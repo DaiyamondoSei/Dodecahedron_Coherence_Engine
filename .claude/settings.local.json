@@ -1,9 +1,79 @@
 {
+  "cleanupPeriodDays": 30,
+  "env": {
+    "PROJECT_TYPE": "web-visualization",
+    "FRAMEWORK": "vanilla-js-threejs",
+    "NODE_ENV": "development"
+  },
+  "includeCoAuthoredBy": true,
   "permissions": {
     "allow": [
-      "Bash(start demo.html)"
+      "Bash(start demo.html)",
+      "Bash(start index.html)",
+      "Bash(start demo-orchestrator.html)",
+      "Bash(start dodecahedron-3d.html)",
+      "Bash(start breath-analysis.html)",
+      "Bash(start radiance-check.html)",
+      "Bash(npm:*)",
+      "Bash(node:*)",
+      "Bash(python:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Read(**/js/**/*.js)",
+      "Read(**/css/**/*.css)",
+      "Read(**/*.html)",
+      "Write(**/js/**/*.js)",
+      "Write(**/css/**/*.css)",
+      "Bash(claude plugins list:*)",
+      "Bash(claude plugins)",
+      "Bash(start \"\" \"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --remote-debugging-port=9222 \"http://localhost:8080/index.html\")",
+      "Bash(claude mcp list:*)",
+      "Bash(powershell -Command \"Stop-Process -Name chrome -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Start-Process ''C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'' -ArgumentList ''--remote-debugging-port=9222''\")",
+      "Bash(powershell -Command \"try { (Invoke-WebRequest -Uri ''http://localhost:9222/json/version'' -UseBasicParsing -TimeoutSec 5).Content } catch { $_Exception.Message }\")",
+      "Bash(curl:*)",
+      "Bash(tasklist:*)",
+      "Bash(taskkill:*)",
+      "Bash(powershell:*)",
+      "Bash(cmd //c 'start \"\"\"\" \"\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\"\" --remote-debugging-port=9222')",
+      "Bash(timeout /t 3 /nobreak)",
+      "Bash(start \"\" \"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --remote-debugging-port=9222)",
+      "Bash(cmd /c \"taskkill /F /IM chrome.exe & timeout /t 3 /nobreak & start \"\"\"\" \"\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\"\" --remote-debugging-port=9222\")",
+      "Bash(cmd /c \"timeout /t 5 /nobreak >nul & curl -s http://localhost:9222/json/version\")",
+      "Bash(dir /a \"C:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\.claude\")",
+      "Bash(dir:*)",
+      "Bash(npx -y @anthropic/mcp-server-chrome-devtools --help)",
+      "Bash(npx -y @anthropic/mcp-server-puppeteer --help)",
+      "WebSearch",
+      "Bash(timeout /t 2 /nobreak)",
+      "Bash(npx:*)",
+      "Bash(cd:*)",
+      "Bash(find:*)",
+      "Bash(findstr:*)",
+      "mcp__puppeteer__*",
+      "mcp__chrome-devtools__*",
+      "Bash(netstat:*)",
+      "Bash(timeout //t 2 //nobreak)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
-    "ask": []
+    "ask": [
+      "Bash(git push:*)",
+      "Write(**/*.html)"
+    ]
+  },
+  "enabledPlugins": {
+    "agent-sdk-dev@claude-code-plugins": true,
+    "code-review@claude-code-plugins": true,
+    "commit-commands@claude-code-plugins": true,
+    "feature-dev@claude-code-plugins": true,
+    "hookify@claude-code-plugins": false,
+    "plugin-dev@claude-code-plugins": false,
+    "pr-review-toolkit@claude-code-plugins": true,
+    "ralph-wiggum@claude-code-plugins": false,
+    "claude-opus-4-5-migration@claude-code-plugins": true,
+    "frontend-design@claude-code-plugins": true
   }
 }

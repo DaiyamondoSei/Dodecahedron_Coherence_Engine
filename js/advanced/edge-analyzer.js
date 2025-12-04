@@ -8,17 +8,16 @@
  *
  * USAGE:
  * const analyzer = new EdgeAnalyzer();
- * await analyzer.loadEdgeCSV('./data/CSV_Edge_tension_Map.csv');
- * const edges = analyzer.calculateAllEdges(facesData);
+ * // Pass edge definitions (from UnifiedDataLoader) directly
+ * const edges = analyzer.calculateAllEdges(facesData, edgeDefinitions, edgeKPIs);
  * const tensionMap = analyzer.getTensionMap(edges);
  *
  * @author Deimantas Butrimas & Claude
- * @version 3.0 (CSV-Integrated Edition)
+ * @version 4.0 (Unified Data Edition)
  */
 
 export class EdgeAnalyzer {
   constructor() {
-    this.csvData = null; // Will hold loaded CSV edge data
     // Define the 30 edges of a dodecahedron
     // Each edge connects two faces (pentagon faces)
     this.edgeDefinitions = [
@@ -90,8 +89,14 @@ export class EdgeAnalyzer {
   /**
    * Calculate tension for a single edge
    *
-   * Tension is based on:
-   * 1. Energy difference between faces (60%)
+   * NORMALIZED FORMULA: T = |E_A - E_B| / (E_A + E_B + ε)
+   *
+   * This makes tension RELATIVE to total energy:
+   * - Two low-energy faces with a gap → HIGH relative tension (stressed connection)
+   * - Two high-energy faces with same gap → LOWER relative tension (abundant)
+   *
+   * Combined with:
+   * 1. Normalized energy difference (60%)
    * 2. Edge KPI health if available (40%)
    * 3. Modulated by elemental nature
    *
@@ -102,8 +107,19 @@ export class EdgeAnalyzer {
    * @returns {number} Tension value between 0 (harmonious) and 1 (highly tense)
    */
   calculateTension(face1, face2, element, edgeKPI = null) {
-    // Energy difference between the two faces
-    const energyDifference = Math.abs(face1.faceEnergy - face2.faceEnergy);
+    const E_A = face1.faceEnergy || 0;
+    const E_B = face2.faceEnergy || 0;
+
+    // Use epsilon from PHI_HARMONICS for numerical stability
+    const epsilon = (typeof window !== 'undefined' && window.PHI_HARMONICS)
+      ? window.PHI_HARMONICS.EPSILON
+      : 1e-10;
+
+    // NORMALIZED tension formula: |E_A - E_B| / (E_A + E_B + epsilon)
+    // Range: [0, 1) - approaches 1 as difference grows relative to sum
+    const absoluteDiff = Math.abs(E_A - E_B);
+    const totalEnergy = E_A + E_B + epsilon;
+    const normalizedDiff = absoluteDiff / totalEnergy;
 
     // Edge KPI health (inverted - low health = high tension)
     const edgeHealth = edgeKPI && edgeKPI.normalizedScore !== undefined
@@ -112,8 +128,8 @@ export class EdgeAnalyzer {
     const edgeTension = 1.0 - edgeHealth;
 
     // Combined tension: weighted average
-    // 60% from energy difference, 40% from edge KPI health
-    const baseTension = (0.6 * energyDifference) + (0.4 * edgeTension);
+    // 60% from normalized energy difference, 40% from edge KPI health
+    const baseTension = (0.6 * normalizedDiff) + (0.4 * edgeTension);
 
     // Apply elemental multiplier
     const multiplier = this.elementalMultipliers[element] || 1.0;
@@ -125,19 +141,45 @@ export class EdgeAnalyzer {
   /**
    * Calculate breath ratio (flow direction) across an edge
    *
-   * Positive = expansion (flow from face1 to face2)
-   * Negative = contraction (flow from face2 to face1)
+   * LOGARITHMIC FORMULA: BR = log(E_B / E_A) / log(φ)
+   *
+   * Using log base φ (golden ratio) creates meaningful anchor points:
+   * - BR = +1 when ratio = φ (1.618) - golden expansion
+   * - BR = -1 when ratio = φ⁻¹ (0.618) - golden contraction
+   * - BR = 0 when ratio = 1.0 - perfect balance
+   *
+   * This is SYMMETRIC: inverting the faces inverts the sign
+   *
+   * Positive = expansion (energy flows toward face2)
+   * Negative = contraction (energy flows toward face1)
    *
    * @param {Object} face1
    * @param {Object} face2
-   * @returns {number} Breath ratio between -1 and +1
+   * @returns {number} Breath ratio (typically between -2 and +2)
    */
   calculateBreathRatio(face1, face2) {
-    const energyDelta = face2.faceEnergy - face1.faceEnergy;
+    const E_A = face1.faceEnergy || 0;
+    const E_B = face2.faceEnergy || 0;
 
-    // Normalize to -1 to +1 range
-    // Larger energy difference = stronger breath
-    return Math.max(-1.0, Math.min(1.0, energyDelta * 2));
+    // Use phi from PHI_HARMONICS, with fallback
+    const phi = (typeof window !== 'undefined' && window.PHI_HARMONICS)
+      ? window.PHI_HARMONICS.PHI
+      : 1.618033988749895;
+
+    // Epsilon for numerical stability
+    const epsilon = (typeof window !== 'undefined' && window.PHI_HARMONICS)
+      ? window.PHI_HARMONICS.EPSILON
+      : 1e-10;
+
+    // Logarithmic breath ratio using golden base
+    // log_φ(E_B / E_A) = ln(E_B / E_A) / ln(φ)
+    const safeA = E_A + epsilon;
+    const safeB = E_B + epsilon;
+    const rawLogRatio = Math.log(safeB / safeA);
+    const breathRatio = rawLogRatio / Math.log(phi);
+
+    // Clamp to reasonable range (±2 allows for ratios up to φ²)
+    return Math.max(-2.0, Math.min(2.0, breathRatio));
   }
 
   /**
@@ -199,15 +241,19 @@ export class EdgeAnalyzer {
 
   /**
    * Calculate all 30 edges for the dodecahedron
-   * Merges CSV data (if loaded) with live calculations
+   * Merges injected edge data with live calculations
    *
    * @param {Array<Object>} faces - Array of 12 face objects
+   * @param {Array<Object>} edgeDefinitions - Optional injected edge definitions (from UnifiedDataLoader)
    * @param {Map<string, Object>} edgeKPIs - Optional map of edge KPIs
    * @param {Array<Object>} backendEdges - Optional array of edges from Quannex.getState()
-   * @returns {Array<Object>} Array of edge analyses with full CSV metadata
+   * @returns {Array<Object>} Array of edge analyses with full metadata
    */
-  calculateAllEdges(faces, edgeKPIs = null, backendEdges = null) {
+  calculateAllEdges(faces, edgeDefinitions = null, edgeKPIs = null, backendEdges = null) {
     const edgeAnalyses = [];
+
+    // Use injected definitions or fallback to hardcoded defaults
+    const definitions = edgeDefinitions || this.edgeDefinitions;
 
     // Create a map for faster lookup if backend edges are provided
     const backendMap = new Map();
@@ -215,25 +261,34 @@ export class EdgeAnalyzer {
       backendEdges.forEach(e => backendMap.set(e.id, e));
     }
 
-    this.edgeDefinitions.forEach(edgeDef => {
-      const face1 = faces.find(f => f.id === edgeDef.face1);
-      const face2 = faces.find(f => f.id === edgeDef.face2);
+    // Create a map for injected definitions (if they are passed as array)
+    const definitionMap = new Map();
+    if (edgeDefinitions) {
+      edgeDefinitions.forEach(def => definitionMap.set(def.id, def));
+    }
+
+    // Iterate over the canonical 30 edges (using this.edgeDefinitions as the master topology)
+    // We use this.edgeDefinitions to ensure we iterate the correct geometric pairs,
+    // but we look up metadata from the injected definitions.
+    this.edgeDefinitions.forEach(canonicalDef => {
+      const face1 = faces.find(f => f.id === canonicalDef.face1);
+      const face2 = faces.find(f => f.id === canonicalDef.face2);
 
       if (!face1 || !face2) {
-        console.warn(`Missing face data for edge ${edgeDef.id}`);
+        console.warn(`Missing face data for edge ${canonicalDef.id}`);
         return;
       }
 
-      // Get CSV data for this edge (if available)
-      const csvData = this.getCSVData(edgeDef.id);
+      // Look up enriched metadata from injected definitions
+      const enrichedDef = definitionMap.get(canonicalDef.id);
 
-      // Use CSV element if available, otherwise fallback to hardcoded
-      const element = csvData ? csvData.element : edgeDef.element;
+      // Use enriched element if available, otherwise fallback
+      const element = enrichedDef ? enrichedDef.element : canonicalDef.element;
 
-      const edgeKPI = edgeKPIs ? edgeKPIs.get(edgeDef.id) : null;
+      const edgeKPI = edgeKPIs ? edgeKPIs.get(canonicalDef.id) : null;
 
       // Check for backend data
-      const backendEdge = backendMap.get(edgeDef.id);
+      const backendEdge = backendMap.get(canonicalDef.id);
 
       let tension, breathRatio, flowDirection, healthStatus, color;
 
@@ -254,14 +309,14 @@ export class EdgeAnalyzer {
         color = this.getTensionColor(tension);
       }
 
-      // Build comprehensive edge object with CSV data merged in
+      // Build comprehensive edge object
       const edgeData = {
         // Core identification
-        id: edgeDef.id,
-        face1Id: edgeDef.face1,
-        face2Id: edgeDef.face2,
-        face1Name: face1.name || `Face ${edgeDef.face1}`,
-        face2Name: face2.name || `Face ${edgeDef.face2}`,
+        id: canonicalDef.id,
+        face1Id: canonicalDef.face1,
+        face2Id: canonicalDef.face2,
+        face1Name: face1.name || `Face ${canonicalDef.face1}`,
+        face2Name: face2.name || `Face ${canonicalDef.face2}`,
 
         // Calculated properties
         element: element,
@@ -274,17 +329,14 @@ export class EdgeAnalyzer {
         face2Energy: face2.faceEnergy,
         elementalMultiplier: this.elementalMultipliers[element],
 
-        // CSV metadata (if available)
-        archetype: csvData ? csvData.archetype : null,
-        kpiName: csvData ? csvData.kpiName : null,
-        kpiCoherence: csvData ? csvData.kpiCoherence : 0.5,
-        kpiMetric: csvData ? csvData.kpiMetric : null,
-        kpiCalculation: csvData ? csvData.kpiCalculation : null,
-        kpiValue: csvData ? csvData.kpiValue : 0,
-        question: csvData ? csvData.question : null,
-        csvTension: csvData ? csvData.csvTension : null,
-        csvBreathRatio: csvData ? csvData.csvBreathRatio : null,
-        hasCSVData: csvData !== null,
+        // Metadata (from injected definition)
+        archetype: enrichedDef ? enrichedDef.archetype : null,
+        kpiName: enrichedDef ? enrichedDef.kpiName : null,
+        kpiCoherence: enrichedDef ? enrichedDef.kpiCoherence : 0.5,
+        kpiMetric: enrichedDef ? enrichedDef.kpiMetric : null,
+        kpiCalculation: enrichedDef ? enrichedDef.kpiCalculation : null,
+        kpiValue: enrichedDef ? enrichedDef.kpiValue : 0,
+        question: enrichedDef ? enrichedDef.question : null,
 
         // Flag source
         source: backendEdge ? 'backend' : 'frontend'
@@ -374,140 +426,6 @@ export class EdgeAnalyzer {
     });
 
     return analysis;
-  }
-
-  /**
-   * Load edge tension data from CSV file
-   *
-   * @param {string} csvPath - Path to CSV_Edge_tension_Map.csv
-   * @returns {Promise<Object>} Map of edge ID to CSV data
-   */
-  async loadEdgeCSV(csvPath = './data/CSV_Edge_tension_Map.csv') {
-    try {
-      const response = await fetch(csvPath);
-      if (!response.ok) {
-        throw new Error(`Failed to load CSV: ${response.statusText}`);
-      }
-
-      const csvText = await response.text();
-      this.csvData = this.parseEdgeCSV(csvText);
-
-      console.log(`✅ Loaded ${Object.keys(this.csvData).length} edges from CSV`);
-      return this.csvData;
-    } catch (error) {
-      console.error('❌ Error loading edge CSV:', error);
-      this.csvData = null;
-      return null;
-    }
-  }
-
-  /**
-   * Parse CSV text into structured edge data
-   *
-   * @param {string} csvText - Raw CSV file content
-   * @returns {Object} Map of edge ID to edge data object
-   */
-  parseEdgeCSV(csvText) {
-    const lines = csvText.split('\n').filter(line => line.trim());
-    const headers = lines[0].split(',');
-    const edgeMap = {};
-
-    // Process data rows (skip header and any empty rows at end)
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i];
-
-      // Skip empty lines or footer notes
-      if (!line.trim() || line.startsWith('edge tension to be') || line.startsWith('"What are')) {
-        continue;
-      }
-
-      // Parse CSV line (handle quoted fields with commas)
-      const values = this.parseCSVLine(line);
-
-      if (values.length < 15 || !values[0]) {
-        continue; // Skip incomplete rows
-      }
-
-      const edgeId = values[0].trim();
-
-      edgeMap[edgeId] = {
-        edgeId: edgeId,
-        face1Id: this.parseFaceId(values[1]),
-        face2Id: this.parseFaceId(values[2]),
-        archetype: values[3] ? values[3].trim() : null,
-        face1Energy: parseFloat(values[4]) || 0,
-        face2Energy: parseFloat(values[5]) || 0,
-        csvTension: parseFloat(values[6]) || 0,
-        csvBreathRatio: parseFloat(values[7]) || 1.0,
-        kpiCoherence: parseFloat(values[8]) || 0.5,
-        kpiName: values[9] ? values[9].trim() : null,
-        kpiMetric: values[10] ? values[10].trim() : null,
-        kpiCalculation: values[11] ? values[11].trim() : null,
-        kpiValue: parseFloat(values[12]) || 0,
-        element: this.parseElement(values[13]),
-        question: values[14] ? values[14].trim() : null
-      };
-    }
-
-    return edgeMap;
-  }
-
-  /**
-   * Parse a CSV line handling quoted fields with commas
-   */
-  parseCSVLine(line) {
-    const result = [];
-    let current = '';
-    let inQuotes = false;
-
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-
-      if (char === '"') {
-        inQuotes = !inQuotes;
-      } else if (char === ',' && !inQuotes) {
-        result.push(current);
-        current = '';
-      } else {
-        current += char;
-      }
-    }
-
-    result.push(current); // Add last field
-    return result;
-  }
-
-  /**
-   * Parse face ID from "Face X" format
-   */
-  parseFaceId(faceStr) {
-    if (!faceStr) return null;
-    const match = faceStr.match(/Face (\d+)/);
-    return match ? parseInt(match[1]) : null;
-  }
-
-  /**
-   * Parse element from "Element (Description)" format
-   * e.g., "Air (Communication)" -> "Air"
-   */
-  parseElement(elementStr) {
-    if (!elementStr) return 'Ether';
-    const match = elementStr.match(/^(\w+)/);
-    return match ? match[1].trim() : 'Ether';
-  }
-
-  /**
-   * Get CSV data for a specific edge
-   */
-  getCSVData(edgeId) {
-    return this.csvData ? this.csvData[edgeId] : null;
-  }
-
-  /**
-   * Check if CSV data is loaded
-   */
-  hasCSVData() {
-    return this.csvData !== null && Object.keys(this.csvData).length > 0;
   }
 
   /**

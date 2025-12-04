@@ -1202,6 +1202,37 @@ function initDodecahedron() {
             verticesSection.style.display = 'none';
         }
 
+        // Populate shadow section (Phase 3)
+        const shadowSection = document.getElementById('shadowSection');
+        const shadowList = document.getElementById('shadowList');
+
+        if (window.advancedAnalysisResults && window.advancedAnalysisResults.shadows) {
+            const shadows = window.advancedAnalysisResults.shadows;
+            // Find shadows affecting this face
+            const faceShadows = shadows.filter(s => s.faceId === face.id);
+
+            if (faceShadows.length > 0) {
+                shadowList.innerHTML = '';
+                faceShadows.forEach(shadow => {
+                    const shadowItem = document.createElement('div');
+                    shadowItem.className = 'metric-row';
+                    shadowItem.style.marginBottom = '8px';
+                    shadowItem.style.borderLeft = '3px solid #ff4444';
+                    shadowItem.style.paddingLeft = '8px';
+                    shadowItem.innerHTML = `
+                    <div style="font-weight: bold; color: #ff8888; font-size: 11px;">${shadow.name}</div>
+                    <div style="font-size: 10px; opacity: 0.8;">${shadow.description}</div>
+                `;
+                    shadowList.appendChild(shadowItem);
+                });
+                if (shadowSection) shadowSection.style.display = 'block';
+            } else {
+                if (shadowSection) shadowSection.style.display = 'none';
+            }
+        } else {
+            if (shadowSection) shadowSection.style.display = 'none';
+        }
+
         // Show panel
         panel.classList.add('visible');
     };

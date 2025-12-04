@@ -13,6 +13,8 @@
  * - API Interface: Simple methods for UI to call
  */
 
+import { OrganizationalCoherenceEngine } from './advanced/index.js';
+
 // ========================================
 // UTILITY: CSV Parser
 // ========================================
@@ -80,6 +82,62 @@ class TuningConfig {
 }
 
 // ========================================
+// CONSTANTS: Phi-Harmonic Values (Sacred Geometry)
+// ========================================
+
+/**
+ * Golden Ratio (φ) derived constants for all harmonic calculations.
+ * The dodecahedron is constructed from φ, therefore ALL mathematical
+ * constants in the system derive from φ for self-similarity at every level.
+ *
+ * Reference: Master Plan "φ-Harmonic Constant System (AUTHORITATIVE)"
+ */
+const PHI = (1 + Math.sqrt(5)) / 2;  // Source of truth: 1.618033988749895
+
+const PHI_HARMONICS = {
+  // Core phi values
+  PHI: PHI,                              // 1.618033988749895
+  PHI_2: PHI * PHI,                      // 2.618033988749895
+
+  // Inverse powers of phi (0 < x < 1)
+  PHI_INV_1: 1 / PHI,                    // 0.618033988749895 (high/creative)
+  PHI_INV_2: 1 / (PHI * PHI),            // 0.381966011250105 (low/receptive)
+  PHI_INV_3: 1 / Math.pow(PHI, 3),       // 0.236067977499790 (very low, CV lambda)
+  PHI_INV_4: 1 / Math.pow(PHI, 4),       // 0.145898033750315 (minimal threshold)
+
+  // Psi derived values (1 - phi^-n)
+  PSI_3: 1 - 1 / Math.pow(PHI, 3),       // 0.763932022500210 (very high)
+  PSI_4: 1 - 1 / Math.pow(PHI, 4),       // 0.854101966249685 (near maximum)
+
+  // Numerical stability
+  EPSILON: 1e-10,
+
+  // Semantic aliases for domain-specific usage
+  get CV_LAMBDA() { return this.PHI_INV_3; },      // Variance penalty coefficient
+  get BREATH_BASE() { return this.PHI; },          // Log base for breath ratio
+  get MASTERY_THRESHOLD() { return this.PSI_3; },  // 76.4% mastery before octave advance
+
+  // Curvature parameters for KPI normalization (κ)
+  // survival: sublinear curve (forgiving early gains)
+  // growth: superlinear curve (rewards excellence)
+  // completion: linear (default)
+  CURVATURE: {
+    survival: 1 / PHI,    // 0.618 - asymptotic, forgiving
+    growth: PHI,          // 1.618 - exponential, rewarding
+    completion: 1.0       // linear progression
+  }
+};
+
+// Freeze to prevent accidental mutation
+Object.freeze(PHI_HARMONICS);
+Object.freeze(PHI_HARMONICS.CURVATURE);
+
+// Export for global access (used by other modules)
+if (typeof window !== 'undefined') {
+  window.PHI_HARMONICS = PHI_HARMONICS;
+}
+
+// ========================================
 // MODEL: KPI (Key Performance Indicator)
 // ========================================
 
@@ -104,22 +162,45 @@ class KPI {
     // Metadata
     this.faceId = config.faceId || null;
     this.element = config.element || null; // Earth, Water, Fire, Air, Ether
+
+    // Metric type for κ curvature (survival, growth, or completion)
+    // survival: φ^-1 (0.618) - forgiving, rewards early progress
+    // growth: φ (1.618) - demanding, rewards excellence
+    // completion: 1.0 - linear (default)
+    this.metricType = config.metricType || 'completion';
   }
 
   /**
    * Calculate normalized score (0 to 1) based on KPI direction
+   * Then apply κ curvature based on metric type
    */
   get normalizedScore() {
+    // Get linear score based on direction
+    let linearScore;
     switch (this.direction) {
       case '↑':
-        return this.normalizeUp();
+        linearScore = this.normalizeUp();
+        break;
       case '↓':
-        return this.normalizeDown();
+        linearScore = this.normalizeDown();
+        break;
       case 'Band':
-        return this.normalizeBand();
+        linearScore = this.normalizeBand();
+        break;
       default:
-        return this.normalizeUp();
+        linearScore = this.normalizeUp();
     }
+
+    // Apply κ curvature based on metric type
+    // Uses PHI_HARMONICS.CURVATURE for phi-derived values
+    const kappa = (typeof PHI_HARMONICS !== 'undefined' && PHI_HARMONICS.CURVATURE)
+      ? (PHI_HARMONICS.CURVATURE[this.metricType] || 1.0)
+      : 1.0;
+
+    // Apply curvature: score^kappa
+    // survival (κ=0.618): 0.5^0.618 = 0.65 (forgiving)
+    // growth (κ=1.618): 0.5^1.618 = 0.33 (demanding)
+    return Math.pow(linearScore, kappa);
   }
 
   /**
@@ -468,75 +549,110 @@ class Edge {
 
 /**
  * Represents the intersection of three faces (The Vortex)
- * Models the synergy where three domains meet
+ * Models the synergy where three domains meet.
+ *
+ * FIXED: Constructor no longer tries to calculate with undefined 'energies'.
+ * Calculation is deferred to calculateVortexEnergy(faces) method.
  */
 class Vertex {
   constructor(config) {
     this.id = config.id || '';
     this.faceIds = config.faceIds || []; // Array of 3 face IDs
     this.name = config.name || '';
+    this.archetype = config.archetype || '';
 
-    // State
-    this.vortexEnergy = 0;
-    this.status = 'Dormant';
-    this.vortexDirection = 0; // -1 (Down) to +1 (Up)
-    this.coherence = 0; // 0 (Chaotic) to 1 (Coherent)
-    this.isLeveragePoint = false;
+    // Cache for calculated values (initialized as null)
+    this._vortexStrength = null;
+    this._vortexDirection = null;
+    this._coherence = null;
   }
 
   /**
-   * Calculate Vortex Energy (Triadic Synergy)
-   * @param {Array<Face>} faces - Array of 3 Face objects
+   * Calculate all vortex metrics based on converging face energies
+   * Called by recalculate() with the actual Face objects
+   *
+   * @param {Array<Face>} faces - The 3 faces meeting at this vertex
+   * @returns {number} Vortex strength (0-1)
    */
   calculateVortexEnergy(faces) {
-    if (!faces || faces.length !== 3) return 0;
-
-    const energies = faces.map(f => f.faceEnergy);
-
-    // 1. The Triad Average
-    const avg = energies.reduce((a, b) => a + b, 0) / 3;
-
-    // 2. The Weakest Link (Limiting Factor)
-    const min = Math.min(...energies);
-
-    // 3. Vortex Logic:
-    // A vortex requires ALL THREE to be active to spin.
-    // If one is dead (0), the vortex collapses.
-    // Formula: Average * (Min / Average)^0.5
-    // This penalizes imbalance. If all are equal, it equals the average.
-
-    if (avg === 0) {
-      this.vortexEnergy = 0;
-    } else {
-      this.vortexEnergy = avg * Math.sqrt(min / avg);
+    if (!faces || faces.length !== 3) {
+      console.warn(`Vertex ${this.id} doesn't have exactly 3 faces`);
+      this._vortexStrength = 0;
+      this._vortexDirection = 0;
+      this._coherence = 0;
+      return 0;
     }
 
-    // 4. Vortex Direction (Upward/Downward Spiral)
-    // Positive = upward spiral (generative), Negative = downward spiral (degenerative)
-    this.vortexDirection = Math.max(-1.0, Math.min(1.0, (avg - 0.5) * 2));
-
-    // 5. Coherence (Balance)
-    // High coherence = faces are well-balanced
-    // Low coherence = faces are very different
+    // Get face energies
+    const energies = faces.map(f => f.faceEnergy || 0);
     const [f1, f2, f3] = energies;
+
+    // 1. Calculate mean energy
+    const mean = (f1 + f2 + f3) / 3;
+
+    // 2. Calculate variance and standard deviation
+    const variance = ((f1 - mean) ** 2 + (f2 - mean) ** 2 + (f3 - mean) ** 2) / 3;
+    const stdDev = Math.sqrt(variance);
+
+    // 3. Vortex Strength: 70% variance contribution, 30% mean energy
+    // Normalized stdDev (max possible ~0.577 for values 0-1)
+    const normalizedVariance = stdDev / 0.577;
+    this._vortexStrength = Math.min(1.0, Math.max(0.0, (0.7 * normalizedVariance) + (0.3 * mean)));
+
+    // 4. Vortex Direction: based on whether energy is above/below 0.5 baseline
+    // Positive = upward spiral (generative), Negative = downward spiral (degenerative)
+    this._vortexDirection = Math.max(-1.0, Math.min(1.0, (mean - 0.5) * 2));
+
+    // 5. Coherence: inverse of average pairwise differences
     const diff12 = Math.abs(f1 - f2);
     const diff23 = Math.abs(f2 - f3);
     const diff31 = Math.abs(f3 - f1);
     const avgDiff = (diff12 + diff23 + diff31) / 3;
-    // Maximum possible average difference is ~0.667
-    this.coherence = Math.max(0.0, Math.min(1.0, 1.0 - (avgDiff / 0.667)));
+    // Max possible average diff is ~0.667
+    this._coherence = Math.max(0.0, Math.min(1.0, 1.0 - (avgDiff / 0.667)));
 
-    // 6. Leverage Point
-    // High strength + low coherence = opportunity for transformation
-    this.isLeveragePoint = this.vortexEnergy > 0.7 && this.coherence < 0.5;
+    return this._vortexStrength;
+  }
 
-    // Status
-    if (this.vortexEnergy > 0.8) this.status = 'Radiant Vortex';
-    else if (this.vortexEnergy > 0.5) this.status = 'Active Flow';
-    else if (this.vortexEnergy > 0.3) this.status = 'Weak Swirl';
-    else this.status = 'Stagnant';
+  // ========================================
+  // Getters for cached values
+  // ========================================
 
-    return this.vortexEnergy;
+  get vortexEnergy() {
+    return this._vortexStrength !== null ? this._vortexStrength : 0;
+  }
+
+  get vortexStrength() {
+    return this._vortexStrength !== null ? this._vortexStrength : 0;
+  }
+
+  get vortexDirection() {
+    return this._vortexDirection !== null ? this._vortexDirection : 0;
+  }
+
+  get coherence() {
+    return this._coherence !== null ? this._coherence : 0;
+  }
+
+  /**
+   * Check if this is a high-leverage point
+   * High strength + low coherence = opportunity for transformation
+   */
+  get isLeveragePoint() {
+    return this._vortexStrength > 0.7 && this._coherence < 0.5;
+  }
+
+  /**
+   * Get status description based on vortex characteristics
+   */
+  get status() {
+    const strength = this._vortexStrength || 0;
+    const direction = this._vortexDirection || 0;
+
+    if (strength < 0.3) return 'Dormant';
+    if (direction > 0.3) return strength > 0.7 ? 'Powerful Ascent' : 'Rising';
+    if (direction < -0.3) return strength > 0.7 ? 'Critical Descent' : 'Declining';
+    return 'Turbulent';
   }
 }
 
@@ -547,7 +663,7 @@ class Vertex {
 /**
  * Main coherence engine orchestrating all 12 faces, 30 edges, 20 vertices
  */
-class DodecahedronEngine {
+export class DodecahedronEngine {
   constructor() {
     this.faces = [];
     this.edges = [];
@@ -555,9 +671,23 @@ class DodecahedronEngine {
     this.kpis = new Map(); // id -> KPI object
     this.tuning = new TuningConfig(); // Load tuning constants
     this.breathAnalyzer = new BreathAnalyzer(); // Breath analysis
-    this.spectralAnalyzer = new SpectralAnalyzer(); // Spectral analysis
+
+    // Spectral analysis - handle module scope for both ES module and global contexts
+    this.spectralAnalyzer = (typeof SpectralAnalyzer !== 'undefined')
+      ? new SpectralAnalyzer()
+      : (typeof window !== 'undefined' && window.SpectralAnalyzer)
+        ? new window.SpectralAnalyzer()
+        : null;
+
+    if (!this.spectralAnalyzer) {
+      console.warn('SpectralAnalyzer not available - spectral analysis will be skipped');
+    }
     this.breathAnalysis = null; // Cached breath analysis
     this.spectralAnalysis = null; // Cached spectral analysis
+
+    // The Advanced Brain
+    this.advancedEngine = new OrganizationalCoherenceEngine(this.tuning);
+    this.advancedAnalysis = null;
   }
 
   /**
@@ -820,6 +950,33 @@ class DodecahedronEngine {
         const faceEnergies = this.faces.map(f => f.faceEnergy);
         this.spectralAnalysis = this.spectralAnalyzer.analyze(faceEnergies);
       }
+
+      // 4.5 Shadow Detection and Penalty Application
+      // Shadow patterns (e.g., "Brittle Profit") apply penalties to face energies
+      if (this.advancedEngine && this.advancedEngine.shadows) {
+        try {
+          const shadowAnalysis = this.advancedEngine.shadows.analyze(this.faces, this.kpis);
+
+          if (shadowAnalysis && shadowAnalysis.penalties) {
+            Object.entries(shadowAnalysis.penalties).forEach(([faceId, penalty]) => {
+              const face = this.faces.find(f => f.id === parseInt(faceId));
+              if (face && face._faceEnergy !== null && penalty > 0) {
+                // Apply penalty: reduce face energy by penalty percentage
+                const originalEnergy = face._faceEnergy;
+                face._faceEnergy = originalEnergy * (1 - penalty);
+                // Cap penalties at 90% reduction
+                face._faceEnergy = Math.max(face._faceEnergy, originalEnergy * 0.1);
+              }
+            });
+          }
+
+          // Store shadow analysis for UI access
+          this.shadowAnalysis = shadowAnalysis;
+        } catch (err) {
+          console.warn('Shadow analysis failed:', err);
+          this.shadowAnalysis = null;
+        }
+      }
     }
 
     // 5. Update Edges
@@ -838,12 +995,50 @@ class DodecahedronEngine {
 
   /**
    * Get global coherence score
+   *
+   * COEFFICIENT OF VARIATION FORMULA: C = μ × (1 - λ × (σ/μ))
+   *
+   * This penalizes variance while preserving scale-invariance:
+   * - μ (mean): Average face energy across all 12 faces
+   * - σ (stddev): Standard deviation of face energies
+   * - λ (lambda): Variance penalty coefficient = φ^-3 = 0.236
+   *
+   * The result is bounded to [0, 1] and:
+   * - High mean + low variance = high coherence
+   * - High mean + high variance = moderate coherence (penalized)
+   * - Low mean = low coherence regardless of variance
    */
   getGlobalCoherence() {
     if (this.faces.length === 0) return 0;
 
-    const totalEnergy = this.faces.reduce((sum, face) => sum + face.faceEnergy, 0);
-    return totalEnergy / this.faces.length;
+    const energies = this.faces.map(face => face.faceEnergy || 0);
+
+    // Calculate mean (μ)
+    const mu = energies.reduce((sum, e) => sum + e, 0) / energies.length;
+
+    // Handle edge case of zero or near-zero mean
+    const epsilon = (typeof PHI_HARMONICS !== 'undefined')
+      ? PHI_HARMONICS.EPSILON
+      : 1e-10;
+
+    if (mu <= epsilon) return 0;
+
+    // Calculate standard deviation (σ)
+    const variance = energies.reduce((sum, e) => sum + Math.pow(e - mu, 2), 0) / energies.length;
+    const sigma = Math.sqrt(variance);
+
+    // Get lambda from PHI_HARMONICS (φ^-3 = 0.236)
+    const lambda = (typeof PHI_HARMONICS !== 'undefined')
+      ? PHI_HARMONICS.CV_LAMBDA
+      : 0.236;
+
+    // CV-penalized coherence: μ × (1 - λ × CV)
+    // where CV = σ/μ (coefficient of variation)
+    const cv = sigma / mu;
+    const coherence = mu * (1 - lambda * cv);
+
+    // Clamp to [0, 1] range
+    return Math.max(0, Math.min(1, coherence));
   }
 
   /**
@@ -1032,6 +1227,13 @@ window.Quannex = {
    */
   getSpectralAnalysis() {
     return quannexEngine.spectralAnalysis;
+  },
+
+  /**
+   * Get shadow analysis (detected organizational shadows and penalties)
+   */
+  getShadowAnalysis() {
+    return quannexEngine.shadowAnalysis;
   }
 };
 
@@ -1040,3 +1242,7 @@ window.quannexEngine = quannexEngine;
 
 console.log('🌟 Quannex Serverless Engine Loaded');
 console.log('💡 Use window.Quannex API to interact with the system');
+// Export for global access (backward compatibility)
+if (typeof window !== 'undefined') {
+  window.DodecahedronEngine = DodecahedronEngine;
+}

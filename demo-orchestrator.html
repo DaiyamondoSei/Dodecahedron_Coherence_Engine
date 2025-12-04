@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌟 Quannex Demo Orchestrator</title>
+    <!-- Sprint 2 Theme - Unified Design System -->
+    <link rel="stylesheet" href="css/sprint2-theme.css">
     <style>
         * {
             margin: 0;
@@ -171,6 +174,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -426,7 +430,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .loading-text {
@@ -463,6 +469,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <div class="main-header">
@@ -501,6 +508,27 @@
             </button>
         </div>
 
+        <!-- Sprint 2: AI Configuration Panel -->
+        <div id="sprint2-config-panel" class="content-card" style="margin-bottom: 20px; display: none;">
+            <!-- API Key Manager Container -->
+            <div id="api-key-manager-container"></div>
+
+            <!-- Strategic Lens Pre-Selector (BEFORE analysis) -->
+            <div id="lens-pre-selector-container" style="margin-top: 15px;"></div>
+
+            <!-- Vocabulary Style Selector -->
+            <div id="vocabulary-style-container" style="margin-top: 15px;"></div>
+
+            <!-- Mode Selector Container (Quick/Full) -->
+            <div id="mode-selector-container" style="margin-top: 15px;"></div>
+
+            <!-- Archetype Selector Container -->
+            <div id="archetype-selector-container" style="margin-top: 15px;"></div>
+
+            <!-- Validation Gate Status -->
+            <div id="validation-gate-container" style="margin-top: 15px;"></div>
+        </div>
+
         <!-- Step 1: Define Faces -->
         <div class="step-content active" id="step1">
             <div class="content-card">
@@ -529,7 +557,8 @@
                             Traditional corporate structure with focus on financial, human, and operational capital.
                         </div>
                         <div class="template-faces">
-                            Includes: Financial, Human, Customer, Operations, Technology, Brand, Leadership, Strategy, Partnerships, Risk, Learning, Sustainability
+                            Includes: Financial, Human, Customer, Operations, Technology, Brand, Leadership, Strategy,
+                            Partnerships, Risk, Learning, Sustainability
                         </div>
                     </div>
 
@@ -542,7 +571,8 @@
                             Early-stage venture model focused on product-market fit, funding, and rapid growth.
                         </div>
                         <div class="template-faces">
-                            Includes: Product-Market Fit, Funding, Team, Technology, Customer Acquisition, Revenue Model, Competition, Operations, Founder Alignment, Market Timing, Scalability, Risk
+                            Includes: Product-Market Fit, Funding, Team, Technology, Customer Acquisition, Revenue
+                            Model, Competition, Operations, Founder Alignment, Market Timing, Scalability, Risk
                         </div>
                     </div>
 
@@ -555,7 +585,9 @@
                             Mission-driven organization emphasizing impact, community, and sustainability.
                         </div>
                         <div class="template-faces">
-                            Includes: Mission Clarity, Impact Measurement, Community Engagement, Funding Diversity, Volunteer Capacity, Program Effectiveness, Board Governance, Stakeholder Trust, Operational Sustainability, Advocacy, Learning, Financial Health
+                            Includes: Mission Clarity, Impact Measurement, Community Engagement, Funding Diversity,
+                            Volunteer Capacity, Program Effectiveness, Board Governance, Stakeholder Trust, Operational
+                            Sustainability, Advocacy, Learning, Financial Health
                         </div>
                     </div>
 
@@ -565,10 +597,13 @@
                             <span class="template-name">Project Management</span>
                         </div>
                         <div class="template-description">
-                            Comprehensive project delivery framework covering scope, timeline, resources, and value realization.
+                            Comprehensive project delivery framework covering scope, timeline, resources, and value
+                            realization.
                         </div>
                         <div class="template-faces">
-                            Includes: Scope & Requirements, Timeline & Milestones, Budget & Resources, Team Performance, Stakeholder Engagement, Quality Standards, Risk Management, Change Control, Dependencies & Integration, Technical Delivery, Knowledge Transfer, Value Realization
+                            Includes: Scope & Requirements, Timeline & Milestones, Budget & Resources, Team Performance,
+                            Stakeholder Engagement, Quality Standards, Risk Management, Change Control, Dependencies &
+                            Integration, Technical Delivery, Knowledge Transfer, Value Realization
                         </div>
                     </div>
 
@@ -586,13 +621,15 @@
                     </div>
 
                     <!-- AI Story Mode Card -->
-                    <div class="template-card" onclick="selectTemplate('story')" id="template-story" style="background: rgba(120, 34, 206, 0.15); border-color: rgba(147, 112, 219, 0.3);">
+                    <div class="template-card" onclick="selectTemplate('story')" id="template-story"
+                        style="background: rgba(120, 34, 206, 0.15); border-color: rgba(147, 112, 219, 0.3);">
                         <div class="template-header">
                             <span class="template-icon">🧠</span>
                             <span class="template-name">AI Story Mode</span>
                         </div>
                         <div class="template-description">
-                            Paste your manifesto, about page, or strategy doc. The AI will extract your organizational DNA automatically.
+                            Paste your manifesto, about page, or strategy doc. The AI will extract your organizational
+                            DNA automatically.
                         </div>
                         <div class="template-faces" style="color: #a78bfa;">
                             ✨ Powered by Google Gemini
@@ -600,44 +637,36 @@
                     </div>
                 </div>
 
-                <!-- API Key Input (Temporary for BYOK) -->
-                <div id="apiKeySection" style="display: none; margin-bottom: 20px;">
-                    <div class="content-card" style="background: rgba(66, 133, 244, 0.1); border: 1px solid rgba(66, 133, 244, 0.3); padding: 20px;">
-                        <h3 style="font-size: 14px; margin-bottom: 10px; color: #8ab4f8; display: flex; align-items: center; gap: 8px;">
-                            🔑 Google Gemini API Key
+                <!-- Story Mode Input Section -->
+                <div id="storyModeSection" style="display: none; margin-bottom: 30px;">
+                    <div class="content-card"
+                        style="background: rgba(0, 0, 0, 0.3); border: 1px dashed rgba(147, 112, 219, 0.5);">
+                        <h3 style="font-size: 16px; margin-bottom: 15px; color: #a78bfa;">
+                            📖 Tell Us Your Story
                         </h3>
-                        <div style="display: flex; gap: 10px;">
-                            <input 
-                                type="password" 
-                                id="geminiKeyInput" 
-                                placeholder="Paste your Gemini API Key here (starts with AIza...)"
-                                style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; color: #fff;"
-                            >
-                            <button class="btn btn-secondary" onclick="saveGeminiKey()" style="white-space: nowrap;">
-                                Save Key
+                        <textarea id="storyInput"
+                            placeholder="Paste your company description, mission statement, or strategic goals here... (e.g., 'We are a sustainable fashion brand focused on ethical supply chains and community impact...')"
+                            style="width: 100%; height: 150px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 15px; color: #fff; font-family: inherit; resize: vertical; margin-bottom: 15px;"></textarea>
+                        <div style="display: flex; justify-content: flex-end;">
+                            <button class="btn btn-primary" onclick="analyzeStory()"
+                                style="background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #fff;">
+                                ✨ Analyze & Map DNA
                             </button>
-                        </div>
-                        <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 8px;">
-                            Your key is stored locally in your browser. It is never sent to our servers.
                         </div>
                     </div>
                 </div>
 
-                <!-- Story Mode Input Section -->
-                <div id="storyModeSection" style="display: none; margin-bottom: 30px;">
-                    <div class="content-card" style="background: rgba(0, 0, 0, 0.3); border: 1px dashed rgba(147, 112, 219, 0.5);">
-                        <h3 style="font-size: 16px; margin-bottom: 15px; color: #a78bfa;">
-                            📖 Tell Us Your Story
-                        </h3>
-                        <textarea 
-                            id="storyInput" 
-                            placeholder="Paste your company description, mission statement, or strategic goals here... (e.g., 'We are a sustainable fashion brand focused on ethical supply chains and community impact...')"
-                            style="width: 100%; height: 150px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 15px; color: #fff; font-family: inherit; resize: vertical; margin-bottom: 15px;"
-                        ></textarea>
-                        <div style="display: flex; justify-content: flex-end;">
-                            <button class="btn btn-primary" onclick="analyzeStory()" style="background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #fff;">
-                                ✨ Analyze & Map DNA
-                            </button>
+                <!-- Note: Strategic Lens is now selected BEFORE analysis in Sprint 2 panel -->
+                <!-- The selected lens influences face name generation, not post-filtering -->
+
+                <!-- Overall Octave Display (appears after analysis) -->
+                <div id="octaveDisplaySection" style="display: none; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                        <div id="overallOctaveIcon" style="font-size: 32px;">🟢</div>
+                        <div>
+                            <div style="font-size: 14px; color: rgba(255,255,255,0.6);">Overall Developmental Stage</div>
+                            <div id="overallOctaveLabel" style="font-size: 18px; font-weight: 600; color: #00ffcc;">O4 - Creativity</div>
+                            <div id="overallOctaveDesc" style="font-size: 12px; color: rgba(255,255,255,0.5);">Innovation activation, differentiation</div>
                         </div>
                     </div>
                 </div>
@@ -673,6 +702,9 @@
                         <strong>Full Mode (60 KPIs):</strong> Five elemental metrics per face - deeper analysis
                     </div>
                 </div>
+
+                <!-- KPI Entry Mode Selection (Sprint 2 Task 10) -->
+                <div id="kpi-extraction-container" style="margin: 20px 0;"></div>
 
                 <div style="margin: 30px 0;">
                     <h3 style="font-size: 16px; margin-bottom: 15px; color: rgba(255, 255, 255, 0.8);">
@@ -743,13 +775,25 @@
                 <div class="info-box">
                     <span class="info-icon">🎨</span>
                     <div class="info-text">
-                        Explore your results across multiple views: 3D Dodecahedron, Calculations, Breath Analysis, and DNA Helix
+                        Explore your results across multiple views: 3D Dodecahedron, Calculations, Breath Analysis, and
+                        DNA Helix
                     </div>
+                </div>
+
+                <!-- Portrait View: The Gateway -->
+                <div id="portrait-view-section" style="margin: 30px 0;">
+                    <h3 style="font-size: 16px; margin-bottom: 15px; color: rgba(255, 255, 255, 0.8);">
+                        Your Organizational Portrait
+                    </h3>
+                    <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 20px;">
+                        A layered gateway to your organization's coherence - click any face to explore deeper.
+                    </p>
+                    <div id="portrait-view-container" style="min-height: 500px; background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);"></div>
                 </div>
 
                 <div style="margin: 30px 0;">
                     <h3 style="font-size: 16px; margin-bottom: 15px; color: rgba(255, 255, 255, 0.8);">
-                        Choose Visualization
+                        Explore Further
                     </h3>
 
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
@@ -814,9 +858,218 @@
 
     <!-- Load Gemini Client -->
     <script type="module" src="js/gemini-client.js"></script>
-    
+
+    <!-- Load Portrait View Component -->
+    <script type="module" src="js/ui/portrait-view.js"></script>
+
+    <!-- Sprint 2: AI Integration Modules -->
+    <script type="module">
+        // Import Sprint 2 AI modules
+        import { MappingContext } from './js/ai/core/mapping-context.js';
+        import { ValidationGate } from './js/ai/core/validation-gate.js';
+        import { NamePropagator } from './js/ai/core/name-propagator.js';
+        import { APIKeyManager } from './js/ai/ui/api-key-manager.js';
+        import { ModeSelector } from './js/ai/ui/mode-selector.js';
+        import { ArchetypeSelector } from './js/ai/ui/archetype-selector.js';
+        import { LensPreSelector } from './js/ai/ui/lens-pre-selector.js';
+        import { VocabularyStyleSelector } from './js/ai/ui/vocabulary-style-selector.js';
+        import { KPIExtractionPanel } from './js/ai/kpi-extractor.js';
+        import { ARCHETYPE_PRESETS, PHI } from './js/ai/tuning/archetype-presets.js';
+        import {
+            OCTAVE_KAPPA_MODIFIERS,
+            OCTAVE_DELTA_MODIFIERS,
+            OCTAVE_GAMMA_MODIFIERS,
+            getOctaveModifier,
+            applyOctaveModifiers
+        } from './js/ai/tuning/octave-modifiers.js';
+
+        // Initialize Sprint 2 components when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Sprint 2: Initializing AI Integration modules...');
+
+            // Get singleton MappingContext
+            const mappingContext = MappingContext.getInstance();
+
+            // Initialize Validation Gate with empowering messaging
+            const validationGate = new ValidationGate({
+                onValidationChange: (validation) => {
+                    console.log('📋 Validation update:', validation.stage, validation.percentage + '%');
+                    updateValidationUI(validation);
+                }
+            });
+
+            // Initialize API Key Manager with proper init() call
+            const apiKeyManager = new APIKeyManager({
+                onStatusChange: (status, message) => {
+                    console.log('🔑 API Key status:', status, message);
+                },
+                onKeyValidated: (isValid) => {
+                    console.log('🔑 API Key validated:', isValid);
+                    // Provider is set via face-wizard.js selectProvider()
+                }
+            });
+            apiKeyManager.init('api-key-manager-container');
+
+            // Initialize Mode Selector with proper init() call
+            const modeSelector = new ModeSelector({
+                onModeChange: (modeId, modeConfig) => {
+                    console.log('⚡ Mode changed:', modeId, modeConfig);
+                    mappingContext.setMode(modeId);
+                }
+            });
+            modeSelector.init('mode-selector-container');
+
+            // Initialize Archetype Selector with proper init() call
+            const archetypeSelector = new ArchetypeSelector({
+                onArchetypeChange: (archetypeId, archetype) => {
+                    console.log('🎭 Archetype changed:', archetypeId, archetype);
+                },
+                onPresetsApplied: (archetypeId, constants, archetype) => {
+                    console.log('🎭 Archetype presets applied:', archetypeId, constants);
+                    mappingContext.setArchetype(archetypeId, constants);
+                }
+            });
+            archetypeSelector.init('archetype-selector-container');
+
+            // Initialize Lens Pre-Selector (Sprint 2 Task 4)
+            const lensPreSelector = new LensPreSelector({
+                onLensChange: (lensId, lensConfig) => {
+                    console.log('🔮 Strategic Lens changed:', lensId, lensConfig.name);
+                    mappingContext.setLens(lensId);
+                }
+            });
+            lensPreSelector.init('lens-pre-selector-container');
+            window.lensPreSelector = lensPreSelector;
+
+            // Initialize Vocabulary Style Selector (Sprint 2 Task 5)
+            const vocabularyStyleSelector = new VocabularyStyleSelector({
+                onStyleChange: (styleId, styleConfig) => {
+                    console.log('🎨 Vocabulary Style changed:', styleId, styleConfig.name);
+                    mappingContext.setVocabulary(styleId);
+                }
+            });
+            vocabularyStyleSelector.init('vocabulary-style-container');
+            window.vocabularyStyleSelector = vocabularyStyleSelector;
+
+            // Initialize KPI Extraction Panel (Sprint 2 Task 10)
+            const kpiExtractionPanel = new KPIExtractionPanel({
+                onExtracted: (result) => {
+                    console.log('📊 KPIs extracted:', result);
+                    // Store for later use
+                    window.extractedKPIResult = result;
+                }
+            });
+            kpiExtractionPanel.init('kpi-extraction-container');
+            window.kpiExtractionPanel = kpiExtractionPanel;
+
+            // Update validation UI helper - Sprint 2 FIX: Add red/amber indicators
+            function updateValidationUI(validation) {
+                const container = document.getElementById('validation-gate-container');
+                if (!container) return;
+
+                const message = validation.message;
+
+                // Sprint 2 Task 15: Color-coded indicators based on completion
+                let borderColor, textColor, progressGradient, statusIcon;
+                if (validation.isComplete) {
+                    borderColor = '#00ff88';
+                    textColor = '#00ff88';
+                    progressGradient = 'linear-gradient(90deg, #00ffcc, #00ff88)';
+                    statusIcon = '✅';
+                } else if (validation.percentage >= 50) {
+                    // Amber for partial completion (50%+)
+                    borderColor = '#ffcc00';
+                    textColor = '#ffcc00';
+                    progressGradient = 'linear-gradient(90deg, #ff6b6b, #ffcc00)';
+                    statusIcon = '⚠️';
+                } else {
+                    // Red for low completion (<50%)
+                    borderColor = '#ff6b6b';
+                    textColor = '#ff6b6b';
+                    progressGradient = 'linear-gradient(90deg, #ff4444, #ff6b6b)';
+                    statusIcon = '🔴';
+                }
+
+                container.innerHTML = `
+                    <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; border-left: 3px solid ${borderColor};">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">${validation.isComplete ? message.icon : statusIcon}</span>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: ${textColor};">
+                                    ${message.title}
+                                </div>
+                                <div style="font-size: 12px; color: rgba(255,255,255,0.7);">
+                                    ${message.message}
+                                </div>
+                                ${message.encouragement ? `<div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px;">${message.encouragement}</div>` : ''}
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 20px; font-weight: 700; color: ${textColor};">${validation.percentage}%</div>
+                                <div style="font-size: 10px; color: rgba(255,255,255,0.5);">${validation.completedFaces}/12 faces</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 10px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
+                            <div style="width: ${validation.percentage}%; height: 100%; background: ${progressGradient}; transition: width 0.5s ease;"></div>
+                        </div>
+                        ${!validation.isComplete ? `
+                        <div style="margin-top: 8px; font-size: 11px; color: ${borderColor};">
+                            ⚠️ Complete all 12 faces to proceed to the next step
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            // Show Sprint 2 config panel when AI Story Mode is selected
+            window.showSprint2Panel = function() {
+                const panel = document.getElementById('sprint2-config-panel');
+                if (panel) {
+                    panel.style.display = 'block';
+                }
+            };
+
+            // Hide Sprint 2 config panel
+            window.hideSprint2Panel = function() {
+                const panel = document.getElementById('sprint2-config-panel');
+                if (panel) {
+                    panel.style.display = 'none';
+                }
+            };
+
+            // Expose to window for integration with demo-orchestrator-logic.js
+            window.Sprint2 = {
+                mappingContext,
+                validationGate,
+                apiKeyManager,
+                modeSelector,
+                archetypeSelector,
+                lensPreSelector,
+                vocabularyStyleSelector,
+                kpiExtractionPanel,
+                ARCHETYPE_PRESETS,
+                PHI,
+                OCTAVE_MODIFIERS: {
+                    KAPPA: OCTAVE_KAPPA_MODIFIERS,
+                    DELTA: OCTAVE_DELTA_MODIFIERS,
+                    GAMMA: OCTAVE_GAMMA_MODIFIERS
+                },
+                getOctaveModifier,
+                applyOctaveModifiers,
+                // Convenience methods
+                showPanel: window.showSprint2Panel,
+                hidePanel: window.hideSprint2Panel,
+                getValidation: () => validationGate.validate(),
+                canProceed: () => validationGate.canProceed()
+            };
+
+            console.log('✅ Sprint 2: AI Integration modules initialized');
+            console.log('   📦 Available via window.Sprint2');
+        });
+    </script>
+
     <!-- Load demo components -->
     <script src="js/face-wizard.js"></script>
     <script src="js/demo-orchestrator-logic.js"></script>
 </body>
+
 </html>

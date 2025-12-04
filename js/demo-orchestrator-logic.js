@@ -33,6 +33,17 @@ function goToStep(stepNumber) {
         return;
     }
 
+    // Sprint 2 FIX: Enforce validation gate for step 2+
+    // Must have all 12 faces validated before proceeding past step 1
+    if (stepNumber > 1 && window.Sprint2 && window.Sprint2.validationGate) {
+        const gateResult = window.Sprint2.canProceed();
+        if (!gateResult.canProceed) {
+            // Show empowering dialog instead of blocking alert
+            showValidationBlockDialog(gateResult);
+            return;
+        }
+    }
+
     // Hide all steps
     document.querySelectorAll('.step-content').forEach(content => {
         content.classList.remove('active');
@@ -55,6 +66,108 @@ function goToStep(stepNumber) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     console.log(`📍 Navigated to Step ${stepNumber}`);
+}
+
+/**
+ * Show validation block dialog with empowering messaging
+ * Sprint 2 Task 15: Red indicators + blocking
+ */
+function showValidationBlockDialog(gateResult) {
+    const validation = window.Sprint2.validationGate.validate();
+    const message = validation.message;
+    const incompleteFaces = validation.faceGuidance || [];
+
+    // Build face list with red indicators
+    let faceListHtml = incompleteFaces.slice(0, 5).map(face =>
+        `<div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(255,100,100,0.1); border-radius: 4px; margin: 4px 0;">
+            <span style="color: #ff6b6b; font-size: 16px;">⚠️</span>
+            <span>Face ${face.faceId}: ${face.currentName}</span>
+        </div>`
+    ).join('');
+
+    if (incompleteFaces.length > 5) {
+        faceListHtml += `<div style="font-size: 12px; color: rgba(255,255,255,0.5); padding: 4px;">...and ${incompleteFaces.length - 5} more</div>`;
+    }
+
+    // Create modal overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'validation-block-modal';
+    overlay.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 3000; display: flex; align-items: center; justify-content: center;">
+            <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 2px solid #ff6b6b; border-radius: 16px; padding: 30px; max-width: 500px; margin: 20px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span style="font-size: 48px;">${message.icon || '🔴'}</span>
+                    <h2 style="color: #ff6b6b; margin: 15px 0 10px 0; font-size: 24px;">${message.title}</h2>
+                    <p style="color: rgba(255,255,255,0.8); font-size: 14px;">${message.message}</p>
+                    ${message.encouragement ? `<p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 10px;">${message.encouragement}</p>` : ''}
+                </div>
+
+                <div style="margin: 20px 0;">
+                    <div style="font-size: 12px; color: #ff6b6b; margin-bottom: 8px; font-weight: 600;">
+                        ⚠️ INCOMPLETE FACES (${incompleteFaces.length} remaining):
+                    </div>
+                    ${faceListHtml}
+                </div>
+
+                <div style="display: flex; gap: 12px; justify-content: center; margin-top: 20px;">
+                    <button onclick="closeValidationModal(); focusOnIncompleteFace()"
+                        style="padding: 12px 24px; background: linear-gradient(135deg, #00ffcc, #00ff88); color: #000; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        Complete Faces
+                    </button>
+                    <button onclick="applyDefaultsAndProceed()"
+                        style="padding: 12px 24px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; cursor: pointer;">
+                        Use Defaults
+                    </button>
+                    <button onclick="closeValidationModal()"
+                        style="padding: 12px 24px; background: transparent; color: rgba(255,255,255,0.5); border: none; cursor: pointer;">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+}
+
+/**
+ * Close validation modal
+ */
+function closeValidationModal() {
+    const modal = document.getElementById('validation-block-modal');
+    if (modal) modal.remove();
+}
+
+/**
+ * Apply defaults and proceed
+ */
+function applyDefaultsAndProceed() {
+    closeValidationModal();
+    if (window.Sprint2 && window.Sprint2.validationGate) {
+        window.Sprint2.validationGate.applyDefaults();
+        console.log('✅ Applied defaults to incomplete faces');
+        // Now try to proceed
+        completeStep1();
+    }
+}
+
+/**
+ * Focus on first incomplete face
+ */
+function focusOnIncompleteFace() {
+    if (window.Sprint2 && window.Sprint2.validationGate) {
+        const validation = window.Sprint2.validationGate.validate();
+        if (validation.faceGuidance && validation.faceGuidance.length > 0) {
+            const firstIncomplete = validation.faceGuidance[0];
+            const faceInput = document.querySelector(`#face-input-${firstIncomplete.faceId}`);
+            if (faceInput) {
+                faceInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                faceInput.focus();
+                // Add red highlight
+                faceInput.style.borderColor = '#ff6b6b';
+                faceInput.style.boxShadow = '0 0 10px rgba(255, 107, 107, 0.5)';
+            }
+        }
+    }
 }
 
 /**
@@ -84,7 +197,7 @@ function markStepCompleted(stepNumber) {
  * Complete Step 1: Face Definition
  */
 function completeStep1() {
-    // Validate faces
+    // Validate faces (local check)
     const validation = validateFaces();
 
     if (!validation.valid) {
@@ -92,8 +205,36 @@ function completeStep1() {
         return;
     }
 
-    // Save configuration
+    // Save configuration first
     demoState.faceConfig = getFaceConfiguration();
+
+    // Sprint 2 FIX: Sync faces to MappingContext BEFORE validation check
+    if (window.Sprint2 && window.Sprint2.mappingContext) {
+        try {
+            const facesConfig = demoState.faceConfig.faces.map(face => ({
+                id: face.id,
+                name: face.name,
+                icon: face.icon || '',
+                source: 'user'
+            }));
+            window.Sprint2.mappingContext.setAllFaces(facesConfig);
+            console.log('✅ Synced faces to MappingContext');
+        } catch (err) {
+            console.warn('⚠️ MappingContext sync failed:', err.message);
+        }
+    }
+
+    // Sprint 2 FIX: Now check validation gate with updated data
+    if (window.Sprint2 && window.Sprint2.validationGate) {
+        const gateResult = window.Sprint2.canProceed();
+        console.log('📋 Validation Gate:', gateResult);
+
+        // Block if validation fails - show empowering dialog
+        if (!gateResult.canProceed) {
+            showValidationBlockDialog(gateResult);
+            return; // Block navigation
+        }
+    }
 
     // Mark completed
     markStepCompleted(1);
@@ -125,6 +266,16 @@ function selectMode(mode) {
         document.getElementById('modeFull').classList.add('btn-primary');
     }
 
+    // Sprint 2: Sync mode to MappingContext if available
+    if (window.Sprint2 && window.Sprint2.mappingContext) {
+        try {
+            window.Sprint2.mappingContext.setMode(mode);
+            console.log('✅ Synced mode to MappingContext:', mode);
+        } catch (err) {
+            console.warn('⚠️ Mode sync failed:', err.message);
+        }
+    }
+
     // Load KPI mapper
     loadKPIMapper(mode);
 
@@ -146,6 +297,122 @@ function loadKPIMapper(mode) {
     } else {
         section.innerHTML = generateFullModeHTML();
     }
+
+    // Sprint 2: Auto-fill with extracted KPIs from AI story analysis
+    autoFillExtractedKPIs();
+}
+
+/**
+ * Auto-fill KPI fields with AI-extracted data
+ */
+function autoFillExtractedKPIs() {
+    // Check if we have extracted KPIs from story analysis
+    const extractedKPIs = window.getExtractedKPIs ? window.getExtractedKPIs() : [];
+    const financials = window.getExtractedFinancials ? window.getExtractedFinancials() : {};
+
+    if (extractedKPIs.length === 0 && Object.keys(financials).length === 0) {
+        console.log('📊 No extracted KPIs to auto-fill');
+        return;
+    }
+
+    console.log(`📊 Auto-filling ${extractedKPIs.length} extracted KPIs...`);
+
+    // Fill KPIs by face
+    extractedKPIs.forEach(kpi => {
+        const faceId = kpi.faceId;
+
+        // Find the input fields for this face
+        const nameInput = document.querySelector(`input[data-face-id="${faceId}"][data-field="kpiName"]`);
+        const valueInput = document.querySelector(`input[data-face-id="${faceId}"][data-field="value"]`);
+
+        if (nameInput && kpi.name) {
+            nameInput.value = kpi.name;
+            nameInput.style.borderColor = 'rgba(0, 255, 204, 0.5)';
+        }
+
+        if (valueInput && kpi.value) {
+            // Extract numeric value from string
+            const numValue = parseFloat(kpi.value.replace(/[^0-9.-]/g, ''));
+            if (!isNaN(numValue)) {
+                valueInput.value = numValue;
+                valueInput.style.borderColor = 'rgba(0, 255, 204, 0.5)';
+
+                // Trigger normalization calculation
+                if (typeof calculateLiveNormalization === 'function') {
+                    calculateLiveNormalization(faceId);
+                }
+            }
+        }
+    });
+
+    // Also apply direct financial extractions as fallback
+    if (financials.revenue?.value) {
+        setKPIFieldValue(1, 'Revenue', financials.revenue.value);
+    }
+    if (financials.teamSize?.value) {
+        setKPIFieldValue(3, 'Team Size', financials.teamSize.value);
+    }
+    if (financials.customers?.value) {
+        setKPIFieldValue(5, 'Customer Count', financials.customers.value);
+    }
+    if (financials.runway?.value) {
+        setKPIFieldValue(11, 'Runway', financials.runway.value);
+    }
+
+    // Show confirmation message
+    showAutoFillNotification(extractedKPIs.length);
+}
+
+/**
+ * Helper to set a KPI field value
+ */
+function setKPIFieldValue(faceId, kpiName, value) {
+    const nameInput = document.querySelector(`input[data-face-id="${faceId}"][data-field="kpiName"]`);
+    const valueInput = document.querySelector(`input[data-face-id="${faceId}"][data-field="value"]`);
+
+    if (nameInput && !nameInput.value) {
+        nameInput.value = kpiName;
+        nameInput.style.borderColor = 'rgba(0, 255, 204, 0.5)';
+    }
+
+    if (valueInput && !valueInput.value && value) {
+        const numValue = typeof value === 'number' ? value : parseFloat(value);
+        if (!isNaN(numValue)) {
+            valueInput.value = numValue;
+            valueInput.style.borderColor = 'rgba(0, 255, 204, 0.5)';
+        }
+    }
+}
+
+/**
+ * Show notification that KPIs were auto-filled
+ */
+function showAutoFillNotification(count) {
+    const section = document.getElementById('kpiMapperSection');
+    if (!section || count === 0) return;
+
+    // Add notification banner at the top
+    const existing = document.getElementById('autoFillNotification');
+    if (existing) existing.remove();
+
+    const notification = document.createElement('div');
+    notification.id = 'autoFillNotification';
+    notification.innerHTML = `
+        <div style="background: rgba(0, 255, 204, 0.15); border: 1px solid rgba(0, 255, 204, 0.4);
+                    border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;
+                    display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 24px;">🤖</span>
+            <div>
+                <div style="font-weight: 600; color: #00ffcc; font-size: 14px;">
+                    AI Pre-filled ${count} KPIs from your story
+                </div>
+                <div style="font-size: 12px; color: rgba(255,255,255,0.6);">
+                    Highlighted fields contain extracted data. Review and adjust as needed.
+                </div>
+            </div>
+        </div>
+    `;
+    section.insertBefore(notification, section.firstChild);
 }
 
 /**
@@ -939,6 +1206,194 @@ function displayCalculationTransparency() {
 function completeStep3() {
     markStepCompleted(3);
     goToStep(4);
+
+    // Initialize Portrait View when entering Step 4
+    initializePortraitView();
+}
+
+// Portrait View instance holder
+let portraitViewInstance = null;
+
+/**
+ * Initialize Portrait View with current coherence data
+ */
+function initializePortraitView() {
+    if (!demoState.coherenceResults) {
+        console.warn('[PortraitView] No coherence results available');
+        return;
+    }
+
+    // Wait for PortraitView to be available (it's a module)
+    const waitForPortraitView = () => {
+        if (typeof window.PortraitView === 'undefined') {
+            console.log('[PortraitView] Waiting for module to load...');
+            setTimeout(waitForPortraitView, 100);
+            return;
+        }
+
+        console.log('[PortraitView] Initializing with coherence data');
+
+        // Transform coherence results to Portrait View format
+        const portraitData = transformToPortraitData(demoState.coherenceResults);
+
+        // Create or update the Portrait View
+        if (!portraitViewInstance) {
+            portraitViewInstance = new window.PortraitView('portrait-view-container', {
+                size: 380,
+                showLabels: true,
+                interactive: true
+            });
+        }
+
+        portraitViewInstance.update(portraitData);
+        console.log('[PortraitView] Updated with:', portraitData);
+    };
+
+    waitForPortraitView();
+}
+
+/**
+ * Transform coherence results to Portrait View data format
+ */
+function transformToPortraitData(coherenceResults) {
+    const faces = {};
+
+    // Get face-level octaves if available
+    let faceOctavesMap = {};
+    if (typeof window.getFaceOctaves === 'function') {
+        faceOctavesMap = window.getFaceOctaves();
+    }
+
+    // Detect overall octave from face-wizard or default
+    let overallOctave = 'O3';
+    if (typeof window.getOverallOctave === 'function') {
+        overallOctave = window.getOverallOctave() || 'O3';
+    } else if (Object.keys(faceOctavesMap).length > 0) {
+        // Fallback: get from face octaves map
+        const octaveValues = Object.values(faceOctavesMap).map(f => f.octave || 'O3');
+        overallOctave = octaveValues[0] || 'O3';
+    }
+
+    // Transform each face
+    coherenceResults.faces.forEach(face => {
+        // Extract elemental breakdown if available
+        const elements = extractElementalData(face);
+
+        // Get face-specific octave or fallback to overall
+        const faceOctaveInfo = faceOctavesMap[face.id];
+        const faceOctave = faceOctaveInfo?.octave || face.targetOctave || overallOctave;
+
+        faces[face.id] = {
+            name: face.name || `Face ${face.id}`,
+            coherence: face.energy || face.faceEnergy || 0.5,
+            targetOctave: faceOctave,
+            elements: elements,
+            kpis: face.kpis || [],
+            warnings: []
+        };
+
+        // Add warnings for low coherence
+        if (faces[face.id].coherence < 0.382) {
+            faces[face.id].warnings.push('Critical: coherence below PHI²');
+        } else if (faces[face.id].coherence < 0.5) {
+            faces[face.id].warnings.push('Attention needed: developing coherence');
+        }
+    });
+
+    // Ensure all 12 faces exist
+    for (let i = 1; i <= 12; i++) {
+        if (!faces[i]) {
+            faces[i] = {
+                name: getDefaultFaceName(i),
+                coherence: 0,
+                targetOctave: overallOctave,
+                elements: getDefaultElements(),
+                kpis: [],
+                warnings: ['No data available']
+            };
+        }
+    }
+
+    return {
+        overallCoherence: coherenceResults.globalCoherence || 0.5,
+        octave: overallOctave,
+        faces: faces
+    };
+}
+
+/**
+ * Extract elemental breakdown from face data
+ */
+function extractElementalData(face) {
+    // If face has explicit elemental data, use it
+    if (face.elements) return face.elements;
+
+    // Otherwise, derive from KPIs if they have element tags
+    const elements = {
+        earth: { value: 0.5, label: 'Foundation' },
+        water: { value: 0.5, label: 'Flow' },
+        fire: { value: 0.5, label: 'Energy' },
+        air: { value: 0.5, label: 'Communication' },
+        ether: { value: 0.5, label: 'Purpose' }
+    };
+
+    if (face.kpis && face.kpis.length > 0) {
+        // Try to extract from elemental KPIs (Full Mode)
+        const elementalKpis = {
+            earth: face.kpis.filter(k => k.element === 'earth' || k.element === 'Earth'),
+            water: face.kpis.filter(k => k.element === 'water' || k.element === 'Water'),
+            fire: face.kpis.filter(k => k.element === 'fire' || k.element === 'Fire'),
+            air: face.kpis.filter(k => k.element === 'air' || k.element === 'Air'),
+            ether: face.kpis.filter(k => k.element === 'ether' || k.element === 'Ether')
+        };
+
+        Object.keys(elementalKpis).forEach(element => {
+            const kpis = elementalKpis[element];
+            if (kpis.length > 0) {
+                const avgScore = kpis.reduce((sum, k) => sum + (k.normalizedScore || 0.5), 0) / kpis.length;
+                elements[element] = {
+                    value: avgScore,
+                    label: kpis[0]?.label || kpis[0]?.name || element
+                };
+            }
+        });
+    }
+
+    return elements;
+}
+
+/**
+ * Get default elements structure
+ */
+function getDefaultElements() {
+    return {
+        earth: { value: 0, label: 'Foundation' },
+        water: { value: 0, label: 'Flow' },
+        fire: { value: 0, label: 'Energy' },
+        air: { value: 0, label: 'Communication' },
+        ether: { value: 0, label: 'Purpose' }
+    };
+}
+
+/**
+ * Get default face name
+ */
+function getDefaultFaceName(faceId) {
+    const defaultNames = {
+        1: 'Financial Capital',
+        2: 'Intellectual Capital',
+        3: 'Human Capital',
+        4: 'Structural Capital',
+        5: 'Market Resonance',
+        6: 'Community & Partners',
+        7: 'Brand & Reputation',
+        8: 'Core Operations',
+        9: 'Regenerative Flow',
+        10: 'Foundational Values',
+        11: 'Funding Pipeline',
+        12: 'Risk & Resilience'
+    };
+    return defaultNames[faceId] || `Face ${faceId}`;
 }
 
 /**
@@ -947,10 +1402,28 @@ function completeStep3() {
 function identifyNervousEndpoints() {
     const section = document.getElementById('nervousEndpoints');
 
-    // Find faces with energy < 0.5
-    const criticalFaces = demoState.coherenceResults.faces
-        .filter(face => (face.energy || face.faceEnergy || 0) < 0.5)
-        .sort((a, b) => (a.energy || a.faceEnergy) - (b.energy || b.faceEnergy));
+    // Find faces with energy < 0.5 or missing data
+    // We check all 12 faces to ensure structural gaps are caught
+    const allFaceIds = Array.from({ length: 12 }, (_, i) => i + 1);
+    const criticalFaces = [];
+
+    allFaceIds.forEach(id => {
+        const face = demoState.coherenceResults.faces.find(f => f.id === id);
+        const energy = face ? (face.energy || face.faceEnergy || 0) : 0;
+        const kpiCount = face && face.kpis ? face.kpis.length : 0;
+
+        // Critical if energy is low OR if no data present (Structural Immaturity)
+        if (energy < 0.5) {
+            criticalFaces.push({
+                id: id,
+                name: face ? face.name : `Face ${id}`,
+                energy: energy,
+                reason: kpiCount === 0 ? "Structural Immaturity (No Data)" : "Low Coherence"
+            });
+        }
+    });
+
+    criticalFaces.sort((a, b) => a.energy - b.energy);
 
     if (criticalFaces.length === 0) {
         section.innerHTML = '<p style="color: rgba(255, 255, 255, 0.6); text-align: center;">✅ No critical issues detected. All faces are healthy!</p>';
@@ -960,16 +1433,18 @@ function identifyNervousEndpoints() {
     let html = '<div style="display: grid; gap: 15px;">';
 
     criticalFaces.forEach(face => {
-        const energy = face.energy || face.faceEnergy || 0;
-        const percentage = (energy * 100).toFixed(1);
+        const percentage = (face.energy * 100).toFixed(1);
+        // Red for critical, Orange for warning
+        const color = face.energy < 0.3 ? '#ff6666' : '#ffcc00';
 
         html += `
-            <div style="background: rgba(255, 102, 102, 0.1); border: 1px solid rgba(255, 102, 102, 0.3); border-radius: 8px; padding: 15px;">
-                <div style="font-size: 14px; font-weight: 600; color: #ff6666; margin-bottom: 8px;">
-                    ⚠️ Face ${face.id}: ${face.name}
+            <div style="background: rgba(255, 100, 100, 0.1); border-left: 3px solid ${color}; padding: 12px; border-radius: 4px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span style="color: #fff; font-weight: 600;">Face ${face.id}: ${face.name}</span>
+                    <span style="color: ${color}; font-weight: bold;">${percentage}%</span>
                 </div>
                 <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7);">
-                    Energy: ${percentage}% - Requires immediate attention
+                    ⚠️ ${face.reason}
                 </div>
             </div>
         `;
@@ -1008,9 +1483,6 @@ function exportReport() {
     alert('PDF export feature coming soon!\n\nFor now, you can:\n• Screenshot the visualizations\n• Save the configuration JSON\n• Copy the coherence data');
 }
 
-/**
- * Save configuration
- */
 function saveConfiguration() {
     const fullConfig = {
         faceConfig: demoState.faceConfig,
@@ -1077,6 +1549,11 @@ window.showHelp = showHelp;
 window.autofillKPISuggestion = autofillKPISuggestion;
 window.autofillElementalKPI = autofillElementalKPI;
 window.calculateLiveNormalization = calculateLiveNormalization;
+// Sprint 2: Validation gate modal functions
+window.showValidationBlockDialog = showValidationBlockDialog;
+window.closeValidationModal = closeValidationModal;
+window.applyDefaultsAndProceed = applyDefaultsAndProceed;
+window.focusOnIncompleteFace = focusOnIncompleteFace;
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', initializeDemo);

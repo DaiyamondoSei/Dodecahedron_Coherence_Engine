@@ -77,11 +77,18 @@ class BreathAnalyzer {
 
     // Breath ratio thresholds
     this.minBalanced = 0.8;
-    this.maxBalanced = 1.2;
+    // LOGARITHMIC BREATH RATIO MODE
+    // Now using log_φ ratio: BR = log(reception/projection) / log(φ)
+    // BR = 0 means balanced (ratio = 1.0)
+    // BR > 0 means over-inhaling (reception > projection)
+    // BR < 0 means over-exhaling (projection > reception)
+    this.maxBalanced = 0.382;   // φ^-2 ≈ ±0.382 for balanced zone
 
     // Golden Ratio constants
     this.PHI = 1.618033988749895;
     this.PHI_INVERSE = 0.618033988749895;
+    this.PHI_INV_2 = 0.381966011250105; // φ^-2
+    this.EPSILON = 1e-10;
     this.mode = 'normal'; // 'normal' or 'golden'
   }
 
@@ -92,14 +99,14 @@ class BreathAnalyzer {
   setMode(mode) {
     if (mode === 'golden') {
       this.mode = 'golden';
-      this.minBalanced = this.PHI_INVERSE; // 0.618
-      this.maxBalanced = this.PHI;         // 1.618
-      console.log(`✨ Breath Analysis switched to Golden Ratio Mode (φ): [${this.minBalanced.toFixed(3)}, ${this.maxBalanced.toFixed(3)}]`);
+      // Golden mode: wider tolerance, ±1 means φ or 1/φ ratio
+      this.maxBalanced = 1.0;
+      console.log(`✨ Breath Analysis switched to Golden Ratio Mode (φ): [-${this.maxBalanced}, +${this.maxBalanced}]`);
     } else {
       this.mode = 'normal';
-      this.minBalanced = 0.8;
-      this.maxBalanced = 1.2;
-      console.log(`📊 Breath Analysis switched to Normal Mode: [${this.minBalanced}, ${this.maxBalanced}]`);
+      // Normal mode: tighter tolerance around balance
+      this.maxBalanced = this.PHI_INV_2; // 0.382
+      console.log(`📊 Breath Analysis switched to Normal Mode: [-${this.maxBalanced.toFixed(3)}, +${this.maxBalanced.toFixed(3)}]`);
     }
   }
 
@@ -142,35 +149,39 @@ class BreathAnalyzer {
   /**
    * Calculate breath ratio for a single axis
    *
-   * Breath Ratio (BR) = Reception Energy / Projection Energy
+   * LOGARITHMIC FORMULA: BR = log_φ(Reception / Projection)
    *
-   * Interpretation:
-   * - BR < 0.8: Over-exhaling (too much action, not enough regeneration)
-   * - BR > 1.2: Over-inhaling (too much reception, not enough expression)
-   * - 0.8 ≤ BR ≤ 1.2: Balanced breath
+   * Using log base φ (golden ratio) creates meaningful anchor points:
+   * - BR = 0 when ratio = 1.0 (perfect balance)
+   * - BR = +1 when ratio = φ (1.618) - golden expansion (over-inhaling)
+   * - BR = -1 when ratio = φ⁻¹ (0.618) - golden contraction (over-exhaling)
+   *
+   * This is SYMMETRIC: the scale works the same in both directions
    */
   calculateAxisBreath(axis, faceEnergies) {
     const receptionEnergy = faceEnergies[axis.reception] || 0;
     const projectionEnergy = faceEnergies[axis.projection] || 0;
 
-    // Avoid division by zero
-    let breathRatio;
-    if (projectionEnergy > 0) {
-      breathRatio = receptionEnergy / projectionEnergy;
-    } else {
-      breathRatio = receptionEnergy > 0 ? 999 : 1; // Very high or neutral
-    }
+    // Use epsilon for numerical stability
+    const safeReception = receptionEnergy + this.EPSILON;
+    const safeProjection = projectionEnergy + this.EPSILON;
 
-    // Determine breath status
+    // Logarithmic breath ratio using golden base
+    // log_φ(R/P) = ln(R/P) / ln(φ)
+    const rawLogRatio = Math.log(safeReception / safeProjection);
+    const breathRatio = rawLogRatio / Math.log(this.PHI);
+
+    // Determine breath status using symmetric thresholds
     let status, direction, severity;
 
-    if (breathRatio < this.minBalanced) {
+    if (breathRatio < -this.maxBalanced) {
       direction = 'over-exhaling';
-      severity = breathRatio < 0.5 ? 'critical' : 'moderate';
+      // Critical if beyond ±1 (ratio beyond φ or 1/φ)
+      severity = breathRatio < -1.0 ? 'critical' : 'moderate';
       status = 'unbalanced';
     } else if (breathRatio > this.maxBalanced) {
       direction = 'over-inhaling';
-      severity = breathRatio > 2.0 ? 'critical' : 'moderate';
+      severity = breathRatio > 1.0 ? 'critical' : 'moderate';
       status = 'unbalanced';
     } else {
       direction = 'balanced';
@@ -178,9 +189,13 @@ class BreathAnalyzer {
       status = 'healthy';
     }
 
-    // Calculate breath tension (distance from ideal)
-    const idealRatio = 1.0;
-    const breathTension = Math.abs(breathRatio - idealRatio);
+    // Breath tension is simply the absolute value of the log ratio
+    // (distance from 0 = distance from perfect balance)
+    const breathTension = Math.abs(breathRatio);
+
+    // Convert log ratio back to linear percentage for display
+    // e^(breathRatio * ln(φ)) = linear ratio
+    const linearRatio = Math.exp(breathRatio * Math.log(this.PHI));
 
     return {
       axis: axis.name,
@@ -191,8 +206,9 @@ class BreathAnalyzer {
       projectionFace: axis.projection,
       receptionEnergy: receptionEnergy,
       projectionEnergy: projectionEnergy,
-      breathRatio: breathRatio,
-      breathPercentage: breathRatio * 100,
+      breathRatio: breathRatio,                    // Log-scale ratio (centered at 0)
+      breathPercentage: linearRatio * 100,         // Linear percentage for display
+      linearRatio: linearRatio,                    // Linear ratio for backward compat
       status: status,
       direction: direction,
       severity: severity,
@@ -214,6 +230,11 @@ class BreathAnalyzer {
     // Average tension across all axes
     const averageTension = breathRatios.reduce((sum, br) => sum + br.tension, 0) / totalAxes;
     const breathHealth = 1.0 - Math.min(averageTension, 1.0);
+
+    // Calculate Pulse Speed using Phi-harmonics
+    // Health 1.0 (Perfect) -> Speed 0.618 (1/Φ) -> Slow, deep, resonant
+    // Health 0.0 (Critical) -> Speed 2.236 (1/Φ + Φ) -> Fast, erratic, hyperventilating
+    const pulseSpeed = (1.0 / this.PHI) + ((1.0 - breathHealth) * this.PHI);
 
     // Determine dominant tendency
     let dominantTendency;
@@ -244,6 +265,7 @@ class BreathAnalyzer {
     return {
       breathHealth: breathHealth,
       breathHealthPercentage: breathHealth * 100,
+      pulseSpeed: pulseSpeed, // Phi-harmonic pulse speed
       status: overallStatus,
       message: message,
       dominantTendency: dominantTendency,

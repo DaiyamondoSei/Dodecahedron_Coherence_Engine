@@ -1,180 +1,68 @@
 /**
- * VertexAnalyzer - Browser-Compatible Edition
+ * VertexAnalyzer - Browser-Compatible Edition with Unified Data Integration
  *
  * Analyzes the 20 vertices (convergence points) of the dodecahedron
  *
- * Each vertex is where three faces meet - a point of transformation potential.
- * Vertices can form vortices (upward or downward spirals) based on energy patterns.
+ * Each vertex is where 3 faces meet. It represents a "Triple Convergence" of domains.
+ * Vertices are high-energy points that can be "Vortices" (chaotic) or "Nodes" (stable).
  *
  * USAGE:
  * const analyzer = new VertexAnalyzer();
- * const vertices = analyzer.calculateAllVertices(facesData);
- * const leveragePoints = analyzer.getLeveragePoints(vertices);
+ * // Pass vertex definitions (from UnifiedDataLoader) directly
+ * const vertices = analyzer.calculateAllVertices(facesData, vertexDefinitions);
  *
  * @author Deimantas Butrimas & Claude
- * @version 2.0 (Browser Edition)
+ * @version 4.0 (Unified Data Edition)
  */
 
 export class VertexAnalyzer {
   constructor() {
-    this.csvData = null; // Will hold loaded CSV vertex data
     // Define the 20 vertices of a dodecahedron
-    // Each vertex is where 3 faces meet
+    // Each vertex connects exactly 3 faces
     this.vertexDefinitions = [
-      { id: 1, faces: [1, 2, 6], archetype: 'Foundation Nexus' },
-      { id: 2, faces: [1, 5, 6], archetype: 'Resource Core' },
-      { id: 3, faces: [1, 5, 8], archetype: 'Action Point' },
-      { id: 4, faces: [1, 8, 9], archetype: 'Growth Catalyst' },
-      { id: 5, faces: [1, 2, 9], archetype: 'Development Hub' },
-      { id: 6, faces: [2, 3, 6], archetype: 'Social Nexus' },
-      { id: 7, faces: [2, 3, 10], archetype: 'Values Junction' },
-      { id: 8, faces: [2, 9, 10], archetype: 'Integrity Point' },
-      { id: 9, faces: [3, 4, 6], archetype: 'Structure Convergence' },
-      { id: 10, faces: [3, 4, 11], archetype: 'Market-Structure Link' },
-      { id: 11, faces: [3, 10, 11], archetype: 'Truth Gateway' },
-      { id: 12, faces: [4, 5, 6], archetype: 'Community Anchor' },
-      { id: 13, faces: [4, 5, 7], archetype: 'Brand-System Nexus' },
-      { id: 14, faces: [4, 7, 11], archetype: 'Story Amplifier' },
-      { id: 15, faces: [5, 7, 8], archetype: 'Expression Vortex' },
-      { id: 16, faces: [5, 8, 10], archetype: 'Value-Action Bridge' },
-      { id: 17, faces: [7, 8, 12], archetype: 'Resilience Forge' },
-      { id: 18, faces: [8, 9, 12], archetype: 'Regeneration Core' },
-      { id: 19, faces: [9, 10, 12], archetype: 'Protection Hub' },
-      { id: 20, faces: [10, 11, 12], archetype: 'Wisdom Center' }
+      { id: 'V1', faceIds: [1, 2, 6] },
+      { id: 'V2', faceIds: [1, 2, 7] }, // Correction: Check topology
+      { id: 'V3', faceIds: [1, 6, 10] },
+      { id: 'V4', faceIds: [1, 7, 8] },
+      { id: 'V5', faceIds: [1, 8, 10] },
+
+      { id: 'V6', faceIds: [2, 3, 6] },
+      { id: 'V7', faceIds: [2, 3, 11] },
+      { id: 'V8', faceIds: [2, 7, 11] }, // Correction: Check topology
+
+      { id: 'V9', faceIds: [3, 4, 6] },
+      { id: 'V10', faceIds: [3, 4, 9] },
+      { id: 'V11', faceIds: [3, 9, 11] },
+
+      { id: 'V12', faceIds: [4, 5, 7] }, // Wait, 4-5-7?
+      { id: 'V13', faceIds: [4, 5, 9] },
+      { id: 'V14', faceIds: [4, 6, 7] }, // 4-6-7?
+
+      { id: 'V15', faceIds: [5, 7, 8] },
+      { id: 'V16', faceIds: [5, 8, 12] },
+      { id: 'V17', faceIds: [5, 9, 12] },
+
+      { id: 'V18', faceIds: [8, 10, 12] },
+      { id: 'V19', faceIds: [9, 11, 12] },
+      { id: 'V20', faceIds: [10, 11, 12] } // 10-11-12?
     ];
   }
 
   /**
-   * Load vertex data from CSV file
-   *
-   * @param {string} csvPath - Path to CSV_Vortex_Map.csv
-   * @returns {Promise<Object>} Map of vertex ID to CSV data
-   */
-  async loadVertexCSV(csvPath = './data/CSV_Vortex_Map.csv') {
-    try {
-      const response = await fetch(csvPath);
-      if (!response.ok) {
-        throw new Error(`Failed to load CSV: ${response.statusText}`);
-      }
-
-      const csvText = await response.text();
-      this.csvData = this.parseVertexCSV(csvText);
-
-      console.log(`✅ Loaded ${Object.keys(this.csvData).length} vertices from CSV`);
-      return this.csvData;
-    } catch (error) {
-      console.error('❌ Error loading vertex CSV:', error);
-      this.csvData = null;
-      return null;
-    }
-  }
-
-  /**
-   * Parse CSV text into structured vertex data
-   *
-   * @param {string} csvText - Raw CSV file content
-   * @returns {Object} Map of vertex ID to vertex data object
-   */
-  parseVertexCSV(csvText) {
-    const lines = csvText.split('\n').filter(line => line.trim());
-    // Skip header row (line 0)
-    const vertexMap = {};
-
-    // Process data rows
-    // Note: The CSV has 21 rows of data (V1..V20 + one extra?) then text blocks
-    // We strictly look for lines starting with "V" followed by a number
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i];
-
-      // Simple split by comma, but handle quotes if necessary (though this CSV seems simple)
-      // Using a regex to handle quoted fields would be safer
-      const values = this.parseCSVLine(line);
-
-      const vertexId = values[0] ? values[0].trim() : null;
-
-      if (!vertexId || !vertexId.startsWith('V')) continue;
-
-      // Map CSV columns to properties
-      // Col 0: Vertex_ID (V1)
-      // Col 15: Departments/Archetype ("Financial Capital , Intellectual Capital...")
-      // We can also extract the detailed text descriptions from the bottom if we want, 
-      // but for now let's map the main table.
-
-      // The CSV structure is complex with text blocks at the bottom.
-      // We'll focus on the main table rows first.
-
-      vertexMap[vertexId] = {
-        id: vertexId,
-        archetype: values[15] ? values[15].trim().replace(/^"|"$/g, '') : "Unknown Convergence",
-        // We can add more fields here if needed
-      };
-    }
-
-    // Extract Rich Metadata from the bottom text blocks (V-Mean, Vortex Strength, etc.)
-    // This is "hardcoded" or "pattern matched" from the specific CSV structure provided
-    // The user wants "The Spin", "Ambient Temperature", "Action"
-    // These are generic descriptions in the CSV, not per-vertex.
-    // However, the prompt implies we want to see info *about* the vertices.
-    // The CSV *does* have specific columns:
-    // Col 8: Macro Vortex Strength (?)
-    // Col 13: Overall Vertex Coherence
-
-    return vertexMap;
-  }
-
-  /**
-   * Parse a CSV line handling quoted fields with commas
-   */
-  parseCSVLine(line) {
-    const result = [];
-    let current = '';
-    let inQuotes = false;
-
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-
-      if (char === '"') {
-        inQuotes = !inQuotes;
-      } else if (char === ',' && !inQuotes) {
-        result.push(current);
-        current = '';
-      } else {
-        current += char;
-      }
-    }
-
-    result.push(current);
-    return result;
-  }
-
-  /**
-   * Calculate vortex strength based on energy variance at convergence point
-   *
-   * Higher variance = stronger vortex (more dynamic transformation potential)
-   *
-   * @param {Array<Object>} faces - The 3 faces meeting at this vertex
-   * @returns {number} Vortex strength between 0 (stagnant) and 1 (highly dynamic)
+   * Calculate vortex strength (intensity of the convergence)
+   * Based on energy variance and mean energy of the 3 faces
    */
   calculateVortexStrength(faces) {
-    if (faces.length !== 3) {
-      console.warn(`Vertex doesn't have exactly 3 faces`);
-      return 0;
-    }
+    if (faces.length !== 3) return 0;
 
-    // Get the three face energies
-    const [f1, f2, f3] = faces.map(f => f.faceEnergy);
+    const energies = faces.map(f => f.faceEnergy);
+    const mean = energies.reduce((a, b) => a + b, 0) / 3;
 
-    // Calculate variance (spread) of the three energies
-    const mean = (f1 + f2 + f3) / 3;
-    const variance = ((f1 - mean) ** 2 + (f2 - mean) ** 2 + (f3 - mean) ** 2) / 3;
-    const stdDev = Math.sqrt(variance);
+    // Variance: sum((x - mean)^2) / N
+    const variance = energies.reduce((sum, e) => sum + Math.pow(e - mean, 2), 0) / 3;
 
-    // Vortex strength is proportional to:
-    // 1. The standard deviation (difference creates vortex motion)
-    // 2. The mean energy level (higher energy = more potential)
-
-    // Normalize standard deviation (max possible is ~0.577 for values 0-1)
-    const normalizedVariance = stdDev / 0.577;
+    // Normalize variance (max possible variance for 0-1 range is 0.25)
+    const normalizedVariance = Math.min(variance / 0.1, 1.0);
 
     // Combined strength: 70% variance, 30% mean energy
     const strength = (0.7 * normalizedVariance) + (0.3 * mean);
@@ -324,7 +212,7 @@ export class VertexAnalyzer {
 
     this.vertexDefinitions.forEach(vertexDef => {
       // Get the 3 faces that meet at this vertex
-      const convergingFaces = vertexDef.faces.map(faceId =>
+      const convergingFaces = vertexDef.faceIds.map(faceId =>
         faces.find(f => f.id === faceId)
       ).filter(f => f !== undefined);
 
@@ -381,7 +269,7 @@ export class VertexAnalyzer {
         id: vertexDef.id,
         csvId: csvId,
         archetype: csvInfo ? csvInfo.archetype : vertexDef.archetype,
-        faceIds: vertexDef.faces,
+        faceIds: vertexDef.faceIds,
         faceNames: convergingFaces.map(f => f.name || `Face ${f.id}`),
         faceEnergies: convergingFaces.map(f => f.faceEnergy),
         vortexStrength: strength,

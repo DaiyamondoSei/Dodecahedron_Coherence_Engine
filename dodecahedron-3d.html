@@ -1163,6 +1163,14 @@
                 <!-- Vertices will be injected here -->
             </div>
         </div>
+
+        <!-- Shadow Section -->
+        <div class="shadow-section" id="shadowSection">
+            <div class="shadow-section-title">🌑 Hidden Dynamics (Shadows)</div>
+            <div id="shadowList">
+                <!-- Shadows will be injected here -->
+            </div>
+        </div>
     </div>
 
     <!-- Hover Tooltip (Faces) -->
@@ -1203,9 +1211,138 @@
     <script type="module" src="js/advanced/visualization-manager.js"></script>
 
     <!-- Dodecahedron Visualization -->
-    <script src="js/dodecahedron-viz.js"></script>
+    <script type="module" src="js/dodecahedron-viz.js"></script>
 
     <script type="module">
+        import { VisualizationManager } from './js/advanced/visualization-manager.js';
+        import { ShadowPanel } from './js/ui/shadow-panel.js';
+        import { VoiceModule } from './js/ai/voice-module.js';
+
+        // Initialize Visualization Manager, Shadow Panel & Voice Module
+        window.addEventListener('load', () => {
+            const checkForScene = setInterval(() => {
+                if (window.scene && window.camera && window.renderer) {
+                    clearInterval(checkForScene);
+                    console.log('✨ Scene detected. Initializing Nervous System...');
+
+                    window.vizManager = new VisualizationManager(window.scene, window.camera, window.renderer);
+                    window.shadowPanel = new ShadowPanel('shadow-panel-container');
+                    window.voiceModule = new VoiceModule();
+
+                    // Voice UI Logic
+                    const voiceInterface = document.getElementById('voiceInterface');
+                    const voiceToggle = document.getElementById('voiceToggle');
+                    const voiceClose = document.getElementById('voiceClose');
+                    const voiceInput = document.getElementById('voiceInput');
+                    const voiceSend = document.getElementById('voiceSend');
+                    const voiceMessages = document.getElementById('voiceMessages');
+
+                    // Toggle Voice Interface
+                    if (voiceToggle) {
+                        voiceToggle.addEventListener('click', () => {
+                            voiceInterface.classList.toggle('visible');
+                            if (voiceInterface.classList.contains('visible')) {
+                                voiceInput.focus();
+                            }
+                        });
+                    }
+
+                    if (voiceClose) {
+                        voiceClose.addEventListener('click', () => {
+                            voiceInterface.classList.remove('visible');
+                        });
+                    }
+
+                    // Send Message
+                    const sendMessage = async () => {
+                        const question = voiceInput.value.trim();
+                        if (!question) return;
+
+                        // Add User Message
+                        addMessage(question, 'user');
+                        voiceInput.value = '';
+
+                        // Show Typing Indicator
+                        const typingId = addMessage('Thinking...', 'system typing');
+
+                        // Get Context
+                        const context = window.Quannex ? window.Quannex.getState() : {};
+
+                        // Ask AI
+                        const response = await window.voiceModule.ask(question, context);
+
+                        // Remove Typing Indicator
+                        const typingEl = document.getElementById(typingId);
+                        if (typingEl) typingEl.remove();
+
+                        // Add AI Response
+                        addMessage(response, 'system');
+                    };
+
+                    if (voiceSend) {
+                        voiceSend.addEventListener('click', sendMessage);
+                    }
+
+                    if (voiceInput) {
+                        voiceInput.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter') sendMessage();
+                        });
+                    }
+
+                    // Helper to add messages
+                    function addMessage(text, type) {
+                        const msgDiv = document.createElement('div');
+                        msgDiv.className = `message ${type}`;
+                        msgDiv.textContent = text;
+                        msgDiv.id = `msg-${Date.now()}`;
+                        voiceMessages.appendChild(msgDiv);
+                        voiceMessages.scrollTop = voiceMessages.scrollHeight;
+                        return msgDiv.id;
+                    }
+
+                    // Start separate loop for advanced viz
+                    const nervousSystemLoop = () => {
+                        requestAnimationFrame(nervousSystemLoop);
+                        if (window.vizManager) window.vizManager.update(0.016);
+                    };
+                    nervousSystemLoop();
+
+                    // Wire up data updates
+                    const checkForEngine = setInterval(() => {
+                        if (window.quannexEngine) {
+                            clearInterval(checkForEngine);
+                            console.log('🧠 Engine detected. Wiring Nervous System...');
+
+                            // Hook into recalculate
+                            const originalRecalculate = window.quannexEngine.recalculate.bind(window.quannexEngine);
+                            window.quannexEngine.recalculate = async function () {
+                                await originalRecalculate();
+                                const analysis = this.getAdvancedAnalysis();
+
+                                // Update Visualization
+                                if (analysis && window.vizManager) {
+                                    window.vizManager.updateData(analysis);
+                                }
+
+                                // Update Shadow Panel
+                                if (analysis && analysis.shadows && window.shadowPanel) {
+                                    window.shadowPanel.update(analysis.shadows);
+                                }
+                            };
+
+                            // Initial update
+                            if (window.quannexEngine.advancedAnalysis) {
+                                window.vizManager.updateData(window.quannexEngine.advancedAnalysis);
+                                if (window.shadowPanel) {
+                                    window.shadowPanel.update(window.quannexEngine.advancedAnalysis.shadows);
+                                }
+                            }
+                        }
+                    }, 500);
+                }
+            }, 100);
+        });
+
         // Import advanced analyzers (lazy loaded when needed)
         let SpectralAnalyzer, EdgeAnalyzer, VertexAnalyzer, ShadowDetector, DynamicsAnalyzer, AIEdgeInterpreter;
         let analyzersLoaded = false;
@@ -1340,880 +1477,964 @@
                     });
                 }
             }
-        }
 
-        // Initialize Visualization Manager (Lazy Load)
-        let vizManager = null;
+            // Update visualization with mode-specific features
+            await updateVisualizationForMode(mode);
 
-        function initVizManager() {
-            if (vizManager) return vizManager;
-
-            if (window.scene && window.camera && window.renderer) {
-                vizManager = new VisualizationManager(window.scene, window.camera, window.renderer.domElement);
-                console.log('✅ VisualizationManager initialized');
-                return vizManager;
-            }
-            return null;
-        }
-
-        // Run advanced analysis (Delegated to VisualizationManager)
-        async function runAdvancedAnalysis(companyData, faceEnergies) {
-            if (!analyzersLoaded) {
-                console.warn('⚠️ Analyzers not loaded yet');
-                return;
-            }
-
-            // Ensure VizManager is initialized
-            if (!vizManager) {
-                if (!initVizManager()) {
-                    console.warn('⚠️ Scene not ready for VisualizationManager');
+            // Advanced visualization update
+            async function updateVisualizationForMode(mode) {
+                const scene = window.scene;
+                if (!scene) {
+                    console.warn('⚠️ Scene not ready yet');
                     return;
                 }
-            }
 
-            // Delegate to VisualizationManager
-            const results = await vizManager.runAdvancedAnalysis(companyData, faceEnergies);
+                // Clear existing advanced visualizations
+                clearAdvancedVisualizations();
 
-            // Update local reference for compatibility
-            advancedAnalysisResults = results;
-            window.advancedAnalysisResults = results;
-        }
+                if (mode === 'standard' || mode === 'minimal') {
+                    // Base visualization only
+                    advancedAnalysisResults = null;
+                    window.advancedAnalysisResults = null;
+                    console.log('✅ Standard/Minimal mode - base visualization active');
+                    return;
+                }
 
-        // Run complete analysis (advanced + dynamics)
-        async function runCompleteAnalysis(companyData, faceEnergies) {
-            await runAdvancedAnalysis(companyData, faceEnergies);
+                // Get company data
+                const companyData = window.Quannex ? window.Quannex.getState() : null;
+                if (!companyData || !companyData.faces) {
+                    console.warn('⚠️ No company data available');
+                    return;
+                }
 
-            if (!DynamicsAnalyzer) {
-                console.warn('⚠️ Dynamics analyzer not loaded');
-                return;
-            }
+                // Run analyses
+                const faceEnergies = companyData.faces.map(f => f.faceEnergy);
 
-            const dynamics = new DynamicsAnalyzer();
-            const dynamicsAnalysis = dynamics.analyzeComplete(
-                companyData.faces,
-                advancedAnalysisResults.edges,
-                advancedAnalysisResults.spectral
-            );
+                if (mode === 'advanced') {
+                    await runAdvancedAnalysis(companyData, faceEnergies);
+                    renderEdgeTensions();
+                    renderVertexVortices();
+                    updateAnalysisPanel();
+                } else if (mode === 'complete') {
+                    await runCompleteAnalysis(companyData, faceEnergies);
+                    renderEdgeTensions();
+                    renderVertexVortices();
+                    renderFeedbackLoops();
+                    updateAnalysisPanel();
+                    checkPhaseTransitionWarning();
 
-            advancedAnalysisResults.dynamics = dynamicsAnalysis;
-
-            // Update window reference
-            window.advancedAnalysisResults = advancedAnalysisResults;
-
-            // Update VisualizationManager state if needed (it stores results internally too)
-            if (vizManager || initVizManager()) {
-                vizManager.advancedAnalysisResults.dynamics = dynamicsAnalysis;
-            }
-
-            console.log('✅ Complete dynamics analysis done');
-        }
-
-        // Render edge tensions (Delegated)
-        function renderEdgeTensions() {
-            if (vizManager || initVizManager()) {
-                vizManager.renderEdgeTensions();
-            }
-        }
-
-        // Render vertex vortices (Delegated)
-        function renderVertexVortices() {
-            if (vizManager || initVizManager()) {
-                vizManager.renderVertexVortices();
-            }
-        }
-
-        // Render feedback loops (Delegated)
-        function renderFeedbackLoops() {
-            if (vizManager || initVizManager()) {
-                vizManager.renderFeedbackLoops();
-            }
-        }
-
-        // Clear visualizations (Delegated)
-        function clearAdvancedVisualizations() {
-            if (vizManager || initVizManager()) {
-                vizManager.clear();
-            }
-        }
-
-        // Expose functions to window for external access (dodecahedron-viz.js)
-        window.runAdvancedAnalysis = runAdvancedAnalysis;
-        window.renderEdgeTensions = renderEdgeTensions;
-        window.renderVertexVortices = renderVertexVortices;
-        window.renderFeedbackLoops = renderFeedbackLoops;
-        window.clearAdvancedVisualizations = clearAdvancedVisualizations;
-
-        // Cache for extracted vertices and topology mapping
-        let cachedGeometricVertices = null;
-        let cachedVertexToFacesMap = null;
-        let cachedAnalyticalToGeometricMap = null;
-
-
-
-        // Authoritative vertex-to-face mapping extracted from Three.js geometry
-        // This maps analytical vertex ID (1-20) to the 3 face IDs it connects
-        // NOTE: This will be populated at runtime from the actual geometry
-        let AUTHORITATIVE_VERTEX_TOPOLOGY = null;
-
-        /**
-         * Build a topology-aware mapping from Three.js face indices to analytical Face IDs
-         * Returns an array where index = Three.js face index (0-11), value = analytical Face ID (1-12)
-         */
-
-
-
-
-        /**
-         * Extract the ACTUAL vertex topology from the rendered Three.js geometry
-         * This is the ground truth - what the dodecahedron actually looks like
-         */
-        function extractActualTopologyFromGeometry() {
-            const vertexToFacesMap = buildVertexToFacesMap();
-
-            if (!vertexToFacesMap || vertexToFacesMap.size === 0) {
-                console.error('❌ Could not extract topology from geometry - no face meshes available');
-                return null;
-            }
-
-            console.log('\n🔍 EXTRACTED ACTUAL TOPOLOGY FROM THREE.JS GEOMETRY:');
-            console.log('='.repeat(60));
-
-            const topology = {};
-            vertexToFacesMap.forEach((faceSet, geoIdx) => {
-                const faces = Array.from(faceSet).sort((a, b) => a - b);
-                topology[geoIdx] = faces;
-                console.log(`Vertex ${geoIdx + 1}: faces [${faces.join(', ')}] (${faces.length} faces)`);
-            });
-
-            console.log('='.repeat(60));
-            console.log(`✅ Extracted ${Object.keys(topology).length} vertices from actual geometry\n`);
-
-            // Validate topology
-            const vertexCount = Object.keys(topology).length;
-            const invalidVertices = Object.entries(topology).filter(([, faces]) => faces.length !== 3);
-
-            if (vertexCount !== 20) {
-                console.error(`❌ ERROR: Expected 20 vertices, got ${vertexCount}`);
-            }
-
-            if (invalidVertices.length > 0) {
-                console.error(`❌ ERROR: ${invalidVertices.length} vertices don't have exactly 3 faces:`);
-                invalidVertices.forEach(([idx, faces]) => {
-                    console.error(`   Vertex ${parseInt(idx) + 1}: ${faces.length} faces - [${faces.join(', ')}]`);
-                });
-            }
-
-            if (vertexCount === 20 && invalidVertices.length === 0) {
-                console.log('✅ VALIDATION PASSED: All 20 vertices have exactly 3 faces');
-            }
-
-            return topology;
-        }
-
-        /**
-         * Build the authoritative vertex-to-face topology
-         * Uses ACTUAL geometry as ground truth, then maps to analytical vertex IDs
-         */
-        function buildAuthoritativeTopology() {
-            // Extract actual topology from rendered geometry
-            const geometricTopology = extractActualTopologyFromGeometry();
-
-            if (!geometricTopology) {
-                console.warn('⚠️ Geometry extraction failed, using CSV fallback topology');
-                // Return CSV topology as fallback
-                return {
-                    1: [1, 2, 6],     // V1: Foundation Nexus
-                    2: [1, 5, 6],     // V2: Resource Core
-                    3: [1, 8, 9],     // V3: Action Point
-                    4: [2, 9, 10],    // V4: Growth Catalyst
-                    5: [2, 3, 10],    // V5: Development Hub
-                    6: [2, 3, 6],     // V6: Social Nexus
-                    7: [3, 10, 11],   // V7: Learning Junction
-                    8: [4, 5, 6],     // V8: Brand Anchor
-                    9: [1, 5, 8],     // V9: Strategic Vortex
-                    10: [4, 5, 7],    // V10: Excellence Hub
-                    11: [3, 4, 11],   // V11: Governance Core
-                    12: [4, 7, 11],   // V12: Leadership Point
-                    13: [5, 7, 8],    // V13: Vision Bridge
-                    14: [7, 8, 12],   // V14: Future Nexus
-                    15: [7, 11, 12],  // V15: Wisdom Center
-                    16: [8, 9, 12],   // V16: Impact Junction
-                    17: [9, 10, 12],  // V17: Evolution Point
-                    18: [10, 11, 12], // V18: Sustainability Anchor
-                    19: [3, 4, 6],    // V19: Culture Nexus
-                    20: [1, 2, 9]     // V20: Wisdom Center
-                };
-            }
-
-            // For now, use geometric indices as analytical IDs (geoIdx + 1 = analyticalId)
-            // This will show us the ACTUAL topology, then we can map archetypes to it
-            const topology = {};
-            Object.entries(geometricTopology).forEach(([geoIdx, faces]) => {
-                const analyticalId = parseInt(geoIdx) + 1; // Convert to 1-indexed
-                topology[analyticalId] = faces;
-            });
-
-            console.log('📊 Using EXTRACTED topology as authoritative source');
-            return topology;
-        }
-
-        /**
-         * Get the authoritative vertex topology, building it if not yet initialized
-         */
-        function getAuthoritativeTopology() {
-            if (!AUTHORITATIVE_VERTEX_TOPOLOGY) {
-                AUTHORITATIVE_VERTEX_TOPOLOGY = buildAuthoritativeTopology();
-            }
-            return AUTHORITATIVE_VERTEX_TOPOLOGY;
-        }
-
-        /**
-         * Find the 2 vertices that form the shared edge between two faces
-         * @param {number} face1 - First face ID (1-12)
-         * @param {number} face2 - Second face ID (1-12)
-         * @returns {Array<number>} Array of 2 vertex IDs, or null if faces don't share an edge
-         */
-        function findSharedEdgeVertices(face1Id, face2Id) {
-            // Get the authoritative topology (builds from geometry if not yet initialized)
-            const topology = getAuthoritativeTopology();
-            const sharedVertexIds = [];
-
-            // Check each vertex (1-20) to see if it connects to both faces
-            for (let vertexId = 1; vertexId <= 20; vertexId++) {
-                const connectedFaces = topology[vertexId];
-
-                if (!connectedFaces) continue;
-
-                // If this vertex connects to both faces, it's part of the shared edge
-                if (connectedFaces.includes(face1Id) && connectedFaces.includes(face2Id)) {
-                    sharedVertexIds.push(vertexId);
+                    // Highlight frozen faces (System Inertia)
+                    if (advancedAnalysisResults.dynamics && window.dodecahedronMaterials) {
+                        const materials = window.dodecahedronMaterials;
+                        companyData.faces.forEach((face, i) => {
+                            if (i < materials.length) {
+                                const frozenFace = advancedAnalysisResults.dynamics.inertia.faceInertia.find(f => f.faceId
+                                    === face.id);
+                                if (frozenFace && frozenFace.responsiveness === 'Frozen') {
+                                    materials[i].emissiveIntensity = 0.8; // High glow for frozen faces
+                                    materials[i].needsUpdate = true;
+                                }
+                            }
+                        });
+                    }
                 }
             }
 
-            // Two adjacent faces should share exactly 2 vertices
-            if (sharedVertexIds.length !== 2) {
-                console.warn(`⚠️ Faces ${face1Id} and ${face2Id} share ${sharedVertexIds.length} vertices (expected 2)`);
+            // Initialize Visualization Manager (Lazy Load)
+            let vizManager = null;
+
+            function initVizManager() {
+                if (vizManager) return vizManager;
+
+                if (window.scene && window.camera && window.renderer) {
+                    vizManager = new VisualizationManager(window.scene, window.camera, window.renderer.domElement);
+                    console.log('✅ VisualizationManager initialized');
+                    return vizManager;
+                }
                 return null;
             }
 
-            // Convert vertex IDs to geometric positions
-            const geometricVertices = getDodecahedronVertices();
-            const sharedPositions = sharedVertexIds.map(vertexId => {
-                const geoIndex = getGeometricVertexIndex(vertexId);
-                return geometricVertices[geoIndex];
-            });
+            // Run advanced analysis (Delegated to VisualizationManager)
+            async function runAdvancedAnalysis(companyData, faceEnergies) {
+                if (!analyzersLoaded) {
+                    console.warn('⚠️ Analyzers not loaded yet');
+                    return;
+                }
 
-            // Verify we got valid positions
-            if (!sharedPositions[0] || !sharedPositions[1]) {
-                console.warn(`⚠️ Could not map vertex IDs ${sharedVertexIds} to positions for edge ${face1Id}-${face2Id}`);
-                return null;
+                // Ensure VizManager is initialized
+                if (!vizManager) {
+                    if (!initVizManager()) {
+                        console.warn('⚠️ Scene not ready for VisualizationManager');
+                        return;
+                    }
+                }
+
+                // Delegate to VisualizationManager
+                const results = await vizManager.runAdvancedAnalysis(companyData, faceEnergies);
+
+                // Update local reference for compatibility
+                advancedAnalysisResults = results;
+                window.advancedAnalysisResults = results;
             }
 
-            return sharedPositions; // Returns array of 2 THREE.Vector3 positions
-        }
+            // Run complete analysis (advanced + dynamics)
+            async function runCompleteAnalysis(companyData, faceEnergies) {
+                await runAdvancedAnalysis(companyData, faceEnergies);
 
-        // Build a map of geometric vertex index -> face indices
-        window.buildVertexToFacesMap = function () {
-            if (cachedVertexToFacesMap) {
-                return cachedVertexToFacesMap;
+                if (!DynamicsAnalyzer) {
+                    console.warn('⚠️ Dynamics analyzer not loaded');
+                    return;
+                }
+
+                const dynamics = new DynamicsAnalyzer();
+                const dynamicsAnalysis = dynamics.analyzeComplete(
+                    companyData.faces,
+                    advancedAnalysisResults.edges,
+                    advancedAnalysisResults.spectral
+                );
+
+                advancedAnalysisResults.dynamics = dynamicsAnalysis;
+
+                // Update window reference
+                window.advancedAnalysisResults = advancedAnalysisResults;
+
+                // Update VisualizationManager state if needed (it stores results internally too)
+                if (vizManager || initVizManager()) {
+                    vizManager.advancedAnalysisResults.dynamics = dynamicsAnalysis;
+                }
+
+                console.log('✅ Complete dynamics analysis done');
             }
 
-            const faceMeshes = window.dodecahedronViz?.faceMeshes;
-            const geometricVertices = getDodecahedronVertices();
-
-            if (!faceMeshes || faceMeshes.length === 0) {
-                console.warn('⚠️ No face meshes available for topology mapping');
-                return null;
+            // Render edge tensions (Delegated)
+            function renderEdgeTensions() {
+                if (vizManager || initVizManager()) {
+                    vizManager.renderEdgeTensions();
+                }
             }
 
-            // Map: geometricVertexIndex -> Set of faceIndices (1-12, 1-indexed to match authoritative data)
-            const vertexToFaces = new Map();
+            // Render vertex vortices (Delegated)
+            function renderVertexVortices() {
+                if (vizManager || initVizManager()) {
+                    vizManager.renderVertexVortices();
+                }
+            }
 
-            // For each geometric vertex, find which faces it belongs to
-            geometricVertices.forEach((geoVertex, geoIdx) => {
-                const connectedFaces = new Set();
+            // Render feedback loops (Delegated)
+            function renderFeedbackLoops() {
+                if (vizManager || initVizManager()) {
+                    vizManager.renderFeedbackLoops();
+                }
+            }
 
-                // Check each face mesh
-                faceMeshes.forEach((mesh, faceIdx) => {
-                    const positions = mesh.geometry.attributes.position;
+            // Clear visualizations (Delegated)
+            function clearAdvancedVisualizations() {
+                if (vizManager || initVizManager()) {
+                    vizManager.clear();
+                }
+            }
 
-                    // Check if this face contains this vertex
-                    for (let i = 0; i < positions.count; i++) {
-                        const vx = positions.getX(i);
-                        const vy = positions.getY(i);
-                        const vz = positions.getZ(i);
+            // Expose functions to window for external access (dodecahedron-viz.js)
+            window.runAdvancedAnalysis = runAdvancedAnalysis;
+            window.renderEdgeTensions = renderEdgeTensions;
+            window.renderVertexVortices = renderVertexVortices;
+            window.renderFeedbackLoops = renderFeedbackLoops;
+            window.clearAdvancedVisualizations = clearAdvancedVisualizations;
 
-                        // Check if this face vertex matches the geometric vertex
-                        const distance = Math.sqrt(
-                            Math.pow(vx - geoVertex.x, 2) +
-                            Math.pow(vy - geoVertex.y, 2) +
-                            Math.pow(vz - geoVertex.z, 2)
-                        );
+            // Harmonic Tuner Integration (Phase 4)
+            window.refreshVisualization = async function () {
+                console.log('🔄 Refreshing visualization from Tuner...');
+                const companyData = window.Quannex ? window.Quannex.getState() : null;
+                if (companyData) {
+                    // Re-run analysis with new tuning params
+                    const faceEnergies = companyData.faces.map(f => f.faceEnergy);
 
-                        if (distance < 0.01) { // Tolerance for floating point comparison
-                            connectedFaces.add(faceIdx + 1); // +1 because analytical faces are 1-indexed
-                            break;
+                    // Update standard viz
+                    if (window.updateVisualization) {
+                        window.updateVisualization();
+                    }
+
+                    // Update advanced viz
+                    if (currentMode === 'advanced' || currentMode === 'complete') {
+                        await updateVisualizationForMode(currentMode);
+                    }
+                }
+            };
+
+            // Cache for extracted vertices and topology mapping
+            let cachedGeometricVertices = null;
+            let cachedVertexToFacesMap = null;
+            let cachedAnalyticalToGeometricMap = null;
+
+
+
+            // Authoritative vertex-to-face mapping extracted from Three.js geometry
+            // This maps analytical vertex ID (1-20) to the 3 face IDs it connects
+            // NOTE: This will be populated at runtime from the actual geometry
+            let AUTHORITATIVE_VERTEX_TOPOLOGY = null;
+
+            /**
+            * Build a topology-aware mapping from Three.js face indices to analytical Face IDs
+            * Returns an array where index = Three.js face index (0-11), value = analytical Face ID (1-12)
+            */
+
+
+
+
+            /**
+            * Extract the ACTUAL vertex topology from the rendered Three.js geometry
+            * This is the ground truth - what the dodecahedron actually looks like
+            */
+            function extractActualTopologyFromGeometry() {
+                const vertexToFacesMap = buildVertexToFacesMap();
+
+                if (!vertexToFacesMap || vertexToFacesMap.size === 0) {
+                    console.error('❌ Could not extract topology from geometry - no face meshes available');
+                    return null;
+                }
+
+                console.log('\n🔍 EXTRACTED ACTUAL TOPOLOGY FROM THREE.JS GEOMETRY:');
+                console.log('='.repeat(60));
+
+                const topology = {};
+                vertexToFacesMap.forEach((faceSet, geoIdx) => {
+                    const faces = Array.from(faceSet).sort((a, b) => a - b);
+                    topology[geoIdx] = faces;
+                    console.log(`Vertex ${geoIdx + 1}: faces [${faces.join(', ')}] (${faces.length} faces)`);
+                });
+
+                console.log('='.repeat(60));
+                console.log(`✅ Extracted ${Object.keys(topology).length} vertices from actual geometry\n`);
+
+                // Validate topology
+                const vertexCount = Object.keys(topology).length;
+                const invalidVertices = Object.entries(topology).filter(([, faces]) => faces.length !== 3);
+
+                if (vertexCount !== 20) {
+                    console.error(`❌ ERROR: Expected 20 vertices, got ${vertexCount}`);
+                }
+
+                if (invalidVertices.length > 0) {
+                    console.error(`❌ ERROR: ${invalidVertices.length} vertices don't have exactly 3 faces:`);
+                    invalidVertices.forEach(([idx, faces]) => {
+                        console.error(` Vertex ${parseInt(idx) + 1}: ${faces.length} faces - [${faces.join(', ')}]`);
+                    });
+                }
+
+                if (vertexCount === 20 && invalidVertices.length === 0) {
+                    console.log('✅ VALIDATION PASSED: All 20 vertices have exactly 3 faces');
+                }
+
+                return topology;
+            }
+
+            /**
+            * Build the authoritative vertex-to-face topology
+            * Uses ACTUAL geometry as ground truth, then maps to analytical vertex IDs
+            */
+            function buildAuthoritativeTopology() {
+                // Extract actual topology from rendered geometry
+                const geometricTopology = extractActualTopologyFromGeometry();
+
+                if (!geometricTopology) {
+                    console.warn('⚠️ Geometry extraction failed, using CSV fallback topology');
+                    // Return CSV topology as fallback
+                    return {
+                        1: [1, 2, 6], // V1: Foundation Nexus
+                        2: [1, 5, 6], // V2: Resource Core
+                        3: [1, 8, 9], // V3: Action Point
+                        4: [2, 9, 10], // V4: Growth Catalyst
+                        5: [2, 3, 10], // V5: Development Hub
+                        6: [2, 3, 6], // V6: Social Nexus
+                        7: [3, 10, 11], // V7: Learning Junction
+                        8: [4, 5, 6], // V8: Brand Anchor
+                        9: [1, 5, 8], // V9: Strategic Vortex
+                        10: [4, 5, 7], // V10: Excellence Hub
+                        11: [3, 4, 11], // V11: Governance Core
+                        12: [4, 7, 11], // V12: Leadership Point
+                        13: [5, 7, 8], // V13: Vision Bridge
+                        14: [7, 8, 12], // V14: Future Nexus
+                        15: [7, 11, 12], // V15: Wisdom Center
+                        16: [8, 9, 12], // V16: Impact Junction
+                        17: [9, 10, 12], // V17: Evolution Point
+                        18: [10, 11, 12], // V18: Sustainability Anchor
+                        19: [3, 4, 6], // V19: Culture Nexus
+                        20: [1, 2, 9] // V20: Wisdom Center
+                    };
+                }
+
+                // For now, use geometric indices as analytical IDs (geoIdx + 1 = analyticalId)
+                // This will show us the ACTUAL topology, then we can map archetypes to it
+                const topology = {};
+                Object.entries(geometricTopology).forEach(([geoIdx, faces]) => {
+                    const analyticalId = parseInt(geoIdx) + 1; // Convert to 1-indexed
+                    topology[analyticalId] = faces;
+                });
+
+                console.log('📊 Using EXTRACTED topology as authoritative source');
+                return topology;
+            }
+
+            /**
+            * Get the authoritative vertex topology, building it if not yet initialized
+            */
+            function getAuthoritativeTopology() {
+                if (!AUTHORITATIVE_VERTEX_TOPOLOGY) {
+                    AUTHORITATIVE_VERTEX_TOPOLOGY = buildAuthoritativeTopology();
+                }
+                return AUTHORITATIVE_VERTEX_TOPOLOGY;
+            }
+
+            /**
+            * Find the 2 vertices that form the shared edge between two faces
+            * @param {number} face1 - First face ID (1-12)
+            * @param {number} face2 - Second face ID (1-12)
+            * @returns {Array<number>} Array of 2 vertex IDs, or null if faces don't share an edge
+                */
+            function findSharedEdgeVertices(face1Id, face2Id) {
+                // Get the authoritative topology (builds from geometry if not yet initialized)
+                const topology = getAuthoritativeTopology();
+                const sharedVertexIds = [];
+
+                // Check each vertex (1-20) to see if it connects to both faces
+                for (let vertexId = 1; vertexId <= 20; vertexId++) {
+                    const connectedFaces = topology[vertexId];
+                    if (!connectedFaces) continue;
+
+                    // If this vertex connects to both faces, it's part of the shared edge
+                    if (connectedFaces.includes(face1Id) && connectedFaces.includes(face2Id)) {
+                        sharedVertexIds.push(vertexId);
+                    }
+                }
+
+                // Two adjacent faces should share exactly 2 vertices
+                if (sharedVertexIds.length !== 2) {
+                    console.warn(`⚠️ Faces ${face1Id} and ${face2Id} share ${sharedVertexIds.length} vertices (expected 2)`);
+                    return null;
+                }
+
+                // Convert vertex IDs to geometric positions
+                const geometricVertices = getDodecahedronVertices();
+                const sharedPositions = sharedVertexIds.map(vertexId => {
+                    const geoIndex = getGeometricVertexIndex(vertexId);
+                    return geometricVertices[geoIndex];
+                });
+
+                // Verify we got valid positions
+                if (!sharedPositions[0] || !sharedPositions[1]) {
+                    console.warn(`⚠️ Could not map vertex IDs ${sharedVertexIds} to positions for edge
+                ${face1Id}-${face2Id}`);
+                    return null;
+                }
+
+                return sharedPositions; // Returns array of 2 THREE.Vector3 positions
+            }
+
+            // Build a map of geometric vertex index -> face indices
+            window.buildVertexToFacesMap = function () {
+                if (cachedVertexToFacesMap) {
+                    return cachedVertexToFacesMap;
+                }
+
+                const faceMeshes = window.dodecahedronViz?.faceMeshes;
+                const geometricVertices = getDodecahedronVertices();
+
+                if (!faceMeshes || faceMeshes.length === 0) {
+                    console.warn('⚠️ No face meshes available for topology mapping');
+                    return null;
+                }
+
+                // Map: geometricVertexIndex -> Set of faceIndices (1-12, 1-indexed to match authoritative data)
+                const vertexToFaces = new Map();
+
+                // For each geometric vertex, find which faces it belongs to
+                geometricVertices.forEach((geoVertex, geoIdx) => {
+                    const connectedFaces = new Set();
+
+                    // Check each face mesh
+                    faceMeshes.forEach((mesh, faceIdx) => {
+                        const positions = mesh.geometry.attributes.position;
+
+                        // Check if this face contains this vertex
+                        for (let i = 0; i < positions.count; i++) {
+                            const vx = positions.getX(i);
+                            const vy = positions.getY(i);
+                            const vz = positions.getZ(i);
+
+                            // Check if this face vertex matches the geometric vertex
+                            const distance = Math.sqrt(Math.pow(vx - geoVertex.x, 2) + Math.pow(vy - geoVertex.y, 2) + Math.pow(vz - geoVertex.z, 2));
+
+                            if (distance < 0.01) { // Tolerance for floating point comparison
+                                connectedFaces.add(faceIdx + 1); // +1 because analytical faces are 1-indexed
+                                break;
+                            }
+                        }
+                    });
+
+                    if (connectedFaces.size > 0) {
+                        vertexToFaces.set(geoIdx, connectedFaces);
+                    }
+                });
+
+                console.log(`✅ Built vertex-to-faces topology map for ${vertexToFaces.size} vertices`);
+
+                cachedVertexToFacesMap = vertexToFaces;
+                return vertexToFaces;
+            }
+
+            // Find the geometric vertex index by matching face connectivity
+            function getGeometricVertexIndex(vertexId) {
+                // Check if we already have a cached mapping
+                if (!cachedAnalyticalToGeometricMap) {
+                    cachedAnalyticalToGeometricMap = new Map();
+                }
+
+                if (cachedAnalyticalToGeometricMap.has(vertexId)) {
+                    return cachedAnalyticalToGeometricMap.get(vertexId);
+                }
+
+                // Use authoritative topology data extracted from geometry
+                const topology = getAuthoritativeTopology();
+                const authoritativeFaces = topology[vertexId];
+
+                if (!authoritativeFaces) {
+                    console.warn(`⚠️ No authoritative topology data for vertex ${vertexId}`);
+                    return 0;
+                }
+
+                // Build vertex-to-faces topology map if not already built
+                const vertexToFaces = buildVertexToFacesMap();
+
+                if (!vertexToFaces) {
+                    console.warn('⚠️ Topology mapping failed, using fallback');
+                    // Fallback to proximity-based method
+                    if (advancedAnalysisResults && advancedAnalysisResults.vertices) {
+                        const vertex = advancedAnalysisResults.vertices.find(v => v.id === vertexId);
+                        if (vertex) {
+                            return getGeometricVertexIndexByProximity(vertex);
                         }
                     }
-                });
-
-                if (connectedFaces.size > 0) {
-                    vertexToFaces.set(geoIdx, connectedFaces);
+                    return 0;
                 }
-            });
 
-            console.log(`✅ Built vertex-to-faces topology map for ${vertexToFaces.size} vertices`);
+                // Convert authoritative face IDs to a Set for comparison
+                const authoritativeFaceSet = new Set(authoritativeFaces);
 
-            cachedVertexToFacesMap = vertexToFaces;
-            return vertexToFaces;
-        }
+                // Find the geometric vertex whose face connectivity matches the authoritative data
+                let bestMatch = null;
+                let bestMatchScore = 0;
 
-        // Find the geometric vertex index by matching face connectivity
-        function getGeometricVertexIndex(vertexId) {
-            // Check if we already have a cached mapping
-            if (!cachedAnalyticalToGeometricMap) {
-                cachedAnalyticalToGeometricMap = new Map();
-            }
+                vertexToFaces.forEach((geoFaces, geoIdx) => {
+                    // Skip if already mapped to another analytical vertex
+                    const alreadyMapped = Array.from(cachedAnalyticalToGeometricMap.values()).includes(geoIdx);
+                    if (alreadyMapped) return;
 
-            if (cachedAnalyticalToGeometricMap.has(vertexId)) {
-                return cachedAnalyticalToGeometricMap.get(vertexId);
-            }
+                    // Calculate match score (how many faces match)
+                    let matchCount = 0;
+                    authoritativeFaceSet.forEach(faceId => {
+                        if (geoFaces.has(faceId)) {
+                            matchCount++;
+                        }
+                    });
 
-            // Use authoritative topology data extracted from geometry
-            const topology = getAuthoritativeTopology();
-            const authoritativeFaces = topology[vertexId];
-
-            if (!authoritativeFaces) {
-                console.warn(`⚠️ No authoritative topology data for vertex ${vertexId}`);
-                return 0;
-            }
-
-            // Build vertex-to-faces topology map if not already built
-            const vertexToFaces = buildVertexToFacesMap();
-
-            if (!vertexToFaces) {
-                console.warn('⚠️ Topology mapping failed, using fallback');
-                // Fallback to proximity-based method
-                if (advancedAnalysisResults && advancedAnalysisResults.vertices) {
-                    const vertex = advancedAnalysisResults.vertices.find(v => v.id === vertexId);
-                    if (vertex) {
-                        return getGeometricVertexIndexByProximity(vertex);
-                    }
-                }
-                return 0;
-            }
-
-            // Convert authoritative face IDs to a Set for comparison
-            const authoritativeFaceSet = new Set(authoritativeFaces);
-
-            // Find the geometric vertex whose face connectivity matches the authoritative data
-            let bestMatch = null;
-            let bestMatchScore = 0;
-
-            vertexToFaces.forEach((geoFaces, geoIdx) => {
-                // Skip if already mapped to another analytical vertex
-                const alreadyMapped = Array.from(cachedAnalyticalToGeometricMap.values()).includes(geoIdx);
-                if (alreadyMapped) return;
-
-                // Calculate match score (how many faces match)
-                let matchCount = 0;
-                authoritativeFaceSet.forEach(faceId => {
-                    if (geoFaces.has(faceId)) {
-                        matchCount++;
+                    // Perfect match requires all 3 faces to match
+                    if (matchCount === 3 && geoFaces.size === 3) {
+                        bestMatch = geoIdx;
+                        bestMatchScore = 3;
+                    } else if (matchCount > bestMatchScore) {
+                        // Partial match - take the best one
+                        bestMatch = geoIdx;
+                        bestMatchScore = matchCount;
                     }
                 });
 
-                // Perfect match requires all 3 faces to match
-                if (matchCount === 3 && geoFaces.size === 3) {
-                    bestMatch = geoIdx;
-                    bestMatchScore = 3;
-                } else if (matchCount > bestMatchScore) {
-                    // Partial match - take the best one
-                    bestMatch = geoIdx;
-                    bestMatchScore = matchCount;
-                }
-            });
+                const finalIndex = bestMatch !== null ? bestMatch : 0;
+                cachedAnalyticalToGeometricMap.set(vertexId, finalIndex);
 
-            const finalIndex = bestMatch !== null ? bestMatch : 0;
-            cachedAnalyticalToGeometricMap.set(vertexId, finalIndex);
+                console.log(`📍 Vertex ${vertexId}: authoritative faces ${JSON.stringify(authoritativeFaces)} →
+                    geometric index ${finalIndex} (match score: ${bestMatchScore})`);
 
-            console.log(`📍 Vertex ${vertexId}: authoritative faces ${JSON.stringify(authoritativeFaces)} → geometric index ${finalIndex} (match score: ${bestMatchScore})`);
+                return finalIndex;
+            }
 
-            return finalIndex;
-        }
+            // Fallback: Find geometric vertex by proximity (old method)
+            function getGeometricVertexIndexByProximity(vertex) {
+                // Get the centers of the 3 faces that meet at this vertex
+                const faceCenters = vertex.faceIds.map(faceId => getFaceCenterPosition(faceId - 1)).filter(p => p
+                    !== null);
+                if (faceCenters.length !== 3) return 0;
 
-        // Fallback: Find geometric vertex by proximity (old method)
-        function getGeometricVertexIndexByProximity(vertex) {
-            // Get the centers of the 3 faces that meet at this vertex
-            const faceCenters = vertex.faceIds.map(faceId => getFaceCenterPosition(faceId - 1)).filter(p => p !== null);
-            if (faceCenters.length !== 3) return 0;
+                // Calculate the average position (approximate vertex location)
+                const avgPos = new THREE.Vector3();
+                faceCenters.forEach(center => avgPos.add(center));
+                avgPos.divideScalar(faceCenters.length);
 
-            // Calculate the average position (approximate vertex location)
-            const avgPos = new THREE.Vector3();
-            faceCenters.forEach(center => avgPos.add(center));
-            avgPos.divideScalar(faceCenters.length);
+                // Find the closest actual vertex from the Three.js geometry
+                const geometricVertices = getDodecahedronVertices();
+                let closestIndex = 0;
+                let minDistance = Infinity;
 
-            // Find the closest actual vertex from the Three.js geometry
-            const geometricVertices = getDodecahedronVertices();
-            let closestIndex = 0;
-            let minDistance = Infinity;
+                geometricVertices.forEach((geoVertex, index) => {
+                    const distance = avgPos.distanceTo(geoVertex);
+                    if (distance < minDistance) { minDistance = distance; closestIndex = index; }
+                });
+                return closestIndex;
+            }
 
-            geometricVertices.forEach((geoVertex, index) => {
-                const distance = avgPos.distanceTo(geoVertex);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestIndex = index;
-                }
-            });
+            // Get vertex position using actual geometric vertices
+            function getVertexPosition(vertexFaceIds) {
+                // Find which vertex this is by matching face IDs
+                if (!advancedAnalysisResults || !advancedAnalysisResults.vertices) return null;
 
-            return closestIndex;
-        }
+                const vertex = advancedAnalysisResults.vertices.find(v =>
+                    v.faceIds.length === vertexFaceIds.length &&
+                    v.faceIds.every(id => vertexFaceIds.includes(id))
+                );
+                const geometricVertices = getDodecahedronVertices();
 
-        // Get vertex position using actual geometric vertices
-        function getVertexPosition(vertexFaceIds) {
-            // Find which vertex this is by matching face IDs
-            if (!advancedAnalysisResults || !advancedAnalysisResults.vertices) return null;
+                return geometricVertices[geometricIndex];
+            }
 
-            const vertex = advancedAnalysisResults.vertices.find(v =>
-                v.faceIds.length === vertexFaceIds.length &&
-                v.faceIds.every(id => vertexFaceIds.includes(id))
-            );
+            // Update analysis panel with current results
+            function updateAnalysisPanel() {
+                if (!advancedAnalysisResults) return;
 
-            if (!vertex) return null;
+                const content = document.getElementById('analysisContent');
+                const { spectral, edges, vertices, shadows, dynamics } = advancedAnalysisResults;
 
-            // Map to geometric vertex and get position
-            const geometricIndex = getGeometricVertexIndex(vertex.id); // Fixed: use vertex.id
-            const geometricVertices = getDodecahedronVertices();
+                let html = `
+                        <!-- Spectral Analysis -->
+                        <div class="analysis-section">
+                            <div class="section-title">🎵 Spectral Mode</div>
+                            <div class="metric-row">
+                                <span class="metric-label">Pattern</span>
+                                <span class="metric-value">${spectral.summary.pattern}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Eigenvalue λ</span>
+                                <span class="metric-value">${spectral.dominantMode.eigenvalue.toFixed(3)}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Dissonance</span>
+                                <span
+                                    class="metric-value ${spectral.diagnostics.dissonanceIndex.percentage > 20 ? 'critical' : 'success'}">
+                                    ${spectral.diagnostics.dissonanceIndex.percentage.toFixed(1)}%
+                                </span>
+                            </div>
+                        </div>
 
-            return geometricVertices[geometricIndex];
-        }
+                        <!-- Edge Tensions -->
+                        <div class="analysis-section">
+                            <div class="section-title">🔗 Edge Tensions</div>
+                            <div class="metric-row">
+                                <span class="metric-label">Total Edges</span>
+                                <span class="metric-value">${edges.length}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">High Tension</span>
+                                <span class="metric-value">${edges.filter(e => e.tension > 0.4).length} edges</span>
+                            </div>
+                        </div>
 
-        // Update analysis panel with current results
-        function updateAnalysisPanel() {
-            if (!advancedAnalysisResults) return;
+                        <!-- Vortex Dynamics -->
+                        <div class="analysis-section">
+                            <div class="section-title">🌀 Vortex Dynamics</div>
+                            <div class="metric-row">
+                                <span class="metric-label">Total Vertices</span>
+                                <span class="metric-value">${vertices.length}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Strong Vortices</span>
+                                <span class="metric-value">${vertices.filter(v => v.vortexStrength > 0.5).length}</span>
+                            </div>
 
-            const content = document.getElementById('analysisContent');
-            const { spectral, edges, vertices, shadows, dynamics } = advancedAnalysisResults;
+                            <!-- Leverage Points List -->
+                            ${(() => {
+                        // Calculate leverage points if not available in summary
+                        const leveragePoints = vertices.filter(v => v.isLeveragePoint)
+                            .sort((a, b) => b.vortexStrength - a.vortexStrength)
+                            .slice(0, 3);
 
-            let html = `
-                <!-- Spectral Analysis -->
-                <div class="analysis-section">
-                    <div class="section-title">🎵 Spectral Mode</div>
-                    <div class="metric-row">
-                        <span class="metric-label">Pattern</span>
-                        <span class="metric-value">${spectral.summary.pattern}</span>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">Eigenvalue λ</span>
-                        <span class="metric-value">${spectral.dominantMode.eigenvalue.toFixed(3)}</span>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">Dissonance</span>
-                        <span class="metric-value ${spectral.diagnostics.dissonanceIndex.percentage > 20 ? 'critical' : 'success'}">
-                            ${spectral.diagnostics.dissonanceIndex.percentage.toFixed(1)}%
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Edge Tensions -->
-                <div class="analysis-section">
-                    <div class="section-title">🔗 Edge Tensions</div>
-                    <div class="metric-row">
-                        <span class="metric-label">Total Edges</span>
-                        <span class="metric-value">${edges.length}</span>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">High Tension</span>
-                        <span class="metric-value">${edges.filter(e => e.tension > 0.4).length} edges</span>
-                    </div>
-                </div>
-
-                <!-- Vortex Dynamics -->
-                <div class="analysis-section">
-                    <div class="section-title">🌀 Vortex Dynamics</div>
-                    <div class="metric-row">
-                        <span class="metric-label">Total Vertices</span>
-                        <span class="metric-value">${vertices.length}</span>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">Strong Vortices</span>
-                        <span class="metric-value">${vertices.filter(v => v.vortexStrength > 0.5).length}</span>
-                    </div>
-                    
-                    <!-- Leverage Points List -->
-                    ${(() => {
-                    // Calculate leverage points if not available in summary
-                    const leveragePoints = vertices.filter(v => v.isLeveragePoint)
-                        .sort((a, b) => b.vortexStrength - a.vortexStrength)
-                        .slice(0, 3);
-
-                    if (leveragePoints.length > 0) {
-                        return `
-                                <div style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
-                                    <div style="font-size: 11px; opacity: 0.7; margin-bottom: 6px;">TOP LEVERAGE POINTS</div>
-                                    ${leveragePoints.map(v => `
-                                        <div class="leverage-point">
-                                            <div class="leverage-point-title">V${v.id}: ${v.archetype || 'Unknown'}</div>
-                                            <div style="font-size: 11px; opacity: 0.8;">Strength: ${(v.vortexStrength * 100).toFixed(0)}%</div>
-                                        </div>
-                                    `).join('')}
+                        if (leveragePoints.length > 0) {
+                            return `
+                            <div
+                                style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
+                                <div style="font-size: 11px; opacity: 0.7; margin-bottom: 6px;">TOP LEVERAGE POINTS
                                 </div>
-                             `;
-                    }
-                    return '';
-                })()}
-                </div>
+                                ${leveragePoints.map(v => `
+                                <div class="leverage-point">
+                                    <div class="leverage-point-title">V${v.id}: ${v.archetype || 'Unknown'}</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Strength: ${(v.vortexStrength *
+                                    100).toFixed(0)}%</div>
+                                </div>
+                                `).join('')}
+                            </div>
+                            `;
+                        }
+                        return '';
+                    })()}
+                        </div>
 
-                <!-- Shadow Detection -->
-                <div class="analysis-section">
-                    <div class="section-title">👁️ Shadow Patterns</div>
-                    <div class="metric-row">
-                        <span class="metric-label">Detected</span>
-                        <span class="metric-value ${shadows.totalPatternsDetected > 0 ? 'critical' : 'success'}">
-                            ${shadows.totalPatternsDetected} patterns
-                        </span>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">Integrity</span>
-                        <span class="metric-value ${shadows.systemIntegrity.score < 0.7 ? 'critical' : 'success'}">
-                            ${(shadows.systemIntegrity.score * 100).toFixed(1)}%
-                        </span>
-                    </div>
+                        <!-- Shadow Detection -->
+                        <div class="analysis-section">
+                            <div class="section-title">👁️ Shadow Patterns</div>
+                            <div class="metric-row">
+                                <span class="metric-label">Detected</span>
+                                <span
+                                    class="metric-value ${shadows.totalPatternsDetected > 0 ? 'critical' : 'success'}">
+                                    ${shadows.totalPatternsDetected} patterns
+                                </span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Integrity</span>
+                                <span
+                                    class="metric-value ${shadows.systemIntegrity.score < 0.7 ? 'critical' : 'success'}">
+                                    ${(shadows.systemIntegrity.score * 100).toFixed(1)}%
+                                </span>
+                            </div>
 
-                    ${shadows.detectedPatterns.length > 0 ? `
-                        <div style="margin-top: 12px;">
-                            ${shadows.detectedPatterns.map(pattern => `
+                            ${shadows.detectedPatterns.length > 0 ? `
+                            <div style="margin-top: 12px;">
+                                ${shadows.detectedPatterns.map(pattern => `
                                 <div class="shadow-alert">
                                     <div class="shadow-alert-title">${pattern.icon || '⚠️'} ${pattern.pattern}</div>
-                                    <div style="font-size: 11px; opacity: 0.8;">${pattern.severity ? pattern.severity.toUpperCase() : 'DETECTED'}</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">${pattern.severity ?
+                            pattern.severity.toUpperCase() : 'DETECTED'}</div>
                                 </div>
-                            `).join('')}
+                                `).join('')}
+                            </div>
+                            ` : '<div style="font-size: 12px; opacity: 0.7; margin-top: 10px;">No shadows detected ✅</div>'}
                         </div>
-                    ` : '<div style="font-size: 12px; opacity: 0.7; margin-top: 10px;">No shadows detected ✅</div>'}
-                </div>
-            `;
+                `;
 
-            // Add dynamics section for Complete mode
-            if (dynamics) {
-                html += `
-                    <!-- System Dynamics -->
-                    <div class="analysis-section">
-                        <div class="section-title">⚡ System Dynamics</div>
-                        <div class="metric-row">
-                            <span class="metric-label">Pattern</span>
-                            <span class="metric-value">${dynamics.feedbackLoops.summary.dominantPattern}</span>
+                // Add dynamics section for Complete mode
+                if (dynamics) {
+                    html += `
+                        <!-- System Dynamics -->
+                        <div class="analysis-section">
+                            <div class="section-title">⚡ System Dynamics</div>
+                            <div class="metric-row">
+                                <span class="metric-label">Pattern</span>
+                                <span class="metric-value">${dynamics.feedbackLoops.summary.dominantPattern}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Trajectory</span>
+                                <span class="metric-value">${dynamics.attractors.trajectory.type}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Stability</span>
+                                <span class="metric-value">${dynamics.attractors.stability.status}</span>
+                            </div>
                         </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Trajectory</span>
-                            <span class="metric-value">${dynamics.attractors.trajectory.type}</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Stability</span>
-                            <span class="metric-value">${dynamics.attractors.stability.status}</span>
-                        </div>
-                    </div>
 
-                    <!-- Feedback Loops -->
-                    <div class="analysis-section">
-                        <div class="section-title">🔄 Feedback Loops</div>
-                        <div class="metric-row">
-                            <span class="metric-label">Total Loops</span>
-                            <span class="metric-value">${dynamics.feedbackLoops.summary.totalLoops}</span>
+                        <!--Feedback Loops-- >
+                        <div class="analysis-section">
+                            <div class="section-title">🔄 Feedback Loops</div>
+                            <div class="metric-row">
+                                <span class="metric-label">Total Loops</span>
+                                <span class="metric-value">${dynamics.feedbackLoops.summary.totalLoops}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Vicious</span>
+                                <span class="metric-value critical">${dynamics.feedbackLoops.summary.vicious}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Virtuous</span>
+                                <span class="metric-value success">${dynamics.feedbackLoops.summary.virtuous}</span>
+                            </div>
                         </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Vicious</span>
-                            <span class="metric-value critical">${dynamics.feedbackLoops.summary.vicious}</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Virtuous</span>
-                            <span class="metric-value success">${dynamics.feedbackLoops.summary.virtuous}</span>
-                        </div>
-                    </div>
 
-                    <!-- Phase Transitions -->
-                    <div class="analysis-section">
-                        <div class="section-title">🌊 Phase Transitions</div>
-                        <div class="metric-row">
-                            <span class="metric-label">Nearest</span>
-                            <span class="metric-value">${dynamics.phaseTransitions.nearestTransition.name}</span>
+                        <!--Phase Transitions-- >
+                        <div class="analysis-section">
+                            <div class="section-title">🌊 Phase Transitions</div>
+                            <div class="metric-row">
+                                <span class="metric-label">Nearest</span>
+                                <span class="metric-value">${dynamics.phaseTransitions.nearestTransition.name}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Proximity</span>
+                                <span
+                                    class="metric-value ${dynamics.phaseTransitions.proximity > 0.7 ? 'warning' : ''}">
+                                    ${(dynamics.phaseTransitions.proximity * 100).toFixed(0)}%
+                                </span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Likelihood</span>
+                                <span class="metric-value">${dynamics.phaseTransitions.prediction.likelihood}</span>
+                            </div>
                         </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Proximity</span>
-                            <span class="metric-value ${dynamics.phaseTransitions.proximity > 0.7 ? 'warning' : ''}">
-                                ${(dynamics.phaseTransitions.proximity * 100).toFixed(0)}%
-                            </span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Likelihood</span>
-                            <span class="metric-value">${dynamics.phaseTransitions.prediction.likelihood}</span>
-                        </div>
-                    </div>
 
-                    <!-- System Inertia -->
-                    <div class="analysis-section">
-                        <div class="section-title">⏳ System Inertia</div>
-                        <div class="metric-row">
-                            <span class="metric-label">Frozen Faces</span>
-                            <span class="metric-value ${dynamics.inertia.summary.frozenFaces > 3 ? 'critical' : ''}">
-                                ${dynamics.inertia.summary.frozenFaces}
-                            </span>
+                        <!--System Inertia-- >
+                        <div class="analysis-section">
+                            <div class="section-title">⏳ System Inertia</div>
+                            <div class="metric-row">
+                                <span class="metric-label">Frozen Faces</span>
+                                <span
+                                    class="metric-value ${dynamics.inertia.summary.frozenFaces > 3 ? 'critical' : ''}">
+                                    ${dynamics.inertia.summary.frozenFaces}
+                                </span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Flexibility</span>
+                                <span class="metric-value">${dynamics.inertia.summary.systemFlexibility.status}</span>
+                            </div>
                         </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Flexibility</span>
-                            <span class="metric-value">${dynamics.inertia.summary.systemFlexibility.status}</span>
-                        </div>
-                    </div>
 
-                    <!-- Critical Insights -->
-                    ${dynamics.summary.criticalInsights.length > 0 ? `
+                        <!--Critical Insights-- >
+                ${dynamics.summary.criticalInsights.length > 0 ? `
                         <div class="analysis-section">
                             <div class="section-title">⚡ Critical Insights</div>
                             ${dynamics.summary.criticalInsights.map(insight => `
-                                <div class="insight-card ${insight.type.toLowerCase()}">
-                                    <div class="insight-title">${insight.type}: ${insight.category}</div>
-                                    <div class="insight-message">${insight.message}</div>
-                                    <div class="insight-action">→ ${insight.action}</div>
-                                </div>
+                            <div class="insight-card ${insight.type.toLowerCase()}">
+                                <div class="insight-title">${insight.type}: ${insight.category}</div>
+                                <div class="insight-message">${insight.message}</div>
+                                <div class="insight-action">→ ${insight.action}</div>
+                            </div>
                             `).join('')}
                         </div>
-                    ` : ''}
-                `;
-            }
-
-            content.innerHTML = html;
-        }
-
-        function updateModeUI(mode) {
-            // Update mode buttons
-            document.querySelectorAll('.mode-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.getElementById(`mode${mode.charAt(0).toUpperCase() + mode.slice(1)}`).classList.add('active');
-
-            // Update subtitle
-            const subtitles = {
-                standard: 'Interactive Organizational Geometry',
-                advanced: 'Advanced Mathematical Visualization with Edge Tensions & Vortex Dynamics',
-                complete: 'Complete Mathematical Oracle - Full Dynamics & Feedback Analysis',
-                minimal: 'Clean Presentation View'
-            };
-            document.getElementById('pageSubtitle').textContent = subtitles[mode];
-
-            // Show/hide panels
-            const controlsPanel = document.getElementById('controlsPanel');
-            const analysisPanel = document.getElementById('analysisPanel');
-            const legend = document.getElementById('legend');
-            const modeSelector = document.querySelector('.mode-selector');
-
-            if (mode === 'standard') {
-                controlsPanel.style.display = 'block';
-                analysisPanel.classList.remove('visible');
-                legend.style.display = 'block';
-                modeSelector.style.display = 'block';
-            } else if (mode === 'advanced' || mode === 'complete') {
-                controlsPanel.style.display = 'none';
-                analysisPanel.classList.add('visible');
-                legend.style.display = 'block';
-                modeSelector.style.display = 'block';
-            } else if (mode === 'minimal') {
-                controlsPanel.style.display = 'none';
-                analysisPanel.classList.remove('visible');
-                legend.style.display = 'none';
-                modeSelector.style.display = 'none';
-            }
-        }
-
-        // Parent-child communication (from standard mode)
-        window.addEventListener('message', async (event) => {
-            const { type, companyId } = event.data;
-
-            if (type === 'LOAD_COMPANY') {
-                console.log(`[3D View] 📨 Received company load request from parent: ${companyId}`);
-
-                if (currentLoadedCompanyId === companyId) {
-                    console.log(`[3D View] ℹ️ Company "${companyId}" is already loaded, skipping duplicate load`);
-                    return;
+                        ` : ''
+                        }
+            `;
                 }
 
-                try {
-                    const loading = document.getElementById('loading');
-                    if (loading) loading.classList.remove('hidden');
+                content.innerHTML = html;
+            }
 
-                    if (companyId && window.CompanyLoader) {
-                        console.log(`[3D View] 🔄 Loading company: ${companyId}`);
-                        const company = await window.CompanyLoader.loadCompany(companyId);
+            function updateModeUI(mode) {
+                // Update mode buttons
+                document.querySelectorAll('.mode-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.getElementById(`mode${mode.charAt(0).toUpperCase() +
+                    mode.slice(1)
+                    } `).classList.add('active');
+
+                // Update subtitle
+                const subtitles = {
+                    standard: 'Interactive Organizational Geometry',
+                    advanced: 'Advanced Mathematical Visualization with Edge Tensions & Vortex Dynamics',
+                    complete: 'Complete Mathematical Oracle - Full Dynamics & Feedback Analysis',
+                    minimal: 'Clean Presentation View'
+                };
+                document.getElementById('pageSubtitle').textContent = subtitles[mode];
+
+                // Show/hide panels
+                const controlsPanel = document.getElementById('controlsPanel');
+                const analysisPanel = document.getElementById('analysisPanel');
+                const legend = document.getElementById('legend');
+                const modeSelector = document.querySelector('.mode-selector');
+
+                if (mode === 'standard') {
+                    controlsPanel.style.display = 'block';
+                    analysisPanel.classList.remove('visible');
+                    legend.style.display = 'block';
+                    modeSelector.style.display = 'block';
+                } else if (mode === 'advanced' || mode === 'complete') {
+                    controlsPanel.style.display = 'none';
+                    analysisPanel.classList.add('visible');
+                    legend.style.display = 'block';
+                    modeSelector.style.display = 'block';
+                } else if (mode === 'minimal') {
+                    controlsPanel.style.display = 'none';
+                    analysisPanel.classList.remove('visible');
+                    legend.style.display = 'none';
+                    modeSelector.style.display = 'none';
+                }
+            }
+
+            // Parent-child communication (from standard mode)
+            window.addEventListener('message', async (event) => {
+                const { type, companyId } = event.data;
+
+                if (type === 'LOAD_COMPANY') {
+                    console.log(`[3D View] 📨 Received company load request from parent: ${companyId} `);
+
+                    if (currentLoadedCompanyId === companyId) {
+                        console.log(`[3D View] ℹ️ Company "${companyId}" is already loaded, skipping duplicate load`);
+                        return;
+                    }
+
+                    try {
+                        const loading = document.getElementById('loading');
+                        if (loading) loading.classList.remove('hidden');
+
+                        if (companyId && window.CompanyLoader) {
+                            console.log(`[3D View] 🔄 Loading company: ${companyId} `);
+                            const company = await window.CompanyLoader.loadCompany(companyId);
+
+                            if (window.Quannex) {
+                                await window.Quannex.initWithCompany(company);
+                            }
+
+                            if (window.refreshVisualization) {
+                                window.refreshVisualization();
+                            }
+
+                            currentLoadedCompanyId = companyId;
+
+                            const state = window.Quannex ? window.Quannex.getState() : null;
+                            if (state) {
+                                const coherencePercent = (state.globalCoherence * 100).toFixed(1);
+                                document.getElementById('statCoherence').textContent = coherencePercent + '%';
+
+                                const status = state.globalCoherence >= 0.7 ? 'Healthy' :
+                                    state.globalCoherence >= 0.5 ? 'Moderate' : 'Critical';
+                                document.getElementById('statStatus').textContent = status;
+                            }
+
+                            if (loading) loading.classList.add('hidden');
+
+                            console.log(`[3D View] ✅ Loaded company from parent: ${company.name} `);
+                        } else {
+                            console.warn('[3D View] ⚠️ CompanyLoader not available');
+                        }
+                    } catch (error) {
+                        console.error('[3D View] ❌ Failed to load company from parent:', error);
+                        const loading = document.getElementById('loading');
+                        if (loading) loading.classList.add('hidden');
+                    }
+                }
+            });
+
+            // Check sessionStorage for custom data
+            async function checkSessionStorage() {
+                const selectedCompanyId = sessionStorage.getItem('selectedCompanyId');
+                const customDataJson = sessionStorage.getItem('customCompanyData');
+
+                if (selectedCompanyId === 'custom' && customDataJson) {
+                    try {
+                        console.log(`[3D View] 🎨 Loading CUSTOM data from orchestrator`);
+                        const customData = JSON.parse(customDataJson);
+
+                        const loading = document.getElementById('loading');
+                        if (loading) loading.classList.remove('hidden');
+
+                        const company = {
+                            id: 'custom',
+                            name: customData.name || 'Custom Analysis',
+                            description: customData.description || 'User-generated data',
+                            kpis: customData.kpis || [],
+                            faceConfig: customData.faceConfig || null
+                        };
+
+                        let attempts = 0;
+                        while (!window.Quannex && attempts < 10) {
+                            await new Promise(resolve => setTimeout(resolve,
+                                200));
+                            attempts++;
+                        }
 
                         if (window.Quannex) {
                             await window.Quannex.initWithCompany(company);
+
+                            if (window.refreshVisualization) {
+                                window.refreshVisualization();
+                            }
+
+                            const state = window.Quannex.getState();
+                            if (state) {
+                                const coherencePercent = (state.globalCoherence * 100).toFixed(1);
+                                document.getElementById('statCoherence').textContent = coherencePercent + '%';
+
+                                const status = state.globalCoherence >= 0.7 ? 'Healthy' :
+                                    state.globalCoherence >= 0.5 ? 'Moderate' : 'Critical';
+                                document.getElementById('statStatus').textContent = status;
+                            }
+
+                            const companyButtons = document.querySelectorAll('.control-group button[id^="company"]');
+                            if (companyButtons.length > 0) {
+                                companyButtons.forEach(btn => btn.style.display = 'none');
+                            }
+                            const companyLabel = document.querySelector('.control-group .control-label');
+                            if (companyLabel && companyLabel.textContent === 'Company') {
+                                companyLabel.textContent = 'Custom Analysis';
+                            }
                         }
 
-                        if (window.refreshVisualization) {
-                            window.refreshVisualization();
-                        }
-
-                        currentLoadedCompanyId = companyId;
-
-                        const state = window.Quannex ? window.Quannex.getState() : null;
-                        if (state) {
-                            const coherencePercent = (state.globalCoherence * 100).toFixed(1);
-                            document.getElementById('statCoherence').textContent = coherencePercent + '%';
-
-                            const status = state.globalCoherence >= 0.7 ? 'Healthy' :
-                                state.globalCoherence >= 0.5 ? 'Moderate' : 'Critical';
-                            document.getElementById('statStatus').textContent = status;
-                        }
+                        currentLoadedCompanyId = 'custom';
 
                         if (loading) loading.classList.add('hidden');
 
-                        console.log(`[3D View] ✅ Loaded company from parent: ${company.name}`);
-                    } else {
-                        console.warn('[3D View] ⚠️ CompanyLoader not available');
+                        console.log(`[3D View] ✅ Successfully loaded custom data`);
+                        return true;
+                    } catch (error) {
+                        console.error('[3D View] ❌ Failed to load custom data:', error);
                     }
-                } catch (error) {
-                    console.error('[3D View] ❌ Failed to load company from parent:', error);
-                    const loading = document.getElementById('loading');
-                    if (loading) loading.classList.add('hidden');
+                } else if (window.self !== window.top && selectedCompanyId) {
+                    if (selectedCompanyId && !currentLoadedCompanyId) {
+                        console.log(`[3D View] 💾 Found company ID in sessionStorage: ${selectedCompanyId} `);
+                        window.postMessage({ type: 'LOAD_COMPANY', companyId: selectedCompanyId }, '*');
+                    }
                 }
             }
-        });
 
-        // Check sessionStorage for custom data
-        async function checkSessionStorage() {
-            const selectedCompanyId = sessionStorage.getItem('selectedCompanyId');
-            const customDataJson = sessionStorage.getItem('customCompanyData');
+            // Auto-refresh polling
+            let lastKnownTimestamp = null;
 
-            if (selectedCompanyId === 'custom' && customDataJson) {
+            function checkForUpdates() {
+                const customDataJson = sessionStorage.getItem('customCompanyData');
+                if (!customDataJson) return;
+
                 try {
-                    console.log(`[3D View] 🎨 Loading CUSTOM data from orchestrator`);
                     const customData = JSON.parse(customDataJson);
+                    const newTimestamp = customData.timestamp;
 
-                    const loading = document.getElementById('loading');
-                    if (loading) loading.classList.remove('hidden');
-
-                    const company = {
-                        id: 'custom',
-                        name: customData.name || 'Custom Analysis',
-                        description: customData.description || 'User-generated data',
-                        kpis: customData.kpis || [],
-                        faceConfig: customData.faceConfig || null
-                    };
-
-                    let attempts = 0;
-                    while (!window.Quannex && attempts < 10) {
-                        await new Promise(resolve => setTimeout(resolve, 200));
-                        attempts++;
+                    if (lastKnownTimestamp && newTimestamp !== lastKnownTimestamp) {
+                        console.log('[3D View] 🔄 Detected data update! Reloading...');
+                        checkSessionStorage();
                     }
 
-                    if (window.Quannex) {
-                        await window.Quannex.initWithCompany(company);
-
-                        if (window.refreshVisualization) {
-                            window.refreshVisualization();
-                        }
-
-                        const state = window.Quannex.getState();
-                        if (state) {
-                            const coherencePercent = (state.globalCoherence * 100).toFixed(1);
-                            document.getElementById('statCoherence').textContent = coherencePercent + '%';
-
-                            const status = state.globalCoherence >= 0.7 ? 'Healthy' :
-                                state.globalCoherence >= 0.5 ? 'Moderate' : 'Critical';
-                            document.getElementById('statStatus').textContent = status;
-                        }
-
-                        const companyButtons = document.querySelectorAll('.control-group button[id^="company"]');
-                        if (companyButtons.length > 0) {
-                            companyButtons.forEach(btn => btn.style.display = 'none');
-                        }
-                        const companyLabel = document.querySelector('.control-group .control-label');
-                        if (companyLabel && companyLabel.textContent === 'Company') {
-                            companyLabel.textContent = 'Custom Analysis';
-                        }
-                    }
-
-                    currentLoadedCompanyId = 'custom';
-
-                    if (loading) loading.classList.add('hidden');
-
-                    console.log(`[3D View] ✅ Successfully loaded custom data`);
-                    return true;
+                    lastKnownTimestamp = newTimestamp;
                 } catch (error) {
-                    console.error('[3D View] ❌ Failed to load custom data:', error);
-                }
-            } else if (window.self !== window.top && selectedCompanyId) {
-                if (selectedCompanyId && !currentLoadedCompanyId) {
-                    console.log(`[3D View] 💾 Found company ID in sessionStorage: ${selectedCompanyId}`);
-                    window.postMessage({ type: 'LOAD_COMPANY', companyId: selectedCompanyId }, '*');
+                    console.error('[3D View] ❌ Error checking for updates:', error);
                 }
             }
-        }
 
-        // Auto-refresh polling
-        let lastKnownTimestamp = null;
-
-        function checkForUpdates() {
-            const customDataJson = sessionStorage.getItem('customCompanyData');
-            if (!customDataJson) return;
-
-            try {
-                const customData = JSON.parse(customDataJson);
-                const newTimestamp = customData.timestamp;
-
-                if (lastKnownTimestamp && newTimestamp !== lastKnownTimestamp) {
-                    console.log('[3D View] 🔄 Detected data update! Reloading...');
-                    checkSessionStorage();
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    console.log('[3D View] 👀 Tab became visible - checking for updates...');
+                    checkForUpdates();
                 }
+            });
 
-                lastKnownTimestamp = newTimestamp;
-            } catch (error) {
-                console.error('[3D View] ❌ Error checking for updates:', error);
-            }
-        }
+            setInterval(checkForUpdates, 2000);
 
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                console.log('[3D View] 👀 Tab became visible - checking for updates...');
-                checkForUpdates();
+            // Check if in iframe
+            if (window.self !== window.top) {
+                document.getElementById('pageHeader').classList.add('hidden');
             }
+
+            // Initialize
+            setTimeout(checkSessionStorage, 1000);
+
+
+
+            function checkPhaseTransitionWarning() {
+                if (!advancedAnalysisResults || !advancedAnalysisResults.dynamics) return;
+
+                const transitions = advancedAnalysisResults.dynamics.phaseTransitions;
+
+                if (transitions.isImminent) {
+                    const warning = document.getElementById('phase-warning');
+                    const message = document.getElementById('phase-warning-message');
+
+                    message.textContent = `${transitions.nearestTransition.name} transition detected! ` +
+                        `${transitions.prediction.message}`;
+
+                    warning.classList.add('visible');
+
+                    // Hide after 10 seconds
+                    setTimeout(() => {
+                        warning.classList.remove('visible');
+                    }, 10000);
+                }
+            }
+
+            console.log('[3D View] 📡 Unified visualization initialized');
+            console.log('[3D View] 🎨 Mode system ready - Standard/Advanced/Complete/Minimal');
         });
-
-        setInterval(checkForUpdates, 2000);
-
-        // Check if in iframe
-        if (window.self !== window.top) {
-            document.getElementById('pageHeader').classList.add('hidden');
-        }
-
-        // Initialize
-        setTimeout(checkSessionStorage, 1000);
-
-
-
-        function checkPhaseTransitionWarning() {
-            if (!advancedAnalysisResults || !advancedAnalysisResults.dynamics) return;
-
-            const transitions = advancedAnalysisResults.dynamics.phaseTransitions;
-
-            if (transitions.isImminent) {
-                const warning = document.getElementById('phase-warning');
-                const message = document.getElementById('phase-warning-message');
-
-                message.textContent = `${transitions.nearestTransition.name} transition detected! ` +
-                    `${transitions.prediction.message}`;
-
-                warning.classList.add('visible');
-
-                // Hide after 10 seconds
-                setTimeout(() => {
-                    warning.classList.remove('visible');
-                }, 10000);
-            }
-        }
-
-        console.log('[3D View] 📡 Unified visualization initialized');
-        console.log('[3D View] 🎨 Mode system ready - Standard/Advanced/Complete/Minimal');
-
     </script>
+
     <!-- Harmonic Tuner Dashboard -->
     <div class="harmonic-tuner" id="harmonicTuner">
         <div class="tuner-toggle" id="tunerToggle">▲ Harmonic Tuner</div>
@@ -2304,7 +2525,8 @@
             <div class="knob-label">Kappa<div class="knob-sublabel">Gain</div>
             </div>
             <div class="info-icon" data-title="Kappa (Gain)"
-                data-desc="Amplifies weak signals to make them visible. Low = Noise Gate, High = Deep Scan.">?</div>
+                data-desc="Amplifies weak signals to make them visible. Low = Noise Gate, High = Deep Scan.">
+                ?</div>
             <div class="knob-control" id="knobKappa" data-param="KAPPA" data-min="1" data-max="10" data-step="0.5"
                 data-value="2.0">
                 <svg class="knob-ring" viewBox="0 0 90 90">
@@ -2322,10 +2544,28 @@
         </div>
     </div>
 
+    <!-- Voice Interface (Phase 5) -->
+    <div class="voice-interface" id="voiceInterface">
+        <div class="voice-header">
+            <div class="voice-title">Ask Quannex</div>
+            <button class="voice-close" id="voiceClose">&times;</button>
+        </div>
+        <div class="voice-messages" id="voiceMessages">
+            <div class="message system">Greetings. I am the voice of the system. Ask me about the coherence of your
+                organization.</div>
+        </div>
+        <div class="voice-input-area">
+            <input type="text" id="voiceInput" placeholder="Ask a question..." autocomplete="off">
+            <button id="voiceSend">Send</button>
+        </div>
+    </div>
+
+    <!-- Voice Toggle Button -->
+    <button class="voice-toggle" id="voiceToggle">💬 Ask Quannex</button>
+
     <!-- Load Harmonic Tuner Logic -->
     <script src="js/harmonic-tuner.js"></script>
 
 </body>
 
 </html>
-```

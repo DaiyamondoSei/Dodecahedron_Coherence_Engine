@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Project Radiance: Brain Transplant Verification</title>
+    <style>
+        body {
+            background: #111;
+            color: #eee;
+            font-family: monospace;
+            padding: 2rem;
+        }
+
+        .pass {
+            color: #0f0;
+        }
+
+        .fail {
+            color: #f00;
+            font-weight: bold;
+        }
+
+        .log {
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.2rem;
+        }
+
+        h1 {
+            color: #d4af37;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🧠 Project Radiance: Brain Transplant Check</h1>
+    <div id="console">Initializing...</div>
+
+    <script>
+        window.onerror = function (msg, url, line, col, error) {
+            const logDiv = document.getElementById('console');
+            const div = document.createElement('div');
+            div.className = 'log fail';
+            div.textContent = `❌ GLOBAL ERROR: ${msg} at ${url}:${line}:${col}`;
+            logDiv.appendChild(div);
+            console.error('Global Error:', error);
+            return false;
+        };
+        window.addEventListener('unhandledrejection', function (event) {
+            const logDiv = document.getElementById('console');
+            const div = document.createElement('div');
+            div.className = 'log fail';
+            div.textContent = `❌ UNHANDLED PROMISE: ${event.reason}`;
+            logDiv.appendChild(div);
+            console.error('Unhandled Rejection:', event.reason);
+        });
+    </script>
+
+    <!-- Load Three.js (Required by VisualizationManager, though we might not use it here yet) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Load the Engine as a Module -->
+    <script type="module">
+        import { DodecahedronEngine } from './js/main.js';
+
+        const logDiv = document.getElementById('console');
+        function log(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `log ${type}`;
+            div.textContent = `> ${msg}`;
+            logDiv.appendChild(div);
+            console.log(msg);
+        }
+
+        function assert(condition, message) {
+            if (condition) {
+                log(`PASS: ${message}`, 'pass');
+            } else {
+                log(`FAIL: ${message}`, 'fail');
+                throw new Error(message);
+            }
+        }
+
+        async function runTest() {
+            try {
+                log('🚀 Starting Engine...');
+                const engine = new DodecahedronEngine();
+
+                log('📂 Loading Data...');
+                await engine.initialize();
+
+                log('⏳ Waiting for Advanced Analysis...');
+                // Give it a moment for the async analysis to complete
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                const analysis = engine.getAdvancedAnalysis();
+
+                // 1. Verify Analysis Object Exists
+                assert(analysis !== null, 'Advanced Analysis object exists');
+
+                // 2. Verify Spectral Analysis
+                assert(analysis.spectral, 'Spectral Analysis module present');
+                assert(analysis.spectral.dominantMode, 'Dominant Mode identified');
+                log(`🎵 Dominant Mode: ${analysis.spectral.dominantMode.interpretation}`);
+
+                // 3. Verify Shadow Detection
+                assert(analysis.shadows, 'Shadow Detection module present');
+                assert(Array.isArray(analysis.shadows.detectedPatterns), 'Shadow Patterns is an array');
+                log(`👁️ Shadows Detected: ${analysis.shadows.totalPatternsDetected}`);
+
+                // 4. Verify Dynamics
+                assert(analysis.dynamics, 'Dynamics Analysis module present');
+                assert(analysis.dynamics.phaseTransitions, 'Phase Transitions analyzed');
+                log(`🌊 Phase Proximity: ${(analysis.dynamics.phaseTransitions.proximity * 100).toFixed(1)}%`);
+
+                log('✅ BRAIN TRANSPLANT SUCCESSFUL! The organism is thinking.', 'pass');
+
+            } catch (error) {
+                log(`❌ CRITICAL FAILURE: ${error.message}`, 'fail');
+                console.error(error);
+            }
+        }
+
+        runTest();
+    </script>
+</body>
+
+</html>

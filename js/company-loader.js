@@ -1,100 +1,39 @@
 /**
- * ========================================
- * COMPANY DATA LOADER
- * ========================================
- *
- * Manages loading different company datasets
- * Supports switching between multiple business cases
+ * Company Loader
+ * 
+ * Manages loading of company profiles and data.
+ * Now powered by UnifiedDataLoader for consistent data handling.
  */
+import { UnifiedDataLoader } from './unified-data-loader.js';
 
-/**
- * Available companies with metadata
- */
 const COMPANIES = [
-    {
-        id: 'quannex',
-        name: 'Quannex',
-        tagline: 'Organizational DNA Visualization Platform',
-        stage: 'Pre-Seed Startup',
-        color: '#DAA520',
-        octaveRange: 'O1/O6-O7',
-        description: 'Real startup data - Aspiration-Actuality Gap embodied'
-    },
-    {
-        id: 'nova-tech',
-        name: 'Nova Tech',
-        tagline: 'AI-Powered Marketing Platform',
-        stage: 'Seed Stage Startup',
-        color: '#ff6b6b',
-        octaveRange: 'O1-O2',
-        description: 'Struggling startup in survival mode'
-    },
-    {
-        id: 'zenith-solutions',
-        name: 'Zenith Solutions',
-        tagline: 'Cloud Infrastructure Automation',
-        stage: 'Series A Growth',
-        color: '#4ecdc4',
-        octaveRange: 'O3-O4',
-        description: 'Scaling company with growing pains'
-    },
-    {
-        id: 'apex-industries',
-        name: 'Apex Industries',
-        tagline: 'Sustainable Manufacturing Excellence',
-        stage: 'Public Company',
-        color: '#00ff88',
-        octaveRange: 'O6-O7',
-        description: 'Mature enterprise radiating excellence'
-    }
+    { id: 'quannex', name: 'Quannex AI' },
+    { id: 'nova-tech', name: 'NovaTech Solutions' },
+    { id: 'apex-industries', name: 'Apex Industries' },
+    { id: 'zenith-solutions', name: 'Zenith Global' }
 ];
 
-/**
- * Current loaded company
- */
-let currentCompany = null;
-
-/**
- * Load company profile from JSON
- */
 async function loadCompanyProfile(companyId) {
     try {
         const response = await fetch(`./companies/${companyId}/company.json`);
-        const profile = await response.json();
-        return profile;
+        return await response.json();
     } catch (error) {
-        console.error(`Failed to load company profile for ${companyId}:`, error);
+        console.error(`Failed to load profile for ${companyId}:`, error);
         return null;
     }
 }
 
 /**
- * Load company KPI data from CSV
+ * Load company KPI data using the UnifiedDataLoader
+ * @param {string} companyId 
+ * @returns {Promise<Array>}
  */
 async function loadCompanyKPIs(companyId) {
+    const loader = new UnifiedDataLoader();
     try {
-        const response = await fetch(`./companies/${companyId}/kpis.csv`);
-        const csvText = await response.text();
-
-        // Parse CSV (reuse parseCSV from main.js if available)
-        const lines = csvText.split('\n').filter(line => line.trim());
-        if (lines.length === 0) return [];
-
-        const headers = lines[0].split(',').map(h => h.trim());
-        const data = [];
-
-        for (let i = 1; i < lines.length; i++) {
-            const values = lines[i].split(',').map(v => v.trim());
-            const row = {};
-
-            headers.forEach((header, index) => {
-                row[header] = values[index] || '';
-            });
-
-            data.push(row);
-        }
-
-        return data;
+        const kpiReq = await fetch(`./companies/${companyId}/kpis.csv`);
+        const kpiText = await kpiReq.text();
+        return loader.parseKPIs(kpiText);
     } catch (error) {
         console.error(`Failed to load KPIs for ${companyId}:`, error);
         return [];
@@ -102,70 +41,70 @@ async function loadCompanyKPIs(companyId) {
 }
 
 /**
- * Load complete company dataset
- */
-async function loadCompany(companyId) {
-    console.log(`📦 Loading company: ${companyId}`);
-
-    const [profile, kpis] = await Promise.all([
-        loadCompanyProfile(companyId),
-        loadCompanyKPIs(companyId)
-    ]);
-
-    if (!profile || !kpis) {
-        console.error('Failed to load company data');
-        return null;
-    }
-
-    currentCompany = {
-        ...profile,
-        kpis: kpis,
-        metadata: COMPANIES.find(c => c.id === companyId)
-    };
-
-    console.log(`✅ Loaded ${currentCompany.name}`);
-    console.log(`   ${currentCompany.employees} employees`);
-    console.log(`   ${kpis.length} KPIs`);
-    console.log(`   Octaves: ${currentCompany.octaveProfile.dominant}`);
-
-    return currentCompany;
-}
-
-/**
- * Get list of available companies
- */
-function getAvailableCompanies() {
-    return COMPANIES;
-}
-
-/**
- * Get current company
- */
-function getCurrentCompany() {
-    return currentCompany;
-}
-
-/**
- * Switch to different company
+ * Switch the active company
+ * Re-initializes the engine with the new company data
  */
 async function switchCompany(companyId) {
-    const company = await loadCompany(companyId);
+    console.log(`Switching to company: ${companyId}`);
 
-    if (company && window.Quannex) {
-        // Reinitialize Quannex with new company data
-        await window.Quannex.initWithCompany(company);
+    // Show loading state if UI elements exist
+    const loadingOverlay = document.getElementById('loading-overlay');
+    if (loadingOverlay) loadingOverlay.style.display = 'flex';
+
+    try {
+        const loader = new UnifiedDataLoader();
+
+        // Load full context via Unified Loader
+        const context = await loader.loadContext(companyId);
+
+        if (!context) {
+            throw new Error("Failed to load company context");
+        }
+
+        // Update Global State
+        window.currentCompany = context.company;
+
+        // Initialize Engine
+        if (window.Quannex) {
+            await window.Quannex.initWithCompany({
+                ...context.company,
+                faceConfig: { faces: context.faces },
+                kpis: context.kpis
+            });
+        }
+
+        // Update UI
+        updateCompanyUI(context.company);
+
+        return context;
+
+    } catch (error) {
+        console.error('Error switching company:', error);
+        alert(`Failed to load company: ${companyId}`);
+    } finally {
+        if (loadingOverlay) loadingOverlay.style.display = 'none';
     }
-
-    return company;
 }
 
-// Export for use in other modules
+function updateCompanyUI(company) {
+    const titleEl = document.getElementById('company-title');
+    const descEl = document.getElementById('company-description');
+
+    if (titleEl) titleEl.textContent = company.name;
+    if (descEl) descEl.textContent = company.description;
+
+    // Update selector if it exists
+    const selector = document.getElementById('company-selector');
+    if (selector) selector.value = company.id;
+}
+
+// Export
 window.CompanyLoader = {
     COMPANIES,
-    loadCompany,
+    loadCompanyProfile,
+    loadCompanyKPIs,
     switchCompany,
-    getAvailableCompanies,
-    getCurrentCompany
+    // Backward compatibility for dodecahedron-viz.js
+    loadCompany: switchCompany,
+    getAvailableCompanies: () => COMPANIES
 };
-
-console.log('📦 Company Loader ready');

@@ -1,96 +1,186 @@
 /**
  * Gemini API Client for Quannex
- * 
+ *
  * Handles communication with Google's Gemini API.
  * Supports "Bring Your Own Key" (BYOK) for immediate prototyping.
- * 
+ *
+ * ENHANCED for Sprint 2:
+ * - Strategic Lens integration (Growth/Stability/Innovation)
+ * - Vocabulary Style integration (Grounded/Professional/Systems/Poetic)
+ * - Octave determination with stage-based constraints
+ * - Reference library integration for accurate octave matching
+ *
  * USAGE:
  * const ai = new GeminiClient(apiKey);
- * const result = await ai.analyzeStory(storyText);
+ * const result = await ai.analyzeStory(storyText, { lens: 'growth', vocabulary: 'professional' });
  */
+
+import { OCTAVES, BREATH_AXES, detectOrganizationStage, constrainOctave } from './ai/octave-reference-library.js';
 
 export class GeminiClient {
     constructor(apiKey) {
         this.apiKey = apiKey;
         this.baseUrl = "https://generativelanguage.googleapis.com/v1beta/models";
-        this.model = "gemini-pro"; // Text-only model
+        // Use the EXACT model from official Quickstart documentation
+        this.model = "gemini-2.5-flash";
     }
 
     /**
      * Analyze an organizational story and map it to the 12 faces
      * @param {string} storyText - User's narrative
+     * @param {Object} context - Analysis context (lens, vocabulary, etc.)
      * @returns {Promise<Object>} JSON configuration for the Dodecahedron
      */
-    async analyzeStory(storyText) {
+    async analyzeStory(storyText, context = {}) {
         if (!this.apiKey) {
             throw new Error("API Key is missing");
         }
 
-        const prompt = this.constructPrompt(storyText);
-        
+        // Tier 1: Primary (Gemini 2.5 Flash - Official Quickstart Model)
         try {
-            const response = await fetch(`${this.baseUrl}/${this.model}:generateContent?key=${this.apiKey}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: prompt
-                        }]
-                    }],
-                    generationConfig: {
-                        temperature: 0.2, // Low temperature for consistent JSON
-                        maxOutputTokens: 1000,
-                    }
-                })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Gemini API Error: ${errorData.error?.message || response.statusText}`);
-            }
-
-            const data = await response.json();
-            const textResponse = data.candidates[0].content.parts[0].text;
-            
-            return this.parseJSONResponse(textResponse);
-
+            console.log(`🚀 Attempting ${this.model}...`);
+            return await this.callApi(this.model, storyText, context);
         } catch (error) {
-            console.error("❌ Gemini Analysis Failed:", error);
-            throw error;
+            console.warn(`⚠️ ${this.model} failed, attempting fallback (Gemini 1.5 Flash)...`);
+
+            // Tier 2: Fallback (Gemini 1.5 Flash)
+            try {
+                return await this.callApi("gemini-1.5-flash", storyText, context);
+            } catch (tier2Error) {
+                console.error("❌ All Gemini models failed:", tier2Error);
+                throw tier2Error;
+            }
         }
     }
 
     /**
-     * Construct the prompt with Dodecahedron context
+     * Internal API call method
      */
-    constructPrompt(storyText) {
+    async callApi(modelName, storyText, context = {}) {
+        const prompt = this.constructPrompt(storyText, context);
+
+        // Use x-goog-api-key header as per Quickstart docs
+        const response = await fetch(`${this.baseUrl}/${modelName}:generateContent`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-goog-api-key": this.apiKey
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{
+                        text: prompt
+                    }]
+                }],
+                generationConfig: {
+                    temperature: 0.2,
+                    maxOutputTokens: 2000,
+                }
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Gemini API Error (${modelName}): ${errorData.error?.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        const textResponse = data.candidates[0].content.parts[0].text;
+
+        // Parse and add stage/octave constraints
+        const result = this.parseJSONResponse(textResponse);
+
+        // Detect stage and constrain octaves
+        const stageInfo = detectOrganizationStage(storyText);
+        result.detectedStage = stageInfo.stage;
+        result.maxOctave = stageInfo.maxOctave;
+
+        // Constrain overall octave if present
+        if (result.overallOctave) {
+            result.overallOctave = constrainOctave(result.overallOctave, stageInfo.maxOctave);
+        }
+
+        return result;
+    }
+
+    /**
+     * Construct the prompt with Dodecahedron context
+     * @param {string} storyText - User's narrative
+     * @param {Object} context - Analysis context
+     */
+    constructPrompt(storyText, context = {}) {
+        const { lens, lensPrompt, vocabulary, vocabularyPrompt } = context;
+
+        // Detect organization stage for octave constraints
+        const stageInfo = detectOrganizationStage(storyText);
+
+        // Build lens instruction
+        const lensInstruction = lensPrompt || this._getDefaultLensPrompt(lens);
+
+        // Build vocabulary instruction
+        const vocabularyInstruction = vocabularyPrompt || this._getDefaultVocabularyPrompt(vocabulary);
+
+        // Build octave constraint instruction
+        const octaveConstraint = this._buildOctaveConstraint(stageInfo);
+
         return `
 You are the Quannex Organizational Architect, an expert system based on Sacred Geometry.
 Your task is to map the user's organizational story to a 12-Face Dodecahedron model.
 
 THE 12 FACES (Standard Model):
-1. Financial Capital (Foundation)
-2. Human Capital (Team/Culture)
-3. Customer Experience (Relationships)
-4. Operations & Execution (Structure)
-5. Technology & Innovation (Tools)
-6. Brand & Reputation (Identity)
-7. Leadership & Governance (Direction)
-8. Strategy & Vision (Purpose)
-9. Partnerships & Ecosystem (Connection)
-10. Risk & Compliance (Protection)
-11. Learning & Development (Evolution)
-12. Sustainability & Impact (Regeneration)
+1. Financial Capital (Foundation) - Axis pair with Face 11
+2. Intellectual Capital (Ideas/IP)
+3. Human Capital (Team/Culture) - Axis pair with Face 8
+4. Structural Capital (Systems/Processes) - Axis pair with Face 9
+5. Market Resonance (Customers/Perception) - Axis pair with Face 10
+6. Community & Partners (Network) - Axis pair with Face 12
+7. Brand & Reputation (Identity) - Axis pair with Face 2
+8. Core Operations (Execution) - Axis pair with Face 3
+9. Regenerative Flow (Sustainability) - Axis pair with Face 4
+10. Foundational Values (Purpose) - Axis pair with Face 5
+11. Funding Pipeline (Future Capital) - Axis pair with Face 1
+12. Risk & Resilience (Protection) - Axis pair with Face 6
+
+=== STRATEGIC LENS ===
+${lensInstruction}
+
+=== VOCABULARY STYLE ===
+${vocabularyInstruction}
+
+=== OCTAVE DETERMINATION ===
+${octaveConstraint}
+
+THE 7 OCTAVES (Developmental Levels):
+- O1 (Survival): Basic existence, "Do we have enough to survive?"
+- O2 (Structure): Building systems, "Are we organized and efficient?"
+- O3 (Relationships): Building trust, "Do we have psychological safety?"
+- O4 (Creativity): Innovation mindset, "Are we experimenting boldly?"
+- O5 (Expression): Clear voice, "Is our purpose clearly communicated?"
+- O6 (Vision): Long-term thinking, "Are we building for generations?"
+- O7 (Radiance): Transcendent purpose, "Are we serving something larger?"
+
+CRITICAL: Match octave to KPI SOPHISTICATION, not aspiration.
+- A startup talking about "runway" and "cash" = O1
+- A corporation with "integrated reporting" and "stakeholder narrative" = O5
+- Do NOT inflate octaves based on vision statements alone.
+
+THE 5 ARCHETYPES:
+- BUILDER: Creates infrastructure, systems, and structures. Focus on engineering and architecture.
+- NURTURER: Develops people, culture, and relationships. Focus on care and growth.
+- INNOVATOR: Pioneers new ideas, disrupts markets. Focus on creativity and experimentation.
+- GUARDIAN: Protects assets, manages risk, ensures stability. Focus on security and reliability.
+- CONNECTOR: Builds networks, partnerships, ecosystems. Focus on relationships and bridges.
 
 INSTRUCTIONS:
 1. Analyze the user's story below.
 2. Determine the organization type (Business, Startup, Non-Profit, Project, or Community).
-3. Rename the 12 Faces to fit their specific context (e.g., "Donors" instead of "Customers" for Non-Profit).
-4. Estimate a "sentiment/health" score (0.0 - 1.0) for each face based on the text. (0.5 is neutral).
-5. Identify the "Primary Focus" of their story.
+3. Rename the 12 Faces following the STRATEGIC LENS and VOCABULARY STYLE above.
+4. Estimate a "sentiment/health" score (0.0 - 1.0) for each face based on the text.
+5. Determine an octave (O1-O7) for each face based on KPI sophistication.
+6. Identify the overall organizational octave (constrained by detected stage).
+7. Detect the primary and secondary archetype from the story.
+8. Identify the "Primary Focus" of their story.
+9. Extract any mentioned metrics/KPIs from the story.
 
 USER STORY:
 "${storyText}"
@@ -100,11 +190,388 @@ Return ONLY valid JSON. No markdown, no explanation.
 {
     "type": "Startup/Business/etc",
     "focus": "Short summary of focus",
+    "overallOctave": "O1-O7 (constrained by stage)",
+    "archetype": {
+        "primary": "Builder/Nurturer/Innovator/Guardian/Connector",
+        "secondary": "Builder/Nurturer/Innovator/Guardian/Connector",
+        "reasoning": "Why these archetypes fit"
+    },
+    "extractedMetrics": {
+        "revenue": "if mentioned",
+        "teamSize": "if mentioned",
+        "runway": "if mentioned",
+        "customers": "if mentioned",
+        "growthRate": "if mentioned"
+    },
     "faces": [
-        { "id": 1, "name": "Contextual Name", "icon": "Emoji", "sentiment": 0.8 },
+        {
+            "id": 1,
+            "name": "Contextual Name (matching lens + vocabulary)",
+            "icon": "Emoji",
+            "sentiment": 0.8,
+            "octave": "O1-O7",
+            "reasoning": "Why this fits and why this octave"
+        },
         ... (all 12 faces)
     ]
 }
+`;
+    }
+
+    /**
+     * Get default lens prompt if not provided
+     */
+    _getDefaultLensPrompt(lens) {
+        const prompts = {
+            growth: `
+LENS: GROWTH (Face-centered)
+Focus on what each domain could BECOME. Emphasize individual domain sovereignty and development potential.
+For each face, ask: "What is this domain becoming? What is its evolutionary trajectory?"
+Names should feel aspirational and future-oriented.
+Example: Finance becomes "Venture Pipeline" or "Growth Capital"
+`,
+            stability: `
+LENS: STABILITY (Edge-centered)
+Focus on RELATIONSHIPS between domains. Emphasize how departments support and strengthen each other.
+For each face, ask: "How does this domain support the others? What is its relational role?"
+Names should feel grounded and interconnected.
+Example: Finance becomes "Financial Resilience" or "Capital Foundation"
+`,
+            innovation: `
+LENS: INNOVATION (Vertex-centered)
+Focus on CONVERGENCE points. Emphasize what emerges when 3+ domains work together.
+For each face, ask: "What new possibilities emerge when this domain intersects with others?"
+Names should feel creative and transformative.
+Example: Finance becomes "Innovation Fund" or "Catalyst Capital"
+`
+        };
+
+        return prompts[lens] || prompts.growth;
+    }
+
+    /**
+     * Get default vocabulary prompt if not provided
+     */
+    _getDefaultVocabularyPrompt(vocabulary) {
+        const prompts = {
+            grounded: `
+VOCABULARY: GROUNDED
+Use plain, everyday language for all domain names.
+Names should feel like talking to a wise friend.
+Avoid jargon, buzzwords, or abstract concepts.
+Example: Instead of "Financial Capital" use "Money Flow"
+Example: Instead of "Human Resources" use "Our People"
+`,
+            professional: `
+VOCABULARY: PROFESSIONAL
+Use business and professional terminology for domain names.
+Names should feel competent and boardroom-appropriate.
+Use standard business vocabulary that executives would recognize.
+Example: "Financial Capital", "Human Resources", "Strategic Partnerships"
+`,
+            systems: `
+VOCABULARY: SYSTEMS
+Use technical, systems-thinking language for domain names.
+Names should show how pieces connect and interact.
+Emphasize flows, feedback loops, and emergent properties.
+Example: Instead of "Finance" use "Resource Circulation"
+Example: Instead of "Team" use "Human System Dynamics"
+`,
+            poetic: `
+VOCABULARY: POETIC
+Use metaphorical, evocative language for domain names.
+Names should touch something deeper and inspire.
+Draw from nature, mythology, and universal archetypes.
+Example: Instead of "Finance" use "Abundance Stream"
+Example: Instead of "Brand" use "Voice in the World"
+`
+        };
+
+        return prompts[vocabulary] || prompts.professional;
+    }
+
+    /**
+     * Build octave constraint instruction based on detected stage
+     */
+    _buildOctaveConstraint(stageInfo) {
+        const { stage, maxOctave, typicalOctave, confidence } = stageInfo;
+
+        if (stage === 'unknown') {
+            return `
+OCTAVE CONSTRAINT: Unable to detect organization stage.
+Use KPI sophistication matching without stage constraints.
+Default to O3 if uncertain.
+`;
+        }
+
+        return `
+DETECTED STAGE: ${stage.toUpperCase()} (confidence: ${confidence})
+MAXIMUM OCTAVE: ${maxOctave}
+TYPICAL OCTAVE: ${typicalOctave}
+
+CONSTRAINT: Do NOT assign octaves above ${maxOctave} for this organization.
+A ${stage} organization CANNOT be at ${maxOctave === 'O2' ? 'O3+' : 'O' + (parseInt(maxOctave.replace('O', '')) + 1) + '+'} level.
+
+KPI SOPHISTICATION MATCHING (for ${stage}):
+${this._getKPIExamplesForStage(stage)}
+`;
+    }
+
+    /**
+     * Get KPI examples for stage-appropriate matching
+     */
+    _getKPIExamplesForStage(stage) {
+        const examples = {
+            'pre-seed': `
+- O1 Financial: "Do we have enough money to survive?" → Months of Runway
+- O1 Team: "Do we have a founding team?" → Founder Commitment
+- O1 Market: "Is there anyone who wants this?" → First Customer Interest
+`,
+            'seed': `
+- O1-O2 Financial: "Are we managing our burn rate?" → Cash Efficiency
+- O1-O2 Team: "Are roles defined?" → Role Clarity
+- O1-O2 Market: "Are we finding product-market fit?" → Validation Metrics
+`,
+            'series-a': `
+- O2-O3 Financial: "Is our unit economics working?" → CAC/LTV Ratio
+- O2-O3 Team: "Is our culture forming?" → Team Cohesion Score
+- O2-O3 Market: "Are customers returning?" → Retention Rate
+`,
+            'growth': `
+- O3-O4 Financial: "Do we have diverse revenue streams?" → Revenue Diversification
+- O3-O4 Team: "Is innovation encouraged?" → Innovation Culture Index
+- O3-O4 Market: "Are we building community?" → NPS & Advocacy
+`,
+            'mature': `
+- O4-O5 Financial: "Is our financial story compelling?" → Integrated Reporting
+- O4-O5 Team: "Is our purpose clearly expressed?" → Purpose Alignment Score
+- O4-O5 Market: "Are we a category leader?" → Market Leadership Index
+`,
+            'legacy': `
+- O5-O6 Financial: "Are we building generational wealth?" → Legacy Capital
+- O5-O6 Team: "Do we have succession planning?" → Leadership Pipeline
+- O5-O6 Market: "Are we shaping the industry?" → Industry Influence Score
+`,
+            'transcendent': `
+- O6-O7 All Domains: Focus on universal benefit and regenerative impact.
+`
+        };
+
+        return examples[stage] || examples['growth'];
+    }
+
+    // ========================================
+    // KPI EXTRACTION
+    // ========================================
+
+    /**
+     * Extract KPIs from story with octave-aware guidance
+     * @param {string} storyText - The organization story
+     * @param {string} mode - 'quick' (12 KPIs) or 'full' (60 KPIs with 5 elements)
+     * @param {string} octave - Target octave 'O1'-'O7' (default: 'O2')
+     */
+    async extractKPIs(storyText, mode = 'quick', octave = 'O2') {
+        if (!this.apiKey) {
+            throw new Error("API Key is missing");
+        }
+
+        const kpiCount = mode === 'quick' ? 12 : 60;
+        const prompt = this._buildKPIExtractionPrompt(storyText, kpiCount, octave);
+
+        console.log(`[GeminiClient] extractKPIs called: mode=${mode}, octave=${octave}, kpiCount=${kpiCount}`);
+
+        try {
+            // Use same tiered fallback as analyzeStory
+            let response;
+            try {
+                response = await this._callGeminiForKPIs(this.model, prompt);
+            } catch (error) {
+                console.warn(`⚠️ ${this.model} failed for KPIs, trying fallback...`);
+                response = await this._callGeminiForKPIs("gemini-1.5-flash", prompt);
+            }
+
+            return this.parseJSONResponse(response);
+        } catch (error) {
+            console.error('[GeminiClient] extractKPIs error:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Internal API call for KPI extraction
+     */
+    async _callGeminiForKPIs(modelName, prompt) {
+        const response = await fetch(`${this.baseUrl}/${modelName}:generateContent`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-goog-api-key": this.apiKey
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: prompt }]
+                }],
+                generationConfig: {
+                    temperature: 0.3,
+                    maxOutputTokens: 4000,
+                }
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Gemini API Error (${modelName}): ${errorData.error?.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.candidates[0].content.parts[0].text;
+    }
+
+    /**
+     * Build KPI extraction prompt with octave guidance
+     */
+    _buildKPIExtractionPrompt(storyText, kpiCount, octave) {
+        const octaveGuidance = this._getOctaveGuidance(octave);
+        const elementGuidance = kpiCount === 60 ? this._getElementGuidance() : '';
+
+        return `
+You are a KPI Analyst for the Quannex Organizational Health System.
+Analyze the following organization story and extract meaningful KPIs.
+
+=== TARGET OCTAVE ===
+${octaveGuidance}
+
+=== ORGANIZATION STORY ===
+"${storyText}"
+
+=== INSTRUCTIONS ===
+Generate ${kpiCount} KPIs distributed across 12 organizational faces.
+${kpiCount === 60 ? `
+For FULL MODE (60 KPIs), organize 5 KPIs per face using the ELEMENTAL STRUCTURE:
+${elementGuidance}
+` : `
+For QUICK MODE (12 KPIs), provide 1 key KPI per face.
+`}
+
+THE 12 FACES:
+1. Financial Capital - Resources and cash flow
+2. Intellectual Capital - Ideas, IP, and knowledge
+3. Human Capital - Team and culture
+4. Structural Capital - Systems and processes
+5. Market Resonance - Customers and perception
+6. Community & Partners - Network and alliances
+7. Brand & Reputation - Identity and trust
+8. Core Operations - Execution and delivery
+9. Regenerative Flow - Sustainability and renewal
+10. Foundational Values - Purpose and ethics
+11. Funding Pipeline - Future capital and investment
+12. Risk & Resilience - Protection and adaptability
+
+=== OUTPUT FORMAT ===
+Return ONLY valid JSON:
+{
+    "mode": "${kpiCount === 60 ? 'full' : 'quick'}",
+    "octave": "${octave}",
+    "totalKPIs": ${kpiCount},
+    "financials": {
+        "revenue": { "value": "extracted or null", "source": "story/inferred" },
+        "runway": { "value": "extracted or null", "source": "story/inferred" },
+        "teamSize": { "value": "extracted or null", "source": "story/inferred" },
+        "growthRate": { "value": "extracted or null", "source": "story/inferred" }
+    },
+    "kpis": [
+        {
+            "faceId": 1,
+            "label": "Meaningful KPI name matching ${octave} level",
+            ${kpiCount === 60 ? '"element": "Earth/Water/Fire/Air/Ether",' : ''}
+            ${kpiCount === 60 ? '"elementCode": "earth/water/fire/air/ether",' : ''}
+            "question": "Reflective question for this KPI",
+            "unit": "% or $ or count or score",
+            "target": "suggested target value or range",
+            "reasoning": "Why this KPI matters at ${octave}"
+        }
+        // ... ${kpiCount} total KPIs
+    ]
+}
+`;
+    }
+
+    /**
+     * Get octave-specific guidance for KPI extraction
+     */
+    _getOctaveGuidance(octave) {
+        const guidance = {
+            'O1': `SURVIVAL FOCUS (${octave}): Basic existence questions.
+- Financial: "Do we have enough to survive?" → Cash in Bank, Burn Rate, Days of Runway
+- Team: "Do we have people?" → Founder Presence, Basic Roles Filled
+- Market: "Is there interest?" → First Conversations, Initial Feedback
+KPIs should be binary or simple counts. "Do we have X? Yes/No."`,
+
+            'O2': `STRUCTURE FOCUS (${octave}): Stability and systems questions.
+- Financial: "Are we organized?" → Budget Tracking, Expense Categories
+- Team: "Are roles defined?" → Org Chart, Role Clarity
+- Market: "Do we have repeatable sales?" → Pipeline Stages, Conversion Rates
+KPIs should measure efficiency and consistency.`,
+
+            'O3': `RELATIONSHIPS FOCUS (${octave}): Connection and trust questions.
+- Financial: "Do stakeholders trust us?" → Investor Confidence, Payment Terms
+- Team: "Is there psychological safety?" → Team Trust Score, Feedback Frequency
+- Market: "Do customers return?" → Retention Rate, NPS
+KPIs should measure relationship quality and depth.`,
+
+            'O4': `CREATIVITY FOCUS (${octave}): Innovation and possibility questions.
+- Financial: "Do we invest in R&D?" → Innovation Budget %, Experiment Count
+- Team: "Is experimentation encouraged?" → Ideas Submitted, Failed Experiments Celebrated
+- Market: "Are we creating new categories?" → New Product Revenue, Market Creation
+KPIs should measure creative output and risk-taking.`,
+
+            'O5': `EXPRESSION FOCUS (${octave}): Clarity and communication questions.
+- Financial: "Is our financial story clear?" → Integrated Reporting Quality
+- Team: "Is purpose clearly communicated?" → Mission Understanding Score
+- Market: "Is our voice distinctive?" → Brand Recognition, Message Consistency
+KPIs should measure clarity, coherence, and authentic expression.`,
+
+            'O6': `VISION FOCUS (${octave}): Long-term and legacy questions.
+- Financial: "Are we building generational wealth?" → Long-term Investment %, Legacy Fund
+- Team: "Do we have succession planning?" → Leadership Pipeline, Knowledge Transfer
+- Market: "Are we shaping the future?" → Industry Influence, Thought Leadership
+KPIs should measure long-term impact and foresight.`,
+
+            'O7': `RADIANCE FOCUS (${octave}): Service and transcendence questions.
+- Financial: "Does our capital serve higher purposes?" → Impact Investment %, Regenerative ROI
+- Team: "Are we developing whole humans?" → Personal Growth Index, Life Integration
+- Market: "Are we serving humanity?" → Systemic Impact Score, Planetary Contribution
+KPIs should measure transcendent purpose and universal benefit.`
+        };
+
+        return guidance[octave] || guidance['O2'];
+    }
+
+    /**
+     * Get elemental structure guidance for Full Mode
+     */
+    _getElementGuidance() {
+        return `
+Each face should have exactly 5 KPIs, one for each element:
+1. EARTH (Tangible): What can be measured, counted, or touched?
+   - Physical assets, inventory, concrete deliverables
+   - elementCode: "earth"
+
+2. WATER (Flow): How does this move, circulate, or adapt?
+   - Cash flow, information flow, process fluidity
+   - elementCode: "water"
+
+3. FIRE (Energy): What drives transformation and action?
+   - Motivation, conversion rates, catalytic metrics
+   - elementCode: "fire"
+
+4. AIR (Communication): How is information shared?
+   - Feedback loops, communication clarity, knowledge transfer
+   - elementCode: "air"
+
+5. ETHER (Purpose): What is the deeper meaning?
+   - Alignment scores, purpose metrics, coherence indicators
+   - elementCode: "ether"
 `;
     }
 
@@ -116,7 +583,7 @@ Return ONLY valid JSON. No markdown, no explanation.
             // Clean markdown code blocks if present
             const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
             const json = JSON.parse(cleanText);
-            
+
             // Basic validation
             if (!json.faces || json.faces.length !== 12) {
                 throw new Error("AI returned invalid face count (must be 12)");
@@ -129,4 +596,3 @@ Return ONLY valid JSON. No markdown, no explanation.
         }
     }
 }
-

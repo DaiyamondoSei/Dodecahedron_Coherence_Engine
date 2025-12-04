@@ -13,10 +13,12 @@
  * @version 2.0
  */
 
-export { SpectralAnalyzer } from './spectral-analyzer.js';
-export { EdgeAnalyzer } from './edge-analyzer.js';
-export { VertexAnalyzer } from './vertex-analyzer.js';
-export { ShadowDetector } from './shadow-detector.js';
+import { SpectralAnalyzer } from './spectral-analyzer.js';
+import { EdgeAnalyzer } from './edge-analyzer.js';
+import { VertexAnalyzer } from './vertex-analyzer.js';
+import { ShadowDetector } from './shadow-detector.js';
+
+export { SpectralAnalyzer, EdgeAnalyzer, VertexAnalyzer, ShadowDetector };
 
 /**
  * OrganizationalCoherenceEngine - Unified Interface
@@ -25,10 +27,10 @@ export { ShadowDetector } from './shadow-detector.js';
  */
 export class OrganizationalCoherenceEngine {
   constructor(tuningConfig = null) {
-    this.spectral = new (await import('./spectral-analyzer.js')).SpectralAnalyzer();
-    this.edges = new (await import('./edge-analyzer.js')).EdgeAnalyzer();
-    this.vertices = new (await import('./vertex-analyzer.js')).VertexAnalyzer();
-    this.shadows = new (await import('./shadow-detector.js')).ShadowDetector(tuningConfig);
+    this.spectral = new SpectralAnalyzer();
+    this.edges = new EdgeAnalyzer();
+    this.vertices = new VertexAnalyzer();
+    this.shadows = new ShadowDetector(tuningConfig);
   }
 
   /**

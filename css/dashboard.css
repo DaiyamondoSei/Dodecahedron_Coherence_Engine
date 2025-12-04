@@ -632,3 +632,269 @@
             background: linear-gradient(90deg, #9370DB, #ff00ff);
             border-radius: 3px;
         }
+
+/* Shadow Panel Styles */
+.shadow-panel-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 2000;
+    pointer-events: none; /* Allow clicks through container */
+}
+
+.shadow-card {
+    background: rgba(20, 0, 0, 0.95);
+    border-left: 4px solid #ff4444;
+    padding: 15px;
+    border-radius: 4px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+    color: #fff;
+    pointer-events: auto; /* Re-enable clicks on cards */
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.shadow-card:hover {
+    transform: translateX(-5px);
+    background: rgba(40, 0, 0, 1);
+    box-shadow: 0 10px 30px rgba(255, 68, 68, 0.2);
+}
+
+.shadow-card.severity-high {
+    border-left-color: #ff0000;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+    animation: slideIn 0.5s ease, pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.2); }
+    50% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.4); }
+    100% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.2); }
+}
+
+.shadow-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.shadow-icon {
+    font-size: 18px;
+}
+
+.shadow-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #ff8888;
+}
+
+.shadow-message {
+    font-size: 13px;
+    line-height: 1.4;
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+
+.shadow-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+/* Face Detail Panel - Shadow Section */
+.shadow-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(50, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    display: none; /* Hidden by default */
+}
+
+.shadow-section.visible {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.shadow-section-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #ff4444;
+    margin-bottom: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* =========================================
+   VOICE INTERFACE (Phase 5)
+   ========================================= */
+
+.voice-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 255, 204, 0.1);
+    border: 1px solid #00ffcc;
+    color: #00ffcc;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.voice-toggle:hover {
+    background: rgba(0, 255, 204, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+    transform: translateY(-2px);
+}
+
+.voice-interface {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    background: rgba(10, 15, 30, 0.95);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    transform: translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.voice-interface.visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.voice-header {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.voice-title {
+    color: #00ffcc;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.voice-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.voice-close:hover {
+    color: #fff;
+}
+
+.voice-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+    max-width: 85%;
+    animation: fadeIn 0.3s ease;
+}
+
+.message.system {
+    background: rgba(0, 255, 204, 0.1);
+    border-left: 3px solid #00ffcc;
+    align-self: flex-start;
+    color: #e0e0e0;
+}
+
+.message.user {
+    background: rgba(255, 255, 255, 0.1);
+    align-self: flex-end;
+    color: #fff;
+}
+
+.message.typing {
+    font-style: italic;
+    opacity: 0.7;
+}
+
+.voice-input-area {
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    gap: 10px;
+}
+
+#voiceInput {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 4px;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+#voiceInput:focus {
+    outline: none;
+    border-color: #00ffcc;
+}
+
+#voiceSend {
+    background: #00ffcc;
+    color: #000;
+    border: none;
+    padding: 0 15px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#voiceSend:hover {
+    background: #00ccaa;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+}

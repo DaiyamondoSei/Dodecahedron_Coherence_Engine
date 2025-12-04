@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌟 Quannex Coherence Engine - University Demo</title>
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
+
 <body>
     <div class="container">
         <div class="header">
             <div class="title">🌟 QUANNEX COHERENCE ENGINE</div>
             <div class="subtitle">Organizational DNA • 12 Faces • Real-time Coherence Analysis</div>
             <div class="global-coherence tooltip" id="globalCoherence"
-                 data-tooltip="Average energy across all 12 organizational faces - Higher is better!">—</div>
+                data-tooltip="Average energy across all 12 organizational faces - Higher is better!">—</div>
             <div class="status" id="globalStatus">Initializing...</div>
         </div>
 
@@ -46,7 +48,7 @@
                 <h2>🎵 System Resonance</h2>
                 <p class="section-subtitle">Spectral Analysis • Eigenvector Decomposition • Hidden Harmonics</p>
             </div>
-            
+
             <div class="spectral-grid" id="spectralContent">
                 <!-- Spectral content will be inserted here -->
             </div>
@@ -75,16 +77,16 @@
     </div>
 
     <!-- Load company loader first -->
-    <script src="./js/company-loader.js"></script>
+    <script type="module" src="./js/company-loader.js"></script>
 
     <!-- Load breath analyzer -->
     <script src="./js/breath-analyzer.js"></script>
-    
+
     <!-- Load spectral analyzer -->
     <script src="./js/spectral-analyzer.js"></script>
 
-    <!-- Load the serverless engine -->
-    <script src="./js/main.js"></script>
+    <!-- Load the serverless engine (ES Module) -->
+    <script type="module" src="./js/main.js"></script>
 
     <script>
         // ============================================
@@ -267,7 +269,7 @@
 
             // Display breath analysis
             displayBreathAnalysis();
-            
+
             // Display spectral analysis
             displaySpectralAnalysis();
         }
@@ -280,7 +282,7 @@
             card.className = 'face-card';
             card.style.borderColor = face.color;
 
-            const energyPercent = (face.energy * 100).toFixed(1);
+            const energyPercent = (face.faceEnergy * 100).toFixed(1);
 
             card.innerHTML = `
                 <div class="face-header">
@@ -327,13 +329,13 @@
 
             face.kpis.forEach((kpi, index) => {
                 const elements = [
-                    {icon: '🜃', name: 'Earth', tooltip: 'Earth - Grounding, stability, material resources'},
-                    {icon: '💧', name: 'Water', tooltip: 'Water - Flow, adaptability, emotional intelligence'},
-                    {icon: '🔥', name: 'Fire', tooltip: 'Fire - Energy, passion, transformation'},
-                    {icon: '💨', name: 'Air', tooltip: 'Air - Communication, intellect, movement'},
-                    {icon: '🜀', name: 'Ether', tooltip: 'Ether - Space, potential, integration'}
+                    { icon: '🜃', name: 'Earth', tooltip: 'Earth - Grounding, stability, material resources' },
+                    { icon: '💧', name: 'Water', tooltip: 'Water - Flow, adaptability, emotional intelligence' },
+                    { icon: '🔥', name: 'Fire', tooltip: 'Fire - Energy, passion, transformation' },
+                    { icon: '💨', name: 'Air', tooltip: 'Air - Communication, intellect, movement' },
+                    { icon: '🜀', name: 'Ether', tooltip: 'Ether - Space, potential, integration' }
                 ];
-                const element = elements[index] || {icon: '⚡', name: 'Element', tooltip: 'Elemental KPI'};
+                const element = elements[index] || { icon: '⚡', name: 'Element', tooltip: 'Elemental KPI' };
 
                 html += `
                     <div class="kpi-item">
@@ -439,10 +441,10 @@
             card.className = 'breath-axis-card';
 
             const statusClass = axis.direction === 'balanced' ? 'balanced' :
-                               axis.direction === 'over-exhaling' ? 'over-exhaling' : 'over-inhaling';
+                axis.direction === 'over-exhaling' ? 'over-exhaling' : 'over-inhaling';
 
             const ratioColor = axis.direction === 'balanced' ? '#00ff66' :
-                              axis.direction === 'over-exhaling' ? '#ff6666' : '#66b2ff';
+                axis.direction === 'over-exhaling' ? '#ff6666' : '#66b2ff';
 
             card.innerHTML = `
                 <div class="breath-axis-header">
@@ -499,7 +501,7 @@
         function displaySpectralAnalysis() {
             const analysis = window.Quannex.getSpectralAnalysis();
             const section = document.getElementById('spectralSection');
-            
+
             if (!analysis) {
                 section.style.display = 'none';
                 return;
@@ -507,11 +509,11 @@
 
             section.style.display = 'block';
             const container = document.getElementById('spectralContent');
-            
+
             // Format dissonance
             const dissonance = analysis.diagnostics.dissonanceIndex;
             const dissonanceColor = dissonance.percentage < 10 ? '#00ff66' : dissonance.percentage < 25 ? '#ffff00' : '#ff6666';
-            
+
             container.innerHTML = `
                 <!-- Dominant Mode -->
                 <div class="spectral-card">
@@ -549,7 +551,7 @@
                     </div>
                 </div>
             `;
-            
+
             console.log('🎵 Displayed spectral analysis');
         }
 
@@ -797,4 +799,5 @@
         window.addEventListener('load', init);
     </script>
 </body>
+
 </html>

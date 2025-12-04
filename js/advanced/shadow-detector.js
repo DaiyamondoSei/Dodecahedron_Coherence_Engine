@@ -26,6 +26,7 @@
 export class ShadowDetector {
   constructor(tuningConfig = null) {
     // Default tuning constants (can be overridden)
+    // Default tuning if not provided
     this.tuning = tuningConfig || {
       shadowPenalties: {
         brittleProfit: 0.25,      // 25% penalty
@@ -36,6 +37,18 @@ export class ShadowDetector {
         lonelyHero: 0.25          // 25% penalty
       }
     };
+
+    // Ensure shadowPenalties exists even if tuning was provided but incomplete
+    if (!this.tuning.shadowPenalties) {
+      this.tuning.shadowPenalties = {
+        brittleProfit: 0.25,
+        extractiveGrowth: 0.30,
+        experienceGap: 0.20,
+        burnoutEngine: 0.35,
+        hollowGovernance: 0.15,
+        lonelyHero: 0.25
+      };
+    }
 
     // Define the 6 archetypal shadow patterns
     this.shadowPatterns = {
