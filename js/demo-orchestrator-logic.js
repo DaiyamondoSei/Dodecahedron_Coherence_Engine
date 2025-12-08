@@ -6,41 +6,630 @@
 
 // Global state
 const demoState = {
-    currentStep: 1,
-    totalSteps: 4,
+    currentStep: 0,
+    totalSteps: 5, // Now includes Step 0
     faceConfig: null,
     kpiMode: null, // 'quick' or 'full'
     kpiData: null,
     coherenceResults: null,
-    completedSteps: []
+    completedSteps: [],
+    selectedCompanyId: null, // Track which company template is selected
+    loadedMappingContext: null // Store the loaded mapping context
 };
+
+/**
+ * ========================================
+ * SESSION EXPIRY MANAGER
+ * ========================================
+ *
+ * Prevents users from losing work by:
+ * 1. Warning at 25 minutes (5 min before expiry)
+ * 2. Allowing session extension
+ * 3. Graceful handling at 30 min expiry
+ *
+ * INTEGRITY FIX: Previously sessions expired silently.
+ * ========================================
+ */
+const SessionManager = {
+    SESSION_DURATION: 30 * 60 * 1000,    // 30 minutes in ms
+    WARNING_THRESHOLD: 25 * 60 * 1000,   // 25 minutes - show warning
+    CHECK_INTERVAL: 60 * 1000,           // Check every minute
+    _checkTimer: null,
+    _warningShown: false,
+    _notificationElement: null,
+
+    /**
+     * Start monitoring the session
+     */
+    start() {
+        this.stop(); // Clear any existing timer
+        this._warningShown = false;
+        this._checkTimer = setInterval(() => this._checkSession(), this.CHECK_INTERVAL);
+        console.log('[SessionManager] Session monitoring started (30 min expiry, 25 min warning)');
+    },
+
+    /**
+     * Stop monitoring
+     */
+    stop() {
+        if (this._checkTimer) {
+            clearInterval(this._checkTimer);
+            this._checkTimer = null;
+        }
+        this._hideNotification();
+    },
+
+    /**
+     * Check session age and show warnings
+     */
+    _checkSession() {
+        try {
+            const savedData = sessionStorage.getItem('customCompanyData');
+            if (!savedData) return;
+
+            const parsed = JSON.parse(savedData);
+            const savedTime = new Date(parsed.timestamp);
+            const elapsed = Date.now() - savedTime.getTime();
+            const remaining = this.SESSION_DURATION - elapsed;
+            const minutesRemaining = Math.ceil(remaining / 60000);
+
+            // Session expired
+            if (remaining <= 0) {
+                this._handleExpiry();
+                return;
+            }
+
+            // Show warning at 25 minutes (5 min remaining)
+            if (elapsed >= this.WARNING_THRESHOLD && !this._warningShown) {
+                this._showWarning(minutesRemaining);
+            }
+
+            // Update warning if already shown
+            if (this._warningShown && this._notificationElement) {
+                const timeText = this._notificationElement.querySelector('.session-time-remaining');
+                if (timeText) {
+                    timeText.textContent = `${minutesRemaining} minute${minutesRemaining !== 1 ? 's' : ''} remaining`;
+                }
+            }
+        } catch (e) {
+            console.warn('[SessionManager] Check failed:', e.message);
+        }
+    },
+
+    /**
+     * Show expiry warning notification
+     */
+    _showWarning(minutesRemaining) {
+        this._warningShown = true;
+
+        // Create notification if not exists
+        if (!this._notificationElement) {
+            this._notificationElement = document.createElement('div');
+            this._notificationElement.id = 'session-expiry-warning';
+            this._notificationElement.innerHTML = `
+                <div class="session-warning-content">
+                    <div class="session-warning-icon">⏰</div>
+                    <div class="session-warning-text">
+                        <strong>Session Expiring Soon</strong>
+                        <span class="session-time-remaining">${minutesRemaining} minutes remaining</span>
+                    </div>
+                    <button class="session-extend-btn" onclick="SessionManager.extendSession()">
+                        Extend Session
+                    </button>
+                    <button class="session-dismiss-btn" onclick="SessionManager._hideNotification()">
+                        ✕
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(this._notificationElement);
+
+            // Add styles if not exists
+            if (!document.getElementById('session-warning-styles')) {
+                const style = document.createElement('style');
+                style.id = 'session-warning-styles';
+                style.textContent = `
+                    #session-expiry-warning {
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        background: linear-gradient(135deg, #1a1a2e, #16213e);
+                        border: 1px solid #ffcc00;
+                        border-radius: 12px;
+                        padding: 16px 20px;
+                        box-shadow: 0 4px 20px rgba(255, 204, 0, 0.3);
+                        z-index: 10000;
+                        animation: slideInWarning 0.3s ease-out;
+                        max-width: 400px;
+                    }
+                    @keyframes slideInWarning {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    .session-warning-content {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                    }
+                    .session-warning-icon {
+                        font-size: 28px;
+                        animation: pulseIcon 1s ease-in-out infinite;
+                    }
+                    @keyframes pulseIcon {
+                        0%, 100% { transform: scale(1); }
+                        50% { transform: scale(1.1); }
+                    }
+                    .session-warning-text {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                        color: white;
+                    }
+                    .session-warning-text strong {
+                        color: #ffcc00;
+                        font-size: 14px;
+                    }
+                    .session-time-remaining {
+                        font-size: 12px;
+                        color: rgba(255, 255, 255, 0.7);
+                    }
+                    .session-extend-btn {
+                        background: linear-gradient(135deg, #00ffcc, #00cc99);
+                        border: none;
+                        border-radius: 6px;
+                        padding: 8px 16px;
+                        color: #000;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: transform 0.2s, box-shadow 0.2s;
+                    }
+                    .session-extend-btn:hover {
+                        transform: scale(1.05);
+                        box-shadow: 0 2px 10px rgba(0, 255, 204, 0.4);
+                    }
+                    .session-dismiss-btn {
+                        background: transparent;
+                        border: none;
+                        color: rgba(255, 255, 255, 0.5);
+                        font-size: 18px;
+                        cursor: pointer;
+                        padding: 4px 8px;
+                        margin-left: auto;
+                    }
+                    .session-dismiss-btn:hover {
+                        color: white;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        this._notificationElement.style.display = 'block';
+        console.log(`[SessionManager] ⚠️ Session expiry warning shown (${minutesRemaining} min remaining)`);
+    },
+
+    /**
+     * Hide notification
+     */
+    _hideNotification() {
+        if (this._notificationElement) {
+            this._notificationElement.style.display = 'none';
+        }
+    },
+
+    /**
+     * Extend the session by updating timestamp
+     */
+    extendSession() {
+        try {
+            const savedData = sessionStorage.getItem('customCompanyData');
+            if (savedData) {
+                const parsed = JSON.parse(savedData);
+                parsed.timestamp = new Date().toISOString();
+                sessionStorage.setItem('customCompanyData', JSON.stringify(parsed));
+                this._warningShown = false;
+                this._hideNotification();
+                console.log('[SessionManager] ✅ Session extended for another 30 minutes');
+
+                // Show confirmation toast
+                this._showToast('Session extended! You have 30 more minutes.');
+            }
+        } catch (e) {
+            console.error('[SessionManager] Extension failed:', e);
+        }
+    },
+
+    /**
+     * Handle session expiry
+     */
+    _handleExpiry() {
+        this.stop();
+        console.log('[SessionManager] ❌ Session expired');
+
+        // Show final notification
+        if (this._notificationElement) {
+            this._notificationElement.innerHTML = `
+                <div class="session-warning-content">
+                    <div class="session-warning-icon">⌛</div>
+                    <div class="session-warning-text">
+                        <strong style="color: #ff6666;">Session Expired</strong>
+                        <span class="session-time-remaining">Your work has been cleared after 30 minutes of inactivity.</span>
+                    </div>
+                    <button class="session-extend-btn" onclick="location.reload()">
+                        Start Fresh
+                    </button>
+                </div>
+            `;
+            this._notificationElement.style.borderColor = '#ff6666';
+            this._notificationElement.style.display = 'block';
+        }
+
+        // Clear session
+        sessionStorage.removeItem('customCompanyData');
+    },
+
+    /**
+     * Show a brief toast notification
+     */
+    _showToast(message) {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: rgba(0, 255, 204, 0.9);
+            color: #000;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 10001;
+            animation: fadeInOut 2s ease-in-out forwards;
+        `;
+        toast.textContent = message;
+
+        if (!document.getElementById('toast-animation-style')) {
+            const style = document.createElement('style');
+            style.id = 'toast-animation-style';
+            style.textContent = `
+                @keyframes fadeInOut {
+                    0% { opacity: 0; transform: translateY(10px); }
+                    15%, 85% { opacity: 1; transform: translateY(0); }
+                    100% { opacity: 0; transform: translateY(-10px); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+};
+
+/**
+ * ========================================
+ * CROSS-WINDOW SYNCHRONIZATION (Issue #12 Fix)
+ * ========================================
+ *
+ * Uses BroadcastChannel API to sync state between multiple windows/tabs.
+ * When user modifies data in orchestrator, all open visualization views
+ * (3D model, DNA helix, etc.) receive updates in real-time.
+ *
+ * Channel: 'quannex-sync'
+ * Messages: { type: string, payload: any, timestamp: number }
+ * ========================================
+ */
+const CrossWindowSync = {
+    CHANNEL_NAME: 'quannex-sync',
+    _channel: null,
+    _listeners: new Map(),
+
+    /**
+     * Initialize the broadcast channel
+     */
+    init() {
+        if (typeof BroadcastChannel === 'undefined') {
+            console.warn('[CrossWindowSync] BroadcastChannel not supported in this browser');
+            return false;
+        }
+
+        try {
+            this._channel = new BroadcastChannel(this.CHANNEL_NAME);
+            this._channel.onmessage = (event) => this._handleMessage(event.data);
+            console.log('[CrossWindowSync] ✅ Channel initialized:', this.CHANNEL_NAME);
+            return true;
+        } catch (e) {
+            console.error('[CrossWindowSync] Failed to create channel:', e);
+            return false;
+        }
+    },
+
+    /**
+     * Broadcast a state update to all windows
+     * @param {string} type - Message type (e.g., 'STATE_UPDATE', 'FACES_CHANGED')
+     * @param {any} payload - Data to broadcast
+     */
+    broadcast(type, payload) {
+        if (!this._channel) return;
+
+        const message = {
+            type,
+            payload,
+            timestamp: Date.now(),
+            source: window.location.pathname  // Identify source window
+        };
+
+        try {
+            this._channel.postMessage(message);
+            console.log(`[CrossWindowSync] 📤 Broadcast: ${type}`, payload);
+        } catch (e) {
+            console.error('[CrossWindowSync] Broadcast failed:', e);
+        }
+    },
+
+    /**
+     * Register a listener for incoming messages
+     * @param {string} type - Message type to listen for, or '*' for all
+     * @param {Function} callback - Handler function(payload, message)
+     */
+    on(type, callback) {
+        if (!this._listeners.has(type)) {
+            this._listeners.set(type, []);
+        }
+        this._listeners.get(type).push(callback);
+    },
+
+    /**
+     * Handle incoming messages
+     */
+    _handleMessage(message) {
+        console.log(`[CrossWindowSync] 📥 Received: ${message.type} from ${message.source}`);
+
+        // Skip messages from self
+        if (message.source === window.location.pathname) {
+            return;
+        }
+
+        // Notify type-specific listeners
+        const typeListeners = this._listeners.get(message.type) || [];
+        typeListeners.forEach(cb => cb(message.payload, message));
+
+        // Notify wildcard listeners
+        const wildcardListeners = this._listeners.get('*') || [];
+        wildcardListeners.forEach(cb => cb(message.payload, message));
+    },
+
+    /**
+     * Broadcast current demoState (for views to sync on open)
+     */
+    broadcastCurrentState() {
+        this.broadcast('STATE_SYNC', {
+            demoState: {
+                currentStep: demoState.currentStep,
+                faceConfig: demoState.faceConfig,
+                kpiData: demoState.kpiData,
+                coherenceResults: demoState.coherenceResults,
+                loadedMappingContext: demoState.loadedMappingContext
+            }
+        });
+    },
+
+    /**
+     * Request current state from other windows (for views that open late)
+     */
+    requestState() {
+        this.broadcast('STATE_REQUEST', { requester: window.location.pathname });
+    },
+
+    /**
+     * Clean up
+     */
+    close() {
+        if (this._channel) {
+            this._channel.close();
+            this._channel = null;
+        }
+    }
+};
+
+// Initialize sync channel
+CrossWindowSync.init();
+
+// Listen for state requests (orchestrator responds to views asking for data)
+CrossWindowSync.on('STATE_REQUEST', (payload) => {
+    console.log('[CrossWindowSync] State requested by:', payload.requester);
+    // Only orchestrator should respond
+    if (window.location.pathname.includes('demo-orchestrator')) {
+        CrossWindowSync.broadcastCurrentState();
+    }
+});
+
+// Export for global access
+window.CrossWindowSync = CrossWindowSync;
+
+// Clean up on page unload
+window.addEventListener('beforeunload', () => {
+    SessionManager.stop();
+    CrossWindowSync.close();
+});
 
 /**
  * Initialize demo
  */
 function initializeDemo() {
     console.log('🌟 Quannex Demo Orchestrator initialized');
+
+    // =====================================================
+    // URL PARAMETER HANDLING
+    // =====================================================
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedPath = urlParams.get('path');
+    const shouldRestore = urlParams.get('restore') === 'true';
+
+    // Issue #10 Fix: Handle ?restore=true from back navigation
+    // This ensures state is restored when returning from sub-views
+    if (shouldRestore) {
+        console.log('🔄 Restore flag detected - restoring session from back navigation');
+        // Clear the restore parameter
+        window.history.replaceState({}, document.title, window.location.pathname);
+        // Fall through to normal session restoration below
+    }
+
+    // PATH HANDLING: Check for ?path= parameter from welcome screen
+    if (selectedPath) {
+        console.log(`🎯 Welcome screen path detected: ${selectedPath}`);
+        // Clear URL parameter to prevent re-triggering on refresh
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        // Handle each path type
+        setTimeout(() => {
+            switch (selectedPath) {
+                case 'template':
+                    // Go to Step 0 and highlight template options
+                    goToStep(0);
+                    highlightTemplateOptions();
+                    break;
+
+                case 'custom':
+                    // Start fresh with manual mode
+                    startFreshManual();
+                    break;
+
+                case 'ai':
+                    // Start fresh with AI story mode
+                    startFreshAI();
+                    break;
+
+                default:
+                    console.warn(`Unknown path: ${selectedPath}, defaulting to Step 0`);
+                    goToStep(0);
+            }
+        }, 100);
+
+        return; // Skip session restoration when coming from welcome screen
+    }
+
+    // Session restoration: attempt to restore previous session data
+    try {
+        const savedData = sessionStorage.getItem('customCompanyData');
+        if (savedData) {
+            const parsed = JSON.parse(savedData);
+            // Only restore if recent (within 30 minutes)
+            const savedTime = new Date(parsed.timestamp);
+            const now = new Date();
+            const minutesElapsed = (now - savedTime) / (1000 * 60);
+
+            if (minutesElapsed < 30) {
+                console.log('[Demo] Restoring previous session data (saved', Math.round(minutesElapsed), 'minutes ago)');
+                demoState.kpiData = parsed.kpis || [];
+                demoState.faceConfig = parsed.faceConfig || null;
+                demoState.coherenceResults = parsed.coherenceResults || null;
+                // Restore completed steps if available
+                if (parsed.completedSteps) {
+                    demoState.completedSteps = parsed.completedSteps;
+                }
+
+                // ===================================================
+                // ISSUE #11 FIX: Sync demoState with MappingContext
+                // ===================================================
+                // MappingContext is used by Sprint2/AI flow. Without this sync,
+                // two parallel state systems exist with no connection.
+                if (demoState.faceConfig && demoState.faceConfig.faces) {
+                    try {
+                        // Lazy import - MappingContext may be loaded via module
+                        if (window.MappingContext) {
+                            const ctx = window.MappingContext.getInstance();
+                            demoState.faceConfig.faces.forEach(face => {
+                                ctx.updateFace(face.id, {
+                                    name: face.name,
+                                    icon: face.icon,
+                                    sentiment: face.sentiment || face.faceEnergy || face.energy || 0.5
+                                });
+                            });
+                            console.log('[Demo] ✅ MappingContext synced with demoState');
+                            // Store reference for later use
+                            demoState.loadedMappingContext = ctx.toJSON();
+                        }
+                    } catch (syncError) {
+                        console.warn('[Demo] MappingContext sync deferred (not yet loaded):', syncError.message);
+                    }
+                }
+
+                console.log('[Demo] Session restored:', {
+                    kpiCount: demoState.kpiData?.length,
+                    hasFaceConfig: !!demoState.faceConfig,
+                    hasCoherence: !!demoState.coherenceResults
+                });
+                // Start session monitoring after successful restore
+                SessionManager.start();
+            } else {
+                console.log('[Demo] Previous session expired (', Math.round(minutesElapsed), 'minutes old)');
+                sessionStorage.removeItem('customCompanyData');
+            }
+        }
+    } catch (e) {
+        console.warn('[Demo] Session restore failed:', e.message);
+    }
+
     updateProgress();
+}
+
+/**
+ * Highlight template options in Step 0 (for welcome screen path)
+ */
+function highlightTemplateOptions() {
+    // Add visual emphasis to template cards
+    const templateCards = document.querySelectorAll('.company-template-card');
+    templateCards.forEach(card => {
+        card.style.animation = 'pulseHighlight 1.5s ease-in-out 3';
+    });
+
+    // Add CSS animation if not exists
+    if (!document.getElementById('welcome-path-styles')) {
+        const style = document.createElement('style');
+        style.id = 'welcome-path-styles';
+        style.textContent = `
+            @keyframes pulseHighlight {
+                0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); }
+                50% { box-shadow: 0 0 20px 5px rgba(0, 255, 204, 0.3); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
 }
 
 /**
  * Navigate to step
  */
 function goToStep(stepNumber) {
-    // Validate step is accessible
-    if (stepNumber > 1 && !demoState.completedSteps.includes(stepNumber - 1)) {
+    // Step 0 is always accessible
+    if (stepNumber === 0) {
+        // Allow going back to step 0
+    }
+    // Validate step is accessible (for steps > 0)
+    else if (stepNumber > 1 && !demoState.completedSteps.includes(stepNumber - 1)) {
         alert(`Please complete Step ${stepNumber - 1} first`);
+        return;
+    }
+    // Step 1 requires step 0 to be completed (company selected or manual mode)
+    else if (stepNumber === 1 && !demoState.completedSteps.includes(0)) {
+        alert('Please select a journey or start fresh first');
         return;
     }
 
     // Sprint 2 FIX: Enforce validation gate for step 2+
     // Must have all 12 faces validated before proceeding past step 1
+    // EXCEPTION: Skip validation for template flow (all steps already marked complete)
     if (stepNumber > 1 && window.Sprint2 && window.Sprint2.validationGate) {
-        const gateResult = window.Sprint2.canProceed();
-        if (!gateResult.canProceed) {
-            // Show empowering dialog instead of blocking alert
-            showValidationBlockDialog(gateResult);
-            return;
+        const isTemplateFlow = demoState.completedSteps.includes(1) &&
+                               demoState.completedSteps.includes(2) &&
+                               demoState.completedSteps.includes(3);
+
+        if (!isTemplateFlow) {
+            const gateResult = window.Sprint2.canProceed();
+            if (!gateResult.canProceed) {
+                // Show empowering dialog instead of blocking alert
+                showValidationBlockDialog(gateResult);
+                return;
+            }
         }
     }
 
@@ -64,6 +653,36 @@ function goToStep(stepNumber) {
 
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // If navigating to Step 4, initialize visualizations
+    if (stepNumber === 4) {
+        setTimeout(() => {
+            initializePortraitView();
+            initializeOctaveDashboard();
+            // Sprint 3 Fix: Ensure nervous endpoints are updated with current template data
+            if (demoState.coherenceResults && demoState.coherenceResults.faces) {
+                identifyNervousEndpoints();
+            }
+        }, 100);
+    }
+
+    // If navigating to Step 2, ensure KPI mode buttons are visible
+    if (stepNumber === 2) {
+        const modeQuick = document.getElementById('modeQuick');
+        const modeFull = document.getElementById('modeFull');
+        if (modeQuick) modeQuick.style.display = 'inline-block';
+        if (modeFull) modeFull.style.display = 'inline-block';
+    }
+
+    // If navigating back to Step 1, restore face names from demoState
+    // This preserves user customizations across navigation
+    if (stepNumber === 1 && demoState.faceConfig) {
+        if (typeof window.restoreFacesFromDemoState === 'function') {
+            window.restoreFacesFromDemoState();
+            // Also re-populate the face editor UI
+            populateFaceEditor();
+        }
+    }
 
     console.log(`📍 Navigated to Step ${stepNumber}`);
 }
@@ -174,8 +793,311 @@ function focusOnIncompleteFace() {
  * Update progress bar
  */
 function updateProgress() {
-    const progressPercent = ((demoState.currentStep - 1) / (demoState.totalSteps - 1)) * 100;
+    // Step 0 = 0%, Step 1 = 25%, Step 2 = 50%, Step 3 = 75%, Step 4 = 100%
+    const progressPercent = (demoState.currentStep / (demoState.totalSteps - 1)) * 100;
     document.getElementById('progressBar').style.width = `${progressPercent}%`;
+}
+
+// ============================================
+// COMPANY TEMPLATE SELECTION (Sprint 3)
+// ============================================
+
+/**
+ * Select a pre-filled company template
+ * Loads the mapping-context.json and pre-fills all steps
+ */
+async function selectCompanyTemplate(companyId) {
+    console.log(`🏢 Selecting company template: ${companyId}`);
+    showLoading('Loading organizational DNA...');
+
+    try {
+        let mappingContext;
+
+        // Try to fetch from server first
+        try {
+            const response = await fetch(`companies/${companyId}/mapping-context.json`);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            mappingContext = await response.json();
+            console.log(`✅ Loaded mapping context from server for ${mappingContext.displayName}`);
+        } catch (fetchError) {
+            // Fallback to bundled templates for offline/file:// protocol support
+            console.warn(`⚠️ Fetch failed (${fetchError.message}), trying offline bundle...`);
+
+            if (window.CompanyTemplatesBundle && window.CompanyTemplatesBundle.has(companyId)) {
+                mappingContext = window.CompanyTemplatesBundle.get(companyId);
+                console.log(`✅ Loaded mapping context from offline bundle for ${mappingContext.displayName}`);
+            } else {
+                throw new Error(`Template not found: ${companyId} (offline bundle not available)`);
+            }
+        }
+
+        // Store in state
+        demoState.selectedCompanyId = companyId;
+        demoState.loadedMappingContext = mappingContext;
+
+        // Pre-fill face configuration
+        demoState.faceConfig = {
+            templateName: mappingContext.displayName,
+            faces: mappingContext.faces.map(face => ({
+                id: face.id,
+                name: face.customName || face.baseName,
+                icon: face.icon || '',
+                octave: face.octave,
+                tooltip: face.tooltip,
+                sentiment: face.sentiment
+            }))
+        };
+
+        // Pre-fill KPI data
+        demoState.kpiMode = mappingContext.mode || 'quick';
+        demoState.kpiData = [];
+
+        // Transform KPIs from mapping context
+        Object.keys(mappingContext.kpis || {}).forEach(faceKey => {
+            const faceId = parseInt(faceKey.replace('face', ''));
+            const faceKpis = mappingContext.kpis[faceKey];
+            const face = mappingContext.faces.find(f => f.id === faceId);
+
+            faceKpis.forEach((kpi, index) => {
+                demoState.kpiData.push({
+                    faceId: faceId,
+                    faceName: face ? (face.customName || face.baseName) : `Face ${faceId}`,
+                    id: kpi.id,
+                    name: kpi.name,
+                    value: kpi.value,
+                    unit: kpi.unit || 'number',
+                    direction: '↑',
+                    targetMin: 0,
+                    targetIdeal: kpi.target || 100,
+                    element: 'Earth'
+                });
+            });
+        });
+
+        // Pre-calculate coherence from face sentiments
+        const avgCoherence = mappingContext.diagnostics?.globalCoherence ||
+            (mappingContext.faces.reduce((sum, f) => sum + (f.sentiment || 0.5), 0) / mappingContext.faces.length);
+
+        demoState.coherenceResults = {
+            globalCoherence: avgCoherence,
+            coherenceStatus: getCoherenceStatus(avgCoherence),
+            faces: mappingContext.faces.map(f => ({
+                id: f.id,
+                name: f.customName || f.baseName,
+                faceEnergy: f.sentiment,  // Primary property for 3D viz
+                energy: f.sentiment,       // Backwards compatibility
+                kpis: []
+            }))
+        };
+
+        // Mark steps as completed since data is pre-loaded
+        demoState.completedSteps = [0, 1, 2, 3];
+
+        // Sync to Sprint 2 MappingContext if available
+        if (window.Sprint2 && window.Sprint2.mappingContext) {
+            try {
+                const facesConfig = demoState.faceConfig.faces.map(face => ({
+                    id: face.id,
+                    name: face.name,
+                    icon: face.icon || '',
+                    source: 'template'
+                }));
+                window.Sprint2.mappingContext.setAllFaces(facesConfig);
+                console.log('✅ Synced to Sprint2 MappingContext');
+            } catch (err) {
+                console.warn('⚠️ Sprint2 sync failed:', err.message);
+            }
+        }
+
+        // ============================================================
+        // DATA BRIDGE: Initialize Quannex Engine with template data
+        // ============================================================
+        try {
+            if (typeof window.DataTransformer !== 'undefined' && demoState.kpiData && demoState.kpiData.length > 0) {
+                const engineData = window.DataTransformer.transform({
+                    faceConfig: demoState.faceConfig,
+                    kpiMode: demoState.kpiMode || 'quick',
+                    kpiData: demoState.kpiData
+                });
+
+                if (typeof window.Quannex !== 'undefined') {
+                    await window.Quannex.initWithCompany(engineData);
+                    console.log('[DataBridge] Engine initialized with template data');
+
+                    const engineState = window.Quannex.getState();
+                    if (engineState && engineState.globalCoherence !== undefined) {
+                        demoState.coherenceResults = window.DataTransformer.transformResults(engineState);
+                    }
+                }
+            }
+        } catch (bridgeError) {
+            console.warn('[DataBridge] Engine initialization skipped:', bridgeError.message);
+            // Continue with fallback data - visualization will use pre-calculated sentiments
+        }
+
+        // Trigger hero update for template-loaded data
+        if (demoState.coherenceResults && demoState.coherenceResults.globalCoherence) {
+            setTimeout(() => {
+                if (typeof initializeCoherenceHero === 'function') {
+                    initializeCoherenceHero();
+                }
+            }, 200);
+        }
+
+        // Ensure sessionStorage is populated immediately for 3D view
+        // (Risk Manager: prevents race condition if user opens 3D before clicking launchView)
+        updateSessionStorage();
+        console.log('[Template] ✅ SessionStorage populated with edges/vertices for 3D view');
+
+        hideLoading();
+
+        // Show success notification
+        showCompanyLoadedNotification(mappingContext);
+
+        // Navigate to Step 1 (Face Configuration) - data is pre-filled
+        goToStep(1);
+
+        // Pre-populate the face editor
+        populateFaceEditor();
+
+    } catch (error) {
+        console.error('❌ Failed to load company template:', error);
+        hideLoading();
+        alert(`Failed to load ${companyId} template: ${error.message}`);
+    }
+}
+
+/**
+ * Show notification that company data was loaded
+ */
+function showCompanyLoadedNotification(mappingContext) {
+    const notification = document.createElement('div');
+    notification.id = 'company-loaded-notification';
+    notification.innerHTML = `
+        <div style="position: fixed; top: 100px; right: 20px; z-index: 2000;
+                    background: rgba(0, 255, 204, 0.15); border: 1px solid rgba(0, 255, 204, 0.4);
+                    border-radius: 12px; padding: 20px; max-width: 350px;
+                    animation: slideIn 0.5s ease;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 32px;">${mappingContext.faces[0]?.icon || '🏢'}</span>
+                <div>
+                    <div style="font-weight: 600; color: #00ffcc; font-size: 16px;">
+                        ${mappingContext.displayName} Loaded
+                    </div>
+                    <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 4px;">
+                        ${mappingContext.octaveStage} • ${mappingContext.archetype}
+                    </div>
+                    <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px; font-style: italic;">
+                        "${mappingContext.dominantBreathName}"
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 12px; font-size: 11px; color: rgba(255,255,255,0.6);">
+                ✅ All 12 faces pre-configured<br>
+                ✅ KPIs and metrics loaded<br>
+                ✅ Ready to explore the journey
+            </div>
+        </div>
+    `;
+    document.body.appendChild(notification);
+
+    // Remove after 5 seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => notification.remove(), 500);
+    }, 5000);
+}
+
+/**
+ * Populate the face editor with pre-loaded data
+ */
+function populateFaceEditor() {
+    if (!demoState.faceConfig) return;
+
+    // Generate face grid HTML
+    const faceGrid = document.getElementById('faceGrid');
+    if (!faceGrid) return;
+
+    let html = '';
+    demoState.faceConfig.faces.forEach(face => {
+        html += `
+            <div class="face-item" style="background: rgba(0, 255, 204, 0.1); border-color: rgba(0, 255, 204, 0.3);">
+                <span class="face-number">${face.id}</span>
+                <input
+                    type="text"
+                    class="face-input"
+                    id="face-input-${face.id}"
+                    value="${face.name}"
+                    placeholder="Face ${face.id} name"
+                    data-face-id="${face.id}"
+                    style="border-color: rgba(0, 255, 204, 0.5);"
+                />
+                <span style="font-size: 11px; color: rgba(255,255,255,0.5); margin-left: 8px;">
+                    O${face.octave || '?'}
+                </span>
+            </div>
+        `;
+    });
+
+    faceGrid.innerHTML = html;
+
+    // Show the face editor section
+    const editorSection = document.getElementById('faceEditorSection');
+    if (editorSection) {
+        editorSection.style.display = 'block';
+    }
+
+    // Enable the Next button
+    const nextBtn = document.getElementById('step1NextBtn');
+    if (nextBtn) {
+        nextBtn.disabled = false;
+    }
+
+    console.log('✅ Face editor populated with pre-loaded data');
+}
+
+/**
+ * Start fresh with manual setup
+ */
+function startFreshManual() {
+    console.log('🛠️ Starting fresh with manual setup');
+
+    // Mark step 0 as complete
+    markStepCompleted(0);
+
+    // Clear any loaded company data
+    demoState.selectedCompanyId = null;
+    demoState.loadedMappingContext = null;
+
+    // Navigate to step 1
+    goToStep(1);
+}
+
+/**
+ * Start fresh with AI story mode
+ */
+function startFreshAI() {
+    console.log('🧠 Starting fresh with AI story mode');
+
+    // Mark step 0 as complete
+    markStepCompleted(0);
+
+    // Clear any loaded company data
+    demoState.selectedCompanyId = null;
+    demoState.loadedMappingContext = null;
+
+    // Navigate to step 1
+    goToStep(1);
+
+    // Select the AI Story template
+    setTimeout(() => {
+        if (typeof selectTemplate === 'function') {
+            selectTemplate('story');
+        }
+    }, 100);
 }
 
 /**
@@ -225,14 +1147,23 @@ function completeStep1() {
     }
 
     // Sprint 2 FIX: Now check validation gate with updated data
+    // EXCEPTION: Skip validation for template flow (all steps already marked complete)
     if (window.Sprint2 && window.Sprint2.validationGate) {
-        const gateResult = window.Sprint2.canProceed();
-        console.log('📋 Validation Gate:', gateResult);
+        const isTemplateFlow = demoState.completedSteps.includes(1) &&
+                               demoState.completedSteps.includes(2) &&
+                               demoState.completedSteps.includes(3);
 
-        // Block if validation fails - show empowering dialog
-        if (!gateResult.canProceed) {
-            showValidationBlockDialog(gateResult);
-            return; // Block navigation
+        if (!isTemplateFlow) {
+            const gateResult = window.Sprint2.canProceed();
+            console.log('📋 Validation Gate:', gateResult);
+
+            // Block if validation fails - show empowering dialog
+            if (!gateResult.canProceed) {
+                showValidationBlockDialog(gateResult);
+                return; // Block navigation
+            }
+        } else {
+            console.log('📋 Validation Gate: Skipped (template flow)');
         }
     }
 
@@ -330,9 +1261,15 @@ function autoFillExtractedKPIs() {
             nameInput.style.borderColor = 'rgba(0, 255, 204, 0.5)';
         }
 
-        if (valueInput && kpi.value) {
-            // Extract numeric value from string
-            const numValue = parseFloat(kpi.value.replace(/[^0-9.-]/g, ''));
+        if (valueInput && kpi.value !== undefined && kpi.value !== null) {
+            // Extract numeric value from string or use directly if already a number
+            let numValue;
+            if (typeof kpi.value === 'number') {
+                numValue = kpi.value;
+            } else {
+                numValue = parseFloat(String(kpi.value).replace(/[^0-9.-]/g, ''));
+            }
+
             if (!isNaN(numValue)) {
                 valueInput.value = numValue;
                 valueInput.style.borderColor = 'rgba(0, 255, 204, 0.5)';
@@ -419,13 +1356,31 @@ function showAutoFillNotification(count) {
  * Generate Quick Mode HTML (12 KPIs) - ENHANCED with better layout
  */
 function generateQuickModeHTML() {
+    // Defensive check: ensure face configuration exists
+    if (!demoState.faceConfig || !demoState.faceConfig.faces) {
+        console.error('[KPIMapper] No face configuration available');
+        return '<p style="color: #ff6b6b; text-align: center; padding: 40px;">Please complete Step 1 (Define Faces) first.</p>';
+    }
+
     const units = window.KPILibrary ? window.KPILibrary.getUnitTypes() : [];
+
+    // Create KPI lookup by faceId for pre-filling template data
+    const kpiByFaceId = {};
+    if (demoState.kpiData && demoState.kpiData.length > 0) {
+        demoState.kpiData.forEach(kpi => {
+            kpiByFaceId[kpi.faceId] = kpi;
+        });
+        console.log('[KPIMapper] Pre-filling with template KPIs:', Object.keys(kpiByFaceId).length);
+    }
 
     let html = '<div style="margin: 30px 0;">';
     html += '<h3 style="font-size: 16px; margin-bottom: 20px; color: rgba(255, 255, 255, 0.8);">Quick Mode: 1 KPI per Face</h3>';
     html += '<div style="display: grid; gap: 20px;">';
 
     demoState.faceConfig.faces.forEach(face => {
+        // Get pre-loaded KPI data for this face (from template)
+        const preFilledKPI = kpiByFaceId[face.id];
+
         // Get KPI suggestions for this face (Earth element by default for quick mode)
         const suggestions = window.KPILibrary ? window.KPILibrary.getKPISuggestions(face.name, 'Earth') : [];
         const datalistId = `kpi-suggestions-${face.id}`;
@@ -449,6 +1404,7 @@ function generateQuickModeHTML() {
                             placeholder="Start typing..."
                             data-face-id="${face.id}"
                             data-field="kpiName"
+                            value="${preFilledKPI?.name || ''}"
                             onchange="autofillKPISuggestion(this, ${face.id})"
                             oninput="this.setAttribute('data-current-value', this.value)"
                         />
@@ -466,6 +1422,7 @@ function generateQuickModeHTML() {
                             placeholder="0"
                             data-face-id="${face.id}"
                             data-field="value"
+                            value="${preFilledKPI?.value !== undefined ? preFilledKPI.value : ''}"
                             step="any"
                             oninput="calculateLiveNormalization(${face.id})"
                         />
@@ -480,7 +1437,7 @@ function generateQuickModeHTML() {
                             data-field="unit"
                             style="cursor: pointer; font-size: 12px;"
                         >
-                            ${units.map(u => `<option value="${u.value}">${u.symbol || u.label}</option>`).join('')}
+                            ${units.map(u => `<option value="${u.value}" ${preFilledKPI?.unit === u.value ? 'selected' : ''}>${u.symbol || u.label}</option>`).join('')}
                         </select>
                     </div>
                 </div>
@@ -497,6 +1454,7 @@ function generateQuickModeHTML() {
                             placeholder="0"
                             data-face-id="${face.id}"
                             data-field="targetMin"
+                            value="${preFilledKPI?.targetMin !== undefined ? preFilledKPI.targetMin : ''}"
                             step="any"
                             oninput="calculateLiveNormalization(${face.id})"
                         />
@@ -511,6 +1469,7 @@ function generateQuickModeHTML() {
                             placeholder="100"
                             data-face-id="${face.id}"
                             data-field="targetIdeal"
+                            value="${preFilledKPI?.targetIdeal !== undefined ? preFilledKPI.targetIdeal : ''}"
                             step="any"
                             oninput="calculateLiveNormalization(${face.id})"
                         />
@@ -526,9 +1485,9 @@ function generateQuickModeHTML() {
                             style="cursor: pointer; font-size: 12px;"
                             onchange="calculateLiveNormalization(${face.id})"
                         >
-                            <option value="↑">↑ Higher</option>
-                            <option value="↓">↓ Lower</option>
-                            <option value="Band">⊟ Sweet spot</option>
+                            <option value="↑" ${preFilledKPI?.direction === '↑' || !preFilledKPI ? 'selected' : ''}>↑ Higher</option>
+                            <option value="↓" ${preFilledKPI?.direction === '↓' ? 'selected' : ''}>↓ Lower</option>
+                            <option value="Band" ${preFilledKPI?.direction === 'Band' ? 'selected' : ''}>⊟ Sweet spot</option>
                         </select>
                     </div>
                 </div>
@@ -665,6 +1624,34 @@ function completeStep2() {
     if (!demoState.kpiData || demoState.kpiData.length === 0) {
         alert('Please enter at least one KPI');
         return;
+    }
+
+    // NEW: Generate edges/vertices for custom flow using Context Synthesizer
+    // This ensures the 3D visualization has complete data for non-template flows
+    if (!demoState.loadedMappingContext && demoState.faceConfig) {
+        console.log('🔮 Custom flow detected - synthesizing edges and vertices...');
+
+        // Check if Context Synthesizer is available
+        if (window.ContextSynthesizer && typeof window.ContextSynthesizer.synthesizeCustomContext === 'function') {
+            try {
+                const synthesizedContext = window.ContextSynthesizer.synthesizeCustomContext(
+                    demoState.faceConfig,
+                    demoState.kpiData
+                );
+
+                if (synthesizedContext) {
+                    demoState.loadedMappingContext = synthesizedContext;
+                    console.log('✅ Context Synthesizer generated:',
+                        synthesizedContext.edges?.length || 0, 'edges,',
+                        synthesizedContext.vertices?.length || 0, 'vertices');
+                }
+            } catch (error) {
+                console.error('⚠️ Context Synthesizer failed:', error);
+                // Continue anyway - visualization will work without edges
+            }
+        } else {
+            console.warn('⚠️ Context Synthesizer not loaded - 3D view may lack edge data');
+        }
     }
 
     // Mark completed
@@ -923,6 +1910,13 @@ function collectKPIData() {
     }
 
     console.log(`📊 Total KPIs collected: ${kpis.length}`);
+
+    // Validation feedback: warn if no KPIs collected
+    if (kpis.length === 0) {
+        console.warn('[collectKPIData] No KPIs collected - check if form was rendered');
+        alert('Please enter at least one KPI with a name before proceeding.');
+    }
+
     return kpis;
 }
 
@@ -1145,13 +2139,21 @@ function displayCalculationResults() {
  */
 function updateSessionStorage() {
     if (demoState.kpiData && demoState.kpiData.length > 0) {
+        // Get actual company name from loaded template or face config
+        const companyName = demoState.loadedMappingContext?.displayName
+            || demoState.faceConfig?.templateName
+            || 'Custom Analysis';
+
         const customCompanyData = {
             id: 'custom',
-            name: 'Custom Analysis',
+            name: companyName,
             description: 'User-generated data from Orchestrator',
             kpis: demoState.kpiData,
             faceConfig: demoState.faceConfig,
             coherenceResults: demoState.coherenceResults,
+            breathAxes: demoState.loadedMappingContext?.breathAxes || null, // Sprint 3 Task 27: Include breath data
+            edges: demoState.loadedMappingContext?.edges || null, // Sprint 3 Task 28: Include edge data for 3D hover
+            dominantOctave: demoState.loadedMappingContext?.dominantOctave || 1,
             isCustomData: true,
             timestamp: new Date().toISOString() // Fresh timestamp on each update
         };
@@ -1159,6 +2161,23 @@ function updateSessionStorage() {
         sessionStorage.setItem('customCompanyData', JSON.stringify(customCompanyData));
         sessionStorage.setItem('selectedCompanyId', 'custom');
         console.log('💾 Updated sessionStorage with latest data (timestamp:', customCompanyData.timestamp, ')');
+
+        // Ensure session monitoring is active
+        if (!SessionManager._checkTimer) {
+            SessionManager.start();
+        }
+
+        // Issue #12: Broadcast state change to other windows (3D views, etc.)
+        if (window.CrossWindowSync) {
+            CrossWindowSync.broadcast('STATE_UPDATE', {
+                customCompanyData,
+                demoState: {
+                    currentStep: demoState.currentStep,
+                    faceConfig: demoState.faceConfig,
+                    coherenceResults: demoState.coherenceResults
+                }
+            });
+        }
     }
 }
 
@@ -1207,12 +2226,528 @@ function completeStep3() {
     markStepCompleted(3);
     goToStep(4);
 
+    // Initialize Coherence Hero when entering Step 4 (Sprint 3 Task 26)
+    initializeCoherenceHero();
+
     // Initialize Portrait View when entering Step 4
     initializePortraitView();
+
+    // Initialize Octave Dashboard when entering Step 4 (Sprint 3 Task 30)
+    initializeOctaveDashboard();
 }
 
 // Portrait View instance holder
 let portraitViewInstance = null;
+
+/**
+ * Octave reference data for dashboard population
+ */
+const OCTAVE_REFERENCE = {
+    1: {
+        name: 'Survival',
+        focus: 'Existence',
+        color: '#ff6b6b',
+        gradient: 'linear-gradient(135deg, #ff6b6b, #ff8e53)',
+        description: 'The organization is fighting to exist. Focus is on basic viability.',
+        questions: [
+            'Are we actively seeking resources to exist?',
+            'Do we have enough cash to survive?',
+            'Is any work getting done?',
+            'Does the founder have the energy to exist?'
+        ],
+        breathInsight: 'At this stage, every breath is about staying alive. Resources in, survival out.',
+        advanceHint: 'Secure basic viability first. Once survival is stable, you can begin building structure.'
+    },
+    2: {
+        name: 'Structure',
+        focus: 'Stability',
+        color: '#ffa94d',
+        gradient: 'linear-gradient(135deg, #ffa94d, #ffd43b)',
+        description: 'Building stable foundations. Processes and systems are being established.',
+        questions: [
+            'Are systems being documented?',
+            'Is knowledge being preserved?',
+            'Are processes repeatable?',
+            'Do we have a clear operational rhythm?'
+        ],
+        breathInsight: 'Structure brings rhythm to chaos. Each exhale is a process documented.',
+        advanceHint: 'Document and systematize key processes. When foundations are solid, relationships can flourish.'
+    },
+    3: {
+        name: 'Relationships',
+        focus: 'Connection',
+        color: '#69db7c',
+        gradient: 'linear-gradient(135deg, #69db7c, #94d82d)',
+        description: 'Growing through connection. Community and partnerships are central.',
+        questions: [
+            'Are we building meaningful partnerships?',
+            'Is our team growing in harmony?',
+            'Do our stakeholders feel valued?',
+            'Is communication flowing both ways?'
+        ],
+        breathInsight: 'Relationships are the breath between beings. Inhale others\' wisdom, exhale your value.',
+        advanceHint: 'Deepen key relationships. When connections are strong, creativity emerges naturally.'
+    },
+    4: {
+        name: 'Creativity',
+        focus: 'Innovation',
+        color: '#4dabf7',
+        gradient: 'linear-gradient(135deg, #4dabf7, #748ffc)',
+        description: 'Innovation flourishes. New ideas emerge and are welcomed.',
+        questions: [
+            'Is experimentation encouraged?',
+            'Do people feel safe to propose new ideas?',
+            'Are we solving problems creatively?',
+            'Is there space for play and exploration?'
+        ],
+        breathInsight: 'Creativity is the breath of new possibility. Let go of what was to create what can be.',
+        advanceHint: 'Foster innovation culture. When creativity flows freely, authentic expression becomes possible.'
+    },
+    5: {
+        name: 'Expression',
+        focus: 'Authenticity',
+        color: '#a78bfa',
+        gradient: 'linear-gradient(135deg, #a78bfa, #f472b6)',
+        description: 'Authentic voice emerging. The organization expresses its unique identity.',
+        questions: [
+            'Is our brand voice distinctive and true?',
+            'Do our actions match our stated values?',
+            'Are we communicating our unique perspective?',
+            'Is there coherence between inner and outer?'
+        ],
+        breathInsight: 'Expression is truth made visible. Each exhale shares your authentic essence.',
+        advanceHint: 'Refine authentic expression. When you speak your truth fully, vision crystallizes.'
+    },
+    6: {
+        name: 'Vision',
+        focus: 'Purpose',
+        color: '#da77f2',
+        gradient: 'linear-gradient(135deg, #da77f2, #f06595)',
+        description: 'Clear sight of purpose. Strategic vision guides all decisions.',
+        questions: [
+            'Is our long-term vision crystal clear?',
+            'Does everyone understand the "why"?',
+            'Are we seeing patterns others miss?',
+            'Is our strategy aligned with deeper purpose?'
+        ],
+        breathInsight: 'Vision is the breath of the future. Inhale possibility, exhale direction.',
+        advanceHint: 'Clarify and embody the vision. When vision is lived fully, radiance emerges.'
+    },
+    7: {
+        name: 'Radiance',
+        focus: 'Service',
+        color: '#ffd43b',
+        gradient: 'linear-gradient(135deg, #ffd43b, #ffe066)',
+        description: 'Full coherence achieved. The organization serves something greater than itself.',
+        questions: [
+            'Are we serving the greater good?',
+            'Is our impact regenerative?',
+            'Do we uplift those we touch?',
+            'Is there joy in our work?'
+        ],
+        breathInsight: 'Radiance is the breath of service. Every exhale blesses the world.',
+        advanceHint: 'Radiance is the culmination. Maintain coherence while expanding your service to the world.'
+    }
+};
+
+/**
+ * Initialize Octave Dashboard with current data
+ */
+/**
+ * Initialize Coherence Hero Section (Sprint 3 Task 26)
+ * Displays the coherence score prominently at the top of Step 4
+ */
+function initializeCoherenceHero() {
+    if (!demoState.coherenceResults) {
+        console.warn('[CoherenceHero] No coherence results available');
+        return;
+    }
+
+    const coherence = demoState.coherenceResults.globalCoherence || 0;
+    const coherencePercent = (coherence * 100).toFixed(1);
+
+    // Determine interpretation based on coherence level
+    let interpretation = '';
+    let detail = '';
+
+    if (coherence >= 0.85) {
+        interpretation = 'Exceptional Coherence';
+        detail = 'Your organization demonstrates masterful integration across all dimensions. This is rare and represents organizational radiance.';
+    } else if (coherence >= 0.7) {
+        interpretation = 'Strong Coherence';
+        detail = 'Your organization shows excellent alignment. Most dimensions work harmoniously together with clear synergies.';
+    } else if (coherence >= 0.5) {
+        interpretation = 'Developing Coherence';
+        detail = 'Your organization has solid foundations with room for growth. Focus on strengthening the connections between dimensions.';
+    } else if (coherence >= 0.382) {
+        interpretation = 'Emerging Coherence';
+        detail = 'Your organization is in early development. The dodecahedron reveals specific areas requiring focused attention.';
+    } else {
+        interpretation = 'Foundational Stage';
+        detail = 'Your organization is at the beginning of its coherence journey. Every step forward matters. The path is clear.';
+    }
+
+    // Update hero elements
+    const scoreEl = document.getElementById('hero-coherence-score');
+    const interpEl = document.getElementById('hero-coherence-interpretation');
+    const detailEl = document.getElementById('hero-coherence-detail');
+
+    if (scoreEl) scoreEl.textContent = `${coherencePercent}%`;
+    if (interpEl) interpEl.textContent = interpretation;
+    if (detailEl) detailEl.textContent = detail;
+
+    // Update hero border color based on coherence
+    const heroEl = document.getElementById('coherence-hero');
+    if (heroEl) {
+        let borderColor = 'rgba(0, 255, 204, 0.4)';
+        if (coherence >= 0.85) {
+            borderColor = 'rgba(255, 215, 0, 0.6)';
+        } else if (coherence >= 0.7) {
+            borderColor = 'rgba(0, 255, 136, 0.5)';
+        } else if (coherence < 0.382) {
+            borderColor = 'rgba(255, 107, 107, 0.5)';
+        }
+        heroEl.style.borderColor = borderColor;
+    }
+
+    console.log('[CoherenceHero] Initialized with coherence:', coherencePercent + '%');
+}
+
+function initializeOctaveDashboard() {
+    // Try to get octave from loaded mapping context
+    let dominantOctave = 1;
+    let octaveStage = 'O1';
+    let dominantBreathName = 'The Breath of Viability';
+    let breathAxes = [];
+    let integrityResult = null;  // Store Foundation Principle calculation result
+
+    // Check for loaded mapping context
+    if (demoState.loadedMappingContext) {
+        dominantOctave = demoState.loadedMappingContext.dominantOctave || 1;
+        octaveStage = demoState.loadedMappingContext.octaveStage || `O${dominantOctave}`;
+        dominantBreathName = demoState.loadedMappingContext.dominantBreathName || 'The Breath of Viability';
+        breathAxes = demoState.loadedMappingContext.breathAxes || [];
+    }
+
+    // ========================================
+    // FOUNDATION PRINCIPLE: Use OctaveIntegrityCalculator
+    // ========================================
+    // If we have face-level coherence data, apply the Foundation Principle:
+    // "An organization cannot claim a higher octave than its structural foundation supports"
+    if (window.OctaveIntegrityCalculator && demoState.coherenceResults?.faces) {
+        // Build face data with individual octaves
+        const faceOctaveData = demoState.coherenceResults.faces.map(face => {
+            // Get face coherence/energy
+            const faceCoherence = face.energy || face.faceEnergy || face.coherence || 0.5;
+            // Detect face-level octave from its coherence
+            const faceOctave = window.OctaveIntegrityCalculator.detectOctaveFromCoherence(faceCoherence);
+            return {
+                id: face.id,
+                name: face.name || `Face ${face.id}`,
+                octave: faceOctave.octave,
+                coherence: faceCoherence
+            };
+        });
+
+        // Get lifecycle stage if available
+        const lifecycleStage = demoState.loadedMappingContext?.lifecycleStage || null;
+
+        // Calculate organizational octave with Foundation Principle
+        integrityResult = window.OctaveIntegrityCalculator.calculateOrganizationalOctave(
+            faceOctaveData,
+            lifecycleStage
+        );
+
+        // Use Foundation Principle result if available
+        if (integrityResult && integrityResult.orgOctave) {
+            dominantOctave = integrityResult.orgOctave;
+            octaveStage = `O${dominantOctave}`;
+            console.log('[OctaveDashboard] Foundation Principle applied:', {
+                orgOctave: dominantOctave,
+                geoMean: integrityResult.geoMean,
+                spread: integrityResult.spread,
+                penalty: integrityResult.penalty,
+                warnings: integrityResult.warnings?.length || 0
+            });
+        }
+    }
+    // Fallback: If no face data, detect from global coherence
+    else if (!demoState.loadedMappingContext && demoState.coherenceResults) {
+        const avgCoherence = demoState.coherenceResults.globalCoherence || 0.5;
+        dominantOctave = detectOctaveFromCoherence(avgCoherence);
+    }
+
+    const octaveData = OCTAVE_REFERENCE[dominantOctave] || OCTAVE_REFERENCE[1];
+    const nextOctave = Math.min(7, dominantOctave + 1);
+    const nextOctaveData = OCTAVE_REFERENCE[nextOctave];
+
+    // Update progress bar (14% per octave)
+    const progressPercent = (dominantOctave / 7) * 100;
+    const progressFill = document.getElementById('octave-progress-fill');
+    const progressMarker = document.getElementById('octave-progress-marker');
+    if (progressFill) progressFill.style.width = `${progressPercent}%`;
+    if (progressMarker) progressMarker.style.left = `${progressPercent}%`;
+
+    // Update progress bar gradient based on octave
+    if (progressFill) {
+        progressFill.style.background = octaveData.gradient;
+    }
+
+    // Update badge
+    const badge = document.getElementById('octave-badge');
+    if (badge) {
+        badge.textContent = `O${dominantOctave}`;
+        badge.style.background = octaveData.gradient;
+    }
+
+    // Update name and description
+    const nameEl = document.getElementById('octave-name');
+    const focusEl = document.getElementById('octave-focus');
+    const descEl = document.getElementById('octave-description');
+
+    if (nameEl) {
+        nameEl.textContent = octaveData.name;
+        nameEl.style.color = octaveData.color;
+    }
+    if (focusEl) {
+        focusEl.innerHTML = `Focus: <span style="color: ${octaveData.color};">${octaveData.focus}</span>`;
+    }
+    if (descEl) {
+        descEl.textContent = octaveData.description;
+    }
+
+    // Update questions from breath axes if available, otherwise use defaults
+    const questionsEl = document.getElementById('octave-questions');
+    if (questionsEl) {
+        let questions = octaveData.questions;
+
+        // If we have breath axes, use their questions
+        if (breathAxes.length > 0) {
+            questions = breathAxes
+                .filter(axis => axis.projectionQuestion || axis.receptionQuestion)
+                .slice(0, 4)
+                .flatMap(axis => [
+                    axis.projectionQuestion,
+                    axis.receptionQuestion
+                ])
+                .filter(q => q)
+                .slice(0, 4);
+        }
+
+        questionsEl.innerHTML = questions.map((q, i) =>
+            `<div style="padding: 8px 0; ${i < questions.length - 1 ? 'border-bottom: 1px solid rgba(255,255,255,0.05);' : ''}">• ${q}</div>`
+        ).join('');
+    }
+
+    // Update next octave preview
+    const nextBadgeDiv = document.querySelector('#next-octave-preview > div:first-child > div:first-child');
+    const nextNameDiv = document.querySelector('#next-octave-preview .font-weight-600, #next-octave-preview div > div > div:first-child');
+
+    if (dominantOctave < 7) {
+        const nextPreview = document.getElementById('next-octave-preview');
+        if (nextPreview) {
+            nextPreview.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(167,139,250,0.2); border: 2px solid ${nextOctaveData.color}40; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: ${nextOctaveData.color};">O${nextOctave}</div>
+                    <div>
+                        <div style="font-weight: 600; color: ${nextOctaveData.color};">${nextOctaveData.name}</div>
+                        <div style="font-size: 11px; color: rgba(255,255,255,0.5);">Focus: ${nextOctaveData.focus}</div>
+                    </div>
+                </div>
+                <div style="font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.6;">
+                    ${nextOctaveData.description}
+                </div>
+                <div style="margin-top: 12px; padding: 10px; background: ${nextOctaveData.color}15; border-radius: 6px; font-size: 11px; color: rgba(255,255,255,0.7);">
+                    💡 <strong>To advance:</strong> ${octaveData.advanceHint}
+                </div>
+            `;
+        }
+    } else {
+        // At O7 - show completion message
+        const nextPreview = document.getElementById('next-octave-preview');
+        if (nextPreview) {
+            nextPreview.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <span style="font-size: 32px;">✨</span>
+                    <div style="font-weight: 600; color: #ffd43b; margin-top: 10px;">Full Radiance Achieved</div>
+                    <div style="font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 8px;">
+                        The journey continues in service to others. Your coherence becomes a gift to the world.
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    // Update breath insight
+    const breathNameEl = document.getElementById('dominant-breath-name');
+    const breathInsightEl = document.getElementById('dominant-breath-insight');
+
+    if (breathNameEl) {
+        breathNameEl.textContent = `"${dominantBreathName}"`;
+    }
+    if (breathInsightEl) {
+        breathInsightEl.textContent = octaveData.breathInsight;
+    }
+
+    // Highlight current octave in progress bar labels
+    const labels = document.querySelectorAll('#octave-progress-labels span');
+    labels.forEach((label, i) => {
+        if (i + 1 === dominantOctave) {
+            label.style.color = octaveData.color;
+            label.style.fontWeight = '600';
+        } else {
+            label.style.color = 'rgba(255,255,255,0.4)';
+            label.style.fontWeight = 'normal';
+        }
+    });
+
+    // ========================================
+    // SPREAD WARNING UI (Foundation Principle Feedback)
+    // ========================================
+    displayFoundationPrincipleWarnings(integrityResult, octaveData.color);
+
+    console.log(`🎵 Octave Dashboard initialized: O${dominantOctave} (${octaveData.name})`);
+}
+
+/**
+ * Display Foundation Principle warnings in the Octave Dashboard
+ * Shows spread warnings, structural misalignment alerts, and recommendations
+ *
+ * @param {Object|null} integrityResult - Result from OctaveIntegrityCalculator
+ * @param {string} octaveColor - Current octave's theme color
+ */
+function displayFoundationPrincipleWarnings(integrityResult, octaveColor) {
+    // Find or create warning container
+    let warningContainer = document.getElementById('foundation-principle-warnings');
+
+    // If no container exists, try to insert one after the octave progress section
+    if (!warningContainer) {
+        const octaveProgressContainer = document.querySelector('#octave-progress-fill')?.closest('div')?.parentElement;
+        if (octaveProgressContainer) {
+            warningContainer = document.createElement('div');
+            warningContainer.id = 'foundation-principle-warnings';
+            warningContainer.style.cssText = 'margin-top: 15px; transition: all 0.3s ease;';
+            octaveProgressContainer.parentElement.insertBefore(warningContainer, octaveProgressContainer.nextSibling);
+        }
+    }
+
+    // If still no container, skip
+    if (!warningContainer) {
+        console.warn('[FoundationWarnings] Could not find/create warning container');
+        return;
+    }
+
+    // No integrity result means no Foundation Principle was applied
+    if (!integrityResult) {
+        warningContainer.innerHTML = '';
+        return;
+    }
+
+    // Build warning HTML
+    let warningsHtml = '';
+    const warnings = integrityResult.warnings || [];
+
+    // Show spread info if there's a penalty
+    if (integrityResult.spread > 0) {
+        const spreadColor = integrityResult.spread > 4 ? '#ff6b6b' :
+                           integrityResult.spread > 2 ? '#ffa94d' : '#69db7c';
+        const spreadIcon = integrityResult.spread > 4 ? '⚠️' :
+                          integrityResult.spread > 2 ? '📊' : '✅';
+
+        warningsHtml += `
+            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: ${spreadColor}15; border-left: 3px solid ${spreadColor}; border-radius: 0 6px 6px 0; margin-bottom: 10px;">
+                <span style="font-size: 18px;">${spreadIcon}</span>
+                <div style="flex: 1;">
+                    <div style="font-size: 12px; font-weight: 600; color: ${spreadColor};">
+                        Octave Spread: ${integrityResult.spread} levels (O${integrityResult.breakdown?.min || '?'} → O${integrityResult.breakdown?.max || '?'})
+                    </div>
+                    <div style="font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px;">
+                        ${integrityResult.spread <= 2 ? 'Healthy variance - well-aligned development' :
+                          integrityResult.spread <= 4 ? 'Some faces are developing faster than others' :
+                          'Critical misalignment detected - foundations need strengthening'}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Show penalty info if applied
+    if (integrityResult.penalty > 0) {
+        warningsHtml += `
+            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(255,170,77,0.1); border-left: 3px solid #ffa94d; border-radius: 0 6px 6px 0; margin-bottom: 10px;">
+                <span style="font-size: 18px;">📉</span>
+                <div style="flex: 1;">
+                    <div style="font-size: 12px; font-weight: 600; color: #ffa94d;">
+                        Foundation Principle Applied: -${integrityResult.penalty.toFixed(1)} octave penalty
+                    </div>
+                    <div style="font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px;">
+                        Geometric mean was ${integrityResult.geoMean?.toFixed(2) || '?'}, reduced due to structural misalignment
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Show specific warnings
+    warnings.forEach(warning => {
+        if (warning.type === 'structural_misalignment' || warning.type === 'aspirational_outlier') {
+            const color = warning.severity === 'critical' ? '#ff6b6b' : '#ffa94d';
+            const icon = warning.severity === 'critical' ? '🚨' : '⚡';
+
+            warningsHtml += `
+                <div style="display: flex; align-items: flex-start; gap: 10px; padding: 10px; background: ${color}10; border-left: 3px solid ${color}; border-radius: 0 6px 6px 0; margin-bottom: 10px;">
+                    <span style="font-size: 16px;">${icon}</span>
+                    <div style="flex: 1;">
+                        <div style="font-size: 12px; font-weight: 600; color: ${color};">
+                            ${warning.message}
+                        </div>
+                        ${warning.detail ? `<div style="font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px;">${warning.detail}</div>` : ''}
+                        ${warning.recommendation ? `
+                            <div style="font-size: 11px; color: rgba(0,255,204,0.8); margin-top: 6px; padding: 6px; background: rgba(0,255,204,0.1); border-radius: 4px;">
+                                💡 ${warning.recommendation}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+    });
+
+    // Show octave distribution if we have breakdown
+    if (integrityResult.breakdown?.distribution && Object.keys(integrityResult.breakdown.distribution).length > 1) {
+        const distHtml = Object.entries(integrityResult.breakdown.distribution)
+            .map(([oct, count]) => `<span style="padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 10px;">${oct}: ${count}</span>`)
+            .join(' ');
+
+        warningsHtml += `
+            <div style="padding: 8px 10px; background: rgba(255,255,255,0.05); border-radius: 6px; margin-bottom: 10px;">
+                <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 5px;">Face Octave Distribution:</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; color: rgba(255,255,255,0.7);">
+                    ${distHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    warningContainer.innerHTML = warningsHtml;
+
+    if (warnings.length > 0) {
+        console.log('[FoundationWarnings] Displayed', warnings.length, 'warnings');
+    }
+}
+
+/**
+ * Detect octave from coherence score
+ */
+function detectOctaveFromCoherence(coherence) {
+    if (coherence >= 0.95) return 7;
+    if (coherence >= 0.854) return 6;
+    if (coherence >= 0.764) return 5;
+    if (coherence >= 0.618) return 4;
+    if (coherence >= 0.5) return 3;
+    if (coherence >= 0.382) return 2;
+    return 1;
+}
 
 /**
  * Initialize Portrait View with current coherence data
@@ -1221,6 +2756,19 @@ function initializePortraitView() {
     if (!demoState.coherenceResults) {
         console.warn('[PortraitView] No coherence results available');
         return;
+    }
+
+    // Ensure faces array exists and has data (null-safe fallback)
+    if (!demoState.coherenceResults.faces || demoState.coherenceResults.faces.length === 0) {
+        console.warn('[PortraitView] No face data in coherence results, creating fallback');
+        if (demoState.faceConfig && demoState.faceConfig.faces) {
+            demoState.coherenceResults.faces = demoState.faceConfig.faces.map(f => ({
+                id: f.id,
+                name: f.name,
+                energy: demoState.loadedMappingContext?.faces?.find(mf => mf.id === f.id)?.sentiment || 0.5,
+                kpis: []
+            }));
+        }
     }
 
     // Wait for PortraitView to be available (it's a module)
@@ -1279,24 +2827,36 @@ function transformToPortraitData(coherenceResults) {
         // Extract elemental breakdown if available
         const elements = extractElementalData(face);
 
-        // Get face-specific octave or fallback to overall
+        // Get face coherence
+        const faceCoherence = face.energy || face.faceEnergy || 0.5;
+
+        // Detect operational octave based on coherence AND elemental engagement
+        const octaveInfo = detectOctave(faceCoherence, elements);
+
+        // Get face-specific octave or use detected
         const faceOctaveInfo = faceOctavesMap[face.id];
-        const faceOctave = faceOctaveInfo?.octave || face.targetOctave || overallOctave;
+        const faceOctave = faceOctaveInfo?.octave || face.targetOctave || octaveInfo.effective;
 
         faces[face.id] = {
             name: face.name || `Face ${face.id}`,
-            coherence: face.energy || face.faceEnergy || 0.5,
+            coherence: faceCoherence,
             targetOctave: faceOctave,
+            octaveInfo: octaveInfo, // Include full octave detection info
             elements: elements,
             kpis: face.kpis || [],
             warnings: []
         };
 
         // Add warnings for low coherence
-        if (faces[face.id].coherence < 0.382) {
+        if (faceCoherence < 0.382) {
             faces[face.id].warnings.push('Critical: coherence below PHI²');
-        } else if (faces[face.id].coherence < 0.5) {
+        } else if (faceCoherence < 0.5) {
             faces[face.id].warnings.push('Attention needed: developing coherence');
+        }
+
+        // Add warning if octave is limited by elemental coverage
+        if (octaveInfo.limitedBy === 'elemental_coverage') {
+            faces[face.id].warnings.push(`Octave limited: explore more elements to unlock ${octaveInfo.coherenceBased}`);
         }
     });
 
@@ -1323,22 +2883,23 @@ function transformToPortraitData(coherenceResults) {
 
 /**
  * Extract elemental breakdown from face data
+ * Enhanced: Tracks which elements are explored vs unexplored
  */
 function extractElementalData(face) {
     // If face has explicit elemental data, use it
     if (face.elements) return face.elements;
 
-    // Otherwise, derive from KPIs if they have element tags
+    // Default: all elements unexplored (Quick Mode starts here)
     const elements = {
-        earth: { value: 0.5, label: 'Foundation' },
-        water: { value: 0.5, label: 'Flow' },
-        fire: { value: 0.5, label: 'Energy' },
-        air: { value: 0.5, label: 'Communication' },
-        ether: { value: 0.5, label: 'Purpose' }
+        earth: { value: null, label: 'Foundation', explored: false, question: 'Is it grounded?' },
+        water: { value: null, label: 'Flow', explored: false, question: 'Is it flowing?' },
+        fire: { value: null, label: 'Energy', explored: false, question: 'Is there action?' },
+        air: { value: null, label: 'Communication', explored: false, question: 'Is it clear?' },
+        ether: { value: null, label: 'Purpose', explored: false, question: 'Is it aligned?' }
     };
 
     if (face.kpis && face.kpis.length > 0) {
-        // Try to extract from elemental KPIs (Full Mode)
+        // Try to extract from elemental KPIs
         const elementalKpis = {
             earth: face.kpis.filter(k => k.element === 'earth' || k.element === 'Earth'),
             water: face.kpis.filter(k => k.element === 'water' || k.element === 'Water'),
@@ -1353,13 +2914,76 @@ function extractElementalData(face) {
                 const avgScore = kpis.reduce((sum, k) => sum + (k.normalizedScore || 0.5), 0) / kpis.length;
                 elements[element] = {
                     value: avgScore,
-                    label: kpis[0]?.label || kpis[0]?.name || element
+                    label: kpis[0]?.label || kpis[0]?.name || element,
+                    explored: true,
+                    kpiName: kpis[0]?.name,
+                    question: elements[element].question
                 };
             }
         });
+
+        // Quick Mode fallback: if no element tags, assign all to Earth
+        const hasElementTags = Object.values(elementalKpis).some(arr => arr.length > 0);
+        if (!hasElementTags && face.kpis.length > 0) {
+            // In Quick Mode, the single KPI represents Earth element
+            const kpi = face.kpis[0];
+            const score = kpi.normalizedScore || kpi.coherence || face.energy || 0.5;
+            elements.earth = {
+                value: score,
+                label: kpi.name || 'Foundation',
+                explored: true,
+                kpiName: kpi.name,
+                question: 'Is it grounded?'
+            };
+        }
     }
 
     return elements;
+}
+
+/**
+ * Detect operational octave based on coherence and engaged elements
+ * Philosophy: Octave isn't a reward - it's recognition of which level questions are being engaged
+ */
+function detectOctave(faceCoherence, elementsExplored) {
+    // Count how many elements have data
+    const exploredCount = Object.values(elementsExplored).filter(e => e.explored).length;
+
+    // Coherence thresholds for octave progression (PHI-based)
+    const thresholds = {
+        O1: 0.0,    // Survival - just existing
+        O2: 0.382,  // Structure - PHI²
+        O3: 0.5,    // Relationships - midpoint
+        O4: 0.618,  // Creativity - PHI
+        O5: 0.764,  // Expression - PHI + 0.146
+        O6: 0.854,  // Vision - 1 - PHI²
+        O7: 0.95    // Radiance - near unity
+    };
+
+    // Base octave from coherence score
+    let detectedOctave = 'O1';
+    if (faceCoherence >= thresholds.O7) detectedOctave = 'O7';
+    else if (faceCoherence >= thresholds.O6) detectedOctave = 'O6';
+    else if (faceCoherence >= thresholds.O5) detectedOctave = 'O5';
+    else if (faceCoherence >= thresholds.O4) detectedOctave = 'O4';
+    else if (faceCoherence >= thresholds.O3) detectedOctave = 'O3';
+    else if (faceCoherence >= thresholds.O2) detectedOctave = 'O2';
+
+    // Elemental engagement can elevate or limit octave
+    // Full elemental engagement (5/5) allows full octave expression
+    // Partial engagement caps the effective octave
+    const octaveOrder = ['O1', 'O2', 'O3', 'O4', 'O5', 'O6', 'O7'];
+    const maxOctaveByEngagement = Math.min(exploredCount + 2, 7); // 1 element = max O3, 5 elements = max O7
+    const detectedIndex = octaveOrder.indexOf(detectedOctave);
+    const effectiveIndex = Math.min(detectedIndex, maxOctaveByEngagement - 1);
+
+    return {
+        detected: detectedOctave,
+        effective: octaveOrder[effectiveIndex],
+        limitedBy: effectiveIndex < detectedIndex ? 'elemental_coverage' : null,
+        exploredCount: exploredCount,
+        coherenceBased: detectedOctave
+    };
 }
 
 /**
@@ -1397,7 +3021,7 @@ function getDefaultFaceName(faceId) {
 }
 
 /**
- * Identify nervous endpoints
+ * Identify nervous endpoints (Sprint 3 Task 26 Polish)
  */
 function identifyNervousEndpoints() {
     const section = document.getElementById('nervousEndpoints');
@@ -1406,52 +3030,75 @@ function identifyNervousEndpoints() {
     // We check all 12 faces to ensure structural gaps are caught
     const allFaceIds = Array.from({ length: 12 }, (_, i) => i + 1);
     const criticalFaces = [];
+    const healthyFaces = [];
 
     allFaceIds.forEach(id => {
         const face = demoState.coherenceResults.faces.find(f => f.id === id);
         const energy = face ? (face.energy || face.faceEnergy || 0) : 0;
         const kpiCount = face && face.kpis ? face.kpis.length : 0;
 
+        const faceInfo = {
+            id: id,
+            name: face ? face.name : `Face ${id}`,
+            energy: energy
+        };
+
         // Critical if energy is low OR if no data present (Structural Immaturity)
         if (energy < 0.5) {
-            criticalFaces.push({
-                id: id,
-                name: face ? face.name : `Face ${id}`,
-                energy: energy,
-                reason: kpiCount === 0 ? "Structural Immaturity (No Data)" : "Low Coherence"
-            });
+            faceInfo.reason = kpiCount === 0 ? "Structural Immaturity (No Data)" : "Low Coherence";
+            criticalFaces.push(faceInfo);
+        } else if (energy >= 0.7) {
+            faceInfo.reason = "Strong Performance";
+            healthyFaces.push(faceInfo);
         }
     });
 
     criticalFaces.sort((a, b) => a.energy - b.energy);
+    healthyFaces.sort((a, b) => b.energy - a.energy);
 
-    if (criticalFaces.length === 0) {
-        section.innerHTML = '<p style="color: rgba(255, 255, 255, 0.6); text-align: center;">✅ No critical issues detected. All faces are healthy!</p>';
+    if (criticalFaces.length === 0 && healthyFaces.length > 0) {
+        // Show healthy faces when no critical issues
+        let html = '';
+        healthyFaces.slice(0, 3).forEach(face => {
+            const percentage = (face.energy * 100).toFixed(1);
+            html += `
+                <div class="nervous-endpoint-card healthy">
+                    <div class="endpoint-header">
+                        <span class="endpoint-icon">✨</span>
+                        <span class="endpoint-name">Face ${face.id}: ${face.name}</span>
+                    </div>
+                    <div class="endpoint-detail">
+                        <strong>${percentage}%</strong> coherence — ${face.reason}
+                    </div>
+                </div>
+            `;
+        });
+        section.innerHTML = html || '<p style="color: rgba(0, 255, 136, 0.8); text-align: center;">✅ All systems coherent!</p>';
         return;
     }
 
-    let html = '<div style="display: grid; gap: 15px;">';
+    let html = '';
 
-    criticalFaces.forEach(face => {
+    // Show critical faces (max 4)
+    criticalFaces.slice(0, 4).forEach(face => {
         const percentage = (face.energy * 100).toFixed(1);
-        // Red for critical, Orange for warning
-        const color = face.energy < 0.3 ? '#ff6666' : '#ffcc00';
+        const isCritical = face.energy < 0.3;
+        const icon = isCritical ? '🚨' : '⚠️';
 
         html += `
-            <div style="background: rgba(255, 100, 100, 0.1); border-left: 3px solid ${color}; padding: 12px; border-radius: 4px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span style="color: #fff; font-weight: 600;">Face ${face.id}: ${face.name}</span>
-                    <span style="color: ${color}; font-weight: bold;">${percentage}%</span>
+            <div class="nervous-endpoint-card">
+                <div class="endpoint-header">
+                    <span class="endpoint-icon">${icon}</span>
+                    <span class="endpoint-name">Face ${face.id}: ${face.name}</span>
                 </div>
-                <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7);">
-                    ⚠️ ${face.reason}
+                <div class="endpoint-detail">
+                    <strong>${percentage}%</strong> coherence — ${face.reason}
                 </div>
             </div>
         `;
     });
 
-    html += '</div>';
-    section.innerHTML = html;
+    section.innerHTML = html || '<p style="color: rgba(255, 255, 255, 0.6); text-align: center;">No endpoints to display</p>';
 }
 
 /**
@@ -1554,6 +3201,10 @@ window.showValidationBlockDialog = showValidationBlockDialog;
 window.closeValidationModal = closeValidationModal;
 window.applyDefaultsAndProceed = applyDefaultsAndProceed;
 window.focusOnIncompleteFace = focusOnIncompleteFace;
+// Sprint 3: Company template selection
+window.selectCompanyTemplate = selectCompanyTemplate;
+window.startFreshManual = startFreshManual;
+window.startFreshAI = startFreshAI;
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', initializeDemo);

@@ -310,19 +310,56 @@ class OctaveDeterminer {
     /**
      * Get tuning modifier based on octave
      * Lower octaves = more forgiving, higher octaves = more demanding
+     *
+     * ========================================
+     * PHI-BASED MODIFIER FORMULA (Integrity Fix #7)
+     * ========================================
+     *
+     * Formula: modifier = 1 + (octaveFactor × φ^-2)
+     *
+     * Where octaveFactor is itself PHI-derived:
+     *   O1: -1        (most forgiving)
+     *   O2: -φ^-1     (-0.618...)
+     *   O3: -φ^-2     (-0.382...)
+     *   O4:  0        (balanced)
+     *   O5: +φ^-2     (+0.382...)
+     *   O6: +φ^-1     (+0.618...)
+     *   O7: +1        (most demanding)
+     *
+     * Results:
+     *   O1: 1 - 0.382 = 0.618 (φ^-1)
+     *   O2: 1 - 0.236 = 0.764 (φ^-1 + φ^-3)
+     *   O3: 1 - 0.146 = 0.854 (1 - φ^-4)
+     *   O4: 1.000
+     *   O5: 1 + 0.146 = 1.146 (1 + φ^-4)
+     *   O6: 1 + 0.236 = 1.236 (1 + φ^-3)
+     *   O7: 1 + 0.382 = 1.382 (1 + φ^-2)
+     *
+     * This creates symmetric demand curves around O4 using sacred geometry.
+     * ========================================
      */
     getOctaveModifier(octaveId) {
-        const modifiers = {
-            O1: 0.618, // Very forgiving
-            O2: 0.764, // Forgiving
-            O3: 0.854, // Slightly forgiving
-            O4: 1.0,   // Balanced
-            O5: 1.146, // Slightly demanding
-            O6: 1.236, // Demanding
-            O7: 1.382  // Most demanding (PHI itself)
+        // PHI constants (Golden Ratio)
+        const PHI = 1.618033988749895;
+        const PHI_INV = 1 / PHI;        // φ^-1 ≈ 0.618
+        const PHI_INV_2 = PHI_INV * PHI_INV; // φ^-2 ≈ 0.382
+
+        // Octave factors (how much to adjust from baseline)
+        const octaveFactors = {
+            O1: -1,           // Most forgiving
+            O2: -PHI_INV,     // -0.618
+            O3: -PHI_INV_2,   // -0.382
+            O4:  0,           // Balanced
+            O5: +PHI_INV_2,   // +0.382
+            O6: +PHI_INV,     // +0.618
+            O7: +1            // Most demanding
         };
 
-        return modifiers[octaveId] || 1.0;
+        const factor = octaveFactors[octaveId];
+        if (factor === undefined) return 1.0;
+
+        // modifier = 1 + (factor × φ^-2)
+        return 1 + (factor * PHI_INV_2);
     }
 
     /**

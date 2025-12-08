@@ -379,9 +379,11 @@ function initDodecahedron() {
             // Store reference to whichever engine is available
             window.quannexEngine = engine;
 
-            // If CompanyLoader available, load default company
+            // If CompanyLoader available, load company from sessionStorage or default
             if (window.CompanyLoader) {
-                await window.CompanyLoader.loadCompany('quannex');
+                const selectedCompanyId = sessionStorage.getItem('selectedCompanyId') || 'quannex';
+                console.log(`🔄 Loading company from session: ${selectedCompanyId}`);
+                await window.CompanyLoader.loadCompany(selectedCompanyId);
             }
 
             companyData = engine.getState();
@@ -422,6 +424,141 @@ function initDodecahedron() {
     // ========================================
     // GEOMETRY CREATION
     // ========================================
+
+    // Sprint 3 Task 28: Element colors for edge tooltips
+    const ELEMENT_COLORS = {
+        'Earth': '#8B4513',
+        'Water': '#4169E1',
+        'Fire': '#FF4500',
+        'Air': '#87CEEB',
+        'Ether': '#9370DB'
+    };
+
+    /**
+     * Sprint 3 Task 28: Create interactive edges with userData for hover detection
+     * Each edge gets face pair info, name, question, and elemental nature from mapping context
+     */
+    const createInteractiveEdges = (baseGeometry, parentMesh, faceMeshesArray) => {
+        // Get edge vertices from EdgesGeometry
+        const edgesGeometry = new THREE.EdgesGeometry(baseGeometry);
+        const positions = edgesGeometry.attributes.position.array;
+
+        // Build a map of face centroids for determining which faces an edge belongs to
+        const faceCentroids = [];
+        faceMeshesArray.forEach((mesh, index) => {
+            if (mesh.geometry) {
+                mesh.geometry.computeBoundingBox();
+                const center = new THREE.Vector3();
+                mesh.geometry.boundingBox.getCenter(center);
+                faceCentroids.push({
+                    faceId: mesh.userData.faceId || (index + 1),
+                    center: center.clone()
+                });
+            }
+        });
+
+        // Try to load edge data from mapping context (sessionStorage or global)
+        let edgeDataMap = {};
+        try {
+            const customDataJson = sessionStorage.getItem('customCompanyData');
+            if (customDataJson) {
+                const customData = JSON.parse(customDataJson);
+                // Build a map keyed by sorted face pair
+                if (customData.edges) {
+                    customData.edges.forEach(edge => {
+                        const key = edge.faceIds.slice().sort().join('-');
+                        edgeDataMap[key] = edge;
+                    });
+                }
+            }
+        } catch (e) {
+            console.warn('[3D View] Could not load edge data from sessionStorage:', e);
+        }
+
+        // Also check for loaded company context
+        if (Object.keys(edgeDataMap).length === 0 && window.CompanyTemplatesBundle?.templates) {
+            const selectedCompanyId = sessionStorage.getItem('selectedCompanyId');
+            if (selectedCompanyId && window.CompanyTemplatesBundle.templates[selectedCompanyId]?.edges) {
+                const edges = window.CompanyTemplatesBundle.templates[selectedCompanyId].edges;
+                edges.forEach(edge => {
+                    const key = edge.faceIds.slice().sort().join('-');
+                    edgeDataMap[key] = edge;
+                });
+            }
+        }
+
+        // Create individual line for each edge
+        const edgeMaterial = new THREE.LineBasicMaterial({
+            color: 0x00ffcc,
+            linewidth: 2,
+            transparent: true,
+            opacity: 0.5
+        });
+
+        const edgeCount = positions.length / 6; // 2 vertices per edge, 3 coords per vertex
+        console.log(`[3D View] Creating ${edgeCount} interactive edges`);
+
+        for (let i = 0; i < edgeCount; i++) {
+            const start = new THREE.Vector3(
+                positions[i * 6 + 0],
+                positions[i * 6 + 1],
+                positions[i * 6 + 2]
+            );
+            const end = new THREE.Vector3(
+                positions[i * 6 + 3],
+                positions[i * 6 + 4],
+                positions[i * 6 + 5]
+            );
+
+            // Find the two faces this edge belongs to by checking proximity to face centroids
+            const edgeMidpoint = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+            const nearestFaces = faceCentroids
+                .map(fc => ({ faceId: fc.faceId, distance: edgeMidpoint.distanceTo(fc.center) }))
+                .sort((a, b) => a.distance - b.distance)
+                .slice(0, 2)
+                .map(fc => fc.faceId);
+
+            // Create line geometry
+            const lineGeometry = new THREE.BufferGeometry();
+            lineGeometry.setFromPoints([start, end]);
+
+            // Clone material for potential color changes
+            const lineMaterial = edgeMaterial.clone();
+            const line = new THREE.Line(lineGeometry, lineMaterial);
+
+            // Look up edge data from mapping context
+            const faceKey = nearestFaces.slice().sort().join('-');
+            const mappedEdgeData = edgeDataMap[faceKey];
+
+            // Set userData for hover detection
+            line.userData.edgeData = mappedEdgeData ? {
+                faceIds: mappedEdgeData.faceIds,
+                tension: mappedEdgeData.tension || 0,
+                healthStatus: mappedEdgeData.tension < 0.1 ? 'Healthy' : mappedEdgeData.tension < 0.2 ? 'Moderate' : 'Tense',
+                element: mappedEdgeData.elementalNature || 'Unknown',
+                color: ELEMENT_COLORS[mappedEdgeData.elementalNature] || '#00ffcc',
+                theQuestion: mappedEdgeData.theQuestion || null
+            } : {
+                faceIds: nearestFaces,
+                tension: 0,
+                healthStatus: 'Unknown',
+                element: 'Unknown',
+                color: '#00ffcc',
+                theQuestion: null
+            };
+
+            line.userData.edgeName = mappedEdgeData?.emergentName || `Edge ${nearestFaces.join('-')}`;
+
+            // Apply the element color to the material (Sacred Tech: let essence match form)
+            lineMaterial.color.set(line.userData.edgeData.color);
+
+            // Add to parent mesh so it rotates together
+            parentMesh.add(line);
+            edgeLines.push(line);
+        }
+
+        console.log(`[3D View] ✅ Created ${edgeLines.length} interactive edges with ${Object.keys(edgeDataMap).length} mapped data entries`);
+    };
 
     // Create dodecahedron with 12 separate face meshes
     const createDodecahedron = () => {
@@ -555,17 +692,8 @@ function initDodecahedron() {
             console.log('[3D View] ℹ️ buildFaceIndexMapping not available, using default face IDs');
         }
 
-        // Create edges
-        const edgesGeometry = new THREE.EdgesGeometry(baseGeometry);
-        const edgesMaterial = new THREE.LineBasicMaterial({
-            color: 0x00ffcc,
-            linewidth: 2,
-            transparent: true,
-            opacity: 0.4
-        });
-        const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
-        scene.add(edges);
-        edgeLines.push(edges);
+        // Create edges - Sprint 3 Task 28: Interactive edges with userData
+        createInteractiveEdges(baseGeometry, dodecahedron, faceMeshes);
 
         console.log(`✅ Created dodecahedron with ${materials.length} materials and ${faceMeshes.length} clickable faces`);
     };
@@ -663,6 +791,87 @@ function initDodecahedron() {
         materials.forEach(mat => mat.needsUpdate = true);
 
         console.log('✅ Visualization updated with', companyData.faces.length, 'face colors');
+    };
+
+    // ========================================
+    // EDGE DATA UPDATE (Sprint 3 Fix)
+    // ========================================
+
+    /**
+     * Update edge userData with data from sessionStorage or CompanyTemplatesBundle.
+     * This is called by refreshVisualization() to ensure edge tooltips have
+     * the latest data (questions, elemental nature, etc.) after sessionStorage is populated.
+     */
+    const updateEdgeData = () => {
+        if (!edgeLines || edgeLines.length === 0) {
+            console.log('[3D View] ℹ️ No edge lines to update');
+            return;
+        }
+
+        // Try to load edge data from sessionStorage
+        let edgeDataMap = {};
+        try {
+            const customDataJson = sessionStorage.getItem('customCompanyData');
+            if (customDataJson) {
+                const customData = JSON.parse(customDataJson);
+                if (customData.edges && customData.edges.length > 0) {
+                    customData.edges.forEach(edge => {
+                        const key = edge.faceIds.slice().sort().join('-');
+                        edgeDataMap[key] = edge;
+                    });
+                    console.log(`[3D View] 📊 Loaded ${customData.edges.length} edges from sessionStorage`);
+                }
+            }
+        } catch (e) {
+            console.warn('[3D View] Could not load edge data from sessionStorage:', e);
+        }
+
+        // Fallback to CompanyTemplatesBundle
+        if (Object.keys(edgeDataMap).length === 0 && window.CompanyTemplatesBundle?.templates) {
+            const selectedCompanyId = sessionStorage.getItem('selectedCompanyId');
+            if (selectedCompanyId && window.CompanyTemplatesBundle.templates[selectedCompanyId]?.edges) {
+                const edges = window.CompanyTemplatesBundle.templates[selectedCompanyId].edges;
+                edges.forEach(edge => {
+                    const key = edge.faceIds.slice().sort().join('-');
+                    edgeDataMap[key] = edge;
+                });
+                console.log(`[3D View] 📊 Loaded ${edges.length} edges from CompanyTemplatesBundle`);
+            }
+        }
+
+        if (Object.keys(edgeDataMap).length === 0) {
+            console.log('[3D View] ℹ️ No edge data available to update');
+            return;
+        }
+
+        // Update each edge line's userData
+        let updatedCount = 0;
+        edgeLines.forEach(line => {
+            if (!line.userData) return;
+
+            // Get the face pair from existing userData
+            const currentFaceIds = line.userData.edgeData?.faceIds || [];
+            if (currentFaceIds.length < 2) return;
+
+            const faceKey = currentFaceIds.slice().sort().join('-');
+            const mappedEdgeData = edgeDataMap[faceKey];
+
+            if (mappedEdgeData) {
+                // Update userData with fresh data
+                line.userData.edgeData = {
+                    faceIds: mappedEdgeData.faceIds,
+                    tension: mappedEdgeData.tension || 0,
+                    healthStatus: mappedEdgeData.tension < 0.1 ? 'Healthy' : mappedEdgeData.tension < 0.2 ? 'Moderate' : 'Tense',
+                    element: mappedEdgeData.elementalNature || 'Unknown',
+                    color: ELEMENT_COLORS[mappedEdgeData.elementalNature] || '#00ffcc',
+                    theQuestion: mappedEdgeData.theQuestion || null
+                };
+                line.userData.edgeName = mappedEdgeData.emergentName || line.userData.edgeName;
+                updatedCount++;
+            }
+        });
+
+        console.log(`[3D View] ✅ Updated ${updatedCount}/${edgeLines.length} edges with mapped data`);
     };
 
     // ========================================
@@ -850,14 +1059,21 @@ function initDodecahedron() {
                 const tensionPercent = Math.round(edgeData.tension * 100);
                 const healthStatus = edgeData.healthStatus || 'Unknown';
 
+                // Sprint 3 Task 28: Show "The Question" in edge tooltip
+                const questionHtml = edgeData.theQuestion ?
+                    `<div style="font-size: 10px; color: rgba(255,255,255,0.9); margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.1); font-style: italic;">
+                        "${edgeData.theQuestion}"
+                    </div>` : '';
+
                 edgeTooltip.innerHTML = `
-                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">${edgeName}</div>
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px; color: ${edgeData.color};">${edgeName}</div>
                 <div style="font-size: 11px; opacity: 0.8;">
                     Tension: <span style="color: ${edgeData.color}">${tensionPercent}%</span> (${healthStatus})
                 </div>
                 <div style="font-size: 10px; opacity: 0.6; margin-top: 2px;">
-                    ${edgeData.element} • Click for details
+                    <span style="color: ${edgeData.color};">●</span> ${edgeData.element} Element
                 </div>
+                ${questionHtml}
             `;
 
                 // Position tooltip
@@ -1607,8 +1823,9 @@ function initDodecahedron() {
     // Export refreshVisualization globally (used by parent window communication)
     window.refreshVisualization = () => {
         updateVisualization();
+        updateEdgeData(); // Sprint 3 Fix: Update edge tooltips with sessionStorage data
         updateStats();
-        console.log('✅ Visualization refreshed');
+        console.log('✅ Visualization refreshed (faces + edges)');
     };
 
     console.log('✅ 3D Dodecahedron initialized successfully!');

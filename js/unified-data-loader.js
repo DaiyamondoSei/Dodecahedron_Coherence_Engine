@@ -29,8 +29,21 @@ export class UnifiedDataLoader {
 
         // 2. Load Specific Company Data
         let companyData = null;
-        if (companyId === 'custom' && customConfig) {
-            companyData = customConfig;
+        if (companyId === 'custom') {
+            if (customConfig) {
+                companyData = customConfig;
+            } else {
+                // Custom company without config - create minimal default
+                // This happens when navigating directly to a view without going through orchestrator
+                console.warn('⚠️ Custom company requested but no config provided. Using default.');
+                companyData = {
+                    id: 'custom',
+                    name: 'Custom Analysis',
+                    description: 'Session data not found - please start from Demo Orchestrator',
+                    faceConfig: { faces: this.getDefaultFaces() },
+                    kpis: []
+                };
+            }
         } else {
             companyData = await this.loadCompanyProfile(companyId);
         }

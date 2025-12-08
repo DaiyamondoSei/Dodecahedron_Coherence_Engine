@@ -475,9 +475,9 @@
 
         <!-- Navigation -->
         <div class="nav-bar">
-            <a href="demo-orchestrator.html" class="nav-btn">← Back to Orchestrator</a>
+            <a href="#" onclick="smartNavigateBack(event)" class="nav-btn">← Back to Orchestrator</a>
             <a href="calculations.html" class="nav-btn">🔬 View Calculations</a>
-            <a href="dodecahedron-3d-enhanced.html" class="nav-btn">🔷 View 3D Model</a>
+            <a href="dodecahedron-3d.html" class="nav-btn">🔷 View 3D Model</a>
             <a href="octave-dna.html" class="nav-btn">🧬 View DNA Helix</a>
         </div>
 
@@ -524,6 +524,38 @@
     <script type="module" src="./js/company-loader.js"></script>
 
     <script>
+        /**
+         * Smart Back Navigation (Issue #10 Fix)
+         * ======================================
+         * Handles "Back to Orchestrator" navigation intelligently:
+         * 1. If opened via window.opener, close this window and focus opener
+         * 2. If came from orchestrator in history, use history.back()
+         * 3. As fallback, navigate with state preservation marker
+         */
+        function smartNavigateBack(event) {
+            if (event) event.preventDefault();
+
+            // Option 1: If this window was opened by another (e.g., window.open())
+            if (window.opener && !window.opener.closed) {
+                console.log('[Nav] Returning to opener window');
+                window.opener.focus();
+                window.close();
+                return;
+            }
+
+            // Option 2: Check if we came from demo-orchestrator via history
+            if (document.referrer && document.referrer.includes('demo-orchestrator')) {
+                console.log('[Nav] Using history.back() to return to orchestrator');
+                history.back();
+                return;
+            }
+
+            // Option 3: Navigate with state preservation marker
+            // The orchestrator should check for this and restore from sessionStorage
+            console.log('[Nav] Navigating to orchestrator with restore flag');
+            window.location.href = 'demo-orchestrator.html?restore=true';
+        }
+
         // Track loaded company to prevent duplicates
         let currentLoadedCompanyId = null;
 

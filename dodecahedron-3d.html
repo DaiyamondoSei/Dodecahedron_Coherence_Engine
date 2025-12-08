@@ -517,6 +517,98 @@
             }
         }
 
+        /* Phase Transition Warning Overlay */
+        .phase-warning {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 170, 0, 0.15);
+            border: 2px solid #ffaa00;
+            border-radius: 12px;
+            padding: 20px 30px;
+            backdrop-filter: blur(10px);
+            z-index: 500;
+            animation: phaseWarningPulse 2s ease-in-out infinite;
+            display: none;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .phase-warning.visible {
+            display: block;
+        }
+
+        @keyframes phaseWarningPulse {
+            0%, 100% {
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.05);
+                box-shadow: 0 0 40px rgba(255, 170, 0, 0.6);
+            }
+        }
+
+        .phase-warning-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffaa00;
+            margin-bottom: 10px;
+        }
+
+        .phase-warning-message {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .phase-warning-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .phase-warning-close:hover {
+            background: rgba(255, 170, 0, 0.3);
+            border-color: #ffaa00;
+            color: #ffaa00;
+        }
+
+        /* Feedback Loop Tooltip */
+        .loop-tooltip {
+            position: fixed;
+            pointer-events: none;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid rgba(255, 170, 0, 0.5);
+            border-radius: 8px;
+            padding: 12px 16px;
+            backdrop-filter: blur(10px);
+            z-index: 1500;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            box-shadow: 0 4px 20px rgba(255, 170, 0, 0.3);
+            max-width: 280px;
+        }
+
+        .loop-tooltip.visible {
+            opacity: 1;
+        }
+
         /* Tooltip */
         .face-tooltip {
             position: fixed;
@@ -1042,9 +1134,13 @@
 
     <!-- Phase Warning Overlay -->
     <div id="phase-warning" class="phase-warning">
+        <button class="phase-warning-close" id="phase-warning-close">×</button>
         <div class="phase-warning-title">⚠️ PHASE TRANSITION IMMINENT</div>
         <div class="phase-warning-message" id="phase-warning-message"></div>
     </div>
+
+    <!-- Feedback Loop Tooltip -->
+    <div id="loopTooltip" class="loop-tooltip"></div>
 
     <!-- Loading -->
     <div class="loading" id="loading">
@@ -1198,20 +1294,20 @@
     <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <!-- Load breath analyzer first -->
-    <script src="js/breath-analyzer.js"></script>
+    <script src="js/breath-analyzer.js?v=20251207"></script>
 
     <!-- Load spectral analyzer (required for engine) -->
-    <script src="js/spectral-analyzer.js"></script>
+    <script src="js/spectral-analyzer.js?v=20251207"></script>
 
     <!-- Main Quannex Engine (modules) -->
-    <script type="module" src="js/main.js"></script>
-    <script type="module" src="js/company-loader.js"></script>
+    <script type="module" src="js/main.js?v=20251207b"></script>
+    <script type="module" src="js/company-loader.js?v=20251207"></script>
 
     <!-- Visualization Manager -->
-    <script type="module" src="js/advanced/visualization-manager.js"></script>
+    <script type="module" src="js/advanced/visualization-manager.js?v=20251207"></script>
 
     <!-- Dodecahedron Visualization -->
-    <script type="module" src="js/dodecahedron-viz.js"></script>
+    <script type="module" src="js/dodecahedron-viz.js?v=20251207"></script>
 
     <script type="module">
         import { VisualizationManager } from './js/advanced/visualization-manager.js';
@@ -1225,7 +1321,11 @@
                     clearInterval(checkForScene);
                     console.log('✨ Scene detected. Initializing Nervous System...');
 
-                    window.vizManager = new VisualizationManager(window.scene, window.camera, window.renderer);
+                    // Only create if not already created by DOMContentLoaded
+                    if (!window.vizManager) {
+                        window.vizManager = new VisualizationManager(window.scene, window.camera, window.renderer);
+                        console.log('✅ VisualizationManager initialized (from load event)');
+                    }
                     window.shadowPanel = new ShadowPanel('shadow-panel-container');
                     window.voiceModule = new VoiceModule();
 
@@ -1307,35 +1407,542 @@
                     };
                     nervousSystemLoop();
 
+                    // ===== INTERACTIVE TOOLTIP SYSTEM =====
+                    // Raycaster for detecting hover on edges and vertices
+                    const raycaster = new THREE.Raycaster();
+                    const mouse = new THREE.Vector2();
+                    const edgeTooltip = document.getElementById('edgeTooltip');
+                    const vertexTooltip = document.getElementById('vertexTooltip');
+                    let highlightedObject = null;
+
+                    // Tooltip display functions
+                    function showEdgeTooltip(event, data) {
+                        // Get narrative data (generated by EdgeAnalyzer.generateNarrative)
+                        const narrative = data.narrative || {};
+                        const question = narrative.question || data.theQuestion || '';
+                        const flow = narrative.flow || '';
+                        const fullNarrative = narrative.fullNarrative || '';
+                        const archetype = narrative.archetype || data.archetype || data.edgeName;
+                        const tensionStatus = narrative.tensionStatus || data.tensionStatus || '';
+
+                        // Strategic question section
+                        const questionHtml = question
+                            ? `<div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+                                <div style="font-size: 10px; color: #aaa; margin-bottom: 2px;">Strategic Question:</div>
+                                <div style="font-size: 11px; font-style: italic; color: #fff;">"${question}"</div>
+                               </div>`
+                            : '';
+
+                        // Narrative insight section
+                        const narrativeHtml = fullNarrative
+                            ? `<div style="font-size: 11px; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; margin-top: 8px;">
+                                ${fullNarrative}
+                               </div>`
+                            : '';
+
+                        // KPI recommendation section
+                        const kpiHtml = data.kpiName
+                            ? `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1);">
+                                <div style="font-size: 9px; color: #00ffcc; text-transform: uppercase;">Recommended KPI</div>
+                                <div style="font-size: 11px; font-weight: 600;">${data.kpiName}</div>
+                                ${data.kpiMetric ? `<div style="font-size: 10px; opacity: 0.7;">${data.kpiMetric}</div>` : ''}
+                               </div>`
+                            : '';
+
+                        edgeTooltip.innerHTML = `
+                            <div style="font-weight: bold; color: #00ffcc; margin-bottom: 2px; font-size: 13px;">${archetype}</div>
+                            <div style="font-size: 9px; color: rgba(255,255,255,0.5); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                                ${data.face1Name} ↔ ${data.face2Name}
+                            </div>
+                            ${questionHtml}
+                            <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 4px;">
+                                <span>Tension:</span>
+                                <span style="color: ${data.tension > 0.6 ? '#ff4444' : '#00ff88'}">${(data.tension * 100).toFixed(0)}% (${tensionStatus})</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 8px;">
+                                <span>Flow:</span>
+                                <span style="color: #00ccff;">${flow || 'Balanced'}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 10px;">
+                                <span>Element:</span>
+                                <span style="color: #ffaa00;">${data.elementalNature}</span>
+                            </div>
+                            ${narrativeHtml}
+                            ${kpiHtml}
+                        `;
+                        edgeTooltip.style.left = (event.clientX + 15) + 'px';
+                        edgeTooltip.style.top = (event.clientY + 15) + 'px';
+                        edgeTooltip.classList.add('visible');
+                        document.body.style.cursor = 'help';
+                    }
+
+                    function showVertexTooltip(event, data) {
+                        // Get narrative data (generated by VertexAnalyzer.generateVertexNarrative)
+                        const narrative = data.narrative || {};
+                        const spinLabel = narrative.spinLabel || '';
+                        const description = narrative.description || '';
+                        const action = narrative.action || '';
+
+                        const faceTagsHtml = data.faceNames && data.faceNames.length > 0
+                            ? data.faceNames.map(name => `<span style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${name}</span>`).join('')
+                            : '';
+
+                        const tooltipText = data.tooltip || '';
+
+                        // Spin narrative section
+                        const spinHtml = spinLabel
+                            ? `<div style="background: rgba(255, 0, 100, 0.1); padding: 8px; border-radius: 6px; margin-bottom: 8px; border: 1px solid rgba(255, 0, 100, 0.3);">
+                                <div style="font-size: 10px; color: #ff99cc; margin-bottom: 2px;">The Spin:</div>
+                                <div style="font-size: 11px; color: #fff; font-style: italic;">"${spinLabel}"</div>
+                                ${description ? `<div style="font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 4px;">${description}</div>` : ''}
+                               </div>`
+                            : '';
+
+                        // Action recommendation section
+                        const actionHtml = action
+                            ? `<div style="font-size: 11px; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
+                                <strong style="color: #ff0066;">Action:</strong> ${action}
+                               </div>`
+                            : '';
+
+                        vertexTooltip.innerHTML = `
+                            <div style="font-weight: bold; color: #ff0066; margin-bottom: 2px; font-size: 13px;">${data.emergentName}</div>
+                            <div style="font-size: 9px; color: rgba(255,255,255,0.5); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                                V${data.vertexId} • Vortex Point
+                            </div>
+                            ${faceTagsHtml ? `<div style="font-size: 10px; margin-bottom: 8px; display: flex; gap: 4px; flex-wrap: wrap;">${faceTagsHtml}</div>` : ''}
+                            <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 4px;">
+                                <span>Strength:</span>
+                                <span style="color: ${data.vortexStrength > 0.7 ? '#ff0066' : '#00ffcc'}">${(data.vortexStrength * 100).toFixed(0)}% (${data.vortexType})</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 8px;">
+                                <span>Coherence:</span>
+                                <span style="color: ${data.coherence > 0.7 ? '#00ffcc' : '#ffaa00'}">${(data.coherence * 100).toFixed(0)}%</span>
+                            </div>
+                            ${spinHtml}
+                            ${actionHtml}
+                            ${tooltipText && !spinLabel ? `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px;">${tooltipText}</div>` : ''}
+                        `;
+                        vertexTooltip.style.left = (event.clientX + 15) + 'px';
+                        vertexTooltip.style.top = (event.clientY + 15) + 'px';
+                        vertexTooltip.classList.add('visible');
+                        document.body.style.cursor = 'help';
+                    }
+
+                    function hideEdgeTooltip() {
+                        edgeTooltip.classList.remove('visible');
+                    }
+
+                    function hideVertexTooltip() {
+                        vertexTooltip.classList.remove('visible');
+                    }
+
+                    function highlightObject(object) {
+                        clearHighlights();
+                        highlightedObject = object;
+                        const data = object.userData;
+
+                        // Boost opacity
+                        object.material.opacity = 1.0;
+
+                        // SUPER GLOW: Boost emissive intensity for dramatic hover effect
+                        if (object.material.emissiveIntensity !== undefined) {
+                            object.material.emissiveIntensity = 2.0;
+                        }
+
+                        // SCALE ANIMATION: Vertices grow slightly on hover
+                        if (data.isVertex) {
+                            object.scale.setScalar(1.3);
+                        }
+
+                        document.body.style.cursor = 'help';
+                    }
+
+                    function clearHighlights() {
+                        if (highlightedObject) {
+                            const data = highlightedObject.userData;
+
+                            // Restore base opacity
+                            const baseOpacity = data.baseOpacity || 0.7;
+                            highlightedObject.material.opacity = baseOpacity;
+
+                            // Restore base emissive intensity
+                            if (highlightedObject.material.emissiveIntensity !== undefined) {
+                                const baseEmissive = data.baseEmissive || 0.5;
+                                highlightedObject.material.emissiveIntensity = baseEmissive;
+                            }
+
+                            // Restore scale for vertices
+                            if (data.isVertex) {
+                                highlightedObject.scale.setScalar(data.baseScale || 1.0);
+                            }
+
+                            highlightedObject = null;
+                        }
+                        document.body.style.cursor = 'default';
+                    }
+
+                    // Collect interactive objects from the scene
+                    function getInteractiveObjects() {
+                        const targets = [];
+                        window.scene.traverse((obj) => {
+                            if (obj.type === 'Mesh' && (obj.userData.isEdge || obj.userData.isVertex)) {
+                                targets.push(obj);
+                            }
+                            // Include feedback loop lines
+                            if (obj.type === 'Line' && obj.userData.isFeedbackLoop) {
+                                targets.push(obj);
+                            }
+                        });
+                        return targets;
+                    }
+
+                    // Feedback loop tooltip functions
+                    const loopTooltip = document.getElementById('loopTooltip');
+
+                    function showLoopTooltip(event, data) {
+                        if (!loopTooltip) return;
+
+                        // Determine loop color based on direction
+                        let colorClass = '#ffaa00'; // Orange default
+                        let emoji = '🔄';
+                        if (data.direction.includes('Virtuous')) {
+                            colorClass = '#00ff88';
+                            emoji = '✨';
+                        } else if (data.direction.includes('Vicious')) {
+                            colorClass = '#ff4444';
+                            emoji = '⚠️';
+                        }
+
+                        loopTooltip.innerHTML = `
+                            <div style="font-weight: bold; color: ${colorClass}; margin-bottom: 8px; font-size: 13px;">
+                                ${emoji} ${data.type} Loop
+                            </div>
+                            <div style="font-size: 10px; opacity: 0.7; margin-bottom: 10px;">
+                                ${data.direction}
+                            </div>
+                            <div style="font-size: 11px; margin-bottom: 6px;">
+                                <span style="opacity: 0.6;">Cycle Path:</span>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px;">
+                                ${data.faceNames.map(name => `<span style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 10px;">${name}</span>`).join(' → ')}
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1);">
+                                <span style="opacity: 0.6;">Loop Gain:</span>
+                                <span style="color: ${colorClass}; font-weight: bold;">${data.loopGain.toFixed(2)}x</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 10px;">
+                                <span style="opacity: 0.6;">Avg Energy:</span>
+                                <span>${(data.avgEnergy * 100).toFixed(0)}%</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 10px;">
+                                <span style="opacity: 0.6;">Impact:</span>
+                                <span style="color: ${colorClass};">${(data.strength * 100).toFixed(0)}% strength</span>
+                            </div>
+                        `;
+
+                        loopTooltip.style.left = (event.clientX + 15) + 'px';
+                        loopTooltip.style.top = (event.clientY + 15) + 'px';
+                        loopTooltip.classList.add('visible');
+                        document.body.style.cursor = 'help';
+                    }
+
+                    function hideLoopTooltip() {
+                        if (loopTooltip) {
+                            loopTooltip.classList.remove('visible');
+                        }
+                    }
+
+                    // Mouse move handler for raycasting
+                    window.addEventListener('mousemove', (event) => {
+                        if (!window.scene || !window.camera) return;
+
+                        // Normalized mouse coordinates
+                        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+                        // Raycast against all interactive objects in the scene
+                        raycaster.setFromCamera(mouse, window.camera);
+                        const targets = getInteractiveObjects();
+                        if (targets.length === 0) return;
+
+                        const intersects = raycaster.intersectObjects(targets);
+
+                        if (intersects.length > 0) {
+                            const object = intersects[0].object;
+                            const data = object.userData;
+
+                            if (data.isEdge) {
+                                showEdgeTooltip(event, data);
+                                hideVertexTooltip();
+                                hideLoopTooltip();
+                                highlightObject(object);
+                            } else if (data.isVertex) {
+                                showVertexTooltip(event, data);
+                                hideEdgeTooltip();
+                                hideLoopTooltip();
+                                highlightObject(object);
+                            } else if (data.isFeedbackLoop) {
+                                showLoopTooltip(event, data);
+                                hideEdgeTooltip();
+                                hideVertexTooltip();
+                                // Highlight the loop line
+                                if (object.material) {
+                                    object.material.opacity = 1.0;
+                                }
+                                document.body.style.cursor = 'help';
+                            }
+                        } else {
+                            hideEdgeTooltip();
+                            hideVertexTooltip();
+                            hideLoopTooltip();
+                            clearHighlights();
+                        }
+                    });
+
+                    // ===== CLICK HANDLER FOR DETAIL PANELS =====
+                    window.addEventListener('click', (event) => {
+                        if (!window.scene || !window.camera) return;
+
+                        // Normalized mouse coordinates
+                        const clickMouse = new THREE.Vector2();
+                        clickMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                        clickMouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+                        // Raycast against all interactive objects
+                        const clickRaycaster = new THREE.Raycaster();
+                        clickRaycaster.setFromCamera(clickMouse, window.camera);
+                        const targets = getInteractiveObjects();
+                        if (targets.length === 0) return;
+
+                        const intersects = clickRaycaster.intersectObjects(targets);
+
+                        if (intersects.length > 0) {
+                            const object = intersects[0].object;
+                            const data = object.userData;
+
+                            if (data.isEdge) {
+                                console.log('🔗 Edge clicked:', data.edgeName);
+                                // Show edge detail panel using existing system
+                                showEdgeDetailPanel(data);
+                            } else if (data.isVertex) {
+                                console.log('🌀 Vertex clicked:', data.emergentName);
+                                // Show vertex detail panel
+                                showVertexDetailPanel(data);
+                            }
+                        }
+                    });
+
+                    // Show edge detail panel (integrates with dodecahedron-viz.js system)
+                    function showEdgeDetailPanel(data) {
+                        const panel = document.getElementById('faceDetailPanel');
+                        const title = document.getElementById('faceDetailTitle');
+                        const energyDisplay = document.getElementById('faceEnergyDisplay');
+                        const kpiGrid = document.getElementById('kpiGrid');
+                        const edgesSection = document.getElementById('connectedEdgesSection');
+                        const verticesSection = document.getElementById('cornerVerticesSection');
+
+                        if (!panel || !title) return;
+
+                        // Set title to edge name
+                        title.textContent = data.edgeName || `Edge ${data.edgeId}`;
+
+                        // Show tension as energy
+                        const tensionPercent = Math.round((data.tension || 0) * 100);
+                        energyDisplay.textContent = `${tensionPercent}% Tension`;
+                        energyDisplay.className = data.tension > 0.6 ? 'critical' : data.tension > 0.3 ? 'warning' : 'healthy';
+
+                        // Get narrative data if available
+                        const narrative = data.narrative || {};
+
+                        // Build rich edge detail display
+                        kpiGrid.innerHTML = `
+                            <div style="padding: 20px; line-height: 1.8;">
+                                <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Edge Connection</div>
+                                    <div style="font-size: 13px; color: #00ffcc;">${data.face1Name} ↔ ${data.face2Name}</div>
+                                </div>
+
+                                ${data.theQuestion ? `
+                                    <div style="margin-bottom: 20px; padding: 15px; background: rgba(255,204,0,0.1); border-left: 3px solid #ffcc00; border-radius: 4px;">
+                                        <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Strategic Question</div>
+                                        <div style="font-style: italic; color: #ffcc00; line-height: 1.6;">"${data.theQuestion}"</div>
+                                    </div>
+                                ` : ''}
+
+                                <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Tension Analysis</div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                        <div><span style="opacity: 0.7;">Status:</span></div>
+                                        <div style="color: ${data.tension > 0.6 ? '#ff4444' : data.tension > 0.3 ? '#ffaa00' : '#00ff88'}; font-weight: 600;">${data.tensionStatus}</div>
+                                        <div><span style="opacity: 0.7;">Tension:</span></div>
+                                        <div style="font-weight: 600;">${tensionPercent}%</div>
+                                        <div><span style="opacity: 0.7;">Element:</span></div>
+                                        <div style="font-weight: 600;">${data.elementalNature}</div>
+                                        <div><span style="opacity: 0.7;">Flow:</span></div>
+                                        <div style="font-weight: 600;">${Math.round((data.flow || 0) * 100)}%</div>
+                                    </div>
+                                </div>
+
+                                ${narrative.fullNarrative ? `
+                                    <div style="margin-bottom: 20px; padding: 15px; background: rgba(0,255,204,0.05); border-radius: 6px;">
+                                        <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Narrative Insight</div>
+                                        <div style="font-size: 12px; line-height: 1.6;">${narrative.fullNarrative}</div>
+                                    </div>
+                                ` : ''}
+
+                                ${data.kpiName ? `
+                                    <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                        <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Recommended KPI</div>
+                                        <div style="font-weight: 600; color: #00ffcc;">${data.kpiName}</div>
+                                        ${data.kpiMetric ? `<div style="margin-top: 8px; font-size: 11px; opacity: 0.8;">${data.kpiMetric}</div>` : ''}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+
+                        // Hide extra sections
+                        if (edgesSection) edgesSection.style.display = 'none';
+                        if (verticesSection) verticesSection.style.display = 'none';
+
+                        // Show panel
+                        panel.classList.add('visible');
+                    }
+
+                    // Show vertex detail panel
+                    function showVertexDetailPanel(data) {
+                        const panel = document.getElementById('faceDetailPanel');
+                        const title = document.getElementById('faceDetailTitle');
+                        const energyDisplay = document.getElementById('faceEnergyDisplay');
+                        const kpiGrid = document.getElementById('kpiGrid');
+                        const edgesSection = document.getElementById('connectedEdgesSection');
+                        const verticesSection = document.getElementById('cornerVerticesSection');
+
+                        if (!panel || !title) return;
+
+                        // Set title to vertex name
+                        title.textContent = data.emergentName || `Vertex ${data.vertexId}`;
+
+                        // Show vortex strength as energy
+                        const strengthPercent = Math.round((data.vortexStrength || 0) * 100);
+                        energyDisplay.textContent = `${strengthPercent}% Vortex`;
+                        energyDisplay.className = data.vortexStrength > 0.5 ? 'critical' : data.vortexStrength > 0.25 ? 'warning' : 'healthy';
+
+                        // Get narrative data if available
+                        const narrative = data.narrative || {};
+
+                        // Classification color
+                        const classColors = {
+                            'synergy_hub': '#00ffcc',
+                            'hotspot': '#ffaa00',
+                            'bermuda_triangle': '#ff4444',
+                            'neutral': '#888888'
+                        };
+                        const classColor = classColors[data.classification] || '#888888';
+
+                        // Build rich vertex detail display
+                        kpiGrid.innerHTML = `
+                            <div style="padding: 20px; line-height: 1.8;">
+                                <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Convergence Point</div>
+                                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                        ${(data.faceNames || []).map(name => `<span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">${name}</span>`).join('')}
+                                    </div>
+                                </div>
+
+                                <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Vortex Analysis</div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                        <div><span style="opacity: 0.7;">Strength:</span></div>
+                                        <div style="color: ${data.vortexStrength > 0.5 ? '#ff4444' : '#00ffcc'}; font-weight: 600;">${strengthPercent}%</div>
+                                        <div><span style="opacity: 0.7;">Type:</span></div>
+                                        <div style="font-weight: 600;">${data.vortexType}</div>
+                                        <div><span style="opacity: 0.7;">Coherence:</span></div>
+                                        <div style="font-weight: 600;">${Math.round((data.coherence || 0) * 100)}%</div>
+                                        <div><span style="opacity: 0.7;">Classification:</span></div>
+                                        <div style="color: ${classColor}; font-weight: 600; text-transform: capitalize;">${(data.classification || 'unknown').replace('_', ' ')}</div>
+                                    </div>
+                                </div>
+
+                                ${data.tooltip ? `
+                                    <div style="margin-bottom: 20px; padding: 15px; background: rgba(255,0,100,0.1); border-left: 3px solid #ff0066; border-radius: 4px;">
+                                        <div style="font-size: 12px; line-height: 1.6;">${data.tooltip}</div>
+                                    </div>
+                                ` : ''}
+
+                                ${narrative.spinLabel ? `
+                                    <div style="margin-bottom: 20px; padding: 15px; background: rgba(255,0,100,0.05); border-radius: 6px;">
+                                        <div style="font-size: 11px; color: #ff99cc; margin-bottom: 4px;">The Spin:</div>
+                                        <div style="font-size: 13px; font-style: italic; color: #fff;">"${narrative.spinLabel}"</div>
+                                        ${narrative.description ? `<div style="margin-top: 8px; font-size: 11px; opacity: 0.8;">${narrative.description}</div>` : ''}
+                                    </div>
+                                ` : ''}
+
+                                ${narrative.action ? `
+                                    <div style="padding: 12px; background: rgba(0,255,204,0.05); border-radius: 4px;">
+                                        <span style="color: #ff0066; font-weight: 600;">Action:</span> ${narrative.action}
+                                    </div>
+                                ` : ''}
+
+                                ${data.isLeveragePoint ? `
+                                    <div style="margin-top: 15px; padding: 12px; background: rgba(255,215,0,0.15); border-left: 3px solid #ffd700; border-radius: 4px; font-size: 11px;">
+                                        ⚡ <strong>Leverage Point</strong> - High transformation potential
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+
+                        // Hide extra sections
+                        if (edgesSection) edgesSection.style.display = 'none';
+                        if (verticesSection) verticesSection.style.display = 'none';
+
+                        // Show panel
+                        panel.classList.add('visible');
+                    }
+
+                    console.log('✨ Interactive tooltip system initialized');
+                    console.log('🖱️ Click handlers for detail panels initialized');
+                    // ===== END INTERACTIVE TOOLTIP SYSTEM =====
+
                     // Wire up data updates
                     const checkForEngine = setInterval(() => {
-                        if (window.quannexEngine) {
+                        // Check that engine exists AND has the recalculate method
+                        if (window.quannexEngine && typeof window.quannexEngine.recalculate === 'function') {
                             clearInterval(checkForEngine);
                             console.log('🧠 Engine detected. Wiring Nervous System...');
 
-                            // Hook into recalculate
-                            const originalRecalculate = window.quannexEngine.recalculate.bind(window.quannexEngine);
-                            window.quannexEngine.recalculate = async function () {
-                                await originalRecalculate();
-                                const analysis = this.getAdvancedAnalysis();
+                            try {
+                                // Hook into recalculate
+                                const originalRecalculate = window.quannexEngine.recalculate.bind(window.quannexEngine);
+                                window.quannexEngine.recalculate = async function () {
+                                    await originalRecalculate();
+                                    const analysis = this.getAdvancedAnalysis?.();
 
-                                // Update Visualization
-                                if (analysis && window.vizManager) {
-                                    window.vizManager.updateData(analysis);
-                                }
+                                    // Update Visualization with companyData for rich tooltips
+                                    if (analysis && window.vizManager) {
+                                        const companyData = window.Quannex ? window.Quannex.getState() : null;
+                                        window.vizManager.updateData(analysis, companyData);
+                                    }
 
-                                // Update Shadow Panel
-                                if (analysis && analysis.shadows && window.shadowPanel) {
-                                    window.shadowPanel.update(analysis.shadows);
-                                }
-                            };
+                                    // Update Shadow Panel
+                                    if (analysis && analysis.shadows && window.shadowPanel) {
+                                        window.shadowPanel.update(analysis.shadows);
+                                    }
+                                };
 
-                            // Initial update
-                            if (window.quannexEngine.advancedAnalysis) {
-                                window.vizManager.updateData(window.quannexEngine.advancedAnalysis);
-                                if (window.shadowPanel) {
-                                    window.shadowPanel.update(window.quannexEngine.advancedAnalysis.shadows);
+                                // Initial update
+                                if (window.quannexEngine.advancedAnalysis) {
+                                    const companyData = window.Quannex ? window.Quannex.getState() : null;
+                                    if (window.vizManager) {
+                                        window.vizManager.updateData(window.quannexEngine.advancedAnalysis, companyData);
+                                    }
+                                    if (window.shadowPanel) {
+                                        window.shadowPanel.update(window.quannexEngine.advancedAnalysis.shadows);
+                                    }
                                 }
+                                console.log('✅ Nervous System wired successfully');
+                            } catch (error) {
+                                console.warn('⚠️ Error wiring Nervous System:', error.message);
                             }
                         }
                     }, 500);
@@ -1430,7 +2037,7 @@
             }
 
             // Clear existing advanced visualizations
-            clearAdvancedVisualizations();
+            if (window.clearAdvancedVisualizations) window.clearAdvancedVisualizations();
 
             if (mode === 'standard' || mode === 'minimal') {
                 // Base visualization only
@@ -1451,17 +2058,22 @@
             const faceEnergies = companyData.faces.map(f => f.faceEnergy);
 
             if (mode === 'advanced') {
-                await runAdvancedAnalysis(companyData, faceEnergies);
-                renderEdgeTensions();
-                renderVertexVortices();
-                updateAnalysisPanel();
+                await window.runAdvancedAnalysis(companyData, faceEnergies);
+                window.renderEdgeTensions();
+                window.renderVertexVortices();
+                if (window.updateAnalysisPanel) window.updateAnalysisPanel();
             } else if (mode === 'complete') {
-                await runCompleteAnalysis(companyData, faceEnergies);
-                renderEdgeTensions();
-                renderVertexVortices();
-                renderFeedbackLoops();
-                updateAnalysisPanel();
-                checkPhaseTransitionWarning();
+                // Run complete analysis (includes dynamics)
+                if (window.runCompleteAnalysis) {
+                    await window.runCompleteAnalysis(companyData, faceEnergies);
+                } else {
+                    await window.runAdvancedAnalysis(companyData, faceEnergies);
+                }
+                window.renderEdgeTensions();
+                window.renderVertexVortices();
+                window.renderFeedbackLoops();
+                if (window.updateAnalysisPanel) window.updateAnalysisPanel();
+                if (window.checkPhaseTransitionWarning) window.checkPhaseTransitionWarning();
 
                 // Highlight frozen faces (System Inertia)
                 if (advancedAnalysisResults.dynamics && window.dodecahedronMaterials) {
@@ -1477,104 +2089,110 @@
                     });
                 }
             }
+        }
 
-            // Update visualization with mode-specific features
-            await updateVisualizationForMode(mode);
+        // Initialize Visualization Manager & Advanced Features
+        window.addEventListener('DOMContentLoaded', () => {
+            // ================================================
+            // CROSS-WINDOW SYNC (Issue #12 Fix)
+            // Listen for state updates from orchestrator
+            // ================================================
+            if (typeof BroadcastChannel !== 'undefined') {
+                const syncChannel = new BroadcastChannel('quannex-sync');
+                syncChannel.onmessage = (event) => {
+                    const message = event.data;
+                    console.log(`[3D View] 📥 Received sync: ${message.type}`);
 
-            // Advanced visualization update
-            async function updateVisualizationForMode(mode) {
-                const scene = window.scene;
-                if (!scene) {
-                    console.warn('⚠️ Scene not ready yet');
-                    return;
-                }
-
-                // Clear existing advanced visualizations
-                clearAdvancedVisualizations();
-
-                if (mode === 'standard' || mode === 'minimal') {
-                    // Base visualization only
-                    advancedAnalysisResults = null;
-                    window.advancedAnalysisResults = null;
-                    console.log('✅ Standard/Minimal mode - base visualization active');
-                    return;
-                }
-
-                // Get company data
-                const companyData = window.Quannex ? window.Quannex.getState() : null;
-                if (!companyData || !companyData.faces) {
-                    console.warn('⚠️ No company data available');
-                    return;
-                }
-
-                // Run analyses
-                const faceEnergies = companyData.faces.map(f => f.faceEnergy);
-
-                if (mode === 'advanced') {
-                    await runAdvancedAnalysis(companyData, faceEnergies);
-                    renderEdgeTensions();
-                    renderVertexVortices();
-                    updateAnalysisPanel();
-                } else if (mode === 'complete') {
-                    await runCompleteAnalysis(companyData, faceEnergies);
-                    renderEdgeTensions();
-                    renderVertexVortices();
-                    renderFeedbackLoops();
-                    updateAnalysisPanel();
-                    checkPhaseTransitionWarning();
-
-                    // Highlight frozen faces (System Inertia)
-                    if (advancedAnalysisResults.dynamics && window.dodecahedronMaterials) {
-                        const materials = window.dodecahedronMaterials;
-                        companyData.faces.forEach((face, i) => {
-                            if (i < materials.length) {
-                                const frozenFace = advancedAnalysisResults.dynamics.inertia.faceInertia.find(f => f.faceId
-                                    === face.id);
-                                if (frozenFace && frozenFace.responsiveness === 'Frozen') {
-                                    materials[i].emissiveIntensity = 0.8; // High glow for frozen faces
-                                    materials[i].needsUpdate = true;
+                    if (message.type === 'STATE_UPDATE' || message.type === 'STATE_SYNC') {
+                        console.log('[3D View] 🔄 Orchestrator state changed, refreshing data...');
+                        // Reload data from sessionStorage (which was just updated)
+                        setTimeout(() => {
+                            const customDataJson = sessionStorage.getItem('customCompanyData');
+                            if (customDataJson) {
+                                const newData = JSON.parse(customDataJson);
+                                console.log('[3D View] 📦 Reloading with updated data:', {
+                                    kpis: newData.kpis?.length,
+                                    faces: newData.faceConfig?.faces?.length
+                                });
+                                // Re-initialize with new data if init function exists
+                                if (typeof initWithSessionData === 'function') {
+                                    initWithSessionData();
+                                } else {
+                                    // Fallback: reload page
+                                    location.reload();
                                 }
                             }
-                        });
+                        }, 100); // Small delay to ensure sessionStorage is updated
                     }
-                }
+                };
+
+                // Request current state on load (in case orchestrator has newer data)
+                syncChannel.postMessage({
+                    type: 'STATE_REQUEST',
+                    payload: { requester: window.location.pathname },
+                    timestamp: Date.now(),
+                    source: window.location.pathname
+                });
+                console.log('[3D View] ✅ CrossWindowSync listener active');
             }
 
-            // Initialize Visualization Manager (Lazy Load)
-            let vizManager = null;
-
+            // Use window.vizManager to ensure single instance across all code
             function initVizManager() {
-                if (vizManager) return vizManager;
+                // Check if already exists (may be created by load event)
+                if (window.vizManager) return window.vizManager;
 
                 if (window.scene && window.camera && window.renderer) {
-                    vizManager = new VisualizationManager(window.scene, window.camera, window.renderer.domElement);
-                    console.log('✅ VisualizationManager initialized');
-                    return vizManager;
+                    window.vizManager = new VisualizationManager(window.scene, window.camera, window.renderer);
+                    console.log('✅ VisualizationManager initialized (from DOMContentLoaded)');
+                    return window.vizManager;
                 }
                 return null;
             }
 
-            // Run advanced analysis (Delegated to VisualizationManager)
+            // Run advanced analysis using the loaded analyzers
             async function runAdvancedAnalysis(companyData, faceEnergies) {
                 if (!analyzersLoaded) {
                     console.warn('⚠️ Analyzers not loaded yet');
                     return;
                 }
 
-                // Ensure VizManager is initialized
-                if (!vizManager) {
-                    if (!initVizManager()) {
-                        console.warn('⚠️ Scene not ready for VisualizationManager');
-                        return;
-                    }
-                }
+                console.log('🔬 Running advanced analysis...');
 
-                // Delegate to VisualizationManager
-                const results = await vizManager.runAdvancedAnalysis(companyData, faceEnergies);
+                // Run spectral analysis
+                const spectral = new window.SpectralAnalyzer();
+                const spectralResult = spectral.analyze(faceEnergies);
 
-                // Update local reference for compatibility
-                advancedAnalysisResults = results;
-                window.advancedAnalysisResults = results;
+                // Run edge analysis
+                const edgeAnalyzer = new window.EdgeAnalyzer();
+                let edgeResult = edgeAnalyzer.calculateAllEdges(companyData.faces, companyData.edges || []);
+
+                // 🧠 GENERATE NARRATIVES FOR EACH EDGE
+                // This adds the "Story" to the "Physics"
+                edgeResult = edgeResult.map(edge => {
+                    const narrative = edgeAnalyzer.generateNarrative(edge);
+                    return {
+                        ...edge,
+                        narrative: narrative
+                    };
+                });
+                console.log('📖 Edge narratives generated');
+
+                // Run vertex analysis (already includes narrative via generateVertexNarrative)
+                const vertexAnalyzer = new window.VertexAnalyzer();
+                const vertexResult = vertexAnalyzer.calculateAllVertices(companyData.faces, companyData.vertices || []);
+
+                // Combine results
+                advancedAnalysisResults = {
+                    spectral: spectralResult,
+                    edges: edgeResult,
+                    vertices: vertexResult,
+                    shadows: null
+                };
+
+                // Update window reference
+                window.advancedAnalysisResults = advancedAnalysisResults;
+
+                console.log('✅ Advanced analysis complete:', advancedAnalysisResults);
             }
 
             // Run complete analysis (advanced + dynamics)
@@ -1598,65 +2216,105 @@
                 // Update window reference
                 window.advancedAnalysisResults = advancedAnalysisResults;
 
-                // Update VisualizationManager state if needed (it stores results internally too)
-                if (vizManager || initVizManager()) {
-                    vizManager.advancedAnalysisResults.dynamics = dynamicsAnalysis;
+                // Update VisualizationManager state if needed
+                if (window.vizManager && window.vizManager.currentAnalysis) {
+                    window.vizManager.currentAnalysis.dynamics = dynamicsAnalysis;
                 }
 
                 console.log('✅ Complete dynamics analysis done');
             }
 
-            // Render edge tensions (Delegated)
+            // Render edge tensions using VisualizationManager
             function renderEdgeTensions() {
-                if (vizManager || initVizManager()) {
-                    vizManager.renderEdgeTensions();
+                if (!advancedAnalysisResults || !advancedAnalysisResults.edges) {
+                    console.warn('⚠️ No edge analysis results to render');
+                    return;
+                }
+                if (window.vizManager || initVizManager()) {
+                    // Get company data for rich tooltip content (theQuestion, emergentName, etc.)
+                    const companyData = window.Quannex?.getState() || window.currentCompanyData;
+                    const faceNames = companyData?.faces?.map(f => f.name) || [];
+                    window.vizManager.updateNeonEdges(advancedAnalysisResults.edges, companyData, faceNames);
+                    console.log('✅ Edge tensions rendered');
                 }
             }
 
-            // Render vertex vortices (Delegated)
+            // Render vertex vortices using VisualizationManager
             function renderVertexVortices() {
-                if (vizManager || initVizManager()) {
-                    vizManager.renderVertexVortices();
+                if (!advancedAnalysisResults || !advancedAnalysisResults.vertices) {
+                    console.warn('⚠️ No vertex analysis results to render');
+                    return;
+                }
+                if (window.vizManager || initVizManager()) {
+                    // Get company data for rich tooltip content
+                    const companyData = window.Quannex?.getState() || window.currentCompanyData;
+                    const faceNames = companyData?.faces?.map(f => f.name) || [];
+                    window.vizManager.updateVertexSpheres(advancedAnalysisResults.vertices, companyData, faceNames);
+                    console.log('✅ Vertex vortices rendered');
                 }
             }
 
-            // Render feedback loops (Delegated)
+            // Render feedback loops using VisualizationManager
             function renderFeedbackLoops() {
-                if (vizManager || initVizManager()) {
-                    vizManager.renderFeedbackLoops();
+                if (!advancedAnalysisResults || !advancedAnalysisResults.dynamics) {
+                    console.warn('⚠️ No dynamics analysis results to render');
+                    return;
+                }
+                if (window.vizManager || initVizManager()) {
+                    window.vizManager.updateFeedbackLoops(advancedAnalysisResults.dynamics);
+                    console.log('✅ Feedback loops rendered');
                 }
             }
 
             // Clear visualizations (Delegated)
             function clearAdvancedVisualizations() {
-                if (vizManager || initVizManager()) {
-                    vizManager.clear();
-                }
+                // VisualizationManager doesn't have a clear method yet
+                // For now, just log - the update methods handle clearing internally
+                console.log('🧹 Clearing advanced visualizations');
             }
 
-            // Expose functions to window for external access (dodecahedron-viz.js)
+            // Expose functions to window for external access (dodecahedron-viz.js and switchMode)
             window.runAdvancedAnalysis = runAdvancedAnalysis;
+            window.runCompleteAnalysis = runCompleteAnalysis;
             window.renderEdgeTensions = renderEdgeTensions;
             window.renderVertexVortices = renderVertexVortices;
             window.renderFeedbackLoops = renderFeedbackLoops;
             window.clearAdvancedVisualizations = clearAdvancedVisualizations;
+            window.initVizManager = initVizManager;
 
             // Harmonic Tuner Integration (Phase 4)
+            // NOTE: This extends the refreshVisualization from dodecahedron-viz.js
+            // We save the original and call it, then add advanced mode handling
+            const originalRefreshVisualization = window.refreshVisualization;
+
             window.refreshVisualization = async function () {
                 console.log('🔄 Refreshing visualization from Tuner...');
-                const companyData = window.Quannex ? window.Quannex.getState() : null;
-                if (companyData) {
-                    // Re-run analysis with new tuning params
-                    const faceEnergies = companyData.faces.map(f => f.faceEnergy);
 
-                    // Update standard viz
-                    if (window.updateVisualization) {
-                        window.updateVisualization();
-                    }
+                // Call the original refresh from dodecahedron-viz.js (updates faces, edges, stats)
+                if (originalRefreshVisualization) {
+                    originalRefreshVisualization();
+                } else if (window.dodecahedronViz?.updateVisualization) {
+                    // Fallback: call updateVisualization directly
+                    window.dodecahedronViz.updateVisualization();
+                }
 
-                    // Update advanced viz
-                    if (currentMode === 'advanced' || currentMode === 'complete') {
-                        await updateVisualizationForMode(currentMode);
+                // Update advanced viz modes
+                if (currentMode === 'advanced' || currentMode === 'complete') {
+                    await updateVisualizationForMode(currentMode);
+                }
+
+                // Update stats panel with current engine state
+                const state = window.Quannex ? window.Quannex.getState() : null;
+                if (state) {
+                    const coherencePercent = (state.globalCoherence * 100).toFixed(0);
+                    const statCoherence = document.getElementById('statCoherence');
+                    const statStatus = document.getElementById('statStatus');
+
+                    if (statCoherence) statCoherence.textContent = coherencePercent + '%';
+                    if (statStatus) {
+                        const status = state.globalCoherence >= 0.7 ? 'Healthy 🟢' :
+                                       state.globalCoherence >= 0.5 ? 'Moderate 🟡' : 'Concerning 🔴';
+                        statStatus.textContent = status;
                     }
                 }
             };
@@ -2076,6 +2734,7 @@
                         </div>
 
                         <!-- Shadow Detection -->
+                        ${shadows ? `
                         <div class="analysis-section">
                             <div class="section-title">👁️ Shadow Patterns</div>
                             <div class="metric-row">
@@ -2105,6 +2764,7 @@
                             </div>
                             ` : '<div style="font-size: 12px; opacity: 0.7; margin-top: 10px;">No shadows detected ✅</div>'}
                         </div>
+                        ` : ''}
                 `;
 
                 // Add dynamics section for Complete mode
@@ -2205,9 +2865,9 @@
                 document.querySelectorAll('.mode-button').forEach(btn => {
                     btn.classList.remove('active');
                 });
-                document.getElementById(`mode${mode.charAt(0).toUpperCase() +
-                    mode.slice(1)
-                    } `).classList.add('active');
+                const modeId = `mode${mode.charAt(0).toUpperCase()}${mode.slice(1)}`;
+                const modeBtn = document.getElementById(modeId);
+                if (modeBtn) modeBtn.classList.add('active');
 
                 // Update subtitle
                 const subtitles = {
@@ -2241,6 +2901,9 @@
                     modeSelector.style.display = 'none';
                 }
             }
+
+            // Expose updateModeUI to window for switchMode access
+            window.updateModeUI = updateModeUI;
 
             // Parent-child communication (from standard mode)
             window.addEventListener('message', async (event) => {
@@ -2314,7 +2977,9 @@
                             name: customData.name || 'Custom Analysis',
                             description: customData.description || 'User-generated data',
                             kpis: customData.kpis || [],
-                            faceConfig: customData.faceConfig || null
+                            faceConfig: customData.faceConfig || null,
+                            // Pass pre-calculated coherence results from orchestrator
+                            coherenceResults: customData.coherenceResults || null
                         };
 
                         let attempts = 0;
@@ -2359,6 +3024,17 @@
                         return true;
                     } catch (error) {
                         console.error('[3D View] ❌ Failed to load custom data:', error);
+
+                        // Even if there was an error, try to refresh visualization
+                        // The engine might have valid data despite the error
+                        try {
+                            if (window.refreshVisualization) {
+                                console.log('[3D View] 🔄 Attempting refresh despite error...');
+                                window.refreshVisualization();
+                            }
+                        } catch (refreshError) {
+                            console.warn('[3D View] ⚠️ Refresh also failed:', refreshError.message);
+                        }
                     }
                 } else if (window.self !== window.top && selectedCompanyId) {
                     if (selectedCompanyId && !currentLoadedCompanyId) {
@@ -2430,8 +3106,50 @@
                 }
             }
 
+            // Expose remaining functions for switchMode
+            window.updateAnalysisPanel = updateAnalysisPanel;
+            window.checkPhaseTransitionWarning = checkPhaseTransitionWarning;
+
+            // ===== PHASE TRANSITION EVENT LISTENER =====
+            // Listen for phase transition events from VisualizationManager
+            window.addEventListener('phaseTransitionImminent', (event) => {
+                const { nearestTransition, prediction, proximity } = event.detail;
+                const warning = document.getElementById('phase-warning');
+                const message = document.getElementById('phase-warning-message');
+
+                if (warning && message) {
+                    message.innerHTML = `
+                        <div style="margin-bottom: 8px;">
+                            <strong>${nearestTransition.name}</strong> transition detected!
+                        </div>
+                        <div style="font-size: 12px; opacity: 0.8;">
+                            ${prediction.message}
+                        </div>
+                        <div style="font-size: 11px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,170,0,0.3);">
+                            Proximity: <span style="color: #ff6600; font-weight: bold;">${Math.round(proximity * 100)}%</span>
+                        </div>
+                    `;
+                    warning.classList.add('visible');
+
+                    // Auto-hide after 10 seconds
+                    setTimeout(() => {
+                        warning.classList.remove('visible');
+                    }, 10000);
+                }
+            });
+
+            // Close button for phase warning
+            const phaseWarningClose = document.getElementById('phase-warning-close');
+            if (phaseWarningClose) {
+                phaseWarningClose.addEventListener('click', () => {
+                    const warning = document.getElementById('phase-warning');
+                    if (warning) warning.classList.remove('visible');
+                });
+            }
+
             console.log('[3D View] 📡 Unified visualization initialized');
             console.log('[3D View] 🎨 Mode system ready - Standard/Advanced/Complete/Minimal');
+            console.log('[3D View] ✨ Enhanced with Feedback Loops, Phase Transitions & Frozen Face highlighting');
         });
     </script>
 

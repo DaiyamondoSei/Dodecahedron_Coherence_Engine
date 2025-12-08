@@ -39,37 +39,38 @@ const DODECAHEDRON_TOPOLOGY = {
     ],
 
     // 30 Edge connections (each face has 5 edges, shared between 2 faces)
+    // Element data derived from CSV_Edge_tension_Map.csv "Elemental Nature of the Relationship" column
     edges: [
-        { id: 'E1-2', faces: [1, 2] },
-        { id: 'E1-3', faces: [1, 3] },
-        { id: 'E1-4', faces: [1, 4] },
-        { id: 'E1-5', faces: [1, 5] },
-        { id: 'E1-6', faces: [1, 6] },
-        { id: 'E2-3', faces: [2, 3] },
-        { id: 'E2-6', faces: [2, 6] },
-        { id: 'E2-7', faces: [2, 7] },
-        { id: 'E2-8', faces: [2, 8] },
-        { id: 'E3-4', faces: [3, 4] },
-        { id: 'E3-8', faces: [3, 8] },
-        { id: 'E3-9', faces: [3, 9] },
-        { id: 'E4-5', faces: [4, 5] },
-        { id: 'E4-9', faces: [4, 9] },
-        { id: 'E4-10', faces: [4, 10] },
-        { id: 'E5-6', faces: [5, 6] },
-        { id: 'E5-10', faces: [5, 10] },
-        { id: 'E5-11', faces: [5, 11] },
-        { id: 'E6-7', faces: [6, 7] },
-        { id: 'E6-11', faces: [6, 11] },
-        { id: 'E7-8', faces: [7, 8] },
-        { id: 'E7-11', faces: [7, 11] },
-        { id: 'E7-12', faces: [7, 12] },
-        { id: 'E8-9', faces: [8, 9] },
-        { id: 'E8-12', faces: [8, 12] },
-        { id: 'E9-10', faces: [9, 10] },
-        { id: 'E9-12', faces: [9, 12] },
-        { id: 'E10-11', faces: [10, 11] },
-        { id: 'E10-12', faces: [10, 12] },
-        { id: 'E11-12', faces: [11, 12] }
+        { id: 'E1-2', faces: [1, 2], element: 'Fire' },      // Financial Capital ↔ Intellectual Capital
+        { id: 'E1-6', faces: [1, 6], element: 'Water' },     // Financial Capital ↔ Community & Partners
+        { id: 'E1-7', faces: [1, 7], element: 'Air' },       // Financial Capital ↔ Brand & Reputation
+        { id: 'E1-8', faces: [1, 8], element: 'Earth' },     // Financial Capital ↔ Core Operations
+        { id: 'E1-10', faces: [1, 10], element: 'Ether' },   // Financial Capital ↔ Foundational Values
+        { id: 'E2-3', faces: [2, 3], element: 'Air' },       // Intellectual Capital ↔ Human Capital
+        { id: 'E2-6', faces: [2, 6], element: 'Water' },     // Intellectual Capital ↔ Community & Partners
+        { id: 'E2-10', faces: [2, 10], element: 'Earth' },   // Intellectual Capital ↔ Foundational Values
+        { id: 'E2-11', faces: [2, 11], element: 'Ether' },   // Intellectual Capital ↔ Funding Pipeline
+        { id: 'E3-4', faces: [3, 4], element: 'Earth' },     // Human Capital ↔ Structural Capital
+        { id: 'E3-6', faces: [3, 6], element: 'Water' },     // Human Capital ↔ Community & Partners
+        { id: 'E3-9', faces: [3, 9], element: 'Ether' },     // Human Capital ↔ Regenerative Flow
+        { id: 'E3-11', faces: [3, 11], element: 'Fire' },    // Human Capital ↔ Funding Pipeline
+        { id: 'E4-5', faces: [4, 5], element: 'Air' },       // Structural Capital ↔ Market Resonance
+        { id: 'E4-6', faces: [4, 6], element: 'Earth' },     // Structural Capital ↔ Community & Partners
+        { id: 'E4-7', faces: [4, 7], element: 'Ether' },     // Structural Capital ↔ Brand & Reputation
+        { id: 'E4-9', faces: [4, 9], element: 'Fire' },      // Structural Capital ↔ Regenerative Flow
+        { id: 'E5-7', faces: [5, 7], element: 'Ether' },     // Market Resonance ↔ Brand & Reputation
+        { id: 'E5-8', faces: [5, 8], element: 'Fire' },      // Market Resonance ↔ Core Operations
+        { id: 'E5-9', faces: [5, 9], element: 'Water' },     // Market Resonance ↔ Regenerative Flow
+        { id: 'E5-12', faces: [5, 12], element: 'Water' },   // Market Resonance ↔ Risk & Resilience
+        { id: 'E6-7', faces: [6, 7], element: 'Air' },       // Community & Partners ↔ Brand & Reputation
+        { id: 'E7-8', faces: [7, 8], element: 'Fire' },      // Brand & Reputation ↔ Core Operations
+        { id: 'E8-10', faces: [8, 10], element: 'Water' },   // Core Operations ↔ Foundational Values
+        { id: 'E8-12', faces: [8, 12], element: 'Air' },     // Core Operations ↔ Risk & Resilience
+        { id: 'E9-11', faces: [9, 11], element: 'Earth' },   // Regenerative Flow ↔ Funding Pipeline
+        { id: 'E9-12', faces: [9, 12], element: 'Fire' },    // Regenerative Flow ↔ Risk & Resilience
+        { id: 'E10-11', faces: [10, 11], element: 'Air' },   // Foundational Values ↔ Funding Pipeline
+        { id: 'E10-12', faces: [10, 12], element: 'Fire' },  // Foundational Values ↔ Risk & Resilience
+        { id: 'E11-12', faces: [11, 12], element: 'Water' }  // Funding Pipeline ↔ Risk & Resilience
     ],
 
     // 20 Vertices (where 3 faces meet)
@@ -131,10 +132,44 @@ class FaceMapping {
         this.archetype = config.archetype || null;
         this.kpis = config.kpis || [];
         this.validated = config.validated || false;
-        this.sentiment = config.sentiment || 0.5;
+        // Accept both 'sentiment' and 'faceEnergy' for backwards compatibility (Issue #9 Fix)
+        this.sentiment = config.sentiment ?? config.faceEnergy ?? config.energy ?? 0.5;
         this.reasoning = config.reasoning || '';
         this.source = config.source || 'default'; // 'default', 'ai', 'manual'
         this.namedAt = config.namedAt || null;
+    }
+
+    /**
+     * Alias for sentiment - provides backwards compatibility with backend Face class
+     * which uses 'faceEnergy' instead of 'sentiment'
+     * @returns {number} The face's energy/sentiment value (0-1)
+     */
+    get faceEnergy() {
+        return this.sentiment;
+    }
+
+    /**
+     * Setter for faceEnergy - syncs with sentiment
+     * @param {number} value - The energy value (0-1)
+     */
+    set faceEnergy(value) {
+        this.sentiment = value;
+    }
+
+    /**
+     * Alias for sentiment - 'energy' is used in some visualization code
+     * @returns {number} The face's energy value (0-1)
+     */
+    get energy() {
+        return this.sentiment;
+    }
+
+    /**
+     * Setter for energy - syncs with sentiment
+     * @param {number} value - The energy value (0-1)
+     */
+    set energy(value) {
+        this.sentiment = value;
     }
 
     /**
@@ -170,12 +205,41 @@ class FaceMapping {
             kpis: this.kpis,
             validated: this.validated,
             sentiment: this.sentiment,
+            faceEnergy: this.sentiment,  // Alias for backwards compatibility
+            energy: this.sentiment,       // Alias for visualization code
             reasoning: this.reasoning,
             source: this.source,
             namedAt: this.namedAt,
             isComplete: this.isComplete
         };
     }
+}
+
+// ========================================
+// UTILITY: EXTRACT FACE ENERGY
+// ========================================
+
+/**
+ * Extracts face energy from any face-like object, handling various property names.
+ * This utility resolves the sentiment vs faceEnergy vs energy naming inconsistency.
+ * (Issue #9: Sentiment to FaceEnergy converter)
+ *
+ * @param {Object} face - A face object from any source (FaceMapping, Face, plain object)
+ * @param {number} defaultValue - Default value if no energy property found (default: 0.5)
+ * @returns {number} The face energy value (0-1)
+ *
+ * @example
+ * const energy = extractFaceEnergy(face); // Works with any face object
+ */
+function extractFaceEnergy(face, defaultValue = 0.5) {
+    if (!face || typeof face !== 'object') return defaultValue;
+
+    // Priority order: coherence > sentiment > faceEnergy > energy > default
+    const value = face.coherence ?? face.sentiment ?? face.faceEnergy ?? face.energy ?? defaultValue;
+
+    // Ensure we have a valid number
+    const numValue = parseFloat(value);
+    return isNaN(numValue) ? defaultValue : Math.max(0, Math.min(1, numValue));
 }
 
 // ========================================
@@ -364,11 +428,12 @@ class MappingContext {
             }));
         });
 
-        // Initialize 30 edges
+        // Initialize 30 edges with elemental nature from CSV data
         DODECAHEDRON_TOPOLOGY.edges.forEach(edge => {
             this._edges.set(edge.id, new EdgeMapping({
                 id: edge.id,
-                faceIds: edge.faces
+                faceIds: edge.faces,
+                element: edge.element || 'Ether' // Use element from topology, fallback to Ether
             }));
         });
 
@@ -978,11 +1043,13 @@ export {
     FaceMapping,
     EdgeMapping,
     VertexMapping,
-    DODECAHEDRON_TOPOLOGY
+    DODECAHEDRON_TOPOLOGY,
+    extractFaceEnergy  // Utility for getting face energy regardless of property name
 };
 
 // Export for browser global
 if (typeof window !== 'undefined') {
     window.MappingContext = MappingContext;
     window.DODECAHEDRON_TOPOLOGY = DODECAHEDRON_TOPOLOGY;
+    window.extractFaceEnergy = extractFaceEnergy;  // Issue #9: Sentiment-FaceEnergy converter
 }

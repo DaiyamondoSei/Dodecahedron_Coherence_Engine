@@ -155,6 +155,63 @@
             line-height: 1.6;
         }
 
+        /* Sprint 3 Task 27: Breath Name Styling */
+        .breath-name {
+            font-size: 10px;
+            color: rgba(0, 255, 204, 0.8);
+            font-style: italic;
+            margin-top: 4px;
+            padding-top: 4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .helix-item[title] {
+            cursor: help;
+        }
+
+        .helix-tooltip {
+            position: fixed;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            border-radius: 8px;
+            padding: 12px 16px;
+            max-width: 300px;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .helix-tooltip.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .helix-tooltip-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #00ffcc;
+            margin-bottom: 8px;
+        }
+
+        .helix-tooltip-question {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 6px 0;
+            padding-left: 8px;
+            border-left: 2px solid rgba(0, 255, 204, 0.4);
+        }
+
+        .helix-tooltip-question strong {
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: normal;
+            font-size: 10px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
         /* Elegant Diagnostic Panel */
         .diagnostic-panel {
             position: fixed;
@@ -368,9 +425,174 @@
             box-shadow: 0 0 12px rgba(0, 255, 204, 0.4);
         }
 
+        .octave-dot.not-yet {
+            background: transparent;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .octave-dot.blocked {
+            background: rgba(255, 68, 68, 0.2);
+            border: 2px solid #ff4444;
+            animation: pulse-blocked 1.5s ease-in-out infinite;
+        }
+
+        .octave-dot.aspirational {
+            background: rgba(255, 204, 0, 0.15);
+            border: 2px dashed #ffcc00;
+            animation: pulse-aspirational 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-blocked {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 8px 2px rgba(255, 68, 68, 0.6); }
+        }
+
+        @keyframes pulse-aspirational {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
         .octave-dot:hover {
             transform: scale(1.2);
         }
+
+        /* Enhanced Dimensional Progression Styles */
+        .dimensional-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .dimensional-title {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .face-octave-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .face-octave-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            min-width: 80px;
+        }
+
+        .face-octave-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .face-octave-progress {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .face-octave-progress-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .face-octave-threshold {
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: right;
+            min-width: 60px;
+        }
+
+        .per-face-dots {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .per-face-dots .octave-dot {
+            width: 14px;
+            height: 14px;
+        }
+
+        .foundation-warning {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-top: 12px;
+            font-size: 11px;
+            color: #ff6666;
+        }
+
+        .foundation-warning-icon {
+            margin-right: 6px;
+        }
+
+        .spread-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .spread-value {
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .spread-healthy { background: rgba(0, 255, 102, 0.2); color: #00ff66; }
+        .spread-warning { background: rgba(255, 204, 0, 0.2); color: #ffcc00; }
+        .spread-critical { background: rgba(255, 68, 68, 0.2); color: #ff4444; }
+
+        .octave-legend {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 12px;
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.reached { background: #00ffcc; }
+        .legend-dot.not-yet { border: 1px dashed rgba(255,255,255,0.3); }
+        .legend-dot.blocked { background: #ff4444; }
+        .legend-dot.aspirational { background: #ffcc00; }
 
         /* Insight Card - Surprise Feature */
         .insight-card {
@@ -786,12 +1008,19 @@
 
     <script src="https://unpkg.com/three@0.128.0/build/three.js"></script>
     <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="./js/company-loader.js"></script>
+    <script type="module" src="./js/company-loader.js"></script>
     <script src="./js/breath-analyzer.js"></script>
-    <script src="./js/main.js"></script>
+
+    <!-- Unified Octave Thresholds (PHI-based single source of truth) -->
+    <script src="./js/constants/octave-thresholds.js"></script>
+
+    <!-- Octave Integrity Calculator (Foundation Principle) -->
+    <script src="./js/octave-integrity-calculator.js"></script>
+
+    <script type="module" src="./js/main.js"></script>
     <script src="./js/pentagram-overlay.js"></script>
     <script src="./js/face-to-breath-mapper.js"></script>
-    <script>
+    <script type="module">
         // ============================================
         // IFRAME DETECTION: Hide header if embedded
         // ============================================
@@ -907,35 +1136,76 @@
 
         /**
          * Update DNA helices configuration based on company
+         *
+         * IMPORTANT: Uses FIXED face pairings to match breath-analyzer.js
+         * This ensures consistency between Breath Analysis and DNA Helix views.
          */
-        function updateDNAHelicesConfig(company, facesData) {
-            if (!window.FaceToBreathMapper) {
-                console.warn('⚠️ FaceToBreathMapper not loaded, using default config');
-                return;
+        function updateDNAHelicesConfig(company, facesData, breathAxesData = null) {
+            // Fixed breath axis face pairings (matching breath-analyzer.js)
+            // These are the canonical pairings based on dodecahedron geometry
+            const FIXED_BREATH_AXES = [
+                { id: 1, name: 'Resource Flow', projection: 11, reception: 1 },
+                { id: 2, name: 'Substance & Story', projection: 7, reception: 2 },
+                { id: 3, name: 'Being & Doing', projection: 8, reception: 3 },
+                { id: 4, name: 'Form & Integrity', projection: 4, reception: 9 },
+                { id: 5, name: 'Perception & Truth', projection: 5, reception: 10 },
+                { id: 6, name: 'Network & Fortress', projection: 6, reception: 12 }
+            ];
+
+            // Build face lookup map for custom names
+            const faceMap = {};
+            if (facesData && Array.isArray(facesData)) {
+                facesData.forEach(face => {
+                    faceMap[face.id] = face.name || `Face ${face.id}`;
+                });
             }
 
-            // Get intelligent breath axis mapping
-            const breathConfig = window.FaceToBreathMapper.getBreathAxisConfig(company, facesData);
+            console.log('🧬 Using FIXED breath axis face pairings (consistent with Breath Analysis)');
 
-            console.log('🧬 Breath axis configuration:', breathConfig);
-
-            if (breathConfig.mode === 'custom' && breathConfig.summary) {
-                console.log(`   Mapping confidence: ${breathConfig.summary.highConfidence} high, ${breathConfig.summary.mediumConfidence} medium, ${breathConfig.summary.lowConfidence} low`);
+            // Sprint 3 Task 27: Try to load breath data from mapping context
+            let breathAxes = breathAxesData;
+            if (!breathAxes) {
+                // Try sessionStorage
+                try {
+                    const customDataJson = sessionStorage.getItem('customCompanyData');
+                    if (customDataJson) {
+                        const customData = JSON.parse(customDataJson);
+                        breathAxes = customData.breathAxes;
+                    }
+                } catch (e) {
+                    console.warn('⚠️ Could not load breath axes from sessionStorage:', e);
+                }
             }
 
-            // Update DNA_HELICES with mapped configuration
-            DNA_HELICES = breathConfig.axes.map((axis, index) => ({
-                id: axis.axisId,
-                name: axis.axisName,
-                color: HELIX_COLORS[index % HELIX_COLORS.length],
-                angle: (index * Math.PI * 2) / 6,
-                faces: [axis.inhaleFace.id, axis.exhaleFace.id],
-                names: [axis.inhaleFace.name, axis.exhaleFace.name],
-                confidence: axis.confidence,
-                method: axis.method
-            }));
+            // Update DNA_HELICES with FIXED face pairings + custom names
+            DNA_HELICES = FIXED_BREATH_AXES.map((axis, index) => {
+                // Find matching breath axis data by axis ID or index
+                const breathData = breathAxes?.find(b => b.axis === axis.id) || breathAxes?.[index] || null;
 
-            console.log('✅ DNA helices configuration updated:', DNA_HELICES.length, 'axes');
+                // Get custom face names or use defaults
+                const projectionName = faceMap[axis.projection] || DNA_HELICES[index]?.names?.[0] || `Face ${axis.projection}`;
+                const receptionName = faceMap[axis.reception] || DNA_HELICES[index]?.names?.[1] || `Face ${axis.reception}`;
+
+                return {
+                    id: axis.id,
+                    name: axis.name,
+                    color: HELIX_COLORS[index % HELIX_COLORS.length],
+                    angle: (index * Math.PI * 2) / 6,
+                    faces: [axis.projection, axis.reception],  // Fixed face IDs
+                    names: [projectionName, receptionName],     // Custom names for display
+                    confidence: 'high',  // Fixed pairings = high confidence
+                    method: 'fixed',
+                    // Sprint 3 Task 27: Breath name and questions
+                    breathName: breathData?.breathName || null,
+                    projectionQuestion: breathData?.projectionQuestion || null,
+                    receptionQuestion: breathData?.receptionQuestion || null
+                };
+            });
+
+            console.log('✅ DNA helices configuration updated:', DNA_HELICES.length, 'axes (fixed pairings)');
+            if (breathAxes) {
+                console.log('🌬️ Breath names loaded:', DNA_HELICES.filter(h => h.breathName).length, 'axes have breath data');
+            }
 
             // Update legend with mapped face names
             updateLegend();
@@ -943,6 +1213,7 @@
 
         /**
          * Update legend to show current breath axis mappings
+         * Sprint 3 Task 27: Now includes breath names and hover tooltips
          */
         function updateLegend() {
             const legendContainer = document.querySelector('.legend');
@@ -956,14 +1227,22 @@
                     const confidenceBadge = helix.confidence ?
                         `<span style="font-size: 9px; opacity: 0.6;">${helix.confidence === 'high' ? '●●●' : helix.confidence === 'medium' ? '●●○' : '●○○'}</span>` : '';
 
+                    // Sprint 3 Task 27: Add breath name if available
+                    const breathNameHtml = helix.breathName ?
+                        `<div class="breath-name">"${helix.breathName}"</div>` : '';
+
                     return `
-                        <div class="helix-item" style="border-color: ${colorHex};" data-helix="${helix.id}">
+                        <div class="helix-item" style="border-color: ${colorHex};" data-helix="${helix.id}"
+                             data-breath-name="${helix.breathName || ''}"
+                             data-projection-q="${helix.projectionQuestion || ''}"
+                             data-reception-q="${helix.receptionQuestion || ''}">
                             <div class="helix-name" style="color: ${colorHex};">
                                 ${helix.name} ${confidenceBadge}
                             </div>
                             <div class="helix-faces">
                                 ${helix.names[0]} → ${helix.names[1]}
                             </div>
+                            ${breathNameHtml}
                         </div>
                     `;
                 }).join('')}
@@ -971,14 +1250,83 @@
 
             legendContainer.innerHTML = legendHtml;
 
-            // Re-attach click handlers
+            // Re-attach click handlers and add hover tooltips
             document.querySelectorAll('.helix-item').forEach(item => {
+                // Click handler
                 item.addEventListener('click', () => {
                     const helixId = parseInt(item.dataset.helix);
                     const helix = DNA_HELICES.find(h => h.id === helixId);
                     if (helix) selectHelix(helix);
                 });
+
+                // Sprint 3 Task 27: Hover tooltip for breath questions
+                const projectionQ = item.dataset.projectionQ;
+                const receptionQ = item.dataset.receptionQ;
+                const breathName = item.dataset.breathName;
+
+                if (projectionQ || receptionQ) {
+                    item.addEventListener('mouseenter', (e) => {
+                        showBreathTooltip(e, breathName, projectionQ, receptionQ);
+                    });
+                    item.addEventListener('mouseleave', () => {
+                        hideBreathTooltip();
+                    });
+                    item.addEventListener('mousemove', (e) => {
+                        moveBreathTooltip(e);
+                    });
+                }
             });
+        }
+
+        // Sprint 3 Task 27: Tooltip element for breath questions
+        let breathTooltip = null;
+
+        function showBreathTooltip(e, breathName, projectionQ, receptionQ) {
+            if (!breathTooltip) {
+                breathTooltip = document.createElement('div');
+                breathTooltip.className = 'helix-tooltip';
+                document.body.appendChild(breathTooltip);
+            }
+
+            let tooltipHtml = '';
+            if (breathName) {
+                tooltipHtml += `<div class="helix-tooltip-title">"${breathName}"</div>`;
+            }
+            if (projectionQ) {
+                tooltipHtml += `<div class="helix-tooltip-question"><strong>Projection:</strong>${projectionQ}</div>`;
+            }
+            if (receptionQ) {
+                tooltipHtml += `<div class="helix-tooltip-question"><strong>Reception:</strong>${receptionQ}</div>`;
+            }
+
+            breathTooltip.innerHTML = tooltipHtml;
+            breathTooltip.style.left = `${e.clientX + 15}px`;
+            breathTooltip.style.top = `${e.clientY + 10}px`;
+
+            // Ensure tooltip stays on screen
+            requestAnimationFrame(() => {
+                const rect = breathTooltip.getBoundingClientRect();
+                if (rect.right > window.innerWidth) {
+                    breathTooltip.style.left = `${e.clientX - rect.width - 15}px`;
+                }
+                if (rect.bottom > window.innerHeight) {
+                    breathTooltip.style.top = `${e.clientY - rect.height - 10}px`;
+                }
+                breathTooltip.classList.add('visible');
+            });
+        }
+
+        function moveBreathTooltip(e) {
+            if (breathTooltip) {
+                breathTooltip.style.left = `${e.clientX + 15}px`;
+                breathTooltip.style.top = `${e.clientY + 10}px`;
+            }
+        }
+
+        function hideBreathTooltip() {
+            if (breathTooltip) {
+                breathTooltip.classList.remove('visible');
+            }
         }
 
         // State
@@ -1009,13 +1357,70 @@
         }
 
         /**
-         * Check if octave is reached for a face
+         * PHI-based thresholds for octave detection
+         * Uses unified thresholds from octave-thresholds.js when available
+         */
+        const PHI_OCTAVE_THRESHOLDS = window.OctaveThresholds?.OCTAVE_THRESHOLDS ?
+            Object.values(window.OctaveThresholds.OCTAVE_THRESHOLDS).map(o => o.threshold) :
+            [0, 0.382, 0.5, 0.618, 0.764, 0.854, 0.95];  // Fallback
+
+        /**
+         * Get current octave for a face based on PHI thresholds
+         * @returns {number} Octave number (1-7)
+         */
+        function getCurrentOctave(faceId) {
+            const energy = getFaceEnergy(faceId);
+            // Use OctaveThresholds if available, otherwise manual detection
+            if (window.OctaveThresholds?.coherenceToOctave) {
+                return window.OctaveThresholds.coherenceToOctave(energy);
+            }
+            // Fallback: manual PHI threshold detection
+            if (energy >= 0.95) return 7;
+            if (energy >= 0.854) return 6;
+            if (energy >= 0.764) return 5;
+            if (energy >= 0.618) return 4;
+            if (energy >= 0.5) return 3;
+            if (energy >= 0.382) return 2;
+            return 1;
+        }
+
+        /**
+         * Get octave info (name, color, threshold) by octave number
+         */
+        function getOctaveInfo(octaveNum) {
+            if (window.OctaveThresholds?.getOctaveByNumber) {
+                return window.OctaveThresholds.getOctaveByNumber(octaveNum);
+            }
+            // Fallback
+            const fallbackInfo = {
+                1: { name: 'Survival', color: '#FF4444', threshold: 0 },
+                2: { name: 'Structure', color: '#FF8800', threshold: 0.382 },
+                3: { name: 'Relationships', color: '#FFCC00', threshold: 0.5 },
+                4: { name: 'Creativity', color: '#44BB44', threshold: 0.618 },
+                5: { name: 'Expression', color: '#00CCCC', threshold: 0.764 },
+                6: { name: 'Vision', color: '#4488FF', threshold: 0.854 },
+                7: { name: 'Radiance', color: '#AA44FF', threshold: 0.95 }
+            };
+            return fallbackInfo[octaveNum] || fallbackInfo[1];
+        }
+
+        /**
+         * Get threshold needed for next octave
+         */
+        function getNextOctaveThreshold(currentOctave) {
+            if (currentOctave >= 7) return 1.0; // Already at max
+            const nextOctaveInfo = getOctaveInfo(currentOctave + 1);
+            return nextOctaveInfo.threshold;
+        }
+
+        /**
+         * Check if octave is reached for a face (PHI-based)
+         * Uses golden ratio thresholds instead of simple 15% increments
          */
         function isOctaveReached(faceId, octaveId) {
-            // Simple logic: each 15% energy = 1 octave reached
             const energy = getFaceEnergy(faceId);
-            const reachedOctaves = Math.floor(energy / 0.15);
-            return octaveId <= reachedOctaves;
+            const threshold = PHI_OCTAVE_THRESHOLDS[octaveId - 1] || 0;
+            return energy >= threshold;
         }
 
         /**
@@ -1053,7 +1458,141 @@
                 clickableMeshes.push(strand2);
             }
 
+            // Add breath connection rungs
+            // Calculate breath ratio for this helix (projection vs reception)
+            const energy1 = getFaceEnergy(helix.faces[0]); // Projection
+            const energy2 = getFaceEnergy(helix.faces[1]); // Reception
+            const breathRatio = calculatePhiBreathRatio(energy1, energy2);
+
+            const rungs = createBreathRungs(helix, centerX, centerZ, breathRatio);
+            group.add(rungs);
+
             return group;
+        }
+
+        /**
+         * Create breath connection rungs between DNA strands
+         * Visualizes breath ratio balance - solid when balanced, gaps when imbalanced
+         *
+         * @param {Object} helix - Helix configuration
+         * @param {number} centerX - X center position
+         * @param {number} centerZ - Z center position
+         * @param {number} breathRatio - φ-normalized breath ratio
+         * @returns {THREE.Group} Group of rung meshes
+         */
+        function createBreathRungs(helix, centerX, centerZ, breathRatio) {
+            const rungsGroup = new THREE.Group();
+
+            // Calculate balance factor (1 = perfect, 0 = severely imbalanced)
+            const balanceFactor = Math.max(0, 1 - Math.abs(breathRatio) / 1.5);
+            const isBalanced = Math.abs(breathRatio) <= PHI_INV_2; // φ^-2 threshold
+
+            // Number of rungs based on balance
+            // Balanced: 21 rungs (3 per octave)
+            // Imbalanced: proportionally fewer rungs (gaps appear)
+            const maxRungs = 21;
+            const visibleRungs = Math.floor(maxRungs * balanceFactor);
+
+            // Rung visual properties
+            const rungColor = isBalanced
+                ? new THREE.Color(0x00ffcc)  // Cyan-green when balanced
+                : breathRatio > 0
+                    ? new THREE.Color(0x6666ff)  // Blue tint for over-inhaling
+                    : new THREE.Color(0xff6666); // Red tint for over-exhaling
+
+            const rungOpacity = isBalanced ? 0.6 : 0.4;
+
+            // Create rungs at specific positions along the helix
+            for (let i = 0; i < maxRungs; i++) {
+                // Skip some rungs to show gaps when imbalanced
+                if (i >= visibleRungs && i % 3 !== 0) continue;
+
+                const t = i / maxRungs;
+                const octaveLevel = 1 + t * 6; // Spans O1 to O7
+                const fibRadius = getFibonacciRadius(Math.ceil(octaveLevel));
+
+                // Calculate positions on both strands
+                const angle = 2 * Math.PI * CONFIG.helixTurns * t;
+                const spiralR = CONFIG.strandRadius * fibRadius;
+
+                // Strand 1 position (phase 0)
+                const x1 = centerX + spiralR * Math.cos(angle);
+                const z1 = centerZ + spiralR * Math.sin(angle);
+
+                // Strand 2 position (phase π)
+                const x2 = centerX + spiralR * Math.cos(angle + Math.PI);
+                const z2 = centerZ + spiralR * Math.sin(angle + Math.PI);
+
+                const y = t * CONFIG.helixHeight;
+
+                // Create rung geometry (cylinder between two points)
+                const start = new THREE.Vector3(x1, y, z1);
+                const end = new THREE.Vector3(x2, y, z2);
+                const midpoint = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+                const length = start.distanceTo(end);
+
+                // If severely imbalanced, show a warning indicator instead of a solid rung
+                if (i >= visibleRungs) {
+                    // Warning sphere at midpoint (gap indicator)
+                    const warningGeometry = new THREE.SphereGeometry(0.08, 8, 8);
+                    const warningMaterial = new THREE.MeshBasicMaterial({
+                        color: 0xff4444,
+                        transparent: true,
+                        opacity: 0.4 + Math.sin(Date.now() * 0.005 + i) * 0.2
+                    });
+                    const warningSphere = new THREE.Mesh(warningGeometry, warningMaterial);
+                    warningSphere.position.copy(midpoint);
+                    rungsGroup.add(warningSphere);
+                    continue;
+                }
+
+                // Create solid rung (curved cylinder)
+                const rungGeometry = new THREE.CylinderGeometry(
+                    0.04,  // Radius top
+                    0.04,  // Radius bottom
+                    length,
+                    6      // Segments
+                );
+
+                const rungMaterial = new THREE.MeshPhongMaterial({
+                    color: rungColor,
+                    emissive: rungColor,
+                    emissiveIntensity: isBalanced ? 0.3 : 0.15,
+                    transparent: true,
+                    opacity: rungOpacity * (i >= visibleRungs * 0.8 ? 0.6 : 1),
+                    shininess: 60
+                });
+
+                const rung = new THREE.Mesh(rungGeometry, rungMaterial);
+
+                // Position and orient the rung
+                rung.position.copy(midpoint);
+
+                // Orient cylinder to connect the two strand points
+                const direction = new THREE.Vector3().subVectors(end, start).normalize();
+                const up = new THREE.Vector3(0, 1, 0);
+                const quaternion = new THREE.Quaternion().setFromUnitVectors(up, direction);
+                rung.setRotationFromQuaternion(quaternion);
+
+                rungsGroup.add(rung);
+            }
+
+            // Add central axis indicator for breath health
+            if (!isBalanced) {
+                const axisGeometry = new THREE.CylinderGeometry(0.02, 0.02, CONFIG.helixHeight, 8);
+                const axisColor = breathRatio > 0 ? 0x4444ff : 0xff4444;
+                const axisMaterial = new THREE.MeshBasicMaterial({
+                    color: axisColor,
+                    transparent: true,
+                    opacity: 0.2
+                });
+                const axis = new THREE.Mesh(axisGeometry, axisMaterial);
+                axis.position.set(centerX, CONFIG.helixHeight / 2, centerZ);
+                rungsGroup.add(axis);
+            }
+
+            rungsGroup.userData = { breathRatio, isBalanced, balanceFactor };
+            return rungsGroup;
         }
 
         /**
@@ -1178,6 +1717,36 @@
         // Pentagram overlay instance
         let pentagramOverlay = null;
 
+        // ========================================
+        // φ-LOGARITHMIC BREATH RATIO CONSTANTS
+        // Aligned with breath-analyzer.js for consistency
+        // ========================================
+        const PHI = 1.618033988749895;
+        const LOG_PHI = Math.log(PHI);
+        const PHI_INV_2 = 0.381966011250105; // φ^-2, threshold for balanced zone
+
+        /**
+         * Calculate φ-normalized logarithmic breath ratio
+         * This matches the formula in breath-analyzer.js
+         *
+         * Formula: BR = log(reception / projection) / log(φ)
+         *
+         * Interpretation:
+         *   BR = 0: Perfect balance (ratio = 1.0)
+         *   BR > 0: Over-inhaling (reception > projection)
+         *   BR < 0: Over-exhaling (projection > reception)
+         *   |BR| < 0.382: Balanced zone (within φ^-2)
+         */
+        function calculatePhiBreathRatio(projectionEnergy, receptionEnergy) {
+            // Avoid division by zero
+            if (projectionEnergy <= 0 || receptionEnergy <= 0) {
+                return 0;
+            }
+            // BR = log(reception / projection) / log(φ)
+            const rawRatio = receptionEnergy / projectionEnergy;
+            return Math.log(rawRatio) / LOG_PHI;
+        }
+
         /**
          * Show diagnostic panel with breath analysis
          */
@@ -1189,14 +1758,26 @@
             title.textContent = helix.name.toUpperCase();
 
             // Get energies for both faces
-            const energy1 = getFaceEnergy(helix.faces[0]);
-            const energy2 = getFaceEnergy(helix.faces[1]);
-            const breathRatio = energy2 > 0 ? energy1 / energy2 : 1;
-            const isBalanced = breathRatio >= 0.8 && breathRatio <= 1.2;
+            // faces[0] = projection (exhale), faces[1] = reception (inhale)
+            const energy1 = getFaceEnergy(helix.faces[0]); // Projection
+            const energy2 = getFaceEnergy(helix.faces[1]); // Reception
 
-            // Calculate reached octaves for each face
-            const face1Octaves = Math.floor(energy1 / 0.15);
-            const face2Octaves = Math.floor(energy2 / 0.15);
+            // Calculate φ-normalized logarithmic breath ratio (matching breath-analyzer.js)
+            const breathRatio = calculatePhiBreathRatio(energy1, energy2);
+            const isBalanced = Math.abs(breathRatio) <= PHI_INV_2; // Within φ^-2 threshold
+
+            // Calculate reached octaves for each face using PHI-based thresholds
+            const face1Octave = getCurrentOctave(helix.faces[0]);
+            const face2Octave = getCurrentOctave(helix.faces[1]);
+            const face1Info = getOctaveInfo(face1Octave);
+            const face2Info = getOctaveInfo(face2Octave);
+            const face1NextThreshold = getNextOctaveThreshold(face1Octave);
+            const face2NextThreshold = getNextOctaveThreshold(face2Octave);
+
+            // Calculate octave spread (for Foundation Principle warnings)
+            const minOctave = Math.min(face1Octave, face2Octave);
+            const maxOctave = Math.max(face1Octave, face2Octave);
+            const octaveSpread = maxOctave - minOctave;
 
             // Generate insight
             const insight = generateInsight(helix, breathRatio, energy1, energy2);
@@ -1226,8 +1807,13 @@
                         <div class="energy-bar">
                             <div class="energy-fill" style="width: ${energy1 * 100}%; background: linear-gradient(90deg, ${colorToHex(helix.color)}, ${colorToHex(helix.color)}88);"></div>
                         </div>
-                        <div style="font-size: 10px; color: rgba(255,255,255,0.6);">
-                            <strong>Octaves Reached:</strong> ${face1Octaves} / 7
+                        <div style="font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 6px;">
+                            <span class="face-octave-badge" style="background: ${face1Info.color}22; color: ${face1Info.color}; border: 1px solid ${face1Info.color}44;">
+                                O${face1Octave} ${face1Info.name}
+                            </span>
+                        </div>
+                        <div style="font-size: 9px; color: rgba(255,255,255,0.4); margin-top: 4px;">
+                            Next: O${face1Octave + 1} @ ${(face1NextThreshold * 100).toFixed(1)}%
                         </div>
                     </div>
 
@@ -1242,23 +1828,73 @@
                         <div class="energy-bar">
                             <div class="energy-fill" style="width: ${energy2 * 100}%; background: linear-gradient(90deg, ${colorToHex(helix.color)}, ${colorToHex(helix.color)}88);"></div>
                         </div>
-                        <div style="font-size: 10px; color: rgba(255,255,255,0.6);">
-                            <strong>Octaves Reached:</strong> ${face2Octaves} / 7
+                        <div style="font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 6px;">
+                            <span class="face-octave-badge" style="background: ${face2Info.color}22; color: ${face2Info.color}; border: 1px solid ${face2Info.color}44;">
+                                O${face2Octave} ${face2Info.name}
+                            </span>
+                        </div>
+                        <div style="font-size: 9px; color: rgba(255,255,255,0.4); margin-top: 4px;">
+                            Next: O${face2Octave + 1} @ ${(face2NextThreshold * 100).toFixed(1)}%
                         </div>
                     </div>
                 </div>
 
-                <!-- Octave Progress -->
-                <div class="octave-info">
-                    <div class="octave-title">Dimensional Progression</div>
-                    <div class="octave-grid">
-                        ${[1,2,3,4,5,6,7].map(oct => {
-                            const reached = isOctaveReached(helix.faces[0], oct) || isOctaveReached(helix.faces[1], oct);
-                            return `<div class="octave-dot ${reached ? 'reached' : ''}" title="Octave ${oct}"></div>`;
-                        }).join('')}
+                <!-- Enhanced Dimensional Progression -->
+                <div class="dimensional-section">
+                    <div class="dimensional-title">Dimensional Progression</div>
+
+                    <!-- Per-Face Octave Visualization -->
+                    <div class="face-octave-row">
+                        <div class="face-octave-label">${helix.names[0]}</div>
+                        <div class="per-face-dots">
+                            ${[1,2,3,4,5,6,7].map(oct => {
+                                const reached = isOctaveReached(helix.faces[0], oct);
+                                const octInfo = getOctaveInfo(oct);
+                                let stateClass = 'not-yet';
+                                if (reached) stateClass = 'reached';
+                                else if (oct > face1Octave + 2 && face1Octave <= 2) stateClass = 'blocked'; // Foundation weak
+                                else if (oct > face1Octave + 3) stateClass = 'aspirational'; // Too far ahead
+                                return '<div class="octave-dot ' + stateClass + '" title="O' + oct + ': ' + octInfo.name + ' (' + (octInfo.threshold * 100).toFixed(1) + '%)"></div>';
+                            }).join('')}
+                        </div>
                     </div>
-                    <div style="margin-top: 12px; font-size: 10px; color: rgba(255,255,255,0.6); text-align: center;">
-                        O1: Survival → O7: Radiance
+
+                    <div class="face-octave-row">
+                        <div class="face-octave-label">${helix.names[1]}</div>
+                        <div class="per-face-dots">
+                            ${[1,2,3,4,5,6,7].map(oct => {
+                                const reached = isOctaveReached(helix.faces[1], oct);
+                                const octInfo = getOctaveInfo(oct);
+                                let stateClass = 'not-yet';
+                                if (reached) stateClass = 'reached';
+                                else if (oct > face2Octave + 2 && face2Octave <= 2) stateClass = 'blocked';
+                                else if (oct > face2Octave + 3) stateClass = 'aspirational';
+                                return '<div class="octave-dot ' + stateClass + '" title="O' + oct + ': ' + octInfo.name + ' (' + (octInfo.threshold * 100).toFixed(1) + '%)"></div>';
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Octave Spread Indicator -->
+                    <div class="spread-indicator">
+                        <span>Octave Spread:</span>
+                        <span class="spread-value ${octaveSpread <= 1 ? 'spread-healthy' : octaveSpread <= 2 ? 'spread-warning' : 'spread-critical'}">
+                            ${octaveSpread} octave${octaveSpread !== 1 ? 's' : ''}
+                        </span>
+                        <span style="flex: 1; text-align: right;">
+                            ${octaveSpread <= 1 ? 'Aligned' : octaveSpread <= 2 ? 'Minor gap' : 'Structural gap'}
+                        </span>
+                    </div>
+
+                    ${octaveSpread > 2 ? '<div class="foundation-warning"><span class="foundation-warning-icon">⚠️</span>Foundation Principle: Large octave gaps indicate uneven development. Focus on strengthening the lagging face before advancing further.</div>' : ''}
+
+                    ${(minOctave === 1 && maxOctave >= 4) ? '<div class="foundation-warning" style="margin-top: 8px;"><span class="foundation-warning-icon">🏗️</span>One strand at O1 (Survival) while the other is at O' + maxOctave + '. Stabilize the foundation first.</div>' : ''}
+
+                    <!-- Legend -->
+                    <div class="octave-legend">
+                        <div class="legend-item"><div class="legend-dot reached"></div> Reached</div>
+                        <div class="legend-item"><div class="legend-dot not-yet"></div> Not Yet</div>
+                        <div class="legend-item"><div class="legend-dot blocked"></div> Blocked</div>
+                        <div class="legend-item"><div class="legend-dot aspirational"></div> Aspirational</div>
                     </div>
                 </div>
 
@@ -1439,14 +2075,21 @@
         }
 
         /**
-         * Generate an elegant insight based on the data
+         * Generate an elegant insight based on φ-logarithmic breath ratio
+         *
+         * Scale: ratio = 0 is balanced, > 0 is over-inhaling, < 0 is over-exhaling
          */
         function generateInsight(helix, ratio, energy1, energy2) {
-            if (ratio >= 0.9 && ratio <= 1.1) {
+            const absRatio = Math.abs(ratio);
+
+            if (absRatio <= PHI_INV_2) {
+                // Balanced (within φ^-2 threshold)
                 return `Perfect harmony detected. This axis demonstrates the Golden Ratio principle: balanced flow creates exponential coherence. Both strands are breathing in unison—a rare state of organizational resonance.`;
-            } else if (ratio > 1.2) {
+            } else if (ratio < 0) {
+                // Over-exhaling (projection > reception)
                 return `Over-projection detected. ${helix.names[0]} is exhausting energy faster than ${helix.names[1]} can receive and ground it. Consider pausing expansion to strengthen foundations—the Fibonacci sequence teaches us that growth requires proper spacing.`;
-            } else if (ratio < 0.8) {
+            } else if (ratio > 0) {
+                // Over-inhaling (reception > projection)
                 return `Under-projection detected. ${helix.names[1]} has capacity that ${helix.names[0]} isn't utilizing. This is untapped potential—like a coiled spring waiting to release. Channel this receptive energy into focused action.`;
             } else {
                 return `Mild imbalance detected. The system is self-correcting but could benefit from conscious attention. Like a DNA helix, organizational health requires both strands to spiral in proportion—neither too tight nor too loose.`;
@@ -1454,13 +2097,30 @@
         }
 
         /**
-         * Get breath status text
+         * Get breath status text for φ-logarithmic ratio
+         *
+         * Scale interpretation:
+         *   ratio = 0: Perfect balance
+         *   ratio > 0: Over-inhaling (reception > projection)
+         *   ratio < 0: Over-exhaling (projection > reception)
+         *   |ratio| < 0.382 (φ^-2): Balanced zone
          */
         function getBreathStatus(ratio) {
-            if (ratio >= 0.8 && ratio <= 1.2) return '✓ Balanced Flow';
-            if (ratio > 1.2) return '⚠ Over-Exhaling';
-            if (ratio < 0.8) return '⚠ Under-Exhaling';
-            return '◯ Neutral';
+            const absRatio = Math.abs(ratio);
+
+            if (absRatio <= PHI_INV_2) {
+                return '✓ Balanced Flow';
+            } else if (ratio > 0) {
+                // Over-inhaling (reception > projection)
+                if (absRatio > 1.0) return '🚨 Critical Over-Inhaling';
+                if (absRatio > 0.618) return '⚠ Over-Inhaling';
+                return '⚡ Slight Over-Inhaling';
+            } else {
+                // Over-exhaling (projection > reception)
+                if (absRatio > 1.0) return '🚨 Critical Over-Exhaling';
+                if (absRatio > 0.618) return '⚠ Over-Exhaling';
+                return '⚡ Slight Over-Exhaling';
+            }
         }
 
         /**
@@ -1649,21 +2309,36 @@
 
                 // Get current company or load first company
                 let company = window.CompanyLoader.getCurrentCompany();
-                if (!company) {
+                if (!company || !company.name) {
                     const companies = window.CompanyLoader.getAvailableCompanies();
                     const firstCompany = companies[0];
-                    company = await window.CompanyLoader.loadCompany(firstCompany.id);
+                    const context = await window.CompanyLoader.loadCompany(firstCompany.id);
+                    // loadCompany returns full context {company, faces, edges, vertices, kpis}
+                    company = context?.company || context;
                 }
 
-                // Initialize Quannex engine with company data
+                // Get faces from Quannex (already initialized by switchCompany)
                 if (window.Quannex && company) {
-                    await window.Quannex.initWithCompany(company);
+                    // Note: initWithCompany is called by switchCompany with full data (kpis, faces)
+                    // Don't call it again here as it would overwrite with incomplete data
                     facesData = window.Quannex.getFaces();
-                    console.log('✅ Quannex engine initialized with', company.name);
+                    console.log('✅ Using Quannex engine for', company.name);
                     console.log('📊 Loaded', facesData.length, 'faces');
 
-                    // 🔧 Update DNA helix configuration with intelligent mapping
-                    updateDNAHelicesConfig(company, facesData);
+                    // Sprint 3 Task 27: Try to load breath axes from various sources
+                    let breathAxes = null;
+                    // 1. Try company templates bundle
+                    if (window.CompanyTemplatesBundle?.templates && company.id) {
+                        const companyData = window.CompanyTemplatesBundle.templates[company.id];
+                        if (companyData?.breathAxes) {
+                            breathAxes = companyData.breathAxes;
+                            console.log('🌬️ Loaded breath axes from template bundle');
+                        }
+                    }
+                    // 2. If not found, the updateDNAHelicesConfig will try sessionStorage as fallback
+
+                    // 🔧 Update DNA helix configuration with intelligent mapping + breath data
+                    updateDNAHelicesConfig(company, facesData, breathAxes);
                 }
 
                 renderDNA();
@@ -1837,8 +2512,14 @@
                         console.log('[DNA View] ✅ Quannex initialized with custom company');
                         console.log('[DNA View] 📊 Loaded', facesData.length, 'faces with', company.kpis.length, 'KPIs');
 
-                        // Update DNA helix configuration with intelligent mapping
-                        updateDNAHelicesConfig(company, facesData);
+                        // Sprint 3 Task 27: Extract breath axes from custom data
+                        const breathAxes = customData.breathAxes || null;
+                        if (breathAxes) {
+                            console.log('[DNA View] 🌬️ Found breath axes:', breathAxes.length, 'axes');
+                        }
+
+                        // Update DNA helix configuration with intelligent mapping + breath data
+                        updateDNAHelicesConfig(company, facesData, breathAxes);
 
                         // Clear and re-render DNA
                         if (dnaGroup) {
@@ -1967,8 +2648,11 @@
                     console.log('[DNA View] ✅ Quannex engine reinitialized');
                     console.log('[DNA View] 📊 Loaded', facesData.length, 'faces');
 
-                    // 🔧 Update DNA helix configuration with intelligent mapping
-                    updateDNAHelicesConfig(company, facesData);
+                    // Sprint 3 Task 27: Extract breath axes for reload
+                    const breathAxes = customData.breathAxes || null;
+
+                    // 🔧 Update DNA helix configuration with intelligent mapping + breath data
+                    updateDNAHelicesConfig(company, facesData, breathAxes);
                 }
 
                 // Re-render DNA

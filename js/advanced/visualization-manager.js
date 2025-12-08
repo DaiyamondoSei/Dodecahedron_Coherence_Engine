@@ -42,14 +42,20 @@ export class VisualizationManager {
     /**
      * Update visualization based on new analysis data
      * @param {Object} analysis - The full advancedAnalysis object
+     * @param {Object} companyData - Optional company data for rich tooltips
      */
-    updateData(analysis) {
+    updateData(analysis, companyData = null) {
         this.currentAnalysis = analysis;
+        this.companyData = companyData;
 
-        this.updateNeonEdges(analysis.edges);
-        this.updateVertexSpheres(analysis.vertices);
+        // Extract face names for tooltip context
+        const faceNames = companyData?.faces?.map(f => f.name) || [];
+
+        this.updateNeonEdges(analysis.edges, companyData, faceNames);
+        this.updateVertexSpheres(analysis.vertices, companyData, faceNames);
         this.updateFeedbackLoops(analysis.dynamics);
         this.checkPhaseTransition(analysis.dynamics);
+        this.highlightFrozenFaces(analysis.dynamics);
     }
 
     /**
@@ -67,30 +73,100 @@ export class VisualizationManager {
 
         // Accumulate phase to prevent jumps when speed changes
         this.pulsePhase += deltaTime * pulseSpeed;
-        const pulse = (Math.sin(this.pulsePhase) + 1) * 0.5; // 0 to 1
 
-        // Animate Neon Edges (Opacity Pulse)
+        // Use per-edge timing for individual pulse animation
+        // Each edge pulses at its own frequency based on tension
         this.groups.neonEdges.children.forEach(tube => {
-            if (tube.userData.isPulsing) {
-                // Pulse opacity from 0.4 to 0.4 * Phi (approx 0.65)
-                const baseOpacity = 0.4;
-                const targetOpacity = baseOpacity * this.PHI;
-                tube.material.opacity = baseOpacity + (targetOpacity - baseOpacity) * pulse;
+            this.animateEdgeWithTiming(tube, deltaTime);
+        });
+
+        // Animate Feedback Loops (Dash Offset for flowing effect)
+        this.groups.feedbackLoops.children.forEach(line => {
+            if (line.material.dashSize) {
+                // Flow speed based on loop strength (stronger = faster)
+                const flowSpeed = 2.0 + (line.userData.strength || 0) * 3.0;
+                line.material.dashOffset -= deltaTime * flowSpeed;
             }
         });
 
-        // Animate Feedback Loops (Dash Offset)
-        this.groups.feedbackLoops.children.forEach(line => {
-            if (line.material.dashSize) {
-                line.material.dashOffset -= deltaTime * 2; // Flow animation
+        // Animate Vertex Spheres (subtle breathing effect)
+        const vertexPulse = (Math.sin(this.pulsePhase * 0.5) + 1) * 0.5; // Slower pulse for vertices
+        this.groups.vertexSpheres.children.forEach(sphere => {
+            const data = sphere.userData;
+            if (!data.isVertex) return;
+
+            // Subtle scale breathing (1.0 to 1.08)
+            const breathScale = (data.baseScale || 1.0) + (vertexPulse * 0.08 * (data.vortexStrength || 0.5));
+            sphere.scale.setScalar(breathScale);
+
+            // Emissive pulse
+            const baseEmissive = data.baseEmissive || 0.5;
+            const pulseValue = (vertexPulse - 0.5) * 0.2;
+            if (sphere.material.emissiveIntensity !== undefined) {
+                sphere.material.emissiveIntensity = baseEmissive + pulseValue;
+            }
+        });
+
+        // Phase transition proximity effect (subtle pulsing when near threshold)
+        if (this.phaseTransitionProximity > 0.6) {
+            const urgency = (this.phaseTransitionProximity - 0.6) / 0.4; // 0-1 scale
+            const urgentPulse = Math.sin(this.time * 4) * urgency * 0.1;
+
+            // Apply urgent pulsing to all edges
+            this.groups.neonEdges.children.forEach(tube => {
+                if (tube.material.emissiveIntensity !== undefined) {
+                    tube.material.emissiveIntensity += urgentPulse;
+                }
+            });
+        }
+    }
+
+    /**
+     * Highlight frozen faces in the dodecahedron
+     * Called after dynamics analysis to mark faces with high inertia
+     * @param {Object} dynamicsAnalysis - Dynamics analysis with inertia data
+     */
+    highlightFrozenFaces(dynamicsAnalysis) {
+        if (!dynamicsAnalysis || !dynamicsAnalysis.inertia) return;
+
+        const materials = window.dodecahedronMaterials;
+        if (!materials) return;
+
+        const frozenFaces = dynamicsAnalysis.inertia.faceInertia || [];
+
+        frozenFaces.forEach(faceInertia => {
+            const faceIndex = faceInertia.faceId - 1; // Convert to 0-indexed
+            if (faceIndex < 0 || faceIndex >= materials.length) return;
+
+            const material = materials[faceIndex];
+
+            if (faceInertia.responsiveness === 'Frozen') {
+                // High glow for frozen faces (ice-like effect)
+                if (material.emissiveIntensity !== undefined) {
+                    material.emissiveIntensity = 0.8;
+                    material.emissive = new THREE.Color(0x4488ff); // Blue-ish frozen glow
+                    material.needsUpdate = true;
+                }
+                console.log(`❄️ Face ${faceInertia.faceId} (${faceInertia.faceName}) is FROZEN`);
+            } else if (faceInertia.responsiveness === 'Sticky') {
+                // Moderate glow for sticky faces
+                if (material.emissiveIntensity !== undefined) {
+                    material.emissiveIntensity = 0.4;
+                    material.emissive = new THREE.Color(0x888888); // Grey-ish sticky glow
+                    material.needsUpdate = true;
+                }
             }
         });
     }
 
     /**
      * Update Neon Edge Tubes
+     * Renders tension/flow as glowing tubes along dodecahedron edges
+     * @param {Array|Object} edgeAnalysis - Edge analysis data
+     * @param {Object} companyData - Company data for rich tooltips
+     * @param {Array} faceNames - Array of face names for context
      */
-    updateNeonEdges(edgeAnalysis) {
+    updateNeonEdges(edgeAnalysis, companyData = null, faceNames = []) {
         // Clear existing
         while (this.groups.neonEdges.children.length > 0) {
             const obj = this.groups.neonEdges.children[0];
@@ -99,49 +175,119 @@ export class VisualizationManager {
             this.groups.neonEdges.remove(obj);
         }
 
-        if (!edgeAnalysis || !edgeAnalysis.edges) return;
+        // Handle both array and object with edges property
+        const edges = Array.isArray(edgeAnalysis) ? edgeAnalysis : edgeAnalysis?.edges;
+        if (!edges || edges.length === 0) return;
 
-        edgeAnalysis.edges.forEach(edge => {
-            // Only render high tension or high flow edges
-            if (edge.tension > 0.6 || edge.flow > 0.6) {
-                const isTension = edge.tension > edge.flow;
-                const intensity = isTension ? edge.tension : edge.flow;
+        // Create lookup for company edge data (for emergentName, theQuestion, etc.)
+        const companyEdges = companyData?.edges || [];
+        const edgeLookup = {};
+        companyEdges.forEach(e => {
+            edgeLookup[e.id] = e;
+        });
 
-                // Get vertex positions (we need to map edge IDs to geometric positions)
-                // This relies on the global helper for now, or we pass vertices
-                // For now, let's assume we can find the geometric vertices.
-                // Actually, we need the geometric positions from the main scene.
-                // We can find them by looking up the edge in the main `dodecahedronViz` if available,
-                // or by recalculating.
+        // Helper to get tension status label
+        const getTensionStatus = (tension) => {
+            if (tension < 0.2) return 'Harmonious';
+            if (tension < 0.4) return 'Active';
+            if (tension < 0.6) return 'Dynamic';
+            if (tension < 0.8) return 'Intense';
+            return 'Critical';
+        };
 
-                // Strategy: Use the global window.dodecahedronViz.faceMeshes to find shared vertices
-                // This is a bit hacky but works for the "Brain Transplant" phase.
+        edges.forEach(edge => {
+            // Render ALL edges (removed threshold to show all 30 edges)
+            const flow = edge.flow || 0;
+            {
+                const isTension = edge.tension > flow;
+                const intensity = isTension ? edge.tension : flow;
+
                 const positions = this.getEdgePositions(edge.id);
                 if (!positions) return;
 
-                // Tube Radius: Base * Phi * Intensity
-                const baseRadius = 0.02;
-                const radius = baseRadius * this.PHI * intensity;
+                // Scale positions slightly outward (1.02x) so tubes render outside faces
+                const scale = 1.02;
+                const scaledStart = positions.start.clone().multiplyScalar(scale);
+                const scaledEnd = positions.end.clone().multiplyScalar(scale);
 
+                // Tube Radius: Base + intensity-scaled component for visibility
+                // Low tension = thinner (0.02), high tension = thicker (0.06)
+                const radius = 0.02 + intensity * 0.04;
+
+                const curve = new THREE.LineCurve3(scaledStart, scaledEnd);
                 const geometry = new THREE.TubeGeometry(
-                    new THREE.LineCurve3(positions.start, positions.end),
-                    4, // segments
+                    curve,
+                    8,  // segments
                     radius,
-                    8, // radialSegments
+                    12, // radialSegments
                     false // closed
                 );
 
-                const color = isTension ? 0xff0000 : 0x00ff00;
+                // Color gradient: Low tension = subtle green-blue, High tension = vivid red
+                // This provides visual hierarchy - healthy edges are calm, stressed edges pop
+                let color;
+                if (edge.tension < 0.2) {
+                    // Very healthy flow - subtle teal
+                    color = 0x44aaaa;
+                } else if (edge.tension < 0.4) {
+                    // Moderate - yellow-green
+                    color = isTension ? 0xaaaa44 : 0x44aa44;
+                } else {
+                    // High tension - vivid red/green
+                    color = isTension ? 0xff3333 : 0x33ff33;
+                }
+                const colorValue = new THREE.Color(color);
 
-                const material = new THREE.MeshBasicMaterial({
-                    color: color,
+                // NEON GLOW: Emissive intensity scaled by tension
+                // Low tension = subtle glow (0.3), high tension = bright glow (0.9)
+                const baseOpacity = 0.5 + (edge.tension * 0.45); // 50-95% visible
+                const emissiveIntensity = 0.3 + (edge.tension * 0.6);
+
+                // MeshPhongMaterial for neon glow effect
+                const material = new THREE.MeshPhongMaterial({
+                    color: colorValue,
+                    emissive: colorValue,
+                    emissiveIntensity: emissiveIntensity,
                     transparent: true,
-                    opacity: 0.4,
-                    blending: THREE.AdditiveBlending
+                    opacity: baseOpacity,
+                    shininess: 100, // High shininess for neon look
+                    side: THREE.DoubleSide,
+                    depthTest: true,
+                    depthWrite: true
                 });
 
+                // Get rich data from company edges if available
+                const companyEdge = edgeLookup[edge.id] || {};
+
+                // Parse face IDs from edge ID (e.g., "E1-2" or "1-2")
+                const cleanId = edge.id.replace(/^E/, '');
+                const [f1, f2] = cleanId.split('-').map(Number);
+
                 const tube = new THREE.Mesh(geometry, material);
-                tube.userData = { isPulsing: true };
+                tube.renderOrder = 10; // Render edges on top
+                tube.userData = {
+                    isPulsing: true,
+                    isEdge: true,  // Marker for raycaster
+                    edgeId: edge.id,
+                    edgeName: companyEdge.emergentName || edge.archetype || edge.emergentName || edge.id,
+                    face1Id: f1,
+                    face2Id: f2,
+                    face1Name: faceNames[f1 - 1] || `Face ${f1}`,
+                    face2Name: faceNames[f2 - 1] || `Face ${f2}`,
+                    tension: edge.tension,
+                    tensionStatus: getTensionStatus(edge.tension),
+                    flow: flow,
+                    elementalNature: companyEdge.elementalNature || edge.element || edge.elementalNature || 'Unknown',
+                    theQuestion: companyEdge.theQuestion || edge.question || edge.theQuestion || '',
+                    intensity: intensity,
+                    baseOpacity: baseOpacity,
+                    baseEmissive: emissiveIntensity, // For hover effect restoration
+                    // 📖 Rich narrative data from EdgeAnalyzer.generateNarrative()
+                    narrative: edge.narrative || null,
+                    archetype: edge.archetype || null,
+                    kpiName: edge.kpiName || null,
+                    kpiMetric: edge.kpiMetric || null
+                };
                 this.groups.neonEdges.add(tube);
             }
         });
@@ -149,8 +295,12 @@ export class VisualizationManager {
 
     /**
      * Update Vertex Spheres
+     * Renders vortex energy as glowing spheres at dodecahedron vertices
+     * @param {Array|Object} vertexAnalysis - Vertex analysis data
+     * @param {Object} companyData - Company data for rich tooltips
+     * @param {Array} faceNames - Array of face names for context
      */
-    updateVertexSpheres(vertexAnalysis) {
+    updateVertexSpheres(vertexAnalysis, companyData = null, faceNames = []) {
         // Clear existing
         while (this.groups.vertexSpheres.children.length > 0) {
             const obj = this.groups.vertexSpheres.children[0];
@@ -159,29 +309,112 @@ export class VisualizationManager {
             this.groups.vertexSpheres.remove(obj);
         }
 
-        if (!vertexAnalysis) return;
+        // Handle both array and object with vertices property
+        const vertices = Array.isArray(vertexAnalysis) ? vertexAnalysis : vertexAnalysis?.vertices;
+        if (!vertices || vertices.length === 0) return;
 
-        vertexAnalysis.forEach(vertex => {
-            // Only render significant vertices (Leverage points or high energy)
-            if (vertex.isLeveragePoint || vertex.vortexStrength > 0.7) {
-                const position = this.getVertexPosition(vertex.id); // Need helper
+        // Create lookup for company vertex data
+        const companyVertices = companyData?.vertices || [];
+        const vertexLookup = {};
+        companyVertices.forEach(v => {
+            vertexLookup[v.id] = v;
+        });
+
+        // Helper to classify vortex type
+        const getVortexType = (strength, direction) => {
+            if (strength > 0.6) return direction > 0 ? 'Amplifying Vortex' : 'Concentrating Vortex';
+            if (strength > 0.3) return 'Active Confluence';
+            return 'Gentle Convergence';
+        };
+
+        vertices.forEach(vertex => {
+            // Render ALL vertices (removed threshold to show all 20 vertices)
+            {
+                const position = this.getVertexPosition(vertex.id);
                 if (!position) return;
 
-                // Size: Base * Energy * Phi
-                const baseSize = 0.15;
-                const size = baseSize * vertex.vortexStrength * this.PHI;
+                // Scale position slightly outward (1.05x) so spheres render outside faces
+                const scaledPosition = position.clone().multiplyScalar(1.05);
+
+                // Size: Base + vortex-scaled component for visibility
+                // Low strength = smaller (0.05), high strength = larger (0.18)
+                const size = 0.05 + vertex.vortexStrength * 0.13;
 
                 const geometry = new THREE.SphereGeometry(size, 16, 16);
 
-                const color = vertex.isLeveragePoint ? 0xffd700 : 0x800080; // Gold or Purple
+                // Color hierarchy based on vortex strength and classification
+                // Low strength = subtle colors, high strength = vivid colors
+                let color;
+                const strength = vertex.vortexStrength || 0;
 
-                const material = new THREE.MeshBasicMaterial({
-                    color: color,
+                if (vertex.isLeveragePoint) {
+                    color = 0xffd700; // Gold for leverage points (always prominent)
+                } else if (strength < 0.1) {
+                    // Very low strength - subtle white/grey (synergy hubs, harmonious)
+                    color = 0x88aaaa;
+                } else if (strength < 0.2) {
+                    // Low-moderate - soft cyan/teal
+                    color = vertex.vortexDirection > 0 ? 0x66cccc : 0xccaa66;
+                } else if (strength < 0.3) {
+                    // Moderate - more saturated
+                    color = vertex.vortexDirection > 0 ? 0x00ddaa : 0xddaa00;
+                } else {
+                    // High strength - vivid colors (hotspots, bermuda triangles)
+                    if (vertex.vortexDirection > 0.2) {
+                        color = 0x00ffcc; // Cyan (upward/positive spiral)
+                    } else if (vertex.vortexDirection > -0.2) {
+                        color = 0xffaa00; // Orange (neutral/turbulent)
+                    } else {
+                        color = 0xff4444; // Red (downward/negative spiral)
+                    }
+                }
+                const colorValue = new THREE.Color(color);
+
+                // NEON GLOW: Emissive intensity scaled by vortex strength
+                // Low strength = subtle glow (0.25), high strength = bright glow (0.9)
+                const baseOpacity = 0.4 + (strength * 0.5); // 40-90% visible
+                const emissiveIntensity = 0.25 + (strength * 0.65);
+
+                // MeshPhongMaterial for neon glow effect
+                const material = new THREE.MeshPhongMaterial({
+                    color: colorValue,
+                    emissive: colorValue,
+                    emissiveIntensity: emissiveIntensity,
                     transparent: true,
-                    opacity: 0.8
+                    opacity: baseOpacity,
+                    shininess: 80
                 });
 
+                // Get rich data from company vertices if available
+                const companyVertex = vertexLookup[vertex.id] || {};
+
+                // Map face IDs to face names
+                const vertexFaceIds = vertex.faceIds || companyVertex.faceIds || [];
+                const vertexFaceNames = vertexFaceIds.map(id => faceNames[id - 1] || `Face ${id}`);
+
                 const sphere = new THREE.Mesh(geometry, material);
+                sphere.position.copy(scaledPosition);
+                sphere.userData = {
+                    isVertex: true,  // Marker for raycaster
+                    vertexId: vertex.id,
+                    emergentName: companyVertex.emergentName || vertex.archetype || vertex.emergentName || `V${vertex.id}`,
+                    faceIds: vertexFaceIds,
+                    faceNames: vertexFaceNames,
+                    vortexStrength: vertex.vortexStrength,
+                    vortexDirection: vertex.vortexDirection || 0,
+                    coherence: vertex.coherence || companyVertex.coherence || 0,
+                    vortexType: vertex.vortexType || getVortexType(vertex.vortexStrength, vertex.vortexDirection || 0),
+                    classification: companyVertex.classification || vertex.classification || 'Vortex Point',
+                    tooltip: companyVertex.tooltip || vertex.tooltip || '',
+                    isLeveragePoint: vertex.isLeveragePoint || false,
+                    baseOpacity: baseOpacity,
+                    baseEmissive: emissiveIntensity, // For hover effect restoration
+                    baseScale: 1.0, // For hover scale animation
+                    // 📖 Rich narrative data from VertexAnalyzer.generateVertexNarrative()
+                    narrative: vertex.narrative || null,
+                    archetype: vertex.archetype || null,
+                    healthStatus: vertex.healthStatus || null
+                };
                 this.groups.vertexSpheres.add(sphere);
             }
         });
@@ -189,19 +422,239 @@ export class VisualizationManager {
 
     /**
      * Update Feedback Loops
+     * Renders critical feedback loops as colored lines connecting face centers
+     * - Green: Virtuous cycles (positive reinforcement)
+     * - Red: Vicious cycles (negative reinforcement)
+     * - Orange: Neutral/mixed cycles
+     * @param {Object} dynamicsAnalysis - Dynamics analysis with feedbackLoops data
      */
     updateFeedbackLoops(dynamicsAnalysis) {
-        // Placeholder for now - requires complex path finding visualization
+        // Clear existing feedback loop lines
+        while (this.groups.feedbackLoops.children.length > 0) {
+            const obj = this.groups.feedbackLoops.children[0];
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) obj.material.dispose();
+            this.groups.feedbackLoops.remove(obj);
+        }
+
+        if (!dynamicsAnalysis || !dynamicsAnalysis.feedbackLoops) return;
+
+        const loops = dynamicsAnalysis.feedbackLoops.summary?.criticalLoops || [];
+        if (loops.length === 0) return;
+
+        // Render top 5 most impactful loops
+        loops.slice(0, 5).forEach((loop, index) => {
+            const points = [];
+
+            // Get face center positions for each face in the cycle
+            loop.cycle.forEach(faceId => {
+                const pos = this.getFaceCenterPosition(faceId - 1); // 0-indexed
+                if (pos) {
+                    // Scale slightly outward so lines don't clip with faces
+                    points.push(pos.clone().multiplyScalar(1.03));
+                }
+            });
+
+            // Close the loop by connecting back to start
+            if (points.length > 0) {
+                points.push(points[0].clone());
+            }
+
+            if (points.length < 2) return;
+
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+            // Color by loop type
+            let color;
+            if (loop.direction.includes('Virtuous')) {
+                color = new THREE.Color(0x00ff88); // Green - generative
+            } else if (loop.direction.includes('Vicious')) {
+                color = new THREE.Color(0xff4444); // Red - degenerative
+            } else {
+                color = new THREE.Color(0xffaa00); // Orange - neutral/stabilizing
+            }
+
+            // Use LineDashedMaterial for animated flow effect
+            const material = new THREE.LineDashedMaterial({
+                color: color,
+                linewidth: 2,
+                transparent: true,
+                opacity: 0.6 + (loop.strength * 0.3), // More visible for stronger loops
+                dashSize: 0.15,
+                gapSize: 0.08,
+                scale: 1
+            });
+
+            const line = new THREE.Line(geometry, material);
+            line.computeLineDistances(); // Required for dashed lines
+
+            // Store loop data for tooltips and animation
+            line.userData = {
+                isFeedbackLoop: true,
+                loopIndex: index,
+                cycle: loop.cycle,
+                faceNames: loop.faceNames || [],
+                loopGain: loop.loopGain,
+                type: loop.type,
+                direction: loop.direction,
+                strength: loop.strength,
+                avgEnergy: loop.avgEnergy
+            };
+
+            line.renderOrder = 5; // Render above faces but below edges
+            this.groups.feedbackLoops.add(line);
+        });
+
+        console.log(`✅ Rendered ${this.groups.feedbackLoops.children.length} feedback loops`);
+    }
+
+    /**
+     * Get face center position from dodecahedron geometry
+     * @param {number} faceIndex - 0-indexed face index
+     * @returns {THREE.Vector3|null} Center position or null if not found
+     */
+    getFaceCenterPosition(faceIndex) {
+        const faceMeshes = window.dodecahedronViz?.faceMeshes;
+        if (!faceMeshes) {
+            console.warn('⚠️ faceMeshes not available');
+            return null;
+        }
+        if (faceIndex < 0 || faceIndex >= faceMeshes.length) {
+            console.warn(`⚠️ faceIndex ${faceIndex} out of bounds`);
+            return null;
+        }
+
+        const mesh = faceMeshes[faceIndex];
+        const geometry = mesh.geometry;
+        const position = geometry.attributes.position;
+
+        // Calculate centroid from actual vertices
+        let x = 0, y = 0, z = 0;
+        const count = position.count;
+
+        for (let i = 0; i < count; i++) {
+            x += position.getX(i);
+            y += position.getY(i);
+            z += position.getZ(i);
+        }
+
+        return new THREE.Vector3(x / count, y / count, z / count);
     }
 
     /**
      * Check for Phase Transition effects
+     * Triggers immersive visual effects when organization is near critical threshold
+     * - Camera shake
+     * - Pulsing glow on all elements
+     * - Warning overlay (handled in HTML)
+     * @param {Object} dynamicsAnalysis - Dynamics analysis with phaseTransitions data
      */
     checkPhaseTransition(dynamicsAnalysis) {
-        if (dynamicsAnalysis && dynamicsAnalysis.phaseTransitions.proximity > 0.8) {
-            // Trigger glitch effect (can implement via post-processing or camera shake)
-            // For now, just log it
-            // console.log("⚠️ PHASE TRANSITION IMMINENT");
+        if (!dynamicsAnalysis || !dynamicsAnalysis.phaseTransitions) return;
+
+        const transitions = dynamicsAnalysis.phaseTransitions;
+        const proximity = transitions.proximity || 0;
+
+        // Store for animation effects
+        this.phaseTransitionProximity = proximity;
+        this.phaseTransitionImminent = transitions.isImminent || false;
+
+        if (proximity > 0.8 && transitions.isImminent) {
+            console.log('⚠️ PHASE TRANSITION IMMINENT - Activating effects');
+
+            // Trigger camera shake effect
+            this.triggerCameraShake();
+
+            // Dispatch event for HTML warning overlay
+            window.dispatchEvent(new CustomEvent('phaseTransitionImminent', {
+                detail: {
+                    nearestTransition: transitions.nearestTransition,
+                    prediction: transitions.prediction,
+                    proximity: proximity
+                }
+            }));
+        }
+    }
+
+    /**
+     * Trigger camera shake effect for phase transition
+     * Creates subtle oscillation to convey system instability
+     */
+    triggerCameraShake() {
+        if (!this.camera || this.isShaking) return;
+
+        this.isShaking = true;
+        const originalPosition = this.camera.position.clone();
+        const shakeIntensity = 0.05;
+        const shakeDuration = 2000; // 2 seconds
+        const shakeFrequency = 30; // Hz
+        const startTime = Date.now();
+
+        const shake = () => {
+            const elapsed = Date.now() - startTime;
+            if (elapsed >= shakeDuration) {
+                // Restore original position
+                this.camera.position.copy(originalPosition);
+                this.isShaking = false;
+                return;
+            }
+
+            // Damping factor (shake reduces over time)
+            const damping = 1 - (elapsed / shakeDuration);
+            const intensity = shakeIntensity * damping;
+
+            // High-frequency oscillation
+            const t = elapsed * 0.001 * shakeFrequency * Math.PI * 2;
+            const offsetX = Math.sin(t * 1.3) * intensity;
+            const offsetY = Math.cos(t * 0.9) * intensity * 0.5;
+            const offsetZ = Math.sin(t * 1.7) * intensity * 0.3;
+
+            this.camera.position.set(
+                originalPosition.x + offsetX,
+                originalPosition.y + offsetY,
+                originalPosition.z + offsetZ
+            );
+
+            requestAnimationFrame(shake);
+        };
+
+        requestAnimationFrame(shake);
+    }
+
+    /**
+     * Apply per-edge animation timing
+     * Each edge pulses at its own frequency based on tension level
+     * Higher tension = faster pulse (more urgent)
+     * @param {THREE.Mesh} tube - The edge tube mesh
+     * @param {number} deltaTime - Time since last frame
+     */
+    animateEdgeWithTiming(tube, deltaTime) {
+        const data = tube.userData;
+        if (!data.isPulsing) return;
+
+        // Initialize edge-specific phase if not exists
+        if (data.pulsePhase === undefined) {
+            data.pulsePhase = Math.random() * Math.PI * 2; // Random start phase
+        }
+
+        // Tension-based pulse speed: 0.5 (low tension) to 2.0 (high tension)
+        const tensionSpeed = 0.5 + (data.tension || 0.5) * 1.5;
+
+        // Accumulate phase
+        data.pulsePhase += deltaTime * tensionSpeed;
+
+        // Calculate pulse value
+        const pulse = (Math.sin(data.pulsePhase) + 1) * 0.5;
+        const pulseAmplitude = 0.12; // Slightly stronger pulse for individual timing
+        const pulseValue = (pulse - 0.5) * 2 * pulseAmplitude;
+
+        // Apply to material
+        const baseOpacity = data.baseOpacity || 0.85;
+        const baseEmissive = data.baseEmissive || 0.5;
+
+        tube.material.opacity = Math.min(1.0, baseOpacity + pulseValue);
+        if (tube.material.emissiveIntensity !== undefined) {
+            tube.material.emissiveIntensity = baseEmissive + (pulseValue * 0.5);
         }
     }
 
@@ -214,7 +667,15 @@ export class VisualizationManager {
         // edgeId is likely "1-2" (Face 1 and Face 2)
         if (!window.dodecahedronViz || !window.dodecahedronViz.faceMeshes) return null;
 
-        const [f1, f2] = edgeId.split('-').map(Number);
+        // Handle edge IDs like "E1-2" or "1-2"
+        const cleanId = edgeId.replace(/^E/, '');
+        const parts = cleanId.split('-').map(Number);
+        if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) {
+            console.warn(`Invalid edge ID format: ${edgeId}`);
+            return null;
+        }
+        const [f1, f2] = parts;
+
         // Use the global helper defined in dodecahedron-viz.js
         if (typeof window.findSharedEdgeVertices === 'function') {
             const vertices = window.findSharedEdgeVertices(f1, f2);

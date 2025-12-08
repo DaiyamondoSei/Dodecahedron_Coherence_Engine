@@ -755,12 +755,147 @@ export class DodecahedronEngine {
     // Create Faces (use custom face config if provided)
     this.createFaces(company.faceConfig);
 
-    // Calculate initial state
-    this.recalculate();
+    // Check if pre-calculated coherence results are available
+    if (company.coherenceResults && company.coherenceResults.faces) {
+      console.log('📊 Using pre-calculated coherence results from orchestrator');
+      this.applyPreCalculatedResults(company.coherenceResults);
+    } else {
+      // Calculate initial state (fallback)
+      this.recalculate();
+    }
 
     console.log('✅ Company loaded');
     console.log(`📊 ${company.name}: ${this.faces.length} faces, ${this.kpis.size} KPIs`);
     console.log(`🎯 Global Coherence: ${(this.getGlobalCoherence() * 100).toFixed(1)}%`);
+  }
+
+  /**
+   * Apply pre-calculated coherence results from orchestrator
+   * This ensures data integrity between the wizard and visualization
+   */
+  applyPreCalculatedResults(coherenceResults) {
+    // Apply face energies from pre-calculated results
+    coherenceResults.faces.forEach(resultFace => {
+      const face = this.faces.find(f => f.id === resultFace.id);
+      if (face) {
+        // Update face name if different
+        if (resultFace.name && resultFace.name !== face.name) {
+          face.name = resultFace.name;
+        }
+        // Apply pre-calculated energy
+        const energy = resultFace.energy || resultFace.faceEnergy || 0;
+        face.faceEnergy = energy;
+        face._localCoherence = energy;
+        face.healthStatus = energy >= 0.7 ? 'Healthy' : energy >= 0.4 ? 'Warning' : 'Critical';
+
+        // Apply KPI normalized scores if available
+        if (resultFace.kpis && face.elementalKPIs) {
+          resultFace.kpis.forEach(resultKpi => {
+            const kpi = face.elementalKPIs.find(k => k.id === resultKpi.id);
+            if (kpi && resultKpi.normalizedScore !== undefined) {
+              kpi.normalizedScore = resultKpi.normalizedScore;
+            }
+          });
+        }
+      }
+    });
+
+    // Apply global coherence
+    if (coherenceResults.globalCoherence !== undefined) {
+      this._cachedGlobalCoherence = coherenceResults.globalCoherence;
+    }
+
+    // Create edges and vertices dynamically from faces (if not already created)
+    if (this.edges.length === 0) {
+      this.generateEdgesFromTopology();
+    }
+    if (this.vertices.length === 0) {
+      this.generateVerticesFromTopology();
+    }
+
+    // Run advanced analysis with correct face energies
+    this.runAdvancedAnalysis();
+
+    console.log('✅ Pre-calculated results applied successfully');
+  }
+
+  /**
+   * Generate edges dynamically from dodecahedron topology
+   * Each face shares an edge with 5 neighbors
+   */
+  generateEdgesFromTopology() {
+    // Dodecahedron edge topology: which faces share edges
+    const edgeTopology = [
+      [1, 2], [1, 3], [1, 4], [1, 5], [1, 6],
+      [2, 3], [2, 7], [2, 11], [2, 6],
+      [3, 4], [3, 7], [3, 8],
+      [4, 5], [4, 8], [4, 9],
+      [5, 6], [5, 9], [5, 10],
+      [6, 10], [6, 11],
+      [7, 8], [7, 11], [7, 12],
+      [8, 9], [8, 12],
+      [9, 10], [9, 12],
+      [10, 11], [10, 12],
+      [11, 12]
+    ];
+
+    edgeTopology.forEach(([faceAId, faceBId], index) => {
+      const faceA = this.faces.find(f => f.id === faceAId);
+      const faceB = this.faces.find(f => f.id === faceBId);
+
+      if (faceA && faceB) {
+        const edge = new Edge({
+          id: `E${index + 1}`,
+          faceAId: faceAId,
+          faceBId: faceBId,
+          archetype: 'Dynamic',
+          description: `${faceA.name} ↔ ${faceB.name}`
+        });
+
+        // Calculate edge tension from face energies
+        const energyA = faceA.faceEnergy || 0;
+        const energyB = faceB.faceEnergy || 0;
+        edge._tension = Math.abs(energyA - energyB);
+        edge._flow = energyA > energyB ? -1 : (energyB > energyA ? 1 : 0);
+
+        this.edges.push(edge);
+      }
+    });
+
+    console.log(`🔗 Generated ${this.edges.length} edges from topology`);
+  }
+
+  /**
+   * Generate vertices dynamically from edge topology
+   * Each vertex is where 3 faces meet
+   */
+  generateVerticesFromTopology() {
+    // Dodecahedron vertex topology: which 3 faces meet at each vertex
+    const vertexTopology = [
+      [1, 2, 3], [1, 3, 4], [1, 4, 5], [1, 5, 6], [1, 6, 2],
+      [2, 7, 3], [3, 7, 8], [3, 8, 4], [4, 8, 9], [4, 9, 5],
+      [5, 9, 10], [5, 10, 6], [6, 10, 11], [6, 11, 2], [2, 11, 7],
+      [7, 12, 8], [8, 12, 9], [9, 12, 10], [10, 12, 11], [11, 12, 7]
+    ];
+
+    vertexTopology.forEach((faceIds, index) => {
+      const faces = faceIds.map(id => this.faces.find(f => f.id === id)).filter(f => f);
+
+      if (faces.length === 3) {
+        const vertex = new Vertex({
+          id: `V${index + 1}`,
+          faceIds: faceIds,
+          archetype: 'Dynamic'
+        });
+
+        // Calculate vortex energy
+        vertex.calculateVortexEnergy(faces);
+
+        this.vertices.push(vertex);
+      }
+    });
+
+    console.log(`🌀 Generated ${this.vertices.length} vertices from topology`);
   }
 
   /**
@@ -906,6 +1041,9 @@ export class DodecahedronEngine {
    * NOW WITH AXIS-INFORMED FEEDBACK LOOP
    */
   recalculate() {
+    // Clear cached global coherence (forces recalculation)
+    this._cachedGlobalCoherence = undefined;
+
     // 1. Invalidate all caches
     this.faces.forEach(face => face.invalidateCache());
 
@@ -1009,6 +1147,11 @@ export class DodecahedronEngine {
    * - Low mean = low coherence regardless of variance
    */
   getGlobalCoherence() {
+    // Use cached value if available (from pre-calculated orchestrator results)
+    if (this._cachedGlobalCoherence !== undefined) {
+      return this._cachedGlobalCoherence;
+    }
+
     if (this.faces.length === 0) return 0;
 
     const energies = this.faces.map(face => face.faceEnergy || 0);

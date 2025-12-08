@@ -56,7 +56,16 @@
       "mcp__chrome-devtools__*",
       "Bash(netstat:*)",
       "Bash(timeout //t 2 //nobreak)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(cat:*)",
+      "Bash(wc:*)",
+      "Bash(start \"\" \"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --remote-debugging-port=9222 \"file:///c:/Users/murau/OneDrive/Stalinis%20kompiuteris/POC/dodecahedron-3d.html\")",
+      "Bash(timeout /t 5 /nobreak)",
+      "Bash(timeout /t 60 /nobreak)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(copy:*)",
+      "Bash(cmd /c copy \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\data\\CSV_Face_Models.csv\" \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\data\\archive\\CSV_Face_Models_v1_original.csv\")"
     ],
     "deny": [],
     "ask": [

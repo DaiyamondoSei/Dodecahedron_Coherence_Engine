@@ -118,20 +118,32 @@ export class Face {
 
   /**
    * Get face energy (cached)
+   * Uses try-catch to prevent infinite retry loop on calculation errors
    */
   get faceEnergy() {
     if (this._faceEnergy === null) {
-      this._faceEnergy = this.calculateFinalFaceEnergy();
+      try {
+        this._faceEnergy = this.calculateFinalFaceEnergy();
+      } catch (error) {
+        console.error(`[Face ${this.id}] Error calculating face energy:`, error.message);
+        this._faceEnergy = 0.5; // Default to neutral energy on error
+      }
     }
     return this._faceEnergy;
   }
 
   /**
    * Get harmonic resonance (cached)
+   * Uses try-catch to prevent infinite retry loop on calculation errors
    */
   get harmonicResonance() {
     if (this._harmonicResonance === null) {
-      this._harmonicResonance = this.calculateHarmonicResonance();
+      try {
+        this._harmonicResonance = this.calculateHarmonicResonance();
+      } catch (error) {
+        console.error(`[Face ${this.id}] Error calculating harmonic resonance:`, error.message);
+        this._harmonicResonance = 0.5; // Default to neutral resonance on error
+      }
     }
     return this._harmonicResonance;
   }
@@ -286,10 +298,16 @@ export class Face {
 
   /**
    * Get octave coherence (cached)
+   * Uses try-catch to prevent infinite retry loop on calculation errors
    */
   get octaveCoherence() {
     if (this._octaveCoherence === null) {
-      this._octaveCoherence = this.calculateOctaveCoherence();
+      try {
+        this._octaveCoherence = this.calculateOctaveCoherence();
+      } catch (error) {
+        console.error(`[Face ${this.id}] Error calculating octave coherence:`, error.message);
+        this._octaveCoherence = 0.5; // Default to neutral coherence on error
+      }
     }
     return this._octaveCoherence;
   }

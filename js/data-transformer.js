@@ -9,6 +9,20 @@
  * This is the critical "adapter" layer that bridges:
  * - Demo Orchestrator UI → Quannex Engine
  * - User input format → Mathematical calculation format
+ *
+ * ========================================
+ * KNOWN ISSUE FIXED: KPI Range Defaults
+ * ========================================
+ *
+ * Healthy_Min and Healthy_Max can be undefined from user input,
+ * causing NaN in face energy calculations when normalized:
+ *   normalized = (value - healthyMin) / (healthyMax - healthyMin)
+ *
+ * Fix: If not provided, derive from Target_Min/Target_Ideal or use defaults.
+ * Default range: 0-100 (standard percentage scale)
+ *
+ * See DATA_EVOLUTION_NOTES.md for context on known gaps.
+ * ========================================
  */
 
 /**
@@ -19,6 +33,48 @@
 class DataTransformer {
     constructor() {
         this.validationErrors = [];
+
+        // Common scale patterns for unit field parsing
+        // Format: [regex, minValue, maxValue]
+        this.scalePatterns = [
+            [/scale\s*(\d+)-(\d+)/i, null, null],           // "scale 1-5", "scale 0-10"
+            [/(\d+)-(\d+)\s*scale/i, null, null],           // "1-5 scale"
+            [/\((\d+)-(\d+)\)/i, null, null],               // "(1-5)", "(0-100)"
+            [/percentage|%/i, 0, 100],                       // "percentage", "%"
+            [/ratio/i, 0, 1],                                // "ratio"
+            [/score\s*\((\d+)-(\d+)\)/i, null, null],       // "Score (0-5)"
+            [/score/i, 0, 5],                                // "score" (default 0-5)
+        ];
+    }
+
+    /**
+     * Extract scale range from unit string
+     * @param {string} unit - The unit string (e.g., "scale 1-5", "percentage")
+     * @returns {Object|null} - {min, max} or null if no pattern matched
+     */
+    extractScaleFromUnit(unit) {
+        if (!unit || typeof unit !== 'string') return null;
+
+        for (const [pattern, defaultMin, defaultMax] of this.scalePatterns) {
+            const match = unit.match(pattern);
+            if (match) {
+                // If pattern captures groups, use them; otherwise use defaults
+                if (match[1] && match[2]) {
+                    return {
+                        min: parseInt(match[1]),
+                        max: parseInt(match[2]),
+                        source: `unit pattern: "${unit}"`
+                    };
+                } else if (defaultMin !== null && defaultMax !== null) {
+                    return {
+                        min: defaultMin,
+                        max: defaultMax,
+                        source: `unit keyword: "${unit}"`
+                    };
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -129,6 +185,54 @@ class DataTransformer {
      */
     transformKPIs(kpiArray) {
         return kpiArray.map((uiKPI, index) => {
+            // Parse target ranges first (required for deriving healthy ranges)
+            const targetMin = parseFloat(uiKPI.targetMin);
+            const targetIdeal = parseFloat(uiKPI.targetIdeal);
+
+            // ========================================
+            // SCALE-AWARE NORMALIZATION (Issue #6 Fix)
+            // ========================================
+            // Priority order for determining scale:
+            // 1. Explicit healthyMin/Max if provided
+            // 2. Target_Min/Target_Ideal if provided
+            // 3. Scale extracted from unit string (e.g., "scale 1-5")
+            // 4. Default 0-100 (standard percentage scale)
+
+            // Try to extract scale from unit string first (as fallback)
+            const unitScale = this.extractScaleFromUnit(uiKPI.unit);
+            const defaultMin = unitScale ? unitScale.min : 0;
+            const defaultMax = unitScale ? unitScale.max : 100;
+
+            if (unitScale) {
+                console.log(`   📏 KPI ${uiKPI.name}: Detected ${unitScale.source} → range [${unitScale.min}-${unitScale.max}]`);
+            }
+
+            // Use explicit values or derive from targets, falling back to unit-derived or default 0-100
+            // This prevents NaN in normalization: (value - min) / (max - min)
+            const safeTargetMin = isNaN(targetMin) ? defaultMin : targetMin;
+            const safeTargetIdeal = isNaN(targetIdeal) ? defaultMax : targetIdeal;
+
+            // Healthy ranges: use provided values, or derive from targets
+            let healthyMin = parseFloat(uiKPI.healthyMin);
+            let healthyMax = parseFloat(uiKPI.healthyMax);
+
+            // If healthyMin not provided, use targetMin (or scale-derived default)
+            if (isNaN(healthyMin)) {
+                healthyMin = safeTargetMin;
+            }
+
+            // If healthyMax not provided, use targetIdeal (or scale-derived default)
+            if (isNaN(healthyMax)) {
+                healthyMax = safeTargetIdeal;
+            }
+
+            // Safety: ensure max > min to prevent division by zero
+            if (healthyMax <= healthyMin) {
+                console.warn(`   ⚠️ KPI ${uiKPI.name}: Invalid range (max ${healthyMax} <= min ${healthyMin}). Using scale-derived or default range.`);
+                healthyMin = defaultMin;
+                healthyMax = defaultMax;
+            }
+
             // Map UI properties to Engine properties
             const engineKPI = {
                 // Required fields
@@ -138,14 +242,14 @@ class DataTransformer {
                 Weight: parseFloat(uiKPI.weight) || 1.0,
                 Direction: uiKPI.direction || '↑',
 
-                // Target ranges
-                Target_Min: parseFloat(uiKPI.targetMin) || 0,
-                Target_Ideal: parseFloat(uiKPI.targetIdeal) || 100,
+                // Target ranges (safe values)
+                Target_Min: safeTargetMin,
+                Target_Ideal: safeTargetIdeal,
 
-                // Optional advanced ranges (for Band direction)
-                Healthy_Min: parseFloat(uiKPI.healthyMin) || undefined,
-                Healthy_Max: parseFloat(uiKPI.healthyMax) || undefined,
-                Absolute_Max: parseFloat(uiKPI.absoluteMax) || undefined,
+                // Healthy ranges (guaranteed valid - prevents NaN)
+                Healthy_Min: healthyMin,
+                Healthy_Max: healthyMax,
+                Absolute_Max: parseFloat(uiKPI.absoluteMax) || healthyMax * 1.5, // Default to 150% of healthy max
 
                 // Organizational context
                 Face_ID: parseInt(uiKPI.faceId) || null,
@@ -161,7 +265,8 @@ class DataTransformer {
                 from: `${uiKPI.name} = ${uiKPI.value}`,
                 to: `${engineKPI.KPI_Name} = ${engineKPI.Value}`,
                 face: engineKPI.Face_ID,
-                element: engineKPI.Element
+                element: engineKPI.Element,
+                range: `[${engineKPI.Healthy_Min}-${engineKPI.Healthy_Max}]`
             });
 
             return engineKPI;

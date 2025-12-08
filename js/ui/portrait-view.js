@@ -641,25 +641,64 @@ class PortraitView {
     _renderElements(face) {
         const elements = ['earth', 'water', 'fire', 'air', 'ether'];
 
+        // Count explored elements
+        const exploredCount = elements.filter(elem => {
+            const elemData = face.elements?.[elem];
+            return elemData?.explored === true || (typeof elemData === 'number' && elemData !== 0.5);
+        }).length;
+
         return `
             <div class="elements-section">
+                <div class="elements-header" style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px; color: rgba(255,255,255,0.5);">
+                    <span>Elemental Questions</span>
+                    <span>${exploredCount}/5 explored</span>
+                </div>
                 ${elements.map(elem => {
                     const config = ELEMENT_CONFIG[elem];
                     const elemData = face.elements?.[elem];
-                    // Support both {value: 0.5} object format and plain number format
-                    const value = typeof elemData === 'object' ? (elemData?.value ?? 0.5) : (elemData ?? 0.5);
-                    const width = Math.max(0, Math.min(100, value * 100));
 
-                    return `
-                        <div class="element-row">
-                            <div class="element-symbol" style="color: ${config.color}">${config.symbol}</div>
-                            <div class="element-name" style="color: ${config.color}">${config.name}</div>
-                            <div class="element-bar-container">
-                                <div class="element-bar" style="width: ${width}%; background: ${config.color};"></div>
+                    // Determine if element is explored or unexplored
+                    const isExplored = elemData?.explored === true ||
+                                      (typeof elemData === 'number' && elemData !== 0.5) ||
+                                      (typeof elemData === 'object' && elemData?.value !== null && elemData?.value !== 0.5);
+
+                    // Get value - null/undefined means unexplored
+                    const rawValue = typeof elemData === 'object' ? elemData?.value : elemData;
+                    const value = isExplored ? (rawValue ?? 0.5) : null;
+                    const width = value !== null ? Math.max(0, Math.min(100, value * 100)) : 0;
+
+                    // Get question and KPI name if available
+                    const question = elemData?.question || config.quality;
+                    const kpiName = elemData?.kpiName || elemData?.label || '';
+
+                    if (!isExplored) {
+                        // Unexplored element - show as question
+                        return `
+                            <div class="element-row unexplored" style="opacity: 0.5;">
+                                <div class="element-symbol" style="color: ${config.color}">?</div>
+                                <div class="element-name" style="color: ${config.color}">${config.name.toUpperCase()}</div>
+                                <div class="element-bar-container" style="position: relative;">
+                                    <div class="element-question" style="font-size: 10px; color: rgba(255,255,255,0.4); font-style: italic;">
+                                        ${question}
+                                    </div>
+                                </div>
+                                <div class="element-value" style="color: rgba(255,255,255,0.3);">—</div>
                             </div>
-                            <div class="element-value" style="color: ${config.color}">${(value * 100).toFixed(0)}%</div>
-                        </div>
-                    `;
+                        `;
+                    } else {
+                        // Explored element - show value with KPI info
+                        return `
+                            <div class="element-row explored">
+                                <div class="element-symbol" style="color: ${config.color}">${config.symbol}</div>
+                                <div class="element-name" style="color: ${config.color}">${config.name.toUpperCase()}</div>
+                                <div class="element-bar-container">
+                                    <div class="element-bar" style="width: ${width}%; background: ${config.color};"></div>
+                                    ${kpiName ? `<div class="element-kpi-name" style="position: absolute; top: -14px; left: 0; font-size: 9px; color: rgba(255,255,255,0.5);">${kpiName}</div>` : ''}
+                                </div>
+                                <div class="element-value" style="color: ${config.color}">${(value * 100).toFixed(0)}%</div>
+                            </div>
+                        `;
+                    }
                 }).join('')}
             </div>
         `;

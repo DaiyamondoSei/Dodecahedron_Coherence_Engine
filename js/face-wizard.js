@@ -423,6 +423,60 @@ async function analyzeStory() {
             window.detectedArchetype = storyResult.archetype;
         }
 
+        // =====================================================
+        // PHASE 2: KPI EXTRACTION (THE MISSING PIECE!)
+        // =====================================================
+        btn.innerHTML = '📊 Extracting KPIs...';
+
+        try {
+            // Get mode from MappingContext if available, default to 'quick'
+            const kpiMode = window.Sprint2?.mappingContext?.getMode?.() || 'quick';
+
+            // Call KPI extraction with story, mode, and detected octave
+            const kpiResult = await fallbackChain.extractKPIs(text, kpiMode, overallOctave);
+
+            if (kpiResult && kpiResult.kpis && kpiResult.kpis.length > 0) {
+                // Populate the extractedKPIs array (THIS WAS MISSING!)
+                extractedKPIs = kpiResult.kpis.map(kpi => ({
+                    faceId: kpi.faceId || 1,
+                    name: kpi.name || kpi.label || 'KPI',
+                    value: kpi.value,
+                    unit: kpi.unit || '',
+                    source: kpi.source || 'ai',
+                    question: kpi.question || '',
+                    target: kpi.target || ''
+                }));
+
+                // Also merge any extracted financials
+                if (kpiResult.financials) {
+                    extractedFinancials = { ...extractedFinancials, ...kpiResult.financials };
+                }
+
+                console.log(`📊 KPI Extraction Complete: ${extractedKPIs.length} KPIs extracted`);
+                console.log('   Sample KPIs:', extractedKPIs.slice(0, 3));
+            } else {
+                console.warn('⚠️ KPI extraction returned no results, using financials only');
+                // Create minimal KPIs from financials as fallback
+                extractedKPIs = Object.entries(extractedFinancials).map(([key, data], index) => ({
+                    faceId: index + 1,
+                    name: key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1'),
+                    value: data.value,
+                    unit: '',
+                    source: 'extracted'
+                }));
+            }
+        } catch (kpiError) {
+            console.warn('⚠️ KPI extraction failed, continuing with financials:', kpiError.message);
+            // Fallback: create KPIs from extracted financials
+            extractedKPIs = Object.entries(extractedFinancials).map(([key, data], index) => ({
+                faceId: index + 1,
+                name: key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1'),
+                value: data.value,
+                unit: '',
+                source: 'extracted'
+            }));
+        }
+
         // Update UI
         document.getElementById('faceEditorSection').style.display = 'block';
         renderFaceEditor();
@@ -746,13 +800,54 @@ function renderFaceEditor() {
 
 /**
  * Update face name
+ * Also syncs to demoState.faceConfig for persistence across navigation
  */
 function updateFaceName(faceId, newName) {
     const face = currentFaces.find(f => f.id === faceId);
     if (face) {
         face.name = newName;
         console.log(`✅ Updated Face ${faceId}: ${newName}`);
+
+        // Sync to demoState.faceConfig for persistence
+        if (window.demoState && window.demoState.faceConfig && window.demoState.faceConfig.faces) {
+            const demoFace = window.demoState.faceConfig.faces.find(f => f.id === faceId);
+            if (demoFace) {
+                demoFace.name = newName;
+                console.log(`   ↳ Synced to demoState.faceConfig`);
+            }
+        }
+
+        // Also sync to Sprint 2 MappingContext if available
+        if (window.Sprint2 && window.Sprint2.mappingContext) {
+            window.Sprint2.mappingContext.updateFace(faceId, { name: newName });
+        }
     }
+}
+
+/**
+ * Restore faces from demoState.faceConfig
+ * Called when navigating back to Step 1 to preserve user customizations
+ */
+function restoreFacesFromDemoState() {
+    if (window.demoState && window.demoState.faceConfig && window.demoState.faceConfig.faces) {
+        const savedFaces = window.demoState.faceConfig.faces;
+        if (savedFaces.length === 12) {
+            currentFaces = savedFaces.map(f => ({
+                id: f.id,
+                name: f.name,
+                icon: f.icon || ''
+            }));
+            console.log('🔄 Restored faces from demoState.faceConfig');
+
+            // Re-render the face editor if visible
+            const faceEditor = document.getElementById('faceEditorSection');
+            if (faceEditor && faceEditor.style.display !== 'none') {
+                renderFaceEditor();
+            }
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
@@ -788,10 +883,26 @@ function validateFaces() {
  * Get current face configuration
  */
 function getFaceConfiguration() {
+    // Handle company template flow where currentTemplate may be null
+    const templateInfo = currentTemplate && FACE_TEMPLATES[currentTemplate];
+
+    // If currentFaces is empty, try to read from DOM (company template flow)
+    let faces = currentFaces;
+    if (!faces || faces.length === 0) {
+        const faceInputs = document.querySelectorAll('.face-input[data-face-id]');
+        if (faceInputs.length > 0) {
+            faces = Array.from(faceInputs).map(input => ({
+                id: parseInt(input.getAttribute('data-face-id')),
+                name: input.value.trim() || `Face ${input.getAttribute('data-face-id')}`
+            }));
+            console.log('[getFaceConfiguration] Read faces from DOM:', faces.length);
+        }
+    }
+
     return {
-        template: currentTemplate,
-        templateName: FACE_TEMPLATES[currentTemplate].name,
-        faces: currentFaces,
+        template: currentTemplate || 'company',
+        templateName: templateInfo ? templateInfo.name : 'Company Template',
+        faces: faces,
         timestamp: new Date().toISOString()
     };
 }
@@ -850,6 +961,7 @@ window.analyzeStory = analyzeStory;
 window.saveGeminiKey = saveGeminiKey;
 window.saveOpenAIKey = saveOpenAIKey;
 window.selectProvider = selectProvider;
+window.restoreFacesFromDemoState = restoreFacesFromDemoState;
 
 // Sprint 2: Lens & Octave functions
 window.selectLens = selectLens;

@@ -10,6 +10,31 @@
  * A healthy organization breathes in balanced rhythm.
  * Over-exhaling = burnout, depletion
  * Over-inhaling = stagnation, unexpressed potential
+ *
+ * ========================================
+ * FORMULA NOTE: Logarithmic Base-φ Breath Ratio
+ * ========================================
+ *
+ * This implementation uses log_φ(R/P) for mathematical elegance and
+ * symmetry around zero. The backend-fallback uses a simpler linear ratio.
+ *
+ * If unifying implementations, this LOGARITHMIC version is preferred as it:
+ * - Creates symmetric positive/negative scales (balanced = 0)
+ * - Uses φ (golden ratio) consistent with the system's harmonic principles
+ * - Produces more nuanced gradients near balance point
+ * - Maps φ and 1/φ ratios to ±1 for meaningful anchor points
+ *
+ * Key formula: BR = log_φ(Reception / Projection) = ln(R/P) / ln(φ)
+ *
+ * BR = 0  → ratio = 1.0 (perfect balance)
+ * BR = +1 → ratio = φ (1.618) - golden expansion (over-inhaling)
+ * BR = -1 → ratio = 1/φ (0.618) - golden contraction (over-exhaling)
+ *
+ * The backend-fallback linear formula (R/P where balanced = 1.0) produces
+ * DIFFERENT results from the same data. Use this logarithmic version.
+ *
+ * See CSV_BREATH_RATIOS.csv for the theoretical breath axis framework.
+ * ========================================
  */
 
 class BreathAnalyzer {
