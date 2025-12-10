@@ -39,11 +39,13 @@ For detailed instructions: See [QUICK_START.md](QUICK_START.md)
 - 📐 [**MATH_OVERVIEW.md**](math/MATH_OVERVIEW.md) - Conceptual framework (start here!)
 - ⭐ [**PENTAGRAM_ANALYSIS.md**](math/PENTAGRAM_ANALYSIS.md) - Harmonic resonance mathematics
 - 🫁 [**BREATH_DYNAMICS.md**](math/BREATH_DYNAMICS.md) - 6 breath axes explained
-- 🎵 [**OCTAVE_FRAMEWORK.md**](math/OCTAVE_FRAMEWORK.md) - 7 developmental stages
+- 🎵 [**OCTAVE_FRAMEWORK.md**](math/OCTAVE_FRAMEWORK.md) - 7 developmental stages (PHI thresholds)
+- 🏛️ [**FOUNDATION_PRINCIPLE.md**](math/FOUNDATION_PRINCIPLE.md) - Why coherence ≠ promotion (critical!)
 - 🌌 [**SPECTRAL_SHADOW.md**](math/SPECTRAL_SHADOW.md) - Advanced analysis techniques
 
 ### **Feature Deep-Dives**
 - 🗺️ [**INTELLIGENT_FACE_MAPPING.md**](INTELLIGENT_FACE_MAPPING.md) - Adaptive breath axis mapping
+- 🏢 [**COMPANY_TEMPLATES_GUIDE.md**](COMPANY_TEMPLATES_GUIDE.md) - 4 teaching examples (O1→O7 lifecycle)
 
 ---
 
@@ -83,10 +85,13 @@ POC/ (100% Browser-Based)
 ├── octave-dna.html             ← DNA helix spiral
 │
 ├── js/
-│   ├── main.js                 ← Core calculation engine (729 lines)
+│   ├── main.js                 ← Core calculation engine
 │   ├── breath-analyzer.js      ← 6 breath axes logic
 │   ├── company-loader.js       ← Multi-company support
-│   └── [11 more modules]
+│   ├── octave-integrity-calculator.js  ← Foundation Principle
+│   ├── context-synthesizer.js  ← Edge/vertex generation
+│   ├── constants/octave-thresholds.js  ← PHI-based thresholds
+│   └── [10 more modules]
 │
 ├── companies/                   ← Sample data (4 demo companies)
 │   ├── quannex/                ← Real startup (survival mode)
@@ -147,7 +152,7 @@ This POC was developed for a **Bachelor's thesis** exploring how sacred geometry
 2. Does pentagram analysis reveal harmony patterns traditional KPIs miss?
 3. Can breath dynamics predict burnout and stagnation before they manifest?
 
-**Status:** 85% complete, targeting February 2026 defense
+**Status:** 90% complete, targeting February 2025 defense
 
 ---
 
@@ -163,23 +168,30 @@ This POC was developed for a **Bachelor's thesis** exploring how sacred geometry
 → Read [DATA_FLOW_ARCHITECTURE.md](DATA_FLOW_ARCHITECTURE.md)
 
 ### **Path 4: Want to Validate the Math**
-→ Start with [math/MATH_OVERVIEW.md](math/MATH_OVERVIEW.md)
+→ Start with [math/MATH_OVERVIEW.md](math/MATH_OVERVIEW.md) → then [FOUNDATION_PRINCIPLE.md](math/FOUNDATION_PRINCIPLE.md)
 
-### **Path 5: Want to Deploy It**
+### **Path 5: Want Real-World Examples**
+→ Read [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md)
+
+### **Path 6: Want to Deploy It**
 → Coming soon: `DEPLOYMENT.md` (Netlify instructions)
 
 ---
 
 ## 📊 Sample Companies
 
-The POC includes 4 fictional companies at different octave stages:
+The POC includes 4 fictional companies demonstrating archetypal patterns across the full O1→O7 lifecycle:
 
-| Company | Stage | Coherence | Octave | Story |
-|---------|-------|-----------|--------|-------|
-| **Quannex** | Pre-Seed | 48% | O1-O2 | Survival mode, high vision (aspiration gap) |
-| **Nova Tech** | Seed | 58% | O2-O3 | Building structure, seeking relationships |
-| **Zenith Solutions** | Series A | 72% | O4-O5 | Innovating, finding authentic expression |
-| **Apex Industries** | Public | 91% | O6-O7 | Radiant, serving greater purpose |
+| Company | Stage | Octave | Key Pattern | Lesson |
+|---------|-------|--------|-------------|--------|
+| **Quannex** | Pre-Seed | O1-O2 | Aspiration-Actuality Gap | Vision without execution |
+| **Nova Tech** | Seed | O2-O3 | Death Spiral | Burnout from over-exhaling |
+| **Zenith Solutions** | Growth | O3-O4 | Organizational Debt | Product success ≠ org maturity |
+| **Apex Industries** | Enterprise | O6-O7 | Integrated Excellence | Radiant, regenerative |
+
+**Key Insight (Foundation Principle):** Quannex has O7-level Foundational Values but operates at O1. High coherence within an octave means *excellent survival*, NOT promotion to the next octave.
+
+See [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) for detailed profiles and `mapping-context.json` structure.
 
 ---
 
@@ -225,4 +237,5 @@ The POC includes 4 fictional companies at different octave stages:
 
 **🔷 Where Sacred Geometry Meets Organizational Science 🔷**
 
-*Created by Deimantas Butrimas | Bachelor Thesis 2025-2026*
+*Created by Deimantas Butrimas | Bachelor Thesis 2025*
+*Last updated: December 2025*

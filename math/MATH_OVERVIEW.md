@@ -14,6 +14,7 @@ This is your **entry point** to understanding Quannex's mathematical framework. 
 - [PENTAGRAM_ANALYSIS.md](PENTAGRAM_ANALYSIS.md) - How we calculate harmonic resonance
 - [BREATH_DYNAMICS.md](BREATH_DYNAMICS.md) - The 6 breath axes and flow balance
 - [OCTAVE_FRAMEWORK.md](OCTAVE_FRAMEWORK.md) - 7 developmental stages
+- [FOUNDATION_PRINCIPLE.md](FOUNDATION_PRINCIPLE.md) - Why coherence ≠ promotion (critical insight!)
 - [SPECTRAL_SHADOW.md](SPECTRAL_SHADOW.md) - Advanced analysis techniques
 
 ---
@@ -250,6 +251,37 @@ Over-exhaling: Ratio > 1.2 (burnout risk)
 Over-inhaling: Ratio < 0.8 (stagnation risk)
 ```
 
+### PHI-Based Octave Thresholds
+```
+coherence < 0.382 (φ⁻²)  → O1 Survival
+0.382 ≤ c < 0.500        → O2 Structure
+0.500 ≤ c < 0.618 (φ⁻¹)  → O3 Relationships
+0.618 ≤ c < 0.764        → O4 Creativity
+0.764 ≤ c < 0.854        → O5 Expression
+0.854 ≤ c < 0.950        → O6 Vision
+coherence ≥ 0.950        → O7 Radiance
+
+Where: φ = 1.618033988749895 (Golden Ratio)
+```
+
+### Organizational Octave (Foundation Principle)
+```
+Org_Octave = floor(GeometricMean(face_octaves) - SpreadPenalty)
+
+GeometricMean = (∏ face_octaves)^(1/12)
+
+SpreadPenalty:
+  spread ≤ 2: 0
+  spread = 3: 0.5
+  spread = 4: 1.0
+  spread ≥ 5: 1.5 + (spread - 5) × 0.5
+
+Clamped: 1 ≤ Org_Octave ≤ LifecycleMax
+```
+
+**Key Insight:** High coherence at O1 = excellent survival, NOT promotion to O2.
+See [FOUNDATION_PRINCIPLE.md](FOUNDATION_PRINCIPLE.md) for the full treatment.
+
 ---
 
 ## What Makes This Different?
@@ -322,8 +354,9 @@ Over-inhaling → Stagnation, accumulation
 1. Read this overview (you just did! ✅)
 2. Read [PENTAGRAM_ANALYSIS.md](PENTAGRAM_ANALYSIS.md) - The heart of harmonic calculation
 3. Read [BREATH_DYNAMICS.md](BREATH_DYNAMICS.md) - Flow and balance
-4. Optionally: [OCTAVE_FRAMEWORK.md](OCTAVE_FRAMEWORK.md) for developmental progression
-5. Advanced: [SPECTRAL_SHADOW.md](SPECTRAL_SHADOW.md) for leverage points and ethics
+4. Read [OCTAVE_FRAMEWORK.md](OCTAVE_FRAMEWORK.md) for developmental progression
+5. **Essential:** [FOUNDATION_PRINCIPLE.md](FOUNDATION_PRINCIPLE.md) - Why coherence ≠ promotion
+6. Advanced: [SPECTRAL_SHADOW.md](SPECTRAL_SHADOW.md) for leverage points and ethics
 
 **To see it in action:**
 1. Open [../DEMO.html](../DEMO.html)
@@ -339,4 +372,4 @@ Over-inhaling → Stagnation, accumulation
 
 ---
 
-*Created: 2025-01-16 | Part of Quannex Mathematical Framework*
+*Created: 2025-01-16 | Updated: 2025-12-09 | Part of Quannex Mathematical Framework*

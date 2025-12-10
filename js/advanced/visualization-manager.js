@@ -95,6 +95,28 @@ export class VisualizationManager {
             const data = sphere.userData;
             if (!data.isVertex) return;
 
+            // Sprint 4 Task 32: Special pulsing animation for Bermuda Triangles
+            if (data.isBermuda) {
+                // Faster, more intense pulse for bermuda triangles (danger signal)
+                const bermudaPulse = (Math.sin(this.time * 4) + 1) * 0.5;
+                const bermudaScale = (data.baseScale || 1.0) + (bermudaPulse * 0.25);
+                sphere.scale.setScalar(bermudaScale);
+
+                // Strong emissive pulse (0.5 to 1.0)
+                if (sphere.material.emissiveIntensity !== undefined) {
+                    sphere.material.emissiveIntensity = 0.5 + (bermudaPulse * 0.5);
+                }
+                return; // Skip normal breathing for bermuda triangles
+            }
+
+            // Sprint 4 Task 35: Chirality-based rotation animation
+            if (data.chirality && data.chirality !== 'neutral' && data.chiralityStrength > 0.1) {
+                // Rotation speed based on chirality strength and vortex strength
+                const rotationSpeed = 0.3 * (data.chiralityStrength || 0.5) * (data.vortexStrength || 0.5);
+                const direction = data.chirality === 'clockwise' ? -1 : 1;
+                sphere.rotation.y += rotationSpeed * direction * 0.016; // ~60fps delta
+            }
+
             // Subtle scale breathing (1.0 to 1.08)
             const breathScale = (data.baseScale || 1.0) + (vertexPulse * 0.08 * (data.vortexStrength || 0.5));
             sphere.scale.setScalar(breathScale);
@@ -342,13 +364,20 @@ export class VisualizationManager {
 
                 const geometry = new THREE.SphereGeometry(size, 16, 16);
 
+                // Get rich data from company vertices FIRST (needed for classification check)
+                const companyVertex = vertexLookup[vertex.id] || {};
+
                 // Color hierarchy based on vortex strength and classification
                 // Low strength = subtle colors, high strength = vivid colors
                 let color;
                 const strength = vertex.vortexStrength || 0;
 
-                if (vertex.isLeveragePoint) {
-                    color = 0xffd700; // Gold for leverage points (always prominent)
+                // Sprint 4 Task 32: Bermuda Triangle Detection - special handling
+                const classification = companyVertex.classification || vertex.classification || '';
+                const isBermuda = classification === 'bermuda_triangle';
+
+                if (isBermuda) {
+                    color = 0xff2222; // Deep red for bermuda triangles (critical imbalance)
                 } else if (strength < 0.1) {
                     // Very low strength - subtle white/grey (synergy hubs, harmonious)
                     color = 0x88aaaa;
@@ -372,8 +401,9 @@ export class VisualizationManager {
 
                 // NEON GLOW: Emissive intensity scaled by vortex strength
                 // Low strength = subtle glow (0.25), high strength = bright glow (0.9)
-                const baseOpacity = 0.4 + (strength * 0.5); // 40-90% visible
-                const emissiveIntensity = 0.25 + (strength * 0.65);
+                // Sprint 4 Task 32: Bermuda triangles get maximum glow
+                const baseOpacity = isBermuda ? 0.95 : (0.4 + (strength * 0.5)); // 40-90% visible
+                const emissiveIntensity = isBermuda ? 0.9 : (0.25 + (strength * 0.65));
 
                 // MeshPhongMaterial for neon glow effect
                 const material = new THREE.MeshPhongMaterial({
@@ -385,8 +415,7 @@ export class VisualizationManager {
                     shininess: 80
                 });
 
-                // Get rich data from company vertices if available
-                const companyVertex = vertexLookup[vertex.id] || {};
+                // companyVertex already retrieved above for classification check
 
                 // Map face IDs to face names
                 const vertexFaceIds = vertex.faceIds || companyVertex.faceIds || [];
@@ -407,6 +436,12 @@ export class VisualizationManager {
                     classification: companyVertex.classification || vertex.classification || 'Vortex Point',
                     tooltip: companyVertex.tooltip || vertex.tooltip || '',
                     isLeveragePoint: vertex.isLeveragePoint || false,
+                    isBermuda: isBermuda, // Sprint 4 Task 32: Bermuda Triangle flag
+                    // Sprint 4 Task 35: Chirality data for rotation animation
+                    chirality: vertex.chirality || companyVertex.chirality || 'neutral',
+                    chiralityStrength: vertex.chiralityStrength || companyVertex.chiralityStrength || 0,
+                    chiralityLabel: vertex.chiralityLabel || companyVertex.chiralityLabel || 'Neutral',
+                    chiralityDescription: vertex.chiralityDescription || companyVertex.chiralityDescription || 'Balanced energy flow',
                     baseOpacity: baseOpacity,
                     baseEmissive: emissiveIntensity, // For hover effect restoration
                     baseScale: 1.0, // For hover scale animation

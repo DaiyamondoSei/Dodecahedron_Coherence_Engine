@@ -87,32 +87,55 @@ O7: RADIANCE (Are we a gift to the world?)
 
 ## Progression Mechanics
 
-### Formula: Current Octave
+### Formula: Current Octave (PHI-Based Thresholds)
+
+The system uses **Golden Ratio (φ) derived thresholds** for determining organizational octave. This creates mathematically meaningful boundaries that mirror patterns found in nature, art, and music.
 
 ```javascript
-currentOctave = Math.floor(globalCoherence / 0.14) + 1
+// PHI constants
+const PHI = 1.618033988749895;
+const PHI_INVERSE = 0.618;        // φ^-1
+const PHI_SQUARED_INVERSE = 0.382; // φ^-2
+
+// Threshold-based determination (from octave-thresholds.js)
+function coherenceToOctave(coherence) {
+    if (coherence >= 0.95) return 7;   // Radiance
+    if (coherence >= 0.854) return 6;  // Vision
+    if (coherence >= 0.764) return 5;  // Expression
+    if (coherence >= 0.618) return 4;  // Creativity (φ^-1)
+    if (coherence >= 0.5) return 3;    // Relationships
+    if (coherence >= 0.382) return 2;  // Structure (φ^-2)
+    return 1;                          // Survival
+}
 
 Examples:
-- Coherence = 0.48 (48%) → Octave 4 (0.48 / 0.14 = 3.4, floor = 3, +1 = O4)
-- Coherence = 0.75 (75%) → Octave 6
-- Coherence = 0.92 (92%) → Octave 7 (capped at 7)
+- Coherence = 0.48 (48%) → Octave 3 (Relationships)
+- Coherence = 0.65 (65%) → Octave 4 (Creativity)
+- Coherence = 0.92 (92%) → Octave 6 (Vision)
+- Coherence = 0.96 (96%) → Octave 7 (Radiance)
 ```
 
-**Thresholds:**
-- O1: 0-14%
-- O2: 15-28%
-- O3: 29-42%
-- O4: 43-56%
-- O5: 57-70%
-- O6: 71-84%
-- O7: 85-100%
+**PHI-Based Thresholds:**
+
+| Octave | Threshold | Upper Bound | PHI Relationship |
+|--------|-----------|-------------|------------------|
+| **O1** | 0.000 | 0.382 | Below φ^-2 |
+| **O2** | 0.382 | 0.500 | φ^-2 (golden ratio squared inverse) |
+| **O3** | 0.500 | 0.618 | Midpoint |
+| **O4** | 0.618 | 0.764 | φ^-1 (golden ratio inverse) |
+| **O5** | 0.764 | 0.854 | φ^-1 + φ^-2/2 |
+| **O6** | 0.854 | 0.950 | Approaching unity |
+| **O7** | 0.950 | 1.000 | Near-perfect coherence |
+
+**Why PHI?** The golden ratio appears throughout the dodecahedron's geometry (each face is a pentagon with φ-based proportions). Using φ-derived thresholds creates mathematical harmony between the geometric model and developmental stages.
 
 ### Readiness for Next Octave
 
 ```javascript
 function isReadyForNextOctave(currentOctave, coherence) {
-  const currentMin = (currentOctave - 1) * 0.14;
-  const currentMax = currentOctave * 0.14;
+  const thresholds = [0, 0.382, 0.5, 0.618, 0.764, 0.854, 0.95, 1.0];
+  const currentMin = thresholds[currentOctave - 1];
+  const currentMax = thresholds[currentOctave];
 
   const progressInOctave = (coherence - currentMin) / (currentMax - currentMin);
 
@@ -123,11 +146,91 @@ function isReadyForNextOctave(currentOctave, coherence) {
 **Example:**
 ```
 Company at O3 (Relationships)
-- O3 range: 29-42% (0.29-0.42)
-- Current coherence: 40%
-- Progress in O3 = (0.40 - 0.29) / (0.42 - 0.29) = 0.85 → 85%
+- O3 range: 0.50 - 0.618
+- Current coherence: 58%
+- Progress in O3 = (0.58 - 0.50) / (0.618 - 0.50) = 0.68 → 68%
+- Ready for O4? NO (68% < 80%)
+
+Company at O3 with coherence 60%:
+- Progress in O3 = (0.60 - 0.50) / (0.618 - 0.50) = 0.85 → 85%
 - Ready for O4? YES (85% > 80%)
 ```
+
+---
+
+## The Foundation Principle ⭐
+
+**Critical Insight:** Coherence measures excellence *within* your current octave, NOT readiness for the next.
+
+> "High coherence at O1 means excellent survival, NOT promotion to O2."
+
+### Why This Matters
+
+Organizations often make the mistake of equating high performance with developmental advancement. A startup with 95% coherence at O1 is **thriving at survival** - they have excellent product-market fit, solid runway, and strong fundamentals. This does NOT mean they should claim O2 status.
+
+**Analogy:** A child who excels at walking (O1) doesn't automatically become a runner (O2). They must develop new capabilities - muscle strength, coordination, endurance - before running becomes natural.
+
+### The Formula: Organizational Octave
+
+```javascript
+// From octave-integrity-calculator.js
+function calculateOrgOctave(faceOctaves, lifecycleStage) {
+    // Step 1: Calculate geometric mean of all face octaves
+    const product = faceOctaves.reduce((acc, oct) => acc * oct, 1);
+    const geometricMean = Math.pow(product, 1 / faceOctaves.length);
+
+    // Step 2: Calculate spread penalty
+    const maxOctave = Math.max(...faceOctaves);
+    const minOctave = Math.min(...faceOctaves);
+    const spread = maxOctave - minOctave;
+
+    let spreadPenalty = 0;
+    if (spread <= 2) spreadPenalty = 0;        // Healthy
+    else if (spread === 3) spreadPenalty = 0.5;  // Minor misalignment
+    else if (spread === 4) spreadPenalty = 1.0;  // Moderate misalignment
+    else spreadPenalty = 1.5 + (spread - 5) * 0.5; // Severe
+
+    // Step 3: Apply lifecycle constraint
+    const lifecycleMax = LIFECYCLE_CONSTRAINTS[lifecycleStage].maxOctave;
+
+    // Step 4: Final calculation
+    const rawOctave = Math.floor(geometricMean - spreadPenalty);
+    return Math.min(Math.max(rawOctave, 1), lifecycleMax);
+}
+```
+
+### Lifecycle Constraints
+
+Even with high coherence, young organizations cannot authentically claim higher octaves:
+
+| Lifecycle Stage | Maximum Octave | Typical Octave |
+|-----------------|----------------|----------------|
+| Pre-seed | O2 | O1 |
+| Seed | O2 | O1 |
+| Early-stage | O3 | O2 |
+| Growth | O4 | O3 |
+| Mature | O5 | O4 |
+| Enterprise | O6 | O5 |
+| Transcendent | O7 | O6 |
+
+### Worked Example: Spread Penalty
+
+```
+Startup with face octaves: [1, 1, 1, 2, 1, 6, 1, 1, 2, 7, 1, 1]
+
+Geometric mean = (1×1×1×2×1×6×1×1×2×7×1×1)^(1/12)
+               = (168)^(1/12) = 1.52
+
+Spread = 7 - 1 = 6 → Penalty = 1.5 + (6-5)*0.5 = 2.0
+
+Final: floor(1.52 - 2.0) = floor(-0.48) = 1 (clamped)
+
+Result: O1 (despite having faces at O6 and O7!)
+```
+
+**Interpretation:** This startup has brilliant vision (O7 face) but is structurally a survival-stage company. The spread penalty prevents octave delusion.
+
+**Deep dive:** See [FOUNDATION_PRINCIPLE.md](FOUNDATION_PRINCIPLE.md) for complete treatment.
 
 ---
 
@@ -365,4 +468,6 @@ Result: Painful cognitive dissonance, but also deep authenticity
 
 ---
 
-*Created: 2025-01-16 | Part of Quannex Mathematical Framework*
+*Created: 2025-01-16 | Updated: 2025-12-09 (PHI thresholds, Foundation Principle)*
+*Part of Quannex Mathematical Framework*
+*Co-created by: Deimantas Butrimas & Claude*

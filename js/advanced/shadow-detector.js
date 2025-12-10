@@ -23,6 +23,13 @@
  * @version 2.0 (Browser Edition)
  */
 
+// PHI-derived constants for mathematical harmony
+const PHI = 1.618033988749895;
+const PHI_INV = 0.618033988749895;              // φ^-1
+const PHI_INV_SQUARED = 0.381966011250105;      // φ^-2
+const PHI_INV_CUBED = 0.2360679774997896;       // φ^-3
+const PHI_INV_4 = 0.1458980337503153;           // φ^-4
+
 export class ShadowDetector {
   constructor(tuningConfig = null) {
     // Default tuning constants (can be overridden)
@@ -292,11 +299,14 @@ export class ShadowDetector {
     const highCount = detectedPatterns.filter(p => p.severity === 'high').length;
     const moderateCount = detectedPatterns.filter(p => p.severity === 'moderate').length;
 
-    // Calculate integrity score
+    // Calculate integrity score using PHI-derived weights for mathematical harmony
+    // Critical: φ^-2 = 0.382 (most impactful - fundamental contradictions)
+    // High: φ^-3 = 0.236 (significant impact)
+    // Moderate: φ^-4 = 0.146 (noticeable but manageable)
     const integrityScore = 1.0 - (
-      (criticalCount * 0.3) +
-      (highCount * 0.2) +
-      (moderateCount * 0.1)
+      (criticalCount * PHI_INV_SQUARED) +   // 0.382
+      (highCount * PHI_INV_CUBED) +          // 0.236
+      (moderateCount * PHI_INV_4)            // 0.146
     );
 
     let status, message;
@@ -375,6 +385,7 @@ export class ShadowDetector {
         pattern: pattern.pattern,
         severity: pattern.severity,
         recommendation: recommendation,
+        prescription: recommendation,  // Alias for UI compatibility
         affectedFaces: pattern.affectedFaces,
         icon: pattern.icon
       };

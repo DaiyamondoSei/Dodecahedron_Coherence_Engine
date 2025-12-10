@@ -142,7 +142,8 @@ async function switchCompany(companyId) {
             await window.Quannex.initWithCompany({
                 ...context.company,
                 faceConfig: { faces: context.faces },
-                kpis: context.kpis
+                kpis: context.kpis,
+                shadowPatterns: context.shadowPatterns || []
             });
         }
 

@@ -744,6 +744,139 @@
     gap: 5px;
 }
 
+/* Sprint 4 Task 27: Shadow Dual-Form Toggle */
+.shadow-card .toggle-perspective {
+    margin-left: auto;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #fff;
+}
+
+.shadow-card .toggle-perspective:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.shadow-card .shadow-suppressed,
+.shadow-card .shadow-integrated {
+    display: none;
+    padding: 10px;
+    border-radius: 6px;
+    margin: 10px 0;
+    transition: all 0.3s ease;
+}
+
+.shadow-card .shadow-suppressed.active {
+    display: block;
+    background: rgba(255, 100, 100, 0.1);
+    border-left: 3px solid #ff6666;
+}
+
+.shadow-card .shadow-integrated.active {
+    display: block;
+    background: rgba(100, 255, 150, 0.1);
+    border-left: 3px solid #66ff99;
+}
+
+.shadow-card .shadow-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ff8888;
+    margin-bottom: 6px;
+}
+
+.shadow-card .shadow-prescription {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(0, 255, 204, 0.05);
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.shadow-card.showing-gift {
+    border-left-color: #66ff99;
+    background: rgba(0, 20, 0, 0.95);
+}
+
+.shadow-card.showing-gift:hover {
+    background: rgba(0, 40, 0, 1);
+    box-shadow: 0 10px 30px rgba(102, 255, 153, 0.2);
+}
+
+.shadow-card.severity-critical {
+    border-left-color: #ff0000;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+}
+
+.shadow-card.severity-significant {
+    border-left-color: #ff8800;
+    box-shadow: 0 0 10px rgba(255, 136, 0, 0.2);
+}
+
+/* =========================================
+   SHADOW PANEL ACCESSIBILITY
+   ========================================= */
+
+/* Focus indicators for keyboard navigation */
+.shadow-card:focus {
+    outline: 2px solid #00ffcc;
+    outline-offset: 2px;
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+}
+
+.shadow-card:focus-visible {
+    outline: 3px solid #00ffcc;
+    outline-offset: 3px;
+}
+
+/* Focus indicator for toggle button */
+.shadow-card .toggle-perspective:focus {
+    outline: 2px solid #fff;
+    outline-offset: 1px;
+}
+
+.shadow-card .toggle-perspective:focus-visible {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Reduced motion preference for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .shadow-card {
+        animation: none;
+    }
+
+    .shadow-card:hover {
+        transform: none;
+    }
+
+    .shadow-card .toggle-perspective {
+        transition: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .shadow-card {
+        border: 2px solid #ff4444;
+    }
+
+    .shadow-card.severity-critical {
+        border-color: #ff0000;
+        border-width: 3px;
+    }
+
+    .shadow-card:focus {
+        outline-width: 4px;
+    }
+}
+
 /* =========================================
    VOICE INTERFACE (Phase 5)
    ========================================= */
@@ -751,7 +884,7 @@
 .voice-toggle {
     position: fixed;
     bottom: 20px;
-    right: 20px;
+    right: 390px;  /* Moved left to avoid overlap with shadow panel (350px + 20px gap + 20px) */
     background: rgba(0, 255, 204, 0.1);
     border: 1px solid #00ffcc;
     color: #00ffcc;

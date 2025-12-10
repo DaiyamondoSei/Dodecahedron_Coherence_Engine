@@ -1,61 +1,61 @@
-KPI_ID,KPI_Name,Face_ID,Element,Value,Weight,Direction,Target_Min,Target_Ideal,Healthy_Min,Healthy_Max,Absolute_Max
-F1_E1,Cash in Bank,1,Earth,6200000,1.2,↑,0,200000,2000000,8000000,15000000
-F1_E2,Monthly Burn Rate,1,Water,420000,1.0,↓,10000,15000,20000,60000
-F1_E3,Funding Opportunities Pursued,1,Fire,5,1.0,Band,0,1,3,8
-F1_E4,Financial Clarity Score,1,Air,4.1,0.8,↑,1,4.5,3,5,5
-F1_E5,Funding Alignment,1,Ether,4.3,0.9,↑,1,4.5,3,5,5
-F2_E1,IP Documentation,2,Earth,3.2,1.0,↑,1,4.5,3,5,5
-F2_E2,Weekly Dev Progress,2,Water,11,1.0,↑,0,10,5,15,20
-F2_E3,Hours on IP Development,2,Fire,22,1.2,Band,0,10,15,40
-F2_E4,Model Documentation Clarity,2,Air,3.5,0.9,↑,1,4.5,3,5,5
-F2_E5,Ethical IP Score,2,Ether,4.6,0.8,↑,1,4.5,3,5,5
-F3_E1,Founder Sleep Hours,3,Earth,5.8,1.3,Band,4,7,8.5,10
-F3_E2,Founder Energy Level,3,Water,6.2,1.5,Band,5,7,8.5,10
-F3_E3,Learning Hours per Week,3,Fire,3,1.0,Band,0,2,5,10
-F3_E4,Self-Reflection Frequency,3,Air,0.4,0.8,↑,0,1,0.7,1,1
-F3_E5,Joy in Work Score,3,Ether,3.8,1.2,↑,1,4.5,3,5,5
-F4_E1,Legal Registration Complete,4,Earth,78,1.0,↑,0,100,80,100,100
-F4_E2,Decision Protocol Clarity,4,Water,3.4,1.0,↑,1,4,3,5,5
-F4_E3,Value Alignment Checks,4,Fire,65,1.0,↑,0,100,70,100,100
-F4_E4,Governance Docs Drafted,4,Air,72,1.0,↑,0,100,80,100,100
-F4_E5,Ethical Practices Score,4,Ether,4.2,0.9,↑,1,4.5,3,5,5
-F5_E1,Customer Feedback Sessions,5,Earth,12,1.0,↑,0,10,5,15,20
-F5_E2,Weekly Website Traffic,5,Water,4200,1.0,↑,0,100,500,3000,10000
-F5_E3,Market Education Hours,5,Fire,18,1.0,Band,0,5,10,30
-F5_E4,Brand Clarity Score,5,Air,3.9,0.8,↑,1,4.5,3,5,5
-F5_E5,Market Presence,5,Ether,4.1,1.0,↑,1,4.5,3,5,5
-F6_E1,Partnership Agreements,6,Earth,8,1.0,↑,0,5,3,10,15
-F6_E2,Community Engagement Hours,6,Water,12,1.0,Band,0,3,8,20
-F6_E3,Network Growth Rate,6,Fire,28,1.0,↑,0,10,15,30,50
-F6_E4,Collaboration Quality,6,Air,4.2,0.9,↑,1,4.5,3,5,5
-F6_E5,Stakeholder Trust,6,Ether,4.5,1.1,↑,1,4.5,3,5,5
-F7_E1,Media Mentions,7,Earth,18,1.0,↑,0,10,8,20,50
-F7_E2,Brand Consistency Score,7,Water,3.6,0.9,↑,1,4.5,3,5,5
-F7_E3,Content Creation Hours,7,Fire,14,1.0,Band,0,5,10,25
-F7_E4,Message Clarity,7,Air,4.0,0.8,↑,1,4.5,3,5,5
-F7_E5,Reputation Score,7,Ether,4.3,1.0,↑,1,4.5,3,5,5
-F8_E1,Product Uptime,8,Earth,99.4,1.0,↑,95,99.9,99,100,100
-F8_E2,Features Shipped per Month,8,Water,9,1.0,↑,0,5,8,15,20
-F8_E3,Dev Team Velocity,8,Fire,42,1.2,↑,0,20,30,50,60
-F8_E4,Code Quality Score,8,Air,4.3,1.0,↑,1,4.5,3,5,5
-F8_E5,System Elegance,8,Ether,4.0,0.8,↑,1,4.5,3,5,5
-F9_E1,Carbon Footprint Awareness,9,Earth,55,0.8,↑,0,100,60,100,100
-F9_E2,Resource Efficiency Score,9,Water,3.2,1.0,↑,1,4.5,3,5,5
-F9_E3,Regenerative Practices,9,Fire,38,1.0,↑,0,100,50,100,100
-F9_E4,Sustainability Strategy,9,Air,3.0,0.9,↑,1,4.5,3,5,5
-F9_E5,Circular Economy Score,9,Ether,2.8,0.8,↑,1,4.5,3,5,5
-F10_E1,Mission Clarity Score,10,Earth,4.4,1.2,↑,1,4.5,3,5,5
-F10_E2,Values Documentation,10,Water,4.1,0.9,↑,1,4.5,3,5,5
-F10_E3,Purpose Alignment Hours,10,Fire,11,1.0,Band,0,5,10,20
-F10_E4,Foundational Integrity,10,Air,4.3,1.1,↑,1,4.5,3,5,5
-F10_E5,Core Wisdom Score,10,Ether,3.9,0.8,↑,1,4.5,3,5,5
-F11_E1,Active Funding Conversations,11,Earth,6,1.0,↑,0,5,3,10,15
-F11_E2,Pitch Deck Quality,11,Water,4.5,0.9,↑,1,4.5,3,5,5
-F11_E3,Investor Outreach Hours,11,Fire,8,1.2,Band,0,10,15,30
-F11_E4,Investment Story Clarity,11,Air,4.6,0.8,↑,1,4.5,3,5,5
-F11_E5,Funding Pipeline Strength,11,Ether,4.2,1.0,↑,1,4.5,3,5,5
-F12_E1,Risk Assessment Complete,12,Earth,68,1.0,↑,0,100,70,100,100
-F12_E2,Crisis Response Plan,12,Water,3.3,1.0,↑,1,4.5,3,5,5
-F12_E3,Adaptation Frequency,12,Fire,0.8,0.9,↑,0,1,0.7,1,1
-F12_E4,Strategic Flexibility,12,Air,4.1,0.8,↑,1,4.5,3,5,5
-F12_E5,Organizational Resilience,12,Ether,3.7,1.0,↑,1,4.5,3,5,5
+KPI_ID,KPI_Name,Face_ID,Element,Value,Weight,Direction,Target_Min,Target_Ideal,Healthy_Min,Healthy_Max,Absolute_Max,metricType
+F1_E1,Cash in Bank,1,Earth,6200000,1.2,↑,0,200000,2000000,8000000,15000000,survival
+F1_E2,Monthly Burn Rate,1,Water,420000,1.0,↓,10000,15000,20000,60000,survival
+F1_E3,Funding Opportunities Pursued,1,Fire,5,1.0,Band,0,1,3,8,growth
+F1_E4,Financial Clarity Score,1,Air,4.1,0.8,↑,1,4.5,3,5,5,completion
+F1_E5,Funding Alignment,1,Ether,4.3,0.9,↑,1,4.5,3,5,5,completion
+F2_E1,IP Documentation,2,Earth,3.2,1.0,↑,1,4.5,3,5,5,completion
+F2_E2,Weekly Dev Progress,2,Water,11,1.0,↑,0,10,5,15,20,growth
+F2_E3,Hours on IP Development,2,Fire,22,1.2,Band,0,10,15,40,growth
+F2_E4,Model Documentation Clarity,2,Air,3.5,0.9,↑,1,4.5,3,5,5,completion
+F2_E5,Ethical IP Score,2,Ether,4.6,0.8,↑,1,4.5,3,5,5,completion
+F3_E1,Founder Sleep Hours,3,Earth,5.8,1.3,Band,4,7,8.5,10,survival
+F3_E2,Founder Energy Level,3,Water,6.2,1.5,Band,5,7,8.5,10,survival
+F3_E3,Learning Hours per Week,3,Fire,3,1.0,Band,0,2,5,10,growth
+F3_E4,Self-Reflection Frequency,3,Air,0.4,0.8,↑,0,1,0.7,1,1,completion
+F3_E5,Joy in Work Score,3,Ether,3.8,1.2,↑,1,4.5,3,5,5,survival
+F4_E1,Legal Registration Complete,4,Earth,78,1.0,↑,0,100,80,100,100,completion
+F4_E2,Decision Protocol Clarity,4,Water,3.4,1.0,↑,1,4,3,5,5,completion
+F4_E3,Value Alignment Checks,4,Fire,65,1.0,↑,0,100,70,100,100,survival
+F4_E4,Governance Docs Drafted,4,Air,72,1.0,↑,0,100,80,100,100,completion
+F4_E5,Ethical Practices Score,4,Ether,4.2,0.9,↑,1,4.5,3,5,5,survival
+F5_E1,Customer Feedback Sessions,5,Earth,12,1.0,↑,0,10,5,15,20,growth
+F5_E2,Weekly Website Traffic,5,Water,4200,1.0,↑,0,100,500,3000,10000,growth
+F5_E3,Market Education Hours,5,Fire,18,1.0,Band,0,5,10,30,growth
+F5_E4,Brand Clarity Score,5,Air,3.9,0.8,↑,1,4.5,3,5,5,completion
+F5_E5,Market Presence,5,Ether,4.1,1.0,↑,1,4.5,3,5,5,growth
+F6_E1,Partnership Agreements,6,Earth,8,1.0,↑,0,5,3,10,15,growth
+F6_E2,Community Engagement Hours,6,Water,12,1.0,Band,0,3,8,20,growth
+F6_E3,Network Growth Rate,6,Fire,28,1.0,↑,0,10,15,30,50,growth
+F6_E4,Collaboration Quality,6,Air,4.2,0.9,↑,1,4.5,3,5,5,completion
+F6_E5,Stakeholder Trust,6,Ether,4.5,1.1,↑,1,4.5,3,5,5,survival
+F7_E1,Media Mentions,7,Earth,18,1.0,↑,0,10,8,20,50,growth
+F7_E2,Brand Consistency Score,7,Water,3.6,0.9,↑,1,4.5,3,5,5,survival
+F7_E3,Content Creation Hours,7,Fire,14,1.0,Band,0,5,10,25,growth
+F7_E4,Message Clarity,7,Air,4.0,0.8,↑,1,4.5,3,5,5,completion
+F7_E5,Reputation Score,7,Ether,4.3,1.0,↑,1,4.5,3,5,5,growth
+F8_E1,Product Uptime,8,Earth,99.4,1.0,↑,95,99.9,99,100,100,survival
+F8_E2,Features Shipped per Month,8,Water,9,1.0,↑,0,5,8,15,20,growth
+F8_E3,Dev Team Velocity,8,Fire,42,1.2,↑,0,20,30,50,60,growth
+F8_E4,Code Quality Score,8,Air,4.3,1.0,↑,1,4.5,3,5,5,completion
+F8_E5,System Elegance,8,Ether,4.0,0.8,↑,1,4.5,3,5,5,completion
+F9_E1,Carbon Footprint Awareness,9,Earth,55,0.8,↑,0,100,60,100,100,survival
+F9_E2,Resource Efficiency Score,9,Water,3.2,1.0,↑,1,4.5,3,5,5,completion
+F9_E3,Regenerative Practices,9,Fire,38,1.0,↑,0,100,50,100,100,survival
+F9_E4,Sustainability Strategy,9,Air,3.0,0.9,↑,1,4.5,3,5,5,completion
+F9_E5,Circular Economy Score,9,Ether,2.8,0.8,↑,1,4.5,3,5,5,growth
+F10_E1,Mission Clarity Score,10,Earth,4.4,1.2,↑,1,4.5,3,5,5,survival
+F10_E2,Values Documentation,10,Water,4.1,0.9,↑,1,4.5,3,5,5,completion
+F10_E3,Purpose Alignment Hours,10,Fire,11,1.0,Band,0,5,10,20,survival
+F10_E4,Foundational Integrity,10,Air,4.3,1.1,↑,1,4.5,3,5,5,completion
+F10_E5,Core Wisdom Score,10,Ether,3.9,0.8,↑,1,4.5,3,5,5,completion
+F11_E1,Active Funding Conversations,11,Earth,6,1.0,↑,0,5,3,10,15,growth
+F11_E2,Pitch Deck Quality,11,Water,4.5,0.9,↑,1,4.5,3,5,5,growth
+F11_E3,Investor Outreach Hours,11,Fire,8,1.2,Band,0,10,15,30,growth
+F11_E4,Investment Story Clarity,11,Air,4.6,0.8,↑,1,4.5,3,5,5,completion
+F11_E5,Funding Pipeline Strength,11,Ether,4.2,1.0,↑,1,4.5,3,5,5,growth
+F12_E1,Risk Assessment Complete,12,Earth,68,1.0,↑,0,100,70,100,100,survival
+F12_E2,Crisis Response Plan,12,Water,3.3,1.0,↑,1,4.5,3,5,5,survival
+F12_E3,Adaptation Frequency,12,Fire,0.8,0.9,↑,0,1,0.7,1,1,growth
+F12_E4,Strategic Flexibility,12,Air,4.1,0.8,↑,1,4.5,3,5,5,growth
+F12_E5,Organizational Resilience,12,Ether,3.7,1.0,↑,1,4.5,3,5,5,survival

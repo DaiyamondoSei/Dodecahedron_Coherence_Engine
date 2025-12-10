@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quannex - Organizational Coherence Engine</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Three.js Canvas Background */
+        #dodecahedron-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        /* Content Container */
+        .welcome-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 800px;
+            padding: 40px;
+        }
+
+        /* Logo / Title */
+        .welcome-title {
+            font-size: 72px;
+            font-weight: 200;
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #00ffcc 0%, #00ff88 50%, #00ccff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { filter: drop-shadow(0 0 20px rgba(0, 255, 204, 0.3)); }
+            100% { filter: drop-shadow(0 0 40px rgba(0, 255, 204, 0.6)); }
+        }
+
+        .welcome-subtitle {
+            font-size: 18px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+        }
+
+        /* Tagline */
+        .welcome-tagline {
+            font-size: 20px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .welcome-tagline em {
+            color: #00ffcc;
+            font-style: normal;
+            font-weight: 400;
+        }
+
+        /* Path Selection */
+        .path-selection {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .path-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px 24px;
+            width: 220px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .path-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 255, 204, 0.5);
+            background: rgba(0, 255, 204, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 255, 204, 0.15);
+        }
+
+        .path-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .path-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #00ffcc;
+            margin-bottom: 8px;
+        }
+
+        .path-description {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+        }
+
+        /* Path-specific colors on hover */
+        .path-card.template:hover {
+            border-color: rgba(106, 90, 205, 0.6);
+            background: rgba(106, 90, 205, 0.1);
+        }
+        .path-card.template:hover .path-title { color: #9370db; }
+
+        .path-card.custom:hover {
+            border-color: rgba(0, 255, 136, 0.6);
+            background: rgba(0, 255, 136, 0.1);
+        }
+        .path-card.custom:hover .path-title { color: #00ff88; }
+
+        .path-card.ai:hover {
+            border-color: rgba(0, 200, 255, 0.6);
+            background: rgba(0, 200, 255, 0.1);
+        }
+        .path-card.ai:hover .path-title { color: #00c8ff; }
+
+        /* Footer Info */
+        .welcome-footer {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 1px;
+        }
+
+        .welcome-footer a {
+            color: rgba(0, 255, 204, 0.6);
+            text-decoration: none;
+        }
+
+        .welcome-footer a:hover {
+            color: #00ffcc;
+        }
+
+        /* Explanation Section */
+        .explanation-section {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 700px;
+        }
+
+        .explanation-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .explanation-text {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+
+        .explanation-text strong {
+            color: #00ffcc;
+            font-weight: 500;
+        }
+
+        /* Scroll hint */
+        .scroll-hint {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            letter-spacing: 1px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .welcome-title {
+                font-size: 42px;
+                letter-spacing: 6px;
+            }
+            .path-selection {
+                flex-direction: column;
+                align-items: center;
+            }
+            .path-card {
+                width: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Three.js Canvas for Background Dodecahedron -->
+    <canvas id="dodecahedron-canvas"></canvas>
+
+    <!-- Main Content -->
+    <div class="welcome-content">
+        <h1 class="welcome-title">Quannex</h1>
+        <p class="welcome-subtitle">Organizational Coherence Engine</p>
+
+        <p class="welcome-tagline">
+            Visualize your organization's health through the lens of <em>sacred geometry</em>.
+            Twelve faces. Infinite insights.
+        </p>
+
+        <!-- Path Selection Cards -->
+        <div class="path-selection">
+            <a href="demo-orchestrator.html?path=template" class="path-card template">
+                <span class="path-icon">🏢</span>
+                <div class="path-title">Template Path</div>
+                <div class="path-description">
+                    Explore pre-built company profiles to see the system in action
+                </div>
+            </a>
+
+            <a href="demo-orchestrator.html?path=custom" class="path-card custom">
+                <span class="path-icon">✏️</span>
+                <div class="path-title">Custom Path</div>
+                <div class="path-description">
+                    Build your organization's portrait manually, step by step
+                </div>
+            </a>
+
+            <a href="demo-orchestrator.html?path=ai" class="path-card ai">
+                <span class="path-icon">🧠</span>
+                <div class="path-title">AI Path</div>
+                <div class="path-description">
+                    Tell your story and let AI map your organizational DNA
+                </div>
+            </a>
+        </div>
+
+        <!-- Explanation Section -->
+        <div class="explanation-section">
+            <div class="explanation-title">What is this?</div>
+            <p class="explanation-text">
+                Quannex maps your organization onto a <strong>dodecahedron</strong> -
+                a 12-faced Platonic solid that ancient Greeks associated with the cosmos.
+                Each face represents a domain of your organization (finance, team, operations...).
+                The <strong>edges</strong> show how domains connect.
+                The <strong>vertices</strong> reveal where three domains converge to create leverage points.
+                Together, they reveal your organization's coherence - or lack thereof.
+            </p>
+        </div>
+
+        <div class="welcome-footer">
+            Part of the Master Thesis Project by Martynas Aurelijus
+        </div>
+    </div>
+
+    <script>
+        // =====================================================
+        // THREE.JS BACKGROUND DODECAHEDRON
+        // =====================================================
+        (function() {
+            const canvas = document.getElementById('dodecahedron-canvas');
+            const renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+
+            // Create dodecahedron geometry
+            const geometry = new THREE.DodecahedronGeometry(1.5, 0);
+
+            // Wireframe material (subtle, ethereal)
+            const wireframeMaterial = new THREE.MeshBasicMaterial({
+                color: 0x00ffcc,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.15
+            });
+
+            // Solid material (very subtle fill)
+            const solidMaterial = new THREE.MeshBasicMaterial({
+                color: 0x00ffcc,
+                transparent: true,
+                opacity: 0.03,
+                side: THREE.DoubleSide
+            });
+
+            // Create meshes
+            const wireframeMesh = new THREE.Mesh(geometry, wireframeMaterial);
+            const solidMesh = new THREE.Mesh(geometry, solidMaterial);
+
+            scene.add(wireframeMesh);
+            scene.add(solidMesh);
+
+            // Add subtle ambient glow points at vertices
+            const vertexGeometry = new THREE.SphereGeometry(0.03, 8, 8);
+            const vertexMaterial = new THREE.MeshBasicMaterial({
+                color: 0x00ffcc,
+                transparent: true,
+                opacity: 0.4
+            });
+
+            const positions = geometry.attributes.position;
+            const addedPositions = new Set();
+
+            for (let i = 0; i < positions.count; i++) {
+                const x = positions.getX(i);
+                const y = positions.getY(i);
+                const z = positions.getZ(i);
+                const key = `${x.toFixed(2)},${y.toFixed(2)},${z.toFixed(2)}`;
+
+                if (!addedPositions.has(key)) {
+                    addedPositions.add(key);
+                    const vertexMesh = new THREE.Mesh(vertexGeometry, vertexMaterial);
+                    vertexMesh.position.set(x, y, z);
+                    scene.add(vertexMesh);
+                }
+            }
+
+            // Animation loop
+            let time = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.005;
+
+                // Slow, meditative rotation
+                wireframeMesh.rotation.x = Math.sin(time * 0.5) * 0.1 + time * 0.1;
+                wireframeMesh.rotation.y = time * 0.15;
+                solidMesh.rotation.x = wireframeMesh.rotation.x;
+                solidMesh.rotation.y = wireframeMesh.rotation.y;
+
+                // Subtle breathing effect on opacity
+                const breathe = 0.15 + Math.sin(time * 2) * 0.05;
+                wireframeMaterial.opacity = breathe;
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // Interactive: respond to mouse movement
+            let mouseX = 0, mouseY = 0;
+            document.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+                mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+
+                // Subtle camera movement based on mouse
+                camera.position.x = mouseX * 0.3;
+                camera.position.y = -mouseY * 0.3;
+                camera.lookAt(0, 0, 0);
+            });
+        })();
+    </script>
+</body>
+</html>

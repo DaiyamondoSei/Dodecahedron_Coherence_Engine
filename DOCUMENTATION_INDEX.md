@@ -161,16 +161,39 @@ All math docs are in the **[math/](math/)** subfolder and designed to be read in
 ---
 
 ### **9. [math/OCTAVE_FRAMEWORK.md](math/OCTAVE_FRAMEWORK.md)** - Developmental Stages
-**What it is:** The 7 octaves (Survival → Radiance) and progression mechanics
+**What it is:** The 7 octaves (Survival → Radiance), PHI-based thresholds, and progression mechanics
 
 **Read this if you:**
 - Want to understand organizational evolution
 - Are mapping your company's octave position
 - Need to explain aspiration-actuality gap
 
-**Length:** ~12 pages
-**Time:** 40 minutes
+**Length:** ~15 pages
+**Time:** 45 minutes
 **Prerequisites:** MATH_OVERVIEW.md
+**Updated:** December 2025 (PHI thresholds, Foundation Principle introduction)
+
+---
+
+### **NEW: [math/FOUNDATION_PRINCIPLE.md](math/FOUNDATION_PRINCIPLE.md)** - Coherence ≠ Promotion
+**What it is:** Deep treatment of the critical insight that high coherence within an octave does NOT mean promotion to the next octave
+
+**Contains:**
+- Core insight: "High coherence at O1 = excellent survival, NOT promotion to O2"
+- Geometric mean calculation with spread penalty
+- Lifecycle constraints by organizational stage
+- Worked examples (Quannex, Apex, Zenith patterns)
+- Code reference to octave-integrity-calculator.js
+
+**Read this if you:**
+- Are preparing thesis defense (this is a KEY differentiator!)
+- Need to understand why octave ≠ performance
+- Want to avoid "octave jumping delusion"
+
+**Length:** ~12 pages
+**Time:** 35 minutes
+**Prerequisites:** OCTAVE_FRAMEWORK.md
+**Status:** NEW - December 2025
 
 ---
 
@@ -186,6 +209,27 @@ All math docs are in the **[math/](math/)** subfolder and designed to be read in
 **Time:** 45 minutes
 **Prerequisites:** All previous math docs
 **Note:** Backend-only features (not in browser POC yet)
+
+---
+
+### **NEW: [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md)** - Teaching Examples
+**What it is:** Guide to the 4 company templates demonstrating the model across O1-O7 lifecycle
+
+**Contains:**
+- Four company profiles (Quannex, Nova Tech, Zenith, Apex)
+- Key patterns: Aspiration-Actuality Gap, Death Spiral, Organizational Debt, Integrated Excellence
+- mapping-context.json structure explained
+- How to use templates for client onboarding
+- Creating your own templates
+
+**Read this if you:**
+- Want to see the model applied to realistic scenarios
+- Are preparing thesis defense examples
+- Need to onboard clients using reference patterns
+
+**Length:** ~15 pages
+**Time:** 40 minutes
+**Status:** NEW - December 2025
 
 ---
 
@@ -256,7 +300,10 @@ All math docs are in the **[math/](math/)** subfolder and designed to be read in
 → [DEMO_GUIDE.md](DEMO_GUIDE.md) + [QUICK_START.md](QUICK_START.md)
 
 ### **"I need to understand the math for my thesis"**
-→ [NOVEL_MATHEMATICAL_CONTRIBUTIONS.md](NOVEL_MATHEMATICAL_CONTRIBUTIONS.md) (START HERE FOR NOVEL CONTRIBUTIONS!) → [math/MATH_OVERVIEW.md](math/MATH_OVERVIEW.md) → [math/PENTAGRAM_ANALYSIS.md](math/PENTAGRAM_ANALYSIS.md) → [math/BREATH_DYNAMICS.md](math/BREATH_DYNAMICS.md)
+→ [NOVEL_MATHEMATICAL_CONTRIBUTIONS.md](NOVEL_MATHEMATICAL_CONTRIBUTIONS.md) (START HERE FOR NOVEL CONTRIBUTIONS!) → [math/MATH_OVERVIEW.md](math/MATH_OVERVIEW.md) → [math/OCTAVE_FRAMEWORK.md](math/OCTAVE_FRAMEWORK.md) → [math/FOUNDATION_PRINCIPLE.md](math/FOUNDATION_PRINCIPLE.md) (KEY!) → [math/PENTAGRAM_ANALYSIS.md](math/PENTAGRAM_ANALYSIS.md) → [math/BREATH_DYNAMICS.md](math/BREATH_DYNAMICS.md)
+
+### **"I want to see real-world examples"**
+→ [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) (4 companies across O1-O7)
 
 ### **"I want to integrate our company's data"**
 → [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) + [DATA_FLOW_ARCHITECTURE.md](DATA_FLOW_ARCHITECTURE.md)
@@ -277,12 +324,18 @@ All math docs are in the **[math/](math/)** subfolder and designed to be read in
 
 ## 📈 Documentation Statistics
 
-**Total Active Docs:** 15 files (+2 new comprehensive guides)
+**Total Active Docs:** 18 files (+3 new in December 2025)
 **Total Archived Docs:** 5 files
-**Math Docs:** 5 files (traditional) + 1 file (novel contributions)
-**Combined Length:** ~315 pages (+115 pages of novel research)
-**Estimated Reading Time:** 18-22 hours (all docs)
-**Recommended Reading Path:** 6-9 hours (core + novel math + overview)
+**Math Docs:** 6 files (including new FOUNDATION_PRINCIPLE.md) + 1 file (novel contributions)
+**Combined Length:** ~360 pages (+45 pages of new documentation)
+**Estimated Reading Time:** 20-24 hours (all docs)
+**Recommended Reading Path:** 7-10 hours (core + novel math + foundation principle + company templates)
+
+**New in December 2025:**
+- ⚡ [math/FOUNDATION_PRINCIPLE.md](math/FOUNDATION_PRINCIPLE.md) - Coherence ≠ Promotion deep dive
+- ⚡ [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) - 4 teaching examples
+- ✏️ [math/OCTAVE_FRAMEWORK.md](math/OCTAVE_FRAMEWORK.md) - Updated with PHI thresholds
+- ✏️ [FILE_STRUCTURE_MAP.md](FILE_STRUCTURE_MAP.md) - Updated with new JS modules
 
 **New in November 2025:**
 - ⚡ NOVEL_MATHEMATICAL_CONTRIBUTIONS.md (~60 pages)
@@ -356,13 +409,16 @@ If you're adding a new feature or changing existing functionality:
 
 **Essential for defense:**
 - [ ] Can explain pentagram analysis without notes
-- [ ] **Can articulate all 4 novel contributions clearly** ⭐ NEW
-- [ ] **Can explain how this research advances organizational science** ⭐ NEW
+- [ ] **Can articulate all 4 novel contributions clearly** ⭐
+- [ ] **Can explain how this research advances organizational science** ⭐
 - [ ] Can demo live without errors (dodecahedron-3d-enhanced.html)
 - [ ] Can defend mathematical choices
 - [ ] Can answer "why sacred geometry?"
 - [ ] Can show real-world impact (Quannex case study)
-- [ ] **Can demonstrate feedback loop detection and phase transitions** ⭐ NEW
+- [ ] **Can demonstrate feedback loop detection and phase transitions** ⭐
+- [ ] **Can explain the Foundation Principle (coherence ≠ promotion)** ⭐ NEW Dec 2025
+- [ ] **Can walk through company templates (Quannex → Apex progression)** ⭐ NEW Dec 2025
+- [ ] **Can explain PHI-based octave thresholds vs. linear thresholds** ⭐ NEW Dec 2025
 
 ---
 
@@ -377,9 +433,9 @@ If documentation is:
 
 ---
 
-**Last Updated:** November 17, 2025
+**Last Updated:** December 9, 2025
 **Maintained by:** Deimantas Butrimas & Claude
-**Status:** Complete with novel mathematical enhancements ✅
+**Status:** Complete with Foundation Principle, Company Templates, and PHI thresholds ✅
 
 ---
 

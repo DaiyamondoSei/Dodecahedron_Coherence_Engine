@@ -1,0 +1,783 @@
+/**
+ * =============================================
+ * SHADOW OVERLAY & COLLAPSIBLE CARDS
+ * =============================================
+ *
+ * Consolidated CSS module for shadow system UI
+ * - Full-screen shadow overlay container
+ * - BEM-structured collapsible shadow cards
+ * - Evidence, faces, recommendations sections
+ * - Accessibility & animation support
+ *
+ * @version 2.0 - Consolidated from dashboard.css + inline
+ * @module Shadow System UI
+ */
+
+/* ==========================================
+   SHADOW OVERLAY - Full-Screen Container
+   ========================================== */
+
+.shadow-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.shadow-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.shadow-overlay-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+}
+
+.shadow-overlay-container {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    max-height: 85vh;
+    background: linear-gradient(135deg, rgba(20, 20, 30, 0.98), rgba(30, 20, 25, 0.98));
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 25px 80px rgba(255, 68, 68, 0.15), 0 0 100px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.shadow-overlay.visible .shadow-overlay-container {
+    transform: scale(1) translateY(0);
+}
+
+/* Overlay Header */
+.shadow-overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 30px;
+    border-bottom: 1px solid rgba(255, 68, 68, 0.2);
+}
+
+.shadow-overlay-title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.shadow-overlay-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.shadow-overlay-icon {
+    font-size: 28px;
+}
+
+.shadow-overlay-title h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 300;
+    color: #ff6b6b;
+    letter-spacing: 1px;
+}
+
+.shadow-overlay-subtitle {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-left: 40px;
+}
+
+.shadow-overlay-close {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: 50%;
+    color: #ff6b6b;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.shadow-overlay-close:hover {
+    background: rgba(255, 68, 68, 0.2);
+    transform: rotate(90deg);
+}
+
+.shadow-overlay-close:focus {
+    outline: 2px solid rgba(255, 68, 68, 0.5);
+    outline-offset: 2px;
+}
+
+/* Overlay Content Area */
+.shadow-overlay-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Overlay Footer */
+.shadow-overlay-footer {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 16px 30px;
+    border-top: 1px solid rgba(255, 68, 68, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 16px 16px;
+}
+
+.shadow-overlay-hint {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.shadow-overlay-hint .key-hint {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    font-family: monospace;
+    margin-right: 6px;
+}
+
+/* Empty State */
+.shadow-overlay-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.shadow-overlay-empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.shadow-overlay-empty h3 {
+    margin: 0 0 8px 0;
+    font-weight: 300;
+    color: #00ffcc;
+}
+
+
+/* ==========================================
+   SHADOW CARDS - Base Styles
+   ========================================== */
+
+/* Card container within overlay */
+.shadow-overlay-content .shadow-card {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 0;
+    border-left: 4px solid #ff6b6b;
+    transition: all 0.2s ease;
+    overflow: visible;
+}
+
+.shadow-overlay-content .shadow-card:hover {
+    background: rgba(255, 68, 68, 0.08);
+}
+
+/* Severity border colors */
+.shadow-overlay-content .shadow-card.severity-critical {
+    border-left-color: #ff4444;
+}
+
+.shadow-overlay-content .shadow-card.severity-high {
+    border-left-color: #ff6644;
+}
+
+.shadow-overlay-content .shadow-card.severity-significant {
+    border-left-color: #ff8844;
+}
+
+.shadow-overlay-content .shadow-card.severity-moderate {
+    border-left-color: #ffaa44;
+}
+
+.shadow-overlay-content .shadow-card.severity-minimal {
+    border-left-color: #ffcc66;
+}
+
+/* Gift mode - green theme */
+.shadow-overlay-content .shadow-card.showing-gift {
+    border-left-color: #66ff99 !important;
+}
+
+.shadow-overlay-content .shadow-card.showing-gift .shadow-card__header {
+    background: rgba(102, 255, 153, 0.05);
+}
+
+
+/* ==========================================
+   SHADOW CARD HEADER - Click to Expand
+   ========================================== */
+
+.shadow-card__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-radius: 12px 12px 0 0;
+}
+
+.shadow-card:not(.expanded) .shadow-card__header {
+    border-radius: 12px;
+}
+
+.shadow-card__header:hover {
+    background: rgba(255, 68, 68, 0.12);
+}
+
+.shadow-card__icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.shadow-card__title {
+    flex: 1;
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.shadow-card__severity-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.shadow-card__severity-badge.severity-critical {
+    background: rgba(255, 68, 68, 0.3);
+    color: #ff6666;
+}
+
+.shadow-card__severity-badge.severity-high {
+    background: rgba(255, 102, 68, 0.3);
+    color: #ff8866;
+}
+
+.shadow-card__severity-badge.severity-significant {
+    background: rgba(255, 136, 68, 0.3);
+    color: #ffaa66;
+}
+
+.shadow-card__severity-badge.severity-moderate {
+    background: rgba(255, 170, 68, 0.3);
+    color: #ffcc66;
+}
+
+.shadow-card__severity-badge.severity-minimal {
+    background: rgba(255, 204, 102, 0.3);
+    color: #ffdd88;
+}
+
+/* Toggle Perspective Button */
+.shadow-card__toggle-perspective {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+
+.shadow-card__toggle-perspective:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Expand Indicator */
+.shadow-card__expand-indicator {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    transition: transform 0.3s ease;
+    margin-left: 4px;
+    flex-shrink: 0;
+}
+
+.shadow-card.expanded .shadow-card__expand-indicator {
+    transform: rotate(180deg);
+}
+
+
+/* ==========================================
+   SHADOW CARD SUMMARY - Shadow/Gift Toggle
+   ========================================== */
+
+.shadow-card__summary {
+    padding: 0 20px 16px 20px;
+}
+
+.shadow-card__suppressed,
+.shadow-card__integrated {
+    display: none;
+}
+
+.shadow-card__suppressed.active,
+.shadow-card__integrated.active {
+    display: block;
+}
+
+.shadow-card__label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    opacity: 0.8;
+}
+
+.shadow-card__suppressed .shadow-card__label {
+    color: #ff8888;
+}
+
+.shadow-card__integrated .shadow-card__label {
+    color: #66ff99;
+}
+
+.shadow-card__message {
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.shadow-card__integrated .shadow-card__message {
+    color: rgba(102, 255, 153, 0.9);
+}
+
+
+/* ==========================================
+   SHADOW CARD DETAILS - Expandable Section
+   ========================================== */
+
+.shadow-card__details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 12px 12px;
+}
+
+.shadow-card.expanded .shadow-card__details {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Custom scrollbar for details */
+.shadow-card__details::-webkit-scrollbar {
+    width: 6px;
+}
+
+.shadow-card__details::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.shadow-card__details::-webkit-scrollbar-thumb {
+    background: rgba(255, 68, 68, 0.4);
+    border-radius: 3px;
+}
+
+.shadow-card__details::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 68, 68, 0.6);
+}
+
+
+/* ==========================================
+   DETAIL SECTIONS
+   ========================================== */
+
+.shadow-card__section {
+    padding: 14px 20px;
+    border-top: 1px solid rgba(255, 68, 68, 0.15);
+}
+
+.shadow-card__section-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0 0 10px 0;
+    font-weight: 600;
+}
+
+
+/* ==========================================
+   EVIDENCE SECTION
+   ========================================== */
+
+.evidence-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.evidence-item:last-child {
+    border-bottom: none;
+}
+
+.evidence-label {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.evidence-value {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+
+/* ==========================================
+   AFFECTED FACES GRID
+   ========================================== */
+
+.shadow-card__faces-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.shadow-card__face-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    font-size: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.shadow-card__face-chip:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.shadow-card__face-chip.status-high {
+    border-color: rgba(102, 255, 153, 0.3);
+    background: rgba(102, 255, 153, 0.1);
+}
+
+.shadow-card__face-chip.status-low {
+    border-color: rgba(255, 68, 68, 0.3);
+    background: rgba(255, 68, 68, 0.1);
+}
+
+.shadow-card__face-chip.status-moderate {
+    border-color: rgba(255, 170, 68, 0.3);
+    background: rgba(255, 170, 68, 0.1);
+}
+
+.shadow-card__face-chip .face-icon {
+    font-size: 14px;
+}
+
+.shadow-card__face-chip .face-name {
+    color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+}
+
+.shadow-card__face-energy {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-left: 4px;
+}
+
+
+/* ==========================================
+   RELATED ELEMENTS (Edges & Vertices)
+   ========================================== */
+
+.elements-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 6px;
+}
+
+.element-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    font-size: 11px;
+    margin: 2px 4px 2px 0;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.edge-chip {
+    border-left: 2px solid rgba(255, 170, 68, 0.5);
+}
+
+.vertex-chip {
+    border-left: 2px solid rgba(0, 255, 204, 0.5);
+}
+
+
+/* ==========================================
+   RECOMMENDATIONS / PRESCRIPTION
+   ========================================== */
+
+.prescription-action,
+.prescription-insight,
+.prescription-opportunity {
+    padding: 8px 0;
+    font-size: 12px;
+    line-height: 1.5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.prescription-action:last-child,
+.prescription-insight:last-child,
+.prescription-opportunity:last-child {
+    border-bottom: none;
+}
+
+.prescription-action strong {
+    color: #00ffcc;
+}
+
+.prescription-insight strong {
+    color: #ffaa66;
+}
+
+.prescription-opportunity strong {
+    color: #66ff99;
+}
+
+.no-data {
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+    font-size: 12px;
+}
+
+
+/* ==========================================
+   NAVIGATE BUTTON
+   ========================================== */
+
+.shadow-card__actions {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255, 68, 68, 0.15);
+}
+
+.shadow-card__navigate-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(0, 255, 204, 0.15), rgba(102, 255, 153, 0.15));
+    border: 1px solid rgba(0, 255, 204, 0.4);
+    border-radius: 8px;
+    color: #00ffcc;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.shadow-card__navigate-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 255, 204, 0.25), rgba(102, 255, 153, 0.25));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 255, 204, 0.2);
+}
+
+.shadow-card__navigate-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ==========================================
+   ACCESSIBILITY
+   ========================================== */
+
+/* Focus states */
+.shadow-card__header:focus {
+    outline: 2px solid rgba(0, 255, 204, 0.5);
+    outline-offset: -2px;
+}
+
+.shadow-card__header:focus-visible {
+    outline: 3px solid #00ffcc;
+    outline-offset: -3px;
+}
+
+.shadow-card__toggle-perspective:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+.shadow-card__toggle-perspective:focus-visible {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.shadow-card__navigate-btn:focus {
+    outline: 2px solid rgba(0, 255, 204, 0.5);
+    outline-offset: 2px;
+}
+
+.shadow-card__navigate-btn:focus-visible {
+    outline: 3px solid #00ffcc;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .shadow-overlay,
+    .shadow-overlay-container,
+    .shadow-card__details,
+    .shadow-card__expand-indicator,
+    .shadow-card__navigate-btn,
+    .shadow-card__header,
+    .shadow-card__toggle-perspective,
+    .shadow-overlay-close {
+        transition: none;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .shadow-overlay-container {
+        border: 2px solid #ff4444;
+    }
+
+    .shadow-overlay-content .shadow-card {
+        border-left-width: 6px;
+    }
+
+    .shadow-card__header {
+        border-bottom: 2px solid rgba(255, 68, 68, 0.5);
+    }
+
+    .shadow-card__section {
+        border-top: 2px solid rgba(255, 68, 68, 0.3);
+    }
+
+    .shadow-card__face-chip {
+        border-width: 2px;
+    }
+
+    .shadow-card__navigate-btn {
+        border-width: 2px;
+    }
+
+    .shadow-card__header:focus,
+    .shadow-card__navigate-btn:focus {
+        outline-width: 4px;
+    }
+}
+
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+
+@media (max-width: 768px) {
+    .shadow-overlay-container {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .shadow-overlay-header {
+        padding: 16px 20px;
+    }
+
+    .shadow-overlay-content {
+        padding: 16px 20px;
+        gap: 12px;
+    }
+
+    .shadow-card__header {
+        padding: 12px 16px;
+        gap: 8px;
+    }
+
+    .shadow-card__title {
+        font-size: 14px;
+    }
+
+    .shadow-card__summary {
+        padding: 0 16px 12px 16px;
+    }
+
+    .shadow-card__section {
+        padding: 12px 16px;
+    }
+
+    .shadow-card__faces-grid {
+        gap: 6px;
+    }
+
+    .shadow-card__face-chip {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .shadow-card__actions {
+        padding: 12px 16px;
+    }
+
+    .shadow-card__navigate-btn {
+        padding: 10px 14px;
+        font-size: 12px;
+    }
+
+    .shadow-overlay-footer {
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .shadow-overlay-title h2 {
+        font-size: 18px;
+    }
+
+    .shadow-overlay-icon {
+        font-size: 22px;
+    }
+
+    .shadow-card__severity-badge {
+        display: none;
+    }
+
+    .shadow-card__faces-grid {
+        flex-direction: column;
+    }
+
+    .shadow-card__face-chip .face-name {
+        max-width: none;
+    }
+}

@@ -475,13 +475,62 @@ Before presenting to an organization:
 
 ---
 
+## Using Company Templates (NEW - December 2025)
+
+### Pre-Built Company Examples
+
+Four company templates are available in `companies/*/mapping-context.json`:
+
+| Company | Stage | Pattern | Best For |
+|---------|-------|---------|----------|
+| **Quannex** | Pre-seed (O1-O2) | Aspiration-Actuality Gap | Demonstrating startup challenges |
+| **Nova Tech** | Seed (O2-O3) | Death Spiral (burnout) | Showing resource exhaustion |
+| **Zenith Solutions** | Growth (O3-O4) | Organizational Debt | Illustrating scaling problems |
+| **Apex Industries** | Enterprise (O6-O7) | Integrated Excellence | Showcasing mature organization |
+
+### Loading Company Data
+
+```javascript
+// Via company-loader.js
+await CompanyLoader.loadCompany('quannex');
+
+// OR via company-templates-bundle.js (offline)
+const template = window.CompanyTemplates.get('quannex');
+```
+
+### Using Templates for Client Onboarding
+
+1. **Identify closest match**: Which template resembles your client?
+2. **Clone the template**: Copy `mapping-context.json` to a new company folder
+3. **Customize**: Adjust face names, octaves, and sentiment values
+4. **Load**: Use `company-loader.js` with the new company ID
+
+### Integration with Foundation Principle
+
+Company templates now include **face-level octave assignments**, enabling the Foundation Principle calculation:
+
+```javascript
+// Load template and calculate organizational octave
+const template = await CompanyLoader.loadCompany('quannex');
+const result = OctaveIntegrityCalculator.calculateOrganizationalOctave(
+    template.faces,
+    'pre-seed'  // lifecycle stage
+);
+// Returns: { orgOctave: 1, spread: 6, penalty: 2.0, ... }
+```
+
+**See:** [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) for detailed documentation.
+
+---
+
 ## Next Steps
 
 1. **Test the standalone demo**: Open `demo-orchestrator.html` and walk through all 4 steps
 2. **Integrate with engine**: Follow "Option B: Integrated Mode" above
-3. **Customize templates**: Add organization-specific face templates
-4. **Add presenter notes**: Create `docs/PRESENTER_SCRIPT.md` with talking points
-5. **Record a demo**: Screen capture walkthrough for training
+3. **Explore company templates**: Load pre-built examples to see the model in action
+4. **Customize templates**: Add organization-specific face templates
+5. **Add presenter notes**: Create `docs/PRESENTER_SCRIPT.md` with talking points
+6. **Record a demo**: Screen capture walkthrough for training
 
 ---
 
@@ -501,5 +550,5 @@ Before presenting to an organization:
 
 **Built with intention • Documented with care • Ready to transform organizations**
 
-Version: 2.0
-Last Updated: 2025-11-09
+Version: 2.1
+Last Updated: 2025-12-09

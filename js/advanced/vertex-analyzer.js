@@ -93,6 +93,52 @@ export class VertexAnalyzer {
   }
 
   /**
+   * Sprint 4 Task 35: Calculate chirality (rotational direction)
+   *
+   * Clockwise = energy flows in ascending order around the vertex
+   * Counterclockwise = energy flows in descending order
+   *
+   * Uses cross product of energy vectors to determine handedness.
+   *
+   * @param {Array<Object>} faces - The 3 faces meeting at this vertex
+   * @returns {Object} { chirality: 'clockwise'|'counterclockwise'|'neutral', strength: 0-1 }
+   */
+  calculateChirality(faces) {
+    if (faces.length !== 3) return { chirality: 'neutral', strength: 0 };
+
+    const [f1, f2, f3] = faces.map(f => f.faceEnergy);
+
+    // Calculate "winding" using determinant-like cross product
+    // Positive = counterclockwise energy flow (building)
+    // Negative = clockwise energy flow (releasing)
+    const winding = (f2 - f1) * (f3 - f2) - (f3 - f1) * (f2 - f1) / 2;
+
+    // Normalize to -1 to 1 range
+    const normalizedWinding = Math.max(-1, Math.min(1, winding * 10));
+
+    // Determine chirality
+    if (Math.abs(normalizedWinding) < 0.1) {
+      return { chirality: 'neutral', strength: 0, rawValue: normalizedWinding };
+    } else if (normalizedWinding > 0) {
+      return {
+        chirality: 'counterclockwise',
+        strength: Math.abs(normalizedWinding),
+        rawValue: normalizedWinding,
+        label: 'Building (↺)',
+        description: 'Energy spirals inward, building potential'
+      };
+    } else {
+      return {
+        chirality: 'clockwise',
+        strength: Math.abs(normalizedWinding),
+        rawValue: normalizedWinding,
+        label: 'Releasing (↻)',
+        description: 'Energy spirals outward, expressing potential'
+      };
+    }
+  }
+
+  /**
    * Calculate coherence at this vertex
    *
    * High coherence = faces are well-balanced
@@ -265,6 +311,9 @@ export class VertexAnalyzer {
         csvInfo = this.csvData[csvId];
       }
 
+      // Sprint 4 Task 35: Calculate chirality
+      const chirality = this.calculateChirality(convergingFaces);
+
       vertexAnalyses.push({
         id: vertexDef.id,
         csvId: csvId,
@@ -279,6 +328,11 @@ export class VertexAnalyzer {
         healthStatus: healthStatus,
         isLeveragePoint: isLeverage,
         color: color,
+        // Sprint 4 Task 35: Chirality data
+        chirality: chirality.chirality,
+        chiralityStrength: chirality.strength,
+        chiralityLabel: chirality.label || 'Neutral',
+        chiralityDescription: chirality.description || 'Balanced energy flow',
         // Add narrative elements
         narrative: this.generateVertexNarrative(strength, direction, coherence, csvInfo ? csvInfo.archetype : vertexDef.archetype),
         // Flag source

@@ -97,9 +97,30 @@ export class UnifiedDataLoader {
             const kpiText = await kpiReq.text();
             const kpis = this.parseKPIs(kpiText);
 
+            // Try to load rich shadowPatterns from mapping-context.json
+            // (mapping-context has proper object format vs company.json string format)
+            let shadowPatterns = profile.shadowPatterns || [];
+            try {
+                const mappingReq = await fetch(`./companies/${companyId}/mapping-context.json`);
+                if (mappingReq.ok) {
+                    const mappingContext = await mappingReq.json();
+                    if (mappingContext.shadowPatterns && mappingContext.shadowPatterns.length > 0) {
+                        // Check if it's proper object format (has 'name' property)
+                        if (typeof mappingContext.shadowPatterns[0] === 'object' && mappingContext.shadowPatterns[0].name) {
+                            shadowPatterns = mappingContext.shadowPatterns;
+                            console.log(`   ✅ Loaded ${shadowPatterns.length} rich shadow patterns from mapping-context.json`);
+                        }
+                    }
+                }
+            } catch (mappingError) {
+                // mapping-context.json not available, use company.json shadowPatterns
+                console.log(`   ℹ️ Using basic shadow patterns from company.json`);
+            }
+
             return {
                 ...profile,
-                kpis: kpis
+                kpis: kpis,
+                shadowPatterns: shadowPatterns
             };
         } catch (error) {
             console.warn(`   ⚠️ Could not load profile for '${companyId}':`, error);
@@ -157,7 +178,8 @@ export class UnifiedDataLoader {
             faces: faces,
             edges: edges,
             vertices: vertices,
-            kpis: companyData.kpis
+            kpis: companyData.kpis,
+            shadowPatterns: companyData.shadowPatterns || []
         };
     }
 

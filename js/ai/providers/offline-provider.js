@@ -804,6 +804,18 @@ class OfflineProvider extends AIProvider {
     // CAPABILITIES
     // ========================================
 
+    /**
+     * Generate content - throws in offline mode to trigger fallback
+     * AI Shadow Adapter will use template-based detection instead
+     *
+     * @param {string} prompt - The prompt (not used in offline mode)
+     * @throws {Error} Always throws to signal fallback needed
+     */
+    async generateContent(prompt) {
+        this.log('generateContent called in offline mode - triggering fallback');
+        throw new Error('generateContent not available in offline mode');
+    }
+
     getCapabilities() {
         return {
             ...super.getCapabilities(),
@@ -813,6 +825,7 @@ class OfflineProvider extends AIProvider {
             supportsArchetypes: true,
             supportsEdgeNaming: true,
             supportsVertexNaming: true,
+            supportsAIShadows: false, // Not available in offline mode
             note: 'Using semantic analysis fallback'
         };
     }

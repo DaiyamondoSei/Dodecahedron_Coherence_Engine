@@ -475,6 +475,23 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
     }
 
     // ========================================
+    // GENERIC CONTENT GENERATION
+    // Used by AI Shadow Adapter and other modules
+    // ========================================
+
+    /**
+     * Generate content from a raw prompt
+     * Generic method for custom AI tasks like shadow generation
+     *
+     * @param {string} prompt - The full prompt to send to the AI
+     * @returns {Promise<string>} Raw text response from AI
+     */
+    async generateContent(prompt) {
+        this.log('generateContent called', { promptLength: prompt.length });
+        return await this._callApiWithFallback(prompt);
+    }
+
+    // ========================================
     // INTERNAL API METHODS
     // ========================================
 

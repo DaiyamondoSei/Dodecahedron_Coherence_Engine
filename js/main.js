@@ -51,9 +51,17 @@ function parseCSV(csvText) {
 
 /**
  * The "Conductor's Settings" - Tuning constants from Reference Models
+ *
+ * All constants are grounded in φ (phi) for mathematical coherence with
+ * the dodecahedral geometry. The dodecahedron is constructed from φ,
+ * therefore all tuning parameters derive from φ for self-similarity.
  */
 class TuningConfig {
   constructor() {
+    // ════════════════════════════════════════════════════════════════
+    // CORE PHILOSOPHICAL DIALS (Exposed in Harmonic Tuner)
+    // ════════════════════════════════════════════════════════════════
+
     // α (Alpha): The Synergy Blend
     // Blends arithmetic and multiplicative synergy for Star Pairs
     // 0.6 = "We believe in synergy, but ground it in reality"
@@ -78,6 +86,308 @@ class TuningConfig {
     // Controls the "emotional responsiveness" of the final score
     // 2.0 = Balanced responsiveness (Reference model suggests 2.0, logic sometimes uses 4.0)
     this.KAPPA = 2.0;
+
+    // ════════════════════════════════════════════════════════════════
+    // PHI-DERIVED HARMONIC PARAMETERS (Sacred Geometry Foundation)
+    // ════════════════════════════════════════════════════════════════
+
+    // η (Eta): Resonance Amplifier - "How much does harmony amplify energy?"
+    // Default: φ⁻² = 0.382 (38.2% maximum boost for perfect pentagram resonance)
+    // Philosophy: "Coherent systems can amplify their energy by up to 38.2%"
+    // Range: 0.0 (no boost) to 1.0 (100% boost)
+    this.ETA = PHI_HARMONICS.PHI_INV_2;  // 0.381966... ≈ 38.2%
+
+    // ζ (Zeta): Zenith Gradient - "How much harder is each growth stage?"
+    // Default: φ⁻² ÷ 6 ≈ 0.0637 (6.37% penalty per octave level)
+    // Philosophy: "Each octave of maturity raises expectations by 6.37%"
+    // At Octave 7: total penalty = φ⁻² = 38.2% (symmetric with max boost)
+    // Range: 0.0 (no penalty) to 0.15 (15% per octave)
+    this.ZETA = PHI_HARMONICS.PHI_INV_2 / 6;  // 0.06366... ≈ 6.37%
+
+    // θ (Theta): Transcendence Threshold - "When is a face ready for next octave?"
+    // Default: φ⁻¹ = 0.618 (61.8% progress needed to advance)
+    // Philosophy: "The Golden Threshold - when you've integrated 61.8%, you're ready"
+    // Range: 0.5 (easy advancement) to 0.9 (demanding advancement)
+    this.THETA = PHI_HARMONICS.PHI_INV_1;  // 0.618033... ≈ 61.8%
+  }
+
+  /**
+   * Apply sensitivity amplifier using logistic function
+   * Transforms a 0-1 score into an S-curve response
+   *
+   * Formula: 1 / (1 + e^(-κ*(x-0.5)))
+   *
+   * Low KAPPA (1-2): Gentle, forgiving curve
+   * High KAPPA (4+): Sharp, responsive curve
+   *
+   * @param {number} score - Raw score between 0 and 1
+   * @returns {number} - Transformed score between 0 and 1
+   */
+  applySensitivityAmplifier(score) {
+    return 1 / (1 + Math.exp(-this.KAPPA * (score - 0.5)));
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  // TUNING TEMPLATES: Pre-configured Organizational Archetypes
+  // ════════════════════════════════════════════════════════════════
+
+  /**
+   * 🌱 STARTUP MODE: Forgiving, Growth-Focused
+   *
+   * Philosophy: "Every step forward is a victory. We celebrate progress."
+   *
+   * - Lower resonance amplification (still rewarding harmony, but gentler)
+   * - Minimal octave penalty (early stages aren't punished)
+   * - Lower advancement threshold (move fast, learn fast)
+   * - Higher synergy belief (startups need to believe 1+1=3)
+   * - Gentle sensitivity curve (don't panic at every fluctuation)
+   *
+   * Best for: Early-stage startups, new teams, turnaround situations
+   */
+  static startupMode() {
+    const config = new TuningConfig();
+
+    // Philosophical: "We believe in magic" - high synergy faith
+    config.ALPHA = 0.4;   // More multiplicative synergy belief
+
+    // Structural: Maintain symmetry
+    config.BETA = 0.5;    // Perfect symmetry
+
+    // Internal/External: "We need our relationships"
+    config.GAMMA = 0.6;   // More relational dependency
+
+    // Shadow Awareness: "We're focused on building, not shadows"
+    config.DELTA = 0.95;  // Very local focus
+
+    // Sensitivity: "Stay calm, we're learning"
+    config.KAPPA = 1.5;   // Gentle, forgiving curve
+
+    // Resonance: "Harmony helps, but we're still learning to dance"
+    config.ETA = 1 / Math.pow((1 + Math.sqrt(5)) / 2, 3);  // φ⁻³ ≈ 23.6% max boost
+
+    // Zenith: "Early stages are equally valued"
+    config.ZETA = 0.03;   // 3% per octave (18% max at Octave 7)
+
+    // Threshold: "Move forward when you're half-ready"
+    config.THETA = 0.5;   // 50% threshold to advance
+
+    return config;
+  }
+
+  /**
+   * 🏢 ENTERPRISE MODE: Demanding, Excellence-Focused
+   *
+   * Philosophy: "Excellence is the expectation. Harmony is non-negotiable."
+   *
+   * - Maximum resonance amplification (harmony is rewarded greatly)
+   * - Full octave penalty (maturity demands more)
+   * - High advancement threshold (only advance when truly ready)
+   * - Pragmatic synergy (trust proven methods)
+   * - Sharp sensitivity curve (responsive to changes)
+   *
+   * Best for: Mature organizations, public companies, high-stakes environments
+   */
+  static enterpriseMode() {
+    const phi = (1 + Math.sqrt(5)) / 2;
+    const config = new TuningConfig();
+
+    // Philosophical: "Trust what we can measure"
+    config.ALPHA = 0.7;   // More arithmetic (pragmatic)
+
+    // Structural: Perfect balance
+    config.BETA = 0.5;    // Perfect symmetry
+
+    // Internal/External: "Own your results"
+    config.GAMMA = 0.8;   // High internal accountability
+
+    // Shadow Awareness: "Know your shadows"
+    config.DELTA = 0.8;   // More shadow awareness
+
+    // Sensitivity: "We notice everything"
+    config.KAPPA = 4.0;   // Sharp, responsive curve
+
+    // Resonance: "Harmony is rewarded at full phi power"
+    config.ETA = 1 / (phi * phi);  // φ⁻² ≈ 38.2% max boost
+
+    // Zenith: "Maturity demands excellence"
+    config.ZETA = 1 / (phi * phi) / 6;  // 6.37% per octave
+
+    // Threshold: "Golden threshold - advance only when integrated"
+    config.THETA = 1 / phi;  // φ⁻¹ ≈ 61.8%
+
+    return config;
+  }
+
+  /**
+   * ⚖️ BALANCED MODE: Sacred Geometry Defaults
+   *
+   * Philosophy: "Trust the golden ratio. Let phi guide the way."
+   *
+   * All parameters derive from φ (golden ratio) for mathematical coherence
+   * and self-similarity with the dodecahedral structure.
+   *
+   * Best for: General use, organizations seeking holistic balance
+   */
+  static balancedMode() {
+    return new TuningConfig();  // Default constructor uses phi-derived values
+  }
+
+  /**
+   * ∞ NON-DUAL MODE: Shadow-Integrated, Relational
+   *
+   * Philosophy: "We are our shadows. Separation is illusion."
+   *
+   * - Equal weight to self and relationships
+   * - Deep shadow integration
+   * - Maximum symmetry everywhere
+   * - Balanced responsiveness
+   *
+   * Best for: Highly evolved organizations, spiritual communities,
+   * holacratic structures, consciousness-focused enterprises
+   */
+  static nonDualMode() {
+    const phi = (1 + Math.sqrt(5)) / 2;
+    const config = new TuningConfig();
+
+    // Philosophical: "Synergy and structure are equally valid"
+    config.ALPHA = 0.5;   // Perfect blend
+
+    // Structural: "All influence flows equally"
+    config.BETA = 0.5;    // Perfect symmetry
+
+    // Internal/External: "I am my relationships"
+    config.GAMMA = 0.5;   // Equal internal/external weight
+
+    // Shadow Awareness: "I am my shadow"
+    config.DELTA = 0.5;   // Full non-duality
+
+    // Sensitivity: "Balanced awareness"
+    config.KAPPA = 3.0;   // Moderate responsiveness
+
+    // Resonance: "Harmony naturally amplifies"
+    config.ETA = 1 / (phi * phi);  // φ⁻² ≈ 38.2%
+
+    // Zenith: "All stages are sacred"
+    config.ZETA = 0.05;   // Gentle 5% per octave
+
+    // Threshold: "The golden mean"
+    config.THETA = 1 / phi;  // φ⁻¹ ≈ 61.8%
+
+    return config;
+  }
+
+  /**
+   * Get a human-readable explanation of the current tuning philosophy
+   * @returns {Object} Explanation of current settings
+   */
+  getPhilosophy() {
+    const phi = (1 + Math.sqrt(5)) / 2;
+    const phi_inv_1 = 1 / phi;
+    const phi_inv_2 = 1 / (phi * phi);
+    const phi_inv_3 = 1 / Math.pow(phi, 3);
+
+    return {
+      alpha: {
+        value: this.ALPHA,
+        symbol: 'α',
+        name: 'Synergy Blend',
+        meaning: this.ALPHA < 0.4 ? 'Magical Thinking (1+1=3)' :
+                 this.ALPHA > 0.7 ? 'Pragmatic Realism' :
+                 'Grounded Magic'
+      },
+      beta: {
+        value: this.BETA,
+        symbol: 'β',
+        name: 'Intersection Blend',
+        meaning: Math.abs(this.BETA - 0.5) < 0.05 ? 'Perfect Symmetry' :
+                 this.BETA > 0.5 ? 'Forward-Biased Flow' :
+                 'Backward-Biased Flow'
+      },
+      gamma: {
+        value: this.GAMMA,
+        symbol: 'γ',
+        name: 'Ball & Pillars',
+        meaning: this.GAMMA < 0.4 ? 'Radically Relational' :
+                 this.GAMMA > 0.7 ? 'Radically Accountable' :
+                 'Balanced Ecosystem'
+      },
+      delta: {
+        value: this.DELTA,
+        symbol: 'δ',
+        name: 'Shadow Factor',
+        meaning: this.DELTA < 0.6 ? 'Deep Non-Duality' :
+                 this.DELTA > 0.85 ? 'Local Focus' :
+                 'Shadow Aware'
+      },
+      kappa: {
+        value: this.KAPPA,
+        symbol: 'κ',
+        name: 'Sensitivity',
+        meaning: this.KAPPA < 2 ? 'Gentle & Forgiving' :
+                 this.KAPPA > 4 ? 'Highly Reactive' :
+                 'Balanced Responsiveness'
+      },
+      eta: {
+        value: this.ETA,
+        symbol: 'η',
+        name: 'Resonance Amplifier',
+        meaning: `${(this.ETA * 100).toFixed(1)}% max harmonic boost`,
+        phiRelation: Math.abs(this.ETA - phi_inv_2) < 0.001 ? 'φ⁻² (Sacred)' :
+                     Math.abs(this.ETA - phi_inv_3) < 0.001 ? 'φ⁻³ (Gentle)' :
+                     'Custom'
+      },
+      zeta: {
+        value: this.ZETA,
+        symbol: 'ζ',
+        name: 'Zenith Gradient',
+        meaning: `${(this.ZETA * 100).toFixed(2)}% per octave`,
+        maxPenalty: `${(this.ZETA * 6 * 100).toFixed(1)}% at Octave 7`
+      },
+      theta: {
+        value: this.THETA,
+        symbol: 'θ',
+        name: 'Transcendence Threshold',
+        meaning: `${(this.THETA * 100).toFixed(1)}% to advance`,
+        phiRelation: Math.abs(this.THETA - phi_inv_1) < 0.001 ? 'φ⁻¹ (Golden)' :
+                     this.THETA < 0.55 ? 'Low Bar' :
+                     'Custom'
+      }
+    };
+  }
+
+  /**
+   * Export configuration to JSON
+   * @returns {Object} JSON-serializable configuration
+   */
+  toJSON() {
+    return {
+      alpha: this.ALPHA,
+      beta: this.BETA,
+      gamma: this.GAMMA,
+      delta: this.DELTA,
+      kappa: this.KAPPA,
+      eta: this.ETA,
+      zeta: this.ZETA,
+      theta: this.THETA
+    };
+  }
+
+  /**
+   * Create TuningConfig from JSON
+   * @param {Object} json - Configuration object
+   * @returns {TuningConfig} New configuration instance
+   */
+  static fromJSON(json) {
+    const config = new TuningConfig();
+    if (json.alpha !== undefined) config.ALPHA = json.alpha;
+    if (json.beta !== undefined) config.BETA = json.beta;
+    if (json.gamma !== undefined) config.GAMMA = json.gamma;
+    if (json.delta !== undefined) config.DELTA = json.delta;
+    if (json.kappa !== undefined) config.KAPPA = json.kappa;
+    if (json.eta !== undefined) config.ETA = json.eta;
+    if (json.zeta !== undefined) config.ZETA = json.zeta;
+    if (json.theta !== undefined) config.THETA = json.theta;
+    return config;
   }
 }
 
@@ -265,6 +575,9 @@ class Face {
     this.ballKPI = config.ballKPI || null; // Primary/headline KPI
     this.tuning = tuningConfig || new TuningConfig();
 
+    // Octave tracking (1-7, representing organizational maturity)
+    this.currentOctave = config.currentOctave || 1;
+
     // Geometric State
     this.starPairs = []; // s values
     this.intersectionNodes = []; // p values
@@ -274,6 +587,18 @@ class Face {
     // Energy States
     this._localCoherence = null; // Before axis check
     this._faceEnergy = null; // Final axis-informed energy
+    this._harmonicResonance = null; // Pentagram resonance cache
+    this._octaveCoherence = null; // Octave-penalized coherence cache
+
+    // Pentagram connections: which elements each vertex connects to
+    // In a pentagram, each vertex connects to the two non-adjacent vertices
+    this.pentagramConnections = [
+      [2, 3], // Element 0 connects to 2 and 3
+      [3, 4], // Element 1 connects to 3 and 4
+      [0, 4], // Element 2 connects to 0 and 4
+      [0, 1], // Element 3 connects to 0 and 1
+      [1, 2]  // Element 4 connects to 1 and 2
+    ];
   }
 
   /**
@@ -356,9 +681,155 @@ class Face {
   }
 
   /**
+   * 4b. Calculate Harmonic Resonance using pentagram geometry
+   * Measures how well the 5 elemental KPIs work together in harmony
+   *
+   * Philosophy: Resonance is highest when connected elements have similar values
+   * The pentagram connects non-adjacent vertices, creating the "star within"
+   *
+   * Returns: 0.0 (total dissonance) to 1.0 (perfect harmony)
+   */
+  calculateHarmonicResonance() {
+    if (this.elementalKPIs.length < 5) return 0;
+
+    let totalResonance = 0;
+
+    // For each element, check its harmony with its pentagram connections
+    for (let i = 0; i < 5; i++) {
+      const element = this.elementalKPIs[i];
+      const connections = this.pentagramConnections[i];
+
+      // Calculate resonance with each connected element (2 connections per vertex)
+      for (const connectedIdx of connections) {
+        const connected = this.elementalKPIs[connectedIdx];
+
+        // Resonance is higher when values are similar (harmony)
+        // Maximum difference is 1.0, so resonance = 1 - |difference|
+        const difference = Math.abs(element.normalizedScore - connected.normalizedScore);
+        const resonance = 1.0 - difference;
+
+        totalResonance += resonance;
+      }
+    }
+
+    // Average resonance across all 10 connections in the pentagram
+    // (5 vertices × 2 connections each = 10, but each edge counted twice = 5 unique edges)
+    // We count all 10 for consistency with original formula
+    this._harmonicResonance = totalResonance / 10;
+    return this._harmonicResonance;
+  }
+
+  /**
+   * Get harmonic resonance (cached)
+   */
+  get harmonicResonance() {
+    if (this._harmonicResonance === null) {
+      this._harmonicResonance = this.calculateHarmonicResonance();
+    }
+    return this._harmonicResonance;
+  }
+
+  /**
+   * 4c. Calculate Octave Progress (Progress Toward Transcendence)
+   *
+   * REFRAMED CONCEPT: Instead of "coherence percentage", this represents
+   * "progress toward the next octave" - a developmental journey.
+   *
+   * Philosophy: Organizations don't have abstract "coherence" - they're always
+   * on a journey of becoming. This measures how far along that journey they are.
+   *
+   * Formula: progress = localCoherence × (1 - ζ × (currentOctave - 1))
+   *
+   * Where ζ (Zeta) = φ⁻² ÷ 6 ≈ 6.37% (the Zenith Gradient)
+   *
+   * Results (using phi-derived constants):
+   * - Octave 1 (Survival):      multiplier = 1.000 (no penalty)
+   * - Octave 2 (Structure):     multiplier = 0.936 (6.4% harder)
+   * - Octave 3 (Relationships): multiplier = 0.873 (12.7% harder)
+   * - Octave 4 (Creativity):    multiplier = 0.809 (19.1% harder)
+   * - Octave 5 (Expression):    multiplier = 0.745 (25.5% harder)
+   * - Octave 6 (Vision):        multiplier = 0.682 (31.8% harder)
+   * - Octave 7 (Radiance):      multiplier = 0.618 (38.2% harder = φ⁻²)
+   *
+   * Beautiful symmetry: Max penalty (φ⁻²) = Max boost (φ⁻²)
+   */
+  calculateOctaveProgress() {
+    // Get base coherence (local coherence with harmonic boost already applied)
+    if (this._localCoherence === null) {
+      this.calculateLocalCoherence();
+    }
+
+    // Apply zenith gradient (higher octaves are harder to master)
+    // Uses ZETA (ζ) = φ⁻² ÷ 6 per octave step
+    const zenithMultiplier = 1 - (this.tuning.ZETA * (this.currentOctave - 1));
+
+    // Calculate progress toward transcendence
+    this._octaveCoherence = this._localCoherence * zenithMultiplier;
+    return this._octaveCoherence;
+  }
+
+  // Alias for backward compatibility
+  calculateOctaveCoherence() {
+    return this.calculateOctaveProgress();
+  }
+
+  /**
+   * Get octave progress (cached)
+   * Represents progress toward the next octave level
+   */
+  get octaveProgress() {
+    if (this._octaveCoherence === null) {
+      this._octaveCoherence = this.calculateOctaveProgress();
+    }
+    return this._octaveCoherence;
+  }
+
+  // Alias for backward compatibility
+  get octaveCoherence() {
+    return this.octaveProgress;
+  }
+
+  /**
+   * Check if this face is ready to transcend to the next octave
+   *
+   * Uses θ (Theta) = φ⁻¹ ≈ 61.8% as the Golden Threshold
+   * Philosophy: "When you've integrated 61.8%, you're ready to transcend"
+   *
+   * At Octave 7, there's no "next" octave - you've reached Radiance.
+   * Progress at Octave 7 represents depth of mastery, not advancement.
+   */
+  isReadyForNextOctave() {
+    return this.octaveProgress >= this.tuning.THETA && this.currentOctave < 7;
+  }
+
+  /**
+   * Get octave status for display
+   */
+  getOctaveStatus() {
+    const octaveNames = [
+      'Survival', 'Structure', 'Relationships', 'Creativity',
+      'Expression', 'Vision', 'Radiance'
+    ];
+
+    return {
+      currentOctave: this.currentOctave,
+      octaveName: octaveNames[this.currentOctave - 1],
+      coherence: this.octaveCoherence,
+      readyForNext: this.isReadyForNextOctave(),
+      nextOctave: this.currentOctave < 7 ? octaveNames[this.currentOctave] : null
+    };
+  }
+
+  /**
    * 5. Calculate Local Coherence Score (E_local)
    * Blends the Ball (Primary KPI) with the Pillars (Relational Health)
-   * Formula: E_local = γ * Ball + (1-γ) * Pillars_Avg
+   * Then applies Harmonic Resonance Boost from pentagram geometry
+   *
+   * Formula: E_local_base = γ × Ball + (1-γ) × Pillars_Avg
+   *          E_local = E_local_base × (1.0 + η × R_harmonic)
+   *
+   * Where η (Eta) = φ⁻² ≈ 38.2% (the Resonance Amplifier)
+   * Philosophy: "Coherent systems amplify their energy through harmony"
    */
   calculateLocalCoherence() {
     // Ensure prerequisites
@@ -366,6 +837,7 @@ class Face {
     this.calculateIntersectionNodes();
     this.calculateCenterComposite();
     this.calculatePillarSymmetry();
+    this.calculateHarmonicResonance();
 
     const ballScore = this.ballKPI ? this.ballKPI.normalizedScore : 0;
 
@@ -374,7 +846,13 @@ class Face {
     const rawPillarAvg = this.elementalKPIs.reduce((s, k) => s + k.normalizedScore, 0) / 5;
 
     // Blend Ball and Pillars using Gamma
-    this._localCoherence = (this.tuning.GAMMA * ballScore) + ((1 - this.tuning.GAMMA) * rawPillarAvg);
+    const baseCoherence = (this.tuning.GAMMA * ballScore) + ((1 - this.tuning.GAMMA) * rawPillarAvg);
+
+    // Apply Harmonic Resonance Boost using Eta (φ⁻² ≈ 38.2% max boost)
+    // When elements are in resonance, the whole becomes greater than the sum of parts
+    // This is grounded in sacred geometry: φ⁻² is the "golden complement"
+    const harmonicBoost = 1.0 + (this.tuning.ETA * this._harmonicResonance);
+    this._localCoherence = Math.min(1.0, baseCoherence * harmonicBoost); // Cap at 1.0
 
     return this._localCoherence;
   }
@@ -412,6 +890,8 @@ class Face {
   invalidateCache() {
     this._localCoherence = null;
     this._faceEnergy = null;
+    this._harmonicResonance = null;
+    this._octaveCoherence = null;
     this.starPairs = [];
     this.intersectionNodes = [];
   }
@@ -669,6 +1149,7 @@ export class DodecahedronEngine {
     this.edges = [];
     this.vertices = [];
     this.kpis = new Map(); // id -> KPI object
+    this.shadowPatterns = []; // Company shadow patterns
     this.tuning = new TuningConfig(); // Load tuning constants
     this.breathAnalyzer = new BreathAnalyzer(); // Breath analysis
 
@@ -748,6 +1229,7 @@ export class DodecahedronEngine {
     this.edges = [];
     this.vertices = [];
     this.kpis = new Map();
+    this.shadowPatterns = company.shadowPatterns || [];
 
     // Create KPIs from company data
     this.createKPIs(company.kpis);
@@ -1178,10 +1660,16 @@ export class DodecahedronEngine {
     // CV-penalized coherence: μ × (1 - λ × CV)
     // where CV = σ/μ (coefficient of variation)
     const cv = sigma / mu;
-    const coherence = mu * (1 - lambda * cv);
+    const rawCoherence = mu * (1 - lambda * cv);
 
     // Clamp to [0, 1] range
-    return Math.max(0, Math.min(1, coherence));
+    const clampedCoherence = Math.max(0, Math.min(1, rawCoherence));
+
+    // Apply KAPPA sensitivity amplifier (logistic S-curve)
+    // This transforms linear coherence into a more responsive curve
+    const amplifiedCoherence = this.tuning.applySensitivityAmplifier(clampedCoherence);
+
+    return amplifiedCoherence;
   }
 
   /**
@@ -1242,6 +1730,7 @@ export class DodecahedronEngine {
         coherence: v.coherence,
         isLeveragePoint: v.isLeveragePoint
       })),
+      shadowPatterns: this.shadowPatterns || [],
       timestamp: new Date().toISOString()
     };
   }
@@ -1377,6 +1866,106 @@ window.Quannex = {
    */
   getShadowAnalysis() {
     return quannexEngine.shadowAnalysis;
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // TUNING TEMPLATE API
+  // ════════════════════════════════════════════════════════════════
+
+  /**
+   * Get available tuning templates
+   * @returns {Array<Object>} List of available templates with metadata
+   */
+  getTemplates() {
+    return [
+      {
+        id: 'startup',
+        name: '🌱 Startup Mode',
+        philosophy: 'Every step forward is a victory. We celebrate progress.',
+        description: 'Forgiving, growth-focused. Best for early-stage startups and turnarounds.',
+        create: () => TuningConfig.startupMode()
+      },
+      {
+        id: 'enterprise',
+        name: '🏢 Enterprise Mode',
+        philosophy: 'Excellence is the expectation. Harmony is non-negotiable.',
+        description: 'Demanding, excellence-focused. Best for mature organizations.',
+        create: () => TuningConfig.enterpriseMode()
+      },
+      {
+        id: 'balanced',
+        name: '⚖️ Balanced Mode',
+        philosophy: 'Trust the golden ratio. Let phi guide the way.',
+        description: 'Sacred geometry defaults. Best for general use.',
+        create: () => TuningConfig.balancedMode()
+      },
+      {
+        id: 'nonDual',
+        name: '∞ Non-Dual Mode',
+        philosophy: 'We are our shadows. Separation is illusion.',
+        description: 'Shadow-integrated, relational. Best for evolved organizations.',
+        create: () => TuningConfig.nonDualMode()
+      }
+    ];
+  },
+
+  /**
+   * Apply a tuning template by ID
+   * @param {string} templateId - One of: 'startup', 'enterprise', 'balanced', 'nonDual'
+   * @returns {Object} The new tuning configuration
+   */
+  applyTemplate(templateId) {
+    const templates = {
+      startup: TuningConfig.startupMode,
+      enterprise: TuningConfig.enterpriseMode,
+      balanced: TuningConfig.balancedMode,
+      nonDual: TuningConfig.nonDualMode
+    };
+
+    const factory = templates[templateId];
+    if (!factory) {
+      console.warn(`Unknown template: ${templateId}. Available: ${Object.keys(templates).join(', ')}`);
+      return null;
+    }
+
+    const newConfig = factory();
+    quannexEngine.tuning = newConfig;
+
+    // Recalculate all coherence values
+    quannexEngine.recalculate();
+
+    console.log(`✨ Applied "${templateId}" tuning template`);
+    console.log(`   Philosophy: ${newConfig.getPhilosophy().alpha.meaning}`);
+
+    return newConfig.toJSON();
+  },
+
+  /**
+   * Get the current tuning philosophy (human-readable explanation)
+   * @returns {Object} Philosophy explanation for all parameters
+   */
+  getTuningPhilosophy() {
+    return quannexEngine.tuning.getPhilosophy();
+  },
+
+  /**
+   * Export current tuning configuration to JSON
+   * @returns {Object} Current tuning as JSON
+   */
+  exportTuning() {
+    return quannexEngine.tuning.toJSON();
+  },
+
+  /**
+   * Import tuning configuration from JSON
+   * @param {Object} json - Tuning configuration object
+   * @returns {Object} The applied configuration
+   */
+  importTuning(json) {
+    quannexEngine.tuning = TuningConfig.fromJSON(json);
+    quannexEngine.recalculate();
+    console.log('📥 Imported custom tuning configuration');
+    return quannexEngine.tuning.toJSON();
   }
 };
 

@@ -100,21 +100,28 @@ class BreathAnalyzer {
       }
     ];
 
-    // Breath ratio thresholds
-    this.minBalanced = 0.8;
-    // LOGARITHMIC BREATH RATIO MODE
-    // Now using log_φ ratio: BR = log(reception/projection) / log(φ)
-    // BR = 0 means balanced (ratio = 1.0)
-    // BR > 0 means over-inhaling (reception > projection)
-    // BR < 0 means over-exhaling (projection > reception)
-    this.maxBalanced = 0.382;   // φ^-2 ≈ ±0.382 for balanced zone
-
     // Golden Ratio constants
     this.PHI = 1.618033988749895;
-    this.PHI_INVERSE = 0.618033988749895;
-    this.PHI_INV_2 = 0.381966011250105; // φ^-2
+    this.PHI_INVERSE = 0.618033988749895;   // 1/φ
+    this.PHI_INV_2 = 0.381966011250105;     // φ^-2
     this.EPSILON = 1e-10;
-    this.mode = 'normal'; // 'normal' or 'golden'
+
+    // Sprint 4 Task 31: φ-Based Breath Thresholds
+    // ========================================
+    // LOGARITHMIC BREATH RATIO MODE (Base-φ)
+    //
+    // BR = log_φ(Reception / Projection) = ln(R/P) / ln(φ)
+    //
+    // BR = 0  → ratio = 1.0    (perfect balance)
+    // BR = +1 → ratio = φ      (1.618 - golden expansion)
+    // BR = -1 → ratio = 1/φ    (0.618 - golden contraction)
+    //
+    // GOLDEN BALANCE ZONE: linear ratio between 1/φ and φ
+    // In log scale: -1.0 to +1.0
+    // This means a breath is "balanced" when linear ratio is 0.618 to 1.618
+    // ========================================
+    this.maxBalanced = 1.0;     // Golden mode: ±1 = ratio between 1/φ and φ
+    this.mode = 'golden';       // Default to golden mode (Sprint 4)
   }
 
   /**
@@ -124,15 +131,41 @@ class BreathAnalyzer {
   setMode(mode) {
     if (mode === 'golden') {
       this.mode = 'golden';
-      // Golden mode: wider tolerance, ±1 means φ or 1/φ ratio
+      // Golden mode: balanced when linear ratio is between 1/φ (0.618) and φ (1.618)
+      // In log_φ scale: [-1.0, +1.0]
       this.maxBalanced = 1.0;
-      console.log(`✨ Breath Analysis switched to Golden Ratio Mode (φ): [-${this.maxBalanced}, +${this.maxBalanced}]`);
+      console.log(`✨ Breath Analysis: Golden Ratio Mode (φ)`);
+      console.log(`   Balance zone: 0.618 to 1.618 (linear) = [-1, +1] (log_φ)`);
     } else {
       this.mode = 'normal';
-      // Normal mode: tighter tolerance around balance
+      // Normal mode: tighter tolerance (±φ⁻²)
       this.maxBalanced = this.PHI_INV_2; // 0.382
-      console.log(`📊 Breath Analysis switched to Normal Mode: [-${this.maxBalanced.toFixed(3)}, +${this.maxBalanced.toFixed(3)}]`);
+      console.log(`📊 Breath Analysis: Normal Mode`);
+      console.log(`   Balance zone: ±${this.maxBalanced.toFixed(3)} (log_φ)`);
     }
+  }
+
+  /**
+   * Sprint 4 Task 31: Check if a linear ratio is within the golden balance zone
+   * @param {number} linearRatio - The linear ratio (Reception / Projection)
+   * @returns {boolean} True if ratio is between 1/φ and φ
+   */
+  isInGoldenBalance(linearRatio) {
+    return linearRatio >= this.PHI_INVERSE && linearRatio <= this.PHI;
+  }
+
+  /**
+   * Get the golden balance bounds for display
+   * @returns {Object} The balance zone bounds
+   */
+  getGoldenBalanceBounds() {
+    return {
+      lowerLinear: this.PHI_INVERSE,    // 0.618
+      upperLinear: this.PHI,            // 1.618
+      lowerLog: -1.0,
+      upperLog: 1.0,
+      label: `${this.PHI_INVERSE.toFixed(3)} to ${this.PHI.toFixed(3)} (1/φ to φ)`
+    };
   }
 
   /**

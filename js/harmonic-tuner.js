@@ -1,6 +1,7 @@
 /**
- * Harmonic Tuner Logic
- * Handles the interactive rotary knobs and resonance meter.
+ * Harmonic Tuner Logic v2.0
+ * Clean rewrite with BEM naming convention
+ * Handles rotary knobs, resonance meter, and mode selection
  */
 
 class RotaryKnob {
@@ -11,8 +12,9 @@ class RotaryKnob {
             return;
         }
 
+        // BEM selectors
         this.display = document.getElementById(elementId.replace('knob', 'disp'));
-        this.ringValue = this.element.querySelector('.knob-ring-value');
+        this.ringValue = this.element.querySelector('.tuner__ring-value');
 
         this.param = this.element.dataset.param;
         this.min = parseFloat(this.element.dataset.min);
@@ -39,16 +41,15 @@ class RotaryKnob {
 
             // Visual feedback
             this.element.style.transform = 'scale(0.95)';
-
             e.preventDefault();
         });
 
         document.addEventListener('mousemove', (e) => {
             if (!this.isDragging) return;
 
-            const deltaY = this.startY - e.clientY; // Drag up to increase
+            const deltaY = this.startY - e.clientY;
             const range = this.max - this.min;
-            const sensitivity = 200; // Pixels for full range
+            const sensitivity = 200;
 
             let newValue = this.startValue + (deltaY / sensitivity) * range;
 
@@ -74,37 +75,11 @@ class RotaryKnob {
         });
     }
 
-    // Philosophical Tooltip Messages
-    getPhilosophicalMessage(value) {
-        switch (this.param) {
-            case 'ALPHA': // Synergy
-                if (value < 0.3) return "Non-Linear Magic: The whole is greater than sum of parts.";
-                if (value > 0.8) return "Pragmatic Realism: Trusting the simple average.";
-                return "Synergistic Balance: Grounded magic.";
-            case 'BETA': // Structure
-                if (Math.abs(value - 0.5) < 0.1) return "Perfect Symmetry: Equal influence.";
-                return "Asymmetrical Flow: Directed influence.";
-            case 'GAMMA': // Balance
-                if (value < 0.3) return "Relational Dependency: We are nothing without our connections.";
-                if (value > 0.8) return "Radical Accountability: The 'Ball' is everything.";
-                return "Balanced Ecosystem: Strong core, strong bonds.";
-            case 'DELTA': // Shadow
-                if (value < 0.3) return "Non-Duality: We are inextricably linked to our shadow.";
-                if (value > 0.8) return "Local Reality: I am separate from my shadow.";
-                return "Axis Awareness: Acknowledging the polar opposite.";
-            case 'KAPPA': // Gain
-                if (value < 1.5) return "High Inertia: Gentle, forgiving system.";
-                if (value > 4.0) return "High Sensitivity: Reactive and emotional.";
-                return "Balanced Responsiveness.";
-            default:
-                return "";
-        }
-    }
-
     updateVisuals() {
         // Update display text
         if (this.display) {
-            this.display.textContent = this.value.toFixed(1);
+            const precision = ['ETA', 'ZETA', 'THETA'].includes(this.param) ? 3 : 1;
+            this.display.textContent = this.value.toFixed(precision);
         }
 
         // Update ring arc
@@ -112,45 +87,33 @@ class RotaryKnob {
             const range = this.max - this.min;
             const percent = (this.value - this.min) / range;
 
-            // Circumference is approx 220 (2 * PI * 35) - adjusted for new size
-            const circumference = 220;
+            // Circumference = 2 * PI * 26 (r=26 for 62px viewBox)
+            const circumference = 165;
             const offset = circumference - (percent * circumference);
 
             this.ringValue.style.strokeDashoffset = offset;
 
-            // Color shift based on value
-            // 160 (Teal) to 100 (Green)
+            // Color shift: cyan to green
             const hue = 160 - (percent * 60);
             this.ringValue.style.stroke = `hsl(${hue}, 100%, 50%)`;
-
-            // Add glow effect
-            this.ringValue.style.filter = `drop-shadow(0 0 5px hsl(${hue}, 100%, 50%))`;
+            this.ringValue.style.filter = `drop-shadow(0 0 4px hsl(${hue}, 100%, 50%))`;
         }
-
-        // Rotate the knob itself slightly for realism
-        const rotationRange = 270; // degrees
-        const rotation = -135 + (((this.value - this.min) / (this.max - this.min)) * rotationRange);
-        this.element.style.transform = `rotate(${rotation}deg)`;
     }
 
     emitChange() {
-        // Update Quannex
         if (window.Quannex && window.Quannex.updateTuning) {
             window.Quannex.updateTuning(this.param, this.value);
 
-            // Trigger visual refresh
             if (window.refreshVisualization) {
                 window.refreshVisualization();
             }
 
-            // Trigger Philosophical Visual Feedback
             if (window.updateVisualFeedback) {
                 const params = {};
                 params[this.param] = this.value;
                 window.updateVisualFeedback(params);
             }
 
-            // Update meter
             if (window.updateResonanceMeter) {
                 window.updateResonanceMeter();
             }
@@ -167,39 +130,81 @@ window.updateResonanceMeter = function () {
 
     const needle = document.getElementById('meterNeedle');
     const valueDisplay = document.getElementById('meterValue');
+    const statusDisplay = document.getElementById('meterStatus');
+    const waveformBars = document.querySelectorAll('.tuner__waveform-bar');
 
     if (!needle || !valueDisplay) return;
 
     // Map 0-1 to -45deg to +45deg
     const angle = (coherence * 90) - 45;
-
-    needle.style.transform = `rotate(${angle}deg)`;
+    needle.style.transform = `translateX(-50%) rotate(${angle}deg)`;
     valueDisplay.textContent = `${(coherence * 100).toFixed(1)}%`;
 
-    // Visual feedback
+    // Update status text and color
+    if (statusDisplay) {
+        // Remove all status modifiers
+        statusDisplay.classList.remove(
+            'tuner__meter-status--critical',
+            'tuner__meter-status--warning',
+            'tuner__meter-status--healthy',
+            'tuner__meter-status--transcendent'
+        );
+
+        if (coherence < 0.2) {
+            statusDisplay.textContent = 'Seeking';
+            statusDisplay.classList.add('tuner__meter-status--critical');
+        } else if (coherence < 0.4) {
+            statusDisplay.textContent = 'Emerging';
+            statusDisplay.classList.add('tuner__meter-status--warning');
+        } else if (coherence < 0.6) {
+            statusDisplay.textContent = 'Converging';
+            statusDisplay.classList.add('tuner__meter-status--warning');
+        } else if (coherence < 0.8) {
+            statusDisplay.textContent = 'Coherent';
+            statusDisplay.classList.add('tuner__meter-status--healthy');
+        } else {
+            statusDisplay.textContent = 'Transcendent';
+            statusDisplay.classList.add('tuner__meter-status--transcendent');
+        }
+    }
+
+    // Animate waveform bars
+    if (waveformBars.length > 0) {
+        const baseHeight = 4 + (coherence * 10);
+        waveformBars.forEach((bar, i) => {
+            const offset = Math.sin((Date.now() / 200) + i * 0.5) * 0.3;
+            const height = baseHeight * (0.7 + offset + Math.random() * 0.3);
+            bar.style.height = `${Math.max(3, height)}px`;
+        });
+    }
+
+    // Needle color feedback
     if (coherence > 0.8) {
-        needle.classList.add('tuned');
-        valueDisplay.style.color = '#00ffcc';
-        valueDisplay.style.textShadow = '0 0 10px #00ffcc';
+        needle.style.background = `linear-gradient(to top, var(--accent-cyan, #00ffcc), transparent)`;
+        needle.style.boxShadow = '0 0 12px var(--accent-cyan, #00ffcc)';
+    } else if (coherence > 0.6) {
+        needle.style.background = `linear-gradient(to top, var(--accent-gold, #ffd700), transparent)`;
+        needle.style.boxShadow = '0 0 10px var(--accent-gold, #ffd700)';
     } else {
-        needle.classList.remove('tuned');
-        valueDisplay.style.color = '#fff';
-        valueDisplay.style.textShadow = 'none';
+        needle.style.background = `linear-gradient(to top, var(--accent-cyan, #00ffcc), transparent)`;
+        needle.style.boxShadow = '0 0 8px var(--tuner-glow, rgba(0, 255, 204, 0.15))';
     }
 };
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('[Harmonic Tuner] 🎸 Initializing...');
+    console.log('[Harmonic Tuner] v2.0 Initializing...');
 
     // Store knobs for external access
     const knobsMap = {};
 
-    // Initialize Knobs
-    ['Alpha', 'Beta', 'Gamma', 'Delta', 'Kappa'].forEach(name => {
+    // Initialize all knobs
+    ['Alpha', 'Beta', 'Gamma', 'Delta', 'Kappa', 'Eta', 'Zeta', 'Theta'].forEach(name => {
         const knob = new RotaryKnob(`knob${name}`);
         knobsMap[name] = knob;
     });
+
+    window.knobsMap = knobsMap;
 
     // Toggle Panel Logic
     const tunerPanel = document.getElementById('harmonicTuner');
@@ -210,96 +215,64 @@ document.addEventListener('DOMContentLoaded', () => {
         tunerToggle.addEventListener('click', () => {
             isTunerVisible = !isTunerVisible;
             if (isTunerVisible) {
-                tunerPanel.classList.add('visible');
-                tunerToggle.textContent = '▼ Hide Console';
-                tunerToggle.style.animation = 'none'; // Stop pulsing when open
+                tunerPanel.classList.add('tuner--visible');
+                tunerToggle.classList.add('tuner-toggle--open');
+                tunerToggle.textContent = '▼ Hide Tuner';
             } else {
-                tunerPanel.classList.remove('visible');
+                tunerPanel.classList.remove('tuner--visible');
+                tunerToggle.classList.remove('tuner-toggle--open');
                 tunerToggle.textContent = '▲ Harmonic Tuner';
             }
         });
     }
 
-    // Tooltip Logic
-    const tooltip = document.getElementById('tunerTooltip');
-    if (tooltip) {
-        const tooltipTitle = tooltip.querySelector('.tooltip-title');
-        const tooltipDesc = tooltip.querySelector('.tooltip-desc');
+    // Mode Button Logic (Template Selector)
+    const modeBtns = document.querySelectorAll('.tuner__mode-btn');
+    modeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const templateId = btn.dataset.template;
 
-        document.querySelectorAll('.info-icon').forEach(icon => {
-            icon.addEventListener('mouseenter', (e) => {
-                const title = e.target.dataset.title;
-                let desc = e.target.dataset.desc;
+            if (window.Quannex && window.Quannex.applyTemplate) {
+                const newConfig = window.Quannex.applyTemplate(templateId);
 
-                // Dynamic Storytelling: Append current state philosophy
-                // Find which knob this icon belongs to
-                const knobGroup = icon.closest('.knob-group');
-                if (knobGroup) {
-                    const knobEl = knobGroup.querySelector('.knob-control');
-                    if (knobEl) {
-                        const param = knobEl.dataset.param;
-                        // Find the knob instance (a bit hacky, but works since we know the param)
-                        const knobName = param.charAt(0) + param.slice(1).toLowerCase(); // ALPHA -> Alpha
-                        const knobInstance = knobsMap[knobName];
+                if (newConfig) {
+                    // Update all knobs
+                    const paramMap = {
+                        'Alpha': newConfig.alpha,
+                        'Beta': newConfig.beta,
+                        'Gamma': newConfig.gamma,
+                        'Delta': newConfig.delta,
+                        'Kappa': newConfig.kappa,
+                        'Eta': newConfig.eta,
+                        'Zeta': newConfig.zeta,
+                        'Theta': newConfig.theta
+                    };
 
-                        if (knobInstance) {
-                            const philosophy = knobInstance.getPhilosophicalMessage(knobInstance.value);
-                            desc += `<br><br><span style="color: #00ffcc; font-style: italic;">"${philosophy}"</span>`;
+                    Object.entries(paramMap).forEach(([name, value]) => {
+                        if (knobsMap[name]) {
+                            knobsMap[name].value = value;
+                            knobsMap[name].updateVisuals();
                         }
-                    }
+                    });
+
+                    // Update active state
+                    modeBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    // Refresh
+                    if (window.refreshVisualization) window.refreshVisualization();
+                    if (window.updateResonanceMeter) window.updateResonanceMeter();
+
+                    console.log(`[Tuner] Applied template: ${templateId}`);
                 }
-
-                tooltipTitle.textContent = title;
-                tooltipDesc.innerHTML = desc; // Use innerHTML for styling
-
-                // Position tooltip above the icon
-                const rect = e.target.getBoundingClientRect();
-                const tunerRect = tunerPanel.getBoundingClientRect();
-
-                // Calculate position relative to the tuner panel
-                // Center the tooltip horizontally on the icon
-                const tooltipWidth = 240;
-                let leftPos = (rect.left - tunerRect.left) - (tooltipWidth / 2) + 10;
-
-                // Clamp to panel bounds
-                leftPos = Math.max(10, Math.min(tunerRect.width - tooltipWidth - 10, leftPos));
-
-                tooltip.style.left = leftPos + 'px';
-                tooltip.classList.add('visible');
-            });
-
-            icon.addEventListener('mouseleave', () => {
-                tooltip.classList.remove('visible');
-            });
-        });
-    }
-
-    // God Mode (Non-Duality) Button Logic
-    const godModeBtn = document.getElementById('godModeBtn');
-    if (godModeBtn) {
-        godModeBtn.addEventListener('click', () => {
-            console.log('♾️ God Mode Activated: Non-Duality');
-
-            // Set Delta to 0.5 (Non-Duality)
-            if (knobsMap['Delta']) {
-                knobsMap['Delta'].value = 0.5;
-                knobsMap['Delta'].updateVisuals();
-                knobsMap['Delta'].emitChange();
+            } else {
+                console.warn('[Tuner] Quannex.applyTemplate not available');
             }
-
-            // Set Beta to 0.5 (Perfect Symmetry)
-            if (knobsMap['Beta']) {
-                knobsMap['Beta'].value = 0.5;
-                knobsMap['Beta'].updateVisuals();
-                knobsMap['Beta'].emitChange();
-            }
-
-            // Visual Feedback for the button itself
-            godModeBtn.classList.add('active');
-            setTimeout(() => godModeBtn.classList.remove('active'), 500);
         });
-    }
+    });
 
-    // Auto-update meter
-    setInterval(window.updateResonanceMeter, 1000);
+    // Auto-update meter (500ms interval for performance)
+    setInterval(window.updateResonanceMeter, 500);
+
+    console.log('[Harmonic Tuner] Ready');
 });

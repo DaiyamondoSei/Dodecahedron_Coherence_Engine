@@ -17,6 +17,10 @@ const demoState = {
     loadedMappingContext: null // Store the loaded mapping context
 };
 
+// Re-entrancy guard to prevent infinite loop when clicking company cards
+// (Fix for event handler loop bug observed during testing)
+let _isSelectingCompanyTemplate = false;
+
 /**
  * ========================================
  * SESSION EXPIRY MANAGER
@@ -663,6 +667,8 @@ function goToStep(stepNumber) {
             if (demoState.coherenceResults && demoState.coherenceResults.faces) {
                 identifyNervousEndpoints();
             }
+            // Sprint 4 Task 34: Display highest leverage action
+            identifyHighestLeverageAction();
         }, 100);
     }
 
@@ -807,6 +813,13 @@ function updateProgress() {
  * Loads the mapping-context.json and pre-fills all steps
  */
 async function selectCompanyTemplate(companyId) {
+    // Re-entrancy guard: prevent duplicate calls from rapid clicks or event bubbling
+    if (_isSelectingCompanyTemplate) {
+        console.log(`[selectCompanyTemplate] Ignoring duplicate call for: ${companyId}`);
+        return;
+    }
+    _isSelectingCompanyTemplate = true;
+
     console.log(`🏢 Selecting company template: ${companyId}`);
     showLoading('Loading organizational DNA...');
 
@@ -922,7 +935,21 @@ async function selectCompanyTemplate(companyId) {
                     kpiData: demoState.kpiData
                 });
 
+                // Add shadowPatterns from mappingContext to engineData
+                if (mappingContext.shadowPatterns && mappingContext.shadowPatterns.length > 0) {
+                    engineData.shadowPatterns = mappingContext.shadowPatterns;
+                    console.log(`[DataBridge] Added ${mappingContext.shadowPatterns.length} shadow patterns to engine data`);
+                }
+
                 if (typeof window.Quannex !== 'undefined') {
+                    // Apply tuning parameters from template (if available)
+                    // This ensures coherence calculations match the stored perspective
+                    if (mappingContext.diagnostics?.tuning) {
+                        const tuning = mappingContext.diagnostics.tuning;
+                        console.log(`[Tuning] Applying ${tuning.perspective} perspective from template`);
+                        window.Quannex.importTuning(tuning);
+                    }
+
                     await window.Quannex.initWithCompany(engineData);
                     console.log('[DataBridge] Engine initialized with template data');
 
@@ -962,10 +989,17 @@ async function selectCompanyTemplate(companyId) {
         // Pre-populate the face editor
         populateFaceEditor();
 
+        // Hide the template grid to prevent users from accidentally clicking generic templates
+        // which would overwrite the custom company face names
+        hideTemplateGridForPreloadedCompany(mappingContext);
+
     } catch (error) {
         console.error('❌ Failed to load company template:', error);
         hideLoading();
         alert(`Failed to load ${companyId} template: ${error.message}`);
+    } finally {
+        // Always reset the re-entrancy guard
+        _isSelectingCompanyTemplate = false;
     }
 }
 
@@ -1010,6 +1044,101 @@ function showCompanyLoadedNotification(mappingContext) {
         setTimeout(() => notification.remove(), 500);
     }, 5000);
 }
+
+/**
+ * Hide template grid when company data is pre-loaded
+ * This prevents users from accidentally clicking generic templates
+ * which would overwrite the custom company face names
+ */
+function hideTemplateGridForPreloadedCompany(mappingContext) {
+    const templateGrid = document.querySelector('.template-grid');
+    const step1Content = document.getElementById('step1');
+
+    if (!templateGrid || !step1Content) return;
+
+    // Hide the template grid
+    templateGrid.style.display = 'none';
+
+    // Hide the "Select a Template" header
+    const templateHeader = step1Content.querySelector('h3');
+    if (templateHeader && templateHeader.textContent.includes('Select a Template')) {
+        templateHeader.style.display = 'none';
+    }
+
+    // Add a "company loaded" banner at the top of Step 1
+    const existingBanner = document.getElementById('company-preloaded-banner');
+    if (existingBanner) existingBanner.remove();
+
+    const banner = document.createElement('div');
+    banner.id = 'company-preloaded-banner';
+    banner.innerHTML = `
+        <div style="background: linear-gradient(135deg, rgba(0, 255, 204, 0.15), rgba(147, 112, 219, 0.15));
+                    border: 1px solid rgba(0, 255, 204, 0.3); border-radius: 12px; padding: 20px;
+                    margin-bottom: 20px; display: flex; align-items: center; gap: 15px;">
+            <div style="font-size: 40px;">${mappingContext.faces[0]?.icon || '🏢'}</div>
+            <div style="flex: 1;">
+                <div style="font-size: 18px; font-weight: 600; color: #00ffcc;">
+                    ${mappingContext.displayName} Template Loaded
+                </div>
+                <div style="font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 4px;">
+                    ${mappingContext.octaveStage} • ${mappingContext.archetype} • 12 custom faces pre-configured
+                </div>
+                <div style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 8px; font-style: italic;">
+                    Review the faces below and click "Next" when ready
+                </div>
+            </div>
+            <button onclick="resetToTemplateSelection()"
+                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+                           border-radius: 8px; padding: 8px 16px; color: rgba(255,255,255,0.7);
+                           cursor: pointer; font-size: 12px; transition: all 0.3s;">
+                Choose Different Template
+            </button>
+        </div>
+    `;
+
+    // Insert banner before the info-box
+    const infoBox = step1Content.querySelector('.info-box');
+    if (infoBox) {
+        infoBox.parentNode.insertBefore(banner, infoBox);
+    }
+
+    console.log('✅ Template grid hidden for pre-loaded company');
+}
+
+/**
+ * Reset to template selection (when user wants to choose a different template)
+ */
+function resetToTemplateSelection() {
+    // Show the template grid again
+    const templateGrid = document.querySelector('.template-grid');
+    if (templateGrid) templateGrid.style.display = 'grid';
+
+    // Show the "Select a Template" header
+    const step1Content = document.getElementById('step1');
+    const templateHeader = step1Content?.querySelector('h3');
+    if (templateHeader) templateHeader.style.display = 'block';
+
+    // Remove the preloaded banner
+    const banner = document.getElementById('company-preloaded-banner');
+    if (banner) banner.remove();
+
+    // Clear company data
+    demoState.selectedCompanyId = null;
+    demoState.loadedMappingContext = null;
+    demoState.faceConfig = null;
+    demoState.kpiData = [];
+    demoState.coherenceResults = null;
+    demoState.completedSteps = [0];
+
+    // Clear face editor
+    const faceEditorSection = document.getElementById('faceEditorSection');
+    if (faceEditorSection) faceEditorSection.style.display = 'none';
+
+    console.log('✅ Reset to template selection');
+}
+
+// Expose to window
+window.resetToTemplateSelection = resetToTemplateSelection;
 
 /**
  * Populate the face editor with pre-loaded data
@@ -2154,6 +2283,7 @@ function updateSessionStorage() {
             breathAxes: demoState.loadedMappingContext?.breathAxes || null, // Sprint 3 Task 27: Include breath data
             edges: demoState.loadedMappingContext?.edges || null, // Sprint 3 Task 28: Include edge data for 3D hover
             dominantOctave: demoState.loadedMappingContext?.dominantOctave || 1,
+            tuning: demoState.loadedMappingContext?.diagnostics?.tuning || null, // Tuning perspective for consistent calculation
             isCustomData: true,
             timestamp: new Date().toISOString() // Fresh timestamp on each update
         };
@@ -3099,6 +3229,126 @@ function identifyNervousEndpoints() {
     });
 
     section.innerHTML = html || '<p style="color: rgba(255, 255, 255, 0.6); text-align: center;">No endpoints to display</p>';
+}
+
+/**
+ * Sprint 4 Task 34: Identify and display highest leverage action
+ * Finds the most impactful intervention point based on:
+ * - Vertices with bermuda_triangle classification
+ * - Faces with lowest energy in high-stress vertices
+ */
+function identifyHighestLeverageAction() {
+    const panel = document.getElementById('leverageActionPanel');
+    const content = document.getElementById('leverageActionContent');
+
+    if (!panel || !content) return;
+
+    // Get company data (template or custom)
+    const companyData = demoState.templateContext || demoState.coherenceResults;
+    if (!companyData || !companyData.faces) {
+        panel.style.display = 'none';
+        return;
+    }
+
+    const faces = companyData.faces;
+    const vertices = companyData.vertices || [];
+
+    // Strategy 1: Find bermuda_triangle vertex if available
+    let leverageVertex = vertices.find(v => v.classification === 'bermuda_triangle');
+
+    // Strategy 2: If no bermuda triangle, find highest vortex strength vertex
+    if (!leverageVertex && vertices.length > 0) {
+        leverageVertex = vertices.reduce((max, v) =>
+            (v.vortexStrength || 0) > (max.vortexStrength || 0) ? v : max
+        , vertices[0]);
+    }
+
+    // Strategy 3: If no vertices, just find the lowest-energy face
+    if (!leverageVertex || !leverageVertex.faceIds) {
+        const sortedFaces = [...faces].sort((a, b) =>
+            (a.energy || a.faceEnergy || 0) - (b.energy || b.faceEnergy || 0)
+        );
+        const weakestFace = sortedFaces[0];
+
+        if (!weakestFace || (weakestFace.energy || weakestFace.faceEnergy || 0) > 0.7) {
+            // All faces are healthy, no leverage action needed
+            panel.style.display = 'none';
+            return;
+        }
+
+        // Display simple face-based leverage action
+        const energy = (weakestFace.energy || weakestFace.faceEnergy || 0) * 100;
+        content.innerHTML = `
+            <div class="leverage-vertex-name">Primary Focus Area</div>
+            <div class="leverage-target-face">
+                <span class="face-icon">⚡</span>
+                <div class="face-details">
+                    <div class="face-name">${weakestFace.name || `Face ${weakestFace.id}`}</div>
+                    <div class="face-energy">Currently at ${energy.toFixed(0)}% energy</div>
+                </div>
+            </div>
+            <div class="leverage-insight">
+                Strengthening this face will have the most immediate positive impact on overall organizational coherence.
+            </div>
+        `;
+        panel.style.display = 'block';
+        return;
+    }
+
+    // Full vertex-based analysis
+    const vertexFaceIds = leverageVertex.faceIds || [];
+    const vertexFaces = vertexFaceIds.map(id =>
+        faces.find(f => f.id === id) || { id, name: `Face ${id}`, energy: 0 }
+    );
+
+    // Find the weakest face in this vertex
+    const weakestFace = vertexFaces.reduce((min, f) => {
+        const e1 = min.energy || min.faceEnergy || 0;
+        const e2 = f.energy || f.faceEnergy || 0;
+        return e2 < e1 ? f : min;
+    }, vertexFaces[0] || { name: 'Unknown', energy: 0 });
+
+    const weakestEnergy = (weakestFace.energy || weakestFace.faceEnergy || 0) * 100;
+    const vertexStrength = ((leverageVertex.vortexStrength || 0) * 100).toFixed(0);
+    const connectedEdges = vertices.length > 0 ? vertexFaceIds.length : 0;
+    const estimatedLift = Math.min(15, Math.round((100 - weakestEnergy) * 0.3));
+
+    const isBermuda = leverageVertex.classification === 'bermuda_triangle';
+    const vertexTitle = isBermuda
+        ? `⚠️ Bermuda Triangle: ${leverageVertex.emergentName || 'Critical Vertex'}`
+        : `🎯 ${leverageVertex.emergentName || 'Key Convergence Point'}`;
+
+    content.innerHTML = `
+        <div class="leverage-vertex-name">${vertexTitle}</div>
+        <div class="leverage-target-face">
+            <span class="face-icon">${isBermuda ? '🔥' : '⚡'}</span>
+            <div class="face-details">
+                <div class="face-name">Focus: ${weakestFace.name || `Face ${weakestFace.id}`}</div>
+                <div class="face-energy">Currently at ${weakestEnergy.toFixed(0)}% energy</div>
+            </div>
+        </div>
+        <div class="leverage-impact">
+            <div class="leverage-impact-item">
+                <div class="value">${connectedEdges}</div>
+                <div class="label">Connected Faces</div>
+            </div>
+            <div class="leverage-impact-item">
+                <div class="value">${vertexStrength}%</div>
+                <div class="label">Vortex Strength</div>
+            </div>
+            <div class="leverage-impact-item">
+                <div class="value">+${estimatedLift}%</div>
+                <div class="label">Est. Coherence Lift</div>
+            </div>
+        </div>
+        <div class="leverage-insight">
+            ${isBermuda
+                ? 'This vertex represents a critical imbalance where energy is being lost. Strengthening the weakest converging face will begin to restore harmonic flow.'
+                : 'This convergence point has the highest transformation potential. Improving the target face will cascade positive effects through connected edges.'}
+        </div>
+    `;
+
+    panel.style.display = 'block';
 }
 
 /**

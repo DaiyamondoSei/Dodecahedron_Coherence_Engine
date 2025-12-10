@@ -6,9 +6,12 @@
 POC/
 ├── 🌐 HTML Pages (User-facing)
 ├── 🧠 JavaScript Modules (Logic)
-├── 📊 Data Files (Sample data)
-├── 🏢 Companies (Multi-company support)
+│   └── js/constants/ (PHI thresholds - NEW)
+├── 📊 Data Files (Sample data + archive)
+├── 🏢 Companies (Multi-company support + mapping-context)
 ├── 🔧 Backend Fallback (Calculation engine)
+├── 📐 Math Documentation (Rigorous formulas)
+├── 🧠 .claude/ (Development Council - 9 agents)
 └── 📄 Documentation
 ```
 
@@ -244,6 +247,92 @@ Transforms:
 
 ---
 
+### **Constants & Thresholds** (NEW - December 2025)
+
+#### `js/constants/octave-thresholds.js` ⭐ SINGLE SOURCE OF TRUTH
+**What it does:**
+- Defines PHI-based octave thresholds (0.382, 0.5, 0.618, 0.764, 0.854, 0.95)
+- Exports lifecycle constraints (pre-seed max O2, enterprise max O6)
+- Provides helper functions: `coherenceToOctave()`, `getOctaveByNumber()`
+- Used by all octave-related calculations across the system
+
+**Key Constants:**
+```javascript
+PHI = 1.618033988749895
+PHI_INVERSE = 0.618       // φ^-1
+PHI_SQUARED_INVERSE = 0.382  // φ^-2
+```
+
+**Used by:** main.js, octave-integrity-calculator.js, demo-orchestrator-logic.js
+
+---
+
+### **Advanced Calculation Modules** (NEW - December 2025)
+
+#### `js/octave-integrity-calculator.js` ⭐ FOUNDATION PRINCIPLE
+**What it does:**
+- Implements the Foundation Principle: "High coherence at O1 ≠ promotion to O2"
+- Calculates organizational octave from face octaves
+- Applies spread penalty for structural misalignment
+- Enforces lifecycle constraints
+
+**Key Formula:**
+```
+Org Octave = floor(geometric_mean(face_octaves) - spread_penalty)
+```
+
+**Used by:** demo-orchestrator-logic.js, company analysis
+
+---
+
+#### `js/context-synthesizer.js` - Edge/Vertex Generation
+**What it does:**
+- Unifies template and custom data flows
+- Generates 30 edges from 12 faces (topology)
+- Generates 20 vertices from faces (triadic synergy)
+- Applies elemental harmony matrix (PHI-based modifiers)
+- Handles known data gaps defensively (F10-Ether defaults)
+
+**Used by:** demo-orchestrator-logic.js, company-loader.js
+
+---
+
+#### `js/company-templates-bundle.js` - Offline Fallback
+**What it does:**
+- Embedded minimal templates for 4 companies
+- Fallback API when modules fail on file:// protocol
+- Contains: faces, edges, vertices, breathAxes, shadowPatterns
+- Enables demo to work without network
+
+**Used by:** demo.html (offline mode)
+
+---
+
+### **UI Enhancement Modules** (NEW - December 2025)
+
+#### `js/harmonic-tuner-tooltips.js` - Parameter Education
+**What it does:**
+- Rich tooltips for 8 tuning parameters (α, β, γ, δ, κ, η, ζ, θ)
+- Educational descriptions with optimal ranges
+- PHI-based timing (382ms show delay)
+- Effects and warnings for each parameter
+
+**Used by:** harmonic-tuner.js
+
+---
+
+#### `js/dna-preview-mini.js` - Breath Axis Animation
+**What it does:**
+- Canvas-based DNA helix animation
+- Renders double helix for breath axis visualization
+- Phase 2 enhancement for face detail panels
+- Animates with PHI-based timing
+- Colors: Cyan (reception), Magenta (projection)
+
+**Used by:** index.html (face detail panels)
+
+---
+
 ## 📊 Data Files
 
 ### **Sample Data (CSV)**
@@ -266,25 +355,78 @@ Transforms:
 
 ---
 
-### **Company Data (JSON + CSV)**
+### **Company Data (JSON + CSV)** (Enhanced December 2025)
 
 ```
 companies/
 ├── quannex/
 │   ├── company.json       (Profile, story, challenges)
-│   └── kpis.csv           (60 KPI values)
+│   ├── kpis.csv           (60 KPI values)
+│   └── mapping-context.json ⭐ (Full mapping: faces, edges, vertices, shadows)
 ├── nova-tech/
 │   ├── company.json
-│   └── kpis.csv
+│   ├── kpis.csv
+│   └── mapping-context.json
 ├── zenith-solutions/
 │   ├── company.json
-│   └── kpis.csv
+│   ├── kpis.csv
+│   └── mapping-context.json
 └── apex-industries/
     ├── company.json
-    └── kpis.csv
+    ├── kpis.csv
+    └── mapping-context.json
 ```
 
-**Format:**
+#### The Four Teaching Examples
+
+| Company | Stage | Octave | Key Pattern | Use For |
+|---------|-------|--------|-------------|---------|
+| **Quannex** | Pre-seed | O1-O2 | Aspiration-Actuality Gap | Startup with vision |
+| **Nova Tech** | Seed | O2-O3 | Death Spiral (burnout) | Resource exhaustion |
+| **Zenith Solutions** | Growth | O3-O4 | Organizational Debt | Scaling challenges |
+| **Apex Industries** | Enterprise | O6-O7 | Integrated Excellence | Mature organization |
+
+#### mapping-context.json Structure (NEW)
+
+```json
+{
+  "faces": [
+    {
+      "id": "F1",
+      "name": "Financial Capital",
+      "octave": 1,
+      "sentiment": 0.45,
+      "elements": { "Earth": 0.3, "Water": 0.5, ... }
+    }
+  ],
+  "edges": [
+    {
+      "id": "E1",
+      "faces": ["F1", "F2"],
+      "tension": 0.35,
+      "elementalNature": "Earth-Water"
+    }
+  ],
+  "vertices": [
+    {
+      "id": "V1",
+      "faces": ["F1", "F2", "F3"],
+      "vortexStrength": 0.62,
+      "classification": "synergy_hub"
+    }
+  ],
+  "shadowPatterns": [
+    {
+      "name": "Visionary Bypass",
+      "description": "Brilliant ideas without execution capacity"
+    }
+  ]
+}
+```
+
+**See:** [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) for complete documentation.
+
+**Legacy Format (still supported):**
 ```json
 // company.json
 {
@@ -335,13 +477,63 @@ backend-fallback/
 ## 📄 Documentation
 
 ### Core Docs
-- `MATH_REFERENCE.md` ⭐ - Complete mathematical framework (2,400+ lines)
-- `README.md` - Project overview
-- `ENHANCEMENTS_V2.1.md` - Recent improvements
-- `TROUBLESHOOTING_KPI_COLLECTION.md` - Debug guide
-- `DATA_FLOW_ARCHITECTURE.md` ⭐ NEW - Data pipeline explanation
-- `DEMO_UPGRADE_GUIDE.md` ⭐ NEW - Demo usage guide
+- `README.md` - Project overview & quick start
+- `DOCUMENTATION_INDEX.md` - Master index of all docs
+- `DEMO_GUIDE.md` - Complete feature walkthrough
 - `FILE_STRUCTURE_MAP.md` ⭐ THIS FILE
+- `DATA_FLOW_ARCHITECTURE.md` - Data pipeline explanation
+- `INTEGRATION_GUIDE.md` - Custom data integration
+- `COMPANY_TEMPLATES_GUIDE.md` ⭐ NEW - Teaching examples guide
+
+### Math Docs (in `/math/`)
+- `MATH_OVERVIEW.md` - Start here for mathematical framework
+- `PENTAGRAM_ANALYSIS.md` - Elemental harmony calculations
+- `BREATH_DYNAMICS.md` - 6 breath axes analysis
+- `OCTAVE_FRAMEWORK.md` - 7 developmental stages + Foundation Principle
+- `FOUNDATION_PRINCIPLE.md` ⭐ NEW - Coherence ≠ Promotion deep dive
+- `SPECTRAL_SHADOW.md` - Advanced spectral/shadow analysis
+
+### Novel Research
+- `NOVEL_MATHEMATICAL_CONTRIBUTIONS.md` ⭐ - 4 breakthrough frameworks
+- `COMPLETE_SYSTEM_GUIDE.md` ⭐ - Full technical implementation
+
+---
+
+## 🧠 Development Council (.claude/)
+
+**Purpose:** Intelligent development council - 9 AI agents working in harmonious coherence
+
+```
+.claude/
+├── agents/
+│   ├── witness-point.md          (White - Awareness)
+│   ├── chief-consciousness-officer.md (Purple - Strategy)
+│   ├── chief-creativity-officer.md    (Orange - Innovation)
+│   ├── chief-risk-manager.md          (Red - Risk wisdom)
+│   ├── root-foundation-guardian.md    (Brown - Grounding)
+│   ├── dodecahedron-consciousness-architect.md (Pink - Geometry)
+│   ├── heartmath-universal-bridge.md  (Green - Translation)
+│   ├── sacred-tech-architect.md       (Blue - Architecture)
+│   └── solar-chakra-master.md         (Yellow - Integrity)
+├── council-covenant.md           (Principles & protocols)
+├── mcp.json                      (MCP server configuration)
+└── settings.local.json           (Local project settings)
+```
+
+**What it is:**
+- Framework for conscious, multi-perspective development
+- 9 agent archetypes representing different wisdom domains
+- Council protocols: Dyad (2 voices), Triad (3), Full Council (all 9)
+- Used for strategic decisions, creative blocks, risk analysis
+
+**When to use:**
+- Major architectural decisions → Sacred Tech Architect
+- Creative problem-solving → Chief Creativity Officer
+- Risk assessment → Chief Risk Manager
+- Grounding ambitious ideas → Root Foundation Guardian
+- Pure observation → Witness Point
+
+**Note:** Council docs are for development process, not end-user features.
 
 ---
 
@@ -467,25 +659,33 @@ Shows dashboard
 ```
 ┌─────────────────────────────────────────────┐
 │         User Interface Layer                │
-│  (demo.html, demo-orchestrator.html)       │
+│  (demo.html, demo-orchestrator.html)        │
 └──────────────┬──────────────────────────────┘
                │
                ↓
 ┌─────────────────────────────────────────────┐
 │      Data Transformation Layer              │
-│       (data-transformer.js)                 │
+│  (data-transformer.js, context-synthesizer) │
+└──────────────┬──────────────────────────────┘
+               │
+               ↓
+┌─────────────────────────────────────────────┐
+│       Constants Layer (NEW)                 │
+│  (octave-thresholds.js - PHI mathematics)   │
 └──────────────┬──────────────────────────────┘
                │
                ↓
 ┌─────────────────────────────────────────────┐
 │       Calculation Engine Layer              │
-│  (main.js: Dodecahedron, Faces, KPIs)      │
+│  (main.js: Dodecahedron, Faces, KPIs)       │
+│  (octave-integrity-calculator.js)           │
 └──────────────┬──────────────────────────────┘
                │
                ↓
 ┌─────────────────────────────────────────────┐
 │      Visualization Layer                    │
-│  (index.html, dodecahedron-3d.html, etc.)  │
+│  (index.html, dodecahedron-3d.html, etc.)   │
+│  (dna-preview-mini.js, harmonic-tuner.js)   │
 └─────────────────────────────────────────────┘
 ```
 
@@ -534,5 +734,7 @@ Shows dashboard
 ---
 
 **Created:** 2025-11-10
+**Updated:** 2025-12-09 (Added new JS modules, Council, company templates)
 **For:** Thesis defense & demo preparation
 **Status:** Complete reference guide
+**Co-created by:** Deimantas Butrimas & Claude

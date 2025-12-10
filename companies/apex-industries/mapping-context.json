@@ -1,0 +1,350 @@
+{
+  "companyId": "apex-industries",
+  "displayName": "Apex Industries",
+  "tagline": "Sustainable Manufacturing Excellence",
+  "octaveStage": "O6-O7",
+  "dominantOctave": 6,
+  "archetype": "enterprise",
+  "dominantBreathName": "The Breath of Legacy",
+  "mode": "quick",
+
+  "faces": [
+    {
+      "id": 1,
+      "baseName": "Financial Capital",
+      "customName": "Abundant Resources",
+      "icon": "💰",
+      "octave": 6,
+      "tooltip": "MASTERED: $142M reserves, $450M revenue, 22% margin - generational wealth",
+      "sentiment": 0.92,
+      "elements": { "earth": 0.88, "water": 0.82, "fire": 0.75, "air": 0.80, "ether": 0.85 }
+    },
+    {
+      "id": 2,
+      "baseName": "Intellectual Capital",
+      "customName": "Living Knowledge",
+      "icon": "💡",
+      "octave": 7,
+      "tooltip": "TRANSCENDENT: 14 breakthroughs/quarter, 4.8 code quality - knowledge as legacy",
+      "sentiment": 0.95,
+      "elements": { "earth": 0.85, "water": 0.88, "fire": 0.90, "air": 0.92, "ether": 0.94 }
+    },
+    {
+      "id": 3,
+      "baseName": "Human Capital",
+      "customName": "Flourishing People",
+      "icon": "👥",
+      "octave": 7,
+      "tooltip": "RADIANT: 7.8 hrs sleep, 8.2 energy, 4.7 joy, 92% mindfulness practice",
+      "sentiment": 0.94,
+      "elements": { "earth": 0.90, "water": 0.92, "fire": 0.85, "air": 0.88, "ether": 0.95 }
+    },
+    {
+      "id": 4,
+      "baseName": "Structural Capital",
+      "customName": "Evolved Governance",
+      "icon": "🏛️",
+      "octave": 6,
+      "tooltip": "EXCELLENT: 98% framework maturity, 97% ethics compliance - structures that breathe",
+      "sentiment": 0.90,
+      "elements": { "earth": 0.92, "water": 0.85, "fire": 0.78, "air": 0.88, "ether": 0.82 }
+    },
+    {
+      "id": 5,
+      "baseName": "Market Resonance",
+      "customName": "Market Leadership",
+      "icon": "📊",
+      "octave": 6,
+      "tooltip": "INFLUENTIAL: 8,500 weekly engagement, 38 awards, shaping industry standards",
+      "sentiment": 0.88,
+      "elements": { "earth": 0.82, "water": 0.78, "fire": 0.85, "air": 0.90, "ether": 0.88 }
+    },
+    {
+      "id": 6,
+      "baseName": "Community & Partners",
+      "customName": "Living Ecosystem",
+      "icon": "🤝",
+      "octave": 7,
+      "tooltip": "RADIANT: 14 strategic partnerships, 4.9 harmony, ecosystem prototype",
+      "sentiment": 0.95,
+      "elements": { "earth": 0.88, "water": 0.94, "fire": 0.82, "air": 0.90, "ether": 0.96 }
+    },
+    {
+      "id": 7,
+      "baseName": "Brand & Reputation",
+      "customName": "Archetypal Brand",
+      "icon": "⭐",
+      "octave": 6,
+      "tooltip": "LEGENDARY: Harvard case studies, Davos keynotes, industry benchmark",
+      "sentiment": 0.92,
+      "elements": { "earth": 0.85, "water": 0.82, "fire": 0.88, "air": 0.95, "ether": 0.90 }
+    },
+    {
+      "id": 8,
+      "baseName": "Core Operations",
+      "customName": "Operational Mastery",
+      "icon": "⚙️",
+      "octave": 7,
+      "tooltip": "TRANSCENDENT: 99.97% uptime, 52 velocity, 4.8 quality - work as art",
+      "sentiment": 0.96,
+      "elements": { "earth": 0.94, "water": 0.88, "fire": 0.92, "air": 0.85, "ether": 0.90 }
+    },
+    {
+      "id": 9,
+      "baseName": "Regenerative Flow",
+      "customName": "Planetary Healing",
+      "icon": "♻️",
+      "octave": 7,
+      "tooltip": "RADIANT: 100% carbon-negative, 92% regenerative practices - healing the Earth",
+      "sentiment": 0.98,
+      "elements": { "earth": 0.95, "water": 0.96, "fire": 0.88, "air": 0.90, "ether": 0.98 }
+    },
+    {
+      "id": 10,
+      "baseName": "Foundational Values",
+      "customName": "Living Wisdom",
+      "icon": "🎯",
+      "octave": 7,
+      "tooltip": "RADIANT: 4.9 mission alignment, 4.9 foundational wisdom - values as being",
+      "sentiment": 0.97,
+      "elements": { "earth": 0.92, "water": 0.90, "fire": 0.85, "air": 0.88, "ether": 0.98 }
+    },
+    {
+      "id": 11,
+      "baseName": "Funding Pipeline",
+      "customName": "Sacred Capital Flow",
+      "icon": "💎",
+      "octave": 6,
+      "tooltip": "ABUNDANT: Self-funding growth, investors seek them, capital as gift",
+      "sentiment": 0.90,
+      "elements": { "earth": 0.85, "water": 0.88, "fire": 0.80, "air": 0.82, "ether": 0.92 }
+    },
+    {
+      "id": 12,
+      "baseName": "Risk & Resilience",
+      "customName": "Antifragile Fortress",
+      "icon": "🛡️",
+      "octave": 7,
+      "tooltip": "TRANSCENDENT: 96% risk management, 4.9 antifragility - stronger from chaos",
+      "sentiment": 0.95,
+      "elements": { "earth": 0.90, "water": 0.85, "fire": 0.92, "air": 0.88, "ether": 0.94 }
+    }
+  ],
+
+  "edges": [
+    { "id": "E1-2", "faceIds": [1, 2], "emergentName": "Capital Wisdom Flow", "elementalNature": "Fire", "theQuestion": "How does our capital transform into valuable knowledge?", "tension": 0.03 },
+    { "id": "E1-6", "faceIds": [1, 6], "emergentName": "Generous Capital Circulation", "elementalNature": "Water", "theQuestion": "How does capital flow to and from our community in a healthy way?", "tension": 0.03 },
+    { "id": "E1-7", "faceIds": [1, 7], "emergentName": "Brand Capital Story", "elementalNature": "Air", "theQuestion": "How do we communicate our financial value and story?", "tension": 0.00 },
+    { "id": "E1-8", "faceIds": [1, 8], "emergentName": "Operational Investment Harmony", "elementalNature": "Earth", "theQuestion": "How is our capital grounded in real, tangible operational work?", "tension": 0.04 },
+    { "id": "E1-10", "faceIds": [1, 10], "emergentName": "Capital as Sacred Service", "elementalNature": "Ether", "theQuestion": "How does our capital serve the highest purpose of regeneration?", "tension": 0.05 },
+    { "id": "E2-3", "faceIds": [2, 3], "emergentName": "Collective Genius", "elementalNature": "Air", "theQuestion": "How do our people's minds connect to create shared knowledge?", "tension": 0.01 },
+    { "id": "E2-6", "faceIds": [2, 6], "emergentName": "Knowledge Gift Economy", "elementalNature": "Water", "theQuestion": "How does our knowledge flow to our community? (Teaching)", "tension": 0.00 },
+    { "id": "E2-7", "faceIds": [2, 7], "emergentName": "Story-Substance Unity", "elementalNature": "Air", "theQuestion": "Does our brand story match our intellectual substance?", "tension": 0.03 },
+    { "id": "E2-10", "faceIds": [2, 10], "emergentName": "Wisdom Values Integration", "elementalNature": "Earth", "theQuestion": "Is our knowledge grounded in and aligned with our core values?", "tension": 0.02 },
+    { "id": "E2-11", "faceIds": [2, 11], "emergentName": "IP as Legacy Gift", "elementalNature": "Ether", "theQuestion": "Does our knowledge serve the highest purpose of regeneration?", "tension": 0.05 },
+    { "id": "E3-4", "faceIds": [3, 4], "emergentName": "Empowering Structures", "elementalNature": "Earth", "theQuestion": "How is our human energy grounded and supported by our structures?", "tension": 0.04 },
+    { "id": "E3-6", "faceIds": [3, 6], "emergentName": "Community as Family", "elementalNature": "Water", "theQuestion": "What is the emotional flow and quality of our human relationships?", "tension": 0.01 },
+    { "id": "E3-8", "faceIds": [3, 8], "emergentName": "Work as Joy", "elementalNature": "Fire", "theQuestion": "Does our human energy sustainably fuel our operations?", "tension": 0.02 },
+    { "id": "E3-9", "faceIds": [3, 9], "emergentName": "Humanity as Earth Service", "elementalNature": "Ether", "theQuestion": "How does our humanity serve and express our highest values?", "tension": 0.04 },
+    { "id": "E3-11", "faceIds": [3, 11], "emergentName": "People Attract Capital", "elementalNature": "Fire", "theQuestion": "How does our human passion transform into the energy that attracts resources?", "tension": 0.04 },
+    { "id": "E4-5", "faceIds": [4, 5], "emergentName": "Structure as Message", "elementalNature": "Air", "theQuestion": "Do our structures help or hinder the clarity of our public message?", "tension": 0.02 },
+    { "id": "E4-6", "faceIds": [4, 6], "emergentName": "Partnership Excellence", "elementalNature": "Earth", "theQuestion": "Are our partnerships grounded in clear, stable, formal agreements?", "tension": 0.05 },
+    { "id": "E4-7", "faceIds": [4, 7], "emergentName": "Governance as Brand", "elementalNature": "Ether", "theQuestion": "Does our structure embody the highest integrity of our brand?", "tension": 0.02 },
+    { "id": "E4-9", "faceIds": [4, 9], "emergentName": "Structure Serves Regeneration", "elementalNature": "Fire", "theQuestion": "Can our structure transform to meet the needs of due diligence?", "tension": 0.08 },
+    { "id": "E4-10", "faceIds": [4, 10], "emergentName": "Governance Values Unity", "elementalNature": "Ether", "theQuestion": "Does our governance embody our deepest values?", "tension": 0.07 },
+    { "id": "E5-6", "faceIds": [5, 6], "emergentName": "Market Community Harmony", "elementalNature": "Water", "theQuestion": "Is there healthy flow between our market presence and community?", "tension": 0.07 },
+    { "id": "E5-7", "faceIds": [5, 7], "emergentName": "Brand Market Unity", "elementalNature": "Ether", "theQuestion": "Does our market resonance serve the highest purpose of our brand's truth?", "tension": 0.04 },
+    { "id": "E5-8", "faceIds": [5, 8], "emergentName": "Customer Delight Loop", "elementalNature": "Fire", "theQuestion": "Does our market feedback transform into operational improvements?", "tension": 0.08 },
+    { "id": "E5-9", "faceIds": [5, 9], "emergentName": "Market Regeneration Bridge", "elementalNature": "Water", "theQuestion": "Is there a healthy flow of conversation between our market and community?", "tension": 0.10 },
+    { "id": "E5-10", "faceIds": [5, 10], "emergentName": "Market Truth Alignment", "elementalNature": "Ether", "theQuestion": "Does our market perception align with our inner truth?", "tension": 0.09 },
+    { "id": "E5-11", "faceIds": [5, 11], "emergentName": "Market Attracts Capital", "elementalNature": "Air", "theQuestion": "Does our market clarity attract aligned funding?", "tension": 0.02 },
+    { "id": "E5-12", "faceIds": [5, 12], "emergentName": "Market Resilience", "elementalNature": "Water", "theQuestion": "Is our brand a source of resilient, trust-based flow during a crisis?", "tension": 0.07 },
+    { "id": "E6-7", "faceIds": [6, 7], "emergentName": "Community Brand Synergy", "elementalNature": "Air", "theQuestion": "Do we clearly communicate our brand's power to potential funders?", "tension": 0.03 },
+    { "id": "E6-11", "faceIds": [6, 11], "emergentName": "Network as Capital Magnet", "elementalNature": "Water", "theQuestion": "Does our network generate funding opportunities?", "tension": 0.05 },
+    { "id": "E7-8", "faceIds": [7, 8], "emergentName": "Brand-Operations Excellence", "elementalNature": "Fire", "theQuestion": "Does our brand promise transform into operational excellence?", "tension": 0.04 },
+    { "id": "E7-11", "faceIds": [7, 11], "emergentName": "Brand Investor Attraction", "elementalNature": "Air", "theQuestion": "Does our brand story attract aligned capital?", "tension": 0.02 },
+    { "id": "E7-12", "faceIds": [7, 12], "emergentName": "Brand Fortress", "elementalNature": "Fire", "theQuestion": "Is our brand a source of resilience in crisis?", "tension": 0.03 },
+    { "id": "E8-9", "faceIds": [8, 9], "emergentName": "Operations as Earth Service", "elementalNature": "Water", "theQuestion": "Is there healthy regenerative flow in our operations?", "tension": 0.02 },
+    { "id": "E8-10", "faceIds": [8, 10], "emergentName": "Operations Values Unity", "elementalNature": "Water", "theQuestion": "Is there a healthy flow of regenerative practice within our operations?", "tension": 0.01 },
+    { "id": "E8-12", "faceIds": [8, 12], "emergentName": "Operational Antifragility", "elementalNature": "Air", "theQuestion": "Does operational clarity inform and reduce systemic risk?", "tension": 0.01 },
+    { "id": "E9-10", "faceIds": [9, 10], "emergentName": "Regeneration Values Unity", "elementalNature": "Ether", "theQuestion": "Is our regenerative impulse grounded in our core values?", "tension": 0.01 },
+    { "id": "E9-11", "faceIds": [9, 11], "emergentName": "Regeneration Attracts Capital", "elementalNature": "Earth", "theQuestion": "Is our regenerative impulse grounded in our core values?", "tension": 0.08 },
+    { "id": "E9-12", "faceIds": [9, 12], "emergentName": "Regeneration as Resilience", "elementalNature": "Fire", "theQuestion": "Does our regenerative practice transform into greater systemic resilience?", "tension": 0.03 },
+    { "id": "E10-11", "faceIds": [10, 11], "emergentName": "Values Attract Sacred Capital", "elementalNature": "Air", "theQuestion": "Do we clearly communicate our values to our capital partners?", "tension": 0.07 },
+    { "id": "E10-12", "faceIds": [10, 12], "emergentName": "Values as Fortress Foundation", "elementalNature": "Fire", "theQuestion": "Do our values transform into resilience during a crisis?", "tension": 0.02 },
+    { "id": "E11-12", "faceIds": [11, 12], "emergentName": "Capital Resilience Synergy", "elementalNature": "Water", "theQuestion": "Does a healthy funding pipeline create a flow of resilience?", "tension": 0.05 }
+  ],
+
+  "vertices": [
+    { "id": "V1", "faceIds": [1, 2, 3], "emergentName": "Resourced Flourishing Wisdom", "vortexStrength": 0.02, "classification": "synergy_hub", "tooltip": "HARMONY: Capital, knowledge, and people in perfect flow", "chirality": "neutral", "chiralityStrength": 0.006, "chiralityLabel": "Balanced" },
+    { "id": "V2", "faceIds": [1, 3, 4], "emergentName": "Empowered Structure", "vortexStrength": 0.03, "classification": "synergy_hub", "tooltip": "Resources, people, and governance aligned", "chirality": "neutral", "chiralityStrength": 0.006, "chiralityLabel": "Balanced" },
+    { "id": "V3", "faceIds": [1, 4, 5], "emergentName": "Market Capital Governance", "vortexStrength": 0.04, "classification": "synergy_hub", "tooltip": "External and internal coherence", "chirality": "neutral", "chiralityStrength": 0.000, "chiralityLabel": "Perfect Balance" },
+    { "id": "V4", "faceIds": [1, 5, 6], "emergentName": "Ecosystem Capital Market", "vortexStrength": 0.05, "classification": "synergy_hub", "tooltip": "Strong community-market-capital flow", "chirality": "neutral", "chiralityStrength": 0.022, "chiralityLabel": "Balanced" },
+    { "id": "V5", "faceIds": [1, 2, 6], "emergentName": "Knowledge Capital Network", "vortexStrength": 0.02, "classification": "synergy_hub", "tooltip": "IP, capital, and community in harmony", "chirality": "neutral", "chiralityStrength": 0.005, "chiralityLabel": "Balanced" },
+    { "id": "V6", "faceIds": [2, 3, 8], "emergentName": "Team Learning Excellence", "vortexStrength": 0.01, "classification": "synergy_hub", "tooltip": "PERFECT: People, knowledge, operations unified", "chirality": "neutral", "chiralityStrength": 0.002, "chiralityLabel": "Perfect Balance" },
+    { "id": "V7", "faceIds": [3, 4, 9], "emergentName": "Human Structure Regeneration", "vortexStrength": 0.06, "classification": "synergy_hub", "tooltip": "People flourishing within regenerative structures", "chirality": "neutral", "chiralityStrength": 0.024, "chiralityLabel": "Balanced" },
+    { "id": "V8", "faceIds": [4, 5, 10], "emergentName": "Structure Market Values", "vortexStrength": 0.07, "classification": "synergy_hub", "tooltip": "Values visible in governance and market", "chirality": "neutral", "chiralityStrength": 0.011, "chiralityLabel": "Balanced" },
+    { "id": "V9", "faceIds": [5, 6, 11], "emergentName": "Network Market Capital", "vortexStrength": 0.04, "classification": "synergy_hub", "tooltip": "Ecosystem driving sustainable growth", "chirality": "neutral", "chiralityStrength": 0.042, "chiralityLabel": "Balanced" },
+    { "id": "V10", "faceIds": [2, 6, 7], "emergentName": "Brand Knowledge Network", "vortexStrength": 0.02, "classification": "synergy_hub", "tooltip": "IP story shared through community", "chirality": "neutral", "chiralityStrength": 0.000, "chiralityLabel": "Perfect Balance" },
+    { "id": "V11", "faceIds": [2, 7, 8], "emergentName": "Brand IP Operations", "vortexStrength": 0.03, "classification": "synergy_hub", "tooltip": "Operational excellence tells brand story", "chirality": "neutral", "chiralityStrength": 0.011, "chiralityLabel": "Balanced" },
+    { "id": "V12", "faceIds": [3, 8, 9], "emergentName": "Human Ops Regeneration", "vortexStrength": 0.03, "classification": "synergy_hub", "tooltip": "Work as service, people flourishing", "chirality": "neutral", "chiralityStrength": 0.000, "chiralityLabel": "Perfect Balance" },
+    { "id": "V13", "faceIds": [4, 9, 10], "emergentName": "Governance Regeneration Values", "vortexStrength": 0.05, "classification": "synergy_hub", "tooltip": "Structure serves regeneration and values", "chirality": "neutral", "chiralityStrength": 0.036, "chiralityLabel": "Balanced" },
+    { "id": "V14", "faceIds": [5, 10, 11], "emergentName": "Market Values Capital", "vortexStrength": 0.08, "classification": "synergy_hub", "tooltip": "Values visible in market attracting capital", "chirality": "neutral", "chiralityStrength": 0.072, "chiralityLabel": "Balanced" },
+    { "id": "V15", "faceIds": [6, 7, 11], "emergentName": "Network Brand Funding", "vortexStrength": 0.04, "classification": "synergy_hub", "tooltip": "Community amplifying brand to capital", "chirality": "neutral", "chiralityStrength": 0.002, "chiralityLabel": "Perfect Balance" },
+    { "id": "V16", "faceIds": [7, 8, 12], "emergentName": "Brand Ops Fortress", "vortexStrength": 0.03, "classification": "synergy_hub", "tooltip": "Operations and brand building resilience", "chirality": "neutral", "chiralityStrength": 0.010, "chiralityLabel": "Balanced" },
+    { "id": "V17", "faceIds": [8, 9, 12], "emergentName": "Ops Regeneration Antifragile", "vortexStrength": 0.02, "classification": "synergy_hub", "tooltip": "Operations healing Earth, building strength", "chirality": "neutral", "chiralityStrength": 0.005, "chiralityLabel": "Balanced" },
+    { "id": "V18", "faceIds": [9, 10, 12], "emergentName": "Values Regeneration Fortress", "vortexStrength": 0.02, "classification": "synergy_hub", "tooltip": "Values and regeneration as antifragile core", "chirality": "neutral", "chiralityStrength": 0.001, "chiralityLabel": "Perfect Balance" },
+    { "id": "V19", "faceIds": [10, 11, 12], "emergentName": "Values Capital Fortress", "vortexStrength": 0.05, "classification": "synergy_hub", "tooltip": "Values attracting capital building resilience", "chirality": "neutral", "chiralityStrength": 0.042, "chiralityLabel": "Balanced" },
+    { "id": "V20", "faceIds": [7, 11, 12], "emergentName": "Brand Capital Fortress", "vortexStrength": 0.04, "classification": "synergy_hub", "tooltip": "Brand and capital providing protection", "chirality": "neutral", "chiralityStrength": 0.007, "chiralityLabel": "Balanced" }
+  ],
+
+  "breathAxes": [
+    {
+      "axis": 1,
+      "name": "Resource Flow",
+      "projectionFace": 11,
+      "receptionFace": 1,
+      "breathName": "The Breath of Legacy",
+      "projectionQuestion": "Are we seeking capital for 100-year projects?",
+      "receptionQuestion": "Is our capital structured for generational stewardship?",
+      "currentRatio": 0.98,
+      "status": "Perfect Balance",
+      "interpretation": "Capital flows abundantly - self-funding growth, investors seek them"
+    },
+    {
+      "axis": 2,
+      "name": "Substance & Story",
+      "projectionFace": 7,
+      "receptionFace": 2,
+      "breathName": "The Breath of Endurance",
+      "projectionQuestion": "Is our brand telling a story that can change the future?",
+      "receptionQuestion": "Is our IP a legacy that will serve future generations?",
+      "currentRatio": 0.97,
+      "status": "Perfect Balance",
+      "interpretation": "Harvard case studies match real innovation - story = substance"
+    },
+    {
+      "axis": 3,
+      "name": "Being & Doing",
+      "projectionFace": 8,
+      "receptionFace": 3,
+      "breathName": "The Breath of Continuity",
+      "projectionQuestion": "Is our work a path to collective mastery?",
+      "receptionQuestion": "Is our culture designed to outlive its founders?",
+      "currentRatio": 1.02,
+      "status": "Perfect Balance",
+      "interpretation": "Work as joy, people flourishing - 7.8 hrs sleep, 4.7 joy score"
+    },
+    {
+      "axis": 4,
+      "name": "Form & Integrity",
+      "projectionFace": 4,
+      "receptionFace": 9,
+      "breathName": "The Breath of Evolution",
+      "projectionQuestion": "Is our governance model itself designed to evolve?",
+      "receptionQuestion": "Are we a steward for future generations?",
+      "currentRatio": 0.92,
+      "status": "Slight Inhale",
+      "interpretation": "Regeneration (0.98) slightly exceeds structure (0.90) - Earth healing focus"
+    },
+    {
+      "axis": 5,
+      "name": "Perception & Truth",
+      "projectionFace": 5,
+      "receptionFace": 10,
+      "breathName": "The Breath of Destiny",
+      "projectionQuestion": "Is the market seeing us as a shaper of the future?",
+      "receptionQuestion": "Are our values universal and timeless?",
+      "currentRatio": 0.91,
+      "status": "Slight Inhale",
+      "interpretation": "Deep values (0.97) slightly exceed market perception (0.88) - authentic"
+    },
+    {
+      "axis": 6,
+      "name": "Network & Fortress",
+      "projectionFace": 6,
+      "receptionFace": 12,
+      "breathName": "The Breath of Stewardship",
+      "projectionQuestion": "Is our network consciously building a better future?",
+      "receptionQuestion": "Is our vision itself resilient and able to self-correct?",
+      "currentRatio": 1.00,
+      "status": "Perfect Balance",
+      "interpretation": "Community (0.95) and resilience (0.95) in harmony - ecosystem prototype"
+    }
+  ],
+
+  "shadowPatterns": [
+    {
+      "id": "complacency-risk",
+      "name": "Complacency Risk",
+      "suppressed": "17 years of success could breed unconscious complacency",
+      "integrated": "Humble Excellence - Success held with gratitude and vigilance",
+      "severity": "minimal",
+      "involvedFaces": [1, 8, 10],
+      "prescription": "Regular zero-based reviews, external challenge boards, intentional disruption"
+    },
+    {
+      "id": "succession-transition",
+      "name": "Succession Transition",
+      "suppressed": "Visionary leadership team will eventually transition",
+      "integrated": "Generational Wisdom Transfer - Leaders as teachers, not just doers",
+      "severity": "moderate",
+      "involvedFaces": [3, 4, 10],
+      "prescription": "Formalize leadership development program, document founder wisdom, cultivate successors"
+    },
+    {
+      "id": "model-replication",
+      "name": "Model Replication Challenge",
+      "suppressed": "Being studied more than teaching - 38 awards but limited playbook sharing",
+      "integrated": "Generous Mastery - Excellence that multiplies through teaching",
+      "severity": "minimal",
+      "involvedFaces": [2, 6, 7],
+      "prescription": "Create open-source playbooks, expand coaching program, share knowledge freely"
+    }
+  ],
+
+  "diagnostics": {
+    "globalCoherence": 0.94,
+    "beingActionBalance": 1.02,
+    "dissonanceIndex": 0.04,
+    "dominantMode": 7,
+    "highestLeverageAction": "Formalize succession planning and knowledge transfer to next generation",
+    "strategicMandate": "Radiate Excellence - Be the lighthouse for others, not just the ship",
+    "breathPrescription": "Maintain balance while increasing generosity - teach what you've learned",
+    "tuning": {
+      "perspective": "corporate",
+      "description": "Rigorous, demanding perspective for mature organizations",
+      "alpha": 0.7,
+      "beta": 0.5,
+      "gamma": 0.8,
+      "delta": 0.8,
+      "kappa": 4.0,
+      "eta": 0.382,
+      "zeta": 0.064,
+      "theta": 0.618
+    }
+  },
+
+  "kpis": {
+    "face1": [{ "id": "F1.1", "name": "Cash Reserves", "value": 142, "target": 150, "unit": "million USD" }],
+    "face2": [{ "id": "L2.1", "name": "R&D Breakthroughs/Quarter", "value": 14, "target": 12, "unit": "breakthroughs" }],
+    "face3": [{ "id": "L1.1", "name": "Average Employee Sleep", "value": 7.8, "target": 7.5, "unit": "hours" }],
+    "face4": [{ "id": "S1.1", "name": "Governance Framework Maturity", "value": 0.98, "target": 0.95, "unit": "percent" }],
+    "face5": [{ "id": "P1.1", "name": "Weekly Engagement", "value": 8500, "target": 8000, "unit": "interactions" }],
+    "face6": [{ "id": "S2.1", "name": "Strategic Partnerships", "value": 14, "target": 12, "unit": "partnerships" }],
+    "face7": [{ "id": "P2.1", "name": "Industry Awards (3yr)", "value": 38, "target": 30, "unit": "awards" }],
+    "face8": [{ "id": "P3.1", "name": "System Uptime", "value": 0.9997, "target": 0.999, "unit": "percent" }],
+    "face9": [{ "id": "E1.1", "name": "Regenerative Practice Adoption", "value": 0.92, "target": 0.90, "unit": "percent" }],
+    "face10": [{ "id": "L3.1", "name": "Mission Alignment Score", "value": 4.9, "target": 4.8, "unit": "scale 1-5" }],
+    "face11": [{ "id": "F1.2", "name": "Investor Interest Inbound", "value": 12, "target": 8, "unit": "per quarter" }],
+    "face12": [{ "id": "R1.1", "name": "Antifragility Score", "value": 4.9, "target": 4.5, "unit": "scale 1-5" }]
+  },
+
+  "metadata": {
+    "createdAt": "2024-12-05",
+    "version": "1.0.0",
+    "source": "template",
+    "lastModified": "2024-12-05",
+    "notes": "Public company at O6-O7 demonstrating organizational mastery. Near-perfect coherence across all dimensions. 17 years of building systemic excellence. Harvard case study subject, Davos keynote speaker. This is what the aspirational end-state looks like."
+  }
+}

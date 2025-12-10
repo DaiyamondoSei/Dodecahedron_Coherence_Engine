@@ -1,61 +1,61 @@
-KPI_ID,KPI_Name,Face_ID,Element,Value,Weight,Direction,Target_Min,Target_Ideal,Healthy_Min,Healthy_Max,Absolute_Max
-F1_E1,Cash Reserves,1,Earth,142000000,1.2,↑,0,50000000,80000000,200000000,500000000
-F1_E2,Monthly Operating Expenses,1,Water,18500000,1.0,↓,10000,15000,20000,60000
-F1_E3,Investment Portfolio Diversity,1,Fire,7,1.0,Band,0,1,3,8
-F1_E4,Financial Transparency Score,1,Air,4.9,0.8,↑,1,4.5,3,5,5
-F1_E5,Capital Allocation Wisdom,1,Ether,4.8,0.9,↑,1,4.5,3,5,5
-F2_E1,Patent Portfolio Quality,2,Earth,4.7,1.0,↑,1,4.5,3,5,5
-F2_E2,R&D Breakthroughs per Quarter,2,Water,14,1.0,↑,0,10,5,15,20
-F2_E3,Innovation Investment Hours,2,Fire,28,1.2,Band,0,10,15,40
-F2_E4,Knowledge Sharing Index,2,Air,4.8,0.9,↑,1,4.5,3,5,5
-F2_E5,Intellectual Excellence Score,2,Ether,4.9,0.8,↑,1,4.5,3,5,5
-F3_E1,Employee Sleep Quality,3,Earth,7.8,1.3,Band,4,7,8.5,10
-F3_E2,Team Energy Levels,3,Water,8.2,1.5,Band,5,7,8.5,10
-F3_E3,Professional Development Hours,3,Fire,6,1.0,Band,0,2,5,10
-F3_E4,Mindfulness Practice Adoption,3,Air,0.92,0.8,↑,0,1,0.7,1,1
-F3_E5,Organizational Joy Index,3,Ether,4.7,1.2,↑,1,4.5,3,5,5
-F4_E1,Governance Framework Maturity,4,Earth,98,1.0,↑,0,100,80,100,100
-F4_E2,Decision Making Efficiency,4,Water,4.6,1.0,↑,1,4,3,5,5
-F4_E3,Ethics Compliance Rate,4,Fire,97,1.0,↑,0,100,70,100,100
-F4_E4,Policy Documentation Quality,4,Air,95,1.0,↑,0,100,80,100,100
-F4_E5,Structural Integrity Score,4,Ether,4.8,0.9,↑,1,4.5,3,5,5
-F5_E1,Customer Advocacy Score,5,Earth,16,1.0,↑,0,10,5,15,20
-F5_E2,Market Engagement Volume,5,Water,8500,1.0,↑,0,100,500,3000,10000
-F5_E3,Thought Leadership Hours,5,Fire,24,1.0,Band,0,5,10,30
-F5_E4,Brand Authenticity Score,5,Air,4.9,0.8,↑,1,4.5,3,5,5
-F5_E5,Market Resonance Index,5,Ether,4.8,1.0,↑,1,4.5,3,5,5
-F6_E1,Strategic Partnerships,6,Earth,14,1.0,↑,0,5,3,10,15
-F6_E2,Community Investment Hours,6,Water,18,1.0,Band,0,3,8,20
-F6_E3,Ecosystem Growth Rate,6,Fire,42,1.0,↑,0,10,15,30,50
-F6_E4,Relationship Depth Score,6,Air,4.7,0.9,↑,1,4.5,3,5,5
-F6_E5,Stakeholder Harmony Index,6,Ether,4.9,1.1,↑,1,4.5,3,5,5
-F7_E1,Industry Recognition Awards,7,Earth,38,1.0,↑,0,10,8,20,50
-F7_E2,Brand Consistency Index,7,Water,4.8,0.9,↑,1,4.5,3,5,5
-F7_E3,Authentic Communication Hours,7,Fire,22,1.0,Band,0,5,10,25
-F7_E4,Message Clarity Score,7,Air,4.9,0.8,↑,1,4.5,3,5,5
-F7_E5,Reputation Excellence,7,Ether,4.8,1.0,↑,1,4.5,3,5,5
-F8_E1,System Reliability,8,Earth,99.97,1.0,↑,95,99.9,99,100,100
-F8_E2,Value Delivered per Release,8,Water,13,1.0,↑,0,5,8,15,20
-F8_E3,Operational Excellence Score,8,Fire,52,1.2,↑,0,20,30,50,60
-F8_E4,Process Quality Index,8,Air,4.8,1.0,↑,1,4.5,3,5,5
-F8_E5,Operational Elegance,8,Ether,4.7,0.8,↑,1,4.5,3,5,5
-F9_E1,Carbon Negative Achievement,9,Earth,100,0.8,↑,0,100,60,100,100
-F9_E2,Resource Circularity Rate,9,Water,4.8,1.0,↑,1,4.5,3,5,5
-F9_E3,Regenerative Impact Score,9,Fire,92,1.0,↑,0,100,50,100,100
-F9_E4,Sustainability Leadership,9,Air,4.9,0.9,↑,1,4.5,3,5,5
-F9_E5,Ecological Wisdom Index,9,Ether,4.7,0.8,↑,1,4.5,3,5,5
-F10_E1,Purpose Clarity & Alignment,10,Earth,4.9,1.2,↑,1,4.5,3,5,5
-F10_E2,Values Integration Score,10,Water,4.8,0.9,↑,1,4.5,3,5,5
-F10_E3,Meaning Making Hours,10,Fire,16,1.0,Band,0,5,10,20
-F10_E4,Foundational Wisdom,10,Air,4.9,1.1,↑,1,4.5,3,5,5
-F10_E5,Core Truth Embodiment,10,Ether,4.8,0.8,↑,1,4.5,3,5,5
-F11_E1,Strategic Capital Opportunities,11,Earth,11,1.0,↑,0,5,3,10,15
-F11_E2,Investment Narrative Quality,11,Water,4.9,0.9,↑,1,4.5,3,5,5
-F11_E3,Capital Strategy Hours,11,Fire,12,1.2,Band,0,10,15,30
-F11_E4,Financial Story Clarity,11,Air,4.8,0.8,↑,1,4.5,3,5,5
-F11_E5,Capital Flow Mastery,11,Ether,4.7,1.0,↑,1,4.5,3,5,5
-F12_E1,Enterprise Risk Management,12,Earth,96,1.0,↑,0,100,70,100,100
-F12_E2,Adaptive Capacity Index,12,Water,4.7,1.0,↑,1,4.5,3,5,5
-F12_E3,Strategic Agility Score,12,Fire,0.95,0.9,↑,0,1,0.7,1,1
-F12_E4,Resilience Framework Quality,12,Air,4.8,0.8,↑,1,4.5,3,5,5
-F12_E5,Antifragility Index,12,Ether,4.9,1.0,↑,1,4.5,3,5,5
+KPI_ID,KPI_Name,Face_ID,Element,Value,Weight,Direction,Target_Min,Target_Ideal,Healthy_Min,Healthy_Max,Absolute_Max,metricType
+F1_E1,Cash Reserves,1,Earth,142000000,1.2,↑,0,50000000,80000000,200000000,500000000,survival
+F1_E2,Monthly Operating Expenses,1,Water,18500000,1.0,↓,10000,15000,20000,60000,survival
+F1_E3,Investment Portfolio Diversity,1,Fire,7,1.0,Band,0,1,3,8,growth
+F1_E4,Financial Transparency Score,1,Air,4.9,0.8,↑,1,4.5,3,5,5,completion
+F1_E5,Capital Allocation Wisdom,1,Ether,4.8,0.9,↑,1,4.5,3,5,5,completion
+F2_E1,Patent Portfolio Quality,2,Earth,4.7,1.0,↑,1,4.5,3,5,5,completion
+F2_E2,R&D Breakthroughs per Quarter,2,Water,14,1.0,↑,0,10,5,15,20,growth
+F2_E3,Innovation Investment Hours,2,Fire,28,1.2,Band,0,10,15,40,growth
+F2_E4,Knowledge Sharing Index,2,Air,4.8,0.9,↑,1,4.5,3,5,5,completion
+F2_E5,Intellectual Excellence Score,2,Ether,4.9,0.8,↑,1,4.5,3,5,5,completion
+F3_E1,Employee Sleep Quality,3,Earth,7.8,1.3,Band,4,7,8.5,10,survival
+F3_E2,Team Energy Levels,3,Water,8.2,1.5,Band,5,7,8.5,10,survival
+F3_E3,Professional Development Hours,3,Fire,6,1.0,Band,0,2,5,10,growth
+F3_E4,Mindfulness Practice Adoption,3,Air,0.92,0.8,↑,0,1,0.7,1,1,completion
+F3_E5,Organizational Joy Index,3,Ether,4.7,1.2,↑,1,4.5,3,5,5,survival
+F4_E1,Governance Framework Maturity,4,Earth,98,1.0,↑,0,100,80,100,100,completion
+F4_E2,Decision Making Efficiency,4,Water,4.6,1.0,↑,1,4,3,5,5,completion
+F4_E3,Ethics Compliance Rate,4,Fire,97,1.0,↑,0,100,70,100,100,survival
+F4_E4,Policy Documentation Quality,4,Air,95,1.0,↑,0,100,80,100,100,completion
+F4_E5,Structural Integrity Score,4,Ether,4.8,0.9,↑,1,4.5,3,5,5,survival
+F5_E1,Customer Advocacy Score,5,Earth,16,1.0,↑,0,10,5,15,20,growth
+F5_E2,Market Engagement Volume,5,Water,8500,1.0,↑,0,100,500,3000,10000,growth
+F5_E3,Thought Leadership Hours,5,Fire,24,1.0,Band,0,5,10,30,growth
+F5_E4,Brand Authenticity Score,5,Air,4.9,0.8,↑,1,4.5,3,5,5,completion
+F5_E5,Market Resonance Index,5,Ether,4.8,1.0,↑,1,4.5,3,5,5,growth
+F6_E1,Strategic Partnerships,6,Earth,14,1.0,↑,0,5,3,10,15,growth
+F6_E2,Community Investment Hours,6,Water,18,1.0,Band,0,3,8,20,growth
+F6_E3,Ecosystem Growth Rate,6,Fire,42,1.0,↑,0,10,15,30,50,growth
+F6_E4,Relationship Depth Score,6,Air,4.7,0.9,↑,1,4.5,3,5,5,completion
+F6_E5,Stakeholder Harmony Index,6,Ether,4.9,1.1,↑,1,4.5,3,5,5,survival
+F7_E1,Industry Recognition Awards,7,Earth,38,1.0,↑,0,10,8,20,50,growth
+F7_E2,Brand Consistency Index,7,Water,4.8,0.9,↑,1,4.5,3,5,5,survival
+F7_E3,Authentic Communication Hours,7,Fire,22,1.0,Band,0,5,10,25,growth
+F7_E4,Message Clarity Score,7,Air,4.9,0.8,↑,1,4.5,3,5,5,completion
+F7_E5,Reputation Excellence,7,Ether,4.8,1.0,↑,1,4.5,3,5,5,growth
+F8_E1,System Reliability,8,Earth,99.97,1.0,↑,95,99.9,99,100,100,survival
+F8_E2,Value Delivered per Release,8,Water,13,1.0,↑,0,5,8,15,20,growth
+F8_E3,Operational Excellence Score,8,Fire,52,1.2,↑,0,20,30,50,60,growth
+F8_E4,Process Quality Index,8,Air,4.8,1.0,↑,1,4.5,3,5,5,completion
+F8_E5,Operational Elegance,8,Ether,4.7,0.8,↑,1,4.5,3,5,5,completion
+F9_E1,Carbon Negative Achievement,9,Earth,100,0.8,↑,0,100,60,100,100,survival
+F9_E2,Resource Circularity Rate,9,Water,4.8,1.0,↑,1,4.5,3,5,5,completion
+F9_E3,Regenerative Impact Score,9,Fire,92,1.0,↑,0,100,50,100,100,survival
+F9_E4,Sustainability Leadership,9,Air,4.9,0.9,↑,1,4.5,3,5,5,completion
+F9_E5,Ecological Wisdom Index,9,Ether,4.7,0.8,↑,1,4.5,3,5,5,growth
+F10_E1,Purpose Clarity & Alignment,10,Earth,4.9,1.2,↑,1,4.5,3,5,5,survival
+F10_E2,Values Integration Score,10,Water,4.8,0.9,↑,1,4.5,3,5,5,completion
+F10_E3,Meaning Making Hours,10,Fire,16,1.0,Band,0,5,10,20,survival
+F10_E4,Foundational Wisdom,10,Air,4.9,1.1,↑,1,4.5,3,5,5,completion
+F10_E5,Core Truth Embodiment,10,Ether,4.8,0.8,↑,1,4.5,3,5,5,completion
+F11_E1,Strategic Capital Opportunities,11,Earth,11,1.0,↑,0,5,3,10,15,growth
+F11_E2,Investment Narrative Quality,11,Water,4.9,0.9,↑,1,4.5,3,5,5,growth
+F11_E3,Capital Strategy Hours,11,Fire,12,1.2,Band,0,10,15,30,growth
+F11_E4,Financial Story Clarity,11,Air,4.8,0.8,↑,1,4.5,3,5,5,completion
+F11_E5,Capital Flow Mastery,11,Ether,4.7,1.0,↑,1,4.5,3,5,5,growth
+F12_E1,Enterprise Risk Management,12,Earth,96,1.0,↑,0,100,70,100,100,survival
+F12_E2,Adaptive Capacity Index,12,Water,4.7,1.0,↑,1,4.5,3,5,5,survival
+F12_E3,Strategic Agility Score,12,Fire,0.95,0.9,↑,0,1,0.7,1,1,growth
+F12_E4,Resilience Framework Quality,12,Air,4.8,0.8,↑,1,4.5,3,5,5,growth
+F12_E5,Antifragility Index,12,Ether,4.9,1.0,↑,1,4.5,3,5,5,survival

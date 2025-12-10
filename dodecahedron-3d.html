@@ -6,6 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔷 3D Dodecahedron - Unified Visualization</title>
     <style>
+        /* ========================================
+           CSS VARIABLES - Sacred Color Palette
+           ======================================== */
+        :root {
+            /* Primary neon colors */
+            --neon-cyan: #00ffcc;
+            --neon-green: #00ff66;
+
+            /* Transcendence colors */
+            --gold-transcend: #ffd700;
+            --amber-warning: #ffaa00;
+            --violet-mastery: #8a2be2;
+            --deep-purple: #6a0dad;
+
+            /* Status colors */
+            --status-critical: #ff4444;
+            --status-warning: #ffaa00;
+            --status-healthy: #00ffcc;
+
+            /* Phi-based timing */
+            --phi-timing: 1.618s;
+            --phi-short: 0.618s;
+            --phi-micro: 0.382s;
+
+            /* Glassmorphism */
+            --glass-bg: rgba(0, 0, 0, 0.6);
+            --glass-border: rgba(0, 255, 204, 0.2);
+            --glass-glow: rgba(0, 255, 204, 0.1);
+
+            /* Font Scale Levels (Sprint 3.5 - Presentation Enhancement) */
+            --font-scale-base: 1em;
+            --font-scale-large: 1.25em;
+            --font-scale-xlarge: 1.5em;
+            --current-font-scale: var(--font-scale-base);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -251,6 +287,109 @@
             gap: 8px;
         }
 
+        /* Breath Axis Preview Section - Phase 2 Enhancement */
+        .breath-axis-section {
+            padding: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.05) 0%, rgba(255, 0, 255, 0.05) 100%);
+        }
+
+        .breath-axis-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .dna-preview-container {
+            width: 200px;
+            height: 120px;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        #dnaPreviewCanvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .breath-info {
+            text-align: center;
+            width: 100%;
+        }
+
+        .breath-axis-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #00ffcc;
+            margin-bottom: 6px;
+        }
+
+        .breath-ratio-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+        }
+
+        .breath-ratio-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .breath-status {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .breath-status.balanced {
+            background: rgba(0, 255, 150, 0.2);
+            color: #00ff99;
+        }
+
+        .breath-status.over-inhaling {
+            background: rgba(0, 150, 255, 0.2);
+            color: #00aaff;
+        }
+
+        .breath-status.over-exhaling {
+            background: rgba(255, 150, 0, 0.2);
+            color: #ffaa00;
+        }
+
+        .partner-face-info {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 8px;
+        }
+
+        .view-full-dna-btn {
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.2) 0%, rgba(255, 0, 255, 0.2) 100%);
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            border-radius: 6px;
+            color: #00ffcc;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .view-full-dna-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.3) 0%, rgba(255, 0, 255, 0.3) 100%);
+            border-color: rgba(0, 255, 204, 0.6);
+            transform: translateY(-2px);
+        }
+
         .metric-row {
             display: flex;
             justify-content: space-between;
@@ -341,6 +480,191 @@
             color: #fff;
         }
 
+        /* ========================================
+           FACE PANEL TABS - Sprint 3.5
+           Multi-section navigation for rich data
+           ======================================== */
+        .face-panel-tabs {
+            display: flex;
+            gap: 4px;
+            margin: 15px 0;
+            border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+            padding-bottom: 0;
+        }
+
+        .face-panel-tab {
+            flex: 1;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: rgba(255, 255, 255, 0.6);
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 12px 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .face-panel-tab:hover {
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(0, 255, 204, 0.05);
+        }
+
+        .face-panel-tab.active {
+            color: #00ffcc;
+            border-bottom-color: #00ffcc;
+            background: rgba(0, 255, 204, 0.1);
+        }
+
+        .face-panel-tab-icon {
+            font-size: 14px;
+        }
+
+        .face-panel-section {
+            display: none;
+            animation: fadeInSection 0.3s ease;
+        }
+
+        .face-panel-section.active {
+            display: block;
+        }
+
+        @keyframes fadeInSection {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* High-contrast tab styles */
+        body.high-contrast .face-panel-tabs {
+            border-bottom-color: rgba(255, 255, 0, 0.2);
+        }
+
+        body.high-contrast .face-panel-tab.active {
+            color: #FFFF00;
+            border-bottom-color: #FFFF00;
+            background: rgba(255, 255, 0, 0.1);
+        }
+
+        body.high-contrast .face-panel-tab:hover {
+            background: rgba(255, 255, 0, 0.05);
+        }
+
+        /* Section header styling */
+        .panel-section-header {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(0, 255, 204, 0.8);
+            margin: 20px 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(0, 255, 204, 0.15);
+        }
+
+        body.high-contrast .panel-section-header {
+            color: rgba(255, 255, 0, 0.8);
+            border-bottom-color: rgba(255, 255, 0, 0.15);
+        }
+
+        /* Element Balance Grid - Sprint 3.5 */
+        .element-balance-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .element-balance-item {
+            text-align: center;
+            padding: 12px 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .element-balance-item:hover {
+            background: rgba(0, 255, 204, 0.1);
+            border-color: rgba(0, 255, 204, 0.3);
+        }
+
+        .element-icon {
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        .element-name {
+            font-size: 9px;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .element-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #00ffcc;
+        }
+
+        .element-bar {
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .element-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffcc, #00ff66);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        /* Leverage Action Card - Sprint 3.5 */
+        .leverage-action-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 170, 0, 0.05));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 8px;
+        }
+
+        .leverage-action-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .leverage-action-text::before {
+            content: "💡 ";
+        }
+
+        body.high-contrast .element-balance-item:hover {
+            background: rgba(255, 255, 0, 0.1);
+            border-color: rgba(255, 255, 0, 0.3);
+        }
+
+        body.high-contrast .element-value {
+            color: #FFFF00;
+        }
+
+        body.high-contrast .element-bar-fill {
+            background: linear-gradient(90deg, #FFFF00, #FFaa00);
+        }
+
+        body.high-contrast .leverage-action-card {
+            border-color: rgba(255, 255, 0, 0.3);
+        }
+
         .face-energy-display {
             font-size: 48px;
             font-weight: 300;
@@ -356,6 +680,108 @@
             margin-bottom: 30px;
             text-transform: uppercase;
             letter-spacing: 2px;
+        }
+
+        /* Octave Progression Display */
+        .octave-progression-section {
+            margin: 15px 0 20px;
+            padding: 15px;
+            background: rgba(0, 255, 204, 0.05);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 12px;
+        }
+
+        .current-octave-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .octave-number {
+            font-size: 28px;
+            font-weight: 200;
+            color: #00ffcc;
+            font-family: 'Georgia', serif;
+        }
+
+        .octave-name {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+
+        .octave-progress-container {
+            width: 100%;
+        }
+
+        .octave-progress-label {
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .octave-progress-label span {
+            color: #00ffcc;
+            font-weight: 600;
+        }
+
+        .octave-progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .octave-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffcc, #ff00ff);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .octave-threshold-marker {
+            position: absolute;
+            top: -4px;
+            height: 16px;
+            width: 2px;
+            background: #ffaa00;
+            border-radius: 1px;
+            left: 61.8%;
+            transition: left 0.3s ease;
+        }
+
+        .octave-threshold-marker::after {
+            content: 'θ';
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: #ffaa00;
+        }
+
+        .transcendence-badge {
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.3), rgba(255, 0, 255, 0.3));
+            border: 1px solid #00ffcc;
+            border-radius: 16px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #00ffcc;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 204, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(0, 255, 204, 0.6); }
         }
 
         .kpi-grid {
@@ -674,6 +1100,31 @@
             opacity: 1;
         }
 
+        /* Edge Question - Sprint 4 Task 33 */
+        .edge-question {
+            font-style: italic;
+            color: #00ffcc;
+            background: rgba(0, 255, 204, 0.08);
+            padding: 10px 12px;
+            border-left: 3px solid #00ffcc;
+            margin-top: 10px;
+            border-radius: 0 4px 4px 0;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .edge-question::before {
+            content: '"';
+            font-size: 16px;
+            opacity: 0.6;
+        }
+
+        .edge-question::after {
+            content: '"';
+            font-size: 16px;
+            opacity: 0.6;
+        }
+
         /* Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
@@ -818,291 +1269,1172 @@
             margin-bottom: 4px;
         }
 
-        /* Harmonic Tuner Dashboard */
-        .harmonic-tuner {
+        /* ═══════════════════════════════════════════════════════════
+           HARMONIC TUNER STYLES
+           → Moved to external file: css/harmonic-tuner.css
+           ═══════════════════════════════════════════════════════════ */
+
+        /* ========================================
+           PRESENTATION MODE - Phase 5
+           Toggle with 'P' key for thesis defense
+           ======================================== */
+        body.presentation-mode {
+            font-size: 1.3em;
+        }
+
+        body.presentation-mode .controls-panel {
+            width: 340px;
+        }
+
+        body.presentation-mode .controls-panel h3 {
+            font-size: 16px;
+            letter-spacing: 3px;
+        }
+
+        body.presentation-mode .control-button {
+            font-size: 14px;
+            padding: 15px 20px;
+        }
+
+        body.presentation-mode .stats-value {
+            font-size: 20px;
+        }
+
+        body.presentation-mode .face-detail-panel {
+            width: 500px;
+            font-size: 1.1em;
+        }
+
+        body.presentation-mode .face-detail-title {
+            font-size: 26px;
+        }
+
+        body.presentation-mode .face-energy-display {
+            font-size: 60px;
+        }
+
+        body.presentation-mode #faceTooltip,
+        body.presentation-mode #edgeTooltip {
+            font-size: 14px;
+            padding: 15px 20px;
+        }
+
+        /* Presentation mode indicator */
+        .presentation-indicator {
             position: fixed;
-            bottom: -200px;
-            /* Hidden by default */
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 800px;
-            height: 180px;
-            background: linear-gradient(180deg, rgba(10, 15, 20, 0.95) 0%, rgba(0, 0, 0, 1) 100%);
-            border: 1px solid rgba(0, 255, 204, 0.3);
-            border-bottom: none;
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 -10px 50px rgba(0, 255, 204, 0.1);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding: 0 40px;
-            transition: bottom 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
-            backdrop-filter: blur(20px);
-        }
-
-        .harmonic-tuner.visible {
-            bottom: 0;
-        }
-
-        .tuner-toggle {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(0, 255, 204, 0.3);
-            border-bottom: none;
-            padding: 5px 20px;
-            border-radius: 10px 10px 0 0;
-            color: #00ffcc;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            animation: pulse-border 2s infinite;
-        }
-
-        @keyframes pulse-border {
-            0% {
-                box-shadow: 0 -2px 5px rgba(0, 255, 204, 0.1);
-            }
-
-            50% {
-                box-shadow: 0 -5px 15px rgba(0, 255, 204, 0.4);
-            }
-
-            100% {
-                box-shadow: 0 -2px 5px rgba(0, 255, 204, 0.1);
-            }
-        }
-
-        .tuner-toggle:hover {
-            background: rgba(0, 255, 204, 0.2);
-            animation: none;
-            box-shadow: 0 -5px 20px rgba(0, 255, 204, 0.3);
-        }
-
-        /* Tooltip System */
-        .tuner-tooltip {
-            position: absolute;
-            background: rgba(10, 15, 20, 0.95);
+            background: rgba(0, 255, 204, 0.15);
             border: 1px solid #00ffcc;
-            border-radius: 8px;
-            padding: 12px;
-            width: 220px;
-            pointer-events: none;
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: #00ffcc;
             opacity: 0;
             transition: opacity 0.3s ease;
-            z-index: 2000;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-10px);
+            pointer-events: none;
+            z-index: 9999;
         }
 
-        .tuner-tooltip.visible {
+        body.presentation-mode .presentation-indicator {
             opacity: 1;
-            transform: translateX(-50%) translateY(-20px);
         }
 
-        .tooltip-title {
-            color: #00ffcc;
+        /* ========================================
+           FONT SCALE LEVELS - Sprint 3.5
+           Toggle with 'L' key: Normal → Large → XLarge
+           ======================================== */
+
+        /* Normal font scale (default) */
+        body.font-scale-normal {
+            --current-font-scale: var(--font-scale-base);
+        }
+
+        /* Large font scale */
+        body.font-scale-large {
+            --current-font-scale: var(--font-scale-large);
+        }
+
+        body.font-scale-large .controls-panel {
+            width: 320px;
+        }
+
+        body.font-scale-large .controls-panel h3 {
+            font-size: 14px;
+        }
+
+        body.font-scale-large .control-button {
+            font-size: 13px;
+            padding: 12px 18px;
+        }
+
+        body.font-scale-large .stats-value {
+            font-size: 18px;
+        }
+
+        body.font-scale-large .face-detail-panel {
+            width: 450px;
+        }
+
+        body.font-scale-large .face-detail-title {
+            font-size: 24px;
+        }
+
+        body.font-scale-large .face-energy-display {
+            font-size: 50px;
+        }
+
+        body.font-scale-large #faceTooltip,
+        body.font-scale-large #edgeTooltip {
+            font-size: 13px;
+            padding: 12px 16px;
+        }
+
+        body.font-scale-large .mode-button {
             font-size: 12px;
+            padding: 12px 18px;
+        }
+
+        /* XLarge font scale (maximum readability) */
+        body.font-scale-xlarge {
+            --current-font-scale: var(--font-scale-xlarge);
+        }
+
+        body.font-scale-xlarge .controls-panel {
+            width: 380px;
+        }
+
+        body.font-scale-xlarge .controls-panel h3 {
+            font-size: 18px;
+            letter-spacing: 3px;
+        }
+
+        body.font-scale-xlarge .control-button {
+            font-size: 16px;
+            padding: 16px 22px;
+        }
+
+        body.font-scale-xlarge .stats-value {
+            font-size: 24px;
+        }
+
+        body.font-scale-xlarge .face-detail-panel {
+            width: 550px;
+        }
+
+        body.font-scale-xlarge .face-detail-title {
+            font-size: 30px;
+        }
+
+        body.font-scale-xlarge .face-energy-display {
+            font-size: 72px;
+        }
+
+        body.font-scale-xlarge #faceTooltip,
+        body.font-scale-xlarge #edgeTooltip {
+            font-size: 16px;
+            padding: 16px 22px;
+        }
+
+        body.font-scale-xlarge .mode-button {
+            font-size: 14px;
+            padding: 14px 20px;
+        }
+
+        body.font-scale-xlarge .page-title {
+            font-size: 26px;
+        }
+
+        body.font-scale-xlarge .page-subtitle {
+            font-size: 14px;
+        }
+
+        /* Font Scale Indicator */
+        .font-scale-indicator {
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 170, 0, 0.15);
+            border: 1px solid rgba(255, 170, 0, 0.5);
+            color: #ffaa00;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        .font-scale-indicator.visible {
+            opacity: 1;
+        }
+
+        .font-scale-indicator.fade-out {
+            opacity: 0;
+        }
+
+        /* ========================================
+           HIGH-CONTRAST MODE - Sprint 3.5
+           Toggle with 'C' key for projector visibility
+           ======================================== */
+        body.high-contrast {
+            background: #000000;
+        }
+
+        body.high-contrast .page-header {
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom-color: #FFFF00;
+        }
+
+        body.high-contrast .page-title {
+            color: #FFFF00;
+        }
+
+        body.high-contrast .controls-panel {
+            background: rgba(0, 0, 0, 0.95);
+            border-color: #FFFF00;
+        }
+
+        body.high-contrast .controls-panel h3 {
+            color: #FFFF00;
+        }
+
+        body.high-contrast .control-button {
+            border-color: rgba(255, 255, 0, 0.5);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        body.high-contrast .control-button:hover,
+        body.high-contrast .control-button.active {
+            background: rgba(255, 255, 0, 0.2);
+            border-color: #FFFF00;
+            color: #FFFF00;
+        }
+
+        body.high-contrast .mode-selector {
+            background: rgba(0, 0, 0, 0.95);
+            border-color: #FFFF00;
+        }
+
+        body.high-contrast .mode-button {
+            border-color: rgba(255, 255, 0, 0.3);
+        }
+
+        body.high-contrast .mode-button:hover,
+        body.high-contrast .mode-button.active {
+            background: rgba(255, 255, 0, 0.2);
+            border-color: #FFFF00;
+            color: #FFFF00;
+            box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
+        }
+
+        body.high-contrast .face-detail-panel {
+            background: rgba(0, 0, 0, 0.98);
+            border-color: #FFFF00;
+        }
+
+        body.high-contrast .face-detail-title {
+            color: #FFFF00;
+        }
+
+        body.high-contrast .face-energy-display {
+            color: #FFFF00;
+            text-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+        }
+
+        body.high-contrast #faceTooltip,
+        body.high-contrast #edgeTooltip {
+            background: rgba(0, 0, 0, 0.95);
+            border-color: #FFFF00;
+        }
+
+        body.high-contrast #faceTooltip .tooltip-label,
+        body.high-contrast #edgeTooltip .tooltip-label {
+            color: #FFFF00;
+        }
+
+        body.high-contrast .legend-container {
+            background: rgba(0, 0, 0, 0.95);
+            border-color: #FFFF00;
+        }
+
+        body.high-contrast .legend-title {
+            color: #FFFF00;
+        }
+
+        /* High-contrast indicator */
+        .contrast-indicator {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 0, 0.15);
+            border: 1px solid rgba(255, 255, 0, 0.5);
+            color: #FFFF00;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 9997;
+        }
+
+        .contrast-indicator.visible {
+            opacity: 1;
+        }
+
+        .contrast-indicator.fade-out {
+            opacity: 0;
+        }
+
+        /* ========================================
+           KEYBOARD HINTS OVERLAY - Sprint 3.5
+           Toggle with 'H' key to show shortcuts
+           ======================================== */
+        .keyboard-hints-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #00ffcc;
+            border-radius: 16px;
+            padding: 30px 40px;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            box-shadow: 0 0 40px rgba(0, 255, 204, 0.3);
+            min-width: 400px;
+        }
+
+        .keyboard-hints-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .keyboard-hints-title {
+            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 4px;
+            color: #00ffcc;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .keyboard-hints-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 12px 20px;
+            align-items: center;
+        }
+
+        .keyboard-hint-key {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 32px;
+            padding: 0 10px;
+            background: rgba(0, 255, 204, 0.15);
+            border: 1px solid #00ffcc;
+            border-radius: 6px;
+            color: #00ffcc;
+            font-weight: 600;
+            font-size: 14px;
+            font-family: 'SF Mono', Consolas, monospace;
+        }
+
+        .keyboard-hint-desc {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+        }
+
+        .keyboard-hints-divider {
+            grid-column: 1 / -1;
+            height: 1px;
+            background: rgba(0, 255, 204, 0.2);
+            margin: 8px 0;
+        }
+
+        .keyboard-hints-section {
+            grid-column: 1 / -1;
+            font-size: 11px;
+            color: rgba(0, 255, 204, 0.7);
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin-top: 10px;
+            margin-bottom: 5px;
         }
 
-        .tooltip-desc {
-            color: rgba(255, 255, 255, 0.8);
+        .keyboard-hints-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        body.high-contrast .keyboard-hints-overlay {
+            border-color: #FFFF00;
+            box-shadow: 0 0 40px rgba(255, 255, 0, 0.3);
+        }
+
+        body.high-contrast .keyboard-hints-title {
+            color: #FFFF00;
+        }
+
+        body.high-contrast .keyboard-hint-key {
+            background: rgba(255, 255, 0, 0.15);
+            border-color: #FFFF00;
+            color: #FFFF00;
+        }
+
+        body.high-contrast .keyboard-hints-divider {
+            background: rgba(255, 255, 0, 0.2);
+        }
+
+        body.high-contrast .keyboard-hints-section {
+            color: rgba(255, 255, 0, 0.7);
+        }
+
+        /* ========================================
+           ANIMATION PAUSE INDICATOR - Sprint 3.5
+           Shows when Space is pressed to pause all animations
+           ======================================== */
+        .pause-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #ff6600;
+            border-radius: 12px;
+            padding: 20px 35px;
+            color: #ff6600;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 9999;
+            box-shadow: 0 0 30px rgba(255, 102, 0, 0.3);
+        }
+
+        .pause-indicator.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .pause-indicator-icon {
+            display: flex;
+            gap: 6px;
+        }
+
+        .pause-indicator-bar {
+            width: 8px;
+            height: 28px;
+            background: #ff6600;
+            border-radius: 2px;
+        }
+
+        .pause-indicator-hint {
             font-size: 11px;
-            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
+            letter-spacing: 1px;
+            margin-top: 8px;
         }
 
-        .info-icon {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            width: 14px;
-            height: 14px;
-            background: rgba(0, 255, 204, 0.2);
-            border: 1px solid rgba(0, 255, 204, 0.5);
-            border-radius: 50%;
-            color: #00ffcc;
+        body.high-contrast .pause-indicator {
+            border-color: #FFFF00;
+            color: #FFFF00;
+            box-shadow: 0 0 30px rgba(255, 255, 0, 0.3);
+        }
+
+        body.high-contrast .pause-indicator-bar {
+            background: #FFFF00;
+        }
+
+        /* ========================================
+           COHERENCE HUD - Sprint 3.5
+           Always-visible coherence score display
+           ======================================== */
+        .coherence-hud {
+            position: fixed;
+            top: 90px;
+            right: 320px;
+            z-index: 150;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 12px;
+            padding: 12px 20px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            min-width: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .coherence-hud-label {
             font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 4px;
+        }
+
+        .coherence-hud-value {
+            font-size: 32px;
+            font-weight: 300;
+            color: #00ffcc;
+            line-height: 1;
+            transition: color 0.3s ease;
+        }
+
+        .coherence-hud-status {
+            font-size: 10px;
+            margin-top: 6px;
+            padding: 3px 10px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .coherence-hud-status.critical {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+
+        .coherence-hud-status.warning {
+            background: rgba(255, 170, 0, 0.2);
+            color: #ffaa00;
+        }
+
+        .coherence-hud-status.healthy {
+            background: rgba(0, 255, 204, 0.2);
+            color: #00ffcc;
+        }
+
+        .coherence-hud-status.transcendent {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        /* Pulse animation for critical states */
+        @keyframes coherencePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 20px 5px rgba(255, 68, 68, 0.2); }
+        }
+
+        .coherence-hud.critical {
+            animation: coherencePulse 2s ease-in-out infinite;
+            border-color: rgba(255, 68, 68, 0.5);
+        }
+
+        .coherence-hud.critical .coherence-hud-value {
+            color: #ff4444;
+        }
+
+        /* High-contrast styles */
+        body.high-contrast .coherence-hud {
+            border-color: rgba(255, 255, 0, 0.3);
+        }
+
+        body.high-contrast .coherence-hud-value {
+            color: #FFFF00;
+        }
+
+        /* Presentation mode: larger HUD */
+        body.presentation-mode .coherence-hud,
+        body.font-scale-xlarge .coherence-hud {
+            padding: 16px 24px;
+        }
+
+        body.presentation-mode .coherence-hud-value,
+        body.font-scale-xlarge .coherence-hud-value {
+            font-size: 42px;
+        }
+
+        /* Hide when controls panel is hidden (minimal mode) */
+        .controls-panel.hidden ~ .coherence-hud {
+            right: 20px;
+        }
+
+        /* ========================================
+           SHADOW INDICATOR - Sprint 5.5
+           Progressive disclosure from coherence HUD
+           ======================================== */
+        .coherence-shadow-indicator {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            margin-top: 0;
+        }
+
+        .coherence-hud:hover .coherence-shadow-indicator,
+        .coherence-hud.shadow-expanded .coherence-shadow-indicator {
+            max-height: 100px;
+            opacity: 1;
+            margin-top: 10px;
+        }
+
+        .shadow-indicator-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 68, 68, 0.5), transparent);
+            margin-bottom: 10px;
+        }
+
+        .shadow-indicator-content {
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: help;
-            opacity: 0.7;
-            transition: all 0.2s;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
-        .info-icon:hover {
-            opacity: 1;
-            background: rgba(0, 255, 204, 0.4);
-            transform: scale(1.1);
+        .shadow-indicator-icon {
+            font-size: 16px;
         }
 
-        /* Knob Container */
-        .knob-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            width: 80px;
+        .shadow-indicator-count {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ff6b6b;
         }
 
-        .knob-label {
-            color: #00ffcc;
-            font-size: 10px;
+        .shadow-indicator-label {
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 10px;
-            text-align: center;
-            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
         }
 
-        .knob-sublabel {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 8px;
-            margin-top: 2px;
+        .shadow-indicator-btn {
+            width: 100%;
+            padding: 8px 12px;
+            background: rgba(255, 68, 68, 0.15);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 6px;
+            color: #ff6b6b;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        /* The Rotary Knob */
-        .knob-control {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #2a2a2a, #000);
-            border: 2px solid rgba(0, 255, 204, 0.2);
-            position: relative;
-            cursor: ns-resize;
-            /* Up/down drag cursor */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.05);
-            transition: border-color 0.3s;
+        .shadow-indicator-btn:hover {
+            background: rgba(255, 68, 68, 0.25);
+            border-color: rgba(255, 68, 68, 0.5);
+            transform: translateY(-1px);
         }
 
-        .knob-control:hover {
-            border-color: rgba(0, 255, 204, 0.6);
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
-        }
-
-        .knob-control::after {
+        /* Pulse when shadows exist */
+        .coherence-hud.has-shadows::after {
             content: '';
             position: absolute;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 4px;
-            background: #00ffcc;
+            top: -2px;
+            right: -2px;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
             border-radius: 50%;
-            box-shadow: 0 0 5px #00ffcc;
+            animation: shadowPulse 2s ease-in-out infinite;
         }
 
-        /* Indicator Ring (SVG) */
-        .knob-ring {
+        @keyframes shadowPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+        }
+
+        /* ========================================
+           SHADOW OVERLAY - Full-Screen Analysis
+           ======================================== */
+        .shadow-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .shadow-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .shadow-overlay-backdrop {
             position: absolute;
-            top: -5px;
-            left: -5px;
-            width: 70px;
-            height: 70px;
-            pointer-events: none;
-            transform: rotate(-90deg);
-            /* Start from top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
         }
 
-        .knob-ring circle {
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-        }
-
-        .knob-ring-bg {
-            stroke: rgba(255, 255, 255, 0.1);
-        }
-
-        .knob-ring-value {
-            stroke: #00ffcc;
-            stroke-dasharray: 176;
-            /* 2 * PI * r (r=28) approx */
-            stroke-dashoffset: 176;
-            transition: stroke-dashoffset 0.1s;
-        }
-
-
-        /* Resonance Meter */
-        .resonance-meter {
-            width: 160px;
-            height: 100px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+        .shadow-overlay-container {
             position: relative;
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            background: linear-gradient(135deg, rgba(20, 20, 30, 0.98), rgba(30, 20, 25, 0.98));
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 25px 80px rgba(255, 68, 68, 0.15), 0 0 100px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .shadow-overlay.visible .shadow-overlay-container {
+            transform: scale(1) translateY(0);
+        }
+
+        .shadow-overlay-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: flex-end;
-            padding-bottom: 10px;
-            margin: 0 20px;
-            overflow: hidden;
+            padding: 24px 30px;
+            border-bottom: 1px solid rgba(255, 68, 68, 0.2);
         }
 
-        .meter-scale {
-            width: 140px;
-            height: 70px;
-            border-top-left-radius: 70px;
-            border-top-right-radius: 70px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-bottom: none;
-            position: relative;
-            box-sizing: border-box;
+        .shadow-overlay-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .meter-needle {
+        .shadow-overlay-icon {
+            font-size: 28px;
+        }
+
+        .shadow-overlay-title h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 300;
+            color: #ff6b6b;
+            letter-spacing: 1px;
+        }
+
+        .shadow-overlay-subtitle {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-left: 12px;
+        }
+
+        .shadow-overlay-close {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 50%;
+            color: #ff6b6b;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .shadow-overlay-close:hover {
+            background: rgba(255, 68, 68, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .shadow-overlay-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Enhanced shadow cards for overlay */
+        .shadow-overlay-content .shadow-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #ff6b6b;
+            transition: all 0.2s ease;
+        }
+
+        .shadow-overlay-content .shadow-card:hover {
+            background: rgba(255, 68, 68, 0.1);
+            transform: translateX(4px);
+        }
+
+        .shadow-overlay-content .shadow-card.severity-critical {
+            border-left-color: #ff4444;
+        }
+
+        .shadow-overlay-content .shadow-card.severity-significant {
+            border-left-color: #ff8844;
+        }
+
+        .shadow-overlay-content .shadow-card.severity-moderate {
+            border-left-color: #ffaa44;
+        }
+
+        .shadow-overlay-footer {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 16px 30px;
+            border-top: 1px solid rgba(255, 68, 68, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 0 0 16px 16px;
+        }
+
+        .shadow-overlay-hint {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .shadow-overlay-hint .key-hint {
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            font-family: monospace;
+            margin-right: 6px;
+        }
+
+        /* Empty state */
+        .shadow-overlay-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .shadow-overlay-empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .shadow-overlay-empty h3 {
+            margin: 0 0 8px 0;
+            font-weight: 300;
+            color: #00ffcc;
+        }
+
+        /* ========================================
+           GUIDED TOUR - Thesis Presentation Feature
+           ======================================== */
+        .tour-button {
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.2), rgba(0, 170, 255, 0.2)) !important;
+            border-color: #00ffcc !important;
+            color: #00ffcc !important;
+        }
+
+        .tour-button:hover {
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.4), rgba(0, 170, 255, 0.4)) !important;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+        }
+
+        .tour-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .tour-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .tour-spotlight {
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 2px;
-            height: 60px;
-            background: #ff3333;
-            transform-origin: bottom center;
-            transform: rotate(-45deg);
-            transition: transform 0.5s cubic-bezier(0.2, 1.5, 0.5, 1);
-            /* Bouncy needle */
-            box-shadow: 0 0 5px #ff3333;
-            z-index: 2;
+            border-radius: 8px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.85);
+            pointer-events: none;
+            transition: all 0.5s ease;
+            z-index: 10001;
         }
 
-        .meter-needle.tuned {
+        .tour-tooltip {
+            position: absolute;
+            max-width: 420px;
+            background: linear-gradient(135deg, rgba(10, 20, 30, 0.98), rgba(0, 30, 40, 0.98));
+            border: 2px solid #00ffcc;
+            border-radius: 16px;
+            padding: 25px 30px;
+            z-index: 10002;
+            box-shadow: 0 0 40px rgba(0, 255, 204, 0.3), inset 0 0 30px rgba(0, 255, 204, 0.05);
+        }
+
+        .tour-step-indicator {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tour-step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .tour-step-dot.active {
             background: #00ffcc;
             box-shadow: 0 0 10px #00ffcc;
         }
 
-        .meter-label {
-            margin-top: 10px;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.5);
+        .tour-step-dot.completed {
+            background: rgba(0, 255, 204, 0.5);
         }
 
-        .meter-value {
-            font-size: 16px;
-            font-weight: 700;
-            color: #fff;
-            margin-top: 5px;
+        .tour-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #00ffcc;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .tour-content {
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+
+        .tour-content strong {
+            color: #00ffcc;
+        }
+
+        .tour-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .tour-nav-btn {
+            padding: 12px 24px;
+            border: 1px solid rgba(0, 255, 204, 0.5);
+            border-radius: 8px;
+            background: rgba(0, 255, 204, 0.1);
+            color: #00ffcc;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .tour-nav-btn:hover {
+            background: rgba(0, 255, 204, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .tour-nav-btn.primary {
+            background: linear-gradient(135deg, #00ffcc, #00aaff);
+            color: #000;
+            border: none;
+        }
+
+        .tour-nav-btn.primary:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.5);
+        }
+
+        .tour-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tour-close:hover {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6666;
+        }
+
+        .tour-highlight-pulse {
+            position: absolute;
+            border-radius: 8px;
+            border: 2px solid #00ffcc;
+            animation: tourPulse 1.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes tourPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(0, 255, 204, 0); }
         }
     </style>
     <link rel="stylesheet" href="css/harmonic-tuner.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 
 <body>
+    <!-- Guided Tour Overlay -->
+    <div class="tour-overlay" id="tourOverlay">
+        <div class="tour-tooltip" id="tourTooltip">
+            <button class="tour-close" id="tourClose">&times;</button>
+            <div class="tour-step-indicator" id="tourStepIndicator"></div>
+            <div class="tour-title" id="tourTitle">Welcome to the Quannex Coherence Engine</div>
+            <div class="tour-content" id="tourContent">
+                This guided tour will walk you through the key features of the 3D Organizational Coherence Visualization.
+            </div>
+            <div class="tour-nav">
+                <button class="tour-nav-btn" id="tourPrev">← Previous</button>
+                <button class="tour-nav-btn primary" id="tourNext">Next →</button>
+            </div>
+        </div>
+        <div class="tour-highlight-pulse" id="tourHighlight" style="display: none;"></div>
+    </div>
+
+    <!-- Presentation Mode Indicator (Phase 5) -->
+    <div class="presentation-indicator">PRESENTATION MODE (Press P to exit)</div>
+
+    <!-- Font Scale Indicator (Sprint 3.5) -->
+    <div class="font-scale-indicator" id="fontScaleIndicator">FONT: NORMAL</div>
+
+    <!-- Contrast Mode Indicator (Sprint 3.5) -->
+    <div class="contrast-indicator" id="contrastIndicator">HIGH CONTRAST: ON</div>
+
+    <!-- Pause Indicator (Sprint 3.5) -->
+    <div class="pause-indicator" id="pauseIndicator">
+        <div class="pause-indicator-icon">
+            <div class="pause-indicator-bar"></div>
+            <div class="pause-indicator-bar"></div>
+        </div>
+        <div>
+            <div>PAUSED</div>
+            <div class="pause-indicator-hint">Press Space to resume</div>
+        </div>
+    </div>
+
+    <!-- Coherence HUD with Shadow Integration (Sprint 5.5) -->
+    <div class="coherence-hud" id="coherenceHud">
+        <div class="coherence-hud-label">Coherence</div>
+        <div class="coherence-hud-value" id="coherenceHudValue">--</div>
+        <div class="coherence-hud-status healthy" id="coherenceHudStatus">Loading...</div>
+        <!-- Shadow Indicator (appears on hover) -->
+        <div class="coherence-shadow-indicator" id="shadowIndicator">
+            <div class="shadow-indicator-divider"></div>
+            <div class="shadow-indicator-content">
+                <span class="shadow-indicator-icon">👁️</span>
+                <span class="shadow-indicator-count" id="shadowCount">0</span>
+                <span class="shadow-indicator-label">Shadows</span>
+            </div>
+            <button class="shadow-indicator-btn" id="openShadowOverlay" title="View Shadow Analysis (S)">
+                View All →
+            </button>
+        </div>
+    </div>
+
+    <!-- Full-Screen Shadow Overlay -->
+    <div class="shadow-overlay" id="shadowOverlay">
+        <div class="shadow-overlay-backdrop"></div>
+        <div class="shadow-overlay-container">
+            <div class="shadow-overlay-header">
+                <div class="shadow-overlay-title">
+                    <span class="shadow-overlay-icon">👁️</span>
+                    <h2>Shadow Analysis</h2>
+                    <span class="shadow-overlay-subtitle">Organizational patterns requiring attention</span>
+                </div>
+                <button class="shadow-overlay-close" id="closeShadowOverlay" title="Close (ESC)">×</button>
+            </div>
+            <div class="shadow-overlay-content" id="shadowOverlayContent">
+                <!-- Shadow cards will be rendered here -->
+            </div>
+            <div class="shadow-overlay-footer">
+                <div class="shadow-overlay-hint">
+                    <span class="key-hint">Click</span> a card to focus on that face in 3D
+                </div>
+                <div class="shadow-overlay-hint">
+                    <span class="key-hint">ESC</span> or click outside to close
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard Hints Overlay (Sprint 3.5) -->
+    <div class="keyboard-hints-overlay" id="keyboardHints">
+        <div class="keyboard-hints-title">⌨️ Keyboard Shortcuts</div>
+        <div class="keyboard-hints-grid">
+            <div class="keyboard-hints-section">Presentation Mode</div>
+            <span class="keyboard-hint-key">P</span>
+            <span class="keyboard-hint-desc">Toggle presentation mode</span>
+            <span class="keyboard-hint-key">L</span>
+            <span class="keyboard-hint-desc">Cycle font size (Normal → Large → XLarge)</span>
+            <span class="keyboard-hint-key">C</span>
+            <span class="keyboard-hint-desc">Toggle high-contrast mode</span>
+            <span class="keyboard-hint-key">F</span>
+            <span class="keyboard-hint-desc">Toggle fullscreen</span>
+
+            <div class="keyboard-hints-divider"></div>
+            <div class="keyboard-hints-section">Navigation & Control</div>
+            <span class="keyboard-hint-key">Space</span>
+            <span class="keyboard-hint-desc">Pause/resume all animations</span>
+            <span class="keyboard-hint-key">A</span>
+            <span class="keyboard-hint-desc">Toggle auto-rotation</span>
+            <span class="keyboard-hint-key">R</span>
+            <span class="keyboard-hint-desc">Reset camera view</span>
+            <span class="keyboard-hint-key">ESC</span>
+            <span class="keyboard-hint-desc">Close panels/overlays</span>
+
+            <div class="keyboard-hints-divider"></div>
+            <div class="keyboard-hints-section">Views & Features</div>
+            <span class="keyboard-hint-key">S</span>
+            <span class="keyboard-hint-desc">Toggle shadow analysis overlay</span>
+            <span class="keyboard-hint-key">O</span>
+            <span class="keyboard-hint-desc">Toggle octave layers</span>
+            <span class="keyboard-hint-key">D</span>
+            <span class="keyboard-hint-desc">Open DNA helix view</span>
+            <span class="keyboard-hint-key">Shift+R</span>
+            <span class="keyboard-hint-desc">Open Results Summary Report</span>
+            <span class="keyboard-hint-key">H</span>
+            <span class="keyboard-hint-desc">Show/hide this help</span>
+        </div>
+        <div class="keyboard-hints-footer">Press H or ESC to close</div>
+    </div>
+
     <!-- Header -->
     <div class="page-header" id="pageHeader">
         <div class="page-title">🔷 3D Dodecahedron</div>
@@ -1160,6 +2492,8 @@
         <div class="control-group">
             <label class="control-label">Controls</label>
             <button class="control-button" id="toggleRotation">Auto-Rotate: OFF</button>
+            <button class="control-button" id="toggleOctaveLayers">Octave Layers: OFF</button>
+            <button class="control-button tour-button" id="startGuidedTour">Start Guided Tour</button>
         </div>
 
 
@@ -1201,6 +2535,9 @@
                 • <strong>Scroll</strong> to zoom in/out<br>
                 • <strong>R</strong> - Reset camera view<br>
                 • <strong>Space</strong> - Toggle rotation<br>
+                • <strong>O</strong> - Toggle octave layers<br>
+                • <strong>D</strong> - Open DNA helix view<br>
+                • <strong>P</strong> - Presentation mode<br>
                 • <strong>ESC</strong> - Close panels
             </div>
         </div>
@@ -1230,7 +2567,7 @@
         </div>
     </div>
 
-    <!-- Face Detail Panel -->
+    <!-- Face Detail Panel - Sprint 3.5 Enhanced Multi-Section -->
     <div class="face-detail-panel" id="faceDetailPanel">
         <div class="face-detail-header">
             <div class="face-detail-title" id="faceDetailTitle">Face Name</div>
@@ -1240,31 +2577,155 @@
         <div class="face-energy-display" id="faceEnergyDisplay">--</div>
         <div class="face-energy-label">FACE ENERGY</div>
 
-        <div class="kpi-grid" id="kpiGrid">
-            <!-- KPIs will be injected here -->
+        <!-- Tab Navigation - Sprint 3.5 -->
+        <div class="face-panel-tabs">
+            <button class="face-panel-tab active" data-section="energy">
+                <span class="face-panel-tab-icon">⚡</span>
+                <span>Energy</span>
+            </button>
+            <button class="face-panel-tab" data-section="system">
+                <span class="face-panel-tab-icon">🔗</span>
+                <span>System</span>
+            </button>
+            <button class="face-panel-tab" data-section="development">
+                <span class="face-panel-tab-icon">📈</span>
+                <span>Development</span>
+            </button>
         </div>
 
-        <!-- Connected Edges Section -->
-        <div class="analysis-section" id="connectedEdgesSection" style="display: none;">
-            <div class="section-title">🔗 Connected Edges</div>
-            <div id="connectedEdgesList">
-                <!-- Edges will be injected here -->
+        <!-- ========================================
+             SECTION 1: Energy & Elements
+             ======================================== -->
+        <div class="face-panel-section active" id="sectionEnergy" data-section="energy">
+            <!-- Sprint 4 Task 28: Pentagram Element Balance with Visual -->
+            <div class="panel-section-header">Element Balance</div>
+
+            <!-- Pentagram Visualization -->
+            <div id="pentagramContainer" style="display: flex; justify-content: center; margin-bottom: 15px;">
+                <svg id="pentagramSvg" width="160" height="160" viewBox="0 0 160 160" style="opacity: 0.9;">
+                    <!-- Background pentagram outline -->
+                    <polygon id="pentagramOutline"
+                        points="80,15 95,55 140,55 105,85 120,130 80,105 40,130 55,85 20,55 65,55"
+                        fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                    <!-- Element data polygon (filled by JS) -->
+                    <polygon id="pentagramData"
+                        points="80,80 80,80 80,80 80,80 80,80"
+                        fill="rgba(0, 255, 204, 0.3)" stroke="#00ffcc" stroke-width="2"/>
+                    <!-- Element labels -->
+                    <text x="80" y="10" text-anchor="middle" fill="#ffd700" font-size="8">🔥 Fire</text>
+                    <text x="145" y="60" text-anchor="start" fill="#00bfff" font-size="8">💨 Air</text>
+                    <text x="125" y="135" text-anchor="middle" fill="#9966ff" font-size="8">✧ Ether</text>
+                    <text x="35" y="135" text-anchor="middle" fill="#3399ff" font-size="8">💧 Water</text>
+                    <text x="5" y="60" text-anchor="start" fill="#66cc66" font-size="8">🜃 Earth</text>
+                </svg>
+            </div>
+
+            <div class="element-balance-grid" id="elementBalanceGrid">
+                <!-- Elements will be injected here -->
+            </div>
+
+            <!-- KPIs for this face -->
+            <div class="panel-section-header">Key Performance Indicators</div>
+            <div class="kpi-grid" id="kpiGrid">
+                <!-- KPIs will be injected here -->
             </div>
         </div>
 
-        <!-- Corner Vertices Section -->
-        <div class="analysis-section" id="cornerVerticesSection" style="display: none;">
-            <div class="section-title">🌀 Corner Vortices</div>
-            <div id="cornerVerticesList">
-                <!-- Vertices will be injected here -->
+        <!-- ========================================
+             SECTION 2: System Metrics
+             ======================================== -->
+        <div class="face-panel-section" id="sectionSystem" data-section="system">
+            <!-- Breath Axis Preview Section -->
+            <div class="panel-section-header">Breath Axis Connection</div>
+            <div class="breath-axis-section" id="breathAxisSection">
+                <div class="breath-axis-preview" id="breathAxisPreview">
+                    <div class="dna-preview-container">
+                        <canvas id="dnaPreviewCanvas" width="200" height="120"></canvas>
+                    </div>
+                    <div class="breath-info">
+                        <div class="breath-axis-name" id="breathAxisName">Loading...</div>
+                        <div class="breath-ratio-display">
+                            <span>Ratio:</span>
+                            <span class="breath-ratio-value" id="breathRatioValue">--</span>
+                            <span class="breath-status" id="breathStatus">--</span>
+                        </div>
+                        <div class="partner-face-info" id="partnerFaceInfo">Partner: --</div>
+                    </div>
+                    <button class="view-full-dna-btn" id="viewFullDnaBtn">
+                        🔍 View Full DNA Analysis →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Connected Edges Section -->
+            <div class="panel-section-header">Connected Edges (5)</div>
+            <div class="analysis-section" id="connectedEdgesSection">
+                <div id="connectedEdgesList">
+                    <!-- Edges will be injected here -->
+                </div>
+            </div>
+
+            <!-- Corner Vertices Section -->
+            <div class="panel-section-header">Corner Vortices (5)</div>
+            <div class="analysis-section" id="cornerVerticesSection">
+                <div id="cornerVerticesList">
+                    <!-- Vertices will be injected here -->
+                </div>
             </div>
         </div>
 
-        <!-- Shadow Section -->
-        <div class="shadow-section" id="shadowSection">
-            <div class="shadow-section-title">🌑 Hidden Dynamics (Shadows)</div>
-            <div id="shadowList">
-                <!-- Shadows will be injected here -->
+        <!-- ========================================
+             SECTION 3: Octave & Development
+             ======================================== -->
+        <div class="face-panel-section" id="sectionDevelopment" data-section="development">
+            <!-- Octave Progression Section -->
+            <div class="panel-section-header">Octave Progression</div>
+            <div class="octave-progression-section" id="octaveProgressionSection">
+                <div class="current-octave-badge" id="currentOctaveBadge">
+                    <span class="octave-number" id="octaveNumber">I</span>
+                    <span class="octave-name" id="octaveNameDisplay">Survival</span>
+                </div>
+
+                <div class="octave-progress-container">
+                    <div class="octave-progress-label">
+                        <span id="octaveProgressPercent">0%</span> toward
+                        <span id="nextOctaveName">Octave II</span>
+                    </div>
+                    <!-- Sprint 4 Task 28: Enhanced octave bar with φ-based thresholds -->
+                    <div class="octave-progress-bar" style="position: relative;">
+                        <div class="octave-progress-fill" id="octaveProgressFill"></div>
+                        <div class="octave-threshold-marker" id="octaveThresholdMarker"></div>
+                        <!-- φ-based threshold lines -->
+                        <div class="phi-threshold" style="position: absolute; left: 38.2%; top: 0; bottom: 0; width: 1px; background: rgba(255, 215, 0, 0.5);" title="φ⁻² = 0.382"></div>
+                        <div class="phi-threshold" style="position: absolute; left: 61.8%; top: 0; bottom: 0; width: 2px; background: rgba(255, 215, 0, 0.8);" title="φ⁻¹ = 0.618 (Golden)"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 9px; color: rgba(255, 215, 0, 0.6); margin-top: 4px;">
+                        <span>0%</span>
+                        <span style="margin-left: 28%;">φ⁻²</span>
+                        <span style="margin-left: 15%;">φ⁻¹</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+
+                <div class="transcendence-badge" id="transcendenceBadge" style="display: none;">
+                    ✨ Ready for Transcendence!
+                </div>
+            </div>
+
+            <!-- Shadow Section -->
+            <div class="panel-section-header">Hidden Dynamics (Shadows)</div>
+            <div class="shadow-section" id="shadowSection">
+                <div id="shadowList">
+                    <!-- Shadows will be injected here -->
+                </div>
+            </div>
+
+            <!-- Highest Leverage Action -->
+            <div class="panel-section-header">Highest Leverage Action</div>
+            <div class="leverage-action-card" id="leverageActionCard">
+                <div class="leverage-action-text" id="leverageActionText">
+                    Loading recommendation...
+                </div>
             </div>
         </div>
     </div>
@@ -1306,8 +2767,11 @@
     <!-- Visualization Manager -->
     <script type="module" src="js/advanced/visualization-manager.js?v=20251207"></script>
 
+    <!-- DNA Preview Mini - Phase 2 Enhancement -->
+    <script src="js/dna-preview-mini.js?v=20251208"></script>
+
     <!-- Dodecahedron Visualization -->
-    <script type="module" src="js/dodecahedron-viz.js?v=20251207"></script>
+    <script type="module" src="js/dodecahedron-viz.js?v=20251208"></script>
 
     <script type="module">
         import { VisualizationManager } from './js/advanced/visualization-manager.js';
@@ -1425,12 +2889,9 @@
                         const archetype = narrative.archetype || data.archetype || data.edgeName;
                         const tensionStatus = narrative.tensionStatus || data.tensionStatus || '';
 
-                        // Strategic question section
+                        // Sprint 4 Task 33: Enhanced strategic question display
                         const questionHtml = question
-                            ? `<div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
-                                <div style="font-size: 10px; color: #aaa; margin-bottom: 2px;">Strategic Question:</div>
-                                <div style="font-size: 11px; font-style: italic; color: #fff;">"${question}"</div>
-                               </div>`
+                            ? `<div class="edge-question">${question}</div>`
                             : '';
 
                         // Narrative insight section
@@ -1505,6 +2966,14 @@
                                </div>`
                             : '';
 
+                        // Sprint 4 Task 35: Chirality display
+                        const chiralityIcon = data.chirality === 'clockwise' ? '↻' :
+                                             data.chirality === 'counterclockwise' ? '↺' : '⚖';
+                        const chiralityColor = data.chirality === 'clockwise' ? '#ff9966' :
+                                              data.chirality === 'counterclockwise' ? '#66ccff' : 'rgba(255,255,255,0.6)';
+                        const chiralityLabel = data.chiralityLabel || (data.chirality === 'clockwise' ? 'Releasing' :
+                                              data.chirality === 'counterclockwise' ? 'Building' : 'Neutral');
+
                         vertexTooltip.innerHTML = `
                             <div style="font-weight: bold; color: #ff0066; margin-bottom: 2px; font-size: 13px;">${data.emergentName}</div>
                             <div style="font-size: 9px; color: rgba(255,255,255,0.5); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
@@ -1515,9 +2984,15 @@
                                 <span>Strength:</span>
                                 <span style="color: ${data.vortexStrength > 0.7 ? '#ff0066' : '#00ffcc'}">${(data.vortexStrength * 100).toFixed(0)}% (${data.vortexType})</span>
                             </div>
-                            <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 8px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 4px;">
                                 <span>Coherence:</span>
                                 <span style="color: ${data.coherence > 0.7 ? '#00ffcc' : '#ffaa00'}">${(data.coherence * 100).toFixed(0)}%</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 8px;">
+                                <span>Chirality:</span>
+                                <span style="color: ${chiralityColor}; font-weight: 600;">
+                                    ${chiralityIcon} ${chiralityLabel}
+                                </span>
                             </div>
                             ${spinHtml}
                             ${actionHtml}
@@ -1859,6 +3334,10 @@
                                         <div style="font-weight: 600;">${data.vortexType}</div>
                                         <div><span style="opacity: 0.7;">Coherence:</span></div>
                                         <div style="font-weight: 600;">${Math.round((data.coherence || 0) * 100)}%</div>
+                                        <div><span style="opacity: 0.7;">Chirality:</span></div>
+                                        <div style="color: ${data.chirality === 'clockwise' ? '#ff9966' : data.chirality === 'counterclockwise' ? '#66ccff' : 'rgba(255,255,255,0.6)'}; font-weight: 600;">
+                                            ${data.chirality === 'clockwise' ? '↻ Releasing' : data.chirality === 'counterclockwise' ? '↺ Building' : '⚖ Neutral'}
+                                        </div>
                                         <div><span style="opacity: 0.7;">Classification:</span></div>
                                         <div style="color: ${classColor}; font-weight: 600; text-transform: capitalize;">${(data.classification || 'unknown').replace('_', ' ')}</div>
                                     </div>
@@ -1884,6 +3363,12 @@
                                     </div>
                                 ` : ''}
 
+                                ${data.classification === 'bermuda_triangle' ? `
+                                    <div style="margin-top: 15px; padding: 12px; background: rgba(255,34,34,0.2); border-left: 3px solid #ff2222; border-radius: 4px; font-size: 11px;">
+                                        ⚠️ <strong>BERMUDA TRIANGLE</strong> - Critical imbalance between converging faces. This vertex demands immediate attention.
+                                    </div>
+                                ` : ''}
+
                                 ${data.isLeveragePoint ? `
                                     <div style="margin-top: 15px; padding: 12px; background: rgba(255,215,0,0.15); border-left: 3px solid #ffd700; border-radius: 4px; font-size: 11px;">
                                         ⚡ <strong>Leverage Point</strong> - High transformation potential
@@ -1906,40 +3391,71 @@
 
                     // Wire up data updates
                     const checkForEngine = setInterval(() => {
-                        // Check that engine exists AND has the recalculate method
-                        if (window.quannexEngine && typeof window.quannexEngine.recalculate === 'function') {
+                        // Check that engine exists AND has the getState method (Quannex API)
+                        if (window.Quannex && typeof window.Quannex.getState === 'function') {
                             clearInterval(checkForEngine);
                             console.log('🧠 Engine detected. Wiring Nervous System...');
 
                             try {
-                                // Hook into recalculate
-                                const originalRecalculate = window.quannexEngine.recalculate.bind(window.quannexEngine);
-                                window.quannexEngine.recalculate = async function () {
-                                    await originalRecalculate();
-                                    const analysis = this.getAdvancedAnalysis?.();
+                                // Try to hook into recalculate (only works if actual engine exposed)
+                                if (typeof window.quannexEngine?.recalculate === 'function') {
+                                    const originalRecalculate = window.quannexEngine.recalculate.bind(window.quannexEngine);
+                                    window.quannexEngine.recalculate = async function () {
+                                        await originalRecalculate();
+                                        const analysis = this.getAdvancedAnalysis?.();
 
-                                    // Update Visualization with companyData for rich tooltips
-                                    if (analysis && window.vizManager) {
-                                        const companyData = window.Quannex ? window.Quannex.getState() : null;
-                                        window.vizManager.updateData(analysis, companyData);
+                                        // Update Visualization with companyData for rich tooltips
+                                        if (analysis && window.vizManager) {
+                                            const companyData = window.Quannex ? window.Quannex.getState() : null;
+                                            window.vizManager.updateData(analysis, companyData);
+                                        }
+
+                                        // Update Shadow Panel
+                                        if (window.shadowPanel) {
+                                            const companyData = window.Quannex ? window.Quannex.getState() : null;
+                                            const shadowPatterns = companyData?.shadowPatterns || [];
+                                            const detectedPatterns = analysis?.shadows?.detectedPatterns || [];
+
+                                            const shadowsToShow = shadowPatterns.length > 0 ? shadowPatterns : detectedPatterns.map(p => ({
+                                                id: p.pattern,
+                                                name: p.pattern,
+                                                suppressed: p.story,
+                                                integrated: `Integration opportunity for ${p.pattern}`,
+                                                severity: p.severity,
+                                                involvedFaces: p.affectedFaces,
+                                                score: p.severity === 'critical' ? 1.0 : p.severity === 'high' ? 0.7 : 0.4
+                                            }));
+
+                                            window.shadowPanel.update(shadowsToShow);
+                                        }
+                                    };
+                                    console.log('🔗 Hooked into recalculate for live updates');
+                                } else {
+                                    console.log('ℹ️ Recalculate hook not available - using initial load only');
+                                }
+
+                                // Initial update with retry - shadowPatterns may load async
+                                const tryUpdateShadowPanel = (retries = 5) => {
+                                    const companyData = window.Quannex ? window.Quannex.getState() : null;
+                                    const hasShadowPatterns = companyData?.shadowPatterns?.length > 0;
+
+                                    if (window.shadowPanel && hasShadowPatterns) {
+                                        window.shadowPanel.update(companyData.shadowPatterns);
+                                        console.log(`✅ Shadow Panel initialized with ${companyData.shadowPatterns.length} patterns`);
+                                        return true;
                                     }
 
-                                    // Update Shadow Panel
-                                    if (analysis && analysis.shadows && window.shadowPanel) {
-                                        window.shadowPanel.update(analysis.shadows);
+                                    // Retry if shadowPatterns not yet loaded
+                                    if (retries > 0) {
+                                        console.log(`⏳ Shadow patterns not ready, retrying... (${retries} attempts left)`);
+                                        setTimeout(() => tryUpdateShadowPanel(retries - 1), 300);
+                                    } else {
+                                        console.log('⚠️ Shadow Panel: No patterns available after retries');
                                     }
+                                    return false;
                                 };
 
-                                // Initial update
-                                if (window.quannexEngine.advancedAnalysis) {
-                                    const companyData = window.Quannex ? window.Quannex.getState() : null;
-                                    if (window.vizManager) {
-                                        window.vizManager.updateData(window.quannexEngine.advancedAnalysis, companyData);
-                                    }
-                                    if (window.shadowPanel) {
-                                        window.shadowPanel.update(window.quannexEngine.advancedAnalysis.shadows);
-                                    }
-                                }
+                                tryUpdateShadowPanel();
                                 console.log('✅ Nervous System wired successfully');
                             } catch (error) {
                                 console.warn('⚠️ Error wiring Nervous System:', error.message);
@@ -2106,20 +3622,21 @@
                     if (message.type === 'STATE_UPDATE' || message.type === 'STATE_SYNC') {
                         console.log('[3D View] 🔄 Orchestrator state changed, refreshing data...');
                         // Reload data from sessionStorage (which was just updated)
+                        // NOTE: Do NOT use location.reload() here - it causes an infinite loop!
+                        // Instead, refresh the visualization data in-place
                         setTimeout(() => {
                             const customDataJson = sessionStorage.getItem('customCompanyData');
                             if (customDataJson) {
                                 const newData = JSON.parse(customDataJson);
-                                console.log('[3D View] 📦 Reloading with updated data:', {
+                                console.log('[3D View] 📦 Refreshing with updated data:', {
                                     kpis: newData.kpis?.length,
                                     faces: newData.faceConfig?.faces?.length
                                 });
-                                // Re-initialize with new data if init function exists
-                                if (typeof initWithSessionData === 'function') {
-                                    initWithSessionData();
+                                // Refresh visualization without full page reload
+                                if (window.refreshVisualization) {
+                                    window.refreshVisualization();
                                 } else {
-                                    // Fallback: reload page
-                                    location.reload();
+                                    console.log('[3D View] ℹ️ refreshVisualization not yet available, skipping update');
                                 }
                             }
                         }, 100); // Small delay to ensure sessionStorage is updated
@@ -3153,113 +4670,165 @@
         });
     </script>
 
-    <!-- Harmonic Tuner Dashboard -->
-    <div class="harmonic-tuner" id="harmonicTuner">
-        <div class="tuner-toggle" id="tunerToggle">▲ Harmonic Tuner</div>
-        <div class="god-mode-btn" id="godModeBtn" title="Non-Duality Mode (Delta 0.5)">∞</div>
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         HARMONIC TUNER v2.0 - Clean BEM Architecture
+         Styles: css/harmonic-tuner.css | Logic: js/harmonic-tuner.js
+         ═══════════════════════════════════════════════════════════════════════ -->
 
-        <!-- Alpha: Synergy -->
-        <div class="knob-group">
-            <div class="knob-label">Alpha<div class="knob-sublabel">Synergy</div>
+    <!-- Floating Toggle Button (always visible) -->
+    <button class="tuner-toggle" id="tunerToggle">▲ Harmonic Tuner</button>
+
+    <!-- Main Panel (slides up from bottom) -->
+    <div class="tuner" id="harmonicTuner">
+
+        <!-- Column 1: Mode Selection -->
+        <div class="tuner__section tuner__section--mode">
+            <div class="tuner__modes">
+                <button class="tuner__mode-btn" data-template="startup" title="Startup: Forgiving">🌱</button>
+                <button class="tuner__mode-btn" data-template="enterprise" title="Enterprise: Demanding">🏢</button>
+                <button class="tuner__mode-btn active" data-template="balanced" title="Balanced: Defaults">⚖️</button>
+                <button class="tuner__mode-btn" data-template="nonDual" title="Non-Dual: Integrated">∞</button>
             </div>
-            <div class="info-icon" data-title="Alpha (Synergy)"
-                data-desc="Controls the blend between individual brilliance (Arithmetic) and collective synergy (Geometric). Low = Soloist, High = Orchestra.">
-                ?</div>
-            <div class="knob-control" id="knobAlpha" data-param="ALPHA" data-min="0" data-max="1" data-step="0.1"
-                data-value="0.6">
-                <svg class="knob-ring" viewBox="0 0 90 90">
-                    <circle class="knob-ring-bg" cx="45" cy="45" r="35"></circle>
-                    <circle class="knob-ring-value" cx="45" cy="45" r="35"></circle>
-                </svg>
-            </div>
-            <div class="knob-value-display" id="dispAlpha">0.6</div>
         </div>
 
-        <!-- Beta: Structure -->
-        <div class="knob-group">
-            <div class="knob-label">Beta<div class="knob-sublabel">Structure</div>
+        <!-- Column 2: Foundation (α β γ δ κ) -->
+        <div class="tuner__section tuner__section--foundation">
+            <div class="tuner__header">Foundation</div>
+            <div class="tuner__knobs">
+                <div class="tuner__knob-row">
+                    <!-- Alpha -->
+                    <div class="tuner__knob">
+                        <div class="tuner__knob-label">α</div>
+                        <div class="tuner__knob-control" id="knobAlpha" data-param="ALPHA" data-min="0" data-max="1" data-step="0.1" data-value="0.6">
+                            <svg class="tuner__knob-ring" viewBox="0 0 62 62">
+                                <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
+                                <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
+                            </svg>
+                        </div>
+                        <div class="tuner__knob-value" id="dispAlpha">0.6</div>
+                    </div>
+                    <!-- Beta -->
+                    <div class="tuner__knob">
+                        <div class="tuner__knob-label">β</div>
+                        <div class="tuner__knob-control" id="knobBeta" data-param="BETA" data-min="0" data-max="1" data-step="0.1" data-value="0.5">
+                            <svg class="tuner__knob-ring" viewBox="0 0 62 62">
+                                <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
+                                <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
+                            </svg>
+                        </div>
+                        <div class="tuner__knob-value" id="dispBeta">0.5</div>
+                    </div>
+                    <!-- Gamma -->
+                    <div class="tuner__knob">
+                        <div class="tuner__knob-label">γ</div>
+                        <div class="tuner__knob-control" id="knobGamma" data-param="GAMMA" data-min="0" data-max="1" data-step="0.1" data-value="0.7">
+                            <svg class="tuner__knob-ring" viewBox="0 0 62 62">
+                                <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
+                                <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
+                            </svg>
+                        </div>
+                        <div class="tuner__knob-value" id="dispGamma">0.7</div>
+                    </div>
+                </div>
+                <div class="tuner__knob-row">
+                    <!-- Delta -->
+                    <div class="tuner__knob">
+                        <div class="tuner__knob-label">δ</div>
+                        <div class="tuner__knob-control" id="knobDelta" data-param="DELTA" data-min="0" data-max="1" data-step="0.1" data-value="0.9">
+                            <svg class="tuner__knob-ring" viewBox="0 0 62 62">
+                                <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
+                                <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
+                            </svg>
+                        </div>
+                        <div class="tuner__knob-value" id="dispDelta">0.9</div>
+                    </div>
+                    <!-- Kappa -->
+                    <div class="tuner__knob">
+                        <div class="tuner__knob-label">κ</div>
+                        <div class="tuner__knob-control" id="knobKappa" data-param="KAPPA" data-min="1" data-max="10" data-step="0.5" data-value="2.0">
+                            <svg class="tuner__knob-ring" viewBox="0 0 62 62">
+                                <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
+                                <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
+                            </svg>
+                        </div>
+                        <div class="tuner__knob-value" id="dispKappa">2.0</div>
+                    </div>
+                </div>
             </div>
-            <div class="info-icon" data-title="Beta (Structure)"
-                data-desc="Adjusts the rigidity of the organizational lattice. Low = Fluid/Organic, High = Crystalline/Stable.">
-                ?</div>
-            <div class="knob-control" id="knobBeta" data-param="BETA" data-min="0" data-max="1" data-step="0.1"
-                data-value="0.5">
-                <svg class="knob-ring" viewBox="0 0 90 90">
-                    <circle class="knob-ring-bg" cx="45" cy="45" r="35"></circle>
-                    <circle class="knob-ring-value" cx="45" cy="45" r="35"></circle>
-                </svg>
-            </div>
-            <div class="knob-value-display" id="dispBeta">0.5</div>
         </div>
 
-        <!-- Resonance Meter -->
-        <div class="resonance-meter">
-            <div class="info-icon" style="top: 5px; right: 5px;" data-title="Resonance Meter"
-                data-desc="Visualizes the real-time coherence of the organization. Aim for the green zone (>80%) for optimal harmonic alignment.">
-                ?</div>
-            <div class="meter-scale">
-                <div class="meter-needle" id="meterNeedle"></div>
+        <!-- Column 3: Coherence Meter -->
+        <div class="tuner__section tuner__section--coherence">
+            <div class="tuner__header">Coherence</div>
+            <div class="tuner__meter">
+                <div class="tuner__meter-gauge">
+                    <div class="tuner__meter-arc"></div>
+                    <div class="tuner__meter-needle" id="meterNeedle"></div>
+                </div>
+                <div class="tuner__meter-value" id="meterValue">0%</div>
+                <div class="tuner__meter-status" id="meterStatus">Seeking</div>
+                <div class="tuner__waveform">
+                    <div class="tuner__waveform-bar"></div>
+                    <div class="tuner__waveform-bar"></div>
+                    <div class="tuner__waveform-bar"></div>
+                    <div class="tuner__waveform-bar"></div>
+                    <div class="tuner__waveform-bar"></div>
+                    <div class="tuner__waveform-bar"></div>
+                    <div class="tuner__waveform-bar"></div>
+                </div>
             </div>
-            <div class="meter-value" id="meterValue">0%</div>
-            <div class="meter-label">Resonance</div>
         </div>
 
-        <!-- Gamma: Balance -->
-        <div class="knob-group">
-            <div class="knob-label">Gamma<div class="knob-sublabel">Balance</div>
+        <!-- Column 4: Mastery (η ζ θ) -->
+        <div class="tuner__section tuner__section--mastery">
+            <div class="tuner__header">Mastery</div>
+            <div class="tuner__knobs">
+                <div class="tuner__knob-row">
+                    <!-- Eta -->
+                    <div class="tuner__knob">
+                        <div class="tuner__knob-label">η</div>
+                        <div class="tuner__knob-control" id="knobEta" data-param="ETA" data-min="0" data-max="1" data-step="0.05" data-value="0.382">
+                            <svg class="tuner__knob-ring" viewBox="0 0 62 62">
+                                <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
+                                <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
+                            </svg>
+                        </div>
+                        <div class="tuner__knob-value" id="dispEta">0.382</div>
+                    </div>
+                    <!-- Zeta -->
+                    <div class="tuner__knob">
+                        <div class="tuner__knob-label">ζ</div>
+                        <div class="tuner__knob-control" id="knobZeta" data-param="ZETA" data-min="0" data-max="0.15" data-step="0.01" data-value="0.064">
+                            <svg class="tuner__knob-ring" viewBox="0 0 62 62">
+                                <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
+                                <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
+                            </svg>
+                        </div>
+                        <div class="tuner__knob-value" id="dispZeta">0.064</div>
+                    </div>
+                    <!-- Theta -->
+                    <div class="tuner__knob">
+                        <div class="tuner__knob-label">θ</div>
+                        <div class="tuner__knob-control" id="knobTheta" data-param="THETA" data-min="0.5" data-max="0.9" data-step="0.05" data-value="0.618">
+                            <svg class="tuner__knob-ring" viewBox="0 0 62 62">
+                                <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
+                                <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
+                            </svg>
+                        </div>
+                        <div class="tuner__knob-value" id="dispTheta">0.618</div>
+                    </div>
+                </div>
             </div>
-            <div class="info-icon" data-title="Gamma (Balance)"
-                data-desc="Balances Internal Gravity (Culture) vs External Reach (Market). Low = Hunter, High = Builder.">
-                ?</div>
-            <div class="knob-control" id="knobGamma" data-param="GAMMA" data-min="0" data-max="1" data-step="0.1"
-                data-value="0.7">
-                <svg class="knob-ring" viewBox="0 0 90 90">
-                    <circle class="knob-ring-bg" cx="45" cy="45" r="35"></circle>
-                    <circle class="knob-ring-value" cx="45" cy="45" r="35"></circle>
-                </svg>
-            </div>
-            <div class="knob-value-display" id="dispGamma">0.7</div>
         </div>
 
-        <!-- Delta: Shadow -->
-        <div class="knob-group">
-            <div class="knob-label">Delta<div class="knob-sublabel">Shadow</div>
-            </div>
-            <div class="info-icon" data-title="Delta (Shadow)"
-                data-desc="Controls sensitivity to hidden risks and friction. Low = Optimist, High = Analyst (Crisis Scan).">
-                ?</div>
-            <div class="knob-control" id="knobDelta" data-param="DELTA" data-min="0" data-max="1" data-step="0.1"
-                data-value="0.9">
-                <svg class="knob-ring" viewBox="0 0 90 90">
-                    <circle class="knob-ring-bg" cx="45" cy="45" r="35"></circle>
-                    <circle class="knob-ring-value" cx="45" cy="45" r="35"></circle>
-                </svg>
-            </div>
-            <div class="knob-value-display" id="dispDelta">0.9</div>
-        </div>
+        <!-- Column 5: Empty spacer for balance -->
+        <div></div>
+    </div>
 
-        <!-- Kappa: Gain -->
-        <div class="knob-group">
-            <div class="knob-label">Kappa<div class="knob-sublabel">Gain</div>
-            </div>
-            <div class="info-icon" data-title="Kappa (Gain)"
-                data-desc="Amplifies weak signals to make them visible. Low = Noise Gate, High = Deep Scan.">
-                ?</div>
-            <div class="knob-control" id="knobKappa" data-param="KAPPA" data-min="1" data-max="10" data-step="0.5"
-                data-value="2.0">
-                <svg class="knob-ring" viewBox="0 0 90 90">
-                    <circle class="knob-ring-bg" cx="45" cy="45" r="35"></circle>
-                    <circle class="knob-ring-value" cx="45" cy="45" r="35"></circle>
-                </svg>
-            </div>
-            <div class="knob-value-display" id="dispKappa">2.0</div>
-        </div>
-
-        <!-- Tooltip Element -->
-        <div class="tuner-tooltip" id="tunerTooltip">
-            <div class="tooltip-title"></div>
-            <div class="tooltip-desc"></div>
-        </div>
+    <!-- Tooltip (positioned via JS) -->
+    <div class="tuner__tooltip" id="tunerTooltip">
+        <div class="tuner__tooltip-title"></div>
+        <div class="tuner__tooltip-desc"></div>
     </div>
 
     <!-- Voice Interface (Phase 5) -->
@@ -3283,6 +4852,558 @@
 
     <!-- Load Harmonic Tuner Logic -->
     <script src="js/harmonic-tuner.js"></script>
+    <script src="js/harmonic-tuner-tooltips.js"></script>
+
+    <!-- Guided Tour Logic -->
+    <script>
+    (function() {
+        'use strict';
+
+        // Tour steps configuration
+        const tourSteps = [
+            {
+                title: 'Welcome to the Quannex Coherence Engine',
+                content: `This <strong>3D Dodecahedron</strong> represents an organization's coherence across 12 interconnected domains. Each geometric element carries meaning:<br><br>
+                • <strong>12 Faces</strong> = Organizational domains (Financial, Human, Brand, etc.)<br>
+                • <strong>30 Edges</strong> = Relationship tensions between domains<br>
+                • <strong>20 Vertices</strong> = Energy vortices where domains converge`,
+                target: 'canvas-container',
+                position: 'center'
+            },
+            {
+                title: 'Face Energy: Health of Domains',
+                content: `Each face's <strong>color indicates health</strong>:<br><br>
+                • <strong style="color: #00ff88;">Green (70-100%)</strong> = Healthy domain<br>
+                • <strong style="color: #ffa500;">Orange (40-70%)</strong> = Warning zone<br>
+                • <strong style="color: #ff4444;">Red (0-40%)</strong> = Critical attention needed<br><br>
+                <strong>Hover</strong> over any face to see its name and energy level. <strong>Click</strong> to see detailed KPI breakdown.`,
+                target: 'legend',
+                position: 'left'
+            },
+            {
+                title: 'Harmonic Resonance & Pentagram Geometry',
+                content: `Each face contains a <strong>hidden pentagram</strong> of 5 elemental KPIs (Fire, Water, Earth, Air, Ether). When these elements are in harmony, the face receives a <strong>30% resonance boost</strong>.<br><br>
+                The mathematics: <em>E_local = base × (1 + 0.3 × resonance)</em><br><br>
+                This represents the thesis concept that <strong>coherent systems amplify their own energy</strong>.`,
+                target: 'canvas-container',
+                position: 'center'
+            },
+            {
+                title: 'TubeGeometry Edges: Relationship Tensions',
+                content: `The <strong>cyan tubes connecting faces</strong> represent relationship dynamics between domains. These use <strong>TubeGeometry</strong> for rich 3D visualization.<br><br>
+                • Hover over edges to see relationship names<br>
+                • Each edge has an elemental nature (Fire, Water, etc.)<br>
+                • Edge colors reflect their elemental affinity`,
+                target: 'canvas-container',
+                position: 'center'
+            },
+            {
+                title: 'Global Coherence Score',
+                content: `The <strong>Global Coherence</strong> metric uses a sophisticated formula:<br><br>
+                <em>Coherence = μ × (1 - λ × CV)</em><br><br>
+                Where μ is the mean face energy, λ is the variance penalty, and CV is the coefficient of variation. This score is then transformed by the <strong>KAPPA sensitivity amplifier</strong> (logistic S-curve).`,
+                target: 'statCoherence',
+                position: 'left'
+            },
+            {
+                title: 'Visualization Modes',
+                content: `Switch between different analysis depths:<br><br>
+                • <strong>Standard</strong> - Company data & basic controls<br>
+                • <strong>Advanced</strong> - Edge tensions & vortex analysis<br>
+                • <strong>Complete</strong> - Full dynamics with all metrics<br>
+                • <strong>Minimal</strong> - Clean presentation view<br><br>
+                Press <strong>P</strong> for presentation mode during thesis defense.`,
+                target: 'mode-selector',
+                position: 'right'
+            },
+            {
+                title: 'Octave Progression',
+                content: `Each face exists at an <strong>Octave level (1-7)</strong>, representing organizational maturity:<br><br>
+                1. Survival → 2. Structure → 3. Relationships → 4. Creativity → 5. Expression → 6. Vision → 7. Radiance<br><br>
+                Higher octaves have a <strong>5% coherence penalty per level</strong>, reflecting that mature organizations face higher expectations.`,
+                target: 'toggleOctaveLayers',
+                position: 'left'
+            },
+            {
+                title: 'You\'re Ready!',
+                content: `<strong>Key interactions to explore:</strong><br><br>
+                • <strong>Drag</strong> to rotate the dodecahedron<br>
+                • <strong>Scroll</strong> to zoom in/out<br>
+                • <strong>Click faces</strong> to see KPI details<br>
+                • <strong>Hover edges</strong> to see relationship dynamics<br>
+                • Press <strong>D</strong> to open DNA Helix view<br>
+                • Press <strong>R</strong> to reset camera<br><br>
+                <em>Enjoy exploring organizational coherence!</em>`,
+                target: null,
+                position: 'center'
+            }
+        ];
+
+        let currentStep = 0;
+        const overlay = document.getElementById('tourOverlay');
+        const tooltip = document.getElementById('tourTooltip');
+        const title = document.getElementById('tourTitle');
+        const content = document.getElementById('tourContent');
+        const stepIndicator = document.getElementById('tourStepIndicator');
+        const highlight = document.getElementById('tourHighlight');
+        const prevBtn = document.getElementById('tourPrev');
+        const nextBtn = document.getElementById('tourNext');
+        const closeBtn = document.getElementById('tourClose');
+        const startBtn = document.getElementById('startGuidedTour');
+
+        // Build step indicators
+        function buildStepIndicator() {
+            stepIndicator.innerHTML = tourSteps.map((_, i) =>
+                `<div class="tour-step-dot ${i === currentStep ? 'active' : i < currentStep ? 'completed' : ''}"></div>`
+            ).join('');
+        }
+
+        // Position tooltip near target element
+        function positionTooltip(step) {
+            const targetEl = step.target ? document.getElementById(step.target) || document.querySelector('.' + step.target) : null;
+
+            if (!targetEl || step.position === 'center') {
+                // Center the tooltip
+                tooltip.style.top = '50%';
+                tooltip.style.left = '50%';
+                tooltip.style.transform = 'translate(-50%, -50%)';
+                highlight.style.display = 'none';
+            } else {
+                const rect = targetEl.getBoundingClientRect();
+                const tooltipWidth = 420;
+                const tooltipHeight = tooltip.offsetHeight || 300;
+                const padding = 20;
+
+                // Position based on step.position
+                let top, left;
+
+                switch(step.position) {
+                    case 'right':
+                        top = rect.top + rect.height / 2 - tooltipHeight / 2;
+                        left = rect.right + padding;
+                        break;
+                    case 'left':
+                        top = rect.top + rect.height / 2 - tooltipHeight / 2;
+                        left = rect.left - tooltipWidth - padding;
+                        break;
+                    case 'bottom':
+                        top = rect.bottom + padding;
+                        left = rect.left + rect.width / 2 - tooltipWidth / 2;
+                        break;
+                    default: // top
+                        top = rect.top - tooltipHeight - padding;
+                        left = rect.left + rect.width / 2 - tooltipWidth / 2;
+                }
+
+                // Keep within viewport
+                top = Math.max(padding, Math.min(window.innerHeight - tooltipHeight - padding, top));
+                left = Math.max(padding, Math.min(window.innerWidth - tooltipWidth - padding, left));
+
+                tooltip.style.top = top + 'px';
+                tooltip.style.left = left + 'px';
+                tooltip.style.transform = 'none';
+
+                // Show highlight around target
+                highlight.style.display = 'block';
+                highlight.style.top = (rect.top - 5) + 'px';
+                highlight.style.left = (rect.left - 5) + 'px';
+                highlight.style.width = (rect.width + 10) + 'px';
+                highlight.style.height = (rect.height + 10) + 'px';
+            }
+        }
+
+        // Show a specific step
+        function showStep(stepIndex) {
+            if (stepIndex < 0 || stepIndex >= tourSteps.length) return;
+
+            currentStep = stepIndex;
+            const step = tourSteps[currentStep];
+
+            title.textContent = step.title;
+            content.innerHTML = step.content;
+            buildStepIndicator();
+
+            // Update navigation buttons
+            prevBtn.style.visibility = currentStep === 0 ? 'hidden' : 'visible';
+            nextBtn.textContent = currentStep === tourSteps.length - 1 ? 'Finish' : 'Next →';
+
+            // Position tooltip after a small delay to allow DOM updates
+            setTimeout(() => positionTooltip(step), 50);
+        }
+
+        // Start tour
+        function startTour() {
+            console.log('🎯 Starting guided tour');
+            currentStep = 0;
+            overlay.classList.add('active');
+            showStep(0);
+        }
+
+        // End tour
+        function endTour() {
+            overlay.classList.remove('active');
+            highlight.style.display = 'none';
+            console.log('✅ Guided tour completed');
+        }
+
+        // Event listeners
+        if (startBtn) {
+            startBtn.addEventListener('click', startTour);
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => showStep(currentStep - 1));
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                if (currentStep === tourSteps.length - 1) {
+                    endTour();
+                } else {
+                    showStep(currentStep + 1);
+                }
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', endTour);
+        }
+
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                endTour();
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (overlay.classList.contains('active')) {
+                positionTooltip(tourSteps[currentStep]);
+            }
+        });
+
+        // Export for external access
+        window.startGuidedTour = startTour;
+
+        console.log('🎯 Guided tour initialized');
+    })();
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SHADOW OVERLAY CONTROLLER - Progressive Disclosure System (Sprint 5.5)
+         Integrates shadow awareness into the coherence HUD with elegant reveal
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <script>
+    (function() {
+        'use strict';
+
+        // DOM Elements
+        const coherenceHud = document.getElementById('coherenceHud');
+        const shadowIndicator = document.getElementById('shadowIndicator');
+        const shadowCount = document.getElementById('shadowCount');
+        const openShadowOverlayBtn = document.getElementById('openShadowOverlay');
+        const shadowOverlay = document.getElementById('shadowOverlay');
+        const closeShadowOverlayBtn = document.getElementById('closeShadowOverlay');
+        const shadowOverlayContent = document.getElementById('shadowOverlayContent');
+        const shadowOverlayBackdrop = shadowOverlay?.querySelector('.shadow-overlay-backdrop');
+
+        // State
+        let currentShadows = [];
+        let overlayOpen = false;
+
+        // ========================================
+        // SHADOW DATA MANAGEMENT
+        // ========================================
+
+        /**
+         * Update the shadow count and indicator visibility
+         * Called whenever shadow patterns change
+         */
+        function updateShadowIndicator(shadows) {
+            currentShadows = shadows || [];
+            const count = currentShadows.length;
+
+            // Update count display
+            if (shadowCount) {
+                shadowCount.textContent = count;
+            }
+
+            // Add/remove .has-shadows class for pulsing indicator
+            if (coherenceHud) {
+                if (count > 0) {
+                    coherenceHud.classList.add('has-shadows');
+                } else {
+                    coherenceHud.classList.remove('has-shadows');
+                }
+            }
+
+            console.log(`[ShadowOverlay] Updated indicator: ${count} shadows`);
+        }
+
+        /**
+         * Render shadow cards into the overlay content area
+         */
+        function renderShadowCards() {
+            if (!shadowOverlayContent) return;
+
+            // Empty state
+            if (currentShadows.length === 0) {
+                shadowOverlayContent.innerHTML = `
+                    <div class="shadow-overlay-empty">
+                        <div class="shadow-overlay-empty-icon">✨</div>
+                        <h3>No Shadow Patterns Detected</h3>
+                        <p>The organization shows strong coherence with no hidden tensions.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Render shadow cards
+            const cardsHtml = currentShadows.map(shadow => createShadowCardHtml(shadow)).join('');
+            shadowOverlayContent.innerHTML = cardsHtml;
+
+            // Add click handlers to cards for focus-face functionality
+            shadowOverlayContent.querySelectorAll('.shadow-card').forEach((card, index) => {
+                card.addEventListener('click', (e) => {
+                    // Don't trigger if clicking the toggle button
+                    if (e.target.closest('.toggle-perspective')) return;
+
+                    const shadow = currentShadows[index];
+                    focusOnShadowFace(shadow);
+                });
+
+                // Setup toggle button
+                const toggleBtn = card.querySelector('.toggle-perspective');
+                const suppressedDiv = card.querySelector('.shadow-suppressed');
+                const integratedDiv = card.querySelector('.shadow-integrated');
+
+                if (toggleBtn && suppressedDiv && integratedDiv) {
+                    toggleBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const isShowingShadow = suppressedDiv.classList.contains('active');
+
+                        if (isShowingShadow) {
+                            suppressedDiv.classList.remove('active');
+                            integratedDiv.classList.add('active');
+                            toggleBtn.textContent = '🔄 See Shadow';
+                            card.classList.add('showing-gift');
+                        } else {
+                            integratedDiv.classList.remove('active');
+                            suppressedDiv.classList.add('active');
+                            toggleBtn.textContent = '🔄 See Gift';
+                            card.classList.remove('showing-gift');
+                        }
+                    });
+                }
+            });
+        }
+
+        /**
+         * Create HTML for a single shadow card
+         */
+        function createShadowCardHtml(shadow) {
+            const severityLower = (shadow.severity || 'moderate').toLowerCase();
+            const icon = severityLower === 'critical' || severityLower === 'high' ? '⚠️' : '👁️';
+
+            const suppressedForm = shadow.suppressed || shadow.description || 'Shadow pattern detected';
+            const integratedForm = shadow.integrated || shadow.gift || 'Integrated wisdom awaits discovery';
+            const prescription = shadow.prescription || shadow.recommendation || '';
+
+            return `
+                <div class="shadow-card severity-${severityLower}" data-shadow-id="${shadow.id || shadow.name}">
+                    <div class="shadow-header">
+                        <span class="shadow-icon">${icon}</span>
+                        <span class="shadow-title">${shadow.name || 'Unknown Pattern'}</span>
+                        <button class="toggle-perspective" title="See the Gift">🔄 See Gift</button>
+                    </div>
+
+                    <div class="shadow-suppressed active">
+                        <div class="shadow-label">The Shadow:</div>
+                        <div class="shadow-message">${suppressedForm}</div>
+                    </div>
+
+                    <div class="shadow-integrated">
+                        <div class="shadow-label" style="color: #66ff99;">💡 The Gift:</div>
+                        <div class="shadow-message" style="color: rgba(102, 255, 153, 0.9);">${integratedForm}</div>
+                    </div>
+
+                    ${prescription ? `
+                        <div class="shadow-prescription">
+                            <span style="color: #00ffcc; font-weight: 600;">Rx:</span> ${prescription}
+                        </div>
+                    ` : ''}
+
+                    <div class="shadow-meta">
+                        ${shadow.faceId ? `<span class="shadow-location">Face ${shadow.faceId}</span>` : ''}
+                        ${shadow.involvedFaces ? `<span class="shadow-location">Faces: ${shadow.involvedFaces.join(', ')}</span>` : ''}
+                        ${shadow.score ? `<span class="shadow-score">Intensity: ${(shadow.score * 100).toFixed(0)}%</span>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Focus on a shadow's affected face in the 3D view
+         */
+        function focusOnShadowFace(shadow) {
+            const faceId = shadow.faceId || (shadow.involvedFaces && shadow.involvedFaces[0]);
+
+            if (faceId) {
+                console.log(`[ShadowOverlay] Focusing on face ${faceId} for shadow: ${shadow.name}`);
+
+                // Dispatch focus-face event (listened by dodecahedron-viz.js)
+                window.dispatchEvent(new CustomEvent('focus-face', {
+                    detail: { faceId: faceId }
+                }));
+
+                // Close overlay after focusing
+                closeShadowOverlay();
+            }
+        }
+
+        // ========================================
+        // OVERLAY OPEN/CLOSE
+        // ========================================
+
+        function openShadowOverlay() {
+            if (!shadowOverlay || overlayOpen) return;
+
+            renderShadowCards();
+            shadowOverlay.classList.add('visible');
+            overlayOpen = true;
+
+            // Prevent body scroll while overlay is open
+            document.body.style.overflow = 'hidden';
+
+            console.log('[ShadowOverlay] Opened');
+        }
+
+        function closeShadowOverlay() {
+            if (!shadowOverlay || !overlayOpen) return;
+
+            shadowOverlay.classList.remove('visible');
+            overlayOpen = false;
+
+            // Restore body scroll
+            document.body.style.overflow = '';
+
+            console.log('[ShadowOverlay] Closed');
+        }
+
+        function toggleShadowOverlay() {
+            if (overlayOpen) {
+                closeShadowOverlay();
+            } else {
+                openShadowOverlay();
+            }
+        }
+
+        // ========================================
+        // EVENT LISTENERS
+        // ========================================
+
+        // Open button click
+        if (openShadowOverlayBtn) {
+            openShadowOverlayBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openShadowOverlay();
+            });
+        }
+
+        // Close button click
+        if (closeShadowOverlayBtn) {
+            closeShadowOverlayBtn.addEventListener('click', closeShadowOverlay);
+        }
+
+        // Click on backdrop to close
+        if (shadowOverlayBackdrop) {
+            shadowOverlayBackdrop.addEventListener('click', closeShadowOverlay);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // ESC to close overlay
+            if (e.key === 'Escape' && overlayOpen) {
+                closeShadowOverlay();
+                return;
+            }
+
+            // 'S' to toggle shadow overlay (when not typing in an input)
+            if (e.key === 's' || e.key === 'S') {
+                const activeElement = document.activeElement;
+                const isTyping = activeElement && (
+                    activeElement.tagName === 'INPUT' ||
+                    activeElement.tagName === 'TEXTAREA' ||
+                    activeElement.contentEditable === 'true'
+                );
+
+                if (!isTyping) {
+                    e.preventDefault();
+                    toggleShadowOverlay();
+                }
+            }
+        });
+
+        // ========================================
+        // INTEGRATION WITH SHADOW SYSTEM
+        // ========================================
+
+        /**
+         * Listen for shadow pattern updates from the main engine
+         * The engine/shadow panel will dispatch this event when shadows change
+         */
+        window.addEventListener('shadows-updated', (event) => {
+            const shadows = event.detail?.shadows || [];
+            updateShadowIndicator(shadows);
+        });
+
+        /**
+         * Hook into the existing shadow panel update mechanism
+         * Watches for changes to the global shadow state
+         */
+        function syncWithShadowPanel() {
+            // Check Quannex state for shadow patterns
+            const state = window.Quannex?.getState?.();
+            if (state?.shadowPatterns) {
+                updateShadowIndicator(state.shadowPatterns);
+            }
+        }
+
+        // Initial sync after a delay (waiting for engine to initialize)
+        setTimeout(syncWithShadowPanel, 2000);
+
+        // Periodic sync every 3 seconds (catches updates from recalculate)
+        setInterval(syncWithShadowPanel, 3000);
+
+        // Also hook into the ShadowPanel if available
+        const originalShadowPanelUpdate = window.shadowPanel?.update;
+        if (originalShadowPanelUpdate) {
+            window.shadowPanel.update = function(shadows) {
+                originalShadowPanelUpdate.call(this, shadows);
+                updateShadowIndicator(shadows);
+            };
+        }
+
+        // ========================================
+        // GLOBAL API
+        // ========================================
+
+        // Expose API for external access
+        window.shadowOverlayController = {
+            open: openShadowOverlay,
+            close: closeShadowOverlay,
+            toggle: toggleShadowOverlay,
+            updateShadows: updateShadowIndicator,
+            getShadows: () => currentShadows,
+            isOpen: () => overlayOpen
+        };
+
+        console.log('[ShadowOverlay] 👁️ Shadow overlay controller initialized');
+        console.log('[ShadowOverlay] Press "S" to toggle shadow analysis overlay');
+
+    })();
+    </script>
 
 </body>
 

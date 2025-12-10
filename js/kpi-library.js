@@ -90,57 +90,57 @@ const KPI_SUGGESTIONS = {
     // Standard Business Model
     'Financial Capital': {
         Earth: [
-            { name: 'Cash Reserves', unit: 'months', targetMin: 1, targetIdeal: 6, description: 'Months of runway' },
-            { name: 'Total Assets', unit: 'currency_usd', targetMin: 0, targetIdeal: 10000000, description: 'Balance sheet strength' },
-            { name: 'Debt-to-Equity Ratio', unit: 'ratio', targetMin: 0, targetIdeal: 0.5, description: 'Financial leverage' }
+            { name: 'Cash Reserves', unit: 'months', targetMin: 1, targetIdeal: 6, description: 'Months of runway', metricType: 'survival' },
+            { name: 'Total Assets', unit: 'currency_usd', targetMin: 0, targetIdeal: 10000000, description: 'Balance sheet strength', metricType: 'completion' },
+            { name: 'Debt-to-Equity Ratio', unit: 'ratio', targetMin: 0, targetIdeal: 0.5, description: 'Financial leverage', metricType: 'completion' }
         ],
         Water: [
-            { name: 'Revenue Growth', unit: 'percentage', targetMin: 0, targetIdeal: 25, description: 'YoY growth rate' },
-            { name: 'Cash Flow', unit: 'currency_usd', targetMin: 0, targetIdeal: 1000000, description: 'Monthly cash flow' },
-            { name: 'Customer Lifetime Value Growth', unit: 'percentage', targetMin: 0, targetIdeal: 20, description: 'CLV increase' }
+            { name: 'Revenue Growth', unit: 'percentage', targetMin: 0, targetIdeal: 25, description: 'YoY growth rate', metricType: 'growth' },
+            { name: 'Cash Flow', unit: 'currency_usd', targetMin: 0, targetIdeal: 1000000, description: 'Monthly cash flow', metricType: 'survival' },
+            { name: 'Customer Lifetime Value Growth', unit: 'percentage', targetMin: 0, targetIdeal: 20, description: 'CLV increase', metricType: 'growth' }
         ],
         Fire: [
-            { name: 'Profit Margin', unit: 'percentage', targetMin: 0, targetIdeal: 25, description: 'Net profit margin' },
-            { name: 'ROI', unit: 'percentage', targetMin: 0, targetIdeal: 30, description: 'Return on investment' },
-            { name: 'EBITDA Margin', unit: 'percentage', targetMin: 0, targetIdeal: 20, description: 'Operating profitability' }
+            { name: 'Profit Margin', unit: 'percentage', targetMin: 0, targetIdeal: 25, description: 'Net profit margin', metricType: 'growth' },
+            { name: 'ROI', unit: 'percentage', targetMin: 0, targetIdeal: 30, description: 'Return on investment', metricType: 'growth' },
+            { name: 'EBITDA Margin', unit: 'percentage', targetMin: 0, targetIdeal: 20, description: 'Operating profitability', metricType: 'growth' }
         ],
         Air: [
-            { name: 'Investment Velocity', unit: 'ratio', targetMin: 0, targetIdeal: 1, description: 'Capital deployment speed' },
-            { name: 'Days Sales Outstanding', unit: 'days', targetMin: 90, targetIdeal: 30, description: 'Collection speed' },
-            { name: 'Payback Period', unit: 'months', targetMin: 24, targetIdeal: 12, description: 'Investment recovery time' }
+            { name: 'Investment Velocity', unit: 'ratio', targetMin: 0, targetIdeal: 1, description: 'Capital deployment speed', metricType: 'completion' },
+            { name: 'Days Sales Outstanding', unit: 'days', targetMin: 90, targetIdeal: 30, description: 'Collection speed', metricType: 'completion' },
+            { name: 'Payback Period', unit: 'months', targetMin: 24, targetIdeal: 12, description: 'Investment recovery time', metricType: 'completion' }
         ],
         Ether: [
-            { name: 'Financial Strategy Clarity', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Strategic alignment score' },
-            { name: 'Investor Confidence', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Stakeholder trust' },
-            { name: 'Long-term Value Creation', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Sustainable growth focus' }
+            { name: 'Financial Strategy Clarity', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Strategic alignment score', metricType: 'completion' },
+            { name: 'Investor Confidence', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Stakeholder trust', metricType: 'survival' },
+            { name: 'Long-term Value Creation', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Sustainable growth focus', metricType: 'completion' }
         ]
     },
 
     'Human Capital': {
         Earth: [
-            { name: 'Total Headcount', unit: 'count', targetMin: 1, targetIdeal: 100, description: 'Number of employees' },
-            { name: 'Core Team Stability', unit: 'percentage', targetMin: 60, targetIdeal: 90, description: 'Retention of key staff' },
-            { name: 'Salary Competitiveness', unit: 'percentage', targetMin: 80, targetIdeal: 110, description: '% of market rate' }
+            { name: 'Total Headcount', unit: 'count', targetMin: 1, targetIdeal: 100, description: 'Number of employees', metricType: 'survival' },
+            { name: 'Core Team Stability', unit: 'percentage', targetMin: 60, targetIdeal: 90, description: 'Retention of key staff', metricType: 'survival' },
+            { name: 'Salary Competitiveness', unit: 'percentage', targetMin: 80, targetIdeal: 110, description: '% of market rate', metricType: 'completion' }
         ],
         Water: [
-            { name: 'Employee Satisfaction', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Happiness survey score' },
-            { name: 'Talent Acquisition Rate', unit: 'percentage', targetMin: 0, targetIdeal: 20, description: 'New hire growth' },
-            { name: 'Career Progression Rate', unit: 'percentage', targetMin: 0, targetIdeal: 30, description: 'Internal promotions' }
+            { name: 'Employee Satisfaction', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Happiness survey score', metricType: 'survival' },
+            { name: 'Talent Acquisition Rate', unit: 'percentage', targetMin: 0, targetIdeal: 20, description: 'New hire growth', metricType: 'growth' },
+            { name: 'Career Progression Rate', unit: 'percentage', targetMin: 0, targetIdeal: 30, description: 'Internal promotions', metricType: 'growth' }
         ],
         Fire: [
-            { name: 'Productivity per Employee', unit: 'currency_usd', targetMin: 0, targetIdeal: 200000, description: 'Revenue per FTE' },
-            { name: 'Training Investment', unit: 'currency_usd', targetMin: 0, targetIdeal: 5000, description: '$ per employee/year' },
-            { name: 'Innovation Output', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Ideas implemented' }
+            { name: 'Productivity per Employee', unit: 'currency_usd', targetMin: 0, targetIdeal: 200000, description: 'Revenue per FTE', metricType: 'growth' },
+            { name: 'Training Investment', unit: 'currency_usd', targetMin: 0, targetIdeal: 5000, description: '$ per employee/year', metricType: 'completion' },
+            { name: 'Innovation Output', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Ideas implemented', metricType: 'growth' }
         ],
         Air: [
-            { name: 'Communication Quality', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Internal communication rating' },
-            { name: 'Collaboration Index', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Cross-team cooperation' },
-            { name: 'Time to Fill Position', unit: 'days', targetMin: 90, targetIdeal: 30, description: 'Hiring speed' }
+            { name: 'Communication Quality', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Internal communication rating', metricType: 'completion' },
+            { name: 'Collaboration Index', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Cross-team cooperation', metricType: 'completion' },
+            { name: 'Time to Fill Position', unit: 'days', targetMin: 90, targetIdeal: 30, description: 'Hiring speed', metricType: 'completion' }
         ],
         Ether: [
-            { name: 'Cultural Alignment', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Values coherence' },
-            { name: 'Purpose Clarity', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Mission understanding' },
-            { name: 'Psychological Safety', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Trust & openness' }
+            { name: 'Cultural Alignment', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Values coherence', metricType: 'survival' },
+            { name: 'Purpose Clarity', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Mission understanding', metricType: 'completion' },
+            { name: 'Psychological Safety', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Trust & openness', metricType: 'survival' }
         ]
     },
 
@@ -538,26 +538,30 @@ const KPI_SUGGESTIONS = {
     },
 
     // Generic fallback for any face
+    // NOTE: metricType determines the κ curvature applied to normalize KPI scores:
+    //   - 'survival' (κ=0.618): Early gains matter more - forgiving curve
+    //   - 'growth' (κ=1.618): Late gains compound - demanding curve
+    //   - 'completion' (κ=1.0): Linear progress - default
     'Generic': {
         Earth: [
-            { name: 'Foundation Strength', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Structural stability' },
-            { name: 'Resource Availability', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Available capacity' }
+            { name: 'Foundation Strength', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Structural stability', metricType: 'survival' },
+            { name: 'Resource Availability', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Available capacity', metricType: 'survival' }
         ],
         Water: [
-            { name: 'Growth Rate', unit: 'percentage', targetMin: 0, targetIdeal: 20, description: 'Rate of change' },
-            { name: 'Adaptability', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Flexibility' }
+            { name: 'Growth Rate', unit: 'percentage', targetMin: 0, targetIdeal: 20, description: 'Rate of change', metricType: 'growth' },
+            { name: 'Adaptability', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Flexibility', metricType: 'completion' }
         ],
         Fire: [
-            { name: 'Performance Level', unit: 'percentage', targetMin: 60, targetIdeal: 95, description: 'Output quality' },
-            { name: 'Impact', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Effect magnitude' }
+            { name: 'Performance Level', unit: 'percentage', targetMin: 60, targetIdeal: 95, description: 'Output quality', metricType: 'growth' },
+            { name: 'Impact', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Effect magnitude', metricType: 'growth' }
         ],
         Air: [
-            { name: 'Speed', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Velocity' },
-            { name: 'Connectivity', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Integration level' }
+            { name: 'Speed', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Velocity', metricType: 'completion' },
+            { name: 'Connectivity', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Integration level', metricType: 'completion' }
         ],
         Ether: [
-            { name: 'Strategic Alignment', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Purpose fit' },
-            { name: 'Vision Clarity', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Direction understanding' }
+            { name: 'Strategic Alignment', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Purpose fit', metricType: 'completion' },
+            { name: 'Vision Clarity', unit: 'score', targetMin: 0, targetIdeal: 10, description: 'Direction understanding', metricType: 'completion' }
         ]
     }
 };

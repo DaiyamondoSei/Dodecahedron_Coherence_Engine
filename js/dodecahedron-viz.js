@@ -336,17 +336,43 @@ function initDodecahedron() {
         }, 2000);
     });
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    // ========================================
+    // ENHANCED 5-LIGHT SYSTEM
+    // Integrated from Dodecahedron Code
+    // Total intensity balanced at ~2.0x
+    // ========================================
+
+    // Ambient: Soft base illumination (reduced from 0.5 to 0.4)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
 
-    const pointLight1 = new THREE.PointLight(0xffffff, 0.8);
+    // Primary key light: Main white (reduced from 0.8 to 0.6)
+    const pointLight1 = new THREE.PointLight(0xffffff, 0.6);
     pointLight1.position.set(5, 5, 5);
     scene.add(pointLight1);
 
+    // Fill light: Cyan accent (kept at 0.3)
     const pointLight2 = new THREE.PointLight(0x00ffcc, 0.3);
     pointLight2.position.set(-5, -5, -5);
     scene.add(pointLight2);
+
+    // NEW: Magenta accent light - adds depth and mystical quality
+    const pointLight3 = new THREE.PointLight(0xff00ff, 0.25);
+    pointLight3.position.set(-5, 3, 3);
+    scene.add(pointLight3);
+
+    // NEW: Yellow warm accent - creates golden highlights
+    const pointLight4 = new THREE.PointLight(0xffff00, 0.2);
+    pointLight4.position.set(3, -5, -3);
+    scene.add(pointLight4);
+
+    // NEW: Top white rim light - creates halo effect
+    const topLight = new THREE.PointLight(0xffffff, 0.25);
+    topLight.position.set(0, 8, 0);
+    scene.add(topLight);
+
+    // Golden ratio constant for phi-tuned animations
+    const PHI = 1.618033988749895;
 
     // ========================================
     // DATA MANAGEMENT
@@ -357,7 +383,24 @@ function initDodecahedron() {
     let faceMeshes = [];
     let edgeLines = [];
     let autoRotate = false; // Start with manual control
+    let animationsPaused = false; // Sprint 3.5: Global animation pause
     // Note: isUserInteracting and interactionTimeout are declared earlier before OrbitControls initialization
+
+    // ========================================
+    // OCTAVE LAYER SYSTEM - Phase 3 Enhancement
+    // 7 transparent shells representing developmental octaves
+    // ========================================
+    let showOctaveLayers = false;
+    let octaveLayerGroup = null;
+    const OCTAVE_COLORS = [
+        0xff3333,  // O1 - Survival (Red)
+        0xff9933,  // O2 - Security (Orange)
+        0xffff33,  // O3 - Power (Yellow)
+        0x33ff33,  // O4 - Connection (Green)
+        0x33ffff,  // O5 - Expression (Cyan)
+        0x3333ff,  // O6 - Vision (Indigo)
+        0xff33ff   // O7 - Transcendence (Violet)
+    ];
 
     // Load Quannex engine (expects it to be globally available from main.js)
     const loadQuannexEngine = async () => {
@@ -404,6 +447,9 @@ function initDodecahedron() {
 
             console.log(`🔄 Switching to company: ${companyId}`);
 
+            // Update current company tracking for octave layers
+            currentCompany = companyId;
+
             await window.CompanyLoader.switchCompany(companyId);
 
             // Get fresh state from whichever engine is available
@@ -414,6 +460,11 @@ function initDodecahedron() {
 
             updateVisualization();
             updateStats();
+
+            // Update octave layers if visible (Phase 3)
+            if (window.updateOctaveLayers) {
+                window.updateOctaveLayers();
+            }
 
             console.log(`✅ Switched to ${companyId} - ${companyData?.faces?.length || 0} faces loaded`);
         } catch (error) {
@@ -487,16 +538,29 @@ function initDodecahedron() {
             }
         }
 
-        // Create individual line for each edge
-        const edgeMaterial = new THREE.LineBasicMaterial({
+        // ============================================================
+        // TUBE GEOMETRY EDGES - Enhanced 3D visual for thesis defense
+        // Uses TubeGeometry instead of Line for richer 3D appearance
+        // ============================================================
+
+        // Configuration for tube edges
+        const TUBE_RADIUS = 0.015; // Radius of the tube
+        const TUBE_SEGMENTS = 8; // Smoothness of tube cross-section
+        const TUBE_RADIAL = 6; // Radial segments (roundness)
+
+        // Create base material for tubes (will be cloned per edge)
+        const tubeMaterial = new THREE.MeshStandardMaterial({
             color: 0x00ffcc,
-            linewidth: 2,
+            emissive: 0x004444,
+            emissiveIntensity: 0.3,
+            metalness: 0.4,
+            roughness: 0.6,
             transparent: true,
-            opacity: 0.5
+            opacity: 0.7
         });
 
         const edgeCount = positions.length / 6; // 2 vertices per edge, 3 coords per vertex
-        console.log(`[3D View] Creating ${edgeCount} interactive edges`);
+        console.log(`[3D View] Creating ${edgeCount} TubeGeometry edges`);
 
         for (let i = 0; i < edgeCount; i++) {
             const start = new THREE.Vector3(
@@ -518,20 +582,22 @@ function initDodecahedron() {
                 .slice(0, 2)
                 .map(fc => fc.faceId);
 
-            // Create line geometry
-            const lineGeometry = new THREE.BufferGeometry();
-            lineGeometry.setFromPoints([start, end]);
+            // Create TubeGeometry using LineCurve3
+            const curve = new THREE.LineCurve3(start, end);
+            const tubeGeometry = new THREE.TubeGeometry(curve, TUBE_SEGMENTS, TUBE_RADIUS, TUBE_RADIAL, false);
 
-            // Clone material for potential color changes
-            const lineMaterial = edgeMaterial.clone();
-            const line = new THREE.Line(lineGeometry, lineMaterial);
+            // Clone material for potential color changes per edge
+            const edgeTubeMaterial = tubeMaterial.clone();
+
+            // Create tube mesh
+            const tubeMesh = new THREE.Mesh(tubeGeometry, edgeTubeMaterial);
 
             // Look up edge data from mapping context
             const faceKey = nearestFaces.slice().sort().join('-');
             const mappedEdgeData = edgeDataMap[faceKey];
 
             // Set userData for hover detection
-            line.userData.edgeData = mappedEdgeData ? {
+            tubeMesh.userData.edgeData = mappedEdgeData ? {
                 faceIds: mappedEdgeData.faceIds,
                 tension: mappedEdgeData.tension || 0,
                 healthStatus: mappedEdgeData.tension < 0.1 ? 'Healthy' : mappedEdgeData.tension < 0.2 ? 'Moderate' : 'Tense',
@@ -547,17 +613,19 @@ function initDodecahedron() {
                 theQuestion: null
             };
 
-            line.userData.edgeName = mappedEdgeData?.emergentName || `Edge ${nearestFaces.join('-')}`;
+            tubeMesh.userData.edgeName = mappedEdgeData?.emergentName || `Edge ${nearestFaces.join('-')}`;
 
             // Apply the element color to the material (Sacred Tech: let essence match form)
-            lineMaterial.color.set(line.userData.edgeData.color);
+            const edgeColor = new THREE.Color(tubeMesh.userData.edgeData.color);
+            edgeTubeMaterial.color.copy(edgeColor);
+            edgeTubeMaterial.emissive.copy(edgeColor).multiplyScalar(0.2);
 
             // Add to parent mesh so it rotates together
-            parentMesh.add(line);
-            edgeLines.push(line);
+            parentMesh.add(tubeMesh);
+            edgeLines.push(tubeMesh);
         }
 
-        console.log(`[3D View] ✅ Created ${edgeLines.length} interactive edges with ${Object.keys(edgeDataMap).length} mapped data entries`);
+        console.log(`[3D View] ✅ Created ${edgeLines.length} TubeGeometry edges with ${Object.keys(edgeDataMap).length} mapped data entries`);
     };
 
     // Create dodecahedron with 12 separate face meshes
@@ -916,6 +984,77 @@ function initDodecahedron() {
     };
 
     // ========================================
+    // SHADOW FACE HIGHLIGHTING
+    // Visual indicator for shadow-affected faces
+    // ========================================
+
+    /**
+     * Highlight faces affected by shadow patterns
+     * Uses PHI-derived intensity values for severity levels
+     * @param {Array<number>} faceIds - Array of face IDs (1-indexed) to highlight
+     * @param {string} severity - 'critical' | 'high' | 'moderate'
+     */
+    const highlightShadowFaces = (faceIds, severity = 'moderate') => {
+        if (!window.dodecahedronMaterials || !Array.isArray(faceIds)) return;
+
+        // PHI-derived intensity values
+        const PHI_INV = 0.618;
+        const intensityMap = {
+            critical: 1.0,
+            high: PHI_INV,              // 0.618
+            moderate: PHI_INV * PHI_INV // 0.382
+        };
+
+        const intensity = intensityMap[severity] || intensityMap.moderate;
+
+        // Shadow highlight color (red spectrum for warnings)
+        const shadowColor = new THREE.Color(0xff4444);
+
+        faceIds.forEach(faceId => {
+            // Find face mesh by faceId (faceId is 1-indexed)
+            const meshIndex = faceMeshes.findIndex(m =>
+                m.userData.faceId === faceId || m.userData.faceData?.id === faceId
+            );
+
+            if (meshIndex !== -1 && window.dodecahedronMaterials[meshIndex]) {
+                const material = window.dodecahedronMaterials[meshIndex];
+
+                // Store original emissive for restoration
+                if (!material.userData) material.userData = {};
+                if (!material.userData.originalEmissive) {
+                    material.userData.originalEmissive = material.emissive.clone();
+                    material.userData.originalEmissiveIntensity = material.emissiveIntensity || 0;
+                }
+
+                // Apply shadow highlight with lerp for smooth blending
+                material.emissive.lerp(shadowColor, 0.4 * intensity);
+                material.emissiveIntensity = Math.min(0.8, (material.userData.originalEmissiveIntensity || 0) + (0.4 * intensity));
+                material.userData.hasShadowHighlight = true;
+                material.needsUpdate = true;
+            }
+        });
+    };
+
+    /**
+     * Clear shadow highlights from all faces
+     * Restores original emissive properties
+     */
+    const clearShadowHighlights = () => {
+        if (!window.dodecahedronMaterials) return;
+
+        window.dodecahedronMaterials.forEach(material => {
+            if (material.userData?.hasShadowHighlight) {
+                if (material.userData.originalEmissive) {
+                    material.emissive.copy(material.userData.originalEmissive);
+                    material.emissiveIntensity = material.userData.originalEmissiveIntensity || 0;
+                }
+                material.userData.hasShadowHighlight = false;
+                material.needsUpdate = true;
+            }
+        });
+    };
+
+    // ========================================
     // INTERACTION
     // ========================================
 
@@ -1059,11 +1198,35 @@ function initDodecahedron() {
                 const tensionPercent = Math.round(edgeData.tension * 100);
                 const healthStatus = edgeData.healthStatus || 'Unknown';
 
-                // Sprint 3 Task 28: Show "The Question" in edge tooltip
+                // Sprint 4 Task 33: Enhanced edge question display
                 const questionHtml = edgeData.theQuestion ?
-                    `<div style="font-size: 10px; color: rgba(255,255,255,0.9); margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.1); font-style: italic;">
-                        "${edgeData.theQuestion}"
-                    </div>` : '';
+                    `<div class="edge-question">${edgeData.theQuestion}</div>` : '';
+
+                // Sprint 4 Task 29: Edge Polarity - Calculate energy flow direction
+                const face1Energy = edgeData.face1Energy || 0;
+                const face2Energy = edgeData.face2Energy || 0;
+                const energyDiff = face2Energy - face1Energy;
+                let flowHtml = '';
+
+                if (Math.abs(energyDiff) > 0.05) {
+                    const flowDirection = energyDiff > 0 ? '→' : '←';
+                    const flowLabel = energyDiff > 0 ? 'projecting' : 'receiving';
+                    const flowColor = energyDiff > 0 ? '#00ffcc' : '#ffaa00';
+                    const f1Name = edgeData.face1Name || `Face ${edgeData.face1Id}`;
+                    const f2Name = edgeData.face2Name || `Face ${edgeData.face2Id}`;
+                    const f1Pct = Math.round(face1Energy * 100);
+                    const f2Pct = Math.round(face2Energy * 100);
+
+                    flowHtml = `
+                    <div style="font-size: 10px; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <div style="opacity: 0.7; margin-bottom: 4px;">Energy Flow:</div>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span style="color: ${face1Energy < face2Energy ? '#ffaa00' : '#00ffcc'}">${f1Name} (${f1Pct}%)</span>
+                            <span style="color: ${flowColor}; font-size: 14px;">${flowDirection}</span>
+                            <span style="color: ${face2Energy < face1Energy ? '#ffaa00' : '#00ffcc'}">${f2Name} (${f2Pct}%)</span>
+                        </div>
+                    </div>`;
+                }
 
                 edgeTooltip.innerHTML = `
                 <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px; color: ${edgeData.color};">${edgeName}</div>
@@ -1073,6 +1236,7 @@ function initDodecahedron() {
                 <div style="font-size: 10px; opacity: 0.6; margin-top: 2px;">
                     <span style="color: ${edgeData.color};">●</span> ${edgeData.element} Element
                 </div>
+                ${flowHtml}
                 ${questionHtml}
             `;
 
@@ -1299,6 +1463,281 @@ function initDodecahedron() {
             kpiGrid.innerHTML = '<div style="text-align: center; opacity: 0.5; padding: 20px;">No KPI data available</div>';
         }
 
+        // ========================================
+        // SPRINT 3.5: ELEMENT BALANCE GRID
+        // ========================================
+        const elementBalanceGrid = document.getElementById('elementBalanceGrid');
+        if (elementBalanceGrid && face.elementalKPIs) {
+            // Group KPIs by element and calculate average scores
+            const elementData = {
+                earth: { icon: '🜃', name: 'Earth', scores: [], label: 'Stability' },
+                water: { icon: '💧', name: 'Water', scores: [], label: 'Adaptability' },
+                fire: { icon: '🔥', name: 'Fire', scores: [], label: 'Action' },
+                air: { icon: '💨', name: 'Air', scores: [], label: 'Communication' },
+                ether: { icon: '✧', name: 'Ether', scores: [], label: 'Vision' }
+            };
+
+            // Collect scores by element
+            face.elementalKPIs.forEach(kpi => {
+                const element = (kpi.element || 'earth').toLowerCase();
+                if (elementData[element]) {
+                    elementData[element].scores.push(kpi.normalizedScore || 0);
+                }
+            });
+
+            // Build the grid
+            elementBalanceGrid.innerHTML = '';
+            Object.entries(elementData).forEach(([key, data]) => {
+                const avgScore = data.scores.length > 0
+                    ? data.scores.reduce((a, b) => a + b, 0) / data.scores.length
+                    : 0;
+                const percentage = Math.round(avgScore * 100);
+
+                const item = document.createElement('div');
+                item.className = 'element-balance-item';
+                item.innerHTML = `
+                    <div class="element-icon">${data.icon}</div>
+                    <div class="element-name">${data.label}</div>
+                    <div class="element-value">${percentage}%</div>
+                    <div class="element-bar">
+                        <div class="element-bar-fill" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                elementBalanceGrid.appendChild(item);
+            });
+
+            // Sprint 4 Task 28: Update Pentagram Visualization
+            const pentagramData = document.getElementById('pentagramData');
+            if (pentagramData) {
+                // Calculate element scores for pentagram (order: Fire, Air, Ether, Water, Earth)
+                const elementOrder = ['fire', 'air', 'ether', 'water', 'earth'];
+                const scores = elementOrder.map(el => {
+                    const data = elementData[el];
+                    return data.scores.length > 0
+                        ? data.scores.reduce((a, b) => a + b, 0) / data.scores.length
+                        : 0;
+                });
+
+                // Pentagram points (star shape) - center is (80, 80), radius 65
+                const center = { x: 80, y: 80 };
+                const maxRadius = 60;
+                const minRadius = 5;
+
+                // Calculate point positions for pentagram (5 points, -90° offset for top)
+                const angleOffset = -Math.PI / 2; // Start at top
+                const points = scores.map((score, i) => {
+                    const angle = angleOffset + (i * 2 * Math.PI / 5);
+                    const radius = minRadius + (score * (maxRadius - minRadius));
+                    return {
+                        x: center.x + radius * Math.cos(angle),
+                        y: center.y + radius * Math.sin(angle)
+                    };
+                });
+
+                // Update polygon points
+                const pointsStr = points.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+                pentagramData.setAttribute('points', pointsStr);
+
+                // Color based on overall balance
+                const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+                if (avgScore >= 0.618) {
+                    pentagramData.setAttribute('fill', 'rgba(102, 255, 136, 0.3)');
+                    pentagramData.setAttribute('stroke', '#66ff88');
+                } else if (avgScore >= 0.382) {
+                    pentagramData.setAttribute('fill', 'rgba(0, 255, 204, 0.3)');
+                    pentagramData.setAttribute('stroke', '#00ffcc');
+                } else {
+                    pentagramData.setAttribute('fill', 'rgba(255, 170, 0, 0.3)');
+                    pentagramData.setAttribute('stroke', '#ffaa00');
+                }
+            }
+        }
+
+        // ========================================
+        // SPRINT 3.5: LEVERAGE ACTION
+        // ========================================
+        const leverageActionText = document.getElementById('leverageActionText');
+        if (leverageActionText && face.elementalKPIs) {
+            // Find the lowest scoring KPI
+            let lowestKpi = null;
+            let lowestScore = 1;
+            face.elementalKPIs.forEach(kpi => {
+                if ((kpi.normalizedScore || 0) < lowestScore) {
+                    lowestScore = kpi.normalizedScore || 0;
+                    lowestKpi = kpi;
+                }
+            });
+
+            if (lowestKpi && lowestScore < 0.6) {
+                leverageActionText.textContent = `Focus on improving "${lowestKpi.name}" (currently at ${Math.round(lowestScore * 100)}%) for maximum impact on this face's energy.`;
+            } else if (face.faceEnergy < 0.4) {
+                leverageActionText.textContent = `This face needs attention. Consider reviewing all KPIs and prioritizing the most critical improvements.`;
+            } else if (face.faceEnergy >= 0.618) {
+                leverageActionText.textContent = `This face is performing well! Consider how to leverage this strength to support weaker areas of the organization.`;
+            } else {
+                leverageActionText.textContent = `Continue steady progress across all elements to build toward transcendence threshold (61.8%).`;
+            }
+        }
+
+        // ========================================
+        // OCTAVE PROGRESSION SECTION
+        // ========================================
+        const octaveNumber = document.getElementById('octaveNumber');
+        const octaveNameDisplay = document.getElementById('octaveNameDisplay');
+        const octaveProgressPercent = document.getElementById('octaveProgressPercent');
+        const nextOctaveName = document.getElementById('nextOctaveName');
+        const octaveProgressFill = document.getElementById('octaveProgressFill');
+        const octaveThresholdMarker = document.getElementById('octaveThresholdMarker');
+        const transcendenceBadge = document.getElementById('transcendenceBadge');
+
+        // Roman numeral conversion
+        const toRoman = (num) => ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'][num - 1] || num;
+
+        // Octave names from main.js
+        const octaveNames = ['Survival', 'Structure', 'Relationships', 'Creativity', 'Expression', 'Vision', 'Radiance'];
+
+        // Get octave info (use currentOctave from face or default to 1)
+        const currentOctave = face.currentOctave || 1;
+        const octaveName = octaveNames[currentOctave - 1] || 'Unknown';
+
+        // Get progress (face energy as proxy for octave progress)
+        const progress = face.faceEnergy || 0;
+
+        // Get threshold from tuning config
+        const tuning = window.Quannex ? window.Quannex.exportTuning() : null;
+        const theta = tuning ? tuning.theta : 0.618;
+        const isReady = progress >= theta && currentOctave < 7;
+
+        // Update octave badge
+        if (octaveNumber) {
+            octaveNumber.textContent = toRoman(currentOctave);
+        }
+        if (octaveNameDisplay) {
+            octaveNameDisplay.textContent = octaveName;
+        }
+
+        // Update progress display
+        if (octaveProgressPercent) {
+            octaveProgressPercent.textContent = `${Math.round(progress * 100)}%`;
+        }
+
+        if (nextOctaveName) {
+            if (currentOctave < 7) {
+                nextOctaveName.textContent = `Octave ${toRoman(currentOctave + 1)} (${octaveNames[currentOctave]})`;
+            } else {
+                nextOctaveName.textContent = 'Radiance Mastery';
+            }
+        }
+
+        if (octaveProgressFill) {
+            octaveProgressFill.style.width = `${Math.min(progress * 100, 100)}%`;
+        }
+
+        // Position threshold marker based on THETA
+        if (octaveThresholdMarker) {
+            octaveThresholdMarker.style.left = `${theta * 100}%`;
+        }
+
+        // Show/hide transcendence badge
+        if (transcendenceBadge) {
+            transcendenceBadge.style.display = isReady ? 'block' : 'none';
+        }
+
+        // ========================================
+        // BREATH AXIS SECTION - Phase 2 Enhancement
+        // ========================================
+        const breathAxisSection = document.getElementById('breathAxisSection');
+        const breathAxisName = document.getElementById('breathAxisName');
+        const breathRatioValue = document.getElementById('breathRatioValue');
+        const breathStatus = document.getElementById('breathStatus');
+        const partnerFaceInfo = document.getElementById('partnerFaceInfo');
+        const viewFullDnaBtn = document.getElementById('viewFullDnaBtn');
+
+        // Get breath analysis data
+        const breathAnalysis = window.Quannex ? window.Quannex.getBreathAnalysis() : null;
+
+        if (breathAnalysis && breathAxisSection) {
+            // Find the breath axis that includes this face
+            const faceId = face.id;
+            const axisData = breathAnalysis.axes ? breathAnalysis.axes.find(axis =>
+                axis.receptionFace === faceId || axis.projectionFace === faceId
+            ) : null;
+
+            if (axisData) {
+                // Determine this face's role in the breath axis
+                const isReception = axisData.receptionFace === faceId;
+                const partnerFaceId = isReception ? axisData.projectionFace : axisData.receptionFace;
+                const role = isReception ? 'Reception (Inhale)' : 'Projection (Exhale)';
+
+                // Get partner face name from company data
+                const companyData = window.Quannex.getState();
+                let partnerFaceName = `Face ${partnerFaceId}`;
+                let partnerEnergy = 0.5;
+                if (companyData && companyData.faces) {
+                    const partnerFace = companyData.faces.find(f => f.id === partnerFaceId);
+                    if (partnerFace) {
+                        partnerFaceName = partnerFace.name || partnerFaceName;
+                        partnerEnergy = partnerFace.faceEnergy || 0.5;
+                    }
+                }
+
+                // Populate UI elements
+                breathAxisName.textContent = `${axisData.axis || 'Breath Axis'} (${role})`;
+                breathRatioValue.textContent = axisData.linearRatio ? axisData.linearRatio.toFixed(2) : '--';
+
+                // Determine status based on ratio
+                const ratio = axisData.linearRatio || 1.0;
+                let statusText = 'Balanced';
+                let statusClass = 'balanced';
+
+                if (ratio > 1.3) {
+                    statusText = 'Over-projecting';
+                    statusClass = 'over-exhaling';
+                } else if (ratio < 0.7) {
+                    statusText = 'Over-receiving';
+                    statusClass = 'over-inhaling';
+                }
+
+                breathStatus.textContent = statusText;
+                breathStatus.className = 'breath-status ' + statusClass;
+
+                partnerFaceInfo.textContent = `Partner: F${partnerFaceId} (${partnerFaceName})`;
+
+                // Initialize DNA preview animation
+                if (window.initDNAPreview) {
+                    window.initDNAPreview({
+                        ratio: ratio,
+                        receptionEnergy: isReception ? (face.faceEnergy || 0.5) : partnerEnergy,
+                        projectionEnergy: isReception ? partnerEnergy : (face.faceEnergy || 0.5)
+                    });
+                }
+
+                // Setup button click handler
+                if (viewFullDnaBtn) {
+                    viewFullDnaBtn.onclick = () => {
+                        // Store context for the DNA page
+                        sessionStorage.setItem('selectedFaceForDNA', JSON.stringify({
+                            faceId: faceId,
+                            faceName: face.name,
+                            axisName: axisData.axis,
+                            receptionFace: axisData.receptionFace,
+                            projectionFace: axisData.projectionFace
+                        }));
+                        // Navigate to full DNA analysis
+                        window.location.href = 'octave-dna.html';
+                    };
+                }
+
+                breathAxisSection.style.display = 'block';
+            } else {
+                breathAxisSection.style.display = 'none';
+            }
+        } else {
+            if (breathAxisSection) {
+                breathAxisSection.style.display = 'none';
+            }
+        }
+
         // Populate connected edges section (Advanced mode only)
         const edgesSection = document.getElementById('connectedEdgesSection');
         const edgesList = document.getElementById('connectedEdgesList');
@@ -1354,12 +1793,28 @@ function initDodecahedron() {
                         }
                     }
 
+                    // Sprint 4 Task 28: Enhanced edge display with question
+                    const edgeQuestion = edge.question || edge.theQuestion || '';
+                    const edgeName = edge.emergentName || edge.name || '';
+
                     const edgeItem = document.createElement('div');
-                    edgeItem.className = 'metric-row';
+                    edgeItem.className = 'connected-edge-item';
                     edgeItem.style.fontSize = '11px';
+                    edgeItem.style.marginBottom = '10px';
+                    edgeItem.style.padding = '8px';
+                    edgeItem.style.background = 'rgba(0, 255, 204, 0.05)';
+                    edgeItem.style.borderRadius = '4px';
+                    edgeItem.style.borderLeft = `3px solid ${tension > 0.6 ? '#ff4444' : tension > 0.4 ? '#ffaa00' : '#00ff88'}`;
                     edgeItem.innerHTML = `
-                    <span class="metric-label" style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">→ ${otherFaceName}</span>
-                    <span class="metric-value ${tensionClass}" style="white-space: nowrap;">${tensionPercent}%${contextIndicator}</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span style="color: #00ffcc; font-weight: 500;">${edgeName || `→ ${otherFaceName}`}</span>
+                        <span class="metric-value ${tensionClass}" style="font-size: 10px;">${tensionPercent}%${contextIndicator}</span>
+                    </div>
+                    ${edgeQuestion ? `
+                        <div style="font-size: 10px; font-style: italic; color: rgba(255, 204, 0, 0.8); padding-left: 8px; border-left: 2px solid rgba(255, 204, 0, 0.3); margin-top: 4px;">
+                            "${edgeQuestion}"
+                        </div>
+                    ` : ''}
                 `;
                     edgesList.appendChild(edgeItem);
                 });
@@ -1385,10 +1840,12 @@ function initDodecahedron() {
             if (cornerVertices.length > 0) {
                 verticesList.innerHTML = '';
                 cornerVertices.forEach(vertex => {
-                    const archetype = vertex.archetype || 'Unknown';
+                    const archetype = vertex.archetype || vertex.emergentName || 'Unknown';
                     const vortexStrength = vertex.vortexStrength || 0;
                     const vortexDirection = vertex.vortexDirection || 0;
                     const strengthPercent = Math.round(vortexStrength * 100);
+                    const classification = vertex.classification || '';
+                    const isBermuda = classification === 'bermuda_triangle';
 
                     // Color code based on vortex direction
                     let directionIcon = '⚪';
@@ -1401,12 +1858,30 @@ function initDodecahedron() {
                         directionLabel = 'Downward';
                     }
 
+                    // Sprint 4 Task 28: Enhanced vertex display with bermuda triangle indicator
                     const vertexItem = document.createElement('div');
-                    vertexItem.className = 'metric-row';
-                    vertexItem.style.marginBottom = '8px';
+                    vertexItem.className = 'corner-vertex-item';
+                    vertexItem.style.marginBottom = '10px';
+                    vertexItem.style.padding = '8px';
+                    vertexItem.style.background = isBermuda ? 'rgba(255, 34, 34, 0.15)' : 'rgba(255, 0, 100, 0.05)';
+                    vertexItem.style.borderRadius = '4px';
+                    vertexItem.style.borderLeft = isBermuda ? '3px solid #ff2222' : '3px solid rgba(255, 0, 100, 0.5)';
                     vertexItem.innerHTML = `
-                    <span class="metric-label">${directionIcon} V${vertex.id}: ${archetype}</span>
-                    <span class="metric-value">${strengthPercent}% • ${directionLabel}</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span style="color: ${isBermuda ? '#ff6666' : '#ff66aa'}; font-weight: 500;">
+                            ${directionIcon} V${vertex.id}: ${archetype}
+                        </span>
+                        <span style="font-size: 10px;">${strengthPercent}% • ${directionLabel}</span>
+                    </div>
+                    ${isBermuda ? `
+                        <div style="font-size: 10px; color: #ff4444; padding: 4px 8px; background: rgba(255, 34, 34, 0.2); border-radius: 3px; margin-top: 4px;">
+                            ⚠️ <strong>BERMUDA TRIANGLE</strong> - Critical imbalance zone
+                        </div>
+                    ` : classification ? `
+                        <div style="font-size: 10px; color: rgba(255, 255, 255, 0.6); margin-top: 2px;">
+                            ${classification.replace(/_/g, ' ')}
+                        </div>
+                    ` : ''}
                 `;
                     verticesList.appendChild(vertexItem);
                 });
@@ -1429,16 +1904,60 @@ function initDodecahedron() {
 
             if (faceShadows.length > 0) {
                 shadowList.innerHTML = '';
-                faceShadows.forEach(shadow => {
+                faceShadows.forEach((shadow, index) => {
+                    // Sprint 4 Task 28: Enhanced shadow display with dual-form toggle
+                    const suppressedForm = shadow.suppressed || shadow.description || 'Shadow pattern detected';
+                    const integratedForm = shadow.integrated || shadow.gift || 'Integrated wisdom awaits discovery';
+                    const shadowId = `shadow-${face.id}-${index}`;
+
                     const shadowItem = document.createElement('div');
-                    shadowItem.className = 'metric-row';
-                    shadowItem.style.marginBottom = '8px';
+                    shadowItem.className = 'shadow-dual-card';
+                    shadowItem.style.marginBottom = '12px';
+                    shadowItem.style.padding = '10px';
+                    shadowItem.style.background = 'rgba(255, 68, 68, 0.1)';
+                    shadowItem.style.borderRadius = '6px';
                     shadowItem.style.borderLeft = '3px solid #ff4444';
-                    shadowItem.style.paddingLeft = '8px';
+                    shadowItem.setAttribute('data-shadow-id', shadowId);
                     shadowItem.innerHTML = `
-                    <div style="font-weight: bold; color: #ff8888; font-size: 11px;">${shadow.name}</div>
-                    <div style="font-size: 10px; opacity: 0.8;">${shadow.description}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-weight: 600; color: #ff8888; font-size: 11px;">⚠️ ${shadow.name}</span>
+                        <button class="shadow-toggle-btn" data-shadow-id="${shadowId}" style="font-size: 9px; padding: 3px 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; color: #fff; cursor: pointer;">
+                            🔄 See Gift
+                        </button>
+                    </div>
+                    <div class="shadow-suppressed-view" data-shadow-id="${shadowId}" style="font-size: 10px; color: rgba(255, 136, 136, 0.9);">
+                        <div style="opacity: 0.7; font-size: 9px; margin-bottom: 2px;">The Shadow:</div>
+                        ${suppressedForm}
+                    </div>
+                    <div class="shadow-integrated-view" data-shadow-id="${shadowId}" style="display: none; font-size: 10px; color: rgba(102, 255, 153, 0.9);">
+                        <div style="opacity: 0.7; font-size: 9px; margin-bottom: 2px;">💡 The Gift:</div>
+                        ${integratedForm}
+                    </div>
                 `;
+
+                    // Add toggle functionality
+                    const toggleBtn = shadowItem.querySelector('.shadow-toggle-btn');
+                    toggleBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const suppressed = shadowItem.querySelector('.shadow-suppressed-view');
+                        const integrated = shadowItem.querySelector('.shadow-integrated-view');
+                        const isShowingShadow = suppressed.style.display !== 'none';
+
+                        if (isShowingShadow) {
+                            suppressed.style.display = 'none';
+                            integrated.style.display = 'block';
+                            toggleBtn.textContent = '🔄 See Shadow';
+                            shadowItem.style.background = 'rgba(102, 255, 153, 0.1)';
+                            shadowItem.style.borderLeftColor = '#66ff99';
+                        } else {
+                            integrated.style.display = 'none';
+                            suppressed.style.display = 'block';
+                            toggleBtn.textContent = '🔄 See Gift';
+                            shadowItem.style.background = 'rgba(255, 68, 68, 0.1)';
+                            shadowItem.style.borderLeftColor = '#ff4444';
+                        }
+                    });
+
                     shadowList.appendChild(shadowItem);
                 });
                 if (shadowSection) shadowSection.style.display = 'block';
@@ -1575,6 +2094,11 @@ function initDodecahedron() {
             tooltip.classList.remove('visible');
         }
 
+        // Stop DNA preview animation when panel closes
+        if (window.stopDNAPreview) {
+            window.stopDNAPreview();
+        }
+
         // Smoothly return to default view for better UX
         // Check if camera is close (zoomed in from clicking a face)
         const currentDistance = camera.position.length();
@@ -1617,6 +2141,46 @@ function initDodecahedron() {
         statusEl.textContent = status;
         statusEl.style.color = statusColor;
 
+        // ========================================
+        // SPRINT 3.5: Update Coherence HUD
+        // ========================================
+        const coherenceHud = document.getElementById('coherenceHud');
+        const coherenceHudValue = document.getElementById('coherenceHudValue');
+        const coherenceHudStatus = document.getElementById('coherenceHudStatus');
+
+        if (coherenceHudValue) {
+            coherenceHudValue.textContent = `${coherencePercent}%`;
+        }
+
+        if (coherenceHudStatus) {
+            // Remove all status classes
+            coherenceHudStatus.classList.remove('critical', 'warning', 'healthy', 'transcendent');
+
+            // Determine status
+            let hudStatus, hudClass;
+            if (coherence >= 0.618) {
+                hudStatus = 'Transcendent';
+                hudClass = 'transcendent';
+            } else if (coherence >= 0.5) {
+                hudStatus = 'Healthy';
+                hudClass = 'healthy';
+            } else if (coherence >= 0.3) {
+                hudStatus = 'Warning';
+                hudClass = 'warning';
+            } else {
+                hudStatus = 'Critical';
+                hudClass = 'critical';
+            }
+
+            coherenceHudStatus.textContent = hudStatus;
+            coherenceHudStatus.classList.add(hudClass);
+
+            // Update HUD border for critical state
+            if (coherenceHud) {
+                coherenceHud.classList.toggle('critical', hudClass === 'critical');
+            }
+        }
+
         // Count faces by health
         if (companyData.faces) {
             const healthy = companyData.faces.filter(f => (f.faceEnergy || 0) >= 0.7).length;
@@ -1641,6 +2205,96 @@ function initDodecahedron() {
         e.target.classList.toggle('active', autoRotate);
     });
 
+    // ========================================
+    // OCTAVE LAYER CREATION & TOGGLE - Phase 3
+    // ========================================
+
+    // Create octave layer shells (7 concentric dodecahedra)
+    const createOctaveLayers = () => {
+        if (octaveLayerGroup) {
+            scene.remove(octaveLayerGroup);
+        }
+
+        octaveLayerGroup = new THREE.Group();
+        const baseRadius = 2; // Same as main dodecahedron
+
+        // Determine current company octave (Quannex = O1, Apex = O6-O7)
+        let currentOctave = 1;
+        if (currentCompany === 'nova-tech') currentOctave = 3;
+        else if (currentCompany === 'zenith-solutions') currentOctave = 4;
+        else if (currentCompany === 'apex-industries') currentOctave = 6;
+
+        // Create 7 shells from inner (O1) to outer (O7)
+        for (let i = 0; i < 7; i++) {
+            const octaveNum = i + 1;
+            // Scale: O1 is 1.0, each higher octave is PHI^(i*0.15) larger
+            const scale = 1.0 + (i * 0.25); // Linear growth for cleaner visualization
+            const radius = baseRadius * scale;
+
+            const geometry = new THREE.DodecahedronGeometry(radius);
+
+            // Higher octaves are more transparent (ghost future states)
+            // Current octave highlighted with higher opacity
+            let opacity = octaveNum <= currentOctave ? 0.25 : 0.08;
+            if (octaveNum === currentOctave) opacity = 0.4; // Highlight current stage
+
+            const material = new THREE.MeshBasicMaterial({
+                color: OCTAVE_COLORS[i],
+                transparent: true,
+                opacity: opacity,
+                wireframe: true, // Wireframe for cleaner layered view
+                side: THREE.DoubleSide
+            });
+
+            const shell = new THREE.Mesh(geometry, material);
+            shell.userData.octaveLevel = octaveNum;
+            octaveLayerGroup.add(shell);
+        }
+
+        scene.add(octaveLayerGroup);
+        console.log(`[3D View] 🌈 Created 7 octave layers, current company at O${currentOctave}`);
+    };
+
+    // Toggle octave layers visibility
+    const toggleOctaveLayersVisibility = () => {
+        showOctaveLayers = !showOctaveLayers;
+
+        if (showOctaveLayers) {
+            if (!octaveLayerGroup) {
+                createOctaveLayers();
+            } else {
+                scene.add(octaveLayerGroup);
+            }
+        } else {
+            if (octaveLayerGroup) {
+                scene.remove(octaveLayerGroup);
+            }
+        }
+
+        console.log(`[3D View] 🌈 Octave layers: ${showOctaveLayers ? 'ON' : 'OFF'}`);
+    };
+
+    // Octave layers toggle button
+    const octaveToggleBtn = document.getElementById('toggleOctaveLayers');
+    if (octaveToggleBtn) {
+        octaveToggleBtn.addEventListener('click', (e) => {
+            toggleOctaveLayersVisibility();
+            e.target.textContent = `Octave Layers: ${showOctaveLayers ? 'ON' : 'OFF'}`;
+            e.target.classList.toggle('active', showOctaveLayers);
+        });
+    }
+
+    // Update octave layers when company changes
+    const updateOctaveLayersForCompany = () => {
+        if (showOctaveLayers && octaveLayerGroup) {
+            scene.remove(octaveLayerGroup);
+            createOctaveLayers();
+        }
+    };
+
+    // Expose for company switch callback
+    window.updateOctaveLayers = updateOctaveLayersForCompany;
+
     // Company selectors
     document.getElementById('companyQuannex').addEventListener('click', () => switchCompany('quannex'));
     document.getElementById('companyNova').addEventListener('click', () => switchCompany('nova-tech'));
@@ -1649,6 +2303,27 @@ function initDodecahedron() {
 
     // Close face detail
     document.getElementById('closeFaceDetail').addEventListener('click', closeFaceDetail);
+
+    // Sprint 3.5: Face panel tab switching
+    document.querySelectorAll('.face-panel-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const sectionName = tab.dataset.section;
+
+            // Update active tab
+            document.querySelectorAll('.face-panel-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Update active section
+            document.querySelectorAll('.face-panel-section').forEach(section => {
+                section.classList.remove('active');
+                if (section.dataset.section === sectionName) {
+                    section.classList.add('active');
+                }
+            });
+
+            console.log(`[3D View] 📑 Face panel tab switched to: ${sectionName}`);
+        });
+    });
 
     // Dimensional analysis (will link to DNA helix view for sacred geometry)
     const pentagramBtn = document.getElementById('showPentagram');
@@ -1686,6 +2361,11 @@ function initDodecahedron() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeFaceDetail();
+            // Also close keyboard hints overlay
+            const hints = document.getElementById('keyboardHints');
+            if (hints && hints.classList.contains('visible')) {
+                hints.classList.remove('visible');
+            }
         }
 
         // 'R' key - Reset camera view
@@ -1693,15 +2373,176 @@ function initDodecahedron() {
             resetCameraView();
         }
 
-        // 'Space' - Toggle auto-rotation
+        // 'Space' - Toggle global animation pause (Sprint 3.5 enhanced)
         if (e.key === ' ' && e.target === document.body) {
             e.preventDefault(); // Prevent page scroll
-            autoRotate = !autoRotate;
-            const toggleBtn = document.getElementById('toggleRotation');
-            if (toggleBtn) {
-                toggleBtn.textContent = `Auto-Rotate: ${autoRotate ? 'ON' : 'OFF'}`;
-                toggleBtn.classList.toggle('active', autoRotate);
+            animationsPaused = !animationsPaused;
+
+            // Show pause indicator
+            const pauseIndicator = document.getElementById('pauseIndicator');
+            if (pauseIndicator) {
+                if (animationsPaused) {
+                    pauseIndicator.classList.add('visible');
+                } else {
+                    pauseIndicator.classList.remove('visible');
+                }
             }
+
+            // Also pause auto-rotation when animations are paused
+            if (animationsPaused && autoRotate) {
+                autoRotate = false;
+                const toggleBtn = document.getElementById('toggleRotation');
+                if (toggleBtn) {
+                    toggleBtn.textContent = 'Auto-Rotate: OFF';
+                    toggleBtn.classList.remove('active');
+                }
+            }
+
+            console.log(`[3D View] ⏸️ All animations: ${animationsPaused ? 'PAUSED' : 'PLAYING'}`);
+        }
+
+        // 'A' key - Toggle auto-rotation only (separate from global pause)
+        if (e.key === 'a' || e.key === 'A') {
+            if (!animationsPaused) {
+                autoRotate = !autoRotate;
+                const toggleBtn = document.getElementById('toggleRotation');
+                if (toggleBtn) {
+                    toggleBtn.textContent = `Auto-Rotate: ${autoRotate ? 'ON' : 'OFF'}`;
+                    toggleBtn.classList.toggle('active', autoRotate);
+                }
+                console.log(`[3D View] 🔄 Auto-rotate: ${autoRotate ? 'ON' : 'OFF'}`);
+            }
+        }
+
+        // Phase 4: 'O' key - Toggle octave layers
+        if (e.key === 'o' || e.key === 'O') {
+            const octaveBtn = document.getElementById('toggleOctaveLayers');
+            if (octaveBtn) {
+                octaveBtn.click();
+            }
+        }
+
+        // Phase 4: 'D' key - Navigate to DNA Helix view
+        if (e.key === 'd' || e.key === 'D') {
+            // Open DNA helix visualization in new tab
+            window.open('octave-dna.html', '_blank');
+        }
+
+        // Phase 5: 'P' key - Toggle presentation mode (thesis defense)
+        if (e.key === 'p' || e.key === 'P') {
+            document.body.classList.toggle('presentation-mode');
+            const isPresentation = document.body.classList.contains('presentation-mode');
+            console.log(`[3D View] 🎤 Presentation mode: ${isPresentation ? 'ON' : 'OFF'}`);
+        }
+
+        // Sprint 3.5: 'L' key - Cycle font scale levels (Normal → Large → XLarge → Normal)
+        if (e.key === 'l' || e.key === 'L') {
+            const fontScales = ['normal', 'large', 'xlarge'];
+            const fontScaleLabels = { normal: 'NORMAL', large: 'LARGE', xlarge: 'X-LARGE' };
+
+            // Find current scale
+            let currentIndex = 0;
+            fontScales.forEach((scale, index) => {
+                if (document.body.classList.contains(`font-scale-${scale}`)) {
+                    currentIndex = index;
+                }
+            });
+
+            // Remove current scale class
+            fontScales.forEach(scale => {
+                document.body.classList.remove(`font-scale-${scale}`);
+            });
+
+            // Apply next scale (cycle)
+            const nextIndex = (currentIndex + 1) % fontScales.length;
+            const nextScale = fontScales[nextIndex];
+            document.body.classList.add(`font-scale-${nextScale}`);
+
+            // Update and show indicator
+            const indicator = document.getElementById('fontScaleIndicator');
+            if (indicator) {
+                indicator.textContent = `FONT: ${fontScaleLabels[nextScale]}`;
+                indicator.classList.add('visible');
+                indicator.classList.remove('fade-out');
+
+                // Auto-hide after 2 seconds
+                clearTimeout(indicator._hideTimeout);
+                indicator._hideTimeout = setTimeout(() => {
+                    indicator.classList.add('fade-out');
+                    setTimeout(() => {
+                        indicator.classList.remove('visible', 'fade-out');
+                    }, 300);
+                }, 2000);
+            }
+
+            console.log(`[3D View] 📏 Font scale: ${nextScale.toUpperCase()}`);
+        }
+
+        // Sprint 3.5: 'C' key - Toggle high-contrast mode (for projectors)
+        if (e.key === 'c' || e.key === 'C') {
+            document.body.classList.toggle('high-contrast');
+            const isHighContrast = document.body.classList.contains('high-contrast');
+
+            // Update and show indicator
+            const indicator = document.getElementById('contrastIndicator');
+            if (indicator) {
+                indicator.textContent = `HIGH CONTRAST: ${isHighContrast ? 'ON' : 'OFF'}`;
+                indicator.classList.add('visible');
+                indicator.classList.remove('fade-out');
+
+                // Auto-hide after 2 seconds
+                clearTimeout(indicator._hideTimeout);
+                indicator._hideTimeout = setTimeout(() => {
+                    indicator.classList.add('fade-out');
+                    setTimeout(() => {
+                        indicator.classList.remove('visible', 'fade-out');
+                    }, 300);
+                }, 2000);
+            }
+
+            console.log(`[3D View] 🎨 High contrast: ${isHighContrast ? 'ON' : 'OFF'}`);
+        }
+
+        // Sprint 3.5: 'H' key - Toggle keyboard hints overlay
+        if (e.key === 'h' || e.key === 'H') {
+            const hints = document.getElementById('keyboardHints');
+            if (hints) {
+                hints.classList.toggle('visible');
+                console.log(`[3D View] ⌨️ Keyboard hints: ${hints.classList.contains('visible') ? 'SHOWN' : 'HIDDEN'}`);
+            }
+        }
+
+        // Sprint 3.5: 'F' key - Toggle fullscreen mode
+        if (e.key === 'f' || e.key === 'F') {
+            // Don't trigger when typing in input fields
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            if (!document.fullscreenElement) {
+                // Enter fullscreen
+                document.documentElement.requestFullscreen().then(() => {
+                    console.log('[3D View] 🖥️ Fullscreen: ENTERED');
+                }).catch(err => {
+                    console.warn('[3D View] Fullscreen not supported:', err.message);
+                });
+            } else {
+                // Exit fullscreen
+                document.exitFullscreen().then(() => {
+                    console.log('[3D View] 🖥️ Fullscreen: EXITED');
+                }).catch(err => {
+                    console.warn('[3D View] Exit fullscreen failed:', err.message);
+                });
+            }
+        }
+
+        // Sprint 3.5: Shift+R - Open Results Summary Report
+        if ((e.key === 'r' || e.key === 'R') && e.shiftKey) {
+            // Don't trigger when typing in input fields
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            e.preventDefault();
+
+            // Open results summary in new tab
+            window.open('results-summary.html', '_blank');
+            console.log('[3D View] 📊 Opening Results Summary Report');
         }
     });
 
@@ -1712,47 +2553,106 @@ function initDodecahedron() {
     const animate = () => {
         requestAnimationFrame(animate);
 
-        const time = Date.now() * 0.001; // Time in seconds
+        // Sprint 3.5: Skip time-based animations when paused
+        // (Still render the scene, just don't update time-based effects)
+        const time = animationsPaused ? (window._pausedTime || 0) : Date.now() * 0.001;
+        if (!animationsPaused) {
+            window._pausedTime = time; // Store last time for when we pause
+        }
 
-        // Auto-rotate the main dodecahedron and edges (only when not interacting)
+        // Auto-rotate the main dodecahedron and edges (only when not interacting and not paused)
         // Note: faceMeshes are children of mainDodecahedron, so they rotate automatically
-        if (autoRotate && !isUserInteracting) {
+        if (autoRotate && !isUserInteracting && !animationsPaused) {
             if (window.mainDodecahedron) {
                 window.mainDodecahedron.rotation.y += 0.003;
             }
             edgeLines.forEach(line => {
                 line.rotation.y += 0.003;
             });
+            // Rotate octave layers in sync (Phase 3)
+            if (octaveLayerGroup) {
+                octaveLayerGroup.rotation.y += 0.003;
+            }
         }
 
-        // Pulse critical faces for attention
+        // ========================================
+        // PHI-TUNED CRITICAL FACE PULSING
+        // Golden ratio timing for natural rhythm
+        // Skip pulsing when animations are paused
+        // ========================================
         const materials = window.dodecahedronMaterials;
-        if (materials && faceMeshes) {
+        if (materials && faceMeshes && !animationsPaused) {
             faceMeshes.forEach((mesh, index) => {
                 const faceData = mesh.userData.faceData;
                 if (faceData && materials[index]) {
                     const energy = faceData.faceEnergy || 0;
 
-                    // Pulse critical faces (below 40%)
-                    if (energy < 0.4) {
-                        const pulse = Math.sin(time * 2) * 0.2 + 0.8; // Oscillates 0.6-1.0
-                        materials[index].emissiveIntensity = 0.5 * pulse;
+                    // Very low energy (below 10%) - URGENT warning
+                    // Phi-tuned fast pulse with color shift to danger red
+                    if (energy < 0.1) {
+                        const urgentPulse = Math.sin(time * PHI * 2) * 0.3 + 0.7; // φ-tuned
+                        materials[index].emissiveIntensity = 0.7 * urgentPulse;
+                        // Shift emissive toward danger red
+                        const warningRed = new THREE.Color(0xff2200);
+                        const baseEmissive = materials[index].userData.baseEmissive || materials[index].emissive.clone();
+                        if (!materials[index].userData.baseEmissive) {
+                            materials[index].userData.baseEmissive = materials[index].emissive.clone();
+                        }
+                        materials[index].emissive.lerpColors(baseEmissive, warningRed, 0.5 + 0.3 * Math.sin(time * PHI * 3));
                     }
-                    // Very slow pulse for very low energy (below 10%)
-                    else if (energy < 0.1) {
-                        const slowPulse = Math.sin(time * 1) * 0.3 + 0.7; // Slow oscillation
-                        materials[index].emissiveIntensity = 0.6 * slowPulse;
+                    // Critical faces (10-40%) - Warning pulse
+                    // Phi-tuned moderate pulse with subtle color warming
+                    else if (energy < 0.4) {
+                        const criticalPulse = Math.sin(time * PHI) * 0.2 + 0.8; // Slower φ-tuned pulse
+                        materials[index].emissiveIntensity = 0.5 * criticalPulse;
+                        // Subtle shift toward warm orange
+                        const warningOrange = new THREE.Color(0xff8800);
+                        const baseEmissive = materials[index].userData.baseEmissive || materials[index].emissive.clone();
+                        if (!materials[index].userData.baseEmissive) {
+                            materials[index].userData.baseEmissive = materials[index].emissive.clone();
+                        }
+                        materials[index].emissive.lerpColors(baseEmissive, warningOrange, 0.2 + 0.1 * Math.sin(time * PHI * 2));
+                    }
+                    // TRANSCENDENCE READY - Golden glow for faces ready to advance
+                    // Energy >= θ (theta threshold from tuning config)
+                    else {
+                        const tuning = window.Quannex ? window.Quannex.exportTuning() : null;
+                        const theta = tuning ? tuning.theta : 0.618;
+
+                        if (energy >= theta) {
+                            // Golden transcendence glow - gentle phi-tuned pulse
+                            const transcendencePulse = Math.sin(time * PHI * 0.5) * 0.15 + 0.85; // Slow, majestic
+                            materials[index].emissiveIntensity = 0.6 * transcendencePulse;
+
+                            // Radiant golden color (φ-derived warmth)
+                            const goldenColor = new THREE.Color(0xffd700);
+                            const baseEmissive = materials[index].userData.baseEmissive || materials[index].emissive.clone();
+                            if (!materials[index].userData.baseEmissive) {
+                                materials[index].userData.baseEmissive = materials[index].emissive.clone();
+                            }
+                            // Subtle golden shimmer
+                            const shimmer = 0.3 + 0.15 * Math.sin(time * PHI * 1.5);
+                            materials[index].emissive.lerpColors(baseEmissive, goldenColor, shimmer);
+                        }
+                        // Healthy faces - restore base emissive if previously shifted
+                        else if (materials[index].userData.baseEmissive) {
+                            materials[index].emissive.copy(materials[index].userData.baseEmissive);
+                            materials[index].emissiveIntensity = 0.3;
+                        }
                     }
                 }
             });
         }
 
         // Pulse Vertex Spheres (Advanced Visualization)
-        if (window.vertexSpheres) {
+        // Phi-tuned for harmonic resonance with face pulsing
+        // Skip pulsing when animations are paused
+        if (window.vertexSpheres && !animationsPaused) {
             window.vertexSpheres.forEach(sphere => {
                 if (sphere.userData.isPulsing) {
                     const phase = sphere.userData.pulsePhase || 0;
-                    const scale = 1 + Math.sin(time * 3 + phase) * 0.3; // Faster pulse for vertices
+                    // Phi-tuned pulse: 3 * PHI ≈ 4.854 creates pleasing ratio with face pulse
+                    const scale = 1 + Math.sin(time * PHI * 3 + phase) * 0.3;
                     sphere.scale.setScalar(scale);
                 }
             });
@@ -1805,6 +2705,51 @@ function initDodecahedron() {
     // Start initialization
     init();
 
+    // ========================================
+    // SHADOW PANEL INTEGRATION
+    // Focus on face when shadow card is clicked
+    // ========================================
+    window.addEventListener('focus-face', (event) => {
+        const { faceId } = event.detail || {};
+        if (!faceId) {
+            console.warn('[3D View] focus-face event received without faceId');
+            return;
+        }
+
+        console.log(`[3D View] Focusing on face ${faceId} from shadow panel`);
+
+        // Find the face mesh with matching faceId (faceId is 1-indexed, array is 0-indexed)
+        const targetFaceIndex = faceMeshes.findIndex(mesh =>
+            mesh.userData.faceId === faceId || mesh.userData.faceData?.id === faceId
+        );
+
+        if (targetFaceIndex !== -1) {
+            // Get camera position for this face
+            const cameraTarget = getCameraPositionForFace(targetFaceIndex);
+            if (cameraTarget) {
+                // Pause auto-rotation during focus
+                const wasAutoRotating = autoRotate;
+                autoRotate = false;
+
+                // Animate camera to face
+                animateCameraTo(cameraTarget.position, cameraTarget.lookAt, 1200);
+
+                // Resume auto-rotation after animation
+                setTimeout(() => {
+                    autoRotate = wasAutoRotating;
+                }, 1500);
+            }
+
+            // Store selected face and show detail panel
+            selectedFace = faceMeshes[targetFaceIndex].userData.faceData;
+            if (selectedFace) {
+                showFaceDetail(selectedFace);
+            }
+        } else {
+            console.warn(`[3D View] Face ${faceId} not found in faceMeshes`);
+        }
+    });
+
     // Export for debugging and external access
     window.dodecahedronViz = {
         scene,
@@ -1812,7 +2757,19 @@ function initDodecahedron() {
         faceMeshes,
         companyData,
         switchCompany,
-        updateVisualization
+        updateVisualization,
+        // Shadow highlighting functions
+        highlightShadowFaces,
+        clearShadowHighlights,
+        // Shadow data access
+        getShadowPatterns: () => {
+            const state = window.Quannex?.getState?.() || window.quannexEngine?.getState?.();
+            return state?.shadowPatterns || [];
+        },
+        // Focus on face programmatically
+        focusOnFace: (faceId) => {
+            window.dispatchEvent(new CustomEvent('focus-face', { detail: { faceId } }));
+        }
     };
 
     // Export scene and camera globally for unified HTML mode system

@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coherence Report - Results Summary</title>
+    <style>
+        /* ========================================
+           RESULTS SUMMARY - Print-Ready Report
+           Optimized for readability and PDF export
+           ======================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0f1a;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.95);
+            --accent: #00ffcc;
+            --accent-secondary: #7c3aed;
+            --text-primary: #f0f4f8;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(0, 255, 204, 0.2);
+            --healthy: #00ff88;
+            --warning: #ffaa00;
+            --critical: #ff4466;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .report-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 30px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                color: #1a1a1a;
+            }
+            .report-container {
+                padding: 20px;
+            }
+            .report-section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .face-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+        }
+
+        /* ========================================
+           HEADER SECTION
+           ======================================== */
+        .report-header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary), var(--accent));
+        }
+
+        .company-name {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .report-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .report-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .report-date {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* ========================================
+           EXECUTIVE SUMMARY
+           ======================================== */
+        .executive-summary {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .coherence-score-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .score-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .score-value {
+            font-size: 72px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .score-value.healthy { color: var(--healthy); }
+        .score-value.warning { color: var(--warning); }
+        .score-value.critical { color: var(--critical); }
+
+        .score-status {
+            font-size: 14px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .score-status.healthy { background: rgba(0, 255, 136, 0.15); color: var(--healthy); }
+        .score-status.warning { background: rgba(255, 170, 0, 0.15); color: var(--warning); }
+        .score-status.critical { background: rgba(255, 68, 102, 0.15); color: var(--critical); }
+
+        .insights-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .insights-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .insight-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .insight-item:last-child {
+            border-bottom: none;
+        }
+
+        .insight-icon {
+            font-size: 20px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 255, 204, 0.1);
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .insight-content {
+            flex: 1;
+        }
+
+        .insight-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .insight-value {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* ========================================
+           SECTION STYLES
+           ======================================== */
+        .report-section {
+            margin-bottom: 50px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-icon {
+            font-size: 24px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 255, 204, 0.1);
+            border-radius: 12px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ========================================
+           FACES GRID
+           ======================================== */
+        .face-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .face-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .face-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--face-color, var(--accent));
+        }
+
+        .face-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .face-number {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .face-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--face-color, var(--accent));
+        }
+
+        .face-energy {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .face-energy.healthy { color: var(--healthy); }
+        .face-energy.warning { color: var(--warning); }
+        .face-energy.critical { color: var(--critical); }
+
+        .face-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .face-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .element-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+        }
+
+        .element-dot {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .element-dot::after {
+            content: attr(data-value);
+            position: absolute;
+            bottom: -14px;
+            font-size: 8px;
+            color: var(--text-secondary);
+        }
+
+        /* ========================================
+           BREATH ANALYSIS
+           ======================================== */
+        .breath-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .breath-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .breath-axis-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .breath-faces {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .breath-face {
+            text-align: center;
+            flex: 1;
+        }
+
+        .breath-face-name {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .breath-face-energy {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .breath-ratio {
+            text-align: center;
+            padding: 8px;
+            background: rgba(0, 255, 204, 0.1);
+            border-radius: 8px;
+        }
+
+        .breath-ratio-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        .breath-ratio-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* ========================================
+           SHADOW PATTERNS
+           ======================================== */
+        .shadow-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .shadow-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 68, 102, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .shadow-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .shadow-icon {
+            font-size: 24px;
+        }
+
+        .shadow-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--critical);
+        }
+
+        .shadow-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .shadow-gift {
+            padding: 12px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid var(--healthy);
+        }
+
+        .shadow-gift-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--healthy);
+            margin-bottom: 4px;
+        }
+
+        .shadow-gift-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* ========================================
+           RECOMMENDATIONS
+           ======================================== */
+        .recommendations-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .recommendation-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .recommendation-priority {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .priority-1 { background: var(--critical); color: white; }
+        .priority-2 { background: var(--warning); color: #1a1a1a; }
+        .priority-3 { background: var(--accent); color: #1a1a1a; }
+
+        .recommendation-content {
+            flex: 1;
+        }
+
+        .recommendation-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .recommendation-detail {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .recommendation-impact {
+            font-size: 12px;
+            color: var(--accent);
+            margin-top: 8px;
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+        .report-footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        /* ========================================
+           NAVIGATION BAR
+           ======================================== */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 15, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 255, 204, 0.1);
+            border-color: var(--accent);
+        }
+
+        .nav-btn.primary {
+            background: var(--accent);
+            color: #0a0f1a;
+            border-color: var(--accent);
+        }
+
+        .nav-btn.primary:hover {
+            background: #00e6b8;
+        }
+
+        body {
+            padding-top: 60px;
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 60px;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(0, 255, 204, 0.2);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1024px) {
+            .face-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .executive-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .face-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .breath-grid {
+                grid-template-columns: 1fr;
+            }
+            .shadow-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar no-print">
+        <div class="nav-brand">Coherence Report</div>
+        <div class="nav-actions">
+            <button class="nav-btn" onclick="window.location.href='dodecahedron-3d.html'">
+                Back to 3D View
+            </button>
+            <button class="nav-btn" onclick="window.print()">
+                Print / Save PDF
+            </button>
+        </div>
+    </nav>
+
+    <div class="report-container">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <div>Loading coherence data...</div>
+        </div>
+
+        <!-- Report Content (hidden until loaded) -->
+        <div id="reportContent" style="display: none;">
+            <!-- Header -->
+            <header class="report-header">
+                <div class="company-name" id="companyName">Organization</div>
+                <h1 class="report-title">Organizational Coherence Report</h1>
+                <p class="report-subtitle">Comprehensive Analysis of the 12-Face Dodecahedral System</p>
+                <p class="report-date" id="reportDate">Generated on [Date]</p>
+            </header>
+
+            <!-- Executive Summary -->
+            <section class="executive-summary">
+                <div class="coherence-score-card">
+                    <div class="score-label">Global Coherence</div>
+                    <div class="score-value" id="coherenceScore">--</div>
+                    <div class="score-status" id="coherenceStatus">Calculating...</div>
+                </div>
+                <div class="insights-card">
+                    <div class="insights-title">Key Insights</div>
+                    <div id="keyInsights">
+                        <!-- Insights will be populated here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Faces Section -->
+            <section class="report-section">
+                <div class="section-header">
+                    <div class="section-icon">&#x2B21;</div>
+                    <div>
+                        <h2 class="section-title">12 Organizational Faces</h2>
+                        <p class="section-subtitle">Energy levels and element balance for each pentagonal domain</p>
+                    </div>
+                </div>
+                <div class="face-grid" id="facesGrid">
+                    <!-- Face cards will be populated here -->
+                </div>
+            </section>
+
+            <!-- Breath Analysis Section -->
+            <section class="report-section">
+                <div class="section-header">
+                    <div class="section-icon">&#x1F32C;</div>
+                    <div>
+                        <h2 class="section-title">Breath Analysis</h2>
+                        <p class="section-subtitle">6 polar axes showing reception/projection balance</p>
+                    </div>
+                </div>
+                <div class="breath-grid" id="breathGrid">
+                    <!-- Breath cards will be populated here -->
+                </div>
+            </section>
+
+            <!-- Shadow Patterns Section -->
+            <section class="report-section">
+                <div class="section-header">
+                    <div class="section-icon">&#x1F311;</div>
+                    <div>
+                        <h2 class="section-title">Shadow Patterns</h2>
+                        <p class="section-subtitle">Hidden dynamics and their potential gifts when integrated</p>
+                    </div>
+                </div>
+                <div class="shadow-grid" id="shadowGrid">
+                    <!-- Shadow cards will be populated here -->
+                </div>
+            </section>
+
+            <!-- Recommendations Section -->
+            <section class="report-section">
+                <div class="section-header">
+                    <div class="section-icon">&#x1F4A1;</div>
+                    <div>
+                        <h2 class="section-title">Prioritized Recommendations</h2>
+                        <p class="section-subtitle">Highest leverage actions for improving organizational coherence</p>
+                    </div>
+                </div>
+                <div class="recommendations-list" id="recommendationsList">
+                    <!-- Recommendations will be populated here -->
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="report-footer">
+                <p>Generated by Quannex Coherence Engine</p>
+                <p>Based on the Dodecahedral Organizational Model</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        // Import necessary modules
+        import { UnifiedDataLoader } from './js/unified-data-loader.js';
+
+        // Initialize report
+        async function initReport() {
+            try {
+                // Get company ID from session storage
+                const companyId = sessionStorage.getItem('selectedCompanyId') || 'quannex';
+
+                console.log(`[Report] Loading data for: ${companyId}`);
+
+                // Create loader instance and load the context
+                const loader = new UnifiedDataLoader();
+                const context = await loader.loadContext(companyId);
+
+                if (!context) {
+                    throw new Error('Failed to load context');
+                }
+
+                // Populate report
+                populateReport(context, companyId);
+
+                // Show content, hide loading
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('reportContent').style.display = 'block';
+
+            } catch (error) {
+                console.error('[Report] Error loading data:', error);
+                document.getElementById('loadingState').innerHTML = `
+                    <div style="color: var(--critical);">Error loading report data</div>
+                    <div style="margin-top: 10px; font-size: 14px; color: var(--text-secondary);">
+                        ${error.message}
+                    </div>
+                    <button class="nav-btn" style="margin-top: 20px;" onclick="window.location.href='dodecahedron-3d.html'">
+                        Return to 3D View
+                    </button>
+                `;
+            }
+        }
+
+        function populateReport(context, companyId) {
+            // Company name and date
+            const companyMeta = context.companyMeta || { name: companyId };
+            document.getElementById('companyName').textContent = companyMeta.name || companyId;
+            document.getElementById('reportDate').textContent = `Generated on ${new Date().toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            })}`;
+
+            // Calculate global coherence
+            const faces = context.faces || [];
+            const avgEnergy = faces.reduce((sum, f) => sum + (f.sentiment || 0.5), 0) / (faces.length || 1);
+            const coherencePercent = Math.round(avgEnergy * 100);
+
+            // Update coherence score
+            const scoreEl = document.getElementById('coherenceScore');
+            const statusEl = document.getElementById('coherenceStatus');
+
+            scoreEl.textContent = coherencePercent + '%';
+
+            if (coherencePercent >= 70) {
+                scoreEl.className = 'score-value healthy';
+                statusEl.textContent = 'Healthy System';
+                statusEl.className = 'score-status healthy';
+            } else if (coherencePercent >= 40) {
+                scoreEl.className = 'score-value warning';
+                statusEl.textContent = 'Needs Attention';
+                statusEl.className = 'score-status warning';
+            } else {
+                scoreEl.className = 'score-value critical';
+                statusEl.textContent = 'Critical';
+                statusEl.className = 'score-status critical';
+            }
+
+            // Populate key insights
+            populateInsights(context, faces);
+
+            // Populate faces
+            populateFaces(faces);
+
+            // Populate breath analysis
+            populateBreathAnalysis(context);
+
+            // Populate shadows
+            populateShadows(context);
+
+            // Populate recommendations
+            populateRecommendations(context, faces);
+        }
+
+        function populateInsights(context, faces) {
+            const container = document.getElementById('keyInsights');
+
+            // Find strongest and weakest faces
+            const sortedFaces = [...faces].sort((a, b) => (b.sentiment || 0) - (a.sentiment || 0));
+            const strongest = sortedFaces[0];
+            const weakest = sortedFaces[sortedFaces.length - 1];
+
+            // Count health statuses
+            const healthCounts = {
+                healthy: faces.filter(f => (f.sentiment || 0) >= 0.7).length,
+                warning: faces.filter(f => (f.sentiment || 0) >= 0.4 && (f.sentiment || 0) < 0.7).length,
+                critical: faces.filter(f => (f.sentiment || 0) < 0.4).length
+            };
+
+            container.innerHTML = `
+                <div class="insight-item">
+                    <div class="insight-icon">&#x1F4AA;</div>
+                    <div class="insight-content">
+                        <div class="insight-label">Strongest Domain</div>
+                        <div class="insight-value">${strongest?.name || 'N/A'} (${Math.round((strongest?.sentiment || 0) * 100)}%)</div>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-icon">&#x26A0;</div>
+                    <div class="insight-content">
+                        <div class="insight-label">Needs Most Attention</div>
+                        <div class="insight-value">${weakest?.name || 'N/A'} (${Math.round((weakest?.sentiment || 0) * 100)}%)</div>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-icon">&#x1F4CA;</div>
+                    <div class="insight-content">
+                        <div class="insight-label">Health Distribution</div>
+                        <div class="insight-value">${healthCounts.healthy} healthy, ${healthCounts.warning} warning, ${healthCounts.critical} critical</div>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-icon">&#x1F300;</div>
+                    <div class="insight-content">
+                        <div class="insight-label">Shadow Patterns Detected</div>
+                        <div class="insight-value">${context.shadowPatterns?.length || 0} patterns identified</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function populateFaces(faces) {
+            const container = document.getElementById('facesGrid');
+            const elementSymbols = {
+                'Earth': '&#x1F30D;',
+                'Water': '&#x1F4A7;',
+                'Fire': '&#x1F525;',
+                'Air': '&#x1F32C;',
+                'Ether': '&#x2728;'
+            };
+
+            container.innerHTML = faces.map((face, index) => {
+                const energy = Math.round((face.sentiment || 0.5) * 100);
+                const healthClass = energy >= 70 ? 'healthy' : energy >= 40 ? 'warning' : 'critical';
+                const color = getHealthColor(energy);
+
+                return `
+                    <div class="face-card" style="--face-color: ${color};">
+                        <div class="face-header">
+                            <div>
+                                <div class="face-number">Face ${index + 1}</div>
+                                <div class="face-name">${face.name || 'Unnamed'}</div>
+                            </div>
+                        </div>
+                        <div class="face-energy ${healthClass}">${energy}%</div>
+                        <div class="face-bar">
+                            <div class="face-bar-fill" style="width: ${energy}%; background: ${color};"></div>
+                        </div>
+                        <div class="element-grid">
+                            ${['Earth', 'Water', 'Fire', 'Air', 'Ether'].map(el => `
+                                <div class="element-dot" title="${el}" data-value="${el.charAt(0)}">
+                                    ${elementSymbols[el]}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function populateBreathAnalysis(context) {
+            const container = document.getElementById('breathGrid');
+            const breathAxes = context.breathAxes || [];
+
+            if (breathAxes.length === 0) {
+                container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary);">Breath analysis data not available</div>';
+                return;
+            }
+
+            container.innerHTML = breathAxes.map((axis, index) => {
+                const ratio = axis.ratio || 1;
+                const ratioDisplay = ratio.toFixed(2);
+
+                return `
+                    <div class="breath-card">
+                        <div class="breath-axis-label">Axis ${index + 1}</div>
+                        <div class="breath-faces">
+                            <div class="breath-face">
+                                <div class="breath-face-name">${axis.projectionFace?.name || 'Projection'}</div>
+                                <div class="breath-face-energy">${Math.round((axis.projectionFace?.sentiment || 0.5) * 100)}%</div>
+                            </div>
+                            <div style="color: var(--text-secondary);">&#x21C4;</div>
+                            <div class="breath-face">
+                                <div class="breath-face-name">${axis.receptionFace?.name || 'Reception'}</div>
+                                <div class="breath-face-energy">${Math.round((axis.receptionFace?.sentiment || 0.5) * 100)}%</div>
+                            </div>
+                        </div>
+                        <div class="breath-ratio">
+                            <div class="breath-ratio-label">Breath Ratio</div>
+                            <div class="breath-ratio-value">${ratioDisplay}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function populateShadows(context) {
+            const container = document.getElementById('shadowGrid');
+            const shadows = context.shadowPatterns || [];
+
+            if (shadows.length === 0) {
+                container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary);">No shadow patterns currently active</div>';
+                return;
+            }
+
+            container.innerHTML = shadows.map(shadow => `
+                <div class="shadow-card">
+                    <div class="shadow-header">
+                        <div class="shadow-icon">&#x1F311;</div>
+                        <div class="shadow-name">${shadow.name || 'Unknown Pattern'}</div>
+                    </div>
+                    <div class="shadow-description">${shadow.description || 'A hidden dynamic in the system'}</div>
+                    <div class="shadow-gift">
+                        <div class="shadow-gift-label">Gift When Integrated</div>
+                        <div class="shadow-gift-text">${shadow.gift || 'Awaiting discovery'}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function populateRecommendations(context, faces) {
+            const container = document.getElementById('recommendationsList');
+
+            // Generate recommendations based on face health
+            const recommendations = [];
+
+            // Find faces that need attention
+            const sortedFaces = [...faces].sort((a, b) => (a.sentiment || 0) - (b.sentiment || 0));
+
+            sortedFaces.slice(0, 3).forEach((face, index) => {
+                const energy = Math.round((face.sentiment || 0.5) * 100);
+                if (energy < 70) {
+                    recommendations.push({
+                        priority: index + 1,
+                        title: `Strengthen ${face.name || 'Face ' + (face.id || index + 1)}`,
+                        detail: `Current energy at ${energy}%. Focus on improving the 5 elements within this domain.`,
+                        impact: `Potential +${Math.round((0.7 - (face.sentiment || 0.5)) * 100)}% improvement in global coherence`
+                    });
+                }
+            });
+
+            // Add shadow-related recommendations
+            if (context.shadowPatterns?.length > 0) {
+                recommendations.push({
+                    priority: recommendations.length + 1,
+                    title: 'Address Shadow Patterns',
+                    detail: `${context.shadowPatterns.length} shadow pattern(s) detected. Integration of these patterns can unlock hidden organizational gifts.`,
+                    impact: 'Transform suppressed energy into conscious capability'
+                });
+            }
+
+            if (recommendations.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">System is healthy - continue current practices</div>';
+                return;
+            }
+
+            container.innerHTML = recommendations.map(rec => `
+                <div class="recommendation-card">
+                    <div class="recommendation-priority priority-${Math.min(rec.priority, 3)}">${rec.priority}</div>
+                    <div class="recommendation-content">
+                        <div class="recommendation-title">${rec.title}</div>
+                        <div class="recommendation-detail">${rec.detail}</div>
+                        <div class="recommendation-impact">${rec.impact}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getHealthColor(percent) {
+            if (percent >= 70) return '#00ff88';
+            if (percent >= 40) return '#ffaa00';
+            return '#ff4466';
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', initReport);
+    </script>
+</body>
+</html>

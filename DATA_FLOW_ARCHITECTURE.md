@@ -298,6 +298,162 @@ displayCalculationResults(uiResults);
 
 ---
 
+## 🔧 Extended Architecture (December 2025)
+
+### Context Synthesizer Layer
+
+**File:** `js/context-synthesizer.js`
+
+The Context Synthesizer bridges template data and custom data flows, ensuring both produce identical complete data structures:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    CONTEXT SYNTHESIZER                              │
+│                  (context-synthesizer.js)                           │
+│                                                                      │
+│  INPUT: 12 face configurations (from template or custom entry)      │
+│                                                                      │
+│  GENERATES:                                                          │
+│    • 30 Edges (relationships between adjacent faces)                │
+│    • 20 Vertices (triadic synergy points where 3 faces meet)        │
+│    • Elemental Harmony Matrix (PHI-based modifiers)                 │
+│                                                                      │
+│  FORMULAS:                                                           │
+│    Edge Tension = |face1.sentiment - face2.sentiment|               │
+│    Vortex Strength = avg(pairwise face distances)                   │
+│                                                                      │
+│  HANDLES:                                                            │
+│    • Known data gaps (F10-Ether defaults to 0.5)                    │
+│    • Fibonacci-based threshold calculations                         │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Unified Threshold System
+
+**File:** `js/constants/octave-thresholds.js`
+
+**SINGLE SOURCE OF TRUTH** for all octave calculations:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    UNIFIED THRESHOLDS                               │
+│                 (octave-thresholds.js)                              │
+│                                                                      │
+│  PHI CONSTANTS:                                                      │
+│    PHI = 1.618033988749895                                          │
+│    PHI_INVERSE = 0.618 (φ^-1)                                       │
+│    PHI_SQUARED_INVERSE = 0.382 (φ^-2)                               │
+│                                                                      │
+│  OCTAVE THRESHOLDS:                                                  │
+│    O1: < 0.382     O2: 0.382-0.5    O3: 0.5-0.618                   │
+│    O4: 0.618-0.764 O5: 0.764-0.854  O6: 0.854-0.95  O7: >= 0.95    │
+│                                                                      │
+│  LIFECYCLE CONSTRAINTS:                                              │
+│    pre-seed → max O2    seed → max O2    early-stage → max O3      │
+│    growth → max O4      mature → max O5  enterprise → max O6       │
+│                                                                      │
+│  CONSUMERS:                                                          │
+│    main.js, octave-integrity-calculator.js, demo-orchestrator.js   │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Octave Integrity Calculator
+
+**File:** `js/octave-integrity-calculator.js`
+
+Implements the **Foundation Principle**: High coherence at O1 ≠ promotion to O2.
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                  OCTAVE INTEGRITY CALCULATOR                        │
+│               (octave-integrity-calculator.js)                      │
+│                                                                      │
+│  INPUT: Array of face octaves [1,1,2,1,6,1,1,2,1,7,1,1]            │
+│                                                                      │
+│  CALCULATION:                                                        │
+│    1. Geometric Mean = (product of all octaves)^(1/12)              │
+│    2. Spread = max - min octave                                     │
+│    3. Spread Penalty:                                                │
+│       spread ≤ 2: 0    spread = 3: 0.5    spread = 4: 1.0          │
+│       spread ≥ 5: 1.5 + (spread-5)*0.5                              │
+│    4. Org Octave = floor(geoMean - penalty)                         │
+│    5. Apply lifecycle constraint                                    │
+│                                                                      │
+│  OUTPUT:                                                             │
+│    {                                                                 │
+│      orgOctave: 1,                                                  │
+│      geoMean: 1.52,                                                 │
+│      spread: 6,                                                     │
+│      penalty: 2.0,                                                  │
+│      warnings: ["6-octave spread detected..."]                      │
+│    }                                                                 │
+│                                                                      │
+│  See: math/FOUNDATION_PRINCIPLE.md for detailed explanation         │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Company Templates Data Flow
+
+**Location:** `companies/*/mapping-context.json`
+
+Four pre-configured companies demonstrate the full data flow:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    COMPANY TEMPLATES                                │
+│               (companies/*/mapping-context.json)                    │
+│                                                                      │
+│  CONTAINS (per company):                                             │
+│    • 12 Faces with octave, sentiment, elements                      │
+│    • 30 Edges with tension, elemental nature                        │
+│    • 20 Vertices with vortex strength, classification               │
+│    • Shadow Patterns (suppressed organizational dynamics)           │
+│    • Breath Axes (projection/reception balance)                     │
+│                                                                      │
+│  COMPANIES:                                                          │
+│    Quannex (O1-O2)     → Aspiration-Actuality Gap pattern          │
+│    Nova Tech (O2-O3)   → Death Spiral (burnout) pattern            │
+│    Zenith (O3-O4)      → Organizational Debt pattern               │
+│    Apex (O6-O7)        → Integrated Excellence pattern             │
+│                                                                      │
+│  LOADS VIA:                                                          │
+│    company-loader.js OR company-templates-bundle.js (offline)       │
+│                                                                      │
+│  See: COMPANY_TEMPLATES_GUIDE.md for detailed documentation         │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Updated Complete Data Flow
+
+```
+User Input (demo-orchestrator.html)
+       │
+       ↓
+UI Logic (demo-orchestrator-logic.js)
+       │
+       ↓
+Data Transformer (data-transformer.js)
+       │
+       ├──────────────────────────────────────┐
+       ↓                                      ↓
+Context Synthesizer                    Unified Thresholds
+(context-synthesizer.js)              (octave-thresholds.js)
+       │                                      │
+       └──────────────┬───────────────────────┘
+                      ↓
+         Calculation Engine (main.js)
+                      │
+                      ↓
+         Octave Integrity Calculator
+         (octave-integrity-calculator.js)
+                      │
+                      ↓
+         Visualization Layer
+         (index.html, dodecahedron-3d.html, etc.)
+```
+
+---
+
 ## 🚀 For Your Demo Presentation
 
 ### Before (Without Transformation Layer)
@@ -384,5 +540,7 @@ You now have a **production-grade data pipeline** that:
 ---
 
 **Created:** 2025-11-10
-**Version:** 1.0
+**Updated:** 2025-12-09 (Extended architecture: Context Synthesizer, Unified Thresholds, Octave Integrity)
+**Version:** 2.0
 **Status:** Production-Ready
+**Co-created by:** Deimantas Butrimas & Claude

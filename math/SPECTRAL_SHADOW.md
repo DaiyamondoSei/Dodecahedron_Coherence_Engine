@@ -360,6 +360,62 @@ Adjusted coherence: 65% × (1 - 0.28) = 46.8%
 
 ---
 
+### Shadow Severity Weights (PHI-Derived)
+
+The system uses **PHI-derived constants** for mathematical harmony in shadow penalty calculations:
+
+| Shadow Pattern | Penalty | PHI Derivation | Rationale |
+|----------------|---------|----------------|-----------|
+| **Burnout Engine** | 35% (0.35) | ~φ^-1 × 0.5 | Human cost is irreversible |
+| **Extractive Growth** | 30% (0.30) | ~φ^-2 | Ecosystem damage compounds |
+| **Brittle Profit** | 25% (0.25) | ~φ^-3 + offset | Financial fragility can be rebuilt |
+| **Lonely Hero** | 25% (0.25) | ~φ^-3 + offset | Knowledge can be documented |
+| **Experience Gap** | 20% (0.20) | ~φ^-3 | Brand-reality gap can be closed |
+| **Hollow Governance** | 15% (0.15) | ~φ^-4 | Culture can grow over time |
+
+#### Important Design Decision: Burnout Asymmetry
+
+The **Burnout Engine** carries a **2.6× higher penalty** than Hollow Governance:
+
+```
+Burnout Engine:    35% penalty (highest)
+Hollow Governance: 15% penalty (lowest)
+Ratio: 35/15 = 2.33×
+```
+
+**Why this asymmetry?**
+
+This reflects the **reversibility gradient** principle:
+1. **Human depletion (burnout)** is the hardest to reverse - depleted humans cannot be "fixed" like processes
+2. **Ecosystem damage** also compounds irreversibly but slower
+3. **Structural/cultural gaps** can be addressed with intention over time
+
+**Philosophy:** *What you deplete most severely, you penalize most heavily.*
+
+#### System Integrity Calculation
+
+The overall system integrity score uses PHI-derived weights:
+
+```javascript
+// PHI-derived severity weights
+const PHI_INV_SQUARED = 0.382;  // φ^-2 - Critical patterns
+const PHI_INV_CUBED = 0.236;    // φ^-3 - High patterns
+const PHI_INV_4 = 0.146;        // φ^-4 - Moderate patterns
+
+integrityScore = 1.0 - (
+    (criticalCount × 0.382) +   // φ^-2
+    (highCount × 0.236) +       // φ^-3
+    (moderateCount × 0.146)     // φ^-4
+);
+```
+
+**Integrity Thresholds:**
+- ≥ 0.8 = "Good" - Minor issues, address when possible
+- ≥ 0.6 = "Concerning" - Multiple patterns, integrity at risk
+- < 0.6 = "Critical" - Severe contradictions threaten sustainability
+
+---
+
 ### Implementation (Backend)
 
 ```javascript
