@@ -59,7 +59,8 @@ export class ShadowPanel {
      */
     createShadowCard(shadow) {
         const card = document.createElement('div');
-        card.className = `shadow-card severity-${(shadow.severity || 'moderate').toLowerCase()}`;
+        // Using shadow-card-mini to avoid CSS conflict with shadow-overlay.css
+    card.className = `shadow-card-mini severity-${(shadow.severity || 'moderate').toLowerCase()}`;
         card.setAttribute('data-shadow-id', shadow.id || shadow.name);
 
         // ACCESSIBILITY: ARIA attributes for screen readers
