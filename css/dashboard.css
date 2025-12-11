@@ -633,7 +633,20 @@
             border-radius: 3px;
         }
 
-/* Shadow Panel Styles */
+/* =========================================
+   SHADOW PANEL MINI (Bottom-Right Panel)
+   =========================================
+
+   CSS Architecture for Shadow UI:
+   - .shadow-card-mini (this file) - Mini cards in bottom-right always-visible panel
+   - .shadow-card (shadow-overlay.css) - Full-size cards in modal overlay view
+
+   These are separate components serving different purposes.
+   Phase 0.3 renamed from .shadow-card to .shadow-card-mini to resolve conflict.
+
+   @see css/shadow-overlay.css for modal overlay styles
+*/
+
 .shadow-panel-container {
     position: fixed;
     bottom: 20px;
