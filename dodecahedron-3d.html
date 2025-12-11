@@ -3435,12 +3435,17 @@
                                 }
 
                                 // Initial update with retry - shadowPatterns may load async
-                                const tryUpdateShadowPanel = (retries = 5) => {
+                                // Phase 1 Fix: Increased retries from 5→10 and delay from 300→500ms
+                                const tryUpdateShadowPanel = (retries = 10) => {
                                     const companyData = window.Quannex ? window.Quannex.getState() : null;
                                     const hasShadowPatterns = companyData?.shadowPatterns?.length > 0;
 
                                     if (window.shadowPanel && hasShadowPatterns) {
                                         window.shadowPanel.update(companyData.shadowPatterns);
+                                        // Also dispatch event for shadow overlay controller
+                                        window.dispatchEvent(new CustomEvent('shadows-updated', {
+                                            detail: { shadows: companyData.shadowPatterns }
+                                        }));
                                         console.log(`✅ Shadow Panel initialized with ${companyData.shadowPatterns.length} patterns`);
                                         return true;
                                     }
@@ -3448,7 +3453,7 @@
                                     // Retry if shadowPatterns not yet loaded
                                     if (retries > 0) {
                                         console.log(`⏳ Shadow patterns not ready, retrying... (${retries} attempts left)`);
-                                        setTimeout(() => tryUpdateShadowPanel(retries - 1), 300);
+                                        setTimeout(() => tryUpdateShadowPanel(retries - 1), 500);
                                     } else {
                                         console.log('⚠️ Shadow Panel: No patterns available after retries');
                                     }
@@ -4465,6 +4470,18 @@
                             if (loading) loading.classList.add('hidden');
 
                             console.log(`[3D View] ✅ Loaded company from parent: ${company.name} `);
+
+                            // Phase 1 Fix: Explicitly trigger shadow panel update after company load
+                            const shadowPatterns = company.shadowPatterns || [];
+                            if (shadowPatterns.length > 0) {
+                                if (window.shadowPanel) {
+                                    window.shadowPanel.update(shadowPatterns);
+                                }
+                                window.dispatchEvent(new CustomEvent('shadows-updated', {
+                                    detail: { shadows: shadowPatterns }
+                                }));
+                                console.log(`[3D View] 👁️ Initialized ${shadowPatterns.length} shadow patterns`);
+                            }
                         } else {
                             console.warn('[3D View] ⚠️ CompanyLoader not available');
                         }
@@ -4538,6 +4555,19 @@
                         if (loading) loading.classList.add('hidden');
 
                         console.log(`[3D View] ✅ Successfully loaded custom data`);
+
+                        // Phase 1 Fix: Trigger shadow panel update for custom data
+                        const customShadows = customData.shadowPatterns || [];
+                        if (customShadows.length > 0) {
+                            if (window.shadowPanel) {
+                                window.shadowPanel.update(customShadows);
+                            }
+                            window.dispatchEvent(new CustomEvent('shadows-updated', {
+                                detail: { shadows: customShadows }
+                            }));
+                            console.log(`[3D View] 👁️ Initialized ${customShadows.length} custom shadow patterns`);
+                        }
+
                         return true;
                     } catch (error) {
                         console.error('[3D View] ❌ Failed to load custom data:', error);
