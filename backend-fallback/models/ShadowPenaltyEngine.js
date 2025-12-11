@@ -1,13 +1,33 @@
 /**
+ * @deprecated Since v2.0 - Backend Shadow Detection
+ *
+ * ⚠️ DEPRECATION NOTICE:
+ * The canonical shadow detection logic has been consolidated into:
+ *   js/advanced/shadow-detector.js
+ *
+ * This file is kept for reference only and should NOT be used for new development.
+ * The frontend ShadowDetector now handles all shadow detection with:
+ * - Configurable thresholds via SHADOW_CONFIG
+ * - Standardized output via SHADOW_SCHEMA
+ * - Integration with AI shadow generation (ai-shadow-adapter.js)
+ *
+ * If you need shadow detection functionality, import from:
+ *   import { ShadowDetector, SHADOW_CONFIG } from '../js/advanced/shadow-detector.js';
+ *
+ * @see js/advanced/shadow-detector.js - Canonical implementation
+ * @see js/ai/adapters/ai-shadow-adapter.js - AI shadow generation
+ */
+
+/**
  * ShadowPenaltyEngine - The Ethical Conscience of the System
- * 
+ *
  * This implements the Shadow Penalty Rules from the Excel engine.
  * It detects archetypal patterns of organizational hypocrisy and applies
  * penalties to face energies that exhibit these patterns.
- * 
+ *
  * The core principle: A high score is only TRUE if it doesn't create a "shadow" -
  * a corresponding hidden cost in another part of the system.
- * 
+ *
  * When a shadow is detected, a penalty is applied, making the dissonance visible
  * and forcing the organization to confront its own contradictions.
  */
