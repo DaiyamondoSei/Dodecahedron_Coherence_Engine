@@ -85,6 +85,8 @@ export class ShadowPanel {
         if (shadows.length === 0) {
             this.container.innerHTML = '';
             this.activeShadows.clear();
+            // Still show AI option for empty state if in manual mode
+            this.renderAIEnhanceOption();
             return;
         }
 
@@ -100,6 +102,92 @@ export class ShadowPanel {
 
             // Add to active set
             this.activeShadows.add(shadow.name + shadow.faceId);
+        });
+
+        // Phase 5: Add AI enhance option for manual mode users
+        this.renderAIEnhanceOption();
+    }
+
+    /**
+     * Phase 5: Render AI enhancement option for manual mode users
+     * Only shows if user chose manual setup path (not AI-assisted)
+     */
+    renderAIEnhanceOption() {
+        // Check setup mode from session storage
+        const setupMode = sessionStorage.getItem('quannex-setup-mode') || 'manual';
+
+        // Only show for manual users
+        if (setupMode !== 'manual') return;
+
+        // Check if AI adapter is available
+        if (!window.AIShadowAdapter) {
+            console.log('[ShadowPanel] AI shadow adapter not available');
+            return;
+        }
+
+        // Create the AI enhance section
+        const aiSection = document.createElement('div');
+        aiSection.className = 'shadow-ai-enhance';
+        aiSection.innerHTML = `
+            <div class="ai-enhance-divider"></div>
+            <p class="ai-enhance-prompt">Want deeper AI-generated insights?</p>
+            <button class="ai-enhance-btn" id="generateAIShadows">
+                ✨ Generate AI Analysis
+            </button>
+        `;
+
+        this.container.appendChild(aiSection);
+        this.setupAIEnhanceButton();
+    }
+
+    /**
+     * Phase 5: Setup AI enhancement button handler
+     */
+    setupAIEnhanceButton() {
+        const btn = document.getElementById('generateAIShadows');
+        if (!btn) return;
+
+        btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            btn.textContent = '🔄 Analyzing...';
+
+            try {
+                // Get current state
+                const state = window.Quannex?.getState?.();
+                if (!state || !state.faces) {
+                    throw new Error('No face data available');
+                }
+
+                // Create AI adapter instance
+                const AIShadowAdapter = window.AIShadowAdapter;
+                const aiAdapter = new AIShadowAdapter();
+
+                // Generate AI shadows
+                const aiShadows = await aiAdapter.generateAIShadowPatterns(
+                    state.faces,
+                    { companyName: state.companyName || 'Organization', context: state }
+                );
+
+                if (aiShadows && aiShadows.length > 0) {
+                    // Update panel with AI shadows
+                    this.update(aiShadows);
+
+                    // Replace AI button with success message
+                    const aiSection = btn.closest('.shadow-ai-enhance');
+                    if (aiSection) {
+                        aiSection.innerHTML = '<p class="ai-enhance-success">✅ AI insights generated</p>';
+                    }
+
+                    console.log(`[ShadowPanel] ✨ Generated ${aiShadows.length} AI shadow insights`);
+                } else {
+                    btn.textContent = '✅ No additional shadows found';
+                    btn.disabled = true;
+                }
+            } catch (e) {
+                console.warn('[ShadowPanel] AI generation failed:', e);
+                btn.textContent = '❌ AI unavailable';
+                btn.disabled = true;
+            }
         });
     }
 

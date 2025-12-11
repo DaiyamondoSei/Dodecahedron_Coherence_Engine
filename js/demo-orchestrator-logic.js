@@ -14,7 +14,8 @@ const demoState = {
     coherenceResults: null,
     completedSteps: [],
     selectedCompanyId: null, // Track which company template is selected
-    loadedMappingContext: null // Store the loaded mapping context
+    loadedMappingContext: null, // Store the loaded mapping context
+    setupMode: 'manual' // Phase 5: Track setup mode for AI integration ('manual' | 'ai-assisted')
 };
 
 // Re-entrancy guard to prevent infinite loop when clicking company cards
@@ -850,6 +851,10 @@ async function selectCompanyTemplate(companyId) {
         demoState.selectedCompanyId = companyId;
         demoState.loadedMappingContext = mappingContext;
 
+        // Phase 5: Template selection is manual mode (pre-configured)
+        demoState.setupMode = 'manual';
+        sessionStorage.setItem('quannex-setup-mode', 'manual');
+
         // Pre-fill face configuration
         demoState.faceConfig = {
             templateName: mappingContext.displayName,
@@ -1201,6 +1206,10 @@ function startFreshManual() {
     demoState.selectedCompanyId = null;
     demoState.loadedMappingContext = null;
 
+    // Phase 5: Track setup mode for AI integration
+    demoState.setupMode = 'manual';
+    sessionStorage.setItem('quannex-setup-mode', 'manual');
+
     // Navigate to step 1
     goToStep(1);
 }
@@ -1217,6 +1226,10 @@ function startFreshAI() {
     // Clear any loaded company data
     demoState.selectedCompanyId = null;
     demoState.loadedMappingContext = null;
+
+    // Phase 5: Track setup mode for AI integration
+    demoState.setupMode = 'ai-assisted';
+    sessionStorage.setItem('quannex-setup-mode', 'ai-assisted');
 
     // Navigate to step 1
     goToStep(1);
