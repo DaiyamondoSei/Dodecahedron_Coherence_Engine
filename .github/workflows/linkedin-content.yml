@@ -75,6 +75,7 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          mode: agent
           direct_prompt: |
             Generate a LinkedIn post for Quannex.
 
