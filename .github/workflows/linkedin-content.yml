@@ -21,6 +21,11 @@ on:
           - philosophy
           - feature
 
+permissions:
+  contents: read
+  issues: write
+  id-token: write
+
 jobs:
   generate-content:
     runs-on: ubuntu-latest
@@ -69,7 +74,8 @@ jobs:
         uses: anthropics/claude-code-action@beta
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          prompt: |
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          direct_prompt: |
             Generate a LinkedIn post for Quannex.
 
             POST TYPE: ${{ steps.post-type.outputs.type }}
