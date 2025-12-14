@@ -139,6 +139,12 @@ async function switchCompany(companyId) {
 
         // Initialize Engine
         if (window.Quannex) {
+            // Apply tuning parameters first (if available) for consistent coherence calculation
+            if (context.tuning && typeof window.Quannex.importTuning === 'function') {
+                console.log(`[CompanyLoader] Applying tuning: ${context.tuning.perspective}`);
+                window.Quannex.importTuning(context.tuning);
+            }
+
             await window.Quannex.initWithCompany({
                 ...context.company,
                 faceConfig: { faces: context.faces },

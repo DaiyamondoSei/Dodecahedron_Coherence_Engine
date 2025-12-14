@@ -781,3 +781,156 @@
         max-width: none;
     }
 }
+
+/* ==========================================
+   AI SHADOW ENHANCEMENT SECTION
+   Sprint 5 Addition
+   ========================================== */
+
+.shadow-ai-enhance {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+.ai-enhance-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+    margin-bottom: 12px;
+}
+
+.ai-enhance-prompt {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 12px;
+}
+
+/* AI Key Input Section */
+.ai-key-input-section {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
+    justify-content: center;
+}
+
+.ai-provider-select {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    min-width: 100px;
+}
+
+.ai-provider-select:focus {
+    outline: none;
+    border-color: rgba(99, 102, 241, 0.6);
+}
+
+.ai-key-input {
+    flex: 1;
+    max-width: 200px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: white;
+    font-size: 12px;
+}
+
+.ai-key-input:focus {
+    outline: none;
+    border-color: rgba(99, 102, 241, 0.6);
+}
+
+.ai-key-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.ai-save-key-btn {
+    background: rgba(99, 102, 241, 0.3);
+    border: 1px solid rgba(99, 102, 241, 0.5);
+    border-radius: 6px;
+    padding: 8px 16px;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s;
+}
+
+.ai-save-key-btn:hover {
+    background: rgba(99, 102, 241, 0.5);
+}
+
+.ai-key-hint {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 4px 0 12px 0;
+}
+
+.ai-enhance-btn {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.ai-enhance-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.ai-enhance-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ai-clear-key-btn {
+    display: block;
+    margin: 8px auto 0;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 10px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.ai-clear-key-btn:hover {
+    color: rgba(255, 100, 100, 0.8);
+}
+
+.ai-enhance-success {
+    color: #66ff99;
+    font-size: 12px;
+}
+
+/* Shadow Overlay specific variant */
+.shadow-ai-enhance-overlay {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.15);
+    text-align: center;
+}
+
+.shadow-overlay-empty .ai-enhance-prompt {
+    margin-bottom: 16px;
+}
+
+.shadow-overlay-empty .ai-key-input-section {
+    justify-content: center;
+    margin: 16px auto;
+    max-width: 400px;
+}
+
+.shadow-overlay-empty .ai-enhance-btn {
+    padding: 12px 24px;
+    font-size: 14px;
+}

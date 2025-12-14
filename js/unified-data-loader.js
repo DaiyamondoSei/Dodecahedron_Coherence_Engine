@@ -97,9 +97,10 @@ export class UnifiedDataLoader {
             const kpiText = await kpiReq.text();
             const kpis = this.parseKPIs(kpiText);
 
-            // Try to load rich shadowPatterns from mapping-context.json
+            // Try to load rich shadowPatterns and tuning from mapping-context.json
             // (mapping-context has proper object format vs company.json string format)
             let shadowPatterns = profile.shadowPatterns || [];
+            let tuning = null;
             try {
                 const mappingReq = await fetch(`./companies/${companyId}/mapping-context.json`);
                 if (mappingReq.ok) {
@@ -111,6 +112,11 @@ export class UnifiedDataLoader {
                             console.log(`   ✅ Loaded ${shadowPatterns.length} rich shadow patterns from mapping-context.json`);
                         }
                     }
+                    // Extract tuning parameters for consistent coherence calculation
+                    if (mappingContext.diagnostics?.tuning) {
+                        tuning = mappingContext.diagnostics.tuning;
+                        console.log(`   ✅ Loaded tuning (${tuning.perspective}) from mapping-context.json`);
+                    }
                 }
             } catch (mappingError) {
                 // mapping-context.json not available, use company.json shadowPatterns
@@ -120,7 +126,8 @@ export class UnifiedDataLoader {
             return {
                 ...profile,
                 kpis: kpis,
-                shadowPatterns: shadowPatterns
+                shadowPatterns: shadowPatterns,
+                tuning: tuning
             };
         } catch (error) {
             console.warn(`   ⚠️ Could not load profile for '${companyId}':`, error);
@@ -179,7 +186,8 @@ export class UnifiedDataLoader {
             edges: edges,
             vertices: vertices,
             kpis: companyData.kpis,
-            shadowPatterns: companyData.shadowPatterns || []
+            shadowPatterns: companyData.shadowPatterns || [],
+            tuning: companyData.tuning || null
         };
     }
 

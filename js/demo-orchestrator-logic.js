@@ -2149,6 +2149,46 @@ async function runCalculation() {
             console.log('   ✅ Fallback calculation completed:', demoState.coherenceResults);
         }
 
+        // ========================================
+        // 👁️ SHADOW DETECTION (for custom path)
+        // ========================================
+        // Only run if we don't already have shadow patterns from a template
+        if (!demoState.loadedMappingContext?.shadowPatterns?.length) {
+            if (typeof window.ShadowDetector !== 'undefined' && demoState.coherenceResults?.faces) {
+                console.log('   👁️ Running shadow detection for custom data...');
+                try {
+                    const detector = new window.ShadowDetector();
+
+                    // Prepare faces with energy values for ShadowDetector
+                    const facesForDetector = demoState.coherenceResults.faces.map(face => ({
+                        id: face.id,
+                        name: face.name || face.customName || `Face ${face.id}`,
+                        faceEnergy: face.energy || face.faceEnergy || 0
+                    }));
+
+                    // Run shadow analysis
+                    const shadowAnalysis = detector.analyze(facesForDetector, demoState.kpiData);
+
+                    if (shadowAnalysis.detectedPatterns?.length > 0) {
+                        demoState.shadowPatterns = shadowAnalysis.detectedPatterns;
+                        console.log(`   ✅ Detected ${shadowAnalysis.detectedPatterns.length} shadow patterns:`,
+                            shadowAnalysis.detectedPatterns.map(p => p.name));
+                    } else {
+                        console.log('   ℹ️ No shadow patterns detected in custom data');
+                        demoState.shadowPatterns = [];
+                    }
+                } catch (e) {
+                    console.warn('   ⚠️ Shadow detection failed:', e);
+                    demoState.shadowPatterns = [];
+                }
+            } else {
+                console.log('   ℹ️ ShadowDetector not available or no face data');
+                demoState.shadowPatterns = [];
+            }
+        } else {
+            console.log('   ✅ Using template shadow patterns');
+        }
+
         // Display results
         displayCalculationResults();
 
@@ -2297,6 +2337,10 @@ function updateSessionStorage() {
             edges: demoState.loadedMappingContext?.edges || null, // Sprint 3 Task 28: Include edge data for 3D hover
             dominantOctave: demoState.loadedMappingContext?.dominantOctave || 1,
             tuning: demoState.loadedMappingContext?.diagnostics?.tuning || null, // Tuning perspective for consistent calculation
+            // Shadow system - use detected patterns for custom path, or template patterns if available
+            shadowPatterns: demoState.shadowPatterns?.length > 0
+                ? demoState.shadowPatterns
+                : (demoState.loadedMappingContext?.shadowPatterns || []),
             isCustomData: true,
             timestamp: new Date().toISOString() // Fresh timestamp on each update
         };
@@ -2304,6 +2348,14 @@ function updateSessionStorage() {
         sessionStorage.setItem('customCompanyData', JSON.stringify(customCompanyData));
         sessionStorage.setItem('selectedCompanyId', 'custom');
         console.log('💾 Updated sessionStorage with latest data (timestamp:', customCompanyData.timestamp, ')');
+
+        // Dispatch shadows-updated event for Shadow Overlay Controller (reduces polling dependency)
+        if (customCompanyData.shadowPatterns) {
+            window.dispatchEvent(new CustomEvent('shadows-updated', {
+                detail: { shadows: customCompanyData.shadowPatterns }
+            }));
+            console.log('[Orchestrator] shadows-updated event dispatched');
+        }
 
         // Ensure session monitoring is active
         if (!SessionManager._checkTimer) {

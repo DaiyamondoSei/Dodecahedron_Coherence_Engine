@@ -1504,6 +1504,13 @@
             applyOctaveModifiers
         } from './js/ai/tuning/octave-modifiers.js';
 
+        // Import ShadowDetector for custom path shadow generation
+        import { ShadowDetector, SHADOW_CONFIG } from './js/advanced/shadow-detector.js';
+
+        // Expose ShadowDetector globally for demo-orchestrator-logic.js
+        window.ShadowDetector = ShadowDetector;
+        window.SHADOW_CONFIG = SHADOW_CONFIG;
+
         // Initialize Sprint 2 components when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
             console.log('🚀 Sprint 2: Initializing AI Integration modules...');

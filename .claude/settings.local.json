@@ -65,7 +65,12 @@
       "Bash(grep:*)",
       "Bash(ls:*)",
       "Bash(copy:*)",
-      "Bash(cmd /c copy \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\data\\CSV_Face_Models.csv\" \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\data\\archive\\CSV_Face_Models_v1_original.csv\")"
+      "Bash(cmd /c copy \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\data\\CSV_Face_Models.csv\" \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\data\\archive\\CSV_Face_Models_v1_original.csv\")",
+      "Bash(gh auth status:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh run cancel:*)"
     ],
     "deny": [],
     "ask": [

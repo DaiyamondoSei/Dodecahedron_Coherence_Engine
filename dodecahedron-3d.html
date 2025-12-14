@@ -2777,6 +2777,20 @@
         import { VisualizationManager } from './js/advanced/visualization-manager.js';
         import { ShadowPanel } from './js/ui/shadow-panel.js';
         import { VoiceModule } from './js/ai/voice-module.js';
+        import { AIShadowAdapter } from './js/ai/adapters/ai-shadow-adapter.js';
+        import { ProviderFactory, getGeminiProvider, getOpenAIProvider } from './js/ai/providers/provider-factory.js';
+        import { GeminiProvider } from './js/ai/providers/gemini-provider.js';
+        import { OpenAIProvider } from './js/ai/providers/openai-provider.js';
+
+        // Expose AIShadowAdapter globally for ShadowPanel AI enhance feature
+        window.AIShadowAdapter = AIShadowAdapter;
+
+        // Expose AI Providers globally for Shadow Overlay Controller
+        window.ProviderFactory = ProviderFactory;
+        window.getGeminiProvider = getGeminiProvider;
+        window.getOpenAIProvider = getOpenAIProvider;
+        window.GeminiProvider = GeminiProvider;
+        window.OpenAIProvider = OpenAIProvider;
 
         // Initialize Visualization Manager, Shadow Panel & Voice Module
         window.addEventListener('load', () => {
@@ -4513,7 +4527,9 @@
                             kpis: customData.kpis || [],
                             faceConfig: customData.faceConfig || null,
                             // Pass pre-calculated coherence results from orchestrator
-                            coherenceResults: customData.coherenceResults || null
+                            coherenceResults: customData.coherenceResults || null,
+                            // Pass shadow patterns for shadow panel display
+                            shadowPatterns: customData.shadowPatterns || []
                         };
 
                         let attempts = 0;
@@ -5177,15 +5193,60 @@
         function renderShadowCards() {
             if (!shadowOverlayContent) return;
 
-            // Empty state
+            // Empty state - with AI enhance option for custom data paths
             if (currentShadows.length === 0) {
+                const setupMode = sessionStorage.getItem('quannex-setup-mode') || 'manual';
+                const geminiKey = localStorage.getItem('quannex_gemini_api_key');
+                const openaiKey = localStorage.getItem('quannex_openai_api_key');
+                const hasApiKey = !!geminiKey || !!openaiKey;
+                const preferredProvider = localStorage.getItem('quannex_preferred_provider') || 'gemini';
+                const activeProvider = geminiKey ? 'Gemini' : (openaiKey ? 'OpenAI' : null);
+
                 shadowOverlayContent.innerHTML = `
                     <div class="shadow-overlay-empty">
                         <div class="shadow-overlay-empty-icon">✨</div>
                         <h3>No Shadow Patterns Detected</h3>
                         <p>The organization shows strong coherence with no hidden tensions.</p>
+
+                        ${setupMode === 'manual' ? `
+                            <div class="shadow-ai-enhance-overlay">
+                                <div class="ai-enhance-divider"></div>
+                                <p class="ai-enhance-prompt">
+                                    ${hasApiKey
+                                        ? '✨ AI analysis available (' + activeProvider + ')'
+                                        : 'Add AI to discover hidden patterns'}
+                                </p>
+
+                                ${!hasApiKey ? `
+                                    <div class="ai-key-input-section">
+                                        <select id="overlay-ai-provider-select" class="ai-provider-select">
+                                            <option value="gemini">Gemini</option>
+                                            <option value="openai">OpenAI</option>
+                                        </select>
+                                        <input type="password"
+                                               id="overlay-ai-api-key-input"
+                                               placeholder="Enter API key..."
+                                               class="ai-key-input"
+                                        />
+                                        <button class="ai-save-key-btn" id="overlaySaveApiKey">Save</button>
+                                    </div>
+                                    <p class="ai-key-hint">Key stored locally only</p>
+                                ` : ''}
+
+                                <button class="ai-enhance-btn" id="overlayGenerateAIShadows" ${!hasApiKey ? 'disabled' : ''}>
+                                    ✨ Generate AI Shadow Analysis
+                                </button>
+
+                                ${hasApiKey ? `
+                                    <button class="ai-clear-key-btn" id="overlayClearApiKey">Clear API Key</button>
+                                ` : ''}
+                            </div>
+                        ` : ''}
                     </div>
                 `;
+
+                // Setup AI handlers for empty state
+                setupOverlayAIHandlers();
                 return;
             }
 
@@ -5227,6 +5288,140 @@
                     });
                 }
             });
+        }
+
+        // ========================================
+        // AI SHADOW ANALYSIS HANDLERS
+        // ========================================
+
+        /**
+         * Setup API key and generate handlers for the overlay
+         */
+        function setupOverlayAIHandlers() {
+            // Save API key button
+            const saveBtn = document.getElementById('overlaySaveApiKey');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', () => {
+                    const providerSelect = document.getElementById('overlay-ai-provider-select');
+                    const input = document.getElementById('overlay-ai-api-key-input');
+                    const provider = providerSelect?.value || 'gemini';
+                    const key = input?.value?.trim();
+
+                    if (!key || key.length < 20) {
+                        alert('Please enter a valid API key (minimum 20 characters)');
+                        return;
+                    }
+
+                    // Store key using existing quannex_ namespace convention
+                    if (provider === 'gemini') {
+                        localStorage.setItem('quannex_gemini_api_key', key);
+                    } else {
+                        localStorage.setItem('quannex_openai_api_key', key);
+                    }
+                    localStorage.setItem('quannex_preferred_provider', provider);
+
+                    console.log('[ShadowOverlay] ✅ API key saved');
+
+                    // Refresh the overlay
+                    renderShadowCards();
+                });
+            }
+
+            // Clear API key button
+            const clearBtn = document.getElementById('overlayClearApiKey');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    localStorage.removeItem('quannex_gemini_api_key');
+                    localStorage.removeItem('quannex_openai_api_key');
+                    console.log('[ShadowOverlay] API keys cleared');
+                    renderShadowCards();
+                });
+            }
+
+            // Generate AI shadows button
+            const generateBtn = document.getElementById('overlayGenerateAIShadows');
+            if (generateBtn) {
+                generateBtn.addEventListener('click', async () => {
+                    await generateAIShadows(generateBtn);
+                });
+            }
+        }
+
+        /**
+         * Generate AI shadow patterns using AIShadowAdapter
+         */
+        async function generateAIShadows(btn) {
+            const geminiKey = localStorage.getItem('quannex_gemini_api_key');
+            const openaiKey = localStorage.getItem('quannex_openai_api_key');
+            const preferredProvider = localStorage.getItem('quannex_preferred_provider') || 'gemini';
+
+            if (!geminiKey && !openaiKey) {
+                alert('Please enter an API key first');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '🔄 Analyzing...';
+
+            try {
+                // Get current state
+                const state = window.Quannex?.getState?.();
+                if (!state || !state.faces) {
+                    throw new Error('No face data available');
+                }
+
+                // Create provider using factory methods
+                let provider = null;
+
+                if (preferredProvider === 'gemini' && geminiKey && window.getGeminiProvider) {
+                    provider = await window.getGeminiProvider(geminiKey);
+                } else if (preferredProvider === 'openai' && openaiKey && window.getOpenAIProvider) {
+                    provider = await window.getOpenAIProvider(openaiKey);
+                } else if (geminiKey && window.getGeminiProvider) {
+                    provider = await window.getGeminiProvider(geminiKey);
+                } else if (openaiKey && window.getOpenAIProvider) {
+                    provider = await window.getOpenAIProvider(openaiKey);
+                }
+
+                if (!provider || provider.name === 'OfflineProvider') {
+                    throw new Error('AI provider unavailable');
+                }
+
+                // Create adapter with provider
+                const aiAdapter = new window.AIShadowAdapter({ provider });
+
+                // Generate shadows with semantic understanding of face relationships
+                const aiShadows = await aiAdapter.generateAIShadowPatterns(
+                    state.faces,
+                    {
+                        companyName: state.companyName || 'Organization',
+                        context: state
+                    }
+                );
+
+                if (aiShadows && aiShadows.length > 0) {
+                    // Mark as AI-generated
+                    aiShadows.forEach(s => s.source = 'ai');
+
+                    // Update the shadow state and re-render
+                    currentShadows = aiShadows;
+                    updateShadowIndicator(aiShadows);
+                    renderShadowCards();
+
+                    // Dispatch event for other listeners
+                    window.dispatchEvent(new CustomEvent('shadows-updated', {
+                        detail: { shadows: aiShadows }
+                    }));
+
+                    console.log(`[ShadowOverlay] ✨ Generated ${aiShadows.length} AI shadows`);
+                } else {
+                    btn.textContent = '✅ No hidden patterns found';
+                }
+            } catch (e) {
+                console.error('[ShadowOverlay] AI generation failed:', e);
+                btn.textContent = '❌ ' + (e.message || 'AI error');
+                btn.disabled = false;
+            }
         }
 
         /**
@@ -5391,20 +5586,28 @@
         /**
          * Hook into the existing shadow panel update mechanism
          * Watches for changes to the global shadow state
+         * Optimized: Early exit if shadows haven't changed
          */
         function syncWithShadowPanel() {
             // Check Quannex state for shadow patterns
             const state = window.Quannex?.getState?.();
-            if (state?.shadowPatterns) {
-                updateShadowIndicator(state.shadowPatterns);
+            const newShadows = state?.shadowPatterns || [];
+
+            // Early exit if no change (prevents unnecessary DOM updates)
+            if (JSON.stringify(newShadows) === JSON.stringify(currentShadows)) {
+                return;
+            }
+
+            if (newShadows.length > 0 || currentShadows.length > 0) {
+                updateShadowIndicator(newShadows);
             }
         }
 
         // Initial sync after a delay (waiting for engine to initialize)
         setTimeout(syncWithShadowPanel, 2000);
 
-        // Periodic sync every 3 seconds (catches updates from recalculate)
-        setInterval(syncWithShadowPanel, 3000);
+        // Fallback periodic sync every 10 seconds (primary: event-driven via shadows-updated)
+        setInterval(syncWithShadowPanel, 10000);
 
         // Also hook into the ShadowPanel if available
         const originalShadowPanelUpdate = window.shadowPanel?.update;
