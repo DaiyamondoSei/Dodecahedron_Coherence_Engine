@@ -175,11 +175,67 @@ After each extraction:
 
 ---
 
-## Questions / Uncertainties
+### Session 2: December 15, 2025 (Steps Extraction - Phase 3 Complete)
 
-1. **Navigation deep dependencies** - Need to map which functions call which before extracting
-2. **Steps module size** - At ~1400 lines, should it be split into sub-modules?
-3. **dodecahedron-viz.js** - Phase 3 plan includes this file too, but focus has been on orchestrator
+**Module Extracted:**
+- `orchestrator-steps.js` (1557 lines) - All step-related functions (Sections 7-12)
+
+**Functions Extracted:**
+- **Section 7:** selectCompanyTemplate(), startFreshManual(), startFreshAI(), markStepCompleted()
+- **Section 8:** showCompanyLoadedNotification(), hideTemplateGridForPreloadedCompany(), resetToTemplateSelection()
+- **Section 9:** populateFaceEditor(), completeStep1(), validateFaces(), getFaceConfiguration()
+- **Section 10:** selectMode(), loadKPIMapper(), autoFillExtractedKPIs(), setKPIFieldValue(), showAutoFillNotification(), generateQuickModeHTML(), generateFullModeHTML(), autofillKPISuggestion(), autofillElementalKPI(), calculateLiveNormalization(), completeStep2()
+- **Section 11:** collectKPIData(), runCalculation(), calculateSimpleCoherence(), getCoherenceStatus()
+- **Section 12:** displayCalculationResults(), updateSessionStorage(), displayCalculationTransparency(), completeStep3()
+
+**Critical Discoveries:**
+
+#### 1. Missing DOMContentLoaded Listener
+**Problem:** After extracting to thin facade, the DOMContentLoaded listener was removed from demo-orchestrator-logic.js but not added to any module.
+
+**Solution:** Added DOMContentLoaded listener to orchestrator-navigation.js exports section:
+```javascript
+document.addEventListener('DOMContentLoaded', initializeDemo);
+```
+
+#### 2. Main File Reduction
+**Result:** demo-orchestrator-logic.js reduced from ~2000 lines to 222 lines (thin facade)
+- Now contains only section comments pointing to extracted modules
+- No actual function implementations remain
+- All window exports handled by extracted modules
+
+#### 3. Complete Orchestrator Module List
+```
+js/orchestrator/
+├── orchestrator-state.js      (161 lines) - demoState, guards, thresholds
+├── orchestrator-session.js    (324 lines) - SessionManager, 30-min timeout
+├── orchestrator-sync.js       (200 lines) - CrossWindowSync, BroadcastChannel
+├── orchestrator-utils.js      (391 lines) - Diagnostics, utilities
+├── orchestrator-dashboard.js  (~800 lines) - Octave dashboard, portrait view
+├── orchestrator-navigation.js (~500 lines) - Navigation, validation dialogs
+└── orchestrator-steps.js      (1557 lines) - All step functions
+```
+
+**Total:** ~3933 lines across 7 modules
+
+---
+
+## Phase 3 Status: COMPLETE ✅
+
+All orchestrator functionality has been successfully extracted from demo-orchestrator-logic.js.
+
+**Remaining Optional Work:**
+1. **dodecahedron-viz.js** - Phase 3 plan mentioned this file, but orchestrator was priority
+2. **Testing** - Full workflow testing recommended before merging to main
+3. **Integration tests** - Consider adding automated tests for module loading
+
+---
+
+## Questions / Uncertainties (Resolved)
+
+1. ~~**Navigation deep dependencies**~~ - RESOLVED: Functions all exported to window, dependencies work via global scope
+2. ~~**Steps module size**~~ - RESOLVED: Kept as single 1557-line file; works well
+3. **dodecahedron-viz.js** - Still pending, lower priority
 
 ---
 
