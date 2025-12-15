@@ -151,152 +151,16 @@ const PSI_4 = _PH.PSI_4 || 0.8541019662496847;
 // ========================================
 // SECTION 3: CROSS-WINDOW COMMUNICATION
 // ========================================
-
-/**
- * Cross-Window Synchronization (Issue #12 Fix)
- *
- * Uses BroadcastChannel API to sync state between multiple windows/tabs.
- * When user modifies data in orchestrator, all open visualization views
- * (3D model, DNA helix, etc.) receive updates in real-time.
- *
- * Channel: 'quannex-sync'
- * Messages: { type: string, payload: any, timestamp: number }
- *
- * @namespace CrossWindowSync
- */
-const CrossWindowSync = {
-    CHANNEL_NAME: 'quannex-sync',
-    _channel: null,
-    _listeners: new Map(),
-
-    /**
-     * Initialize the broadcast channel
-     */
-    init() {
-        if (typeof BroadcastChannel === 'undefined') {
-            console.warn('[CrossWindowSync] BroadcastChannel not supported in this browser');
-            return false;
-        }
-
-        try {
-            this._channel = new BroadcastChannel(this.CHANNEL_NAME);
-            this._channel.onmessage = (event) => this._handleMessage(event.data);
-            console.log('[CrossWindowSync] ✅ Channel initialized:', this.CHANNEL_NAME);
-            return true;
-        } catch (e) {
-            console.error('[CrossWindowSync] Failed to create channel:', e);
-            return false;
-        }
-    },
-
-    /**
-     * Broadcast a state update to all windows
-     * @param {string} type - Message type (e.g., 'STATE_UPDATE', 'FACES_CHANGED')
-     * @param {any} payload - Data to broadcast
-     */
-    broadcast(type, payload) {
-        if (!this._channel) return;
-
-        const message = {
-            type,
-            payload,
-            timestamp: Date.now(),
-            source: window.location.pathname  // Identify source window
-        };
-
-        try {
-            this._channel.postMessage(message);
-            console.log(`[CrossWindowSync] 📤 Broadcast: ${type}`, payload);
-        } catch (e) {
-            console.error('[CrossWindowSync] Broadcast failed:', e);
-        }
-    },
-
-    /**
-     * Register a listener for incoming messages
-     * @param {string} type - Message type to listen for, or '*' for all
-     * @param {Function} callback - Handler function(payload, message)
-     */
-    on(type, callback) {
-        if (!this._listeners.has(type)) {
-            this._listeners.set(type, []);
-        }
-        this._listeners.get(type).push(callback);
-    },
-
-    /**
-     * Handle incoming messages
-     */
-    _handleMessage(message) {
-        console.log(`[CrossWindowSync] 📥 Received: ${message.type} from ${message.source}`);
-
-        // Skip messages from self
-        if (message.source === window.location.pathname) {
-            return;
-        }
-
-        // Notify type-specific listeners
-        const typeListeners = this._listeners.get(message.type) || [];
-        typeListeners.forEach(cb => cb(message.payload, message));
-
-        // Notify wildcard listeners
-        const wildcardListeners = this._listeners.get('*') || [];
-        wildcardListeners.forEach(cb => cb(message.payload, message));
-    },
-
-    /**
-     * Broadcast current demoState (for views to sync on open)
-     */
-    broadcastCurrentState() {
-        this.broadcast('STATE_SYNC', {
-            demoState: {
-                currentStep: demoState.currentStep,
-                faceConfig: demoState.faceConfig,
-                kpiData: demoState.kpiData,
-                coherenceResults: demoState.coherenceResults,
-                loadedMappingContext: demoState.loadedMappingContext
-            }
-        });
-    },
-
-    /**
-     * Request current state from other windows (for views that open late)
-     */
-    requestState() {
-        this.broadcast('STATE_REQUEST', { requester: window.location.pathname });
-    },
-
-    /**
-     * Clean up
-     */
-    close() {
-        if (this._channel) {
-            this._channel.close();
-            this._channel = null;
-        }
-    }
-};
-
-// Initialize sync channel
-CrossWindowSync.init();
-
-// Listen for state requests (orchestrator responds to views asking for data)
-CrossWindowSync.on('STATE_REQUEST', (payload) => {
-    console.log('[CrossWindowSync] State requested by:', payload.requester);
-    // Only orchestrator should respond
-    if (window.location.pathname.includes('demo-orchestrator')) {
-        CrossWindowSync.broadcastCurrentState();
-    }
-});
-
-// Export for global access
-window.CrossWindowSync = CrossWindowSync;
-
-// Clean up on page unload
-window.addEventListener('beforeunload', () => {
-    SessionManager.stop();
-    CrossWindowSync.close();
-});
+//
+// PHASE 3 REFACTOR: CrossWindowSync moved to orchestrator-sync.js module
+// The following are now imported from js/orchestrator/orchestrator-sync.js:
+// - CrossWindowSync (BroadcastChannel-based sync object)
+// - Handles cross-window state synchronization
+// - Manages beforeunload cleanup
+//
+// DEPENDENCY: This file requires orchestrator-sync.js to be loaded first
+//
+// ========================================
 
 // ========================================
 // SECTION 4: INITIALIZATION
