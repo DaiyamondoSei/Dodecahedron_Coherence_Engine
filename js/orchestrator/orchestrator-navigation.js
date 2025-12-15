@@ -491,6 +491,12 @@
     global.applyDefaultsAndProceed = applyDefaultsAndProceed;
     global.focusOnIncompleteFace = focusOnIncompleteFace;
 
+    // ========================================
+    // INITIALIZATION TRIGGER
+    // ========================================
+    // Register DOMContentLoaded listener to initialize the demo
+    document.addEventListener('DOMContentLoaded', initializeDemo);
+
     console.log('[orchestrator-navigation] Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);
