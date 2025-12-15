@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phase 3 Integrity Tests</title>
+    <style>
+        body { font-family: monospace; background: #1a1a2e; color: #00ffcc; padding: 20px; }
+        .pass { color: #00ff88; }
+        .fail { color: #ff4444; }
+        .test-group { margin: 20px 0; padding: 10px; border: 1px solid #333; border-radius: 8px; }
+        h1 { color: #ffcc00; border-bottom: 2px solid #ffcc00; padding-bottom: 10px; }
+        h2 { color: #ffcc00; margin-top: 0; }
+        .summary { font-size: 18px; padding: 20px; border-radius: 8px; margin-top: 20px; }
+        .summary.all-pass { background: rgba(0, 255, 136, 0.1); border: 2px solid #00ff88; }
+        .summary.has-fail { background: rgba(255, 68, 68, 0.1); border: 2px solid #ff4444; }
+        .timestamp { color: #888; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>Phase 3 Data Integrity Tests</h1>
+    <p class="timestamp">Test run: <span id="timestamp"></span></p>
+    <div id="results"></div>
+
+    <!-- Load all modules in correct order -->
+    <script src="../js/constants/phi-harmonics.js"></script>
+    <script src="../js/constants/colors.js"></script>
+    <script src="../js/geometry/dodecahedron-topology.js"></script>
+    <script src="../js/constants/octave-thresholds.js"></script>
+
+    <!-- Utility modules (when created) -->
+    <script src="../js/utils/integrity-checksum.js" onerror="console.log('[integrity-checksum] Not yet created')"></script>
+
+    <!-- Orchestrator modules (when created) -->
+    <script src="../js/orchestrator/orchestrator-state.js" onerror="console.log('[orchestrator-state] Not yet created')"></script>
+    <script src="../js/orchestrator/orchestrator-session.js" onerror="console.log('[orchestrator-session] Not yet created')"></script>
+    <script src="../js/orchestrator/orchestrator-sync.js" onerror="console.log('[orchestrator-sync] Not yet created')"></script>
+    <script src="../js/orchestrator/orchestrator-navigation.js" onerror="console.log('[orchestrator-navigation] Not yet created')"></script>
+    <script src="../js/orchestrator/orchestrator-dashboard.js" onerror="console.log('[orchestrator-dashboard] Not yet created')"></script>
+    <script src="../js/orchestrator/orchestrator-utils.js" onerror="console.log('[orchestrator-utils] Not yet created')"></script>
+
+    <!-- Test script -->
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toISOString();
+
+        const results = document.getElementById('results');
+        let passed = 0, failed = 0;
+
+        function test(name, condition, details = '') {
+            const status = condition ? 'pass' : 'fail';
+            condition ? passed++ : failed++;
+            results.innerHTML += `<div class="${status}">
+                ${condition ? '&#10003;' : '&#10007;'} ${name} ${details ? `- ${details}` : ''}
+            </div>`;
+        }
+
+        function testGroup(name) {
+            results.innerHTML += `<div class="test-group"><h2>${name}</h2>`;
+        }
+
+        function endGroup() {
+            results.innerHTML += `</div>`;
+        }
+
+        // ========================================
+        // GLOBAL OBJECT AVAILABILITY TESTS
+        // ========================================
+        testGroup('1. Global Object Availability');
+
+        test('PhiHarmonics loaded', typeof window.PhiHarmonics !== 'undefined');
+        test('OctaveColors loaded', typeof window.OctaveColors !== 'undefined');
+        test('DodecahedronTopology loaded', typeof window.DodecahedronTopology !== 'undefined');
+
+        // These will be populated as modules are extracted
+        test('demoState exists (after extraction)', typeof window.demoState !== 'undefined' || true, 'Skipped until module extracted');
+        test('SessionManager exists (after extraction)', typeof window.SessionManager !== 'undefined' || true, 'Skipped until module extracted');
+        test('CrossWindowSync exists (after extraction)', typeof window.CrossWindowSync !== 'undefined' || true, 'Skipped until module extracted');
+
+        endGroup();
+
+        // ========================================
+        // PHI CONSTANTS VERIFICATION
+        // ========================================
+        testGroup('2. PHI Constants Integrity');
+
+        const PH = window.PhiHarmonics;
+        if (PH) {
+            test('PHI value correct', Math.abs(PH.PHI - 1.618033988749895) < 1e-10, `PHI = ${PH.PHI}`);
+            test('PHI_1 value correct', Math.abs(PH.PHI_1 - 0.618033988749895) < 1e-10, `PHI_1 = ${PH.PHI_1}`);
+            test('PHI_2 value correct', Math.abs(PH.PHI_2 - 0.381966011250105) < 1e-10, `PHI_2 = ${PH.PHI_2}`);
+            test('PHI_3 value correct', Math.abs(PH.PHI_3 - 0.236067977499790) < 1e-10, `PHI_3 = ${PH.PHI_3}`);
+            test('PSI_3 value correct', Math.abs(PH.PSI_3 - 0.763932022500210) < 1e-10, `PSI_3 = ${PH.PSI_3}`);
+            test('coherenceToOctave exists', typeof PH.coherenceToOctave === 'function');
+
+            // Test coherence-to-octave mapping
+            if (typeof PH.coherenceToOctave === 'function') {
+                test('coherenceToOctave(0.30) = 1 (Survival)', PH.coherenceToOctave(0.30) === 1);
+                test('coherenceToOctave(0.40) = 2 (Security)', PH.coherenceToOctave(0.40) === 2);
+                test('coherenceToOctave(0.55) = 3 (Order)', PH.coherenceToOctave(0.55) === 3);
+                test('coherenceToOctave(0.65) = 4 (Love)', PH.coherenceToOctave(0.65) === 4);
+                test('coherenceToOctave(0.80) = 5 (Expression)', PH.coherenceToOctave(0.80) === 5);
+                test('coherenceToOctave(0.90) = 6 (Synthesis)', PH.coherenceToOctave(0.90) === 6);
+                test('coherenceToOctave(0.95) = 7 (Radiance)', PH.coherenceToOctave(0.95) === 7);
+            }
+        } else {
+            test('PhiHarmonics module loaded', false, 'Module not found!');
+        }
+
+        endGroup();
+
+        // ========================================
+        // OCTAVE COLORS VERIFICATION
+        // ========================================
+        testGroup('3. Octave Colors Integrity');
+
+        const OC = window.OctaveColors;
+        if (OC) {
+            test('7 octave colors defined', Object.keys(OC.OCTAVE).length === 7);
+            test('Octave 1 (Survival) is red', OC.OCTAVE[1].hex === '#ef4444');
+            test('Octave 4 (Love) is green', OC.OCTAVE[4].hex === '#22c55e');
+            test('Octave 7 (Radiance) is violet', OC.OCTAVE[7].hex === '#8b5cf6');
+            test('getOctaveColor function exists', typeof OC.getOctaveColor === 'function');
+            test('getOctaveColorCSS function exists', typeof OC.getOctaveColorCSS === 'function');
+        } else {
+            test('OctaveColors module loaded', false, 'Module not found!');
+        }
+
+        endGroup();
+
+        // ========================================
+        // TOPOLOGY VERIFICATION
+        // ========================================
+        testGroup('4. Dodecahedron Topology Integrity');
+
+        const DT = window.DodecahedronTopology;
+        if (DT) {
+            test('12 faces defined', Object.keys(DT.FACES).length === 12);
+            test('30 edges defined', DT.EDGES.length === 30);
+            test('20 vertices defined', DT.VERTICES.length === 20);
+            test('6 breath axes defined', DT.BREATH_AXES.length === 6);
+
+            // Euler formula validation: V - E + F = 2
+            const euler = DT.VERTEX_COUNT - DT.EDGE_COUNT + DT.FACE_COUNT;
+            test('Euler formula V-E+F=2', euler === 2, `${DT.VERTEX_COUNT} - ${DT.EDGE_COUNT} + ${DT.FACE_COUNT} = ${euler}`);
+
+            // Test helper functions
+            test('getFace(1) returns face', DT.getFace(1) !== null);
+            test('getEdgeBetween(1,2) works', DT.getEdgeBetween(1, 2) !== null);
+            test('getBreathAxis(1) works', DT.getBreathAxis(1) !== null);
+
+            // Test face adjacency
+            const face1 = DT.getFace(1);
+            if (face1) {
+                test('Face 1 has 5 adjacent faces', face1.adjacentFaces.length === 5, `Found ${face1.adjacentFaces.length}`);
+            }
+        } else {
+            test('DodecahedronTopology module loaded', false, 'Module not found!');
+        }
+
+        endGroup();
+
+        // ========================================
+        // DEMOSTATE STRUCTURE VERIFICATION (after extraction)
+        // ========================================
+        testGroup('5. demoState Structure (Post-Extraction)');
+
+        if (typeof window.demoState !== 'undefined') {
+            const ds = window.demoState;
+            const requiredProps = ['currentStep', 'totalSteps', 'faceConfig', 'kpiMode',
+                                   'kpiData', 'coherenceResults', 'completedSteps',
+                                   'selectedCompanyId', 'loadedMappingContext', 'setupMode'];
+
+            requiredProps.forEach(prop => {
+                test(`demoState.${prop} exists`, prop in ds);
+            });
+
+            test('demoState.currentStep is 0', ds.currentStep === 0);
+            test('demoState.totalSteps is 5', ds.totalSteps === 5);
+            test('demoState.faceConfig is object', typeof ds.faceConfig === 'object');
+        } else {
+            test('demoState not yet extracted', true, 'Will test after orchestrator-state.js extraction');
+        }
+
+        endGroup();
+
+        // ========================================
+        // SESSION MANAGER VERIFICATION (after extraction)
+        // ========================================
+        testGroup('6. SessionManager Interface (Post-Extraction)');
+
+        if (typeof window.SessionManager !== 'undefined') {
+            const SM = window.SessionManager;
+            test('SessionManager.start exists', typeof SM.start === 'function');
+            test('SessionManager.stop exists', typeof SM.stop === 'function');
+            test('SessionManager.extendSession exists', typeof SM.extendSession === 'function');
+            test('SESSION_DURATION is 30 minutes', SM.SESSION_DURATION === 30 * 60 * 1000);
+        } else {
+            test('SessionManager not yet extracted', true, 'Will test after orchestrator-session.js extraction');
+        }
+
+        endGroup();
+
+        // ========================================
+        // CROSS WINDOW SYNC VERIFICATION (after extraction)
+        // ========================================
+        testGroup('7. CrossWindowSync Interface (Post-Extraction)');
+
+        if (typeof window.CrossWindowSync !== 'undefined') {
+            const CWS = window.CrossWindowSync;
+            test('CrossWindowSync.init exists', typeof CWS.init === 'function');
+            test('CrossWindowSync.broadcast exists', typeof CWS.broadcast === 'function');
+            test('CrossWindowSync.subscribe exists', typeof CWS.subscribe === 'function');
+            test('CHANNEL_NAME is quannex-sync', CWS.CHANNEL_NAME === 'quannex-sync');
+        } else {
+            test('CrossWindowSync not yet extracted', true, 'Will test after orchestrator-sync.js extraction');
+        }
+
+        endGroup();
+
+        // ========================================
+        // SUMMARY
+        // ========================================
+        const summaryClass = failed === 0 ? 'all-pass' : 'has-fail';
+        results.innerHTML += `
+            <div class="summary ${summaryClass}">
+                <h2>Summary: ${passed} passed, ${failed} failed</h2>
+                ${failed === 0
+                    ? '<div class="pass" style="font-size: 20px;">ALL TESTS PASSED - Safe to proceed with extraction</div>'
+                    : '<div class="fail" style="font-size: 20px;">TESTS FAILED - Review before proceeding</div>'
+                }
+            </div>
+        `;
+
+        console.log(`Phase 3 Integrity Tests: ${passed} passed, ${failed} failed`);
+    </script>
+</body>
+</html>

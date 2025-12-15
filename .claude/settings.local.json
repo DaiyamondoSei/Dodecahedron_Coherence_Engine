@@ -70,7 +70,10 @@
       "Bash(gh run list:*)",
       "Bash(gh run view:*)",
       "Bash(gh issue list:*)",
-      "Bash(gh run cancel:*)"
+      "Bash(gh run cancel:*)",
+      "Bash(git checkout:*)",
+      "Bash(git tag:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": [
@@ -78,6 +81,16 @@
       "Write(**/*.html)"
     ]
   },
+  "enabledMcpjsonServers": [
+    "puppeteer",
+    "chrome-devtools",
+    "playwright",
+    "firecrawl",
+    "github",
+    "scientific-papers",
+    "chart",
+    "sequential-thinking"
+  ],
   "enabledPlugins": {
     "agent-sdk-dev@claude-code-plugins": true,
     "code-review@claude-code-plugins": true,
@@ -89,15 +102,5 @@
     "ralph-wiggum@claude-code-plugins": false,
     "claude-opus-4-5-migration@claude-code-plugins": true,
     "frontend-design@claude-code-plugins": true
-  },
-  "enabledMcpjsonServers": [
-    "puppeteer",
-    "chrome-devtools",
-    "playwright",
-    "firecrawl",
-    "github",
-    "scientific-papers",
-    "chart",
-    "sequential-thinking"
-  ]
+  }
 }

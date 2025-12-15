@@ -113,63 +113,27 @@
 // ========================================
 // SECTION 1: GLOBAL STATE & CONFIG
 // ========================================
-
-// Global state
-const demoState = {
-    currentStep: 0,
-    totalSteps: 5, // Now includes Step 0
-    faceConfig: null,
-    kpiMode: null, // 'quick' or 'full'
-    kpiData: null,
-    coherenceResults: null,
-    completedSteps: [],
-    selectedCompanyId: null, // Track which company template is selected
-    loadedMappingContext: null, // Store the loaded mapping context
-    setupMode: 'manual' // Phase 5: Track setup mode for AI integration ('manual' | 'ai-assisted')
-};
-
-// Re-entrancy guard to prevent infinite loop when clicking company cards
-// (Fix for event handler loop bug observed during testing)
-let _isSelectingCompanyTemplate = false;
-
+//
+// PHASE 3 REFACTOR: State moved to orchestrator-state.js module
+//
+// The following are now imported from js/orchestrator/orchestrator-state.js:
+// - demoState (global object)
+// - isSelectingCompanyTemplate() / setSelectingCompanyTemplate(val)
+// - OCTAVE_COHERENCE_THRESHOLDS
+// - OrchestratorPHI (PHI_1, PHI_2, PHI_3, PHI_4, PSI_3, PSI_4)
+//
+// DEPENDENCY: This file requires orchestrator-state.js to be loaded first
+//
 // ========================================
-// PHI CONSTANTS - Single Source Reference
-// ========================================
-// Primary source: js/constants/phi-harmonics.js
-// All octave thresholds and coherence levels use Golden Ratio (φ) derived values
-const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
 
-// PHI Powers (φ^-n): Decreasing sequence toward 0
-const PHI_1 = _PH.PHI_1 || 0.618033988749895;           // φ^-1 ≈ 0.618
-const PHI_2 = _PH.PHI_2 || 0.381966011250105;           // φ^-2 ≈ 0.382
-const PHI_3 = _PH.PHI_3 || 0.2360679774997896;          // φ^-3 ≈ 0.236
-const PHI_4 = _PH.PHI_4 || 0.1458980337503153;          // φ^-4 ≈ 0.146
-
-// PSI Values (complements): PSI_n = 1 - φ^-n
-const PSI_3 = _PH.PSI_3 || 0.763932022500210;           // 1 - φ^-3 ≈ 0.764
-const PSI_4 = _PH.PSI_4 || 0.8541019662496847;          // 1 - φ^-4 ≈ 0.854
-
-/**
- * PHI-based octave thresholds for coherence detection
- *
- * Maps the 7 octaves of organizational development:
- * - O1 (Survival): 0.0 baseline
- * - O2 (Structure): φ^-2 ≈ 0.382
- * - O3 (Relationships): 0.5 (mathematical midpoint)
- * - O4 (Creativity): φ^-1 ≈ 0.618 (Golden Ratio)
- * - O5 (Expression): Ψ³ ≈ 0.764
- * - O6 (Vision): Ψ⁴ ≈ 0.854
- * - O7 (Radiance): 0.95 (near unity)
- */
-const OCTAVE_COHERENCE_THRESHOLDS = {
-    O1: 0.0,        // Survival - just existing
-    O2: PHI_2,      // Structure - φ^-2 ≈ 0.382
-    O3: 0.5,        // Relationships - midpoint
-    O4: PHI_1,      // Creativity - φ^-1 ≈ 0.618 (Golden Ratio)
-    O5: PSI_3,      // Expression - Ψ³ ≈ 0.764
-    O6: PSI_4,      // Vision - Ψ⁴ ≈ 0.854
-    O7: 0.95        // Radiance - near unity
-};
+// Local references to module exports for backwards compatibility
+const _PH = window.OrchestratorPHI || window.PhiHarmonics || {};
+const PHI_1 = _PH.PHI_1 || 0.618033988749895;
+const PHI_2 = _PH.PHI_2 || 0.381966011250105;
+const PHI_3 = _PH.PHI_3 || 0.2360679774997896;
+const PHI_4 = _PH.PHI_4 || 0.1458980337503153;
+const PSI_3 = _PH.PSI_3 || 0.763932022500210;
+const PSI_4 = _PH.PSI_4 || 0.8541019662496847;
 
 // ========================================
 // SECTION 2: SESSION MANAGEMENT
@@ -1019,11 +983,11 @@ function updateProgress() {
  */
 async function selectCompanyTemplate(companyId) {
     // Re-entrancy guard: prevent duplicate calls from rapid clicks or event bubbling
-    if (_isSelectingCompanyTemplate) {
+    if (isSelectingCompanyTemplate()) {
         console.log(`[selectCompanyTemplate] Ignoring duplicate call for: ${companyId}`);
         return;
     }
-    _isSelectingCompanyTemplate = true;
+    setSelectingCompanyTemplate(true);
 
     console.log(`🏢 Selecting company template: ${companyId}`);
     showLoading('Loading organizational DNA...');
@@ -1208,7 +1172,7 @@ async function selectCompanyTemplate(companyId) {
         alert(`Failed to load ${companyId} template: ${error.message}`);
     } finally {
         // Always reset the re-entrancy guard
-        _isSelectingCompanyTemplate = false;
+        setSelectingCompanyTemplate(false);
     }
 }
 

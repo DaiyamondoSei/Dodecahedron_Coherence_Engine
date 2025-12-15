@@ -1466,6 +1466,10 @@
     <!-- Load Data Transformation Layer (CRITICAL: Bridge between UI and Engine) -->
     <script src="js/data-transformer.js"></script>
 
+    <!-- Phase 3: Load SSOT Constants (Single Source of Truth) -->
+    <script src="js/constants/phi-harmonics.js"></script>
+    <script src="js/constants/colors.js"></script>
+
     <!-- Load Unified Octave Thresholds (SINGLE SOURCE OF TRUTH for all octave calculations) -->
     <script src="js/constants/octave-thresholds.js"></script>
 
@@ -1699,6 +1703,12 @@
     <script src="js/face-wizard.js"></script>
     <script src="js/company-templates-bundle.js"></script>
     <script src="js/context-synthesizer.js"></script>
+
+    <!-- Phase 3: Orchestrator Modules (extracted from demo-orchestrator-logic.js) -->
+    <script src="js/utils/integrity-checksum.js"></script>
+    <script src="js/orchestrator/orchestrator-state.js"></script>
+
+    <!-- Main orchestrator logic (now depends on orchestrator modules above) -->
     <script src="js/demo-orchestrator-logic.js"></script>
 </body>
 
