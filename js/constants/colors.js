@@ -277,30 +277,7 @@ function interpolateOctaveColors(fromOctave, toOctave, t) {
 // EXPORTS
 // ========================================
 
-// ES Module exports
-export {
-    // Color arrays/objects
-    OCTAVE_COLORS_HEX,
-    OCTAVE_COLORS_CSS,
-    OCTAVE_COLORS_TAILWIND,
-    OCTAVE_NAMES,
-    OCTAVE_DESCRIPTIONS,
-    ELEMENT_COLORS,
-    HEALTH_COLORS,
-
-    // Helper functions
-    getOctaveColorHex,
-    getOctaveColorCSS,
-    getOctaveColorTailwind,
-    getOctaveName,
-    getElementColor,
-    getHealthColor,
-    hexToCSS,
-    cssToHex,
-    interpolateOctaveColors
-};
-
-// Browser global export
+// Browser global export (must come BEFORE ES module export to work in both contexts)
 if (typeof window !== 'undefined') {
     window.OctaveColors = {
         // Color arrays/objects

@@ -36,28 +36,33 @@
 
 /**
  * PHI Constants - Single source: js/constants/phi-harmonics.js
- * Fallback values provided for standalone/Node.js use
+ * Access via window.PhiHarmonics to avoid redeclaration conflicts
  */
-const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
-const PHI = _PH.PHI || 1.618033988749895;               // φ (Golden Ratio)
-const PHI_1 = _PH.PHI_1 || 0.618033988749895;           // φ^-1
-const PHI_2 = _PH.PHI_2 || 0.381966011250105;           // φ^-2
-const PHI_3 = _PH.PHI_3 || 0.2360679774997896;          // φ^-3
-const PHI_4 = _PH.PHI_4 || 0.1458980337503153;          // φ^-4
-const SQRT_PHI = _PH.SQRT_PHI || 1.272019649514069;     // √φ
-const SQRT_PHI_1 = _PH.SQRT_PHI_1 || 0.7861513777574233; // √(φ^-1)
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {
+    PHI: 1.618033988749895,
+    PHI_1: 0.618033988749895,
+    PHI_2: 0.381966011250105,
+    PHI_3: 0.2360679774997896,
+    PHI_4: 0.1458980337503153,
+    SQRT_PHI: 1.272019649514069,
+    SQRT_PHI_1: 0.7861513777574233
+};
+// Use _PH.PHI, _PH.PHI_1 etc. instead of bare PHI, PHI_1 to avoid conflicts
 const SQRT_2 = Math.SQRT2 || 1.4142135623730951;        // √2
-const PHI_CUBE_ROOT = Math.pow(PHI, 1/3);               // φ^(1/3) ≈ 1.175
+const PHI_CUBE_ROOT = Math.pow(_PH.PHI, 1/3);           // φ^(1/3) ≈ 1.175
 
 /**
- * Elemental colors for visualization
+ * Elemental colors - use from OctaveColors SSOT
+ * Access via: window.OctaveColors.ELEMENT_COLORS or _COLORS.ELEMENT_COLORS
  */
-const ELEMENT_COLORS = {
-    'Fire': '#FF4500',
-    'Water': '#4169E1',
-    'Earth': '#8B4513',
-    'Air': '#87CEEB',
-    'Ether': '#9370DB'
+const _COLORS = (typeof window !== 'undefined' && window.OctaveColors) || {
+    ELEMENT_COLORS: {
+        'Fire': '#FF4500',
+        'Water': '#4169E1',
+        'Earth': '#8B4513',
+        'Air': '#87CEEB',
+        'Ether': '#9370DB'
+    }
 };
 
 /**
@@ -74,31 +79,31 @@ const ELEMENT_COLORS = {
  */
 const ELEMENTAL_HARMONY = {
     'Fire-Fire': 1.0,
-    'Fire-Water': PHI,          // φ - creative tension (opposites)
-    'Fire-Earth': PHI_1,        // φ^-1 - grounding transformation
-    'Fire-Air': SQRT_2,         // √2 - dynamic catalyst
-    'Fire-Ether': SQRT_PHI,     // √φ - transcendent bridge
+    'Fire-Water': _PH.PHI,           // φ - creative tension (opposites)
+    'Fire-Earth': _PH.PHI_1,         // φ^-1 - grounding transformation
+    'Fire-Air': SQRT_2,              // √2 - dynamic catalyst
+    'Fire-Ether': _PH.SQRT_PHI,      // √φ - transcendent bridge
 
-    'Water-Fire': PHI,
+    'Water-Fire': _PH.PHI,
     'Water-Water': 1.0,
-    'Water-Earth': SQRT_PHI_1,  // √(φ^-1) - nurturing stability
-    'Water-Air': PHI_CUBE_ROOT, // φ^(1/3) - gentle flow
-    'Water-Ether': SQRT_PHI,
+    'Water-Earth': _PH.SQRT_PHI_1,   // √(φ^-1) - nurturing stability
+    'Water-Air': PHI_CUBE_ROOT,      // φ^(1/3) - gentle flow
+    'Water-Ether': _PH.SQRT_PHI,
 
-    'Earth-Fire': PHI_1,
-    'Earth-Water': SQRT_PHI_1,
+    'Earth-Fire': _PH.PHI_1,
+    'Earth-Water': _PH.SQRT_PHI_1,
     'Earth-Earth': 1.0,
-    'Earth-Air': SQRT_PHI_1,
+    'Earth-Air': _PH.SQRT_PHI_1,
     'Earth-Ether': 1.0,
 
     'Air-Fire': SQRT_2,
     'Air-Water': PHI_CUBE_ROOT,
-    'Air-Earth': SQRT_PHI_1,
+    'Air-Earth': _PH.SQRT_PHI_1,
     'Air-Air': 1.0,
     'Air-Ether': SQRT_2,
 
-    'Ether-Fire': SQRT_PHI,
-    'Ether-Water': SQRT_PHI,
+    'Ether-Fire': _PH.SQRT_PHI,
+    'Ether-Water': _PH.SQRT_PHI,
     'Ether-Earth': 1.0,
     'Ether-Air': SQRT_2,
     'Ether-Ether': 1.0
@@ -109,10 +114,10 @@ const ELEMENTAL_HARMONY = {
  * All values derived from Golden Ratio inverse powers
  */
 const PHI_THRESHOLDS = {
-    CRITICAL: PHI_4,    // φ^-4 ≈ 0.146 - severe misalignment (was ~0.21)
-    WARNING: PHI_3,     // φ^-3 ≈ 0.236 - needs attention (was ~0.34)
-    MODERATE: PHI_2,    // φ^-2 ≈ 0.382 - developing (was ~0.55)
-    HEALTHY: PHI_1      // φ^-1 ≈ 0.618 - thriving (was ~0.89)
+    CRITICAL: _PH.PHI_4,    // φ^-4 ≈ 0.146 - severe misalignment (was ~0.21)
+    WARNING: _PH.PHI_3,     // φ^-3 ≈ 0.236 - needs attention (was ~0.34)
+    MODERATE: _PH.PHI_2,    // φ^-2 ≈ 0.382 - developing (was ~0.55)
+    HEALTHY: _PH.PHI_1      // φ^-1 ≈ 0.618 - thriving (was ~0.89)
 };
 
 /**
@@ -280,9 +285,9 @@ function calculateVortexStrength(e1, e2, e3) {
  * @returns {string} Classification: 'synergy' | 'balanced' | 'conflict'
  */
 function classifyVortex(strength) {
-    if (strength < PHI_4) return 'synergy';    // φ^-4 ≈ 0.146 - Harmonious hub
-    if (strength < PHI_3) return 'balanced';   // φ^-3 ≈ 0.236 - Healthy tension
-    return 'conflict';                          // Bermuda Triangle - needs attention
+    if (strength < _PH.PHI_4) return 'synergy';    // φ^-4 ≈ 0.146 - Harmonious hub
+    if (strength < _PH.PHI_3) return 'balanced';   // φ^-3 ≈ 0.236 - Healthy tension
+    return 'conflict';                              // Bermuda Triangle - needs attention
 }
 
 /**
@@ -301,8 +306,8 @@ function classifyVortex(strength) {
  */
 function determineVortexDirection(e1, e2, e3) {
     const avgSentiment = (e1 + e2 + e3) / 3;
-    if (avgSentiment > PHI_1) return 'ascending';   // φ^-1 ≈ 0.618 threshold
-    if (avgSentiment < PHI_2) return 'descending';  // φ^-2 ≈ 0.382 threshold
+    if (avgSentiment > _PH.PHI_1) return 'ascending';   // φ^-1 ≈ 0.618 threshold
+    if (avgSentiment < _PH.PHI_2) return 'descending';  // φ^-2 ≈ 0.382 threshold
     return 'neutral';
 }
 
@@ -399,7 +404,7 @@ function synthesizeCustomContext(faceConfig, kpiData = null) {
             breathRatio: parseFloat(breathRatio.toFixed(3)),
             coherence: parseFloat(coherence.toFixed(3)),
             elementalNature: edgeDef.element,
-            color: ELEMENT_COLORS[edgeDef.element] || '#00ffcc',
+            color: _COLORS.ELEMENT_COLORS[edgeDef.element] || '#00ffcc',
             archetype: edgeDef.archetype,
             emergentName: edgeDef.archetype,
             theQuestion: edgeDef.question,
@@ -473,7 +478,7 @@ function synthesizeCustomContext(faceConfig, kpiData = null) {
     // - O3 (Relationships): avgEnergy < φ^-1 (≈0.618)
     // - O4+ (Creativity & beyond): avgEnergy >= φ^-1
     const avgEnergy = enhancedFaces.reduce((sum, f) => sum + f.sentiment, 0) / enhancedFaces.length;
-    const dominantOctave = avgEnergy < PHI_3 ? 1 : avgEnergy < 0.5 ? 2 : avgEnergy < PHI_1 ? 3 : 4;
+    const dominantOctave = avgEnergy < _PH.PHI_3 ? 1 : avgEnergy < 0.5 ? 2 : avgEnergy < _PH.PHI_1 ? 3 : 4;
 
     const context = {
         faces: enhancedFaces,
@@ -509,7 +514,7 @@ if (typeof window !== 'undefined') {
         classifyHealth,
         determineVortexDirection,
         safeParseNumeric,  // Utility for handling "Not Found" and NaN values
-        ELEMENT_COLORS,
+        ELEMENT_COLORS: _COLORS.ELEMENT_COLORS,
         ELEMENTAL_HARMONY,
         PHI_THRESHOLDS,
         BASE_EDGE_DEFINITIONS,
@@ -531,7 +536,7 @@ if (typeof module !== 'undefined' && module.exports) {
         classifyHealth,
         determineVortexDirection,
         safeParseNumeric,
-        ELEMENT_COLORS,
+        ELEMENT_COLORS: _COLORS.ELEMENT_COLORS,
         ELEMENTAL_HARMONY,
         PHI_THRESHOLDS,
         BASE_EDGE_DEFINITIONS,

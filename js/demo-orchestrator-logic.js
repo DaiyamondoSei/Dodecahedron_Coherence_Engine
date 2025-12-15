@@ -126,14 +126,9 @@
 //
 // ========================================
 
-// Local references to module exports for backwards compatibility
-const _PH = window.OrchestratorPHI || window.PhiHarmonics || {};
-const PHI_1 = _PH.PHI_1 || 0.618033988749895;
-const PHI_2 = _PH.PHI_2 || 0.381966011250105;
-const PHI_3 = _PH.PHI_3 || 0.2360679774997896;
-const PHI_4 = _PH.PHI_4 || 0.1458980337503153;
-const PSI_3 = _PH.PSI_3 || 0.763932022500210;
-const PSI_4 = _PH.PSI_4 || 0.8541019662496847;
+// PHI constants accessed via PhiHarmonics module (SSOT)
+// Do NOT redeclare PHI_* here - other modules already declare them
+// Access via: window.PhiHarmonics.PHI_1, .PHI_2, .PSI_3, etc.
 
 // ========================================
 // SECTION 2: SESSION MANAGEMENT
@@ -2437,7 +2432,7 @@ function initializeCoherenceHero() {
     } else if (coherence >= 0.5) {
         interpretation = 'Developing Coherence';
         detail = 'Your organization has solid foundations with room for growth. Focus on strengthening the connections between dimensions.';
-    } else if (coherence >= PHI_2) {  // φ^-2 ≈ 0.382 - Structure threshold
+    } else if (coherence >= 0.382) {  // φ^-2 ≈ 0.382 - Structure threshold
         interpretation = 'Emerging Coherence';
         detail = 'Your organization is in early development. The dodecahedron reveals specific areas requiring focused attention.';
     } else {
@@ -2462,7 +2457,7 @@ function initializeCoherenceHero() {
             borderColor = 'rgba(255, 215, 0, 0.6)';  // Gold for exceptional
         } else if (coherence >= 0.7) {
             borderColor = 'rgba(0, 255, 136, 0.5)';  // Green for strong
-        } else if (coherence < PHI_2) {  // Below φ^-2 ≈ 0.382 - Structure threshold
+        } else if (coherence < 0.382) {  // Below φ^-2 ≈ 0.382 - Structure threshold
             borderColor = 'rgba(255, 107, 107, 0.5)';  // Red for foundational
         }
         heroEl.style.borderColor = borderColor;
@@ -2922,7 +2917,7 @@ function transformToPortraitData(coherenceResults) {
         };
 
         // Add warnings for low coherence (using PHI-derived threshold)
-        if (faceCoherence < PHI_2) {  // φ^-2 ≈ 0.382
+        if (faceCoherence < 0.382) {  // φ^-2 ≈ 0.382
             faces[face.id].warnings.push('Critical: coherence below φ² threshold');
         } else if (faceCoherence < 0.5) {
             faces[face.id].warnings.push('Attention needed: developing coherence');
