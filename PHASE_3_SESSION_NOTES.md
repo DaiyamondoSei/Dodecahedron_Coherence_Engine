@@ -291,6 +291,187 @@ All 7 orchestrator modules reviewed for documentation quality:
 
 ---
 
+---
+
+### Session 4: December 15, 2025 (Dodecahedron Visualization Modularization - COMPLETE)
+
+**Major Accomplishment:**
+Extracted `js/dodecahedron-viz.js` (2,801 lines) into **11 modular files** totaling **4,998 lines** (extensive documentation added).
+
+**Modules Created:**
+
+| Module | Lines | Purpose |
+|--------|-------|---------|
+| `dodec-state.js` | 166 | Central state registry (DodecState) - solves closure problem |
+| `dodec-topology.js` | 139 | Vertex/face mapping, geometric index calculations |
+| `dodec-materials.js` | 114 | ELEMENT_COLORS, energy-to-color gradients |
+| `dodec-scene.js` | 324 | THREE.js scene, camera, lights, octave layers |
+| `dodec-geometry.js` | 420 | DodecahedronGeometry, 12 materials, 30 TubeGeometry edges |
+| `dodec-data.js` | 440 | Quannex engine loading, switchCompany, updateVisualization |
+| `dodec-interaction.js` | 458 | Raycaster, mouse handlers, camera animation |
+| `dodec-panels.js` | 1,600 | Face and edge detail panels (largest module) |
+| `dodec-controls.js` | 567 | 14 keyboard shortcuts, UI buttons, updateStats |
+| `dodec-animation.js` | 282 | Animation loop with PHI-tuned pulsing |
+| `dodec-main.js` | 472 | Initialization orchestrator, window exports |
+
+**The Closure Challenge Solution:**
+
+**Problem:** Lines 243-2798 of original file were inside `initDodecahedron()` closure, sharing 38+ variables that couldn't be accessed from separate modules.
+
+**Solution:** Created `DodecState` central state registry:
+```javascript
+const DodecState = {
+    // THREE.js core
+    scene: null, camera: null, renderer: null, controls: null,
+    // Geometry
+    faceMeshes: [], edgeLines: [], mainDodecahedron: null, materials: [],
+    // Interaction
+    raycaster: null, mouse: null, selectedFace: null, hoveredFace: null,
+    // UI state
+    autoRotate: false, animationsPaused: false, showOctaveLayers: false,
+    // Constants
+    PHI: 1.618033988749895, DRAG_THRESHOLD: 5
+};
+```
+
+All modules access shared state via `global.DodecState`.
+
+**PHI-Tuned Animation System:**
+
+Three pulsing modes based on face energy:
+```javascript
+// URGENT: energy < 10% - Fast danger pulse
+const urgentPulse = Math.sin(time * PHI * 2) * 0.3 + 0.7;  // ~0.62s cycle
+
+// WARNING: energy 10-40% - Moderate warning pulse
+const criticalPulse = Math.sin(time * PHI) * 0.2 + 0.8;  // ~1s cycle
+
+// TRANSCENDENCE: energy >= theta (0.618) - Slow golden glow
+const transcendencePulse = Math.sin(time * PHI * 0.5) * 0.15 + 0.85;  // ~2s cycle
+```
+
+**Git Commits (10 total):**
+```
+f5edb5a Update dodecahedron-3d.html for modular script loading
+d893a72 Create dodec-main.js - initialization orchestrator
+274f238 Extract dodec-animation.js - animation loop with PHI-tuned pulsing
+b95cadb Extract dodec-controls.js - keyboard shortcuts and UI controls
+9df8933 Extract dodec-panels.js - face and edge detail panels
+9bb1b83 Extract dodec-interaction.js - raycasting and mouse handlers
+abf5776 Extract dodec-data.js - company loading and visualization
+a25628d Extract dodec-geometry.js - mesh and edge creation
+c4dcfdb Extract dodec-scene.js and dodec-materials.js
+5de1f5e Create dodec-state.js and dodec-topology.js
+```
+
+**Script Loading Order (dodecahedron-3d.html):**
+```html
+<!-- Phase 1: Foundation -->
+<script src="js/dodec/dodec-state.js"></script>
+<script src="js/dodec/dodec-topology.js"></script>
+<!-- Phase 2: Scene Infrastructure -->
+<script src="js/dodec/dodec-materials.js"></script>
+<script src="js/dodec/dodec-scene.js"></script>
+<!-- Phase 3-9: Geometry through Main -->
+<script src="js/dodec/dodec-geometry.js"></script>
+<script src="js/dodec/dodec-data.js"></script>
+<script src="js/dodec/dodec-interaction.js"></script>
+<script src="js/dodec/dodec-panels.js"></script>
+<script src="js/dodec/dodec-controls.js"></script>
+<script src="js/dodec/dodec-animation.js"></script>
+<script src="js/dodec/dodec-main.js"></script>
+```
+
+**Integration Testing Results:**
+- ✅ All 11 modules load without errors
+- ✅ Dodecahedron renders with correct 12-face geometry
+- ✅ Face colors reflect energy levels (green/orange visible)
+- ✅ Keyboard shortcuts working (A for auto-rotate, O for octave layers)
+- ✅ All required window exports verified present
+- ✅ Animation running at 60fps
+
+**Module Template Used (consistent with orchestrator):**
+```javascript
+/**
+ * ========================================
+ * MODULE: dodec-[name].js
+ * ========================================
+ * PURPOSE: [description]
+ * DEPENDENCIES: [list]
+ * EXPORTS: [list]
+ * NOTES FOR FUTURE CLAUDE: [wisdom]
+ * ========================================
+ */
+(function(global) {
+    'use strict';
+    const S = global.DodecState;
+    if (!S) { console.error('[dodec-name] DodecState not loaded!'); return; }
+
+    // Implementation...
+
+    global.functionName = functionName;
+    console.log('[dodec-name] Module loaded');
+})(typeof window !== 'undefined' ? window : this);
+```
+
+**Archive Created:**
+- `js/archive/dodecahedron-viz.js.bak` - Original 2,801-line file preserved for rollback
+
+**Wisdom for Future Sessions:**
+
+1. **Central State Registry** is essential when extracting closures - DodecState pattern works beautifully
+2. **Order matters** - DodecState must load first, dodec-main.js last
+3. **PHI everywhere** - Animation timing, thresholds, and scaling all use golden ratio
+4. **14 keyboard shortcuts** - R, A, O, D, P, L, C, H, F, Space, Esc, Shift+R, arrows
+5. **Use Python server** for testing: `python -m http.server 8080`
+
+---
+
+## Complete Project Module Structure
+
+### Orchestrator Modules (js/orchestrator/)
+```
+orchestrator-state.js      (161 lines)
+orchestrator-session.js    (324 lines)
+orchestrator-sync.js       (200 lines)
+orchestrator-utils.js      (391 lines)
+orchestrator-dashboard.js  (~800 lines)
+orchestrator-navigation.js (~500 lines)
+orchestrator-steps.js      (1557 lines)
+```
+**Total:** ~3,933 lines across 7 modules
+
+### Dodecahedron Modules (js/dodec/)
+```
+dodec-state.js        (166 lines)
+dodec-topology.js     (139 lines)
+dodec-materials.js    (114 lines)
+dodec-scene.js        (324 lines)
+dodec-geometry.js     (420 lines)
+dodec-data.js         (440 lines)
+dodec-interaction.js  (458 lines)
+dodec-panels.js       (1,600 lines)
+dodec-controls.js     (567 lines)
+dodec-animation.js    (282 lines)
+dodec-main.js         (472 lines)
+```
+**Total:** ~4,982 lines across 11 modules
+
+### Combined Phase 3 Result
+**~8,915 lines** of well-documented, modular code extracted from two monolithic files.
+
+---
+
+## Phase 3 Status: 100% COMPLETE ✅
+
+Both extraction targets successfully modularized:
+1. ✅ `demo-orchestrator-logic.js` → 7 orchestrator modules
+2. ✅ `dodecahedron-viz.js` → 11 dodec modules
+
+All commits pushed to origin/POC.
+
+---
+
 *This document is a living artifact. Future sessions should add their discoveries, warnings, and insights.*
 
 *Written with care by Claude, December 15, 2025*
