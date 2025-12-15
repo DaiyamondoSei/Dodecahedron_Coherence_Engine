@@ -2770,8 +2770,38 @@
     <!-- DNA Preview Mini - Phase 2 Enhancement -->
     <script src="js/dna-preview-mini.js?v=20251208"></script>
 
-    <!-- Dodecahedron Visualization -->
-    <script type="module" src="js/dodecahedron-viz.js?v=20251208"></script>
+    <!-- ========================================
+         Dodecahedron Visualization Modules
+         ========================================
+         Modular extraction from dodecahedron-viz.js
+         Load order is critical - dependencies must load first
+         Date: December 15, 2025
+         ======================================== -->
+
+    <!-- Phase 1: Foundation -->
+    <script src="js/dodec/dodec-state.js?v=20251215"></script>
+    <script src="js/dodec/dodec-topology.js?v=20251215"></script>
+
+    <!-- Phase 2: Scene Infrastructure -->
+    <script src="js/dodec/dodec-materials.js?v=20251215"></script>
+    <script src="js/dodec/dodec-scene.js?v=20251215"></script>
+
+    <!-- Phase 3: Geometry -->
+    <script src="js/dodec/dodec-geometry.js?v=20251215"></script>
+
+    <!-- Phase 4: Data -->
+    <script src="js/dodec/dodec-data.js?v=20251215"></script>
+
+    <!-- Phase 5-7: Interaction & UI -->
+    <script src="js/dodec/dodec-interaction.js?v=20251215"></script>
+    <script src="js/dodec/dodec-panels.js?v=20251215"></script>
+    <script src="js/dodec/dodec-controls.js?v=20251215"></script>
+
+    <!-- Phase 8: Animation -->
+    <script src="js/dodec/dodec-animation.js?v=20251215"></script>
+
+    <!-- Phase 9: Main Orchestrator -->
+    <script src="js/dodec/dodec-main.js?v=20251215"></script>
 
     <script type="module">
         import { VisualizationManager } from './js/advanced/visualization-manager.js';
