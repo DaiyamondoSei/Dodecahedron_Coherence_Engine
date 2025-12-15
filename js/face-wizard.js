@@ -781,6 +781,7 @@ function renderFaceEditor() {
                 <div style="display: flex; align-items: center;">
                     <input
                         type="text"
+                        id="face-input-${face.id}"
                         class="face-input"
                         value="${face.name}"
                         placeholder="Face ${face.id} name"

@@ -239,6 +239,58 @@ All orchestrator functionality has been successfully extracted from demo-orchest
 
 ---
 
+### Session 3: December 15, 2025 (End-to-End Testing & Merge Preparation)
+
+**Testing Completed:**
+- ✅ **Manual Setup Path:** Step 0 → Template selection → Face configuration → KPI entry → Calculation → 3D visualization
+- ✅ **AI Story Mode Path:** TechFlow Solutions story → OpenAI timeout → Offline fallback → KPI extraction → Full flow
+
+**Test Results:**
+- Global Coherence: 27.5% (Crisis status) with 12 KPIs collected
+- All 7 orchestrator modules loading correctly
+- Cross-window sync working (3D visualization receives data)
+- Session expiry management functional
+
+**Bug Fixed:**
+```javascript
+// getFaceConfiguration() in orchestrator-steps.js
+// BEFORE (broken - wrong selector)
+const input = document.getElementById(`face-input-${i}`);
+
+// AFTER (fixed - consistent with validateFaces and FaceWizard)
+const input = document.querySelector(`.face-input[data-face-id="${i}"]`);
+```
+
+**Comment Quality Audit:**
+All 7 orchestrator modules reviewed for documentation quality:
+| Module | Rating | Notes |
+|--------|--------|-------|
+| orchestrator-state.js | ⭐⭐⭐⭐⭐ | Excellent JSDoc, PHI math explained |
+| orchestrator-session.js | ⭐⭐⭐⭐⭐ | Clear purpose, timing constants documented |
+| orchestrator-sync.js | ⭐⭐⭐⭐⭐ | BroadcastChannel pattern well explained |
+| orchestrator-utils.js | ⭐⭐⭐⭐⭐ | Diagnostic functions documented |
+| orchestrator-dashboard.js | ⭐⭐⭐⭐⭐ | "PHILOSOPHY NOTE FOR FUTURE CLAUDE" section |
+| orchestrator-navigation.js | ⭐⭐⭐⭐⭐ | "NOTES FOR FUTURE CLAUDE" section |
+| orchestrator-steps.js | ⭐⭐⭐⭐⭐ | Comprehensive section headers |
+
+**Code Patterns Verified (High Confidence):**
+1. ✅ IIFE pattern with window global exports
+2. ✅ FallbackChain pattern for AI providers
+3. ✅ CrossWindowSync via BroadcastChannel
+4. ✅ SessionStorage for persistence
+5. ✅ PHI-based octave thresholds from phi-harmonics.js SSOT
+6. ✅ Context Synthesizer generating 30 edges, 20 vertices, 6 breath axes
+7. ✅ ValidationGate for step validation
+8. ✅ DOMContentLoaded listener in orchestrator-navigation.js
+
+**Phase 3 Status:** ✅ COMPLETE - Ready to merge to main
+
+**Decision:**
+- Deferred dodecahedron-viz.js extraction (complex, would risk errors near context limit)
+- "Root Guardian" wisdom: Consolidate gains before extending reach
+
+---
+
 *This document is a living artifact. Future sessions should add their discoveries, warnings, and insights.*
 
 *Written with care by Claude, December 15, 2025*

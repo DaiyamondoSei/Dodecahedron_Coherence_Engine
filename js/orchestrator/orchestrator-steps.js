@@ -665,8 +665,9 @@
         const demoState = global.demoState;
         const faces = [];
 
+        // Use data-face-id selector (consistent with validateFaces and FaceWizard)
         for (let i = 1; i <= 12; i++) {
-            const input = document.getElementById(`face-input-${i}`);
+            const input = document.querySelector(`.face-input[data-face-id="${i}"]`);
             faces.push({
                 id: i,
                 name: input ? input.value.trim() : `Face ${i}`,
