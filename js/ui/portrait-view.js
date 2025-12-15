@@ -19,7 +19,9 @@
 // CONSTANTS
 // ========================================
 
-const PHI = 0.618;
+// PHI derived constants - single source: js/constants/phi-harmonics.js
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+const PHI = _PH.PHI_1 || 0.618033988749895;  // Note: This is φ^-1, the golden inverse
 
 const FACE_NAMES = {
     1: 'Financial Capital',

@@ -110,10 +110,9 @@ export class EdgeAnalyzer {
     const E_A = face1.faceEnergy || 0;
     const E_B = face2.faceEnergy || 0;
 
-    // Use epsilon from PHI_HARMONICS for numerical stability
-    const epsilon = (typeof window !== 'undefined' && window.PHI_HARMONICS)
-      ? window.PHI_HARMONICS.EPSILON
-      : 1e-10;
+    // Use epsilon from PhiHarmonics (single source: js/constants/phi-harmonics.js)
+    const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+    const epsilon = _PH.EPSILON || 1e-10;
 
     // NORMALIZED tension formula: |E_A - E_B| / (E_A + E_B + epsilon)
     // Range: [0, 1) - approaches 1 as difference grows relative to sum
@@ -161,15 +160,10 @@ export class EdgeAnalyzer {
     const E_A = face1.faceEnergy || 0;
     const E_B = face2.faceEnergy || 0;
 
-    // Use phi from PHI_HARMONICS, with fallback
-    const phi = (typeof window !== 'undefined' && window.PHI_HARMONICS)
-      ? window.PHI_HARMONICS.PHI
-      : 1.618033988749895;
-
-    // Epsilon for numerical stability
-    const epsilon = (typeof window !== 'undefined' && window.PHI_HARMONICS)
-      ? window.PHI_HARMONICS.EPSILON
-      : 1e-10;
+    // PHI constants - Single source: js/constants/phi-harmonics.js
+    const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+    const phi = _PH.PHI || 1.618033988749895;
+    const epsilon = _PH.EPSILON || 1e-10;
 
     // Logarithmic breath ratio using golden base
     // log_φ(E_B / E_A) = ln(E_B / E_A) / ln(φ)

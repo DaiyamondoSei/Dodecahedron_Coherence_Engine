@@ -100,11 +100,12 @@ class BreathAnalyzer {
       }
     ];
 
-    // Golden Ratio constants
-    this.PHI = 1.618033988749895;
-    this.PHI_INVERSE = 0.618033988749895;   // 1/φ
-    this.PHI_INV_2 = 0.381966011250105;     // φ^-2
-    this.EPSILON = 1e-10;
+    // Golden Ratio constants - using single source from phi-harmonics.js
+    const PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+    this.PHI = PH.PHI || 1.618033988749895;
+    this.PHI_INVERSE = PH.PHI_1 || PH.PHI_INV_1 || 0.618033988749895;   // 1/φ
+    this.PHI_INV_2 = PH.PHI_2 || PH.PHI_INV_2 || 0.381966011250105;     // φ^-2
+    this.EPSILON = PH.EPSILON || 1e-10;
 
     // Sprint 4 Task 31: φ-Based Breath Thresholds
     // ========================================

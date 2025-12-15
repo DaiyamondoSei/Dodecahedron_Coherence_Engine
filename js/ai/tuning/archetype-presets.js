@@ -25,14 +25,17 @@
  * @version Sprint 2 - Task 20
  */
 
-// PHI-DERIVED CONSTANTS (Sacred Geometry Foundation)
+// PHI-DERIVED CONSTANTS - Single source: js/constants/phi-harmonics.js
+// Fallback values for standalone/Node.js use
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+
 const PHI = {
-    NEG_4: 0.146,    // phi^-4 - Minimal
-    NEG_3: 0.236,    // phi^-3 - Low
-    NEG_2: 0.382,    // phi^-2 - Moderate-Low
-    NEG_1: 0.618,    // phi^-1 - Golden Ratio
-    HIGH: 0.764,     // 1 - phi^-3 - High (additive PHI harmonic)
-    MASTERY: 0.854   // phi^-1 + phi^-3 - Very High (additive PHI harmonic)
+    NEG_4: _PH.PHI_4 || 0.1458980337503153,    // φ^-4 - Minimal
+    NEG_3: _PH.PHI_3 || 0.2360679774997896,    // φ^-3 - Low
+    NEG_2: _PH.PHI_2 || 0.381966011250105,     // φ^-2 - Moderate-Low
+    NEG_1: _PH.PHI_1 || 0.618033988749895,     // φ^-1 - Golden Ratio
+    HIGH: _PH.PSI_3 || 0.763932022500210,      // 1 - φ^-3 = Ψ³ - High (additive PHI harmonic)
+    MASTERY: _PH.PSI_4 || 0.8541019662496847   // 1 - φ^-4 = Ψ⁴ - Very High (additive PHI harmonic)
 };
 
 /**

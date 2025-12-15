@@ -17,6 +17,27 @@
 
 import { PHI } from './archetype-presets.js';
 
+// ========================================
+// PHI CONSTANTS - Single Source Reference
+// ========================================
+// Primary source: js/constants/phi-harmonics.js
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+
+// PHI Powers (with fallbacks for module loading)
+const PHI_1 = _PH.PHI_1 || 0.618033988749895;           // φ^-1
+const PHI_2 = _PH.PHI_2 || 0.381966011250105;           // φ^-2
+const PHI_3 = _PH.PHI_3 || 0.2360679774997896;          // φ^-3
+const PHI_4 = _PH.PHI_4 || 0.1458980337503153;          // φ^-4
+
+// PSI Values (complements): PSI_n = 1 - φ^-n
+const PSI_3 = _PH.PSI_3 || 0.763932022500210;           // 1 - φ^-3
+const PSI_4 = _PH.PSI_4 || 0.8541019662496847;          // 1 - φ^-4
+
+// PHI-derived modifiers for octave scaling
+const PHI_PLUS_2 = 1 + PHI_2;                           // 1.382... (1 + φ^-2)
+const PHI_PLUS_3 = 1 + PHI_3;                           // 1.236... (1 + φ^-3)
+const PHI_PLUS_4 = 1 + PHI_4;                           // 1.146... (1 + φ^-4)
+
 /**
  * OCTAVE KAPPA MODIFIERS
  *
@@ -25,15 +46,20 @@ import { PHI } from './archetype-presets.js';
  * Higher octaves get stricter KAPPA (higher values = tighter standards)
  *
  * Modifier is multiplied with base KAPPA from archetype preset.
+ *
+ * PHI-based scaling:
+ * O1-O3: Use PHI^-1, PSI^3, PSI^4 (below 1.0 = forgiving)
+ * O4: Baseline 1.0
+ * O5-O7: Use 1+PHI^-4, 1+PHI^-3, 1+PHI^-2 (above 1.0 = demanding)
  */
 const OCTAVE_KAPPA_MODIFIERS = {
-    O1: 0.618,  // Very forgiving - survival focus
-    O2: 0.764,  // Forgiving - building foundation
-    O3: 0.854,  // Slightly forgiving - developing relationships
-    O4: 1.0,    // Balanced - established creativity
-    O5: 1.146,  // Slightly demanding - expressing value
-    O6: 1.236,  // Demanding - strategic vision
-    O7: 1.382   // Most demanding - industry leadership (PHI itself as multiplier)
+    O1: PHI_1,      // φ^-1 ≈ 0.618 - Very forgiving - survival focus
+    O2: PSI_3,      // Ψ³ ≈ 0.764 - Forgiving - building foundation
+    O3: PSI_4,      // Ψ⁴ ≈ 0.854 - Slightly forgiving - developing relationships
+    O4: 1.0,        // Balanced - established creativity
+    O5: PHI_PLUS_4, // 1 + φ^-4 ≈ 1.146 - Slightly demanding - expressing value
+    O6: PHI_PLUS_3, // 1 + φ^-3 ≈ 1.236 - Demanding - strategic vision
+    O7: PHI_PLUS_2  // 1 + φ^-2 ≈ 1.382 - Most demanding - industry leadership
 };
 
 /**
@@ -44,13 +70,13 @@ const OCTAVE_KAPPA_MODIFIERS = {
  * Higher octaves get stricter DELTA (shadows matter more at mastery level)
  */
 const OCTAVE_DELTA_MODIFIERS = {
-    O1: 0.618,  // Gentler - shadows expected in survival
-    O2: 0.764,
-    O3: 0.854,
+    O1: PHI_1,      // φ^-1 ≈ 0.618 - Gentler - shadows expected in survival
+    O2: PSI_3,      // Ψ³ ≈ 0.764
+    O3: PSI_4,      // Ψ⁴ ≈ 0.854
     O4: 1.0,
     O5: 1.0,
-    O6: 1.146,
-    O7: 1.236   // Stricter - radiant organizations should have fewer shadows
+    O6: PHI_PLUS_4, // 1 + φ^-4 ≈ 1.146
+    O7: PHI_PLUS_3  // 1 + φ^-3 ≈ 1.236 - Stricter - radiant orgs have fewer shadows
 };
 
 /**
@@ -59,15 +85,17 @@ const OCTAVE_DELTA_MODIFIERS = {
  * GAMMA controls spectral bandwidth - variance tolerance.
  * Lower octaves get wider GAMMA (more variance allowed)
  * Higher octaves get tighter GAMMA (coherence expected)
+ *
+ * Note: GAMMA inverts the pattern - higher values = more tolerance
  */
 const OCTAVE_GAMMA_MODIFIERS = {
-    O1: 1.236,  // Wide bandwidth - anything goes in survival
-    O2: 1.146,
+    O1: PHI_PLUS_3, // 1 + φ^-3 ≈ 1.236 - Wide bandwidth - anything goes in survival
+    O2: PHI_PLUS_4, // 1 + φ^-4 ≈ 1.146
     O3: 1.0,
     O4: 1.0,
-    O5: 0.854,
-    O6: 0.764,
-    O7: 0.618   // Tight bandwidth - coherence required at radiance
+    O5: PSI_4,      // Ψ⁴ ≈ 0.854
+    O6: PSI_3,      // Ψ³ ≈ 0.764
+    O7: PHI_1       // φ^-1 ≈ 0.618 - Tight bandwidth - coherence required at radiance
 };
 
 /**
@@ -232,13 +260,19 @@ function getModifierExplanation(octave) {
  * Calculate coherence thresholds adjusted for octave
  * @param {string} octave - Octave level
  * @returns {Object} Adjusted thresholds
+ *
+ * PHI-derived base thresholds:
+ * - excellent: Ψ³ (1 - φ^-3) ≈ 0.764 - Mastery level
+ * - good: φ^-1 ≈ 0.618 - Golden Ratio threshold
+ * - acceptable: φ^-2 ≈ 0.382 - Moderate threshold
+ * - concerning: φ^-3 ≈ 0.236 - Low threshold
  */
 function getOctaveThresholds(octave) {
     const baseThresholds = {
-        excellent: 0.764,    // psi^3 - Mastery
-        good: 0.618,         // phi^-1 - Golden
-        acceptable: 0.382,   // phi^-2 - Moderate
-        concerning: 0.236    // phi^-3 - Low
+        excellent: PSI_3,    // Ψ³ ≈ 0.764 - Mastery
+        good: PHI_1,         // φ^-1 ≈ 0.618 - Golden
+        acceptable: PHI_2,   // φ^-2 ≈ 0.382 - Moderate
+        concerning: PHI_3    // φ^-3 ≈ 0.236 - Low
     };
 
     const modifier = getOctaveModifier(octave, 'KAPPA');

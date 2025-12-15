@@ -18,6 +18,15 @@
 // ========================================
 // DODECAHEDRON TOPOLOGY
 // ========================================
+//
+// COMPREHENSIVE SOURCE: js/geometry/dodecahedron-topology.js
+// - window.DodecahedronTopology provides full topology with:
+//   FACES, EDGES, VERTICES, BREATH_AXES, ELEMENTS, helper functions
+//
+// This simplified version is kept for backward compatibility with
+// modules importing DODECAHEDRON_TOPOLOGY from mapping-context.js
+//
+// ========================================
 
 /**
  * Immutable topology data for the dodecahedron.
@@ -26,6 +35,8 @@
  * - 20 vertices (where 3 faces converge)
  *
  * Euler's Formula: V - E + F = 2 → 20 - 30 + 12 = 2 ✓
+ *
+ * @see js/geometry/dodecahedron-topology.js for comprehensive version
  */
 const DODECAHEDRON_TOPOLOGY = {
     // 6 Breath Axes - polar opposite face pairs

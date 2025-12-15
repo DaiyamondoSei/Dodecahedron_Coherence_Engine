@@ -20,9 +20,17 @@
 import { getOctaveKPIReference, OCTAVES, OCTAVE_NAMES, OCTAVE_FOCUS, FACE_NAMES } from './octave-kpi-reference.js';
 
 // PHI-based thresholds for coherence scoring
-const PHI = 0.618;
-const PHI_SQUARED = 0.382;
-const PHI_PLUS = 0.764;
+// Single source: js/constants/phi-harmonics.js (window.PhiHarmonics)
+// Note: These are PHI POWERS (φ^-n), not PHI itself
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+const PHI_1 = _PH.PHI_1 || 0.618033988749895;     // φ^-1 (creativity threshold)
+const PHI_2 = _PH.PHI_2 || 0.381966011250105;     // φ^-2 (structure threshold)
+const PSI_3 = _PH.PSI_3 || 0.763932022500210;     // 1-φ^-3 (expression threshold)
+
+// Legacy aliases for backward compatibility
+const PHI = PHI_1;          // Note: This is φ^-1, not φ itself
+const PHI_SQUARED = PHI_2;  // Note: This is φ^-2, not φ²
+const PHI_PLUS = PSI_3;     // Note: This is ψ₃ = 1-φ^-3
 
 /**
  * OctaveStackBuilder - Orchestrates hybrid KPI generation

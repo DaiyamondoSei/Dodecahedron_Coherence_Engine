@@ -68,13 +68,14 @@
  * ========================================
  */
 
-// Check if unified thresholds are loaded
+// Check if unified modules are loaded (prefer PhiHarmonics as primary single source)
+const _phiHarmonics = (typeof window !== 'undefined' && window.PhiHarmonics) || null;
 const _unifiedThresholds = (typeof window !== 'undefined' && window.OctaveThresholds) || null;
 
-// PHI Constants - use unified if available (local to this IIFE)
-const PHI = _unifiedThresholds?.PHI || 1.618033988749895;
-const PHI_INVERSE = _unifiedThresholds?.PHI_INVERSE || 0.618033988749895;
-const PHI_SQUARED_INVERSE = _unifiedThresholds?.PHI_SQUARED_INVERSE || 0.381966011250105;  // φ^-2
+// PHI Constants - use PhiHarmonics first, then OctaveThresholds, then fallback
+const PHI = _phiHarmonics?.PHI || _unifiedThresholds?.PHI || 1.618033988749895;
+const PHI_INVERSE = _phiHarmonics?.PHI_1 || _unifiedThresholds?.PHI_INVERSE || 0.618033988749895;
+const PHI_SQUARED_INVERSE = _phiHarmonics?.PHI_2 || _unifiedThresholds?.PHI_SQUARED_INVERSE || 0.381966011250105;  // φ^-2
 
 /**
  * Octave definitions with thresholds

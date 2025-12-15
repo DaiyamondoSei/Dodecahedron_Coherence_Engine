@@ -400,52 +400,76 @@ class TuningConfig {
  * The dodecahedron is constructed from φ, therefore ALL mathematical
  * constants in the system derive from φ for self-similarity at every level.
  *
+ * SINGLE SOURCE OF TRUTH: js/constants/phi-harmonics.js
+ *
+ * This file uses window.PhiHarmonics when available (loaded from phi-harmonics.js),
+ * with a fallback for standalone usage (e.g., unit testing).
+ *
  * Reference: Master Plan "φ-Harmonic Constant System (AUTHORITATIVE)"
  */
-const PHI = (1 + Math.sqrt(5)) / 2;  // Source of truth: 1.618033988749895
 
-const PHI_HARMONICS = {
-  // Core phi values
-  PHI: PHI,                              // 1.618033988749895
-  PHI_2: PHI * PHI,                      // 2.618033988749895
-
-  // Inverse powers of phi (0 < x < 1)
-  PHI_INV_1: 1 / PHI,                    // 0.618033988749895 (high/creative)
-  PHI_INV_2: 1 / (PHI * PHI),            // 0.381966011250105 (low/receptive)
-  PHI_INV_3: 1 / Math.pow(PHI, 3),       // 0.236067977499790 (very low, CV lambda)
-  PHI_INV_4: 1 / Math.pow(PHI, 4),       // 0.145898033750315 (minimal threshold)
-
-  // Psi derived values (1 - phi^-n)
-  PSI_3: 1 - 1 / Math.pow(PHI, 3),       // 0.763932022500210 (very high)
-  PSI_4: 1 - 1 / Math.pow(PHI, 4),       // 0.854101966249685 (near maximum)
-
-  // Numerical stability
-  EPSILON: 1e-10,
-
-  // Semantic aliases for domain-specific usage
-  get CV_LAMBDA() { return this.PHI_INV_3; },      // Variance penalty coefficient
-  get BREATH_BASE() { return this.PHI; },          // Log base for breath ratio
-  get MASTERY_THRESHOLD() { return this.PSI_3; },  // 76.4% mastery before octave advance
-
-  // Curvature parameters for KPI normalization (κ)
-  // survival: sublinear curve (forgiving early gains)
-  // growth: superlinear curve (rewards excellence)
-  // completion: linear (default)
-  CURVATURE: {
-    survival: 1 / PHI,    // 0.618 - asymptotic, forgiving
-    growth: PHI,          // 1.618 - exponential, rewarding
-    completion: 1.0       // linear progression
+// Check for single-source module (phi-harmonics.js)
+const PHI_HARMONICS = (function() {
+  // If phi-harmonics.js has loaded, use it as the single source
+  if (typeof window !== 'undefined' && window.PhiHarmonics) {
+    console.log('📐 main.js: Using PhiHarmonics from single-source module');
+    return window.PhiHarmonics;
   }
-};
 
-// Freeze to prevent accidental mutation
-Object.freeze(PHI_HARMONICS);
-Object.freeze(PHI_HARMONICS.CURVATURE);
+  // Fallback: Define locally for standalone use or testing
+  console.log('📐 main.js: PhiHarmonics not found, using local definition');
 
-// Export for global access (used by other modules)
-if (typeof window !== 'undefined') {
+  const PHI = (1 + Math.sqrt(5)) / 2;
+
+  const harmonics = {
+    // Core phi values
+    PHI: PHI,
+    PHI_SQUARED: PHI * PHI,
+
+    // PHI Powers (φ^-n) - using both naming conventions
+    PHI_1: 1 / PHI,
+    PHI_2: 1 / (PHI * PHI),
+    PHI_3: 1 / Math.pow(PHI, 3),
+    PHI_4: 1 / Math.pow(PHI, 4),
+
+    // Legacy aliases (backward compatibility)
+    PHI_INV_1: 1 / PHI,
+    PHI_INV_2: 1 / (PHI * PHI),
+    PHI_INV_3: 1 / Math.pow(PHI, 3),
+    PHI_INV_4: 1 / Math.pow(PHI, 4),
+
+    // PSI values (1 - φ^-n)
+    PSI_3: 1 - 1 / Math.pow(PHI, 3),
+    PSI_4: 1 - 1 / Math.pow(PHI, 4),
+    PSI_5: 1 - 1 / Math.pow(PHI, 5),
+
+    // Numerical stability
+    EPSILON: 1e-10,
+
+    // Semantic aliases
+    CV_LAMBDA: 1 / Math.pow(PHI, 3),
+    BREATH_BASE: PHI,
+    MASTERY_THRESHOLD: 1 - 1 / Math.pow(PHI, 3),
+
+    // Curvature parameters
+    CURVATURE: Object.freeze({
+      survival: 1 / PHI,
+      growth: PHI,
+      completion: 1.0
+    })
+  };
+
+  Object.freeze(harmonics);
+  return harmonics;
+})();
+
+// Export for global access (maintain backward compatibility)
+if (typeof window !== 'undefined' && !window.PHI_HARMONICS) {
   window.PHI_HARMONICS = PHI_HARMONICS;
 }
+
+// Local PHI constant for direct use in this file
+const PHI = PHI_HARMONICS.PHI;
 
 // ========================================
 // MODEL: KPI (Key Performance Indicator)

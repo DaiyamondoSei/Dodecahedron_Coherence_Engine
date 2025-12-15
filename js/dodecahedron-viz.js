@@ -106,7 +106,8 @@ window.getDodecahedronVertices = function () {
 
     // Fallback to theoretical positions if geometry not available
     console.warn('⚠️ Using fallback theoretical vertex positions');
-    const phi = (1 + Math.sqrt(5)) / 2;
+    const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+    const phi = _PH.PHI || (1 + Math.sqrt(5)) / 2;
     const radius = 2;
 
     const fallbackVertices = [
@@ -372,7 +373,9 @@ function initDodecahedron() {
     scene.add(topLight);
 
     // Golden ratio constant for phi-tuned animations
-    const PHI = 1.618033988749895;
+    // Single source: js/constants/phi-harmonics.js
+    const _PHI_SRC = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+    const PHI = _PHI_SRC.PHI || 1.618033988749895;
 
     // ========================================
     // DATA MANAGEMENT
@@ -997,12 +1000,18 @@ function initDodecahedron() {
     const highlightShadowFaces = (faceIds, severity = 'moderate') => {
         if (!window.dodecahedronMaterials || !Array.isArray(faceIds)) return;
 
+        // ========================================
         // PHI-derived intensity values
-        const PHI_INV = 0.618;
+        // Single source: js/constants/phi-harmonics.js
+        // ========================================
+        const _PH = window.PhiHarmonics || {};
+        const PHI_1 = _PH.PHI_1 || 0.618033988749895;  // φ^-1
+        const PHI_2 = _PH.PHI_2 || 0.381966011250105;  // φ^-2
+
         const intensityMap = {
             critical: 1.0,
-            high: PHI_INV,              // 0.618
-            moderate: PHI_INV * PHI_INV // 0.382
+            high: PHI_1,    // φ^-1 ≈ 0.618
+            moderate: PHI_2 // φ^-2 ≈ 0.382
         };
 
         const intensity = intensityMap[severity] || intensityMap.moderate;

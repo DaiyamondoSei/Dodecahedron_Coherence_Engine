@@ -9,8 +9,10 @@
 
 class PentagramOverlay {
     constructor() {
-        this.PHI = 1.618033988749895; // Golden ratio
-        this.FIBONACCI_SEQUENCE = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144];
+        // Single source: js/constants/phi-harmonics.js
+        const PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+        this.PHI = PH.PHI || 1.618033988749895; // Golden ratio
+        this.FIBONACCI_SEQUENCE = PH.FIBONACCI || [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144];
 
         // Element colors (5 pillars)
         this.ELEMENT_COLORS = {

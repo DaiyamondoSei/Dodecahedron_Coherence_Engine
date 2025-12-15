@@ -16,14 +16,30 @@
 
 import { AIProvider } from './ai-provider.js';
 
-// PHI-DERIVED CONSTANTS for octave thresholds
+// ========================================
+// PHI CONSTANTS - Single Source Reference
+// ========================================
+// Primary source: js/constants/phi-harmonics.js
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+
+/**
+ * PHI-DERIVED CONSTANTS for octave thresholds
+ *
+ * Maps the 7 developmental octaves to PHI-based sentiment values:
+ * - PHI_NEG_4 (φ^-4): O1 Survival - Minimal viability
+ * - PHI_NEG_3 (φ^-3): O2 Structure - Low threshold
+ * - PHI_NEG_2 (φ^-2): O3 Relationships - Moderate-Low
+ * - PHI_NEG_1 (φ^-1): O4 Creativity - Golden Ratio (Moderate-High)
+ * - PSI_3 (1-φ^-3): O5-O6 Expression/Vision - High (Mastery)
+ * - PSI_4 (1-φ^-4): O7 Radiance - Very High
+ */
 const PHI_THRESHOLDS = {
-    PHI_NEG_4: 0.146,  // Minimal
-    PHI_NEG_3: 0.236,  // Low
-    PHI_NEG_2: 0.382,  // Moderate-Low
-    PHI_NEG_1: 0.618,  // Moderate-High
-    PSI_3: 0.764,      // High (Mastery)
-    PSI_4: 0.854       // Very High
+    PHI_NEG_4: _PH.PHI_4 || 0.1458980337503153,  // φ^-4 ≈ 0.146 - Minimal
+    PHI_NEG_3: _PH.PHI_3 || 0.2360679774997896,  // φ^-3 ≈ 0.236 - Low
+    PHI_NEG_2: _PH.PHI_2 || 0.381966011250105,   // φ^-2 ≈ 0.382 - Moderate-Low
+    PHI_NEG_1: _PH.PHI_1 || 0.618033988749895,   // φ^-1 ≈ 0.618 - Moderate-High
+    PSI_3: _PH.PSI_3 || 0.763932022500210,       // Ψ³ ≈ 0.764 - High (Mastery)
+    PSI_4: _PH.PSI_4 || 0.8541019662496847       // Ψ⁴ ≈ 0.854 - Very High
 };
 
 /**

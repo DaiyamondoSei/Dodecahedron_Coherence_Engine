@@ -18,15 +18,42 @@
 import { MappingContext, DODECAHEDRON_TOPOLOGY } from '../core/mapping-context.js';
 import { getProvider } from '../providers/index.js';
 
-// PHI-derived sentiment thresholds
+// ========================================
+// PHI CONSTANTS - Single Source Reference
+// ========================================
+// Primary source: js/constants/phi-harmonics.js
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+
+// PHI Powers (with fallbacks for module loading)
+const PHI_1 = _PH.PHI_1 || 0.618033988749895;           // φ^-1
+const PHI_2 = _PH.PHI_2 || 0.381966011250105;           // φ^-2
+const PHI_3 = _PH.PHI_3 || 0.2360679774997896;          // φ^-3
+const PHI_4 = _PH.PHI_4 || 0.1458980337503153;          // φ^-4
+
+// PSI Values (complements): PSI_n = 1 - φ^-n
+const PSI_3 = _PH.PSI_3 || 0.763932022500210;           // 1 - φ^-3
+const PSI_4 = _PH.PSI_4 || 0.8541019662496847;          // 1 - φ^-4
+
+/**
+ * PHI-derived sentiment thresholds
+ *
+ * These thresholds map to the 7 octaves of organizational development:
+ * - MINIMAL (φ^-4): O1 Survival threshold
+ * - LOW (φ^-3): O2 Structure threshold
+ * - MODERATE_LOW (φ^-2): O3-O4 transition
+ * - NEUTRAL (0.5): Center point (mathematical, not PHI-derived)
+ * - MODERATE_HIGH (φ^-1): O4-O5 transition (Golden Ratio)
+ * - HIGH (Ψ³): O5-O6 transition
+ * - MASTERY (Ψ⁴): O6-O7 transition
+ */
 const PHI_SENTIMENTS = {
-    MINIMAL: 0.146,
-    LOW: 0.236,
-    MODERATE_LOW: 0.382,
-    NEUTRAL: 0.5,
-    MODERATE_HIGH: 0.618,
-    HIGH: 0.764,
-    MASTERY: 0.854
+    MINIMAL: PHI_4,         // φ^-4 ≈ 0.146
+    LOW: PHI_3,             // φ^-3 ≈ 0.236
+    MODERATE_LOW: PHI_2,    // φ^-2 ≈ 0.382
+    NEUTRAL: 0.5,           // Center point (not PHI-derived)
+    MODERATE_HIGH: PHI_1,   // φ^-1 ≈ 0.618
+    HIGH: PSI_3,            // Ψ³ ≈ 0.764
+    MASTERY: PSI_4          // Ψ⁴ ≈ 0.854
 };
 
 // Lens configurations

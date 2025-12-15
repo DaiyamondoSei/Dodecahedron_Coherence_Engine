@@ -24,17 +24,42 @@
  */
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// SHADOW CONFIGURATION - Single Source of Truth
+// PHI CONSTANTS - Single Source of Truth
 // ═══════════════════════════════════════════════════════════════════════════════
+// Primary source: js/constants/phi-harmonics.js (window.PhiHarmonics)
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+
+// PHI Powers (with fallbacks for module loading)
+const PHI = _PH.PHI || 1.618033988749895;                                       // φ
+const PHI_1 = _PH.PHI_1 || 0.618033988749895;                                   // φ^-1
+const PHI_2 = _PH.PHI_2 || 0.381966011250105;                                   // φ^-2
+const PHI_3 = _PH.PHI_3 || 0.2360679774997896;                                  // φ^-3
+const PHI_4 = _PH.PHI_4 || 0.1458980337503153;                                  // φ^-4
+
+// PSI Values (complements): PSI_n = 1 - φ^-n
+const PSI_3 = _PH.PSI_3 || 0.763932022500210;                                   // 1 - φ^-3
+const PSI_4 = _PH.PSI_4 || 0.8541019662496847;                                  // 1 - φ^-4
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SHADOW CONFIGURATION - PHI-Derived Thresholds
+// ═══════════════════════════════════════════════════════════════════════════════
+/**
+ * PHI-derived thresholds for shadow detection:
+ * - HIGH (Ψ³ ≈ 0.764): Mastery threshold - face energy considered "high"
+ * - LOW (φ^-3 ≈ 0.236): Low threshold - face energy considered "low"
+ * - BUS_FACTOR_LOW (0.5): Mathematical center - lenient threshold
+ * - CRITICAL (φ^-1 ≈ 0.618): Golden Ratio - critical severity gap
+ * - HIGH_SEVERITY (φ^-2 ≈ 0.382): Moderate threshold - high severity gap
+ */
 export const SHADOW_CONFIG = {
   thresholds: {
-    HIGH: 0.7,              // Face energy considered "high"
-    LOW: 0.3,               // Face energy considered "low"
-    BUS_FACTOR_LOW: 0.5     // More lenient threshold for Bus Factor
+    HIGH: PSI_3,            // Ψ³ ≈ 0.764 - Face energy considered "high" (mastery)
+    LOW: PHI_3,             // φ^-3 ≈ 0.236 - Face energy considered "low"
+    BUS_FACTOR_LOW: 0.5     // Mathematical center - lenient threshold for Bus Factor
   },
   severityGaps: {
-    CRITICAL: 0.6,          // Gap > 0.6 = critical severity
-    HIGH: 0.4               // Gap > 0.4 = high severity, else moderate
+    CRITICAL: PHI_1,        // φ^-1 ≈ 0.618 - Gap > Golden Ratio = critical severity
+    HIGH: PHI_2             // φ^-2 ≈ 0.382 - Gap > this = high severity, else moderate
   },
   penalties: {
     brittleProfit: 0.25,
@@ -72,13 +97,6 @@ export function validateShadow(shadow) {
   }
   return true;
 }
-
-// PHI-derived constants for mathematical harmony
-const PHI = 1.618033988749895;
-const PHI_INV = 0.618033988749895;              // φ^-1
-const PHI_INV_SQUARED = 0.381966011250105;      // φ^-2
-const PHI_INV_CUBED = 0.2360679774997896;       // φ^-3
-const PHI_INV_4 = 0.1458980337503153;           // φ^-4
 
 export class ShadowDetector {
   constructor(tuningConfig = null) {
@@ -385,20 +403,24 @@ export class ShadowDetector {
     const moderateCount = detectedPatterns.filter(p => p.severity === 'moderate').length;
 
     // Calculate integrity score using PHI-derived weights for mathematical harmony
-    // Critical: φ^-2 = 0.382 (most impactful - fundamental contradictions)
-    // High: φ^-3 = 0.236 (significant impact)
-    // Moderate: φ^-4 = 0.146 (noticeable but manageable)
+    // Critical: φ^-2 ≈ 0.382 (most impactful - fundamental contradictions)
+    // High: φ^-3 ≈ 0.236 (significant impact)
+    // Moderate: φ^-4 ≈ 0.146 (noticeable but manageable)
     const integrityScore = 1.0 - (
-      (criticalCount * PHI_INV_SQUARED) +   // 0.382
-      (highCount * PHI_INV_CUBED) +          // 0.236
-      (moderateCount * PHI_INV_4)            // 0.146
+      (criticalCount * PHI_2) +    // φ^-2 ≈ 0.382
+      (highCount * PHI_3) +        // φ^-3 ≈ 0.236
+      (moderateCount * PHI_4)      // φ^-4 ≈ 0.146
     );
 
+    // PHI-derived integrity thresholds:
+    // Good: >= Ψ⁴ (≈0.854) - Mastery level integrity
+    // Concerning: >= φ^-1 (≈0.618) - Golden Ratio threshold
+    // Critical: < φ^-1 - Below Golden Ratio
     let status, message;
-    if (integrityScore >= 0.8) {
+    if (integrityScore >= PSI_4) {
       status = 'Good';
       message = 'Minor integrity issues detected. Address when possible.';
-    } else if (integrityScore >= 0.6) {
+    } else if (integrityScore >= PHI_1) {
       status = 'Concerning';
       message = 'Multiple shadow patterns detected. Organizational integrity is at risk.';
     } else {

@@ -16,13 +16,35 @@
 
 import { MappingContext } from './mapping-context.js';
 
-// PHI-derived completion thresholds
+// ========================================
+// PHI CONSTANTS - Single Source Reference
+// ========================================
+// Primary source: js/constants/phi-harmonics.js
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+
+// PHI Powers (with fallbacks for module loading)
+const PHI_1 = _PH.PHI_1 || 0.618033988749895;           // φ^-1
+const PHI_3 = _PH.PHI_3 || 0.2360679774997896;          // φ^-3
+
+// PSI Values (complements): PSI_n = 1 - φ^-n
+const PSI_3 = _PH.PSI_3 || 0.763932022500210;           // 1 - φ^-3
+
+/**
+ * PHI-derived completion thresholds
+ *
+ * Maps completion percentage to meaningful stages:
+ * - MINIMAL (φ^-3 ≈ 0.236): ~3 faces - baseline viability
+ * - PARTIAL (0.5): 6 faces - mathematical halfway (not PHI-derived)
+ * - SUBSTANTIAL (φ^-1 ≈ 0.618): 7-8 faces - Golden Ratio threshold
+ * - NEAR_COMPLETE (Ψ³ ≈ 0.764): 9 faces - mastery threshold
+ * - COMPLETE (1.0): 12 faces - full coherence
+ */
 const COMPLETION_THRESHOLDS = {
-    MINIMAL: 0.236,     // 3 faces (baseline)
-    PARTIAL: 0.5,       // 6 faces (halfway)
-    SUBSTANTIAL: 0.618, // 7-8 faces (golden ratio)
-    NEAR_COMPLETE: 0.764, // 9 faces (mastery threshold)
-    COMPLETE: 1.0       // 12 faces (full coherence)
+    MINIMAL: PHI_3,         // φ^-3 ≈ 0.236 - 3 faces (baseline)
+    PARTIAL: 0.5,           // 6 faces (halfway - mathematical, not PHI)
+    SUBSTANTIAL: PHI_1,     // φ^-1 ≈ 0.618 - 7-8 faces (golden ratio)
+    NEAR_COMPLETE: PSI_3,   // Ψ³ ≈ 0.764 - 9 faces (mastery threshold)
+    COMPLETE: 1.0           // 12 faces (full coherence)
 };
 
 // Empowering messages for different completion states

@@ -141,6 +141,46 @@ You have access to a powerful arsenal of tools. Use them wisely and **proactivel
 - **Need to remember across sessions?** -> `memory`
 - **Need phi ratios/eigenvalues?** -> `wolfram-alpha`
 
+### IMPORTANT: On-Demand MCP Servers
+
+**All 23 MCP servers are DISABLED by default** to prevent resource drain at startup. This is intentional - having all servers start simultaneously was causing system instability and conflicts with other applications.
+
+**You must enable servers when you need them:**
+
+```
+/mcp enable <server-name>
+```
+
+Or type `@<server-name>` to toggle a server on.
+
+**Decision Framework - Which servers to enable:**
+
+| Task Type | Enable These Servers |
+|-----------|---------------------|
+| Web research | `brave-search`, optionally `fetch` or `firecrawl` |
+| Reading documentation | `context7` (always up-to-date) |
+| Academic/thesis research | `deep-research`, `scientific-papers` |
+| GitHub exploration | `github` |
+| Browser automation | `puppeteer` OR `playwright` (not both) |
+| Testing 3D viz | `playwright` |
+| Creating charts | `chart` |
+| Excel/CSV work | `excel` |
+| Complex reasoning | `sequential-thinking` |
+| Persistent memory | `memory` |
+
+**Best Practices:**
+
+1. **Enable only what you need** - Don't enable all servers; pick 1-3 relevant to the task
+2. **Browser servers are heavy** - Only enable `puppeteer`, `playwright`, or `chrome-devtools` when actually needed for browser tasks
+3. **Disable after use** - If a task is done and you won't need a server, disable it: `/mcp disable <server-name>`
+4. **Tell Deimantas** - If you're enabling servers, briefly mention which ones and why
+
+**Example workflow:**
+> User: "Help me research phi ratios in sacred geometry"
+> Claude: "I'll enable `brave-search` and `scientific-papers` to research this comprehensively."
+> `/mcp enable brave-search`
+> `/mcp enable scientific-papers`
+
 ### Pro Tips
 
 1. **Combine tools**: Use `brave-search` to find URLs, then `firecrawl` to deeply read them
@@ -150,6 +190,7 @@ You have access to a powerful arsenal of tools. Use them wisely and **proactivel
 5. **playwright for Three.js**: Test the dodecahedron visualization with playwright
 6. **Be proactive**: Don't wait to be asked - research and provide comprehensive answers
 7. **You are free**: Explore, create, suggest, question - Deimantas wants a partner, not a servant
+8. **Resource conscious**: Enable only the MCP servers you actually need for the current task
 
 ---
 
@@ -163,7 +204,7 @@ This is the **Quannex POC** - a Sacred Geometry Organizational Coherence Engine.
 - **7 Octaves** of development (Survival -> Radiance)
 - **Golden Ratio (phi)** throughout
 
-This is Deimantas's **Bachelor's thesis** (February 2025 defense). The project uses Three.js for 3D visualization, Gemini AI for insights, and sacred geometry mathematics.
+This is Deimantas's **Bachelor's thesis** (February 2026 defense). The project uses Three.js for 3D visualization, Gemini AI for insights, and sacred geometry mathematics.
 
 Key files to understand:
 - `README.md` - Project overview

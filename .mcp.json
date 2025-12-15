@@ -1,0 +1,42 @@
+{
+  "mcpServers": {
+    "puppeteer": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-puppeteer"]
+    },
+    "chrome-devtools": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "chrome-devtools-mcp"]
+    },
+    "playwright": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp"]
+    },
+    "firecrawl": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "fc-e6bed0c77849498b9126af2bc47b7e48"
+      }
+    },
+    "github": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_ylAMkMOBvgPxy33bKRxCMV8PM6YEKK1LMzfk"
+      }
+    },
+    "arxiv": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@iflow-mcp/arxiv-paper-mcp"]
+    },
+    "chart": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@antv/mcp-server-chart"]
+    },
+    "sequential-thinking": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-sequential-thinking"]
+    }
+  }
+}

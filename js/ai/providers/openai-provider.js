@@ -22,14 +22,25 @@
 
 import { AIProvider } from './ai-provider.js';
 
-// PHI-DERIVED CONSTANTS for octave thresholds (same as Gemini)
+// ========================================
+// PHI CONSTANTS - Single Source Reference
+// ========================================
+// Primary source: js/constants/phi-harmonics.js
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+
+/**
+ * PHI-DERIVED CONSTANTS for octave thresholds (same structure as Gemini)
+ *
+ * Maps the 7 developmental octaves to PHI-based sentiment values.
+ * See gemini-provider.js for detailed octave mapping documentation.
+ */
 const PHI_THRESHOLDS = {
-    PHI_NEG_4: 0.146,
-    PHI_NEG_3: 0.236,
-    PHI_NEG_2: 0.382,
-    PHI_NEG_1: 0.618,
-    PSI_3: 0.764,
-    PSI_4: 0.854
+    PHI_NEG_4: _PH.PHI_4 || 0.1458980337503153,  // φ^-4 ≈ 0.146 - Minimal
+    PHI_NEG_3: _PH.PHI_3 || 0.2360679774997896,  // φ^-3 ≈ 0.236 - Low
+    PHI_NEG_2: _PH.PHI_2 || 0.381966011250105,   // φ^-2 ≈ 0.382 - Moderate-Low
+    PHI_NEG_1: _PH.PHI_1 || 0.618033988749895,   // φ^-1 ≈ 0.618 - Moderate-High
+    PSI_3: _PH.PSI_3 || 0.763932022500210,       // Ψ³ ≈ 0.764 - High (Mastery)
+    PSI_4: _PH.PSI_4 || 0.8541019662496847       // Ψ⁴ ≈ 0.854 - Very High
 };
 
 // OpenAI-specific defaults

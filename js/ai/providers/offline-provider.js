@@ -21,13 +21,15 @@
 
 import { AIProvider } from './ai-provider.js';
 
-// PHI-DERIVED sentiment defaults
+// PHI-DERIVED sentiment defaults - Single source: js/constants/phi-harmonics.js
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+
 const PHI = {
-    NEUTRAL: 0.5,
-    MODERATE_LOW: 0.382,
-    MODERATE_HIGH: 0.618,
-    HIGH: 0.764,
-    LOW: 0.236
+    NEUTRAL: 0.5,                               // Center point (not PHI-derived)
+    MODERATE_LOW: _PH.PHI_2 || 0.381966011250105,  // φ^-2
+    MODERATE_HIGH: _PH.PHI_1 || 0.618033988749895, // φ^-1
+    HIGH: _PH.PSI_3 || 0.763932022500210,       // 1 - φ^-3 = Ψ³
+    LOW: _PH.PHI_3 || 0.2360679774997896        // φ^-3
 };
 
 // Keyword patterns for semantic analysis

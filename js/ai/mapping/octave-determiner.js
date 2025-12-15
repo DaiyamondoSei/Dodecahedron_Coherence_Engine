@@ -339,10 +339,11 @@ class OctaveDeterminer {
      * ========================================
      */
     getOctaveModifier(octaveId) {
-        // PHI constants (Golden Ratio)
-        const PHI = 1.618033988749895;
-        const PHI_INV = 1 / PHI;        // φ^-1 ≈ 0.618
-        const PHI_INV_2 = PHI_INV * PHI_INV; // φ^-2 ≈ 0.382
+        // PHI constants - Single source: js/constants/phi-harmonics.js
+        const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+        const PHI = _PH.PHI || 1.618033988749895;
+        const PHI_INV = _PH.PHI_1 || 0.618033988749895;        // φ^-1
+        const PHI_INV_2 = _PH.PHI_2 || 0.381966011250105;      // φ^-2
 
         // Octave factors (how much to adjust from baseline)
         const octaveFactors = {

@@ -6,8 +6,14 @@
 
 class TooltipManager {
     constructor() {
-        // Phi-based timing (golden ratio)
-        this.showDelay = 382;  // 0.382s - phi micro
+        // ========================================
+        // PHI-based timing (golden ratio)
+        // Single source: js/constants/phi-harmonics.js
+        // ========================================
+        const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+        const PHI_2 = _PH.PHI_2 || 0.381966011250105;  // φ^-2 ≈ 0.382
+
+        this.showDelay = Math.round(PHI_2 * 1000);  // φ^-2 × 1000ms ≈ 382ms
         this.hideDelay = 200;  // Quick fade
         this.animationDuration = 250;
 

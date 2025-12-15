@@ -1,8 +1,118 @@
 /**
- * Demo Orchestrator Logic
+ * ========================================
+ * DEMO ORCHESTRATOR LOGIC
+ * ========================================
  *
- * Main navigation and state management for the demo flow
+ * Main navigation and state management for the Demo Orchestrator flow.
+ * This is the largest UI controller in the Quannex POC.
+ *
+ * @module DemoOrchestratorLogic
+ * @see {@link ../demo-orchestrator.html} - Main HTML entry point
+ * @see {@link ../js/data-transformer.js} - Data transformation layer
+ * @see {@link ../js/main.js} - Calculation engine
+ *
+ * ========================================
+ * TABLE OF CONTENTS
+ * ========================================
+ *
+ * 1. GLOBAL STATE & CONFIG           (Lines ~30-40)
+ *    - demoState object
+ *    - Re-entrancy guards
+ *
+ * 2. SESSION MANAGEMENT              (Lines ~50-200)
+ *    - SessionManager object
+ *    - Expiry warnings and extension
+ *
+ * 3. CROSS-WINDOW COMMUNICATION      (Lines ~330-470)
+ *    - CrossWindowSync object
+ *    - BroadcastChannel messaging
+ *
+ * 4. INITIALIZATION                  (Lines ~470-610)
+ *    - initializeDemo()
+ *    - highlightTemplateOptions()
+ *
+ * 5. NAVIGATION & PROGRESS           (Lines ~620-810)
+ *    - goToStep()
+ *    - updateProgress()
+ *
+ * 6. VALIDATION DIALOGS              (Lines ~710-800)
+ *    - showValidationBlockDialog()
+ *    - closeValidationModal()
+ *
+ * 7. STEP 0: TEMPLATE SELECTION      (Lines ~820-1020)
+ *    - Company template cards
+ *    - Template selection handlers
+ *
+ * 8. COMPANY LOADING                 (Lines ~1020-1160)
+ *    - showCompanyLoadedNotification()
+ *    - hideTemplateGridForPreloadedCompany()
+ *    - resetToTemplateSelection()
+ *
+ * 9. STEP 1: FACE CONFIGURATION      (Lines ~1160-1330)
+ *    - populateFaceEditor()
+ *    - startFreshManual()
+ *    - startFreshAI()
+ *    - completeStep1()
+ *
+ * 10. STEP 2: KPI ENTRY              (Lines ~1330-1980)
+ *     - selectMode()
+ *     - loadKPIMapper()
+ *     - generateQuickModeHTML()
+ *     - generateFullModeHTML()
+ *     - autoFillExtractedKPIs()
+ *     - completeStep2()
+ *
+ * 11. KPI COLLECTION & CALCULATION   (Lines ~1980-2300)
+ *     - collectKPIData()
+ *     - calculateSimpleCoherence()
+ *     - getCoherenceStatus()
+ *
+ * 12. STEP 3: RESULTS DISPLAY        (Lines ~2300-2450)
+ *     - displayCalculationResults()
+ *     - displayCalculationTransparency()
+ *
+ * 13. OCTAVE DASHBOARD               (Lines ~2450-2960)
+ *     - OCTAVE_REFERENCE data
+ *     - initializeCoherenceHero()
+ *     - initializeOctaveDashboard()
+ *     - displayFoundationPrincipleWarnings()
+ *
+ * 14. PORTRAIT VIEW                  (Lines ~2960-3210)
+ *     - initializePortraitView()
+ *     - transformToPortraitData()
+ *     - extractElementalData()
+ *
+ * 15. DIAGNOSTIC ANALYSIS            (Lines ~3230-3430)
+ *     - identifyNervousEndpoints()
+ *     - identifyHighestLeverageAction()
+ *
+ * 16. UTILITY FUNCTIONS              (Lines ~3430-3520)
+ *     - launchView()
+ *     - exportReport()
+ *     - saveConfiguration()
+ *     - showLoading() / hideLoading()
+ *
+ * ========================================
+ * CROSS-WINDOW EVENTS
+ * ========================================
+ *
+ * This module sends/receives events via CrossWindowSync:
+ *
+ * OUTGOING:
+ * - 'company-selected'    → Broadcast when company template chosen
+ * - 'calculation-complete' → Broadcast when coherence calculated
+ * - 'step-changed'        → Broadcast when navigation occurs
+ *
+ * INCOMING:
+ * - 'data-loaded'         → From UnifiedDataLoader when company loaded
+ * - 'octave-selected'     → From 3D visualization
+ *
+ * ========================================
  */
+
+// ========================================
+// SECTION 1: GLOBAL STATE & CONFIG
+// ========================================
 
 // Global state
 const demoState = {
@@ -22,10 +132,51 @@ const demoState = {
 // (Fix for event handler loop bug observed during testing)
 let _isSelectingCompanyTemplate = false;
 
+// ========================================
+// PHI CONSTANTS - Single Source Reference
+// ========================================
+// Primary source: js/constants/phi-harmonics.js
+// All octave thresholds and coherence levels use Golden Ratio (φ) derived values
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+
+// PHI Powers (φ^-n): Decreasing sequence toward 0
+const PHI_1 = _PH.PHI_1 || 0.618033988749895;           // φ^-1 ≈ 0.618
+const PHI_2 = _PH.PHI_2 || 0.381966011250105;           // φ^-2 ≈ 0.382
+const PHI_3 = _PH.PHI_3 || 0.2360679774997896;          // φ^-3 ≈ 0.236
+const PHI_4 = _PH.PHI_4 || 0.1458980337503153;          // φ^-4 ≈ 0.146
+
+// PSI Values (complements): PSI_n = 1 - φ^-n
+const PSI_3 = _PH.PSI_3 || 0.763932022500210;           // 1 - φ^-3 ≈ 0.764
+const PSI_4 = _PH.PSI_4 || 0.8541019662496847;          // 1 - φ^-4 ≈ 0.854
+
 /**
- * ========================================
- * SESSION EXPIRY MANAGER
- * ========================================
+ * PHI-based octave thresholds for coherence detection
+ *
+ * Maps the 7 octaves of organizational development:
+ * - O1 (Survival): 0.0 baseline
+ * - O2 (Structure): φ^-2 ≈ 0.382
+ * - O3 (Relationships): 0.5 (mathematical midpoint)
+ * - O4 (Creativity): φ^-1 ≈ 0.618 (Golden Ratio)
+ * - O5 (Expression): Ψ³ ≈ 0.764
+ * - O6 (Vision): Ψ⁴ ≈ 0.854
+ * - O7 (Radiance): 0.95 (near unity)
+ */
+const OCTAVE_COHERENCE_THRESHOLDS = {
+    O1: 0.0,        // Survival - just existing
+    O2: PHI_2,      // Structure - φ^-2 ≈ 0.382
+    O3: 0.5,        // Relationships - midpoint
+    O4: PHI_1,      // Creativity - φ^-1 ≈ 0.618 (Golden Ratio)
+    O5: PSI_3,      // Expression - Ψ³ ≈ 0.764
+    O6: PSI_4,      // Vision - Ψ⁴ ≈ 0.854
+    O7: 0.95        // Radiance - near unity
+};
+
+// ========================================
+// SECTION 2: SESSION MANAGEMENT
+// ========================================
+
+/**
+ * Session Expiry Manager
  *
  * Prevents users from losing work by:
  * 1. Warning at 25 minutes (5 min before expiry)
@@ -33,7 +184,8 @@ let _isSelectingCompanyTemplate = false;
  * 3. Graceful handling at 30 min expiry
  *
  * INTEGRITY FIX: Previously sessions expired silently.
- * ========================================
+ *
+ * @namespace SessionManager
  */
 const SessionManager = {
     SESSION_DURATION: 30 * 60 * 1000,    // 30 minutes in ms
@@ -309,10 +461,12 @@ const SessionManager = {
     }
 };
 
+// ========================================
+// SECTION 3: CROSS-WINDOW COMMUNICATION
+// ========================================
+
 /**
- * ========================================
- * CROSS-WINDOW SYNCHRONIZATION (Issue #12 Fix)
- * ========================================
+ * Cross-Window Synchronization (Issue #12 Fix)
  *
  * Uses BroadcastChannel API to sync state between multiple windows/tabs.
  * When user modifies data in orchestrator, all open visualization views
@@ -320,7 +474,8 @@ const SessionManager = {
  *
  * Channel: 'quannex-sync'
  * Messages: { type: string, payload: any, timestamp: number }
- * ========================================
+ *
+ * @namespace CrossWindowSync
  */
 const CrossWindowSync = {
     CHANNEL_NAME: 'quannex-sync',
@@ -456,8 +611,21 @@ window.addEventListener('beforeunload', () => {
     CrossWindowSync.close();
 });
 
+// ========================================
+// SECTION 4: INITIALIZATION
+// ========================================
+
 /**
- * Initialize demo
+ * Initialize the Demo Orchestrator.
+ *
+ * Handles:
+ * - URL parameter processing (?path=, ?restore=)
+ * - Session restoration from sessionStorage
+ * - Company preloading from templates
+ * - Step navigation setup
+ *
+ * @function initializeDemo
+ * @global
  */
 function initializeDemo() {
     console.log('🌟 Quannex Demo Orchestrator initialized');
@@ -601,8 +769,19 @@ function highlightTemplateOptions() {
     }
 }
 
+// ========================================
+// SECTION 5: NAVIGATION & PROGRESS
+// ========================================
+
 /**
- * Navigate to step
+ * Navigate to a specific step in the demo flow.
+ *
+ * Validates step accessibility and enforces the validation gate.
+ * Broadcasts step changes via CrossWindowSync.
+ *
+ * @param {number} stepNumber - Step to navigate to (0-4)
+ * @function goToStep
+ * @global
  */
 function goToStep(stepNumber) {
     // Step 0 is always accessible
@@ -694,9 +873,17 @@ function goToStep(stepNumber) {
     console.log(`📍 Navigated to Step ${stepNumber}`);
 }
 
+// ========================================
+// SECTION 6: VALIDATION DIALOGS
+// ========================================
+
 /**
- * Show validation block dialog with empowering messaging
+ * Show validation block dialog with empowering messaging.
  * Sprint 2 Task 15: Red indicators + blocking
+ *
+ * @param {Object} gateResult - Result from Sprint2.canProceed()
+ * @function showValidationBlockDialog
+ * @global
  */
 function showValidationBlockDialog(gateResult) {
     const validation = window.Sprint2.validationGate.validate();
@@ -805,13 +992,30 @@ function updateProgress() {
     document.getElementById('progressBar').style.width = `${progressPercent}%`;
 }
 
-// ============================================
-// COMPANY TEMPLATE SELECTION (Sprint 3)
-// ============================================
+// ========================================
+// SECTION 7: STEP 0 - TEMPLATE SELECTION
+// ========================================
+//
+// Functions for selecting pre-built company templates.
+// Templates load face configuration, KPIs, and coherence data.
+//
+// Key functions:
+//   - selectCompanyTemplate(companyId)
+//   - startFreshManual()
+//   - startFreshAI()
+//   - markStepCompleted(stepNumber)
+//
+// Events emitted: 'company-selected'
+// ========================================
 
 /**
- * Select a pre-filled company template
- * Loads the mapping-context.json and pre-fills all steps
+ * Select a pre-filled company template.
+ * Loads the mapping-context.json and pre-fills all steps.
+ *
+ * @async
+ * @param {string} companyId - Company template ID (e.g., 'techstartup')
+ * @fires BroadcastChannel~company-selected
+ * @see {@link ./companies/[id]/mapping-context.json}
  */
 async function selectCompanyTemplate(companyId) {
     // Re-entrancy guard: prevent duplicate calls from rapid clicks or event bubbling
@@ -1008,8 +1212,24 @@ async function selectCompanyTemplate(companyId) {
     }
 }
 
+// ========================================
+// SECTION 8: COMPANY LOADING & DISPLAY
+// ========================================
+//
+// Functions for displaying loaded company data and managing
+// template grid visibility.
+//
+// Key functions:
+//   - showCompanyLoadedNotification(mappingContext)
+//   - hideTemplateGridForPreloadedCompany(mappingContext)
+//   - resetToTemplateSelection()
+//
+// ========================================
+
 /**
- * Show notification that company data was loaded
+ * Show notification that company data was loaded.
+ *
+ * @param {Object} mappingContext - Loaded company mapping context
  */
 function showCompanyLoadedNotification(mappingContext) {
     const notification = document.createElement('div');
@@ -1145,8 +1365,22 @@ function resetToTemplateSelection() {
 // Expose to window
 window.resetToTemplateSelection = resetToTemplateSelection;
 
+// ========================================
+// SECTION 9: STEP 1 - FACE CONFIGURATION
+// ========================================
+//
+// Functions for managing face editor UI and Step 1 completion.
+//
+// Key functions:
+//   - populateFaceEditor()
+//   - startFreshManual()
+//   - startFreshAI()
+//   - completeStep1()
+//
+// ========================================
+
 /**
- * Populate the face editor with pre-loaded data
+ * Populate the face editor with pre-loaded data.
  */
 function populateFaceEditor() {
     if (!demoState.faceConfig) return;
@@ -1319,8 +1553,28 @@ function completeStep1() {
     goToStep(2);
 }
 
+// ========================================
+// SECTION 10: STEP 2 - KPI ENTRY
+// ========================================
+//
+// Functions for KPI mode selection, mapper interface generation,
+// and KPI data auto-fill from AI story analysis.
+//
+// Key functions:
+//   - selectMode(mode)
+//   - loadKPIMapper(mode)
+//   - generateQuickModeHTML()
+//   - generateFullModeHTML()
+//   - autoFillExtractedKPIs()
+//   - autofillKPISuggestion(input, faceId)
+//   - calculateLiveNormalization(faceId)
+//
+// ========================================
+
 /**
- * Select KPI mode
+ * Select KPI mode (quick = 1 KPI/face, full = 5 KPIs/face).
+ *
+ * @param {string} mode - 'quick' or 'full'
  */
 function selectMode(mode) {
     demoState.kpiMode = mode;
@@ -1966,8 +2220,27 @@ function calculateLiveNormalization(faceId) {
     previewDiv.style.display = 'block';
 }
 
+// ========================================
+// SECTION 11: KPI COLLECTION & CALCULATION
+// ========================================
+//
+// Functions for collecting KPI data from forms, running coherence
+// calculations, and processing results through the Quannex engine.
+//
+// Key functions:
+//   - collectKPIData()
+//   - runCalculation()
+//   - calculateSimpleCoherence(kpis)  [fallback]
+//   - getCoherenceStatus(coherence)
+//
+// Events emitted: 'calculation-complete'
+// ========================================
+
 /**
- * Collect KPI data from form - ENHANCED with units and default to 0 for empty values
+ * Collect KPI data from form.
+ * Enhanced with units and defaults to 0 for empty values.
+ *
+ * @returns {Array<Object>} Array of KPI objects
  */
 function collectKPIData() {
     const kpis = [];
@@ -2292,8 +2565,25 @@ function getCoherenceStatus(coherence) {
     return 'Crisis';
 }
 
+// ========================================
+// SECTION 12: STEP 3 - RESULTS DISPLAY
+// ========================================
+//
+// Functions for displaying coherence results, calculation
+// transparency breakdown, and session storage updates.
+//
+// Key functions:
+//   - displayCalculationResults()
+//   - updateSessionStorage()
+//   - displayCalculationTransparency()
+//   - completeStep3()
+//
+// Cross-window: Updates sessionStorage and broadcasts STATE_UPDATE
+// ========================================
+
 /**
- * Display calculation results
+ * Display calculation results.
+ * Shows global coherence score and triggers breakdown display.
  */
 function displayCalculationResults() {
     const resultDiv = document.getElementById('calculationResult');
@@ -2431,11 +2721,33 @@ function completeStep3() {
     initializeOctaveDashboard();
 }
 
+// ========================================
+// SECTION 13: OCTAVE DASHBOARD
+// ========================================
+//
+// Functions for the Octave Journey Dashboard (Step 4).
+// Displays 7 octave levels with stage information and guidance.
+//
+// Key constants:
+//   - OCTAVE_REFERENCE - Static data for all 7 octaves
+//
+// Key functions:
+//   - initializeOctaveDashboard()
+//   - populateOctaveDashboard(octave)
+//   - displayFoundationWarnings(warnings, integrityResult)
+//   - detectOctaveFromCoherence(coherence)
+//
+// ========================================
+
 // Portrait View instance holder
 let portraitViewInstance = null;
 
 /**
- * Octave reference data for dashboard population
+ * Octave reference data for dashboard population.
+ * Each octave has name, focus, colors, description, questions,
+ * breath insight, and advancement hints.
+ *
+ * @constant {Object}
  */
 const OCTAVE_REFERENCE = {
     1: {
@@ -2574,7 +2886,7 @@ function initializeCoherenceHero() {
     } else if (coherence >= 0.5) {
         interpretation = 'Developing Coherence';
         detail = 'Your organization has solid foundations with room for growth. Focus on strengthening the connections between dimensions.';
-    } else if (coherence >= 0.382) {
+    } else if (coherence >= PHI_2) {  // φ^-2 ≈ 0.382 - Structure threshold
         interpretation = 'Emerging Coherence';
         detail = 'Your organization is in early development. The dodecahedron reveals specific areas requiring focused attention.';
     } else {
@@ -2596,11 +2908,11 @@ function initializeCoherenceHero() {
     if (heroEl) {
         let borderColor = 'rgba(0, 255, 204, 0.4)';
         if (coherence >= 0.85) {
-            borderColor = 'rgba(255, 215, 0, 0.6)';
+            borderColor = 'rgba(255, 215, 0, 0.6)';  // Gold for exceptional
         } else if (coherence >= 0.7) {
-            borderColor = 'rgba(0, 255, 136, 0.5)';
-        } else if (coherence < 0.382) {
-            borderColor = 'rgba(255, 107, 107, 0.5)';
+            borderColor = 'rgba(0, 255, 136, 0.5)';  // Green for strong
+        } else if (coherence < PHI_2) {  // Below φ^-2 ≈ 0.382 - Structure threshold
+            borderColor = 'rgba(255, 107, 107, 0.5)';  // Red for foundational
         }
         heroEl.style.borderColor = borderColor;
     }
@@ -2933,19 +3245,35 @@ function displayFoundationPrincipleWarnings(integrityResult, octaveColor) {
 
 /**
  * Detect octave from coherence score
+ * Uses PHI-derived thresholds from OCTAVE_COHERENCE_THRESHOLDS
  */
 function detectOctaveFromCoherence(coherence) {
-    if (coherence >= 0.95) return 7;
-    if (coherence >= 0.854) return 6;
-    if (coherence >= 0.764) return 5;
-    if (coherence >= 0.618) return 4;
-    if (coherence >= 0.5) return 3;
-    if (coherence >= 0.382) return 2;
-    return 1;
+    if (coherence >= OCTAVE_COHERENCE_THRESHOLDS.O7) return 7;  // 0.95 - Radiance
+    if (coherence >= OCTAVE_COHERENCE_THRESHOLDS.O6) return 6;  // Ψ⁴ ≈ 0.854 - Vision
+    if (coherence >= OCTAVE_COHERENCE_THRESHOLDS.O5) return 5;  // Ψ³ ≈ 0.764 - Expression
+    if (coherence >= OCTAVE_COHERENCE_THRESHOLDS.O4) return 4;  // φ^-1 ≈ 0.618 - Creativity
+    if (coherence >= OCTAVE_COHERENCE_THRESHOLDS.O3) return 3;  // 0.5 - Relationships
+    if (coherence >= OCTAVE_COHERENCE_THRESHOLDS.O2) return 2;  // φ^-2 ≈ 0.382 - Structure
+    return 1;  // O1 - Survival
 }
 
+// ========================================
+// SECTION 14: PORTRAIT VIEW
+// ========================================
+//
+// Functions for the Portrait View 2D visualization.
+// Transforms coherence data to radial face display.
+//
+// Key functions:
+//   - initializePortraitView()
+//   - transformToPortraitData(coherenceResults)
+//   - extractElementalData(face)
+//   - detectOctave(faceCoherence, elementsExplored)
+//
+// ========================================
+
 /**
- * Initialize Portrait View with current coherence data
+ * Initialize Portrait View with current coherence data.
  */
 function initializePortraitView() {
     if (!demoState.coherenceResults) {
@@ -3042,9 +3370,9 @@ function transformToPortraitData(coherenceResults) {
             warnings: []
         };
 
-        // Add warnings for low coherence
-        if (faceCoherence < 0.382) {
-            faces[face.id].warnings.push('Critical: coherence below PHI²');
+        // Add warnings for low coherence (using PHI-derived threshold)
+        if (faceCoherence < PHI_2) {  // φ^-2 ≈ 0.382
+            faces[face.id].warnings.push('Critical: coherence below φ² threshold');
         } else if (faceCoherence < 0.5) {
             faces[face.id].warnings.push('Attention needed: developing coherence');
         }
@@ -3139,30 +3467,23 @@ function extractElementalData(face) {
 /**
  * Detect operational octave based on coherence and engaged elements
  * Philosophy: Octave isn't a reward - it's recognition of which level questions are being engaged
+ * Uses centralized PHI-derived thresholds from OCTAVE_COHERENCE_THRESHOLDS
  */
 function detectOctave(faceCoherence, elementsExplored) {
     // Count how many elements have data
     const exploredCount = Object.values(elementsExplored).filter(e => e.explored).length;
 
-    // Coherence thresholds for octave progression (PHI-based)
-    const thresholds = {
-        O1: 0.0,    // Survival - just existing
-        O2: 0.382,  // Structure - PHI²
-        O3: 0.5,    // Relationships - midpoint
-        O4: 0.618,  // Creativity - PHI
-        O5: 0.764,  // Expression - PHI + 0.146
-        O6: 0.854,  // Vision - 1 - PHI²
-        O7: 0.95    // Radiance - near unity
-    };
+    // Use centralized PHI-based coherence thresholds
+    const thresholds = OCTAVE_COHERENCE_THRESHOLDS;
 
     // Base octave from coherence score
     let detectedOctave = 'O1';
-    if (faceCoherence >= thresholds.O7) detectedOctave = 'O7';
-    else if (faceCoherence >= thresholds.O6) detectedOctave = 'O6';
-    else if (faceCoherence >= thresholds.O5) detectedOctave = 'O5';
-    else if (faceCoherence >= thresholds.O4) detectedOctave = 'O4';
-    else if (faceCoherence >= thresholds.O3) detectedOctave = 'O3';
-    else if (faceCoherence >= thresholds.O2) detectedOctave = 'O2';
+    if (faceCoherence >= thresholds.O7) detectedOctave = 'O7';       // 0.95 - Radiance
+    else if (faceCoherence >= thresholds.O6) detectedOctave = 'O6'; // Ψ⁴ ≈ 0.854 - Vision
+    else if (faceCoherence >= thresholds.O5) detectedOctave = 'O5'; // Ψ³ ≈ 0.764 - Expression
+    else if (faceCoherence >= thresholds.O4) detectedOctave = 'O4'; // φ^-1 ≈ 0.618 - Creativity
+    else if (faceCoherence >= thresholds.O3) detectedOctave = 'O3'; // 0.5 - Relationships
+    else if (faceCoherence >= thresholds.O2) detectedOctave = 'O2'; // φ^-2 ≈ 0.382 - Structure
 
     // Elemental engagement can elevate or limit octave
     // Full elemental engagement (5/5) allows full octave expression
@@ -3215,8 +3536,25 @@ function getDefaultFaceName(faceId) {
     return defaultNames[faceId] || `Face ${faceId}`;
 }
 
+// ========================================
+// SECTION 15: DIAGNOSTIC ANALYSIS
+// ========================================
+//
+// Functions for identifying organizational health issues
+// and recommending highest-leverage interventions.
+//
+// Key functions:
+//   - identifyNervousEndpoints()
+//   - identifyHighestLeverageAction()
+//
+// ========================================
+
 /**
- * Identify nervous endpoints (Sprint 3 Task 26 Polish)
+ * Identify nervous endpoints (faces with low coherence).
+ * Sprint 3 Task 26 Polish.
+ *
+ * Displays critical faces needing attention and healthy faces
+ * performing well.
  */
 function identifyNervousEndpoints() {
     const section = document.getElementById('nervousEndpoints');
@@ -3415,6 +3753,26 @@ function identifyHighestLeverageAction() {
 
     panel.style.display = 'block';
 }
+
+// ========================================
+// SECTION 16: UTILITY FUNCTIONS
+// ========================================
+//
+// General utility functions for view launching, export/save,
+// loading overlays, and window API exposure.
+//
+// Key functions:
+//   - launchView(viewName) - Opens visualization in new window
+//   - exportReport() - PDF export (placeholder)
+//   - saveConfiguration() - JSON config download
+//   - startOver() - Reset and reload
+//   - showHelp() - Open documentation
+//   - showLoading(message) / hideLoading() - Loading overlay
+//
+// Window exports (lines 3819-3841):
+//   All public API functions exposed to window object
+//
+// ========================================
 
 /**
  * Launch visualization view with custom data

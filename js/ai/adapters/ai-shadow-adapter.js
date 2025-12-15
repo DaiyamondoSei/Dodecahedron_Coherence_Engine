@@ -16,10 +16,23 @@
 
 import { MappingContext } from '../core/mapping-context.js';
 
-// PHI-derived constants for thresholds
-const PHI_INV = 0.618;
-const HIGH_THRESHOLD = 0.7;
-const LOW_THRESHOLD = 0.3;
+// ========================================
+// PHI CONSTANTS - Single Source Reference
+// ========================================
+// Primary source: js/constants/phi-harmonics.js
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+
+/**
+ * PHI-derived constants for shadow detection thresholds
+ *
+ * Using PHI powers for mathematically coherent thresholds:
+ * - PHI_INV (φ^-1 ≈ 0.618): Golden ratio inverse - primary balance point
+ * - HIGH_THRESHOLD (Ψ³ ≈ 0.764): Mastery level - high shadow integration
+ * - LOW_THRESHOLD (φ^-3 ≈ 0.236): Minimal threshold - shadows emerging
+ */
+const PHI_INV = _PH.PHI_1 || 0.618033988749895;           // φ^-1 ≈ 0.618
+const HIGH_THRESHOLD = _PH.PSI_3 || 0.763932022500210;    // Ψ³ ≈ 0.764 (was 0.7)
+const LOW_THRESHOLD = _PH.PHI_3 || 0.2360679774997896;    // φ^-3 ≈ 0.236 (was 0.3)
 
 /**
  * AIShadowAdapter - AI-Powered Shadow Pattern Discovery

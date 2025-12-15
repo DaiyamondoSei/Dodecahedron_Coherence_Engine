@@ -35,6 +35,21 @@
 // ========================================
 
 /**
+ * PHI Constants - Single source: js/constants/phi-harmonics.js
+ * Fallback values provided for standalone/Node.js use
+ */
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+const PHI = _PH.PHI || 1.618033988749895;               // φ (Golden Ratio)
+const PHI_1 = _PH.PHI_1 || 0.618033988749895;           // φ^-1
+const PHI_2 = _PH.PHI_2 || 0.381966011250105;           // φ^-2
+const PHI_3 = _PH.PHI_3 || 0.2360679774997896;          // φ^-3
+const PHI_4 = _PH.PHI_4 || 0.1458980337503153;          // φ^-4
+const SQRT_PHI = _PH.SQRT_PHI || 1.272019649514069;     // √φ
+const SQRT_PHI_1 = _PH.SQRT_PHI_1 || 0.7861513777574233; // √(φ^-1)
+const SQRT_2 = Math.SQRT2 || 1.4142135623730951;        // √2
+const PHI_CUBE_ROOT = Math.pow(PHI, 1/3);               // φ^(1/3) ≈ 1.175
+
+/**
  * Elemental colors for visualization
  */
 const ELEMENT_COLORS = {
@@ -47,48 +62,57 @@ const ELEMENT_COLORS = {
 
 /**
  * Elemental Harmony Matrix (Sacred Tech Architect recommendation)
- * Based on phi (φ = 1.618) and its derivatives
+ * All values derived from Golden Ratio (φ) and its transformations
+ *
+ * Key relationships:
+ * - φ (1.618): Creative tension between opposites
+ * - φ^-1 (0.618): Grounding/receptive energy
+ * - √φ (1.272): Transcendent bridge
+ * - √(φ^-1) (0.786): Nurturing stability
+ * - √2 (1.414): Dynamic catalyst
+ * - φ^(1/3) (1.175): Gentle flow
  */
 const ELEMENTAL_HARMONY = {
     'Fire-Fire': 1.0,
-    'Fire-Water': 1.618,    // φ - creative tension (opposites)
-    'Fire-Earth': 0.618,    // 1/φ - grounding transformation
-    'Fire-Air': 1.414,      // √2 - dynamic catalyst
-    'Fire-Ether': 1.272,    // √φ - transcendent bridge
+    'Fire-Water': PHI,          // φ - creative tension (opposites)
+    'Fire-Earth': PHI_1,        // φ^-1 - grounding transformation
+    'Fire-Air': SQRT_2,         // √2 - dynamic catalyst
+    'Fire-Ether': SQRT_PHI,     // √φ - transcendent bridge
 
-    'Water-Fire': 1.618,
+    'Water-Fire': PHI,
     'Water-Water': 1.0,
-    'Water-Earth': 0.786,   // √(1/φ) - nurturing stability
-    'Water-Air': 1.175,     // φ^(1/3) - gentle flow
-    'Water-Ether': 1.272,
+    'Water-Earth': SQRT_PHI_1,  // √(φ^-1) - nurturing stability
+    'Water-Air': PHI_CUBE_ROOT, // φ^(1/3) - gentle flow
+    'Water-Ether': SQRT_PHI,
 
-    'Earth-Fire': 0.618,
-    'Earth-Water': 0.786,
+    'Earth-Fire': PHI_1,
+    'Earth-Water': SQRT_PHI_1,
     'Earth-Earth': 1.0,
-    'Earth-Air': 0.786,
+    'Earth-Air': SQRT_PHI_1,
     'Earth-Ether': 1.0,
 
-    'Air-Fire': 1.414,
-    'Air-Water': 1.175,
-    'Air-Earth': 0.786,
+    'Air-Fire': SQRT_2,
+    'Air-Water': PHI_CUBE_ROOT,
+    'Air-Earth': SQRT_PHI_1,
     'Air-Air': 1.0,
-    'Air-Ether': 1.414,
+    'Air-Ether': SQRT_2,
 
-    'Ether-Fire': 1.272,
-    'Ether-Water': 1.272,
+    'Ether-Fire': SQRT_PHI,
+    'Ether-Water': SQRT_PHI,
     'Ether-Earth': 1.0,
-    'Ether-Air': 1.414,
+    'Ether-Air': SQRT_2,
     'Ether-Ether': 1.0
 };
 
 /**
- * Fibonacci-based thresholds (Sacred Tech Architect recommendation)
+ * PHI-derived thresholds for health classification
+ * All values derived from Golden Ratio inverse powers
  */
 const PHI_THRESHOLDS = {
-    CRITICAL: 0.21,   // ~1/φ³ - severe misalignment
-    WARNING: 0.34,    // ~1/φ² - needs attention
-    MODERATE: 0.55,   // ~1/φ - developing
-    HEALTHY: 0.89     // Fibonacci 89/100 - thriving
+    CRITICAL: PHI_4,    // φ^-4 ≈ 0.146 - severe misalignment (was ~0.21)
+    WARNING: PHI_3,     // φ^-3 ≈ 0.236 - needs attention (was ~0.34)
+    MODERATE: PHI_2,    // φ^-2 ≈ 0.382 - developing (was ~0.55)
+    HEALTHY: PHI_1      // φ^-1 ≈ 0.618 - thriving (was ~0.89)
 };
 
 /**
@@ -247,18 +271,28 @@ function calculateVortexStrength(e1, e2, e3) {
 /**
  * Classify vortex based on strength
  *
+ * PHI-derived thresholds:
+ * - Synergy: strength < φ^-4 (≈0.146) - minimal tension, harmonious
+ * - Balanced: strength < φ^-3 (≈0.236) - healthy creative tension
+ * - Conflict: strength >= φ^-3 - needs attention
+ *
  * @param {number} strength - Vortex strength value
  * @returns {string} Classification: 'synergy' | 'balanced' | 'conflict'
  */
 function classifyVortex(strength) {
-    if (strength < 0.1) return 'synergy';      // Harmonious hub
-    if (strength < 0.3) return 'balanced';     // Healthy tension
+    if (strength < PHI_4) return 'synergy';    // φ^-4 ≈ 0.146 - Harmonious hub
+    if (strength < PHI_3) return 'balanced';   // φ^-3 ≈ 0.236 - Healthy tension
     return 'conflict';                          // Bermuda Triangle - needs attention
 }
 
 /**
  * Determine vortex direction based on average sentiment
  * (Sacred Tech Architect enhancement)
+ *
+ * PHI-derived thresholds:
+ * - Ascending: avgSentiment > φ^-1 (0.618) - golden expansion
+ * - Descending: avgSentiment < φ^-2 (0.382) - golden contraction
+ * - Neutral: between these thresholds
  *
  * @param {number} e1 - Face 1 energy
  * @param {number} e2 - Face 2 energy
@@ -267,8 +301,8 @@ function classifyVortex(strength) {
  */
 function determineVortexDirection(e1, e2, e3) {
     const avgSentiment = (e1 + e2 + e3) / 3;
-    if (avgSentiment > 0.618) return 'ascending';   // φ threshold
-    if (avgSentiment < 0.382) return 'descending';  // 1-φ threshold
+    if (avgSentiment > PHI_1) return 'ascending';   // φ^-1 ≈ 0.618 threshold
+    if (avgSentiment < PHI_2) return 'descending';  // φ^-2 ≈ 0.382 threshold
     return 'neutral';
 }
 
@@ -433,8 +467,13 @@ function synthesizeCustomContext(faceConfig, kpiData = null) {
     const globalCoherence = 1 - avgTension;
 
     // 6. Determine dominant octave (find the most common energy range)
+    // PHI-derived thresholds for octave classification:
+    // - O1 (Survival): avgEnergy < φ^-3 (≈0.236)
+    // - O2 (Structure): avgEnergy < 0.5 (mathematical center)
+    // - O3 (Relationships): avgEnergy < φ^-1 (≈0.618)
+    // - O4+ (Creativity & beyond): avgEnergy >= φ^-1
     const avgEnergy = enhancedFaces.reduce((sum, f) => sum + f.sentiment, 0) / enhancedFaces.length;
-    const dominantOctave = avgEnergy < 0.3 ? 1 : avgEnergy < 0.5 ? 2 : avgEnergy < 0.7 ? 3 : 4;
+    const dominantOctave = avgEnergy < PHI_3 ? 1 : avgEnergy < 0.5 ? 2 : avgEnergy < PHI_1 ? 3 : 4;
 
     const context = {
         faces: enhancedFaces,

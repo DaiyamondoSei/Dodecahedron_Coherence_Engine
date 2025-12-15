@@ -22,8 +22,9 @@ class DNAPreviewMini {
         this.time = 0;
         this.isRunning = false;
 
-        // DNA helix parameters
-        this.PHI = 1.618033988749895;
+        // DNA helix parameters - single source: js/constants/phi-harmonics.js
+        const PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+        this.PHI = PH.PHI || 1.618033988749895;
         this.helixAmplitude = 25;
         this.helixFrequency = 0.02;
         this.connectionCount = 8;

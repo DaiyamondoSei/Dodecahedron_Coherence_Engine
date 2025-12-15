@@ -30,8 +30,9 @@ export class VisualizationManager {
         this.scene.add(this.groups.vertexSpheres);
         this.scene.add(this.groups.feedbackLoops);
 
-        // Golden Ratio
-        this.PHI = 1.61803398875;
+        // Golden Ratio - single source: js/constants/phi-harmonics.js
+        const PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+        this.PHI = PH.PHI || 1.618033988749895;
 
         // State
         this.currentAnalysis = null;
