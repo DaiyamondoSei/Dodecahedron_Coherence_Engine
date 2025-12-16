@@ -472,6 +472,76 @@ All commits pushed to origin/POC.
 
 ---
 
+### Session 5: December 16, 2025 (Final Cleanup & Archival)
+
+**Major Accomplishment:**
+Final cleanup of Phase 3 - verified modular architecture is 100% operational and removed unused legacy file.
+
+**Verification Steps Completed:**
+
+| Check | Result | Evidence |
+|-------|--------|----------|
+| Archive file exists | ✅ | `js/archive/dodecahedron-viz.js.bak` (2,800 lines) |
+| Archive matches original | ✅ | Both files: 2,800 lines (exact match) |
+| HTML loads modular files | ✅ | `dodecahedron-3d.html` loads 11 `js/dodec/*` modules |
+| No active imports | ✅ | All references are comments/documentation only |
+| All 11 modules quality | ✅ | 10/10 score - JSDoc, "NOTES FOR FUTURE CLAUDE", exports |
+
+**Action Taken:**
+```bash
+rm js/dodecahedron-viz.js  # Deleted unused 2,800-line file
+```
+
+**Why Safe to Delete:**
+1. Archive backup exists at `js/archive/dodecahedron-viz.js.bak`
+2. `dodecahedron-3d.html` already loads from `js/dodec/*` modules (verified)
+3. All references in HTML/JS are comments documenting the extraction history
+4. The modular system is fully operational with all 11 modules loading correctly
+
+**Module Architecture (Final - For Future Claude Sessions):**
+
+```
+js/dodec/
+├── dodec-state.js      (Phase 1 - Foundation) ← DodecState central registry
+├── dodec-topology.js   (Phase 1 - Helpers) ← Vertex/face mapping
+├── dodec-materials.js  (Phase 2 - Colors) ← Energy gradients
+├── dodec-scene.js      (Phase 2 - THREE.js) ← Scene, camera, lights
+├── dodec-geometry.js   (Phase 3 - Meshes) ← Dec 2025 edge fix here
+├── dodec-data.js       (Phase 4 - Data) ← Company loading
+├── dodec-interaction.js (Phase 5 - Input) ← Mouse/touch handlers
+├── dodec-panels.js     (Phase 6 - UI) ← Detail panels
+├── dodec-controls.js   (Phase 7 - Controls) ← 14 keyboard shortcuts
+├── dodec-animation.js  (Phase 8 - Render) ← PHI-tuned pulsing
+└── dodec-main.js       (Phase 9 - Init) ← Orchestrator
+```
+
+**Critical Pattern: DodecState**
+
+All modules share state via `global.DodecState` - this solved the original closure challenge where 38+ variables were trapped inside `initDodecahedron()`. If you need to access any visualization state:
+
+```javascript
+const S = global.DodecState;
+// Then: S.scene, S.camera, S.faceMeshes, S.selectedFace, etc.
+```
+
+**Key Wisdom for Future Sessions:**
+
+1. **Don't search for `js/dodecahedron-viz.js`** - It was archived December 16, 2025
+2. **All active code is in `js/dodec/`** - 11 production-ready modules
+3. **Each module has "NOTES FOR FUTURE CLAUDE"** - Read them!
+4. **Load order matters** - See `dodecahedron-3d.html` for the 9-phase sequence
+5. **The archive exists** - `js/archive/dodecahedron-viz.js.bak` if rollback ever needed
+
+---
+
+## Related Plan Files
+
+The detailed extraction plan is preserved at:
+- `.claude/plans/atomic-wondering-waterfall.md` - Original 10-phase extraction plan (COMPLETED)
+- `.claude/plans/hidden-crunching-sifakis.md` - Cleanup plan (COMPLETED)
+
+---
+
 *This document is a living artifact. Future sessions should add their discoveries, warnings, and insights.*
 
-*Written with care by Claude, December 15, 2025*
+*Written with care by Claude, December 15-16, 2025*
