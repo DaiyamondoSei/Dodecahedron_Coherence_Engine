@@ -1,7 +1,58 @@
 /**
- * Face Wizard - Template Selection and Face Definition
+ * ========================================
+ * MODULE: face-wizard.js
+ * ========================================
  *
- * Handles Stage 1 of the demo: Defining the 12 organizational faces
+ * Face Wizard - Template Selection and Face Definition
+ * Handles Stage 1 of the demo: Defining the 12 organizational faces.
+ *
+ * PURPOSE:
+ * Provides pre-built face templates for different organization types
+ * (Business, Startup, Non-Profit, Project) and supports AI-assisted
+ * story mode for custom face generation.
+ *
+ * DEPENDENCIES:
+ * - js/ai/providers/*.js (Gemini, OpenAI clients for story analysis)
+ * - localStorage (for API key persistence)
+ *
+ * EXPORTS (to window/global):
+ * - FACE_TEMPLATES: Pre-defined face configurations
+ * - selectTemplate(templateKey): Select a template
+ * - loadFaceEditor(): Populate the face editing UI
+ * - analyzeStory(): AI-powered story analysis
+ * - confirmFaces(): Finalize face configuration
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE:
+ * ========================================
+ *
+ * FACE TEMPLATES:
+ * Each template defines 12 faces with id, name, and icon.
+ * The face IDs (1-12) correspond to the 12 pentagonal faces
+ * of the dodecahedron geometry.
+ *
+ * AI STORY MODE:
+ * Users can describe their organization in natural language.
+ * The AI extracts relevant faces, KPIs, and octave assessments.
+ * This uses the provider pattern from js/ai/providers/.
+ *
+ * OCTAVE SYSTEM:
+ * Each face can be at a different "octave" (O1-O7):
+ * - O1 (Survival): Baseline viability
+ * - O2 (Structure): Systematization
+ * - O3 (Relationships): Network development
+ * - O4 (Creativity): Innovation activation
+ * - O5 (Expression): Communication optimization
+ * - O6 (Vision): Strategic foresight
+ * - O7 (Radiance): Systemic transcendence
+ *
+ * STATE VARIABLES:
+ * - currentTemplate: Selected template key
+ * - currentFaces: Array of 12 face objects
+ * - faceOctaves: Map of faceId → octave data
+ * - extractedKPIs: KPIs extracted from AI story analysis
+ *
+ * ========================================
  */
 
 // Face Templates

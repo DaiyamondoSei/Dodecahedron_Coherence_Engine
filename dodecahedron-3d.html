@@ -2778,16 +2778,22 @@
          Date: December 15, 2025
          ======================================== -->
 
+    <!-- Phase 0: Core Topology (SINGLE SOURCE OF TRUTH) -->
+    <!-- CRITICAL: This must load BEFORE dodec-geometry.js -->
+    <!-- Contains DodecahedronTopology.EDGES with all 30 edge definitions -->
+    <script src="js/geometry/dodecahedron-topology.js?v=20251216"></script>
+
     <!-- Phase 1: Foundation -->
     <script src="js/dodec/dodec-state.js?v=20251215"></script>
-    <script src="js/dodec/dodec-topology.js?v=20251215"></script>
+    <script src="js/dodec/dodec-topology.js?v=20251216"></script>
 
     <!-- Phase 2: Scene Infrastructure -->
     <script src="js/dodec/dodec-materials.js?v=20251215"></script>
     <script src="js/dodec/dodec-scene.js?v=20251215"></script>
 
     <!-- Phase 3: Geometry -->
-    <script src="js/dodec/dodec-geometry.js?v=20251215"></script>
+    <!-- FIXED Dec 2025: Now uses topology-based edge creation (not proximity) -->
+    <script src="js/dodec/dodec-geometry.js?v=20251216"></script>
 
     <!-- Phase 4: Data -->
     <script src="js/dodec/dodec-data.js?v=20251215"></script>

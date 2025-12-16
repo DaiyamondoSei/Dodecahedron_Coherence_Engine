@@ -112,7 +112,7 @@ export class SpectralAnalyzer {
    * This is the mode with the largest absolute amplitude
    *
    * @param {Array<Object>} modalAmplitudes
-   * @returns {Object} Dominant mode information
+   * @returns {Object} Dominant mode information (defaults to Mode 2 if all amplitudes are 0)
    */
   identifyDominantMode(modalAmplitudes) {
     // Skip mode 1 (index 0) - the DC offset
@@ -125,6 +125,13 @@ export class SpectralAnalyzer {
         maxAmplitude = absAmplitude;
         dominantMode = modalAmplitudes[i];
       }
+    }
+
+    // Edge case: If all amplitudes are 0 (e.g., all KPIs are 0), default to Mode 2
+    // This prevents null reference errors in downstream calculations
+    if (dominantMode === null && modalAmplitudes.length > 1) {
+      dominantMode = modalAmplitudes[1]; // Mode 2 (first non-DC mode)
+      console.log('⚠️ SpectralAnalyzer: All modal amplitudes are 0, defaulting to Mode 2');
     }
 
     return dominantMode;

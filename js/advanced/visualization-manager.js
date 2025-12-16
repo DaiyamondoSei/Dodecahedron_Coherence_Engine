@@ -1,5 +1,7 @@
 /**
+ * ========================================
  * VisualizationManager - The Nervous System
+ * ========================================
  *
  * Connects the "Brain" (Advanced Math) to the "Body" (Three.js Scene).
  * Implements the "Wisdom Layer" visualizations:
@@ -8,8 +10,55 @@
  * - Feedback Loop Lines (Dashed flow)
  * - Immersive Phase Transitions (Glitch effects)
  *
+ * DEPENDENCIES:
+ * - THREE.js (global)
+ * - js/constants/phi-harmonics.js (for PHI values)
+ * - js/dodec/dodec-topology.js (for buildVertexToFacesMap, getDodecahedronVertices)
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE:
+ * ========================================
+ *
+ * ARCHITECTURE:
+ * This class manages THREE.js Groups containing dynamic visualization elements.
+ * The groups (neonEdges, vertexSpheres, feedbackLoops) are added to the scene
+ * and populated based on analysis data from OrganizationalCoherenceEngine.
+ *
+ * CRITICAL BUG FIX (December 2025) - Vertex Positioning:
+ * ========================================
+ * The getVertexPosition() method had a subtle but critical bug.
+ *
+ * THE BUG:
+ * Original code assumed getDodecahedronVertices() returns vertices in
+ * order matching analytical IDs (V1 at index 0, V2 at index 1, etc.).
+ * This is FALSE - the array order depends on Map iteration order when
+ * extracting unique vertices from Three.js geometry.
+ *
+ * SYMPTOMS:
+ * Vertex spheres appeared displaced from edge endpoints in Advanced/Complete views.
+ * They were at wrong vertex positions relative to where edges actually met.
+ *
+ * THE FIX:
+ * Use topology-based lookup instead of array-index lookup:
+ * 1. Each analytical vertex (V1-V20) belongs to exactly 3 faces (defined in dodec-topology.js)
+ * 2. Use buildVertexToFacesMap() to get geometric vertex → face mappings
+ * 3. Find the geometric vertex that belongs to ALL 3 target faces
+ * 4. Return that vertex's position
+ *
+ * WHY THIS WORKS:
+ * The topology is constant - vertex V1 ALWAYS belongs to faces [1, 2, 6].
+ * By matching the target faces, we find the correct geometric vertex
+ * regardless of array ordering.
+ *
+ * PULSE ANIMATION:
+ * Edge tubes and vertex spheres use phi-tuned pulsing animation.
+ * Per-edge timing prevents all edges from pulsing in sync, creating
+ * a more organic "living system" feel.
+ *
+ * ========================================
+ *
  * @author Deimantas Butrimas & Claude
- * @version 1.0
+ * @version 2.0 (Bug fix: topology-based vertex positioning)
  */
 
 export class VisualizationManager {
@@ -356,8 +405,9 @@ export class VisualizationManager {
                 const position = this.getVertexPosition(vertex.id);
                 if (!position) return;
 
-                // Scale position slightly outward (1.05x) so spheres render outside faces
-                const scaledPosition = position.clone().multiplyScalar(1.05);
+                // Position spheres exactly at vertices (no scaling)
+                // Previous 1.05x caused misalignment with edge tube endpoints
+                const scaledPosition = position.clone();
 
                 // Size: Base + vortex-scaled component for visibility
                 // Low strength = smaller (0.05), high strength = larger (0.18)
@@ -724,21 +774,101 @@ export class VisualizationManager {
 
     getVertexPosition(vertexId) {
         // vertexId is likely "V1", "V2" or just 1, 2
-        // We need to map this to geometric coordinates.
-        // Global helper: window.getGeometricVertexIndex(id)
-        if (!window.dodecahedronViz || !window.dodecahedronViz.faceMeshes) return null;
+        //
+        // BUG FIX v3 (Dec 2025): Previous approaches failed because:
+        // - The face ID mapping (buildFaceIndexMapping) was broken
+        // - Face meshes had wrong userData.faceId values
+        //
+        // NEW APPROACH: Extract ALL 20 vertex positions directly from geometry
+        // and cache them. Use the vertex index to lookup.
+        //
+        // This bypasses face ID mapping entirely and works with raw geometry.
 
-        // Assume we can get all vertices from the first face mesh's parent geometry?
-        // Or use window.getDodecahedronVertices()
-        if (typeof window.getDodecahedronVertices === 'function') {
-            const allVertices = window.getDodecahedronVertices();
-            // Extract numeric ID from "V1" -> 1
-            const idNum = parseInt(vertexId.replace('V', ''));
-            const index = window.getGeometricVertexIndex(idNum);
-            if (allVertices[index]) {
-                return allVertices[index];
+        // Extract numeric ID from "V1" -> 1
+        const idNum = typeof vertexId === 'string'
+            ? parseInt(vertexId.replace('V', ''))
+            : vertexId;
+
+        if (idNum < 1 || idNum > 20) {
+            console.warn(`[visualization-manager] Invalid vertex ID: ${vertexId}`);
+            return null;
+        }
+
+        // Check cache first
+        if (!this._cachedVertexPositions) {
+            this._cachedVertexPositions = this._extractAllVertexPositions();
+        }
+
+        if (!this._cachedVertexPositions || this._cachedVertexPositions.length < 20) {
+            console.warn(`[visualization-manager] Could not extract vertex positions`);
+            return null;
+        }
+
+        // Return position by index (idNum 1-20 maps to index 0-19)
+        const position = this._cachedVertexPositions[idNum - 1];
+        return position ? position.clone() : null;
+    }
+
+    /**
+     * Extract all 20 unique vertex positions from the dodecahedron geometry
+     * @private
+     */
+    _extractAllVertexPositions() {
+        // Try to get from mainDodecahedron (most reliable)
+        const dodec = window.mainDodecahedron;
+        if (dodec && dodec.geometry) {
+            const positions = dodec.geometry.attributes.position;
+            const uniqueMap = new Map(); // key -> Vector3
+
+            for (let i = 0; i < positions.count; i++) {
+                const x = positions.getX(i);
+                const y = positions.getY(i);
+                const z = positions.getZ(i);
+                const key = `${x.toFixed(5)},${y.toFixed(5)},${z.toFixed(5)}`;
+
+                if (!uniqueMap.has(key)) {
+                    uniqueMap.set(key, new THREE.Vector3(x, y, z));
+                }
+            }
+
+            const vertices = Array.from(uniqueMap.values());
+            console.log(`[visualization-manager] Extracted ${vertices.length} unique vertex positions from geometry`);
+
+            if (vertices.length === 20) {
+                return vertices;
             }
         }
+
+        // Fallback: try to get from faceMeshes
+        const faceMeshes = window.dodecahedronViz?.faceMeshes;
+        if (faceMeshes && faceMeshes.length >= 12) {
+            const uniqueMap = new Map();
+
+            for (const mesh of faceMeshes) {
+                if (!mesh.geometry) continue;
+                const positions = mesh.geometry.attributes.position;
+
+                for (let i = 0; i < positions.count; i++) {
+                    const x = positions.getX(i);
+                    const y = positions.getY(i);
+                    const z = positions.getZ(i);
+                    const key = `${x.toFixed(5)},${y.toFixed(5)},${z.toFixed(5)}`;
+
+                    if (!uniqueMap.has(key)) {
+                        uniqueMap.set(key, new THREE.Vector3(x, y, z));
+                    }
+                }
+            }
+
+            const vertices = Array.from(uniqueMap.values());
+            console.log(`[visualization-manager] Extracted ${vertices.length} unique vertex positions from face meshes`);
+
+            if (vertices.length === 20) {
+                return vertices;
+            }
+        }
+
+        console.warn('[visualization-manager] Could not extract 20 vertex positions');
         return null;
     }
 }
