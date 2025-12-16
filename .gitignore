@@ -24,3 +24,6 @@ __pycache__/
 
 # Playwright MCP screenshots (testing artifacts)
 .playwright-mcp/
+
+# LinkedIn content (lives in QNX_BUSINESS_DATA/LinkedIn, workflow outputs only)
+linkedin-content/

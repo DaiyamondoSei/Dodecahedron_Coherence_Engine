@@ -73,7 +73,9 @@
       "Bash(gh run cancel:*)",
       "Bash(git checkout:*)",
       "Bash(git tag:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(git -C \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\" add -A)",
+      "Bash(git -C \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\" status --short)"
     ],
     "deny": [],
     "ask": [
@@ -87,7 +89,11 @@
     "playwright",
     "firecrawl",
     "github",
-    "scientific-papers",
+    "desktop-commander",
+    "memory"
+  ],
+  "disabledMcpjsonServers": [
+    "arxiv",
     "chart",
     "sequential-thinking"
   ],
