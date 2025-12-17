@@ -1,0 +1,98 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: dodec-main.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Import orchestrator for the 3D Dodecahedron visualization CSS.
+ * This file imports all CSS modules in the correct dependency order.
+ *
+ * LOAD THIS FILE ONLY - it will import all others in correct order.
+ *
+ * Created: 2025-12-17
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                           IMPORT ORDER (CRITICAL)                        │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  1. dodec-base.css       - CSS variables, reset (MUST BE FIRST)          │
+ * │  2. dodec-animations.css - @keyframes (referenced by others)             │
+ * │  3. dodec-layout.css     - Header, canvas, legend                        │
+ * │  4. dodec-controls.css   - Mode selector, controls panel                 │
+ * │  5. dodec-panels.css     - Face detail, analysis panels                  │
+ * │  6. dodec-tooltips.css   - All tooltip types                             │
+ * │  7. dodec-hud.css        - Coherence HUD, shadow indicator               │
+ * │  8. dodec-overlays.css   - Overlays, tour styles                         │
+ * │  9. dodec-accessibility.css - MUST BE LAST (overrides all)               │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * The order matters! CSS cascades, so later files override earlier ones.
+ * - dodec-base.css defines variables used everywhere
+ * - dodec-animations.css defines @keyframes used in other files
+ * - dodec-accessibility.css is last because it overrides other styles
+ *
+ * To add a new CSS file:
+ * 1. Create the file in css/dodec/
+ * 2. Add @import here in the correct position
+ * 3. Update this documentation
+ *
+ * USAGE IN HTML:
+ * <link rel="stylesheet" href="../css/dodec/dodec-main.css">
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   FOUNDATION - Variables, reset, base styles
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("dodec-base.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   ANIMATIONS - @keyframes definitions
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("dodec-animations.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   LAYOUT - Page structure
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("dodec-layout.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   CONTROLS - User interface controls
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("dodec-controls.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PANELS - Detail panels and analysis views
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("dodec-panels.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   TOOLTIPS - Hover information displays
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("dodec-tooltips.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   HUD - Heads-up display elements
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("dodec-hud.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   OVERLAYS - Full-screen modals and tours
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("dodec-overlays.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY - Override styles (MUST BE LAST)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("dodec-accessibility.css");

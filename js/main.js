@@ -440,11 +440,12 @@ export class DodecahedronEngine {
         if (resultFace.name && resultFace.name !== face.name) {
           face.name = resultFace.name;
         }
-        // Apply pre-calculated energy
+        // Apply pre-calculated energy to private cache
+        // Note: faceEnergy and healthStatus are getter-only properties,
+        // so we set the underlying cache directly
         const energy = resultFace.energy || resultFace.faceEnergy || 0;
-        face.faceEnergy = energy;
-        face._localCoherence = energy;
-        face.healthStatus = energy >= 0.7 ? 'Healthy' : energy >= 0.4 ? 'Warning' : 'Critical';
+        face._faceEnergy = energy;      // Private cache for faceEnergy getter
+        face._localCoherence = energy;  // Backup cache (legacy support)
 
         // Apply KPI normalized scores if available
         if (resultFace.kpis && face.elementalKPIs) {

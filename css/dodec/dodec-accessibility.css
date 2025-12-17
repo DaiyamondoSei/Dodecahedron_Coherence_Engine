@@ -1,0 +1,463 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: dodec-accessibility.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Accessibility and presentation enhancement styles.
+ * Contains presentation mode, font scale levels, and high-contrast mode.
+ *
+ * Extracted from: pages/dodecahedron-3d.html (lines 1277-1708)
+ * Extraction Date: 2025-12-17
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  REQUIRED:                                                               │
+ * │  • dodec-base.css - For CSS variables (--font-scale-*, etc.)             │
+ * │  • All other dodec-*.css files (for overriding their styles)             │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * MODES:
+ * 1. Presentation Mode (P key) - Larger UI for projector visibility
+ * 2. Font Scale Levels (L key) - Normal → Large → XLarge cycling
+ * 3. High-Contrast Mode (C key) - Yellow on black for projectors
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * These styles use body classes to override default styles:
+ * - body.presentation-mode
+ * - body.font-scale-normal / .font-scale-large / .font-scale-xlarge
+ * - body.high-contrast
+ *
+ * The high-contrast mode changes the entire color palette from
+ * cyan (#00ffcc) to yellow (#FFFF00) for better projector visibility.
+ *
+ * Font scale levels use CSS variables for dynamic sizing:
+ * --current-font-scale is updated based on body class
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PRESENTATION MODE
+   Toggle with 'P' key for thesis defense
+   ════════════════════════════════════════════════════════════════════════════ */
+
+body.presentation-mode {
+    font-size: 1.3em;
+}
+
+body.presentation-mode .controls-panel {
+    width: 340px;
+}
+
+body.presentation-mode .controls-panel h3 {
+    font-size: 16px;
+    letter-spacing: 3px;
+}
+
+body.presentation-mode .control-button {
+    font-size: 14px;
+    padding: 15px 20px;
+}
+
+body.presentation-mode .stats-value {
+    font-size: 20px;
+}
+
+body.presentation-mode .face-detail-panel {
+    width: 500px;
+    font-size: 1.1em;
+}
+
+body.presentation-mode .face-detail-title {
+    font-size: 26px;
+}
+
+body.presentation-mode .face-energy-display {
+    font-size: 60px;
+}
+
+body.presentation-mode #faceTooltip,
+body.presentation-mode #edgeTooltip {
+    font-size: 14px;
+    padding: 15px 20px;
+}
+
+/* Presentation mode indicator */
+.presentation-indicator {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 255, 204, 0.15);
+    border: 1px solid #00ffcc;
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #00ffcc;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+body.presentation-mode .presentation-indicator {
+    opacity: 1;
+}
+
+/* Presentation mode: larger HUD */
+body.presentation-mode .coherence-hud {
+    padding: 16px 24px;
+}
+
+body.presentation-mode .coherence-hud-value {
+    font-size: 42px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   FONT SCALE LEVELS
+   Toggle with 'L' key: Normal → Large → XLarge
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* Normal font scale (default) */
+body.font-scale-normal {
+    --current-font-scale: var(--font-scale-base);
+}
+
+/* Large font scale */
+body.font-scale-large {
+    --current-font-scale: var(--font-scale-large);
+}
+
+body.font-scale-large .controls-panel {
+    width: 320px;
+}
+
+body.font-scale-large .controls-panel h3 {
+    font-size: 14px;
+}
+
+body.font-scale-large .control-button {
+    font-size: 13px;
+    padding: 12px 18px;
+}
+
+body.font-scale-large .stats-value {
+    font-size: 18px;
+}
+
+body.font-scale-large .face-detail-panel {
+    width: 450px;
+}
+
+body.font-scale-large .face-detail-title {
+    font-size: 24px;
+}
+
+body.font-scale-large .face-energy-display {
+    font-size: 50px;
+}
+
+body.font-scale-large #faceTooltip,
+body.font-scale-large #edgeTooltip {
+    font-size: 13px;
+    padding: 12px 16px;
+}
+
+body.font-scale-large .mode-button {
+    font-size: 12px;
+    padding: 12px 18px;
+}
+
+/* XLarge font scale (maximum readability) */
+body.font-scale-xlarge {
+    --current-font-scale: var(--font-scale-xlarge);
+}
+
+body.font-scale-xlarge .controls-panel {
+    width: 380px;
+}
+
+body.font-scale-xlarge .controls-panel h3 {
+    font-size: 18px;
+    letter-spacing: 3px;
+}
+
+body.font-scale-xlarge .control-button {
+    font-size: 16px;
+    padding: 16px 22px;
+}
+
+body.font-scale-xlarge .stats-value {
+    font-size: 24px;
+}
+
+body.font-scale-xlarge .face-detail-panel {
+    width: 550px;
+}
+
+body.font-scale-xlarge .face-detail-title {
+    font-size: 30px;
+}
+
+body.font-scale-xlarge .face-energy-display {
+    font-size: 72px;
+}
+
+body.font-scale-xlarge #faceTooltip,
+body.font-scale-xlarge #edgeTooltip {
+    font-size: 16px;
+    padding: 16px 22px;
+}
+
+body.font-scale-xlarge .mode-button {
+    font-size: 14px;
+    padding: 14px 20px;
+}
+
+body.font-scale-xlarge .page-title {
+    font-size: 26px;
+}
+
+body.font-scale-xlarge .page-subtitle {
+    font-size: 14px;
+}
+
+body.font-scale-xlarge .coherence-hud {
+    padding: 16px 24px;
+}
+
+body.font-scale-xlarge .coherence-hud-value {
+    font-size: 42px;
+}
+
+/* Font Scale Indicator */
+.font-scale-indicator {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 170, 0, 0.15);
+    border: 1px solid rgba(255, 170, 0, 0.5);
+    color: #ffaa00;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 9998;
+}
+
+.font-scale-indicator.visible {
+    opacity: 1;
+}
+
+.font-scale-indicator.fade-out {
+    opacity: 0;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   HIGH-CONTRAST MODE
+   Toggle with 'C' key for projector visibility
+
+   Changes primary color from cyan (#00ffcc) to yellow (#FFFF00)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+body.high-contrast {
+    background: #000000;
+}
+
+body.high-contrast .page-header {
+    background: rgba(0, 0, 0, 0.95);
+    border-bottom-color: #FFFF00;
+}
+
+body.high-contrast .page-title {
+    color: #FFFF00;
+}
+
+body.high-contrast .controls-panel {
+    background: rgba(0, 0, 0, 0.95);
+    border-color: #FFFF00;
+}
+
+body.high-contrast .controls-panel h3 {
+    color: #FFFF00;
+}
+
+body.high-contrast .control-button {
+    border-color: rgba(255, 255, 0, 0.5);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.high-contrast .control-button:hover,
+body.high-contrast .control-button.active {
+    background: rgba(255, 255, 0, 0.2);
+    border-color: #FFFF00;
+    color: #FFFF00;
+}
+
+body.high-contrast .mode-selector {
+    background: rgba(0, 0, 0, 0.95);
+    border-color: #FFFF00;
+}
+
+body.high-contrast .mode-button {
+    border-color: rgba(255, 255, 0, 0.3);
+}
+
+body.high-contrast .mode-button:hover,
+body.high-contrast .mode-button.active {
+    background: rgba(255, 255, 0, 0.2);
+    border-color: #FFFF00;
+    color: #FFFF00;
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
+}
+
+body.high-contrast .face-detail-panel {
+    background: rgba(0, 0, 0, 0.98);
+    border-color: #FFFF00;
+}
+
+body.high-contrast .face-detail-title {
+    color: #FFFF00;
+}
+
+body.high-contrast .face-energy-display {
+    color: #FFFF00;
+    text-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+}
+
+body.high-contrast #faceTooltip,
+body.high-contrast #edgeTooltip {
+    background: rgba(0, 0, 0, 0.95);
+    border-color: #FFFF00;
+}
+
+body.high-contrast #faceTooltip .tooltip-label,
+body.high-contrast #edgeTooltip .tooltip-label {
+    color: #FFFF00;
+}
+
+body.high-contrast .legend-container {
+    background: rgba(0, 0, 0, 0.95);
+    border-color: #FFFF00;
+}
+
+body.high-contrast .legend-title {
+    color: #FFFF00;
+}
+
+body.high-contrast .coherence-hud {
+    border-color: rgba(255, 255, 0, 0.3);
+}
+
+body.high-contrast .coherence-hud-value {
+    color: #FFFF00;
+}
+
+/* High-contrast Face Panel Tabs */
+body.high-contrast .face-panel-tabs {
+    border-bottom-color: rgba(255, 255, 0, 0.2);
+}
+
+body.high-contrast .face-panel-tab.active {
+    color: #FFFF00;
+    border-bottom-color: #FFFF00;
+    background: rgba(255, 255, 0, 0.1);
+}
+
+body.high-contrast .face-panel-tab:hover {
+    background: rgba(255, 255, 0, 0.05);
+}
+
+body.high-contrast .panel-section-header {
+    color: rgba(255, 255, 0, 0.8);
+    border-bottom-color: rgba(255, 255, 0, 0.15);
+}
+
+body.high-contrast .element-balance-item:hover {
+    background: rgba(255, 255, 0, 0.1);
+    border-color: rgba(255, 255, 0, 0.3);
+}
+
+body.high-contrast .element-value {
+    color: #FFFF00;
+}
+
+body.high-contrast .element-bar-fill {
+    background: linear-gradient(90deg, #FFFF00, #FFaa00);
+}
+
+body.high-contrast .leverage-action-card {
+    border-color: rgba(255, 255, 0, 0.3);
+}
+
+/* High-contrast indicator */
+.contrast-indicator {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 0, 0.15);
+    border: 1px solid rgba(255, 255, 0, 0.5);
+    color: #FFFF00;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 9997;
+}
+
+.contrast-indicator.visible {
+    opacity: 1;
+}
+
+.contrast-indicator.fade-out {
+    opacity: 0;
+}
+
+/* High-contrast keyboard hints */
+body.high-contrast .keyboard-hints-overlay {
+    border-color: #FFFF00;
+    box-shadow: 0 0 40px rgba(255, 255, 0, 0.3);
+}
+
+body.high-contrast .keyboard-hints-title {
+    color: #FFFF00;
+}
+
+body.high-contrast .keyboard-hint-key {
+    background: rgba(255, 255, 0, 0.15);
+    border-color: #FFFF00;
+    color: #FFFF00;
+}
+
+body.high-contrast .keyboard-hints-divider {
+    background: rgba(255, 255, 0, 0.2);
+}
+
+body.high-contrast .keyboard-hints-section {
+    color: rgba(255, 255, 0, 0.7);
+}
+
+/* High-contrast pause indicator */
+body.high-contrast .pause-indicator {
+    border-color: #FFFF00;
+    color: #FFFF00;
+    box-shadow: 0 0 30px rgba(255, 255, 0, 0.3);
+}
+
+body.high-contrast .pause-indicator-bar {
+    background: #FFFF00;
+}

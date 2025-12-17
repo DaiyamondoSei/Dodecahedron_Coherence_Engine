@@ -1,0 +1,164 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: dodec-tooltips.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Styles for all tooltip types in the 3D Dodecahedron visualization.
+ * Includes face, edge, vertex, and feedback loop tooltips.
+ *
+ * Extracted from: pages/dodecahedron-3d.html (lines 1018-1126)
+ * Extraction Date: 2025-12-17
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  REQUIRED:                                                               │
+ * │  • dodec-base.css - For CSS variables (--neon-cyan, etc.)                │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * TOOLTIP TYPES:
+ * 1. .face-tooltip - Quick hover info for dodecahedron faces
+ * 2. .edge-tooltip - Relationship narratives between faces
+ * 3. .loop-tooltip - Feedback loop information
+ * 4. (Vertex tooltips are styled inline in dodec-tooltip-system.js)
+ *
+ * Z-INDEX HIERARCHY:
+ * - .loop-tooltip: 1500
+ * - .face-tooltip: 1500
+ * - .edge-tooltip: 1600 (higher to overlay face tooltip)
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * All tooltips use pointer-events: none to prevent them from blocking
+ * mouse interactions with the underlying 3D scene.
+ *
+ * The .visible class triggers opacity transition (0 -> 1).
+ *
+ * Edge tooltips use golden/amber colors (#ffcc00) to distinguish from
+ * the cyan face tooltips (#00ffcc).
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   FEEDBACK LOOP TOOLTIP
+   Information about circular feedback patterns
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.loop-tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid rgba(255, 170, 0, 0.5);
+    border-radius: 8px;
+    padding: 12px 16px;
+    backdrop-filter: blur(10px);
+    z-index: 1500;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    box-shadow: 0 4px 20px rgba(255, 170, 0, 0.3);
+    max-width: 280px;
+}
+
+.loop-tooltip.visible {
+    opacity: 1;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   FACE TOOLTIP
+   Quick info when hovering over dodecahedron faces
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.face-tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid rgba(0, 255, 204, 0.5);
+    border-radius: 8px;
+    padding: 12px 16px;
+    backdrop-filter: blur(10px);
+    z-index: 1500;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    box-shadow: 0 4px 20px rgba(0, 255, 204, 0.3);
+}
+
+.face-tooltip.visible {
+    opacity: 1;
+}
+
+.tooltip-face-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #00ffcc;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+}
+
+.tooltip-energy {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tooltip-energy-value {
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+.tooltip-hint {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 6px;
+    font-style: italic;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   EDGE TOOLTIP
+   Relationship narrative between connected faces
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.edge-tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid rgba(255, 204, 0, 0.6);
+    border-radius: 8px;
+    padding: 10px 14px;
+    backdrop-filter: blur(10px);
+    z-index: 1600;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    box-shadow: 0 4px 20px rgba(255, 204, 0, 0.3);
+    min-width: 200px;
+    color: #fff;
+}
+
+.edge-tooltip.visible {
+    opacity: 1;
+}
+
+/* Edge Question - Reflective question from EdgeAnalyzer */
+.edge-question {
+    font-style: italic;
+    color: #00ffcc;
+    background: rgba(0, 255, 204, 0.08);
+    padding: 10px 12px;
+    border-left: 3px solid #00ffcc;
+    margin-top: 10px;
+    border-radius: 0 4px 4px 0;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.edge-question::before {
+    content: '"';
+    font-size: 16px;
+    opacity: 0.6;
+}
+
+.edge-question::after {
+    content: '"';
+    font-size: 16px;
+    opacity: 0.6;
+}

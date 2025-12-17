@@ -1,0 +1,750 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: dodec-panels.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Styles for all panel components in the 3D Dodecahedron visualization.
+ * Contains face detail panel, analysis panel, tabs, KPI grids, and metrics.
+ *
+ * Extracted from: pages/dodecahedron-3d.html (lines 249-871)
+ * Extraction Date: 2025-12-17
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  REQUIRED:                                                               │
+ * │  • dodec-base.css - For CSS variables                                    │
+ * │  • dodec-animations.css - For fadeInSection animation                    │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * COMPONENTS:
+ * 1. Analysis Panel (right sidebar for Advanced/Complete modes)
+ * 2. Breath Axis Preview Section
+ * 3. Face Detail Panel (modal overlay)
+ * 4. Face Panel Tabs (Overview, Elements, Relations, DNA)
+ * 5. Element Balance Grid
+ * 6. Octave Progression Display
+ * 7. KPI Grid
+ * 8. Metric Rows
+ * 9. Insight Cards
+ * 10. Shadow Alerts
+ * 11. Leverage Points
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * The face detail panel appears when clicking a dodecahedron face.
+ * It contains multiple tabs for different views of the face data.
+ *
+ * The analysis panel is only visible in Advanced and Complete modes.
+ * It shows aggregate metrics and DNA preview.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   ANALYSIS PANEL
+   Right sidebar for Advanced/Complete modes
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.analysis-panel {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    width: 320px;
+    max-height: calc(100vh - 110px);
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    z-index: 200;
+    overflow-y: auto;
+    display: none;
+}
+
+.analysis-panel.visible {
+    display: block;
+}
+
+.analysis-section {
+    padding: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.analysis-section:last-child {
+    border-bottom: none;
+}
+
+.section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #00ffcc;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   BREATH AXIS PREVIEW SECTION
+   DNA helix preview and breath ratio display
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.breath-axis-section {
+    padding: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, rgba(0, 255, 204, 0.05) 0%, rgba(255, 0, 255, 0.05) 100%);
+}
+
+.breath-axis-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.dna-preview-container {
+    width: 200px;
+    height: 120px;
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+#dnaPreviewCanvas {
+    width: 100%;
+    height: 100%;
+}
+
+.breath-info {
+    text-align: center;
+    width: 100%;
+}
+
+.breath-axis-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #00ffcc;
+    margin-bottom: 6px;
+}
+
+.breath-ratio-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+}
+
+.breath-ratio-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.breath-status {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.breath-status.balanced {
+    background: rgba(0, 255, 150, 0.2);
+    color: #00ff99;
+}
+
+.breath-status.over-inhaling {
+    background: rgba(0, 150, 255, 0.2);
+    color: #00aaff;
+}
+
+.breath-status.over-exhaling {
+    background: rgba(255, 150, 0, 0.2);
+    color: #ffaa00;
+}
+
+.partner-face-info {
+    font-size: 11px;
+    opacity: 0.7;
+    margin-top: 8px;
+}
+
+.view-full-dna-btn {
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, rgba(0, 255, 204, 0.2) 0%, rgba(255, 0, 255, 0.2) 100%);
+    border: 1px solid rgba(0, 255, 204, 0.4);
+    border-radius: 6px;
+    color: #00ffcc;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.view-full-dna-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 255, 204, 0.3) 0%, rgba(255, 0, 255, 0.3) 100%);
+    border-color: rgba(0, 255, 204, 0.6);
+    transform: translateY(-2px);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   METRIC ROWS
+   Simple key-value display rows
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.metric-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 12px;
+}
+
+.metric-label {
+    opacity: 0.7;
+}
+
+.metric-value {
+    color: #00ffcc;
+    font-weight: 600;
+}
+
+.metric-value.critical {
+    color: #ff6b6b;
+}
+
+.metric-value.warning {
+    color: #ffaa00;
+}
+
+.metric-value.success {
+    color: #00ff66;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   FACE DETAIL PANEL
+   Modal overlay for detailed face information
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.face-detail-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: 500px;
+    max-width: 90vw;
+    max-height: 80vh;
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid rgba(0, 255, 204, 0.5);
+    border-radius: 16px;
+    padding: 30px;
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    box-shadow: 0 10px 50px rgba(0, 255, 204, 0.3);
+}
+
+.face-detail-panel.visible {
+    opacity: 1;
+    pointer-events: all;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.face-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.face-detail-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #00ffcc;
+    letter-spacing: 1px;
+}
+
+.face-detail-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.face-detail-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   FACE PANEL TABS
+   Multi-section navigation for rich data
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.face-panel-tabs {
+    display: flex;
+    gap: 4px;
+    margin: 15px 0;
+    border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+    padding-bottom: 0;
+}
+
+.face-panel-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 12px 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.face-panel-tab:hover {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 255, 204, 0.05);
+}
+
+.face-panel-tab.active {
+    color: #00ffcc;
+    border-bottom-color: #00ffcc;
+    background: rgba(0, 255, 204, 0.1);
+}
+
+.face-panel-tab-icon {
+    font-size: 14px;
+}
+
+.face-panel-section {
+    display: none;
+    animation: fadeInSection 0.3s ease;
+}
+
+.face-panel-section.active {
+    display: block;
+}
+
+/* Section header styling */
+.panel-section-header {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(0, 255, 204, 0.8);
+    margin: 20px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 255, 204, 0.15);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   FACE ENERGY DISPLAY
+   Large percentage display for face coherence
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.face-energy-display {
+    font-size: 48px;
+    font-weight: 300;
+    text-align: center;
+    margin: 20px 0;
+    color: #00ffcc;
+}
+
+.face-energy-label {
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.7;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   ELEMENT BALANCE GRID
+   Five-element display (Earth, Water, Fire, Air, Ether)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.element-balance-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.element-balance-item {
+    text-align: center;
+    padding: 12px 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.element-balance-item:hover {
+    background: rgba(0, 255, 204, 0.1);
+    border-color: rgba(0, 255, 204, 0.3);
+}
+
+.element-icon {
+    font-size: 20px;
+    margin-bottom: 6px;
+}
+
+.element-name {
+    font-size: 9px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.element-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #00ffcc;
+}
+
+.element-bar {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.element-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ffcc, #00ff66);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   LEVERAGE ACTION CARD
+   Golden highlighted action suggestions
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.leverage-action-card {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 170, 0, 0.05));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 8px;
+}
+
+.leverage-action-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.leverage-action-text::before {
+    content: " ";
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   OCTAVE PROGRESSION DISPLAY
+   Seven-octave development indicator
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.octave-progression-section {
+    margin: 15px 0 20px;
+    padding: 15px;
+    background: rgba(0, 255, 204, 0.05);
+    border: 1px solid rgba(0, 255, 204, 0.2);
+    border-radius: 12px;
+}
+
+.current-octave-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.octave-number {
+    font-size: 28px;
+    font-weight: 200;
+    color: #00ffcc;
+    font-family: 'Georgia', serif;
+}
+
+.octave-name {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.8;
+}
+
+.octave-progress-container {
+    width: 100%;
+}
+
+.octave-progress-label {
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.octave-progress-label span {
+    color: #00ffcc;
+    font-weight: 600;
+}
+
+.octave-progress-bar {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    position: relative;
+    overflow: visible;
+}
+
+.octave-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ffcc, #ff00ff);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.octave-threshold-marker {
+    position: absolute;
+    top: -4px;
+    height: 16px;
+    width: 2px;
+    background: #ffaa00;
+    border-radius: 1px;
+    left: 61.8%;
+    transition: left 0.3s ease;
+}
+
+.octave-threshold-marker::after {
+    content: 'θ';
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    color: #ffaa00;
+}
+
+.transcendence-badge {
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, rgba(0, 255, 204, 0.3), rgba(255, 0, 255, 0.3));
+    border: 1px solid #00ffcc;
+    border-radius: 16px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #00ffcc;
+    animation: pulse-glow 2s infinite;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   KPI GRID
+   Key Performance Indicator display
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.kpi-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.kpi-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.kpi-name {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.kpi-element {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.kpi-element.earth {
+    background: rgba(120, 120, 120, 0.3);
+    color: #999;
+}
+
+.kpi-element.water {
+    background: rgba(30, 144, 255, 0.3);
+    color: #4a9eff;
+}
+
+.kpi-element.fire {
+    background: rgba(255, 120, 0, 0.3);
+    color: #ff9944;
+}
+
+.kpi-element.air {
+    background: rgba(0, 200, 150, 0.3);
+    color: #00d9a3;
+}
+
+.kpi-element.ether {
+    background: rgba(100, 100, 200, 0.3);
+    color: #8888dd;
+}
+
+.kpi-value-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.kpi-value-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.kpi-value-fill.healthy {
+    background: linear-gradient(90deg, #00ff88, #00ffcc);
+}
+
+.kpi-value-fill.warning {
+    background: linear-gradient(90deg, #ffa500, #ffcc00);
+}
+
+.kpi-value-fill.critical {
+    background: linear-gradient(90deg, #ff4444, #ff6b6b);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   INSIGHT CARDS
+   Contextual insights and alerts
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.insight-card {
+    background: rgba(255, 107, 107, 0.1);
+    border-left: 3px solid #ff6b6b;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 4px;
+    font-size: 11px;
+}
+
+.insight-card.warning {
+    background: rgba(255, 170, 0, 0.1);
+    border-left-color: #ffaa00;
+}
+
+.insight-card.opportunity {
+    background: rgba(0, 255, 102, 0.1);
+    border-left-color: #00ff66;
+}
+
+.insight-card.critical {
+    background: rgba(255, 107, 107, 0.15);
+    border-left-color: #ff6b6b;
+}
+
+.insight-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.insight-message {
+    opacity: 0.9;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.insight-action {
+    opacity: 0.8;
+    font-size: 10px;
+    font-style: italic;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SHADOW ALERTS
+   Warning cards for detected shadows
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.shadow-alert {
+    background: rgba(255, 107, 107, 0.1);
+    border-left: 3px solid #ff6b6b;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.shadow-alert-title {
+    font-weight: 600;
+    color: #ff6b6b;
+    margin-bottom: 4px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   LEVERAGE POINTS
+   Highlighted intervention suggestions
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.leverage-point {
+    background: rgba(255, 255, 0, 0.1);
+    border-left: 3px solid #ffff00;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.leverage-point-title {
+    font-weight: 600;
+    color: #ffff00;
+    margin-bottom: 4px;
+}

@@ -1,0 +1,207 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: dodec-hud.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Coherence HUD and shadow indicator styles.
+ * These provide always-visible status information during visualization.
+ *
+ * Extracted from: pages/dodecahedron-3d.html (lines 1773-1961)
+ * Extraction Date: 2025-12-17
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  REQUIRED:                                                               │
+ * │  • dodec-base.css - For CSS variables                                    │
+ * │  • dodec-animations.css - For coherencePulse, shadowPulse animations     │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * COMPONENTS:
+ * 1. .coherence-hud - Main coherence percentage display
+ * 2. .coherence-shadow-indicator - Expandable shadow count (progressive disclosure)
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * The coherence HUD uses progressive disclosure:
+ * - Default: Shows coherence percentage only
+ * - On hover (or .shadow-expanded class): Reveals shadow indicator
+ *
+ * States:
+ * - .critical: Red pulsing for low coherence (<40%)
+ * - .warning: Amber color for moderate coherence (40-60%)
+ * - .healthy: Cyan color for good coherence (60-80%)
+ * - .transcendent: Gold color for high coherence (>80%)
+ * - .has-shadows: Shows notification dot when shadows detected
+ *
+ * Position adjusts based on controls panel visibility:
+ * - Normal: right: 320px (beside controls panel)
+ * - Minimal mode: right: 20px (controls panel hidden)
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   COHERENCE HUD
+   Always-visible coherence score display
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.coherence-hud {
+    position: fixed;
+    top: 90px;
+    right: 320px;
+    z-index: 150;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-radius: 12px;
+    padding: 12px 20px;
+    backdrop-filter: blur(10px);
+    text-align: center;
+    min-width: 120px;
+    transition: all 0.3s ease;
+}
+
+.coherence-hud-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 4px;
+}
+
+.coherence-hud-value {
+    font-size: 32px;
+    font-weight: 300;
+    color: #00ffcc;
+    line-height: 1;
+    transition: color 0.3s ease;
+}
+
+.coherence-hud-status {
+    font-size: 10px;
+    margin-top: 6px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+/* Status States */
+.coherence-hud-status.critical {
+    background: rgba(255, 68, 68, 0.2);
+    color: #ff4444;
+}
+
+.coherence-hud-status.warning {
+    background: rgba(255, 170, 0, 0.2);
+    color: #ffaa00;
+}
+
+.coherence-hud-status.healthy {
+    background: rgba(0, 255, 204, 0.2);
+    color: #00ffcc;
+}
+
+.coherence-hud-status.transcendent {
+    background: rgba(255, 215, 0, 0.2);
+    color: #ffd700;
+}
+
+/* Critical State Animation */
+.coherence-hud.critical {
+    animation: coherencePulse 2s ease-in-out infinite;
+    border-color: rgba(255, 68, 68, 0.5);
+}
+
+.coherence-hud.critical .coherence-hud-value {
+    color: #ff4444;
+}
+
+/* Responsive: Position when controls panel is hidden (minimal mode) */
+.controls-panel.hidden ~ .coherence-hud {
+    right: 20px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SHADOW INDICATOR
+   Progressive disclosure from coherence HUD
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.coherence-shadow-indicator {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+    margin-top: 0;
+}
+
+/* Expand on hover or when explicitly expanded */
+.coherence-hud:hover .coherence-shadow-indicator,
+.coherence-hud.shadow-expanded .coherence-shadow-indicator {
+    max-height: 100px;
+    opacity: 1;
+    margin-top: 10px;
+}
+
+.shadow-indicator-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 68, 68, 0.5), transparent);
+    margin-bottom: 10px;
+}
+
+.shadow-indicator-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.shadow-indicator-icon {
+    font-size: 16px;
+}
+
+.shadow-indicator-count {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ff6b6b;
+}
+
+.shadow-indicator-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.shadow-indicator-btn {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(255, 68, 68, 0.15);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: 6px;
+    color: #ff6b6b;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.shadow-indicator-btn:hover {
+    background: rgba(255, 68, 68, 0.25);
+    border-color: rgba(255, 68, 68, 0.5);
+    transform: translateY(-1px);
+}
+
+/* Notification Dot - Pulse when shadows exist */
+.coherence-hud.has-shadows::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    background: #ff6b6b;
+    border-radius: 50%;
+    animation: shadowPulse 2s ease-in-out infinite;
+}

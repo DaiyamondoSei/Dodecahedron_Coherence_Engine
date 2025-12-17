@@ -1,0 +1,139 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: dodec-layout.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Core layout styles for the 3D Dodecahedron visualization.
+ * Contains page header, canvas container, and legend positioning.
+ *
+ * Extracted from: pages/dodecahedron-3d.html (lines 59-88, 156-168, 873-907)
+ * Extraction Date: 2025-12-17
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  REQUIRED:                                                               │
+ * │  • dodec-base.css - For CSS variables (--neon-cyan, --glass-*)           │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * LAYOUT STRUCTURE:
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │ .page-header (fixed top bar with title)                                 │
+ * ├─────────────────────────────────────────────────────────────────────────┤
+ * │                                                                         │
+ * │     #canvas-container (full viewport, behind everything)                │
+ * │         └── #scene (THREE.js WebGL canvas)                              │
+ * │                                                                         │
+ * │  .legend (fixed bottom-left)                                            │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * The canvas container is positioned behind all UI elements (z-index: auto).
+ * All panels and overlays use higher z-index values (100-10000).
+ *
+ * Z-INDEX HIERARCHY (for reference):
+ * - Canvas container: default (0)
+ * - Page header: 100
+ * - Mode selector, controls panel, legend: 200
+ * - Face detail panel: 1000
+ * - Tooltips: 1500-1600
+ * - Shadow overlay: 2000
+ * - Guided tour: 10000+
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PAGE HEADER
+   Fixed top bar with title and subtitle
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.page-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 15px 30px;
+    backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid rgba(0, 255, 204, 0.3);
+}
+
+.page-header.hidden {
+    display: none;
+}
+
+.page-title {
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: #00ffcc;
+}
+
+.page-subtitle {
+    font-size: 11px;
+    opacity: 0.7;
+    margin-top: 3px;
+    letter-spacing: 1px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   CANVAS CONTAINER
+   Full-viewport container for THREE.js WebGL canvas
+   ════════════════════════════════════════════════════════════════════════════ */
+
+#canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#scene {
+    width: 100%;
+    height: 100%;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   LEGEND
+   Color legend for face energy levels (bottom-left)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.legend {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    backdrop-filter: blur(10px);
+    z-index: 200;
+}
+
+.legend-title {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #00ffcc;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 11px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 10px;
+}

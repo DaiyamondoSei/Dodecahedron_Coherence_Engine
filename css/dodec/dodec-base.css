@@ -1,0 +1,153 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: dodec-base.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Foundation styles for the 3D Dodecahedron visualization.
+ * Contains CSS variables, reset styles, body setup, and scrollbar customization.
+ *
+ * This file MUST be loaded first - other CSS files depend on these variables.
+ *
+ * Extracted from: pages/dodecahedron-3d.html (lines 9-57, 1128-1144)
+ * Extraction Date: 2025-12-17
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  None - this is the foundation file                                      │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * CSS VARIABLES DEFINED:
+ * - --neon-cyan, --neon-green: Primary neon colors
+ * - --gold-transcend, --violet-mastery: Transcendence palette
+ * - --status-critical/warning/healthy: Status indicators
+ * - --phi-timing/short/micro: PHI-based animation timing
+ * - --glass-bg/border/glow: Glassmorphism effects
+ * - --font-scale-*: Presentation mode font scaling
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   CSS VARIABLES - Sacred Color Palette
+
+   These variables are the DNA of the visualization's appearance.
+   All color and timing decisions flow from these definitions.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+    /* Primary neon colors - The signature Quannex aesthetic */
+    --neon-cyan: #00ffcc;
+    --neon-green: #00ff66;
+
+    /* Transcendence colors - For octave 7 and elevated states */
+    --gold-transcend: #ffd700;
+    --amber-warning: #ffaa00;
+    --violet-mastery: #8a2be2;
+    --deep-purple: #6a0dad;
+
+    /* Status colors - Coherence feedback */
+    --status-critical: #ff4444;
+    --status-warning: #ffaa00;
+    --status-healthy: #00ffcc;
+
+    /* Phi-based timing - Sacred geometry in animation
+       PHI (φ) = 1.618... creates naturally pleasing rhythms */
+    --phi-timing: 1.618s;
+    --phi-short: 0.618s;
+    --phi-micro: 0.382s;
+
+    /* Glassmorphism - Modern translucent UI */
+    --glass-bg: rgba(0, 0, 0, 0.6);
+    --glass-border: rgba(0, 255, 204, 0.2);
+    --glass-glow: rgba(0, 255, 204, 0.1);
+
+    /* Font Scale Levels (Sprint 3.5 - Presentation Enhancement)
+       Cycled with 'F' key for thesis defense visibility */
+    --font-scale-base: 1em;
+    --font-scale-large: 1.25em;
+    --font-scale-xlarge: 1.5em;
+    --current-font-scale: var(--font-scale-base);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   CSS RESET - Clean slate for consistent rendering
+   ════════════════════════════════════════════════════════════════════════════ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   BODY - Base document styling
+
+   The dark background creates contrast for the neon visualization.
+   overflow: hidden prevents scrollbars on the main page.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+body {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #000000;
+    color: #fff;
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SCROLLBAR - Custom webkit scrollbar for panels
+
+   Matches the neon aesthetic while remaining unobtrusive.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 204, 0.3);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 204, 0.5);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   LOADING SPINNER - Shown during initialization
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 9999;
+}
+
+.loading.hidden {
+    display: none;
+}
+
+.loading-text {
+    font-size: 14px;
+    color: #00ffcc;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(0, 255, 204, 0.2);
+    border-top-color: #00ffcc;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}

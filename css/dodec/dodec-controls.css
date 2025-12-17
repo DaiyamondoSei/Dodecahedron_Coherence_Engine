@@ -1,0 +1,210 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: dodec-controls.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Styles for mode selector and controls panel in the 3D Dodecahedron.
+ * These are the primary UI control elements for user interaction.
+ *
+ * Extracted from: pages/dodecahedron-3d.html (lines 90-248)
+ * Extraction Date: 2025-12-17
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  REQUIRED:                                                               │
+ * │  • dodec-base.css - For CSS variables                                    │
+ * │  • dodec-layout.css - For z-index context                                │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * COMPONENTS:
+ * 1. Mode Selector (top-left)
+ *    - Standard, Advanced, Complete, Minimal modes
+ *    - Each mode shows/hides different UI elements
+ *
+ * 2. Controls Panel (top-right)
+ *    - Rotation toggle, reset view
+ *    - Stats display (coherence, shadows, octave)
+ *    - Keyboard shortcuts reference
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Mode switching is handled by dodec-controls.js. The CSS classes here
+ * respond to JavaScript-driven state changes.
+ *
+ * The .active class on mode buttons provides visual feedback for current mode.
+ * The .hidden class can be applied to hide panels in minimal mode.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   MODE SELECTOR
+   Visualization mode toggle (Standard/Advanced/Complete/Minimal)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.mode-selector {
+    position: fixed;
+    top: 90px;
+    left: 20px;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.mode-selector-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 10px;
+}
+
+.mode-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mode-button {
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+}
+
+.mode-button:hover {
+    background: rgba(0, 255, 204, 0.1);
+    border-color: rgba(0, 255, 204, 0.5);
+    color: #00ffcc;
+}
+
+.mode-button.active {
+    background: rgba(0, 255, 204, 0.2);
+    border-color: #00ffcc;
+    color: #00ffcc;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+}
+
+.mode-button-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.mode-button-desc {
+    font-size: 9px;
+    opacity: 0.7;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   CONTROLS PANEL
+   Right sidebar with controls and stats (Standard mode)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.controls-panel {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    width: 280px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    z-index: 200;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+}
+
+.controls-panel h3 {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #00ffcc;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+.control-label {
+    font-size: 10px;
+    opacity: 0.7;
+    margin-bottom: 8px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.control-button {
+    width: 100%;
+    padding: 10px;
+    background: rgba(0, 255, 204, 0.1);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-radius: 6px;
+    color: #00ffcc;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    margin-bottom: 8px;
+}
+
+.control-button:hover {
+    background: rgba(0, 255, 204, 0.2);
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+}
+
+.control-button.active {
+    background: rgba(0, 255, 204, 0.3);
+    border-color: #00ffcc;
+}
+
+/* Tour button styling */
+.tour-button {
+    background: linear-gradient(135deg, rgba(0, 255, 204, 0.2), rgba(0, 170, 255, 0.2)) !important;
+    border-color: #00ffcc !important;
+    color: #00ffcc !important;
+}
+
+.tour-button:hover {
+    background: linear-gradient(135deg, rgba(0, 255, 204, 0.4), rgba(0, 170, 255, 0.4)) !important;
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   STATS DISPLAY
+   Statistics items within controls panel
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.stats-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+}
+
+.stats-label {
+    opacity: 0.7;
+}
+
+.stats-value {
+    color: #00ffcc;
+    font-weight: 600;
+}

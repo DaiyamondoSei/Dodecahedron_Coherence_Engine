@@ -1,0 +1,584 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: dodec-overlays.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Full-screen overlay styles for the 3D Dodecahedron visualization.
+ * Contains phase warnings, keyboard hints, pause indicator, shadow overlay,
+ * and guided tour components.
+ *
+ * Extracted from: pages/dodecahedron-3d.html
+ * Extraction Date: 2025-12-17
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  REQUIRED:                                                               │
+ * │  • dodec-base.css - For CSS variables                                    │
+ * │  • dodec-animations.css - For pulse, phaseWarningPulse, tourPulse        │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * OVERLAY Z-INDEX HIERARCHY:
+ * - Phase warning: 500
+ * - Shadow overlay: 2000
+ * - Font scale indicator: 9998
+ * - Contrast indicator: 9997
+ * - Pause indicator: 9999
+ * - Presentation indicator: 9999
+ * - Keyboard hints: 10000
+ * - Guided tour: 10000-10002
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Most overlays use the pattern:
+ * - Default: opacity: 0; visibility: hidden;
+ * - Active: opacity: 1; visibility: visible; (via .visible or .active class)
+ *
+ * The shadow overlay is a complex component with its own header, content,
+ * and footer sections. It functions as a full-screen modal.
+ *
+ * The guided tour uses spotlight cutouts and positioned tooltips.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PHASE WARNING OVERLAY
+   Shown during octave transition warnings
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.phase-warning {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 170, 0, 0.15);
+    border: 2px solid #ffaa00;
+    border-radius: 12px;
+    padding: 20px 30px;
+    backdrop-filter: blur(10px);
+    z-index: 500;
+    animation: phaseWarningPulse 2s ease-in-out infinite;
+    display: none;
+    max-width: 400px;
+    text-align: center;
+}
+
+.phase-warning.visible {
+    display: block;
+}
+
+.phase-warning-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffaa00;
+    margin-bottom: 10px;
+}
+
+.phase-warning-message {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.phase-warning-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.phase-warning-close:hover {
+    background: rgba(255, 170, 0, 0.3);
+    border-color: #ffaa00;
+    color: #ffaa00;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   KEYBOARD HINTS OVERLAY
+   Shows all keyboard shortcuts (toggle with H key)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.keyboard-hints-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid #00ffcc;
+    border-radius: 16px;
+    padding: 30px 40px;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    box-shadow: 0 0 40px rgba(0, 255, 204, 0.3);
+    min-width: 400px;
+}
+
+.keyboard-hints-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.keyboard-hints-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #00ffcc;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.keyboard-hints-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px 20px;
+    align-items: center;
+}
+
+.keyboard-hint-key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 10px;
+    background: rgba(0, 255, 204, 0.15);
+    border: 1px solid #00ffcc;
+    border-radius: 6px;
+    color: #00ffcc;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: 'SF Mono', Consolas, monospace;
+}
+
+.keyboard-hint-desc {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+}
+
+.keyboard-hints-divider {
+    grid-column: 1 / -1;
+    height: 1px;
+    background: rgba(0, 255, 204, 0.2);
+    margin: 8px 0;
+}
+
+.keyboard-hints-section {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    color: rgba(0, 255, 204, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.keyboard-hints-footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PAUSE INDICATOR
+   Shows when animations are paused (Space key)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.pause-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid #ff6600;
+    border-radius: 12px;
+    padding: 20px 35px;
+    color: #ff6600;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 9999;
+    box-shadow: 0 0 30px rgba(255, 102, 0, 0.3);
+}
+
+.pause-indicator.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.pause-indicator-icon {
+    display: flex;
+    gap: 6px;
+}
+
+.pause-indicator-bar {
+    width: 8px;
+    height: 28px;
+    background: #ff6600;
+    border-radius: 2px;
+}
+
+.pause-indicator-hint {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin-top: 8px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SHADOW OVERLAY
+   Full-screen shadow analysis modal
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.shadow-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.shadow-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.shadow-overlay-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+}
+
+.shadow-overlay-container {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    max-height: 85vh;
+    background: linear-gradient(135deg, rgba(20, 20, 30, 0.98), rgba(30, 20, 25, 0.98));
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 25px 80px rgba(255, 68, 68, 0.15), 0 0 100px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.shadow-overlay.visible .shadow-overlay-container {
+    transform: scale(1) translateY(0);
+}
+
+.shadow-overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 30px;
+    border-bottom: 1px solid rgba(255, 68, 68, 0.2);
+}
+
+.shadow-overlay-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.shadow-overlay-icon {
+    font-size: 28px;
+}
+
+.shadow-overlay-title h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 300;
+    color: #ff6b6b;
+    letter-spacing: 1px;
+}
+
+.shadow-overlay-subtitle {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-left: 12px;
+}
+
+.shadow-overlay-close {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: 50%;
+    color: #ff6b6b;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.shadow-overlay-close:hover {
+    background: rgba(255, 68, 68, 0.2);
+    transform: rotate(90deg);
+}
+
+.shadow-overlay-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Enhanced shadow cards for overlay */
+.shadow-overlay-content .shadow-card {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 20px;
+    border-left: 4px solid #ff6b6b;
+    transition: all 0.2s ease;
+}
+
+.shadow-overlay-content .shadow-card:hover {
+    background: rgba(255, 68, 68, 0.1);
+    transform: translateX(4px);
+}
+
+.shadow-overlay-content .shadow-card.severity-critical {
+    border-left-color: #ff4444;
+}
+
+.shadow-overlay-content .shadow-card.severity-significant {
+    border-left-color: #ff8844;
+}
+
+.shadow-overlay-content .shadow-card.severity-moderate {
+    border-left-color: #ffaa44;
+}
+
+.shadow-overlay-footer {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 16px 30px;
+    border-top: 1px solid rgba(255, 68, 68, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 16px 16px;
+}
+
+.shadow-overlay-hint {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.shadow-overlay-hint .key-hint {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    font-family: monospace;
+    margin-right: 6px;
+}
+
+/* Empty state */
+.shadow-overlay-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.shadow-overlay-empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.shadow-overlay-empty h3 {
+    margin: 0 0 8px 0;
+    font-weight: 300;
+    color: #00ffcc;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   GUIDED TOUR
+   Multi-step interactive tour for thesis presentation
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.tour-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 10000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.tour-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+.tour-spotlight {
+    position: absolute;
+    border-radius: 8px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.85);
+    pointer-events: none;
+    transition: all 0.5s ease;
+    z-index: 10001;
+}
+
+.tour-tooltip {
+    position: absolute;
+    max-width: 420px;
+    background: linear-gradient(135deg, rgba(10, 20, 30, 0.98), rgba(0, 30, 40, 0.98));
+    border: 2px solid #00ffcc;
+    border-radius: 16px;
+    padding: 25px 30px;
+    z-index: 10002;
+    box-shadow: 0 0 40px rgba(0, 255, 204, 0.3), inset 0 0 30px rgba(0, 255, 204, 0.05);
+}
+
+.tour-step-indicator {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.tour-step-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.tour-step-dot.active {
+    background: #00ffcc;
+    box-shadow: 0 0 10px #00ffcc;
+}
+
+.tour-step-dot.completed {
+    background: rgba(0, 255, 204, 0.5);
+}
+
+.tour-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #00ffcc;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+}
+
+.tour-content {
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 20px;
+}
+
+.tour-content strong {
+    color: #00ffcc;
+}
+
+.tour-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 255, 204, 0.2);
+}
+
+.tour-nav-btn {
+    padding: 12px 24px;
+    border: 1px solid rgba(0, 255, 204, 0.5);
+    border-radius: 8px;
+    background: rgba(0, 255, 204, 0.1);
+    color: #00ffcc;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.tour-nav-btn:hover {
+    background: rgba(0, 255, 204, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+    transform: translateY(-1px);
+}
+
+.tour-nav-btn.primary {
+    background: linear-gradient(135deg, #00ffcc, #00aaff);
+    color: #000;
+    border: none;
+}
+
+.tour-nav-btn.primary:hover {
+    box-shadow: 0 0 25px rgba(0, 255, 204, 0.5);
+}
+
+.tour-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tour-close:hover {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff6666;
+}
+
+.tour-highlight-pulse {
+    position: absolute;
+    border-radius: 8px;
+    border: 2px solid #00ffcc;
+    animation: tourPulse 1.5s ease-in-out infinite;
+    pointer-events: none;
+}
