@@ -122,7 +122,7 @@
  * - Any component needing the full organizational model
  *
  * GOTCHAS:
- * - CSV paths are relative to HTML file location (./data/)
+ * - CSV paths auto-detect location (./data/ from root, ../data/ from pages/)
  * - Company profiles must exist or loadCompanyProfile returns null
  * - 'custom' without config shows a warning but still works
  * - Edge element is extracted: "Air (Communication)" → "Air"
@@ -197,9 +197,11 @@ export class UnifiedDataLoader {
         }
 
         console.log('   📂 Loading base CSV models...');
+        // Use root-relative paths to work from any subdirectory (e.g., pages/)
+        const basePath = window.location.pathname.includes('/pages/') ? '../data/' : './data/';
         const [edges, vertices] = await Promise.all([
-            this.fetchCSV('./data/CSV_Edge_tension_Map.csv'),
-            this.fetchCSV('./data/CSV_Vortex_Map.csv')
+            this.fetchCSV(`${basePath}CSV_Edge_tension_Map.csv`),
+            this.fetchCSV(`${basePath}CSV_Vortex_Map.csv`)
         ]);
 
         const models = {

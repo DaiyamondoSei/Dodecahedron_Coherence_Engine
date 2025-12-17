@@ -352,7 +352,9 @@ export class DodecahedronEngine {
    */
   async loadCSV(filename) {
     try {
-      const response = await fetch(`./data/${filename}`);
+      // Auto-detect path based on location (works from root or pages/ subdirectory)
+      const basePath = window.location.pathname.includes('/pages/') ? '../data/' : './data/';
+      const response = await fetch(`${basePath}${filename}`);
       const text = await response.text();
       return parseCSV(text);
     } catch (error) {
