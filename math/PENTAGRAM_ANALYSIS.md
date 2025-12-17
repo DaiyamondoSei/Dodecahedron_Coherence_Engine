@@ -64,23 +64,33 @@ Each face is a **pentagon** (5-sided polygon). Drawing all internal diagonals cr
 
 **Purpose:** Measure resonance between pentagram-connected elements.
 
-**Formula:**
+**Formula (α-Blend):**
 ```
-s_i = √(k_a × k_b)   [geometric mean]
+s_i = α × (k_a + k_b)/2 + (1-α) × (k_a × k_b)
 ```
 
-**Why geometric mean?**
-- **Penalizes imbalance:** If one element is 0, pair value is 0 (even if other is perfect)
-- **Rewards harmony:** Both elements strong → pair strong
-- **Non-linear:** 0.8 × 0.8 = 0.64 (perfect balance better than 0.5 × 1.0)
+Where:
+- `α` = ALPHA tuning parameter (default 0.6)
+- `(k_a + k_b)/2` = arithmetic mean (central tendency)
+- `k_a × k_b` = geometric synergy (multiplicative relationship)
 
-**Calculations:**
+**Why α-blend instead of pure geometric mean?**
+- **Captures two insights:** "What's the average?" AND "Are both working together?"
+- **Penalizes imbalance:** Product term approaches 0 when either element is weak
+- **Tunable philosophy:** High α = pragmatic realism; Low α = believes in synergy
+- **Richer signal:** Blends central tendency with multiplicative harmony
+
+**Note:** Earlier documentation referenced pure geometric mean `√(k_a × k_b)`.
+The implementation uses the simpler product `k_a × k_b` which penalizes weakness
+MORE strongly (0.2 × 0.8 = 0.16 vs √0.16 = 0.4).
+
+**Calculations (with α = 0.6):**
 ```
-s₁ = √(k₁ × k₃)   [Earth-Fire connection]
-s₂ = √(k₂ × k₄)   [Water-Air connection]
-s₃ = √(k₃ × k₅)   [Fire-Ether connection]
-s₄ = √(k₄ × k₁)   [Air-Earth connection]
-s₅ = √(k₅ × k₂)   [Ether-Water connection]
+s₁ = 0.6 × (k₁+k₃)/2 + 0.4 × (k₁×k₃)   [Earth-Fire connection]
+s₂ = 0.6 × (k₂+k₄)/2 + 0.4 × (k₂×k₄)   [Water-Air connection]
+s₃ = 0.6 × (k₃+k₅)/2 + 0.4 × (k₃×k₅)   [Fire-Ether connection]
+s₄ = 0.6 × (k₄+k₁)/2 + 0.4 × (k₄×k₁)   [Air-Earth connection]
+s₅ = 0.6 × (k₅+k₂)/2 + 0.4 × (k₅×k₂)   [Ether-Water connection]
 ```
 
 **Example:**
@@ -92,17 +102,28 @@ k₃ = 0.80  // Fire: Profit Margin
 k₄ = 0.50  // Air: Investment Velocity
 k₅ = 0.70  // Ether: Strategic Alignment
 
-// Calculate star pairs
-s₁ = √(0.60 × 0.80) = √0.48 = 0.693
-s₂ = √(0.75 × 0.50) = √0.375 = 0.612
-s₃ = √(0.80 × 0.70) = √0.56 = 0.748
-s₄ = √(0.50 × 0.60) = √0.30 = 0.548
-s₅ = √(0.70 × 0.75) = √0.525 = 0.725
+// Calculate star pairs using α-blend (α = 0.6)
+// Formula: s = 0.6 × (k_a + k_b)/2 + 0.4 × (k_a × k_b)
+
+s₁ = 0.6 × (0.60+0.80)/2 + 0.4 × (0.60×0.80)
+   = 0.6 × 0.70 + 0.4 × 0.48 = 0.42 + 0.192 = 0.612
+
+s₂ = 0.6 × (0.75+0.50)/2 + 0.4 × (0.75×0.50)
+   = 0.6 × 0.625 + 0.4 × 0.375 = 0.375 + 0.15 = 0.525
+
+s₃ = 0.6 × (0.80+0.70)/2 + 0.4 × (0.80×0.70)
+   = 0.6 × 0.75 + 0.4 × 0.56 = 0.45 + 0.224 = 0.674
+
+s₄ = 0.6 × (0.50+0.60)/2 + 0.4 × (0.50×0.60)
+   = 0.6 × 0.55 + 0.4 × 0.30 = 0.33 + 0.12 = 0.450
+
+s₅ = 0.6 × (0.70+0.75)/2 + 0.4 × (0.70×0.75)
+   = 0.6 × 0.725 + 0.4 × 0.525 = 0.435 + 0.21 = 0.645
 ```
 
 **Interpretation:**
-- `s₃ = 0.748` (highest) → Fire-Ether synergy is strong
-- `s₄ = 0.548` (lowest) → Air-Earth connection is weak (low investment + low cash)
+- `s₃ = 0.674` (highest) → Fire-Ether synergy is strongest
+- `s₄ = 0.450` (lowest) → Air-Earth connection is weak (low investment + low cash)
 
 ---
 
@@ -386,41 +407,45 @@ E_face = 0.850 × (1.0007) = 0.851 → 85.1%
 
 ```javascript
 class Face {
-  calculatePentagramResonance(kpis) {
-    // Step 1: Star pairs (geometric mean)
-    const s = [];
-    s[0] = Math.sqrt(kpis[0].normalizedScore * kpis[2].normalizedScore); // 1-3
-    s[1] = Math.sqrt(kpis[1].normalizedScore * kpis[3].normalizedScore); // 2-4
-    s[2] = Math.sqrt(kpis[2].normalizedScore * kpis[4].normalizedScore); // 3-5
-    s[3] = Math.sqrt(kpis[3].normalizedScore * kpis[0].normalizedScore); // 4-1
-    s[4] = Math.sqrt(kpis[4].normalizedScore * kpis[1].normalizedScore); // 5-2
+  calculateStarPairs() {
+    // Star pairs use α-blend of arithmetic mean and geometric synergy
+    // Formula: s = α × (k₁+k₂)/2 + (1-α) × (k₁×k₂)
+    const alpha = this.tuning.ALPHA; // Default 0.6
+    const connections = [[0, 2], [1, 3], [2, 4], [3, 0], [4, 1]];
 
-    // Step 2: Intersection nodes (arithmetic mean)
-    const p = [];
-    p[0] = (s[0] + s[1]) / 2;
-    p[1] = (s[1] + s[2]) / 2;
-    p[2] = (s[2] + s[3]) / 2;
-    p[3] = (s[3] + s[4]) / 2;
-    p[4] = (s[4] + s[0]) / 2;
+    this.starPairs = connections.map(([i1, i2]) => {
+      const k1 = this.elementalKPIs[i1].normalizedScore;
+      const k2 = this.elementalKPIs[i2].normalizedScore;
 
-    // Step 3: Center composite
-    const C = (p[0] + p[1] + p[2] + p[3] + p[4]) / 5;
+      // Arithmetic mean for central tendency
+      const arithmeticMean = (k1 + k2) / 2;
 
-    // Step 4: Resonance score
-    const E_base = this.calculateBaseEnergy(kpis);
-    let R = (C - E_base) / E_base * 0.3;
+      // Product synergy (captures multiplicative relationship)
+      const geometricSynergy = k1 * k2;
 
-    // Constrain
-    if (R > 0.30) R = 0.30;
-    if (R < -0.20) R = -0.20;
-
-    return R;
+      // ALPHA blends: higher α = more arithmetic, lower = more synergistic
+      return (alpha * arithmeticMean) + ((1 - alpha) * geometricSynergy);
+    });
   }
 
-  calculateEnergy(kpis) {
-    const E_base = this.calculateBaseEnergy(kpis);
-    const R = this.calculatePentagramResonance(kpis);
-    return E_base * (1 + R);
+  calculateIntersectionNodes() {
+    // Intersection nodes blend adjacent star pairs
+    // Formula: p = β × s_prev + (1-β) × s_curr
+    const beta = this.tuning.BETA; // Default 0.5 (PHI_MIDPOINT!)
+
+    this.intersectionNodes = [];
+    for (let i = 0; i < 5; i++) {
+      const prevIndex = (i - 1 + 5) % 5;
+      const s_prev = this.starPairs[prevIndex];
+      const s_curr = this.starPairs[i];
+      this.intersectionNodes.push((beta * s_prev) + ((1 - beta) * s_curr));
+    }
+  }
+
+  calculateCenterComposite() {
+    // Center = average of all intersection nodes
+    const sum = this.intersectionNodes.reduce((acc, val) => acc + val, 0);
+    this.centerComposite = sum / 5;
   }
 }
 ```
@@ -429,15 +454,20 @@ class Face {
 
 ## Frequently Asked Questions
 
-### Q: Why geometric mean for star pairs?
+### Q: Why α-blend instead of pure geometric mean?
 
-**A:** Geometric mean **penalizes imbalance** more than arithmetic mean.
+**A:** The α-blend formula captures **two complementary insights**:
 
-Example:
-- **Arithmetic:** (0.2 + 1.0) / 2 = 0.6
-- **Geometric:** √(0.2 × 1.0) = 0.447
+1. **Arithmetic mean (60% weight):** "What's the average?" - central tendency
+2. **Product term (40% weight):** "Are both strong together?" - synergistic harmony
 
-Geometric mean says: "One weak element drags down the pair more than arithmetic suggests." This encodes **"harmony over power"** - you can't compensate for one weak element with one strong one.
+The product term (`k₁ × k₂`) **penalizes imbalance** more strongly than geometric mean:
+- **Arithmetic only:** (0.2 + 1.0) / 2 = 0.60
+- **Geometric mean:** √(0.2 × 1.0) = 0.447
+- **Product term:** 0.2 × 1.0 = 0.20 (harshest penalty!)
+- **α-blend (0.6):** 0.6 × 0.60 + 0.4 × 0.20 = 0.44
+
+The α-blend allows **tuning the philosophy**: Higher α = more pragmatic; Lower α = stronger synergy belief.
 
 ---
 
@@ -472,9 +502,9 @@ Just ensure each face has exactly 5 KPIs mapped consistently.
 ## Key Takeaways
 
 1. **Pentagram geometry reveals hidden patterns** traditional averages miss
-2. **Geometric mean penalizes imbalance** - encoding "harmony over power"
-3. **Harmonic resonance boosts balanced faces** and penalizes unbalanced ones
-4. **Non-linear feedback** - extreme imbalance gets exponential penalties
+2. **α-blend formula captures both** central tendency AND synergistic harmony
+3. **Product term penalizes imbalance** - encoding "harmony over power"
+4. **Tunable philosophy** - ALPHA parameter adjusts realism vs synergy belief
 5. **Sacred geometry isn't decorative** - it's functional mathematics
 
 ---
