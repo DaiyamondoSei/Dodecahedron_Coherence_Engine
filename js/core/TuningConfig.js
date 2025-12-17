@@ -79,17 +79,21 @@ export class TuningConfig {
     // Blends arithmetic mean and multiplicative synergy for Star Pairs.
     // Formula: s = α × (k₁ + k₂)/2 + (1-α) × (k₁ × k₂)
     //
-    // DEFAULT: 0.6 (intentionally near φ^-1 = 0.618)
+    // DEFAULT: φ^-1 = 0.618033988749895 (Golden Ratio Inverse)
     //
     // PHI DERIVATION NOTE:
-    // The natural PHI choice is φ^-1 = 0.618033... (golden ratio inverse).
-    // Backend uses φ^-1; frontend uses 0.6 for UX clarity ("60/40 blend").
-    // The 0.018 difference (< 3%) has negligible practical impact.
+    // The value is the exact golden ratio inverse: φ^-1 = 1/φ = 0.618033...
+    // This ensures mathematical coherence with the dodecahedral geometry
+    // where φ (phi) is the fundamental building block.
     //
-    // Philosophy: "We believe in synergy, but ground it in reality"
+    // The α-blend with φ^-1 creates a "golden" balance between:
+    // - 61.8% weight on arithmetic mean (central tendency)
+    // - 38.2% weight on multiplicative synergy (φ^-2 complement)
+    //
+    // Philosophy: "We believe in synergy, but ground it in golden reality"
     // Range: 0.0 (pure synergy) to 1.0 (pure arithmetic)
     // ========================================================================
-    this.ALPHA = 0.6;
+    this.ALPHA = PHI_HARMONICS.PHI_INV_1;  // 0.618033988749895
 
     // ========================================================================
     // BETA (β): The Intersection Blend
