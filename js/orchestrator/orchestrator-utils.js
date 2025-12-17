@@ -27,7 +27,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -175,7 +175,7 @@
         if (!leverageVertex && vertices.length > 0) {
             leverageVertex = vertices.reduce((max, v) =>
                 (v.vortexStrength || 0) > (max.vortexStrength || 0) ? v : max
-            , vertices[0]);
+                , vertices[0]);
         }
 
         // Strategy 3: If no vertices, just find the lowest-energy face
@@ -258,8 +258,8 @@
             </div>
             <div class="leverage-insight">
                 ${isBermuda
-                    ? 'This vertex represents a critical imbalance where energy is being lost. Strengthening the weakest converging face will begin to restore harmonic flow.'
-                    : 'This convergence point has the highest transformation potential. Improving the target face will cascade positive effects through connected edges.'}
+                ? 'This vertex represents a critical imbalance where energy is being lost. Strengthening the weakest converging face will begin to restore harmonic flow.'
+                : 'This convergence point has the highest transformation potential. Improving the target face will cascade positive effects through connected edges.'}
             </div>
         `;
 
@@ -280,10 +280,10 @@
      */
     function launchView(viewName) {
         const viewUrls = {
-            'dodecahedron': 'dodecahedron-3d.html',
-            'calculations': 'dev/calculations.html',
+            'dodecahedron': 'pages/dodecahedron-3d.html',
+            'calculations': 'pages/calculations.html',
             'breath': 'pages/breath-analysis.html',
-            'dna': 'octave-dna.html',
+            'dna': 'pages/octave-dna.html',
             'simulator': 'pages/simulator.html'
         };
 

@@ -2306,8 +2306,8 @@
             50% { box-shadow: 0 0 0 15px rgba(0, 255, 204, 0); }
         }
     </style>
-    <link rel="stylesheet" href="css/harmonic-tuner.css">
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="../css/harmonic-tuner.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 
 <body>
@@ -2755,20 +2755,20 @@
     <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <!-- Load breath analyzer first -->
-    <script src="js/breath-analyzer.js?v=20251207"></script>
+    <script src="../js/breath-analyzer.js?v=20251207"></script>
 
     <!-- Load spectral analyzer (required for engine) -->
-    <script src="js/spectral-analyzer.js?v=20251207"></script>
+    <script src="../js/spectral-analyzer.js?v=20251207"></script>
 
     <!-- Main Quannex Engine (modules) -->
-    <script type="module" src="js/main.js?v=20251207b"></script>
-    <script type="module" src="js/company-loader.js?v=20251207"></script>
+    <script type="module" src="../js/main.js?v=20251207b"></script>
+    <script type="module" src="../js/company-loader.js?v=20251207"></script>
 
     <!-- Visualization Manager -->
-    <script type="module" src="js/advanced/visualization-manager.js?v=20251207"></script>
+    <script type="module" src="../js/advanced/visualization-manager.js?v=20251207"></script>
 
     <!-- DNA Preview Mini - Phase 2 Enhancement -->
-    <script src="js/dna-preview-mini.js?v=20251208"></script>
+    <script src="../js/dna-preview-mini.js?v=20251208"></script>
 
     <!-- ========================================
          Dodecahedron Visualization Modules
@@ -2781,33 +2781,33 @@
     <!-- Phase 0: Core Topology (SINGLE SOURCE OF TRUTH) -->
     <!-- CRITICAL: This must load BEFORE dodec-geometry.js -->
     <!-- Contains DodecahedronTopology.EDGES with all 30 edge definitions -->
-    <script src="js/geometry/dodecahedron-topology.js?v=20251216"></script>
+    <script src="../js/geometry/dodecahedron-topology.js?v=20251216"></script>
 
     <!-- Phase 1: Foundation -->
-    <script src="js/dodec/dodec-state.js?v=20251215"></script>
-    <script src="js/dodec/dodec-topology.js?v=20251216"></script>
+    <script src="../js/dodec/dodec-state.js?v=20251215"></script>
+    <script src="../js/dodec/dodec-topology.js?v=20251216"></script>
 
     <!-- Phase 2: Scene Infrastructure -->
-    <script src="js/dodec/dodec-materials.js?v=20251215"></script>
-    <script src="js/dodec/dodec-scene.js?v=20251215"></script>
+    <script src="../js/dodec/dodec-materials.js?v=20251215"></script>
+    <script src="../js/dodec/dodec-scene.js?v=20251215"></script>
 
     <!-- Phase 3: Geometry -->
     <!-- FIXED Dec 2025: Now uses topology-based edge creation (not proximity) -->
-    <script src="js/dodec/dodec-geometry.js?v=20251216"></script>
+    <script src="../js/dodec/dodec-geometry.js?v=20251216"></script>
 
     <!-- Phase 4: Data -->
-    <script src="js/dodec/dodec-data.js?v=20251215"></script>
+    <script src="../js/dodec/dodec-data.js?v=20251215"></script>
 
     <!-- Phase 5-7: Interaction & UI -->
-    <script src="js/dodec/dodec-interaction.js?v=20251215"></script>
-    <script src="js/dodec/dodec-panels.js?v=20251215"></script>
-    <script src="js/dodec/dodec-controls.js?v=20251215"></script>
+    <script src="../js/dodec/dodec-interaction.js?v=20251215"></script>
+    <script src="../js/dodec/dodec-panels.js?v=20251215"></script>
+    <script src="../js/dodec/dodec-controls.js?v=20251215"></script>
 
     <!-- Phase 8: Animation -->
-    <script src="js/dodec/dodec-animation.js?v=20251215"></script>
+    <script src="../js/dodec/dodec-animation.js?v=20251215"></script>
 
     <!-- Phase 9: Main Orchestrator -->
-    <script src="js/dodec/dodec-main.js?v=20251215"></script>
+    <script src="../js/dodec/dodec-main.js?v=20251215"></script>
 
     <script type="module">
         import { VisualizationManager } from './js/advanced/visualization-manager.js';
@@ -4933,8 +4933,8 @@
     <button class="voice-toggle" id="voiceToggle">💬 Ask Quannex</button>
 
     <!-- Load Harmonic Tuner Logic -->
-    <script src="js/harmonic-tuner.js"></script>
-    <script src="js/harmonic-tuner-tooltips.js"></script>
+    <script src="../js/harmonic-tuner.js"></script>
+    <script src="../js/harmonic-tuner-tooltips.js"></script>
 
     <!-- Guided Tour Logic -->
     <script>

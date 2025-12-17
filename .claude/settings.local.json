@@ -79,7 +79,13 @@
       "Bash(for file in main.js gemini-client.js harmonic-tuner.js spectral-analyzer.js breath-analyzer.js)",
       "Bash(done)",
       "Bash(while read file)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Skill(brainstorming)",
+      "Bash(cmd /c del \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\octave-dna.html\")",
+      "Bash(cmd /c del \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\dodecahedron-3d.html\")",
+      "Bash(cmd /c del \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\dev\\results-summary.html\")",
+      "Bash(cmd /c \"dir /b \"\"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\pages\\*.html\"\"\")",
+      "Bash(cmd /c \"dir /b \"\"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\*.html\"\"\")"
     ],
     "deny": [],
     "ask": [

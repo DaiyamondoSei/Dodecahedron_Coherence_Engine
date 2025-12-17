@@ -576,10 +576,10 @@
     </div>
 
     <!-- Load dependencies (ES modules for company-loader and main) -->
-    <script type="module" src="./js/company-loader.js"></script>
-    <script src="./js/breath-analyzer.js"></script>
-    <script src="./js/spectral-analyzer-global.js"></script>
-    <script type="module" src="./js/main.js"></script>
+    <script type="module" src="../js/company-loader.js"></script>
+    <script src="../js/breath-analyzer.js"></script>
+    <script src="../js/spectral-analyzer-global.js"></script>
+    <script type="module" src="../js/main.js"></script>
 
     <script>
         /**
@@ -611,7 +611,7 @@
             // Option 3: Navigate with state preservation marker
             // The orchestrator should check for this and restore from sessionStorage
             console.log('[Nav] Navigating to orchestrator with restore flag');
-            window.location.href = 'demo-orchestrator.html?restore=true';
+            window.location.href = '../demo-orchestrator.html?restore=true';
         }
 
         // Track loaded company to prevent duplicates
