@@ -23,7 +23,7 @@
  * This is intentional: CSVs are the seed/reference, JS is the living implementation.
  * ========================================
  */
-import { UnifiedDataLoader } from './unified-data-loader.js';
+import { UnifiedDataLoader } from './unified-data-loader.js?v=20251217';
 
 const COMPANIES = [
     { id: 'quannex', name: 'Quannex AI' },
@@ -32,12 +32,22 @@ const COMPANIES = [
     { id: 'zenith-solutions', name: 'Zenith Global' }
 ];
 
+/**
+ * Get the correct base path for fetching resources
+ * Auto-detects if running from /pages/ subdirectory
+ * @returns {string} Base path prefix ('./' or '../')
+ */
+function getBasePath() {
+    return window.location.pathname.includes('/pages/') ? '../' : './';
+}
+
 // Re-entrancy guard to prevent infinite loop when updating selector
 let _isSwitchingCompany = false;
 
 async function loadCompanyProfile(companyId) {
+    const basePath = getBasePath();
     try {
-        const response = await fetch(`./companies/${companyId}/company.json`);
+        const response = await fetch(`${basePath}companies/${companyId}/company.json`);
         if (!response.ok) {
             console.warn(`⚠️ Company profile not found for ${companyId} (HTTP ${response.status})`);
             return null;
@@ -59,12 +69,13 @@ async function loadCompanyProfile(companyId) {
  * @returns {Promise<Array>}
  */
 async function loadCompanyKPIs(companyId) {
+    const basePath = getBasePath();
     const loader = new UnifiedDataLoader();
     try {
-        const kpiReq = await fetch(`./companies/${companyId}/kpis.csv`);
+        const kpiReq = await fetch(`${basePath}companies/${companyId}/kpis.csv`);
         if (!kpiReq.ok) {
             console.warn(`⚠️ KPI file not found for ${companyId} (HTTP ${kpiReq.status}). Returning empty array.`);
-            console.warn(`   Expected path: ./companies/${companyId}/kpis.csv`);
+            console.warn(`   Expected path: ${basePath}companies/${companyId}/kpis.csv`);
             return [];
         }
         const kpiText = await kpiReq.text();

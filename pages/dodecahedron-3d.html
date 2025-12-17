@@ -2762,7 +2762,7 @@
 
     <!-- Main Quannex Engine (modules) -->
     <script type="module" src="../js/main.js?v=20251207b"></script>
-    <script type="module" src="../js/company-loader.js?v=20251207"></script>
+    <script type="module" src="../js/company-loader.js?v=20251217"></script>
 
     <!-- Visualization Manager -->
     <script type="module" src="../js/advanced/visualization-manager.js?v=20251207"></script>
@@ -2810,13 +2810,13 @@
     <script src="../js/dodec/dodec-main.js?v=20251215"></script>
 
     <script type="module">
-        import { VisualizationManager } from './js/advanced/visualization-manager.js';
-        import { ShadowPanel } from './js/ui/shadow-panel.js';
-        import { VoiceModule } from './js/ai/voice-module.js';
-        import { AIShadowAdapter } from './js/ai/adapters/ai-shadow-adapter.js';
-        import { ProviderFactory, getGeminiProvider, getOpenAIProvider } from './js/ai/providers/provider-factory.js';
-        import { GeminiProvider } from './js/ai/providers/gemini-provider.js';
-        import { OpenAIProvider } from './js/ai/providers/openai-provider.js';
+        import { VisualizationManager } from '../js/advanced/visualization-manager.js';
+        import { ShadowPanel } from '../js/ui/shadow-panel.js';
+        import { VoiceModule } from '../js/ai/voice-module.js';
+        import { AIShadowAdapter } from '../js/ai/adapters/ai-shadow-adapter.js';
+        import { ProviderFactory, getGeminiProvider, getOpenAIProvider } from '../js/ai/providers/provider-factory.js';
+        import { GeminiProvider } from '../js/ai/providers/gemini-provider.js';
+        import { OpenAIProvider } from '../js/ai/providers/openai-provider.js';
 
         // Expose AIShadowAdapter globally for ShadowPanel AI enhance feature
         window.AIShadowAdapter = AIShadowAdapter;
@@ -3530,11 +3530,11 @@
 
             try {
                 const modules = await Promise.all([
-                    import('./js/advanced/spectral-analyzer.js'),
-                    import('./js/advanced/edge-analyzer.js'),
-                    import('./js/advanced/vertex-analyzer.js?v=2'),
-                    import('./js/advanced/shadow-detector.js'),
-                    import('./js/advanced/ai-edge-interpreter.js'),
+                    import('../js/advanced/spectral-analyzer.js'),
+                    import('../js/advanced/edge-analyzer.js'),
+                    import('../js/advanced/vertex-analyzer.js?v=2'),
+                    import('../js/advanced/shadow-detector.js'),
+                    import('../js/advanced/ai-edge-interpreter.js'),
                 ]);
 
                 // Assign to window for global access (needed by VisualizationManager)
@@ -3562,7 +3562,7 @@
             if (DynamicsAnalyzer) return;
 
             try {
-                const module = await import('./js/advanced/dynamics-analyzer.js');
+                const module = await import('../js/advanced/dynamics-analyzer.js');
                 window.DynamicsAnalyzer = module.DynamicsAnalyzer;
                 DynamicsAnalyzer = window.DynamicsAnalyzer;
                 console.log('✅ Dynamics analyzer loaded');

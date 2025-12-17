@@ -145,6 +145,15 @@ export class UnifiedDataLoader {
     }
 
     /**
+     * Get the correct base path for fetching resources
+     * Auto-detects if running from /pages/ subdirectory
+     * @returns {string} Base path prefix ('./' or '../')
+     */
+    getBasePath() {
+        return window.location.pathname.includes('/pages/') ? '../' : './';
+    }
+
+    /**
      * Load the complete context for a session
      * @param {string} companyId - 'quannex', 'nova-tech', etc. OR 'custom'
      * @param {Object} customConfig - Optional config for custom/AI modes
@@ -197,11 +206,11 @@ export class UnifiedDataLoader {
         }
 
         console.log('   📂 Loading base CSV models...');
-        // Use root-relative paths to work from any subdirectory (e.g., pages/)
-        const basePath = window.location.pathname.includes('/pages/') ? '../data/' : './data/';
+        // Use getBasePath() to work from any subdirectory (e.g., pages/)
+        const basePath = this.getBasePath();
         const [edges, vertices] = await Promise.all([
-            this.fetchCSV(`${basePath}CSV_Edge_tension_Map.csv`),
-            this.fetchCSV(`${basePath}CSV_Vortex_Map.csv`)
+            this.fetchCSV(`${basePath}data/CSV_Edge_tension_Map.csv`),
+            this.fetchCSV(`${basePath}data/CSV_Vortex_Map.csv`)
         ]);
 
         const models = {
@@ -217,13 +226,14 @@ export class UnifiedDataLoader {
      * Load a company profile from the companies folder
      */
     async loadCompanyProfile(companyId) {
+        const basePath = this.getBasePath();
         try {
             // Load metadata
-            const profileReq = await fetch(`./companies/${companyId}/company.json`);
+            const profileReq = await fetch(`${basePath}companies/${companyId}/company.json`);
             const profile = await profileReq.json();
 
             // Load KPIs
-            const kpiReq = await fetch(`./companies/${companyId}/kpis.csv`);
+            const kpiReq = await fetch(`${basePath}companies/${companyId}/kpis.csv`);
             const kpiText = await kpiReq.text();
             const kpis = this.parseKPIs(kpiText);
 
@@ -232,7 +242,7 @@ export class UnifiedDataLoader {
             let shadowPatterns = profile.shadowPatterns || [];
             let tuning = null;
             try {
-                const mappingReq = await fetch(`./companies/${companyId}/mapping-context.json`);
+                const mappingReq = await fetch(`${basePath}companies/${companyId}/mapping-context.json`);
                 if (mappingReq.ok) {
                     const mappingContext = await mappingReq.json();
                     if (mappingContext.shadowPatterns && mappingContext.shadowPatterns.length > 0) {
