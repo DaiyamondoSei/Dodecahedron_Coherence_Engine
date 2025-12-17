@@ -281,10 +281,10 @@
     function launchView(viewName) {
         const viewUrls = {
             'dodecahedron': 'dodecahedron-3d.html',
-            'calculations': 'calculations.html',
-            'breath': 'breath-analysis.html',
+            'calculations': 'dev/calculations.html',
+            'breath': 'pages/breath-analysis.html',
             'dna': 'octave-dna.html',
-            'simulator': 'simulator.html'
+            'simulator': 'pages/simulator.html'
         };
 
         // Update sessionStorage before launching (ensure fresh data)
