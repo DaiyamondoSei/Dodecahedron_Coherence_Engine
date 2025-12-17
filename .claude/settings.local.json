@@ -75,7 +75,11 @@
       "Bash(git tag:*)",
       "Bash(mkdir:*)",
       "Bash(git -C \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\" add -A)",
-      "Bash(git -C \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\" status --short)"
+      "Bash(git -C \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\" status --short)",
+      "Bash(for file in main.js gemini-client.js harmonic-tuner.js spectral-analyzer.js breath-analyzer.js)",
+      "Bash(done)",
+      "Bash(while read file)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": [

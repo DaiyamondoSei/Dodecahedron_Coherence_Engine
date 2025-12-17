@@ -1,7 +1,9 @@
 /**
  * ========================================
- * PORTRAIT VIEW - The Organizational Gateway
+ * MODULE: portrait-view.js
  * ========================================
+ *
+ * PORTRAIT VIEW - The Organizational Gateway
  *
  * A layered visualization that makes depth accessible:
  * - Layer 1: Simple radial diagram (12 faces, color-coded health)
@@ -9,9 +11,90 @@
  * - Layer 3: Octave stack (developmental journey)
  * - Layer 4: Full detail (links to complete ontology)
  *
- * Philosophy: "Meet people where they are, invite them deeper"
+ * DESIGN PHILOSOPHY: "Meet people where they are, invite them deeper"
+ * This is the FIRST thing users see - it must be immediately intuitive
+ * while containing depth for those who want to explore.
  *
- * @module PortraitView
+ * DEPENDENCIES:
+ * - js/constants/phi-harmonics.js (optional, falls back gracefully)
+ * - CSS variables from Q-Design system (--q-* prefixed)
+ *
+ * EXPORTS:
+ * - PortraitView (class)
+ * - FACE_NAMES, OCTAVE_COLORS, OCTAVE_NAMES, ELEMENT_CONFIG (constants)
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * 1. LAYERED PROGRESSIVE DISCLOSURE:
+ *    - Start simple: Just a colorful wheel showing 12 faces
+ *    - Click to reveal: Element breakdown (Earth/Water/Fire/Air/Ether)
+ *    - Breadcrumb navigation: Overview → Face → Element → KPI
+ *    - Never overwhelm - let users pull depth as needed
+ *
+ * 2. DATA NORMALIZATION (Critical!):
+ *    The _normalizeData() method handles multiple input formats:
+ *    - Object format: { faceId: { ... } }
+ *    - KPI extraction format: { byFace: { ... } }
+ *    - Array format: [{ id: 1, ... }, ...]
+ *    This flexibility is intentional - don't assume input structure!
+ *
+ * 3. SVG RADIAL DIAGRAM:
+ *    - 12 wedge segments, each representing a face
+ *    - Inner radius = 40% of total (shows center coherence score)
+ *    - Color-coded by health thresholds (PHI-derived)
+ *    - Click-to-select with visual highlight
+ *
+ * 4. HEALTH THRESHOLDS (PHI-Based):
+ *    - critical: 0.382 (φ² = 0.618²)
+ *    - weak: 0.5 (midpoint)
+ *    - healthy: 0.618 (φ itself)
+ *    - strong: 0.764 (φ + 0.146)
+ *    - excellent: 0.854 (1 - φ²)
+ *    These thresholds appear in color coding and labels.
+ *
+ * 5. ELEMENT DISPLAY:
+ *    - Earth 🌍: Tangible (brown)
+ *    - Water 💧: Flow (blue)
+ *    - Fire 🔥: Energy (red-orange)
+ *    - Air 💨: Communication (light blue)
+ *    - Ether ✨: Purpose (purple)
+ *    Unexplored elements show as "?" with a question prompt.
+ *
+ * 6. OCTAVE STACK:
+ *    Shows developmental journey from O1→O7
+ *    - Foundation octaves (below target) = "established ground"
+ *    - Target octave = "where we're growing"
+ *    Health bars show readiness at each level.
+ *
+ * 7. CSS VARIABLES (Design System):
+ *    Uses --q-* prefix for Q-Design tokens:
+ *    - --q-bg-primary, --q-bg-secondary, --q-bg-tertiary
+ *    - --q-text-primary, --q-text-secondary, --q-text-tertiary
+ *    - --q-accent-primary, --q-accent-warning
+ *    - --q-space-xs/sm/md/lg, --q-radius-sm/md/lg
+ *    Fallbacks are provided for standalone use.
+ *
+ * 8. ACCESSIBILITY:
+ *    - Keyboard navigation via breadcrumbs
+ *    - Color + label redundancy (never color-only)
+ *    - Click targets are large enough for touch
+ *
+ * 9. USED BY:
+ *    - Dashboard pages
+ *    - Orchestrator summary view
+ *    - Reports/exports
+ *
+ * GOTCHAS:
+ * - Ensure container element exists before instantiation
+ * - update() must be called to render data (constructor doesn't auto-render)
+ * - Icons may not render if browser lacks emoji support - fallbacks minimal
+ *
+ * ========================================
+ *
+ * @module js/ui/portrait-view
+ * @author Deimantas Butrimas & Claude
  * @version 1.0.0
  */
 

@@ -1,15 +1,105 @@
 /**
- * ShadowPanel - The Conscience of the Organization
+ * ========================================
+ * MODULE: shadow-panel.js
+ * ========================================
+ *
+ * SHADOW PANEL - The Conscience of the Organization
  *
  * Displays "Shadow Alerts" - hidden patterns, hypocrisies, and systemic risks.
  * Located in the bottom-right, distinct from the main dashboard.
  *
- * Design Philosophy:
- * - "Dark Mode" aesthetic (Red/Black)
+ * DESIGN PHILOSOPHY:
+ * - "Dark Mode" aesthetic (Red/Black) - shadows are uncomfortable truths
  * - Slide-in animations for new alerts
- * - Interactive: Clicking an alert rotates the camera to the affected area
- * - Phase 3 Enhancement: Expandable details with logic, faces, prescription
+ * - Interactive: Clicking an alert rotates the 3D camera to the affected area
+ * - Dual-form: Each shadow has both "suppressed" and "integrated" (gift) views
  *
+ * DEPENDENCIES:
+ * - js/advanced/shadow-detector.js (provides shadow analysis data)
+ * - js/ai/ai-shadow-adapter.js (optional, for AI-generated insights)
+ * - window.Quannex, window.MappingContext (for face name resolution)
+ *
+ * EXPORTS:
+ * - ShadowPanel (class)
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * 1. THE 6 SHADOW ARCHETYPES:
+ *    These come from shadow-detector.js, but displayed here:
+ *    - Brittle Profit: Financial success without sustainability
+ *    - Extractive Growth: Market success draining human capital
+ *    - Siloed Excellence: Operations without cross-pollination
+ *    - Innovation Theater: Creative claims without substance
+ *    - Cult of Personality: Brand built on reputation, not values
+ *    - Scattered Purpose: Values without operational alignment
+ *
+ * 2. DUAL-FORM TOGGLE (Key UX Feature):
+ *    Each shadow card has two views:
+ *    - "The Shadow" (suppressed): What's going wrong
+ *    - "The Gift" (integrated): How to transform it
+ *    Toggle button switches between views - helps reframe problems as opportunities.
+ *
+ * 3. SEVERITY LEVELS & COLORS:
+ *    - critical: #ff4444 (bright red)
+ *    - high: #ff8c00 (orange)
+ *    - moderate: #ffcc00 (yellow)
+ *    - low: #88cc88 (soft green)
+ *
+ * 4. EXPANDABLE DETAILS:
+ *    Each card has a "▼" button that reveals:
+ *    - Logic: Why this shadow was detected
+ *    - Impacted Faces: Which faces are involved (clickable chips)
+ *    - Prescription: Recommended actions
+ *    - Metrics: Intensity score and coherence penalty
+ *
+ * 5. FACE CHIP INTERACTIONS:
+ *    Clicking a face chip dispatches 'focus-face' event:
+ *    window.dispatchEvent(new CustomEvent('focus-face', { detail: { faceId } }))
+ *    This rotates the 3D dodecahedron to show that face.
+ *
+ * 6. AI ENHANCEMENT OPTION:
+ *    For users who chose "manual" setup path:
+ *    - Shows "Generate AI Analysis" button
+ *    - Calls window.AIShadowAdapter.generateAIShadowPatterns()
+ *    - Adds AI-generated insights alongside pattern-based shadows
+ *
+ * 7. FACE NAME RESOLUTION (Priority Order):
+ *    1. MappingContext.getInstance().getFace(id).customName
+ *    2. window.Quannex.getState().faces.find().customName
+ *    3. Default face names (hardcoded fallback)
+ *
+ * 8. ACCESSIBILITY (ARIA):
+ *    - role="article" on cards
+ *    - aria-label describing pattern and severity
+ *    - aria-pressed on toggle buttons
+ *    - aria-expanded on details buttons
+ *    - tabindex="0" for keyboard navigation
+ *    - Enter/Space key handlers
+ *
+ * 9. CSS CLASS CONVENTION:
+ *    Uses "shadow-card-mini" (not "shadow-card") to avoid CSS conflicts
+ *    with shadow-overlay.css which uses the same class name.
+ *
+ * 10. INTEGRATION WITH 3D VIZ:
+ *     focusOnShadow() dispatches 'focus-face' event
+ *     The 3D visualizer (dodecahedron-viz.js) listens for this
+ *     and rotates the camera to show the affected face.
+ *
+ * USED BY:
+ * - dodecahedron-3d.html (bottom-right panel)
+ * - Main dashboard views
+ *
+ * GOTCHAS:
+ * - Container auto-creates if not found (appended to document.body)
+ * - update() with empty array clears panel but shows AI option
+ * - shadow.faceId can be single ID or array (involvedFaces)
+ *
+ * ========================================
+ *
+ * @module js/ui/shadow-panel
+ * @author Deimantas Butrimas & Claude
  * @version 2.1 - Enhanced UI with expandable details
  */
 

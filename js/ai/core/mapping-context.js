@@ -1,7 +1,9 @@
 /**
  * ========================================
- * MAPPING CONTEXT - The Sacred Vessel
+ * MODULE: mapping-context.js
  * ========================================
+ *
+ * MAPPING CONTEXT - The Sacred Vessel
  *
  * Central nervous system for all naming and state management.
  * Implements Singleton pattern for single source of truth.
@@ -11,8 +13,119 @@
  * from which all other patterns emerge. Changes at the center (faces)
  * ripple outward to edges and vertices.
  *
- * @module MappingContext
- * @version Sprint 2 - Task 9
+ * DEPENDENCIES:
+ * - None (self-contained, no imports)
+ * - Uses sessionStorage for persistence
+ *
+ * EXPORTS:
+ * - MappingContext (class, singleton)
+ * - FaceMapping, EdgeMapping, VertexMapping (classes)
+ * - DODECAHEDRON_TOPOLOGY (constant)
+ * - extractFaceEnergy (utility function)
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * 1. THE SINGLETON PATTERN:
+ *    MappingContext._instance holds the one true instance.
+ *    - MappingContext.getInstance() - get or create instance
+ *    - MappingContext.reset() - destroy instance (for testing)
+ *    - new MappingContext() returns existing instance if exists
+ *    NEVER create multiple instances - state will desync!
+ *
+ * 2. THE OBSERVER PATTERN:
+ *    Components subscribe to changes via subscribe(callback):
+ *    - Returns unsubscribe function (call to clean up)
+ *    - Events: FACE_NAMED, FACE_UPDATED, ALL_FACES_UPDATED,
+ *              MODE_CHANGED, ARCHETYPE_CHANGED, LENS_CHANGED,
+ *              VOCABULARY_CHANGED, EDGES_NAMED, VERTICES_NAMED
+ *    - Event contains { type, ...payload, validationState }
+ *
+ * 3. NAME PROPAGATION (Critical Concept!):
+ *    When a face is renamed, it cascades:
+ *    - _propagateFaceNameChange(faceId) updates connected edges/vertices
+ *    - Edges get names like "Face A ↔ Face B" (default)
+ *    - Vertices get names like "Nexus: A-B-C" (abbreviated)
+ *    - AI can override with setEdgeNames() / setVertexNames()
+ *
+ * 4. FACE ENERGY ALIASES (Issue #9 Fix):
+ *    Different modules use different property names:
+ *    - Backend (Face.js): faceEnergy
+ *    - AI mapping: sentiment
+ *    - Visualization: energy
+ *    FaceMapping has getters/setters to keep them in sync.
+ *    extractFaceEnergy() utility handles any format.
+ *
+ * 5. TWO MODES:
+ *    - 'quick': 12 KPIs total (1 per face) - fast assessment
+ *    - 'full': 60 KPIs total (5 per face) - comprehensive
+ *    Mode affects validation requirements.
+ *
+ * 6. DODECAHEDRON_TOPOLOGY CONSTANT:
+ *    Contains immutable geometry data:
+ *    - breathAxes: 6 polar opposite pairs (1↔11, 2↔7, etc.)
+ *    - edges: 30 edge definitions with elemental nature
+ *    - vertices: 20 vertex definitions (3 faces each)
+ *    - defaultFaceNames: 12 domain names with icons
+ *    See js/geometry/dodecahedron-topology.js for comprehensive version.
+ *
+ * 7. PERSISTENCE:
+ *    - _saveToStorage(): Saves to sessionStorage (survives page nav)
+ *    - _restoreFromStorage(): Called in constructor
+ *    - STORAGE_KEY: 'quannex_mapping_context'
+ *    State is automatically saved on every change.
+ *
+ * 8. VALIDATION:
+ *    _validate() checks:
+ *    - Face has non-default name (isComplete)
+ *    - No duplicate face names
+ *    - All 12 faces named = valid
+ *    validationState contains: isComplete, completedFaces, invalidFaces, errors
+ *
+ * 9. CONFIGURATION OPTIONS:
+ *    - _selectedArchetype: Organization type (startup, enterprise, etc.)
+ *    - _archetypeConstants: Tuning params for archetype
+ *    - _selectedLens: Strategic focus (growth, stability, innovation)
+ *    - _selectedVocabulary: Language style (grounded, professional, etc.)
+ *
+ * 10. KEY METHODS:
+ *     Faces:
+ *     - getFace(id), getAllFaces(), getFaceName(id)
+ *     - setFaceName(id, name, metadata) - triggers propagation
+ *     - setAllFaces(config) - bulk update from AI
+ *
+ *     Edges/Vertices:
+ *     - getEdge(id), getAllEdges(), getEdgeName(id)
+ *     - getVertex(id), getAllVertices(), getVertexName(id)
+ *     - getEdgesForFace(id), getVerticesForFace(id)
+ *     - getBreathAxisForFace(id), getOppositeFaceId(id)
+ *
+ *     Serialization:
+ *     - toJSON(): Full state for storage
+ *     - fromJSON(data): Restore from stored state
+ *     - toDisplayState(): Enriched state for UI
+ *
+ * USED BY:
+ * - Demo Orchestrator (wizard state management)
+ * - Face Wizard (name editing UI)
+ * - AI face mapper (bulk face updates)
+ * - 3D visualization (face name display)
+ * - Shadow panel (face name resolution)
+ *
+ * GOTCHAS:
+ * - Singleton means state persists across page navigation
+ * - Always use getInstance(), not new MappingContext()
+ * - Face ID 1-12 (not 0-11!)
+ * - Edge IDs are strings like "E1-2" not numbers
+ * - Vertex IDs are strings like "V1" not numbers
+ * - sessionStorage is per-tab, not shared across tabs
+ *
+ * ========================================
+ *
+ * @module js/ai/core/mapping-context
+ * @author Deimantas Butrimas & Claude
+ * @version 2.0.0 - Sprint 2 Task 9 with comprehensive docs
  */
 
 // ========================================

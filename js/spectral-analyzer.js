@@ -1,19 +1,102 @@
 /**
+ * ========================================
+ * MODULE: spectral-analyzer.js
+ * ========================================
+ *
  * SpectralAnalyzer - The Mathematical Heart of the Coherence Engine
- * 
+ *
  * This class performs spectral analysis on the dodecahedron graph using:
  * - The Graph Laplacian (L) matrix
  * - Eigenvector decomposition (U matrix)
  * - Modal amplitude calculation to identify systemic imbalances
- * 
- * The spectral analysis reveals the "hidden music" of the organization - 
+ *
+ * The spectral analysis reveals the "hidden music" of the organization -
  * the fundamental modes of resonance and dissonance that underlie the visible metrics.
+ *
+ * Date: Original implementation, documented December 16, 2025
+ *
+ * MATHEMATICAL FOUNDATION:
+ * ========================
+ * The Graph Laplacian L = D - A where:
+ *   D = Degree matrix (diagonal, each entry = number of edges for that vertex)
+ *   A = Adjacency matrix (1 if faces share an edge, 0 otherwise)
+ *
+ * For the dodecahedron: Each face has exactly 5 neighbors, so D has 5 on diagonal.
+ * The eigenvalues λ tell us the "vibration frequencies" of the graph.
+ * The eigenvectors u tell us the "shape" of each vibration mode.
+ *
+ * KEY INSIGHT: Modal amplitude a_i = u_i^T × E tells us how much each mode
+ * contributes to the current energy distribution. The dominant mode (largest |a_i|)
+ * reveals the primary pattern of imbalance.
+ *
+ * DEPENDENCIES:
+ * - None (standalone module)
+ *
+ * EXPORTS (to window):
+ * - SpectralAnalyzer: Main class
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * CORE CONCEPTS:
+ * 1. The L matrix is the Graph Laplacian - encodes how faces connect
+ * 2. The U matrix columns are eigenvectors - "vibration shapes"
+ * 3. Eigenvalues are "frequencies" - higher = more local oscillations
+ *
+ * EIGENVALUE INTERPRETATION (Critical!):
+ * - λ = 0 (Mode 1): DC offset - just the average energy, skip this
+ * - λ ≈ 2.4 (Modes 2-4): GLOBAL patterns - whole-system imbalances
+ * - λ ≈ 5.6 (Modes 5-7): REGIONAL patterns - clusters of faces
+ * - λ ≈ 6.9 (Modes 8-9): LOCAL oscillations - adjacent face differences
+ * - λ ≈ 8.1 (Modes 10-12): FINE-GRAINED - subtle dissonance
+ *
+ * THE DELTA VECTOR (Most Important Output):
+ * - Formula: Δ = -u_dominant × a_dominant
+ * - Positive Δ = face needs MORE energy
+ * - Negative Δ = face has EXCESS energy
+ * - This is the "prescription" for rebalancing
+ *
+ * BAB SCORE (Being-Action Balance):
+ * - Uses 6 breath axis pairs from CSV_BREATH_RATIOS.csv
+ * - Projection faces [11,7,8,4,5,6] = Action/Exhale
+ * - Reception faces [1,2,3,9,10,12] = Being/Inhale
+ * - Score > 120% = over-inhaling (too much planning)
+ * - Score < 80% = over-exhaling (too much action)
+ *
+ * GOTCHAS:
+ * - Mode indices are 0-based in arrays but 1-based in output
+ * - Eigenvectors are normalized on construction to fix rounding errors
+ * - If all energies are zero, dominantMode will be null
+ * - The U matrix values are rounded to 3 decimal places
+ *
+ * USED BY: js/main.js (DodecahedronEngine.runSpectralAnalysis)
+ * RELATED: js/advanced/spectral-analyzer.js (wrapper with caching)
+ *
+ * ========================================
+ *
+ * @module js/spectral-analyzer
+ * @author Deimantas Butrimas & Claude
+ * @version 1.1 (with comprehensive documentation)
  */
 
+// ========================================
+// SECTION: SpectralAnalyzer Class
+// ========================================
+
 class SpectralAnalyzer {
+  /**
+   * Initialize the SpectralAnalyzer with precomputed matrices
+   *
+   * The L and U matrices are derived from graph theory analysis of
+   * the dodecahedron structure. They are constant for all analyses.
+   */
   constructor() {
-    // The Dodecahedron Graph Laplacian Matrix (L)
-    // This 12x12 matrix encodes the connectivity structure of the dodecahedron
+    // ========================================
+    // LAPLACIAN MATRIX (L)
+    // ========================================
+    // The Graph Laplacian encodes connectivity: L[i][j] = -1 if faces share edge
+    // Diagonal entries = degree (5 for each face in dodecahedron)
     this.L = [
       [5, -1, 0, 0, -1, -1, 0, -1, -1, 0, 0, 0],
       [-1, 5, -1, 0, 0, -1, 0, 0, -1, -1, 0, 0],

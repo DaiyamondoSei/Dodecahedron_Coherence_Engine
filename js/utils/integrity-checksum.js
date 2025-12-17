@@ -3,18 +3,85 @@
  * MODULE: integrity-checksum.js
  * ========================================
  *
- * Data Integrity Checksum Utility for Phase 3 File Splitting
+ * Data Integrity Checksum Utility for Module Verification
  *
  * PURPOSE:
  * Generates checksums of critical data structures to verify
- * they remain unchanged after module splitting.
+ * they remain unchanged after module splitting/refactoring.
+ * Created during Phase 3 file splitting to ensure no regressions.
  *
- * DEPENDENCIES: None (standalone utility)
+ * DEPENDENCIES: None (standalone utility, IIFE pattern)
  *
  * EXPORTS (to window/global):
  * - IntegrityChecksum: Verification utility object
  *
  * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * 1. WHY THIS EXISTS:
+ *    During Phase 3, we split large monolithic files into modules.
+ *    This utility verifies that after splitting:
+ *    - All required properties still exist
+ *    - All required methods are still accessible
+ *    - No data was lost in the refactoring
+ *
+ * 2. VERIFICATION TARGETS:
+ *    - demoState: The main orchestrator state object
+ *    - SessionManager: User session timeout handler
+ *    - CrossWindowSync: BroadcastChannel wrapper for tab sync
+ *    - OCTAVE_COHERENCE_THRESHOLDS: The 7-octave scoring system
+ *
+ * 3. TWO CHECK MODES:
+ *    a) quickCheck(): Just verifies objects exist (fast)
+ *    b) runFullCheck(): Verifies all properties/methods exist (thorough)
+ *
+ * 4. WHEN TO USE:
+ *    - After major refactoring: runFullCheck()
+ *    - During development: quickCheck() for sanity
+ *    - In browser console: IntegrityChecksum.runFullCheck()
+ *
+ * 5. IIFE PATTERN:
+ *    Uses (function(global) { ... })(window) pattern for:
+ *    - Clean namespace (no pollution)
+ *    - Works in browser and Node.js
+ *    - Single export to window.IntegrityChecksum
+ *
+ * 6. RESULT FORMAT:
+ *    runFullCheck() returns:
+ *    {
+ *      timestamp: ISO string,
+ *      passed: number,
+ *      failed: number,
+ *      checks: [{ name, valid, missing?, found?, error? }]
+ *    }
+ *
+ * 7. CONSOLE OUTPUT:
+ *    - Green "ALL CHECKS PASSED" if everything OK
+ *    - Red "CHECKS FAILED: N" if something missing
+ *    - Detailed object logged for debugging
+ *
+ * 8. EXTENDING CHECKS:
+ *    To add a new verification target:
+ *    1. Create verifyXXX(obj) method returning { valid, missing, found }
+ *    2. Add check to runFullCheck() method
+ *    3. Add to quickCheck() exists object
+ *
+ * USED BY:
+ * - Development debugging
+ * - Post-refactoring verification
+ * - CI/CD sanity checks (potential)
+ *
+ * GOTCHAS:
+ * - quickCheck() returns boolean, runFullCheck() returns object
+ * - Only checks existence, not correctness of values
+ * - Must be loaded AFTER the modules it checks
+ *
+ * ========================================
+ *
+ * @module js/utils/integrity-checksum
+ * @author Deimantas Butrimas & Claude
+ * @version 1.0.0
  */
 (function(global) {
     'use strict';

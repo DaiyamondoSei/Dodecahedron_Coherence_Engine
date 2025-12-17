@@ -1,7 +1,108 @@
 /**
- * Harmonic Tuner Logic v2.0
- * Clean rewrite with BEM naming convention
- * Handles rotary knobs, resonance meter, and mode selection
+ * ========================================
+ * MODULE: harmonic-tuner.js
+ * ========================================
+ *
+ * HARMONIC TUNER - Real-Time Parameter Adjustment Interface
+ *
+ * A sophisticated audio-mixer-style interface for adjusting the 8 Greek
+ * parameters that control coherence calculations. Features:
+ * - 8 rotary knobs with drag-to-adjust interaction
+ * - Real-time resonance meter showing global coherence
+ * - Mode/template presets for common configurations
+ * - BEM CSS naming convention for clean styling
+ *
+ * DEPENDENCIES:
+ * - window.Quannex (state management and calculation engine)
+ * - HTML elements: harmonicTuner, tunerToggle, various knob elements
+ * - CSS: tuner.css with BEM classes (.tuner__, .tuner__*)
+ *
+ * EXPORTS (to window/global):
+ * - RotaryKnob (class) - via implicit global
+ * - knobsMap: { Alpha, Beta, ... Theta } - knob instances
+ * - updateResonanceMeter() - function to refresh meter display
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * 1. THE 8 GREEK PARAMETERS:
+ *    These control how coherence is calculated:
+ *    - Alpha (α): Eigenvalue weighting - which modes matter most
+ *    - Beta (β): Face energy base multiplier
+ *    - Gamma (γ): Edge tension sensitivity
+ *    - Delta (δ): Breath axis balance weight
+ *    - Kappa (κ): PHI alignment boost factor
+ *    - Eta (η): Learning rate / adaptation speed
+ *    - Zeta (ζ): Damping factor / smoothing
+ *    - Theta (θ): Phase offset / timing adjustment
+ *
+ * 2. ROTARY KNOB INTERACTION:
+ *    - Click and drag UP to increase value
+ *    - Click and drag DOWN to decrease value
+ *    - Sensitivity = 200 pixels for full range
+ *    - Values snap to step increments (e.g., 0.1)
+ *    - Visual: Arc fills proportionally, color shifts cyan→green
+ *
+ * 3. DATA ATTRIBUTES ON KNOB ELEMENTS:
+ *    <div id="knobAlpha" data-param="Alpha" data-min="0" data-max="2"
+ *         data-step="0.1" data-value="1.0">
+ *    These configure each knob's behavior.
+ *
+ * 4. DISPLAY PRECISION:
+ *    - ETA, ZETA, THETA: 3 decimal places (fine-tuning)
+ *    - All others: 1 decimal place
+ *
+ * 5. RESONANCE METER:
+ *    Shows global coherence (0-100%):
+ *    - Needle rotates from -45° to +45°
+ *    - Status text: Seeking < Emerging < Converging < Coherent < Transcendent
+ *    - Waveform bars animate based on coherence level
+ *    - Auto-updates every 500ms via setInterval
+ *
+ * 6. MODE TEMPLATES:
+ *    Preset configurations applied via .tuner__mode-btn buttons:
+ *    - Each button has data-template attribute
+ *    - Calls Quannex.applyTemplate(templateId)
+ *    - Updates all knobs to template values
+ *
+ * 7. INTEGRATION WITH QUANNEX:
+ *    emitChange() calls:
+ *    1. Quannex.updateTuning(param, value) - update state
+ *    2. refreshVisualization() - redraw 3D dodecahedron
+ *    3. updateVisualFeedback(params) - update UI hints
+ *    4. updateResonanceMeter() - refresh coherence display
+ *
+ * 8. TOGGLE PANEL:
+ *    The tuner can be shown/hidden:
+ *    - #tunerToggle button toggles visibility
+ *    - .tuner--visible class shows the panel
+ *    - Helps keep interface clean when not tuning
+ *
+ * 9. CSS BEM CLASSES:
+ *    - .tuner__* for all tuner elements
+ *    - .tuner__meter-status--critical/warning/healthy/transcendent
+ *    - .tuner--visible for shown state
+ *
+ * 10. GLOBAL FUNCTIONS:
+ *     - window.updateResonanceMeter(): Refresh meter (call after changes)
+ *     - window.knobsMap: Access knob instances programmatically
+ *
+ * USED BY:
+ * - dodecahedron-3d.html (bottom panel)
+ * - Advanced configuration interfaces
+ *
+ * GOTCHAS:
+ * - Knobs won't work without Quannex global object
+ * - Must have matching HTML elements (knobAlpha, etc.)
+ * - Mouse events registered on document for drag-outside-element
+ * - setInterval runs even when panel hidden (minor perf consideration)
+ *
+ * ========================================
+ *
+ * @module js/harmonic-tuner
+ * @author Deimantas Butrimas & Claude
+ * @version 2.0.0 - Clean BEM rewrite
  */
 
 class RotaryKnob {

@@ -1,14 +1,110 @@
 /**
  * ========================================
- * KPI EXTRACTOR - AI-Assisted KPI Extraction
+ * MODULE: kpi-extractor.js
  * ========================================
+ *
+ * KPI EXTRACTOR - AI-Assisted KPI Extraction from Organizational Stories
  *
  * Extracts KPIs from organizational stories using AI or pattern matching.
  * Provides dual-path option for users:
- * - Manual Entry: User fills in each KPI
- * - AI-Assisted: AI extracts and pre-populates KPI fields
+ * - Manual Entry: User fills in each KPI themselves
+ * - AI-Assisted: AI extracts and pre-populates KPI fields automatically
  *
- * @module KPIExtractor
+ * DEPENDENCIES:
+ * - window.FallbackChain (optional, for AI extraction)
+ * - window.MappingContext (optional, for mode detection)
+ * - window.currentStoryText (for extraction source)
+ *
+ * EXPORTS:
+ * - KPIExtractor (class)
+ * - KPIExtractionPanel (class, UI component)
+ * - EXTRACTION_PATTERNS (regex patterns)
+ * - FACE_KPI_MAPPING (face-to-KPI relationships)
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * 1. TWO EXTRACTION MODES:
+ *    a) Pattern-based: Uses regex (EXTRACTION_PATTERNS) to find metrics in text
+ *       - Always works offline
+ *       - Less accurate but reliable
+ *    b) AI-based: Uses FallbackChain → GeminiClient for intelligent extraction
+ *       - More accurate but requires API
+ *       - Falls back to patterns if AI fails
+ *
+ * 2. EXTRACTION_PATTERNS STRUCTURE:
+ *    Each pattern config has:
+ *    - patterns: Array of regex (all matching the same metric type)
+ *    - multipliers: { k: 1000, m: 1000000, ... } for suffix handling
+ *    - unit: Display unit string
+ *
+ * 3. FACE_KPI_MAPPING:
+ *    Maps which KPIs belong to which faces:
+ *    - Face 1 (Financial Capital): revenue, burnRate, fundingRaised
+ *    - Face 3 (Human Capital): teamSize
+ *    - Face 5 (Market Resonance): customers, nps, socialFollowers
+ *    - Face 7 (Brand): websiteTraffic, socialFollowers
+ *    - Face 8 (Operations): growthRate
+ *    - Face 9 (Regenerative): retention, waitlist
+ *    - Face 11 (Funding): runway, fundingRaised
+ *
+ * 4. TWO MODES IN UI:
+ *    - 'quick' mode: 12 KPIs (one per face)
+ *    - 'full' mode: 60 KPIs (5 elements × 12 faces)
+ *    Mode is detected from MappingContext.getMode()
+ *
+ * 5. AI RESULT FORMAT:
+ *    AI returns: { kpis: [...], financials: {...}, mode, octave, _meta }
+ *    Must be converted to: { byFace: {...}, raw: {...}, confidence }
+ *    The _convertAIResultToDisplayFormat() method handles this.
+ *
+ * 6. CONFIDENCE LEVELS:
+ *    - 'none': 0 metrics extracted
+ *    - 'low': 1-2 metrics
+ *    - 'medium': 3-4 metrics
+ *    - 'high': 5-6 metrics
+ *    - 'very-high': 7+ metrics
+ *
+ * 7. KPI EXTRACTION PANEL:
+ *    UI component that:
+ *    - Shows mode selector (Manual vs AI-Assisted)
+ *    - Displays extraction results grouped by face
+ *    - Full mode shows elemental grouping (earth/water/fire/air/ether)
+ *    - "Apply to Assessment" button dispatches 'kpis-extracted' event
+ *
+ * 8. VALUE FORMATTING:
+ *    Large numbers are formatted as:
+ *    - >= 1B → "$X.XB"
+ *    - >= 1M → "$X.XM"
+ *    - >= 1K → "$XK"
+ *    Percentages get "%" suffix.
+ *
+ * 9. OCTAVE-AWARE EXTRACTION:
+ *    AI extraction respects detected octave:
+ *    - O1-O2: Focus on survival metrics (runway, burn rate)
+ *    - O3-O4: Include growth metrics (customers, retention)
+ *    - O5-O7: Include advanced metrics (NPS, brand metrics)
+ *
+ * 10. EVENTS:
+ *     - 'kpis-extracted': Dispatched when user clicks "Apply"
+ *       Detail contains the full extraction result object
+ *
+ * USED BY:
+ * - Orchestrator setup flow
+ * - Story analysis workflow
+ * - KPI input panels
+ *
+ * GOTCHAS:
+ * - Regex patterns are US/English focused (dollar signs, etc.)
+ * - First regex match wins (won't find multiple revenues)
+ * - AI extraction requires window.currentStoryText to be set
+ * - Some patterns may overlap (socialFollowers used by Face 5 and 7)
+ *
+ * ========================================
+ *
+ * @module js/ai/kpi-extractor
+ * @author Deimantas Butrimas & Claude
  * @version Sprint 2 - Task 10
  */
 

@@ -1,16 +1,131 @@
 /**
  * ========================================
- * KPI MATCHER
+ * MODULE: kpi-matcher.js
  * ========================================
  *
- * Matches story content to octave-level KPI descriptions.
- * This ensures startups get O1-O2, not O5-O6.
+ * KPI MATCHER - Octave Sophistication Detector
+ *
+ * This module solves a critical problem: ensuring organizations are
+ * assessed at the appropriate development level. A seed-stage startup
+ * shouldn't be measured with Fortune 500 KPIs!
  *
  * KEY INSIGHT: Octave = KPI SOPHISTICATION, not face count.
- * Match story content to the sophistication level of described practices.
+ * A startup talks about "runway" and "first customers" (O1-O2).
+ * An enterprise talks about "stakeholder narrative" and "category defining" (O5-O6).
+ *
+ * THE 7 OCTAVES OF ORGANIZATIONAL DEVELOPMENT:
+ * ┌─────────────────────────────────────────────────────────────┐
+ * │ O1: SURVIVAL     - Runway, bootstrap, first customers      │
+ * │ O2: STRUCTURE    - Budget, processes, metrics              │
+ * │ O3: RELATIONSHIPS - Culture, trust, community              │
+ * │ O4: CREATIVITY   - Innovation, experimentation, R&D        │
+ * │ O5: EXPRESSION   - Brand voice, storytelling, transparency │
+ * │ O6: VISION       - Legacy, succession, 100-year thinking   │
+ * │ O7: RADIANCE     - Consciousness, planetary benefit        │
+ * └─────────────────────────────────────────────────────────────┘
+ *
+ * DEPENDENCIES:
+ * - octave-reference-library.js (OCTAVES, constrainOctave, detectOrganizationStage)
+ *
+ * EXPORTS:
+ * - KPIMatcher (class) - main sophistication detector
+ * - KPI_SOPHISTICATION_PATTERNS (constant) - keyword dictionaries per octave
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * 1. THE FOUR DOMAIN INDICATORS:
+ *    Each octave has 4 keyword categories:
+ *    - financialIndicators: How they talk about money
+ *    - teamIndicators: How they describe people/culture
+ *    - operationsIndicators: How they run things
+ *    - marketIndicators: How they engage customers
+ *
+ *    Example O1 vs O6:
+ *    O1 financial: "runway", "burn rate", "bootstrap"
+ *    O6 financial: "long-term capital", "legacy planning", "patient capital"
+ *
+ * 2. THE MATCH() METHOD (Main Entry Point):
+ *    match(storyText) returns:
+ *    {
+ *      domainScores: { financial: {...}, team: {...}, ... },
+ *      overallOctave: "O2",
+ *      stageInfo: { stage: 'startup', maxOctave: 'O3' },
+ *      recommendation: { insight, strongestDomain, weakestDomain },
+ *      confidence: 'medium-high'
+ *    }
+ *
+ * 3. STAGE CONSTRAINT (Prevents Over-Assessment):
+ *    detectOrganizationStage() caps the max octave:
+ *    - 'seed' stage → max O2
+ *    - 'startup' stage → max O3
+ *    - 'growth' stage → max O4
+ *    - 'enterprise' stage → max O6
+ *    - 'transcendent' → no limit
+ *
+ *    This prevents a startup from accidentally being O5 because they
+ *    used a few sophisticated words.
+ *
+ * 4. SCORING ALGORITHM:
+ *    _scoreDomain(text, indicatorType):
+ *    - Counts keyword matches for each octave (O1-O7)
+ *    - Finds bestOctave with highest match count
+ *    - Returns normalized score (bestScore / totalMatches)
+ *
+ * 5. WEIGHTED OVERALL OCTAVE:
+ *    _calculateOverallOctave uses domain weights:
+ *    - financial: 0.3 (most important)
+ *    - team: 0.25
+ *    - operations: 0.25
+ *    - market: 0.2
+ *
+ *    Weighted average is then constrained by stageInfo.maxOctave.
+ *
+ * 6. CONFIDENCE LEVELS:
+ *    Based on total keyword matches found:
+ *    - 0 matches: 'low'
+ *    - 1-4 matches: 'medium-low'
+ *    - 5-9 matches: 'medium'
+ *    - 10-19 matches: 'medium-high'
+ *    - 20+ matches: 'high'
+ *
+ * 7. FACE OCTAVE MAPPING:
+ *    getFaceOctaves(matchResult, faces) assigns octaves to specific faces:
+ *    - financial domain → faces 1, 11 (Financial Capital, Funding)
+ *    - team domain → faces 3, 8 (Human Capital, Operations)
+ *    - operations domain → faces 4, 8, 9
+ *    - market domain → faces 5, 6, 7 (Market, Community, Brand)
+ *
+ *    Faces not in a detected domain get the overall octave.
+ *
+ * 8. INSIGHT GENERATION:
+ *    _generateInsight() provides actionable feedback:
+ *    "Focus is on survival. Strengthen [weakestDomain] practices to build towards O2."
+ *
+ * 9. OCTAVE PROGRESSION PHILOSOPHY:
+ *    Organizations develop through octaves sequentially:
+ *    - Can't skip levels (must master O2 structure before O3 relationships)
+ *    - Higher isn't always better (O7 is rare and not for everyone)
+ *    - Each octave builds on the foundations of previous ones
+ *
+ * USED BY:
+ * - Story analysis flow (determining appropriate KPI sophistication)
+ * - AI face mapper (adjusting KPI generation to match org level)
+ * - Demo orchestrator (showing octave in results)
+ *
+ * GOTCHAS:
+ * - Keywords are case-insensitive (text is lowercased)
+ * - Empty story text returns O1 with 'low' confidence
+ * - constrainOctave() from octave-reference-library handles the capping
+ * - OCTAVES constant contains names/descriptions for each octave
+ * - Domain-to-face mapping is hardcoded (may need update if face semantics change)
+ *
+ * ========================================
  *
  * @module KPIMatcher
- * @version Sprint 2 - Task 7
+ * @author Deimantas Butrimas & Claude
+ * @version 2.0.0 - Documented with Notes for Future Claude
  */
 
 import { OCTAVES, constrainOctave, detectOrganizationStage } from './octave-reference-library.js';

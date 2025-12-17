@@ -1,20 +1,112 @@
 /**
- * DynamicsAnalyzer - Novel Mathematical Enhancements
+ * ========================================
+ * MODULE: dynamics-analyzer.js
+ * ========================================
  *
- * This module contains ORIGINAL CONTRIBUTIONS to organizational coherence theory:
+ * Novel Mathematical Enhancements for Organizational Coherence Theory
+ *
+ * This module contains ORIGINAL CONTRIBUTIONS to organizational coherence:
  * 1. Feedback Loop Detection - Identifies reinforcing/dampening cycles
  * 2. Phase Transition Proximity - Predicts critical thresholds
  * 3. Hysteresis & Inertia Tracking - Measures resistance to change
  * 4. Attractor Basin Mapping - Predicts system trajectory
  *
  * These frameworks apply concepts from:
- * - Dynamical Systems Theory
- * - Statistical Mechanics
- * - Complex Networks
- * - Nonlinear Dynamics
+ * - Dynamical Systems Theory (Strogatz, Lorenz)
+ * - Statistical Mechanics (Ising model, critical phenomena)
+ * - Complex Networks (Barabási, Newman)
+ * - Nonlinear Dynamics (bifurcations, strange attractors)
  *
- * To organizational geometry for the first time.
+ * To organizational geometry FOR THE FIRST TIME - this is thesis-worthy research.
  *
+ * DEPENDENCIES:
+ * - None (self-contained, uses dodecahedron adjacency data internally)
+ *
+ * EXPORTS:
+ * - DynamicsAnalyzer (class)
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * 1. THE 4 NOVEL FRAMEWORKS:
+ *    a) Feedback Loops: Find cycles in the graph, calculate "loop gain"
+ *       - Gain > 1 = reinforcing (amplifies change)
+ *       - Gain < 1 = dampening (resists change)
+ *       - Vicious/virtuous depends on energy level in loop
+ *
+ *    b) Phase Transitions: Detect proximity to octave boundaries
+ *       - Uses "critical slowing down" from statistical mechanics
+ *       - High variance + flickering = transition imminent
+ *       - Key insight: systems show precursors before big changes
+ *
+ *    c) Inertia: Measures resistance to recommended changes
+ *       - High required delta + low current energy = STUCK
+ *       - "Frozen" faces need different intervention than "responsive"
+ *       - Links to spectral delta vector
+ *
+ *    d) Attractors: Predicts where system "naturally flows"
+ *       - 5 attractor basins: Chaos, Survival, Structure, Flow, Radiance
+ *       - Gradient shows direction of natural evolution
+ *       - Stability shows how easily perturbed
+ *
+ * 2. ADJACENCY MATRIX (Critical Data):
+ *    - The adjacency list encodes dodecahedron topology
+ *    - Each face has 5 neighbors (pentagonal faces)
+ *    - Face 6 and Face 12 are POLAR OPPOSITES
+ *    - This topology enables cycle detection
+ *
+ * 3. LOOP GAIN FORMULA:
+ *    For a cycle [A→B→C→A]:
+ *    Gain = Π(transmission_i × energy_ratio_i)
+ *    Where: transmission = 1 - (tension × 0.5)
+ *           energy_ratio = E_next / E_current
+ *
+ * 4. OCTAVE BOUNDARIES (Phase Transitions):
+ *    O1→O2: 0.35 (Survival → Structure)
+ *    O2→O3: 0.50 (Structure → Relationships)
+ *    O3→O4: 0.60 (Relationships → Creativity)
+ *    O4→O5: 0.70 (Creativity → Expression)
+ *    O5→O6: 0.80 (Expression → Vision)
+ *    O6→O7: 0.90 (Vision → Radiance)
+ *
+ * 5. CRITICAL SLOWING DOWN (Physics Concept):
+ *    - Near phase transitions, systems recover slower from perturbations
+ *    - Mathematically: autocorrelation ↑, variance ↑, recovery time ↑
+ *    - We approximate with variance + "flicker score"
+ *
+ * 6. ATTRACTOR BASINS:
+ *    - Chaos (0.15): System in disarray
+ *    - Survival (0.35): Basic functioning
+ *    - Structure (0.50): Organized but rigid
+ *    - Flow (0.70): Dynamic coherence
+ *    - Radiance (0.90): Peak integration
+ *
+ * 7. INTEGRATION POINTS:
+ *    - Needs faces array with faceEnergy property
+ *    - Needs edges array with tension property
+ *    - Needs spectralAnalysis.deltaVector for inertia
+ *    - Returns comprehensive dynamics object
+ *
+ * 8. USED BY:
+ *    - js/main.js (via analyzeComplete method)
+ *    - js/advanced/index.js (exports)
+ *    - Orchestrator for advanced insights
+ *
+ * GOTCHAS:
+ * - Cycle detection is O(n!) in worst case, but limited by maxLength=6
+ * - Loop gain can be 0 if any face has near-zero energy (div protection)
+ * - Phase transition proximity assumes linear distance - simplification
+ *
+ * THESIS RELEVANCE:
+ * This module represents ORIGINAL mathematical research. The application
+ * of dynamical systems theory to organizational geometry is novel. Cite:
+ * - "Novel application of feedback loop analysis to sacred geometry"
+ * - "First use of phase transition theory in organizational coherence"
+ *
+ * ========================================
+ *
+ * @module js/advanced/dynamics-analyzer
  * @author Claude & Deimantas Butrimas
  * @version 1.0 (Novel Research Contribution)
  */

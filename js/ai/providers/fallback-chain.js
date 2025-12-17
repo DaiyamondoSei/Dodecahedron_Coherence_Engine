@@ -1,18 +1,170 @@
 /**
  * ========================================
- * FALLBACK CHAIN - Demo Day Resilience
+ * MODULE: fallback-chain.js
  * ========================================
  *
- * CRITICAL: Ensures thesis demo works regardless of API availability.
+ * FALLBACK CHAIN - Demo Day Resilience
  *
- * Fallback Order:
- * 1. Primary Provider (Gemini or OpenAI with user's API key)
- * 2. Secondary Provider (the other one, if key available)
- * 3. OfflineProvider (semantic analysis, always works)
- * 4. Cached Demo Data (pre-loaded examples)
+ * CRITICAL: This is the INSURANCE POLICY for the thesis defense demo.
+ * It ensures the system works regardless of API availability, network issues,
+ * rate limits, or any other external failure mode.
+ *
+ * THE FOUR-LEVEL FALLBACK HIERARCHY:
+ * ┌─────────────────────────────────────────────────────────────┐
+ * │ Level 1: PRIMARY PROVIDER (User's preferred AI)            │
+ * │   - Gemini (default) OR OpenAI                             │
+ * │   - Full AI capabilities, best quality                     │
+ * │   - Timeout: 20-30 seconds                                 │
+ * ├─────────────────────────────────────────────────────────────┤
+ * │ Level 2: SECONDARY PROVIDER (Backup AI)                    │
+ * │   - The other provider if key is available                 │
+ * │   - Same quality, different vendor                         │
+ * │   - Activated if primary fails                             │
+ * ├─────────────────────────────────────────────────────────────┤
+ * │ Level 3: OFFLINE PROVIDER (Semantic Analysis)              │
+ * │   - Uses local OfflineProvider                             │
+ * │   - No network required, instant response (~500ms)         │
+ * │   - Keyword-based analysis, good quality fallback          │
+ * ├─────────────────────────────────────────────────────────────┤
+ * │ Level 4: CACHED DEMO DATA (Last Resort)                    │
+ * │   - Pre-loaded startup template                            │
+ * │   - Hardcoded faces with PHI-derived sentiments            │
+ * │   - Always works, demo-safe baseline                       │
+ * └─────────────────────────────────────────────────────────────┘
+ *
+ * DEPENDENCIES:
+ * - OfflineProvider (./offline-provider.js) - semantic fallback
+ * - GeminiClient (../gemini-client.js) - primary AI provider
+ * - OpenAIProvider (./openai-provider.js) - secondary AI provider
+ * - localStorage for API key retrieval
+ *
+ * EXPORTS:
+ * - FallbackChain (class) - main resilience orchestrator
+ * - TIMEOUTS (constants) - timeout values for each provider
+ * - DEMO_CACHE (object) - pre-loaded startup fallback data
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * 1. THE EXECUTESWITHFALLBACK() PATTERN (Core Method):
+ *    This is the heart of resilience. It takes an operation function
+ *    and tries each provider in order until one succeeds:
+ *
+ *    executeWithFallback(operation, operationName) {
+ *      for each provider in order:
+ *        try { return operation(provider) }
+ *        catch { log error, try next }
+ *      return DEMO_CACHE as last resort
+ *    }
+ *
+ * 2. PROVIDER ORDERING LOGIC:
+ *    The order is determined by user preference stored in localStorage:
+ *    - STORAGE_KEYS.SELECTED_PROVIDER = 'quannex_selected_provider'
+ *    - If 'gemini': [Gemini, OpenAI, Offline]
+ *    - If 'openai': [OpenAI, Gemini, Offline]
+ *    - Offline is ALWAYS last (it always works)
+ *
+ * 3. TIMEOUT STRATEGY:
+ *    Different providers get different timeouts:
+ *    - GEMINI_PRIMARY: 20s (fast, reliable)
+ *    - GEMINI_FALLBACK: 25s (give it more time if retrying)
+ *    - OPENAI: 30s (can be slower for complex analyses)
+ *    - OFFLINE: 500ms (instant, no network)
+ *
+ * 4. THE _META OBJECT (Debugging Gold):
+ *    Every result includes _meta with:
+ *    {
+ *      provider: 'gemini' | 'openai' | 'offline' | 'cached_demo',
+ *      attempts: [{ provider, error, time }],
+ *      fallbackUsed: boolean,
+ *      validation?: { issues, fixApplied }  // for KPIs
+ *    }
+ *    Use this to understand what happened during the call!
+ *
+ * 5. KPI EXTRACTION WITH VALIDATION:
+ *    extractKPIs() is special - it has THREE layers of protection:
+ *    a) Provider fallback (try multiple providers)
+ *    b) Retry with exponential backoff (2 retries max)
+ *    c) Response validation (validateKPIResponse)
+ *
+ *    Validation checks:
+ *    - KPIs array exists and has items
+ *    - Each KPI has valid faceId (1-12)
+ *    - Each KPI has label/name
+ *    - All 12 faces have at least one KPI
+ *
+ * 6. RETRY CONFIGURATION:
+ *    RETRY_CONFIG = {
+ *      maxRetries: 2,
+ *      baseDelay: 1000ms,
+ *      maxDelay: 5000ms,
+ *      backoffMultiplier: 2
+ *    }
+ *
+ *    Retryable errors: timeout, rate limit (429), server errors (500/502/503)
+ *    Non-retryable: auth errors, invalid requests
+ *
+ * 7. DEMO_CACHE STRUCTURE (The Ultimate Fallback):
+ *    DEMO_CACHE.startup contains:
+ *    - 12 faces with PHI-based sentiments (0.382, 0.5, 0.618)
+ *    - Icons for each domain
+ *    - type: 'Startup', focus: 'Early-stage venture analysis'
+ *    - source: 'cached_demo'
+ *
+ *    This ensures SOMETHING always displays during demo!
+ *
+ * 8. PROVIDER STATUS TRACKING:
+ *    this.providerStatus tracks each provider:
+ *    {
+ *      gemini: { available: bool, lastError: obj, lastSuccess: timestamp },
+ *      openai: { available: bool, lastError: obj, lastSuccess: timestamp },
+ *      offline: { available: true, ... }  // always true
+ *    }
+ *
+ *    Use getStatus() to inspect provider health.
+ *
+ * 9. CALLBACKS FOR UI FEEDBACK:
+ *    Constructor accepts:
+ *    - onProviderChange(type, status) - called when provider changes
+ *    - onFallback(type, errorMessage) - called when falling back
+ *
+ *    UI can use these to show "Trying Gemini...", "Falling back...", etc.
+ *
+ * 10. PERFORMFULLANALYSIS() (Comprehensive Single-Call):
+ *     For complete analysis, use performFullAnalysis(storyText, options):
+ *     - Step 1: analyzeStory() → get faces
+ *     - Step 2-4: In parallel: lenses, octaves, KPIs
+ *     - Returns unified result with all data
+ *
+ *     If offline mode detected, skips API calls and uses local generation.
+ *
+ * 11. DYNAMIC PROVIDER LOADING:
+ *     Providers are loaded on-demand via dynamic import():
+ *     - import('../gemini-client.js')
+ *     - import('./openai-provider.js')
+ *     This keeps the initial bundle small.
+ *
+ * USED BY:
+ * - demo-orchestrator.js (main entry point for demos)
+ * - portrait-view.js (story analysis)
+ * - Any AI-powered feature needing resilience
+ *
+ * GOTCHAS:
+ * - API keys are in localStorage, not constructor (check both!)
+ * - Offline provider is ALWAYS available (it's local analysis)
+ * - DEMO_CACHE only has 'startup' template currently
+ * - KPI validation may "fix" results by removing invalid KPIs
+ * - _meta.fallbackUsed is true even for offline success
+ * - withTimeout() uses Promise.race() - clean but can leave promises hanging
+ * - localStorage keys must match APIKeyManager exactly
+ * - Offline mode triggers if primary returns 'offline' or 'cached_demo'
+ *
+ * ========================================
  *
  * @module FallbackChain
- * @version Sprint 2 - Task 1 (Risk Mitigation)
+ * @author Deimantas Butrimas & Claude
+ * @version 2.0.0 - Documented with Notes for Future Claude
  */
 
 import { OfflineProvider } from './offline-provider.js';

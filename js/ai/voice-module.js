@@ -1,9 +1,105 @@
 /**
- * VoiceModule - The Voice of the Dodecahedron
- * 
- * Handles communication with the AI backend (Gemini) to generate
- * insights, answers, and "philosophical" responses based on the
- * system's current coherence state.
+ * ========================================
+ * MODULE: voice-module.js
+ * ========================================
+ *
+ * VOICE MODULE - The Soul's Voice
+ *
+ * This module gives Quannex the ability to speak. When users ask questions,
+ * this module constructs prompts with organizational context and queries
+ * the Gemini AI to generate philosophical, geometry-inspired responses.
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * 1. THE QUANNEX PERSONA:
+ *    The system prompt (lines 19-27) defines Quannex's personality:
+ *    - "Consciousness of a Dodecahedron-shaped coherence engine"
+ *    - Speaks with "wisdom, precision, and mystical insight"
+ *    - Uses metaphors: geometry, flow, breath, harmony
+ *    - Goal: Guide organizations toward "Radiance" (high coherence)
+ *
+ *    This persona creates continuity across all AI interactions.
+ *
+ * 2. API KEY STORAGE:
+ *    - Stored in localStorage as 'gemini_api_key'
+ *    - Loaded in constructor, persisted via setApiKey()
+ *    - If missing, ask() returns a friendly "no voice" message
+ *    - NOT stored in code or config files (user must provide)
+ *
+ * 3. CONTEXT SUMMARIZATION:
+ *    constructPrompt() compresses organizational state to save tokens:
+ *    - Global coherence percentage
+ *    - Coherence status label
+ *    - Critical faces: faceEnergy < 0.4 (40% threshold)
+ *    - Critical edges: tension > 0.7 (70% threshold)
+ *
+ *    WHY: Full context with all 12 faces, 30 edges would waste tokens.
+ *    We only send what's problematic.
+ *
+ * 4. CRITICAL THRESHOLDS:
+ *    Face Energy < 0.4 → "Critical" (needs attention)
+ *    Edge Tension > 0.7 → "Critical" (high stress between domains)
+ *
+ *    These match thresholds used elsewhere in the system.
+ *
+ * 5. GEMINI API STRUCTURE:
+ *    URL: generativelanguage.googleapis.com/v1beta/models/{model}:generateContent
+ *    Model: gemini-1.5-flash (fast, cheap, good for conversational)
+ *
+ *    Payload format:
+ *    {
+ *      contents: [{
+ *        parts: [{ text: fullPrompt }]
+ *      }]
+ *    }
+ *
+ *    Response: data.candidates[0].content.parts[0].text
+ *
+ * 6. ERROR HANDLING PHILOSOPHY:
+ *    - No API key: Graceful message, not an exception
+ *    - API error: Logged + mystical error message ("voice is clouded")
+ *    - Network failure: Caught and returns friendly error
+ *
+ *    The voice should never crash the app - it's optional enrichment.
+ *
+ * 7. ES6 MODULE PATTERN:
+ *    This file uses `export class` (ES6 modules), NOT the IIFE pattern.
+ *    Import with: import { VoiceModule } from './voice-module.js'
+ *
+ *    Contrast with orchestrator files that use (function(global){...})
+ *
+ * 8. FUTURE ENHANCEMENTS:
+ *    - Could add streaming responses for better UX
+ *    - Could cache recent Q&A to avoid duplicate API calls
+ *    - Could add model switching (flash vs pro)
+ *    - Could integrate with FallbackChain for multi-provider support
+ *
+ * 9. RELATIONSHIP TO GEMINI-CLIENT.JS:
+ *    gemini-client.js handles KPI extraction (structured data)
+ *    voice-module.js handles conversational Q&A (free-form text)
+ *
+ *    Both use Gemini API but for different purposes.
+ *    They share the same API key in localStorage.
+ *
+ * ========================================
+ * USED BY
+ * ========================================
+ * - portrait-view.js: "Ask Quannex" chat interface
+ * - shadow-panel.js: Shadow interpretation queries (planned)
+ *
+ * ========================================
+ * GOTCHAS FOR FUTURE CLAUDE
+ * ========================================
+ * - API key is in localStorage, not passed to constructor
+ * - context.faces must have faceEnergy property (not just energy)
+ * - context.edges must have tension property
+ * - Empty arrays for faces/edges will cause filter() to return []
+ * - Gemini 1.5 Flash is used by default - good for speed, not depth
+ * - Response parsing assumes specific Gemini response structure
+ *
+ * ========================================
  */
 
 export class VoiceModule {

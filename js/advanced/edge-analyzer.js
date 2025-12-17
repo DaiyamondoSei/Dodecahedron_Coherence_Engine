@@ -1,19 +1,80 @@
 /**
+ * ========================================
+ * MODULE: edge-analyzer.js
+ * ========================================
+ *
  * EdgeAnalyzer - Browser-Compatible Edition with CSV Integration
  *
- * Analyzes the 30 edges (connections) of the dodecahedron
- *
+ * Analyzes the 30 edges (connections) of the dodecahedron.
  * Each edge represents the relationship and flow between two organizational domains (Faces).
- * Edges carry tension (energy difference), breath ratio (flow direction), and elemental nature.
+ *
+ * Date: Documented December 16, 2025
+ *
+ * CORE CONCEPTS:
+ * - Edges carry TENSION (energy difference between faces)
+ * - Edges have BREATH RATIO (flow direction)
+ * - Edges have ELEMENTAL NATURE (Fire, Water, Earth, Air, Ether)
+ *
+ * DEPENDENCIES:
+ * - window.PhiHarmonics (optional, has fallbacks)
+ *
+ * EXPORTS:
+ * - EdgeAnalyzer: Main class (ES module + window)
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * THE 30 EDGES:
+ * - Dodecahedron has 30 edges (12 faces × 5 neighbors / 2)
+ * - Each edge connects exactly 2 faces that share a physical edge
+ * - The topology is FIXED - it comes from geometry, not configuration
+ *
+ * TENSION FORMULA (Normalized):
+ * T = |E_A - E_B| / (E_A + E_B + ε)
+ *
+ * This is RELATIVE tension - a gap between two low-energy faces is
+ * MORE severe than the same gap between high-energy faces.
+ * Combined: 60% from energy difference, 40% from edge KPI health.
+ *
+ * BREATH RATIO (Logarithmic, Base-φ):
+ * BR = log_φ(E_B / E_A)
+ *
+ * - BR = 0: Perfect balance (ratio = 1.0)
+ * - BR = +1: Energy flows toward face2 (ratio = φ = 1.618)
+ * - BR = -1: Energy flows toward face1 (ratio = 1/φ = 0.618)
+ *
+ * ELEMENTAL MULTIPLIERS:
+ * - Fire (1.3): Amplifies tension - volatile, transformative
+ * - Water (0.9): Dampens tension - smoothing, adaptive
+ * - Earth (0.8): Stabilizes - grounding, structural
+ * - Air (1.1): Accelerates flow - communication, speed
+ * - Ether (1.0): Neutral - purpose-driven
+ *
+ * DATA SOURCES:
+ * - Backend (Quannex.getState().edges): Authoritative if available
+ * - UnifiedDataLoader: Provides edge definitions from CSV
+ * - Fallback: Hardcoded this.edgeDefinitions
+ *
+ * GOTCHAS:
+ * - Edge IDs are strings like "E1-2" (not numbers)
+ * - faceEnergy can be undefined - always use || 0
+ * - Element assignment comes from CSV or fallback (may vary)
+ * - validateTopology() checks against geometric truth
+ *
+ * USED BY: js/advanced/index.js, js/dodec/dodec-data.js
+ * RELATED: js/core/Edge.js (data structure)
+ *
+ * ========================================
+ *
+ * @module js/advanced/edge-analyzer
+ * @author Deimantas Butrimas & Claude
+ * @version 4.1 (with comprehensive documentation)
  *
  * USAGE:
  * const analyzer = new EdgeAnalyzer();
- * // Pass edge definitions (from UnifiedDataLoader) directly
  * const edges = analyzer.calculateAllEdges(facesData, edgeDefinitions, edgeKPIs);
- * const tensionMap = analyzer.getTensionMap(edges);
- *
- * @author Deimantas Butrimas & Claude
- * @version 4.0 (Unified Data Edition)
+ * const tensionMap = analyzer.getTensionStats(edges);
  */
 
 export class EdgeAnalyzer {

@@ -3,18 +3,154 @@
  * MODULE: orchestrator-steps.js
  * ========================================
  *
+ * DEMO WIZARD - The 4-Step Journey Engine
+ *
+ * This is the largest file in the orchestrator subsystem (~1900 lines).
+ * It handles the entire user journey from template selection to results display.
+ *
  * Extracted from: demo-orchestrator-logic.js
  * Original lines: ~183-1910
  * Date: December 15, 2025
  *
- * PURPOSE:
- * All step-related functionality for the Demo Orchestrator:
- * - Step 0: Template selection
- * - Step 1: Face configuration
- * - Step 2: KPI entry
- * - Step 3: Calculation & results display
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
  *
- * DEPENDENCIES:
+ * 1. THE 4-STEP WIZARD ARCHITECTURE:
+ *    ┌─────────────────────────────────────────────────────────────────┐
+ *    │ STEP 0: Template Selection                                      │
+ *    │         - selectCompanyTemplate() → Pre-fills all data          │
+ *    │         - startFreshManual() → Empty faces, user fills          │
+ *    │         - startFreshAI() → Story-based AI extraction            │
+ *    ├─────────────────────────────────────────────────────────────────┤
+ *    │ STEP 1: Face Configuration                                      │
+ *    │         - populateFaceEditor() → Shows 12 face name inputs      │
+ *    │         - completeStep1() → Validates & syncs to MappingContext │
+ *    ├─────────────────────────────────────────────────────────────────┤
+ *    │ STEP 2: KPI Entry                                               │
+ *    │         - selectMode('quick'|'full') → 12 vs 60 KPIs            │
+ *    │         - generateQuickModeHTML() / generateFullModeHTML()      │
+ *    │         - completeStep2() → Collects & validates KPIs           │
+ *    ├─────────────────────────────────────────────────────────────────┤
+ *    │ STEP 3: Calculation & Results                                   │
+ *    │         - runCalculation() → Transforms → Engine → Display      │
+ *    │         - completeStep3() → Initializes dashboards              │
+ *    └─────────────────────────────────────────────────────────────────┘
+ *
+ * 2. TEMPLATE VS CUSTOM FLOW:
+ *    This file handles TWO fundamentally different user paths:
+ *
+ *    A) TEMPLATE FLOW (selectCompanyTemplate):
+ *       - Loads mapping-context.json from companies/{id}/ folder
+ *       - Pre-fills faces, KPIs, octaves, shadow patterns
+ *       - Marks ALL steps complete (0,1,2,3) immediately
+ *       - User can review and modify but data is ready
+ *
+ *    B) CUSTOM FLOW (startFreshManual/startFreshAI):
+ *       - User enters faces manually OR via AI story extraction
+ *       - User enters KPIs one by one
+ *       - Steps must be completed sequentially
+ *       - ContextSynthesizer generates edges/vertices at Step 2
+ *
+ *    WHY THIS MATTERS: Template flow skips validation gates because
+ *    data is pre-verified. Custom flow must pass Sprint 2 validation.
+ *
+ * 3. THE DATA BRIDGE PATTERN:
+ *    Demo Orchestrator UI → DataTransformer → Quannex Engine
+ *
+ *    Line ~1495-1565: The runCalculation() function orchestrates this:
+ *    1. DataTransformer.validate(demoData) - Check data integrity
+ *    2. DataTransformer.transform(demoData) - Convert UI → Engine format
+ *    3. Quannex.initWithCompany(engineData) - Run sacred geometry math
+ *    4. DataTransformer.transformResults(engineState) - Convert back to UI
+ *
+ *    FALLBACK: If Quannex engine not loaded, calculateSimpleCoherence()
+ *    does basic (value - min) / (ideal - min) normalization.
+ *
+ * 4. SESSION STORAGE SYNC (Critical for 3D View):
+ *    The updateSessionStorage() function at line ~1757 is CRUCIAL.
+ *    It writes to sessionStorage so 3D dodecahedron view can read:
+ *    - customCompanyData: All faces, KPIs, coherence results
+ *    - edges: For 30 edge visualization
+ *    - shadowPatterns: For shadow overlay display
+ *    - tuning: For consistent coherence perspective
+ *
+ *    Also broadcasts via CrossWindowSync for live updates.
+ *
+ * 5. KPI NORMALIZATION FORMULA:
+ *    Line ~1327-1339: calculateLiveNormalization()
+ *
+ *    Direction '↑' (Higher is better):
+ *      normalized = (value - targetMin) / (targetIdeal - targetMin)
+ *
+ *    Direction '↓' (Lower is better):
+ *      normalized = (targetMin - value) / (targetMin - targetIdeal)
+ *
+ *    Direction 'Band' (Sweet spot):
+ *      midpoint = (targetMin + targetIdeal) / 2
+ *      range = |targetIdeal - targetMin| / 2
+ *      normalized = max(0, 1 - (|value - midpoint| / range))
+ *
+ *    Result clamped to [0, 1] and displayed as percentage.
+ *
+ * 6. RE-ENTRANCY GUARDS:
+ *    Line ~96-100: selectCompanyTemplate uses isSelectingCompanyTemplate()
+ *    This prevents double-clicks from loading a template twice.
+ *    ALWAYS check/reset in finally{} block to avoid deadlock.
+ *
+ * 7. OFFLINE BUNDLE FALLBACK:
+ *    Line ~120-126: If server fetch fails (file:// protocol, no server),
+ *    falls back to window.CompanyTemplatesBundle (pre-bundled JSON).
+ *    This ensures thesis demo works without HTTP server.
+ *
+ * 8. SHADOW DETECTION INTEGRATION:
+ *    Line ~1571-1605: For custom flow (no template shadows):
+ *    - ShadowDetector.analyze(faces, kpis) runs after calculation
+ *    - Detected patterns stored in demoState.shadowPatterns
+ *    - Template flow uses pre-defined shadowPatterns from JSON
+ *
+ * 9. THE IIFE PATTERN:
+ *    This file uses (function(global) { ... })(window)
+ *    - All functions are private by default
+ *    - Only functions explicitly assigned to `global.X` are public
+ *    - Line ~1884-1907 shows the export list
+ *
+ * 10. QUICK VS FULL MODE:
+ *     Quick Mode: 12 KPIs (1 per face, Earth element assumed)
+ *     Full Mode: 60 KPIs (5 per face, one for each element)
+ *
+ *     Elements: Earth (Physical), Water (Emotional), Fire (Action),
+ *               Air (Communication), Ether (Purpose)
+ *
+ * 11. VALIDATION GATE BYPASS:
+ *     Line ~613-630: Template flow sets completedSteps = [0,1,2,3]
+ *     This causes completeStep1() to skip Sprint 2 validation.
+ *     Custom flow MUST pass window.Sprint2.canProceed() checks.
+ *
+ * ========================================
+ * USED BY
+ * ========================================
+ * - demo-orchestrator.html: Main demo wizard page
+ * - orchestrator-navigation.js: Calls goToStep() after completions
+ * - dodecahedron-3d.html: Reads sessionStorage data written here
+ * - portrait-view.js: Reads faces from coherenceResults
+ *
+ * ========================================
+ * GOTCHAS FOR FUTURE CLAUDE
+ * ========================================
+ * - Don't forget to call updateSessionStorage() after any data change
+ *   or 3D view will show stale data
+ * - Template flow skips validation - don't add validation there
+ * - The collectKPIData() function uses data-face-id attributes,
+ *   not input IDs - selector must match HTML generation
+ * - Empty KPI values default to 0, not null - this is intentional
+ * - faceEnergy vs energy: Some code uses one, some uses other
+ *   (backwards compatibility). Check both: face.energy || face.faceEnergy
+ * - Quick mode always uses Earth element for elemental calculations
+ *
+ * ========================================
+ * DEPENDENCIES
+ * ========================================
  * - js/orchestrator/orchestrator-state.js (demoState, guards)
  * - js/orchestrator/orchestrator-utils.js (showLoading, hideLoading)
  * - js/orchestrator/orchestrator-navigation.js (goToStep)
@@ -22,7 +158,9 @@
  * - js/orchestrator/orchestrator-session.js (SessionManager)
  * - js/orchestrator/orchestrator-sync.js (CrossWindowSync)
  *
- * EXPORTS (to window/global):
+ * ========================================
+ * EXPORTS (to window/global)
+ * ========================================
  * Template selection:
  * - selectCompanyTemplate(companyId)
  * - startFreshManual()

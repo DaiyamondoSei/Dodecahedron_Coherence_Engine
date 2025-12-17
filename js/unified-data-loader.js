@@ -1,11 +1,139 @@
 /**
- * Unified Data Loader
- * 
- * The "Single Source of Truth" for the Quannex Engine.
- * Centralizes loading from:
- * 1. Static CSVs (Base Models)
- * 2. Company JSONs (Specific Profiles)
- * 3. AI Generation (Dynamic Context)
+ * ========================================
+ * MODULE: unified-data-loader.js
+ * ========================================
+ *
+ * UNIFIED DATA LOADER - The Single Source of Truth
+ *
+ * This is the GATEKEEPER for all data entering the Quannex system.
+ * It centralizes loading from three sources and synthesizes them
+ * into a unified context object that all other modules consume.
+ *
+ * THE THREE DATA SOURCES:
+ * ┌─────────────────────────────────────────────────────────────┐
+ * │ 1. STATIC CSVs (Base Models - The Geometry)                │
+ * │    - CSV_Edge_tension_Map.csv → 30 edges with archetypes   │
+ * │    - CSV_Vortex_Map.csv → 20 vertices with face mappings   │
+ * │    These define the FIXED dodecahedron topology.           │
+ * ├─────────────────────────────────────────────────────────────┤
+ * │ 2. COMPANY JSONs (Specific Profiles)                       │
+ * │    - companies/{id}/company.json → metadata + faceConfig   │
+ * │    - companies/{id}/kpis.csv → KPI definitions             │
+ * │    - companies/{id}/mapping-context.json → shadow patterns │
+ * │    These customize the dodecahedron for each organization. │
+ * ├─────────────────────────────────────────────────────────────┤
+ * │ 3. AI GENERATION (Dynamic Context)                         │
+ * │    - AIEdgeInterpreter generates edge metadata on-the-fly  │
+ * │    - Used when CSV/JSON data is insufficient               │
+ * │    Provides intelligent fallbacks for missing data.        │
+ * └─────────────────────────────────────────────────────────────┘
+ *
+ * DEPENDENCIES:
+ * - AIEdgeInterpreter (./advanced/ai-edge-interpreter.js)
+ * - CSV files in ./data/ folder
+ * - Company profiles in ./companies/{companyId}/ folder
+ *
+ * EXPORTS (to window/global):
+ * - UnifiedDataLoader (class) - exported via ES6 module AND window
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * 1. THE LOADCONTEXT() FLOW (Main Entry Point):
+ *    loadContext(companyId, customConfig) does:
+ *    Step 1: loadBaseModels() - CSV geometry (cached)
+ *    Step 2: loadCompanyProfile() OR use customConfig
+ *    Step 3: synthesizeContext() - merge everything
+ *    Result: A complete context object ready for Quannex
+ *
+ * 2. CACHING STRATEGY:
+ *    - this.cache = new Map() holds cached data
+ *    - Base models (CSVs) are cached after first load
+ *    - Company profiles are NOT cached (may change)
+ *    - Cache key: 'baseModels' for edge/vertex definitions
+ *
+ * 3. THE 'CUSTOM' COMPANY ID:
+ *    When companyId === 'custom':
+ *    - Uses customConfig if provided
+ *    - Falls back to getDefaultFaces() if no config
+ *    - This handles direct navigation to views without orchestrator
+ *    - Warning is logged when no config provided
+ *
+ * 4. COMPANY PROFILE LOADING:
+ *    loadCompanyProfile(companyId) loads 3 files:
+ *    1. company.json → { id, name, description, faceConfig, shadowPatterns }
+ *    2. kpis.csv → Array of KPI objects
+ *    3. mapping-context.json → Rich shadow patterns + tuning (optional)
+ *
+ * 5. SHADOW PATTERNS PRIORITY:
+ *    The loader tries mapping-context.json FIRST because:
+ *    - company.json has shadowPatterns as strings
+ *    - mapping-context.json has proper objects with 'name' property
+ *    - Rich objects enable better shadow detection
+ *
+ * 6. TUNING PARAMETERS:
+ *    Tuning (alpha, beta, etc.) can come from mapping-context.json:
+ *    - diagnostics.tuning.perspective → 'optimistic'/'realistic'
+ *    - Ensures coherence calculations match the mapping session
+ *
+ * 7. THE SYNTHESIZE FLOW:
+ *    synthesizeContext(baseData, companyData) does:
+ *    a) Faces: Use companyData.faceConfig OR getDefaultFaces()
+ *    b) Edges: Merge CSV definitions + AI-generated metadata
+ *    c) Vertices: Enrich CSV definitions with face names
+ *    d) Return unified { company, faces, edges, vertices, kpis, shadowPatterns, tuning }
+ *
+ * 8. CSV PARSING:
+ *    - parseCSVLine() handles quoted commas correctly
+ *    - parseEdgeCSV() extracts face IDs from "Face 1" strings
+ *    - parseVertexCSV() gets 3 face IDs per vertex
+ *    - parseKPIs() creates objects from header-value pairs
+ *
+ * 9. DEFAULT FACES (The 12 Organizational Domains):
+ *    When no faceConfig provided, getDefaultFaces() returns:
+ *    1: Financial Capital, 2: Human Capital, 3: Customer Experience
+ *    4: Operations, 5: Technology, 6: Brand
+ *    7: Leadership, 8: Strategy, 9: Partnerships
+ *    10: Risk, 11: Learning, 12: Sustainability
+ *
+ * 10. AI EDGE INTERPRETER INTEGRATION:
+ *     For each edge, aiInterpreter.generateEdgeMetadata() is called
+ *     This enriches edges with contextual metadata like:
+ *     - Relationship descriptions
+ *     - Flow dynamics
+ *     - Tension interpretations
+ *
+ * 11. THE CONTEXT OBJECT SHAPE:
+ *     loadContext() returns:
+ *     {
+ *       company: { id, name, description },
+ *       faces: [{ id, name, ... }],
+ *       edges: [{ id, face1Id, face2Id, archetype, element, ... }],
+ *       vertices: [{ id, faceIds, faceNames, archetype }],
+ *       kpis: [{ name, metric, target, ... }],
+ *       shadowPatterns: [{ name, faces, description }],
+ *       tuning: { alpha, beta, ..., perspective } or null
+ *     }
+ *
+ * USED BY:
+ * - demo-orchestrator.js (initializing sessions)
+ * - portrait-view.js (loading company context)
+ * - Any component needing the full organizational model
+ *
+ * GOTCHAS:
+ * - CSV paths are relative to HTML file location (./data/)
+ * - Company profiles must exist or loadCompanyProfile returns null
+ * - 'custom' without config shows a warning but still works
+ * - Edge element is extracted: "Air (Communication)" → "Air"
+ * - Face IDs in CSV are strings like "Face 1", parsed to integers
+ * - ES6 module export AND window export for compatibility
+ *
+ * ========================================
+ *
+ * @module js/unified-data-loader
+ * @author Deimantas Butrimas & Claude
+ * @version 2.0.0 - Documented with Notes for Future Claude
  */
 
 import { AIEdgeInterpreter } from './advanced/ai-edge-interpreter.js';

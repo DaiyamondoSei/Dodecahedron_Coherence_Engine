@@ -1,14 +1,83 @@
 /**
+ * ========================================
+ * MODULE: gemini-client.js
+ * ========================================
+ *
  * Gemini API Client for Quannex
  *
- * Handles communication with Google's Gemini API.
+ * Handles communication with Google's Gemini API for AI-powered
+ * organizational analysis and KPI extraction.
+ *
  * Supports "Bring Your Own Key" (BYOK) for immediate prototyping.
  *
- * ENHANCED for Sprint 2:
+ * Date: Sprint 2 implementation, documented December 16, 2025
+ *
+ * FEATURES:
  * - Strategic Lens integration (Growth/Stability/Innovation)
  * - Vocabulary Style integration (Grounded/Professional/Systems/Poetic)
  * - Octave determination with stage-based constraints
  * - Reference library integration for accurate octave matching
+ * - Tiered model fallback (gemini-2.5-flash -> gemini-1.5-flash)
+ *
+ * DEPENDENCIES:
+ * - js/ai/octave-reference-library.js (OCTAVES, BREATH_AXES, detectOrganizationStage)
+ *
+ * EXPORTS:
+ * - GeminiClient: Main API client class (ES module export)
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * API ARCHITECTURE:
+ * 1. TIERED FALLBACK: Tries gemini-2.5-flash first, falls back to gemini-1.5-flash
+ * 2. API KEY: Uses "x-goog-api-key" header (Google's standard approach)
+ * 3. BASE URL: https://generativelanguage.googleapis.com/v1beta/models
+ *
+ * OCTAVE CONSTRAINTS (Critical!):
+ * - detectOrganizationStage() analyzes story text for lifecycle signals
+ * - Stages: pre-seed, seed, series-a, growth, mature, legacy, transcendent
+ * - Each stage has a MAXIMUM octave (prevents AI from over-inflating)
+ * - constrainOctave() enforces the ceiling
+ *
+ * TWO MAIN METHODS:
+ * 1. analyzeStory() - Maps organization story to 12 faces
+ *    - Returns: faces[], archetype, overallOctave, extractedMetrics
+ *    - Temperature: 0.2 (more deterministic)
+ *
+ * 2. extractKPIs() - Extracts KPIs from story
+ *    - Two modes: 'quick' (12 KPIs) or 'full' (60 KPIs with elements)
+ *    - Elemental structure: Earth/Water/Fire/Air/Ether per face
+ *    - Temperature: 0.3 (slightly more creative)
+ *
+ * LENS + VOCABULARY SYSTEM:
+ * - Lens: WHERE to look (growth=faces, stability=edges, innovation=vertices)
+ * - Vocabulary: HOW to name (grounded, professional, systems, poetic)
+ * - Both can have custom prompts or use defaults
+ *
+ * JSON PARSING:
+ * - parseJSONResponse() strips markdown code blocks
+ * - Validates faces.length === 12 (throws if not)
+ *
+ * GOTCHAS:
+ * - If API returns 429, user hit rate limit
+ * - Always check response.ok before parsing
+ * - maxOutputTokens differs: 2000 for story, 4000 for KPIs
+ * - The KPI mode affects both count and elemental structure
+ *
+ * ERROR HANDLING:
+ * - Missing API key throws immediately
+ * - Network errors cascade through try/catch
+ * - Invalid JSON throws with original text in console
+ *
+ * USED BY: Demo orchestrator, AI-assisted face mapping flow
+ * RELATED: js/ai/providers/ (alternative provider implementations)
+ *
+ * ========================================
+ *
+ * @module js/gemini-client
+ * @author Deimantas Butrimas & Claude
+ * @version 2.0 (Sprint 2 with comprehensive documentation)
  *
  * USAGE:
  * const ai = new GeminiClient(apiKey);

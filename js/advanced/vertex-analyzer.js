@@ -1,18 +1,93 @@
 /**
+ * ========================================
+ * MODULE: vertex-analyzer.js
+ * ========================================
+ *
  * VertexAnalyzer - Browser-Compatible Edition with Unified Data Integration
  *
- * Analyzes the 20 vertices (convergence points) of the dodecahedron
+ * Analyzes the 20 vertices (convergence points) of the dodecahedron.
+ * Each vertex is where exactly 3 faces meet - a "Triple Convergence" of domains.
  *
- * Each vertex is where 3 faces meet. It represents a "Triple Convergence" of domains.
- * Vertices are high-energy points that can be "Vortices" (chaotic) or "Nodes" (stable).
+ * Date: Documented December 16, 2025
+ *
+ * CORE CONCEPTS:
+ * - Vertices are VORTEX POINTS where energy converges
+ * - Can be generative (upward spiral) or degenerative (downward spiral)
+ * - High-leverage points have high strength but low coherence
+ *
+ * DEPENDENCIES:
+ * - None (standalone module)
+ *
+ * EXPORTS:
+ * - VertexAnalyzer: Main class (ES module + window)
+ *
+ * ========================================
+ * NOTES FOR FUTURE CLAUDE
+ * ========================================
+ *
+ * THE 20 VERTICES:
+ * - Dodecahedron has 20 vertices
+ * - Each vertex touches exactly 3 faces
+ * - Topology is FIXED from geometry
+ *
+ * VORTEX STRENGTH (0-1):
+ * - Based on VARIANCE of the 3 face energies
+ * - High variance = high strength (turbulent)
+ * - Combined: 70% variance, 30% mean energy
+ * - Max variance for 0-1 range is 0.25
+ *
+ * VORTEX DIRECTION (-1 to +1):
+ * - Based on average energy vs 0.5 (balanced)
+ * - Positive = upward spiral (generative, building)
+ * - Negative = downward spiral (degenerative, releasing)
+ * - Formula: (avgEnergy - 0.5) × 2
+ *
+ * CHIRALITY (Sprint 4 Task 35):
+ * - Clockwise vs counterclockwise energy rotation
+ * - Uses cross-product-like calculation
+ * - Counterclockwise = building (energy spiraling in)
+ * - Clockwise = releasing (energy spiraling out)
+ *
+ * COHERENCE (0-1):
+ * - How aligned are the 3 faces?
+ * - Based on average pairwise difference
+ * - High coherence = faces have similar energy
+ * - Low coherence = faces are very different
+ *
+ * LEVERAGE POINTS (Critical Concept!):
+ * - High strength (>0.7) + Low coherence (<0.5)
+ * - These are transformation opportunities
+ * - Small interventions here cascade through system
+ *
+ * VORTEX TYPES:
+ * - Dormant: strength < 0.3
+ * - Rising/Powerful Ascent: direction > 0.3
+ * - Declining/Critical Descent: direction < -0.3
+ * - Turbulent: strong but no clear direction
+ *
+ * DATA SOURCES:
+ * - Backend (Quannex.getState().vertices): Authoritative if available
+ * - Fallback: Local calculation from face energies
+ *
+ * GOTCHAS:
+ * - Vertex IDs are strings like "V1" in CSV but numbers in definitions
+ * - The topology in vertexDefinitions has comments about corrections needed
+ * - faceEnergies must be filtered to length === 3
+ * - Backend vertex ID format may differ (check both V1 and 1)
+ *
+ * USED BY: js/advanced/index.js
+ * RELATED: js/core/Vertex.js (data structure)
+ *
+ * ========================================
+ *
+ * @module js/advanced/vertex-analyzer
+ * @author Deimantas Butrimas & Claude
+ * @version 4.1 (with comprehensive documentation)
  *
  * USAGE:
  * const analyzer = new VertexAnalyzer();
- * // Pass vertex definitions (from UnifiedDataLoader) directly
  * const vertices = analyzer.calculateAllVertices(facesData, vertexDefinitions);
- *
- * @author Deimantas Butrimas & Claude
- * @version 4.0 (Unified Data Edition)
+ * const leverage = analyzer.getLeveragePoints(vertices);
  */
 
 export class VertexAnalyzer {
