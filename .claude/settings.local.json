@@ -85,7 +85,8 @@
       "Bash(cmd /c del \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\dodecahedron-3d.html\")",
       "Bash(cmd /c del \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\dev\\results-summary.html\")",
       "Bash(cmd /c \"dir /b \"\"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\pages\\*.html\"\"\")",
-      "Bash(cmd /c \"dir /b \"\"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\*.html\"\"\")"
+      "Bash(cmd /c \"dir /b \"\"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\*.html\"\"\")",
+      "Bash(cmd /c copy:*)"
     ],
     "deny": [],
     "ask": [
