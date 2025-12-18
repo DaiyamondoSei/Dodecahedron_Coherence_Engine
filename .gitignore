@@ -21,6 +21,7 @@ __pycache__/
 ~$*.xls
 
 # Invalid files
+nul
 
 # Playwright MCP screenshots (testing artifacts)
 .playwright-mcp/
