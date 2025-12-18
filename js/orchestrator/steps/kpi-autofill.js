@@ -82,6 +82,7 @@
  * - autofillKPISuggestion(inputElement, faceId)
  * - autofillElementalKPI(inputElement, faceId, element)
  * - calculateLiveNormalization(faceId)
+ * - calculateAllNormalizations() [NEW - batch calc for all 12 faces]
  * - autoFillExtractedKPIs()
  *
  * ========================================
@@ -409,12 +410,46 @@
     }
 
     // ========================================
+    // BATCH NORMALIZATION
+    // ========================================
+
+    /**
+     * Calculate normalization for ALL 12 faces.
+     *
+     * Called after KPI form is populated with template data to show
+     * live health indicators for all faces at once.
+     *
+     * Uses a small delay (50ms) between faces to prevent UI blocking
+     * and ensure DOM updates are visible.
+     */
+    function calculateAllNormalizations() {
+        console.log('[kpi-autofill] Calculating normalization for all 12 faces...');
+
+        let calculated = 0;
+
+        for (let faceId = 1; faceId <= 12; faceId++) {
+            // Check if this face has the required values before calculating
+            const valueInput = document.querySelector(`[data-face-id="${faceId}"][data-field="value"]`);
+            const minInput = document.querySelector(`[data-face-id="${faceId}"][data-field="targetMin"]`);
+            const idealInput = document.querySelector(`[data-face-id="${faceId}"][data-field="targetIdeal"]`);
+
+            if (valueInput?.value && minInput?.value && idealInput?.value) {
+                calculateLiveNormalization(faceId);
+                calculated++;
+            }
+        }
+
+        console.log(`[kpi-autofill] Normalization calculated for ${calculated} faces`);
+    }
+
+    // ========================================
     // EXPORTS
     // ========================================
 
     global.autofillKPISuggestion = autofillKPISuggestion;
     global.autofillElementalKPI = autofillElementalKPI;
     global.calculateLiveNormalization = calculateLiveNormalization;
+    global.calculateAllNormalizations = calculateAllNormalizations;
     global.autoFillExtractedKPIs = autoFillExtractedKPIs;
 
     console.log('[kpi-autofill] Module loaded');

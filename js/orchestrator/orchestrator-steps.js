@@ -896,6 +896,14 @@
 
         // Sprint 2: Auto-fill with extracted KPIs from AI story analysis
         autoFillExtractedKPIs();
+
+        // Session 2 Enhancement: Calculate normalization preview for all faces
+        // This shows live health indicators for pre-filled template data
+        setTimeout(() => {
+            if (typeof calculateAllNormalizations === 'function') {
+                calculateAllNormalizations();
+            }
+        }, 100);
     }
 
     /**
