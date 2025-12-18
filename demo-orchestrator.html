@@ -718,6 +718,14 @@
     <script src="js/orchestrator/orchestrator-session.js"></script>
     <script src="js/orchestrator/orchestrator-sync.js"></script>
     <script src="js/orchestrator/orchestrator-utils.js"></script>
+
+    <!-- SESSION 5: Dashboard Modules (extracted from orchestrator-dashboard.js) -->
+    <!-- Load order matters: utilities → system → hero → warnings → portrait → coordinator -->
+    <script src="js/orchestrator/dashboard/octave-utilities.js"></script>
+    <script src="js/orchestrator/dashboard/octave-system.js"></script>
+    <script src="js/orchestrator/dashboard/coherence-hero.js"></script>
+    <script src="js/orchestrator/dashboard/foundation-principle.js"></script>
+    <script src="js/orchestrator/dashboard/portrait-view-manager.js"></script>
     <script src="js/orchestrator/orchestrator-dashboard.js"></script>
     <script src="js/orchestrator/orchestrator-navigation.js"></script>
     <!-- REMOVED: orchestrator-steps.js (2,050 lines) - fully replaced by modular steps/ -->
