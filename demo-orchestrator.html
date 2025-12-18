@@ -724,8 +724,12 @@
 
     <!-- Phase 5: Steps Sub-Modules (extracted from orchestrator-steps.js for modularization) -->
     <!-- Load AFTER orchestrator-steps.js - these override specific functions for cleaner separation -->
+    <!-- SESSION 1: Template & Results display -->
     <script src="js/orchestrator/steps/template-display.js"></script>
     <script src="js/orchestrator/steps/results-display.js"></script>
+    <!-- SESSION 2: Face configuration & KPI autofill -->
+    <script src="js/orchestrator/steps/face-configuration.js"></script>
+    <script src="js/orchestrator/steps/kpi-autofill.js"></script>
 
     <!-- Event delegation system (Phase 4: replaces 33 inline onclick handlers) -->
     <script type="module" src="js/orchestrator/event-handlers.js"></script>
