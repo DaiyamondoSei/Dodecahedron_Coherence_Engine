@@ -19,7 +19,7 @@
  *
  * SESSION STORAGE:
  * ─────────────────────────────────────────────────────────────────────────
- * Custom company data can be stored in sessionStorage.customQuannexData
+ * Custom company data can be stored in sessionStorage.customCompanyData
  * This allows testing with different organizational configurations.
  *
  * IFRAME COMMUNICATION:
@@ -174,7 +174,7 @@
         // Try session storage fallback
         else if (typeof sessionStorage !== 'undefined') {
             try {
-                const customData = sessionStorage.getItem('customQuannexData');
+                const customData = sessionStorage.getItem('customCompanyData');
                 if (customData) {
                     const parsed = JSON.parse(customData);
                     if (parsed.breathAxes && parsed.breathAxes.length === 6) {
@@ -205,15 +205,17 @@
         console.log('🔄 [Company Loader] Reloading custom data...');
 
         try {
-            const customData = sessionStorage.getItem('customQuannexData');
-            if (customData) {
-                const parsed = JSON.parse(customData);
+            const customDataJson = sessionStorage.getItem('customCompanyData');
+            if (customDataJson) {
+                const parsed = JSON.parse(customDataJson);
 
                 // Update faces in Quannex if available
-                if (window.Quannex && parsed.faces) {
+                if (window.Quannex && (parsed.kpis || parsed.faces)) {
                     // Re-initialize with custom data
                     window.Quannex.initWithCompany({
-                        faces: parsed.faces,
+                        name: parsed.name || 'Custom Company',
+                        faceConfig: parsed.faceConfig,
+                        kpis: parsed.kpis,
                         breathAxes: parsed.breathAxes
                     });
                 }

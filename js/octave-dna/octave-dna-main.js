@@ -277,15 +277,55 @@
 
     /**
      * Load company data and initialize face values
+     *
+     * PRIORITY ORDER:
+     * 1. Check sessionStorage for customCompanyData (from demo orchestrator)
+     * 2. Check window.CompanyLoader for template companies
+     * 3. Fall back to mock data
      */
     async function loadCompanyData() {
-        // Check if CompanyLoader module handles this
-        if (CompanyLoader?.initVisualization) {
-            // CompanyLoader will handle full initialization
-            // But we need faces data first for rendering
+        // ═══════════════════════════════════════════════════════════════════
+        // PRIORITY 1: Check for custom company data from demo orchestrator
+        // ═══════════════════════════════════════════════════════════════════
+        try {
+            const customDataJson = sessionStorage.getItem('customCompanyData');
+            if (customDataJson) {
+                const customData = JSON.parse(customDataJson);
+                console.log('📦 [Main] Found customCompanyData in sessionStorage');
+
+                if (window.Quannex && customData.kpis && customData.kpis.length > 0) {
+                    // Initialize Quannex with custom data
+                    await window.Quannex.initWithCompany({
+                        name: customData.name || 'Custom Company',
+                        faceConfig: customData.faceConfig,
+                        kpis: customData.kpis,
+                        breathAxes: customData.breathAxes
+                    });
+
+                    const facesData = window.Quannex.getFaces();
+                    State?.setState('facesData', facesData);
+
+                    // Update DNA helices with custom breath axes
+                    if (customData.breathAxes && CompanyLoader?.updateDNAHelicesConfig) {
+                        CompanyLoader.updateDNAHelicesConfig(
+                            { id: 'custom', name: customData.name },
+                            facesData,
+                            customData.breathAxes
+                        );
+                    }
+
+                    console.log(`✅ [Main] Loaded ${facesData.length} faces from custom data`);
+                    console.log(`📊 [Main] Custom coherence: ${(customData.coherenceResults?.global || 0) * 100}%`);
+                    return; // Custom data loaded successfully
+                }
+            }
+        } catch (error) {
+            console.warn('⚠️ [Main] Failed to load custom data:', error);
         }
 
-        // Check for external data sources
+        // ═══════════════════════════════════════════════════════════════════
+        // PRIORITY 2: Check for template companies via CompanyLoader
+        // ═══════════════════════════════════════════════════════════════════
         if (window.CompanyLoader) {
             try {
                 // Get current company or load first available
@@ -303,16 +343,17 @@
                     const facesData = window.Quannex.getFaces();
                     State?.setState('facesData', facesData);
                     console.log(`✅ [Main] Loaded ${facesData.length} faces for ${company.name}`);
+                    return;
                 }
             } catch (error) {
                 console.warn('⚠️ [Main] Company data loading failed:', error);
-                // Use mock data as fallback
-                loadMockFacesData();
             }
-        } else {
-            // No external data source - use mock data
-            loadMockFacesData();
         }
+
+        // ═══════════════════════════════════════════════════════════════════
+        // PRIORITY 3: Fall back to mock data
+        // ═══════════════════════════════════════════════════════════════════
+        loadMockFacesData();
     }
 
     /**

@@ -1,60 +1,119 @@
 /**
- * ========================================
- * MODULE: dynamics-analyzer.js
- * ========================================
+ * ════════════════════════════════════════════════════════════════════════════════
+ * DYNAMICS-ANALYZER.JS - ORIGINAL THESIS RESEARCH CONTRIBUTION
+ * ════════════════════════════════════════════════════════════════════════════════
  *
  * Novel Mathematical Enhancements for Organizational Coherence Theory
  *
- * This module contains ORIGINAL CONTRIBUTIONS to organizational coherence:
- * 1. Feedback Loop Detection - Identifies reinforcing/dampening cycles
- * 2. Phase Transition Proximity - Predicts critical thresholds
- * 3. Hysteresis & Inertia Tracking - Measures resistance to change
- * 4. Attractor Basin Mapping - Predicts system trajectory
+ * This module contains ORIGINAL CONTRIBUTIONS to organizational coherence theory,
+ * applying dynamical systems concepts to sacred geometry FOR THE FIRST TIME.
  *
- * These frameworks apply concepts from:
- * - Dynamical Systems Theory (Strogatz, Lorenz)
- * - Statistical Mechanics (Ising model, critical phenomena)
- * - Complex Networks (Barabási, Newman)
- * - Nonlinear Dynamics (bifurcations, strange attractors)
+ * @module js/advanced/dynamics-analyzer
+ * @author Deimantas Butrimas & Claude
+ * @version 2.1.0 - Gold documentation standard
+ * @see {@link ../../docs/SYSTEM_ARCHITECTURE.md} - Unified system map
  *
- * To organizational geometry FOR THE FIRST TIME - this is thesis-worthy research.
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NAVIGATION MAP - WHAT THIS FILE CONNECTS TO
+ * ════════════════════════════════════════════════════════════════════════════════
  *
- * DEPENDENCIES:
- * - None (self-contained, uses dodecahedron adjacency data internally)
+ * DEPENDS ON:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  None (self-contained) ───────→ Uses internal adjacency data                │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
  *
  * EXPORTS:
- * - DynamicsAnalyzer (class)
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  export class DynamicsAnalyzer ─→ Temporal flow analysis                    │
+ * │     .detectFeedbackLoops() ─────→ Find reinforcing/dampening cycles         │
+ * │     .analyzePhaseTransitions() ─→ Predict octave boundary crossings         │
+ * │     .analyzeInertia() ──────────→ Measure resistance to change              │
+ * │     .mapAttractors() ───────────→ Predict system trajectory                 │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
  *
- * ========================================
- * NOTES FOR FUTURE CLAUDE
- * ========================================
+ * USED BY:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  js/advanced/index.js ───────────→ Unified export (research extension)     │
+ * │  Future: main.js ────────────────→ For advanced temporal analysis          │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
  *
- * 1. THE 4 NOVEL FRAMEWORKS:
- *    a) Feedback Loops: Find cycles in the graph, calculate "loop gain"
- *       - Gain > 1 = reinforcing (amplifies change)
- *       - Gain < 1 = dampening (resists change)
- *       - Vicious/virtuous depends on energy level in loop
+ * ════════════════════════════════════════════════════════════════════════════════
+ * THE 4 NOVEL FRAMEWORKS - ORIGINAL RESEARCH
+ * ════════════════════════════════════════════════════════════════════════════════
  *
- *    b) Phase Transitions: Detect proximity to octave boundaries
- *       - Uses "critical slowing down" from statistical mechanics
- *       - High variance + flickering = transition imminent
- *       - Key insight: systems show precursors before big changes
+ * 1. FEEDBACK LOOP DETECTION (detectFeedbackLoops)
+ *    ───────────────────────────────────────────────
+ *    Source: Control theory, cybernetics
+ *    - Finds cycles in the dodecahedron graph
+ *    - Calculates "loop gain" for each cycle
+ *    - Gain > 1 = reinforcing (amplifies change)
+ *    - Gain < 1 = dampening (resists change)
+ *    - Vicious/virtuous depends on energy level
  *
- *    c) Inertia: Measures resistance to recommended changes
- *       - High required delta + low current energy = STUCK
- *       - "Frozen" faces need different intervention than "responsive"
- *       - Links to spectral delta vector
+ * 2. PHASE TRANSITION PROXIMITY (analyzePhaseTransitions)
+ *    ─────────────────────────────────────────────────────
+ *    Source: Statistical mechanics (Ising model, critical phenomena)
+ *    - Detects proximity to octave boundaries
+ *    - Uses "critical slowing down" principle
+ *    - High variance + flickering = transition imminent
+ *    - Key insight: systems show precursors before big changes
  *
- *    d) Attractors: Predicts where system "naturally flows"
- *       - 5 attractor basins: Chaos, Survival, Structure, Flow, Radiance
- *       - Gradient shows direction of natural evolution
- *       - Stability shows how easily perturbed
+ * 3. INERTIA & HYSTERESIS TRACKING (analyzeInertia)
+ *    ────────────────────────────────────────────────
+ *    Source: Dynamical systems, materials science
+ *    - Measures resistance to recommended changes
+ *    - High required delta + low current energy = STUCK
+ *    - "Frozen" faces need different interventions
+ *    - Links to spectral delta vector for recommendations
  *
- * 2. ADJACENCY MATRIX (Critical Data):
- *    - The adjacency list encodes dodecahedron topology
- *    - Each face has 5 neighbors (pentagonal faces)
- *    - Face 6 and Face 12 are POLAR OPPOSITES
- *    - This topology enables cycle detection
+ * 4. ATTRACTOR BASIN MAPPING (mapAttractors)
+ *    ────────────────────────────────────────
+ *    Source: Nonlinear dynamics (Lorenz, strange attractors)
+ *    - Predicts where system "naturally flows"
+ *    - 5 attractor basins defined
+ *    - Gradient shows direction of natural evolution
+ *    - Stability shows how easily perturbed
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * ATTRACTOR BASIN REFERENCE TABLE
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ *   Basin     │ Center │ State        │ Characteristics
+ *   ──────────┼────────┼──────────────┼──────────────────────────────────
+ *   Chaos     │  0.15  │ Disarray     │ System fragmented, no coherence
+ *   Survival  │  0.35  │ Basic        │ Functioning but vulnerable
+ *   Structure │  0.50  │ Organized    │ Stable but rigid, resistance high
+ *   Flow      │  0.70  │ Dynamic      │ Coherent and adaptive
+ *   Radiance  │  0.90  │ Peak         │ Full integration, transcendent
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * PHASE TRANSITION BOUNDARY TABLE
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ *   Transition │ Threshold │ From           │ To
+ *   ───────────┼───────────┼────────────────┼─────────────────
+ *   O1 → O2    │   0.35    │ Survival       │ Structure
+ *   O2 → O3    │   0.50    │ Structure      │ Relationships
+ *   O3 → O4    │   0.60    │ Relationships  │ Creativity
+ *   O4 → O5    │   0.70    │ Creativity     │ Expression
+ *   O5 → O6    │   0.80    │ Expression     │ Vision
+ *   O6 → O7    │   0.90    │ Vision         │ Radiance
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NOTES FOR FUTURE CLAUDE - 10 KEY INSIGHTS
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * 1. THIS IS ORIGINAL RESEARCH: The application of dynamical systems theory
+ *    to organizational sacred geometry is novel and thesis-worthy.
+ *
+ * 2. ADJACENCY MATRIX IS CRITICAL: The adjacency list encodes dodecahedron
+ *    topology. Each face has 5 neighbors. Face 6 and Face 12 are polar opposites.
  *
  * 3. LOOP GAIN FORMULA:
  *    For a cycle [A→B→C→A]:
@@ -62,53 +121,51 @@
  *    Where: transmission = 1 - (tension × 0.5)
  *           energy_ratio = E_next / E_current
  *
- * 4. OCTAVE BOUNDARIES (Phase Transitions):
- *    O1→O2: 0.35 (Survival → Structure)
- *    O2→O3: 0.50 (Structure → Relationships)
- *    O3→O4: 0.60 (Relationships → Creativity)
- *    O4→O5: 0.70 (Creativity → Expression)
- *    O5→O6: 0.80 (Expression → Vision)
- *    O6→O7: 0.90 (Vision → Radiance)
+ * 4. CRITICAL SLOWING DOWN (Physics Concept):
+ *    Near phase transitions, systems recover slower from perturbations.
+ *    Mathematically: autocorrelation ↑, variance ↑, recovery time ↑
+ *    We approximate with variance + "flicker score"
  *
- * 5. CRITICAL SLOWING DOWN (Physics Concept):
- *    - Near phase transitions, systems recover slower from perturbations
- *    - Mathematically: autocorrelation ↑, variance ↑, recovery time ↑
- *    - We approximate with variance + "flicker score"
+ * 5. SEPARATE FROM analyzeComplete():
+ *    This analyzer is exported from index.js but NOT included in the
+ *    OrganizationalCoherenceEngine.analyzeComplete() method. This is
+ *    intentional - it's a research extension, not core analysis.
  *
- * 6. ATTRACTOR BASINS:
- *    - Chaos (0.15): System in disarray
- *    - Survival (0.35): Basic functioning
- *    - Structure (0.50): Organized but rigid
- *    - Flow (0.70): Dynamic coherence
- *    - Radiance (0.90): Peak integration
- *
- * 7. INTEGRATION POINTS:
+ * 6. INTEGRATION REQUIREMENTS:
  *    - Needs faces array with faceEnergy property
  *    - Needs edges array with tension property
  *    - Needs spectralAnalysis.deltaVector for inertia
- *    - Returns comprehensive dynamics object
  *
- * 8. USED BY:
- *    - js/main.js (via analyzeComplete method)
- *    - js/advanced/index.js (exports)
- *    - Orchestrator for advanced insights
+ * 7. CYCLE DETECTION COMPLEXITY:
+ *    Worst case O(n!) but limited by maxLength=6 parameter.
+ *    The dodecahedron has bounded cycle lengths.
  *
- * GOTCHAS:
- * - Cycle detection is O(n!) in worst case, but limited by maxLength=6
- * - Loop gain can be 0 if any face has near-zero energy (div protection)
- * - Phase transition proximity assumes linear distance - simplification
+ * 8. DIVISION PROTECTION:
+ *    Loop gain can be 0 if any face has near-zero energy.
+ *    Protected with epsilon fallback.
  *
- * THESIS RELEVANCE:
- * This module represents ORIGINAL mathematical research. The application
- * of dynamical systems theory to organizational geometry is novel. Cite:
- * - "Novel application of feedback loop analysis to sacred geometry"
- * - "First use of phase transition theory in organizational coherence"
+ * 9. LINEAR DISTANCE SIMPLIFICATION:
+ *    Phase transition proximity assumes linear distance to threshold.
+ *    Future work could use more sophisticated proximity measures.
  *
- * ========================================
+ * 10. THESIS CITATION POINTS:
+ *     - "Novel application of feedback loop analysis to sacred geometry"
+ *     - "First use of phase transition theory in organizational coherence"
+ *     - "Attractor basin mapping for organizational development trajectories"
  *
- * @module js/advanced/dynamics-analyzer
- * @author Claude & Deimantas Butrimas
- * @version 1.0 (Novel Research Contribution)
+ * ════════════════════════════════════════════════════════════════════════════════
+ * THEORETICAL FOUNDATIONS
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * This module applies concepts from:
+ * - Dynamical Systems Theory (Strogatz, Lorenz)
+ * - Statistical Mechanics (Ising model, critical phenomena)
+ * - Complex Networks (Barabási, Newman)
+ * - Nonlinear Dynamics (bifurcations, strange attractors)
+ *
+ * To organizational geometry FOR THE FIRST TIME.
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
  */
 
 export class DynamicsAnalyzer {

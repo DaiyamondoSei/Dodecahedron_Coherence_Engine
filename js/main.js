@@ -1,7 +1,7 @@
 /**
- * ========================================
- * MODULE: main.js
- * ========================================
+ * ════════════════════════════════════════════════════════════════════════════════
+ * MAIN.JS - THE HEART OF QUANNEX
+ * ════════════════════════════════════════════════════════════════════════════════
  *
  * QUANNEX - The Organizational Coherence Engine
  *
@@ -10,28 +10,57 @@
  * - Calculates coherence using PHI-derived formulas
  * - Manages the global Quannex API for all UI components
  *
- * Architecture:
- * - CSV Parser: Loads and parses CSV data files
- * - Data Models: KPI, Face, Edge, Vertex classes (extracted to js/core/)
- * - Math Engine: Coherence calculations with CV formula
- * - Breath/Spectral Analyzers: Advanced analysis modules
- * - API Interface: window.Quannex for UI interaction
+ * @module js/main
+ * @author Deimantas Butrimas & Claude
+ * @version 2.1.0 - Gold documentation standard
+ * @see {@link ../docs/SYSTEM_ARCHITECTURE.md} - Unified system map
  *
- * DEPENDENCIES:
- * - js/core/index.js (TuningConfig, KPI, Face, Edge, Vertex)
- * - js/advanced/index.js (OrganizationalCoherenceEngine)
- * - js/spectral-analyzer.js (SpectralAnalyzer - via window)
- * - js/breath-analyzer.js (BreathAnalyzer - inline below)
- * - js/constants/phi-harmonics.js (PHI constants - via window)
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NAVIGATION MAP - WHAT THIS FILE CONNECTS TO
+ * ════════════════════════════════════════════════════════════════════════════════
  *
- * EXPORTS:
- * - DodecahedronEngine (class, ES module + window)
- * - window.Quannex (global API object)
- * - window.quannexEngine (direct engine access)
+ * DEPENDS ON (load before main.js):
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  js/constants/phi-harmonics.js ───→ PHI, PSI_3-5, CV_LAMBDA, thresholds    │
+ * │  js/core/index.js ────────────────→ TuningConfig, KPI, Face, Edge, Vertex  │
+ * │  js/advanced/index.js ────────────→ OrganizationalCoherenceEngine          │
+ * │  js/spectral-analyzer.js ─────────→ window.SpectralAnalyzer (eigenvalues)  │
+ * │  js/breath-analyzer.js ───────────→ window.BreathAnalyzer (6 axes)         │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
  *
- * ========================================
- * NOTES FOR FUTURE CLAUDE
- * ========================================
+ * EXPORTS TO (available after main.js loads):
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  window.Quannex ──────────────────→ Global API for all UI components       │
+ * │     .init()                         Load default company                    │
+ * │     .initWithCompany(data)          Load custom data                        │
+ * │     .getState()                     Full system state                       │
+ * │     .updateKPI(id, value)           Modify KPI → recalculate               │
+ * │     .getBreathAnalysis()            6 breath axes                           │
+ * │     .getSpectralAnalysis()          Eigenvalue decomposition                │
+ * │     .getShadowAnalysis()            6 ethical patterns                      │
+ * │                                                                              │
+ * │  window.quannexEngine ────────────→ Direct engine instance access          │
+ * │  window.DodecahedronEngine ───────→ Class for advanced use                 │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * USED BY:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  demo-orchestrator.html ──────────→ Wizard flow (via Quannex.init)         │
+ * │  index.html ──────────────────────→ Dashboard (via Quannex.getState)       │
+ * │  dodecahedron-3d.html ────────────→ 3D visualization                       │
+ * │  breath-analysis.html ────────────→ Breath view                            │
+ * │  All UI components ───────────────→ via window.Quannex API                 │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NOTES FOR FUTURE CLAUDE - 10 KEY INSIGHTS
+ * ════════════════════════════════════════════════════════════════════════════════
  *
  * 1. CLASS EXTRACTION (December 16, 2025):
  *    Core classes were extracted to js/core/ for maintainability:
@@ -139,11 +168,53 @@
  * - Shadow penalties can reduce face energy by up to 90%
  * - quannexEngine is a singleton - only one instance exists
  *
- * ========================================
+ * ════════════════════════════════════════════════════════════════════════════════
+ * RISKS & RECOVERY
+ * ════════════════════════════════════════════════════════════════════════════════
  *
- * @module js/main
- * @author Deimantas Butrimas & Claude
- * @version 2.0.0 - With class extraction and comprehensive docs
+ * RISK: SpectralAnalyzer not available
+ * ─────────────────────────────────────
+ * Symptom: "Cannot read properties of undefined" in recalculate()
+ * Cause: js/spectral-analyzer.js not loaded before main.js
+ * Recovery: Check HTML script order - spectral-analyzer.js MUST load first
+ * Prevention: Defensive check: if (window.SpectralAnalyzer) before use
+ *
+ * RISK: Shadow penalties over-applied
+ * ────────────────────────────────────
+ * Symptom: Face energies near zero despite good KPIs
+ * Cause: Multiple shadow patterns detected, penalties stacking
+ * Mitigation: Penalties capped at 90% reduction (10% energy minimum preserved)
+ * Recovery: Check shadowAnalysis.patterns for which patterns triggered
+ *
+ * RISK: Breath axis imbalance cascading
+ * ─────────────────────────────────────
+ * Symptom: One face's energy drops → opposing face also drops
+ * Cause: axisInformedEnergy() creates feedback loop
+ * Mitigation: eta (η) caps influence at 38.2% (PHI^-2)
+ * Recovery: Check breathAnalysis for axis balance diagnostics
+ *
+ * RISK: Global coherence stuck at 0
+ * ──────────────────────────────────
+ * Symptom: coherence.global = 0 despite face energies > 0
+ * Cause: CV (coefficient of variation) too high, penalty overcorrected
+ * Check: λ = 0.236 in formula C = μ × (1 - λ × CV)
+ * Recovery: Ensure face energies are somewhat balanced (CV < 4.2)
+ *
+ * RISK: CSV parsing silently fails
+ * ─────────────────────────────────
+ * Symptom: Faces created with default KPIs
+ * Cause: CSV columns don't match expected headers (KPI_ID vs kpi_id)
+ * Recovery: Check console for "Detected CSV format" or "Detected UI format"
+ * Prevention: createKPIs() handles both formats - check format detection
+ *
+ * RISK: quannexEngine is undefined
+ * ─────────────────────────────────
+ * Symptom: "Cannot read properties of undefined (reading 'getState')"
+ * Cause: main.js loaded but Quannex.init() never called
+ * Recovery: Ensure wizard/dashboard calls init() or initWithCompany()
+ * Check: typeof window.quannexEngine !== 'undefined'
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
  */
 
 import { OrganizationalCoherenceEngine } from './advanced/index.js';

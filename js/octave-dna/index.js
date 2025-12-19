@@ -100,7 +100,7 @@
  * │   ├── company-loader.js [Data Loading]
  * │   │   └── Load company from data source
  * │   └── session-storage.js [Custom Data]
- * │       └── Handle sessionStorage.customQuannexData
+ * │       └── Handle sessionStorage.customCompanyData
  * │
  * └── animation/
  *     └── animation-loop.js [RAF Loop]

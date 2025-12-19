@@ -1,24 +1,56 @@
 /**
- * Advanced Mathematical Analyzers - Main Export
+ * ════════════════════════════════════════════════════════════════════════════════
+ * ADVANCED MATHEMATICAL ANALYZERS - UNIFIED EXPORT
+ * ════════════════════════════════════════════════════════════════════════════════
  *
  * This file provides a unified interface to all advanced mathematical analysis modules.
  *
- * USAGE:
- * import { SpectralAnalyzer, EdgeAnalyzer, VertexAnalyzer, ShadowDetector } from './js/advanced/index.js';
+ * USAGE (ES Module):
+ * import { SpectralAnalyzer, EdgeAnalyzer, VertexAnalyzer, ShadowDetector, DynamicsAnalyzer } from './js/advanced/index.js';
  *
- * Or for browsers:
+ * USAGE (Browser):
  * <script type="module" src="./js/advanced/index.js"></script>
  *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * THE 5 ANALYZERS (4 Core + 1 Research Extension)
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * CORE ANALYZERS (used by OrganizationalCoherenceEngine.analyzeComplete):
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │  1. SpectralAnalyzer ──────→ Eigenvalue decomposition (439 lines)          │
+ * │  2. EdgeAnalyzer ──────────→ Tension mapping (622 lines)                   │
+ * │  3. VertexAnalyzer ────────→ Vortex detection (531 lines)                  │
+ * │  4. ShadowDetector ────────→ Ethical patterns (539 lines)                  │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * RESEARCH EXTENSION (separate from analyzeComplete, original thesis contribution):
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │  5. DynamicsAnalyzer ──────→ Temporal flows, attractors, phase transitions │
+ * │                              (860 lines of original research)               │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * WHY SEPARATE?
+ * The DynamicsAnalyzer represents novel theoretical contributions that extend
+ * beyond the core coherence measurement into dynamical systems theory. It's
+ * exported here for discoverability but kept separate from analyzeComplete()
+ * to distinguish "standard analysis" from "research extension."
+ *
+ * @module js/advanced/index
  * @author Deimantas Butrimas & Claude
- * @version 2.0
+ * @version 2.1.0 - Gold documentation standard with DynamicsAnalyzer integration
+ * @see {@link ../docs/SYSTEM_ARCHITECTURE.md} - Unified system map
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
  */
 
 import { SpectralAnalyzer } from './spectral-analyzer.js';
 import { EdgeAnalyzer } from './edge-analyzer.js';
 import { VertexAnalyzer } from './vertex-analyzer.js';
 import { ShadowDetector } from './shadow-detector.js';
+import { DynamicsAnalyzer } from './dynamics-analyzer.js';
 
-export { SpectralAnalyzer, EdgeAnalyzer, VertexAnalyzer, ShadowDetector };
+// Export all 5 analyzers
+export { SpectralAnalyzer, EdgeAnalyzer, VertexAnalyzer, ShadowDetector, DynamicsAnalyzer };
 
 /**
  * OrganizationalCoherenceEngine - Unified Interface

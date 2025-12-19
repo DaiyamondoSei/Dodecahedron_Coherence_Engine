@@ -1,87 +1,198 @@
 /**
- * ========================================
- * MODULE: gemini-client.js
- * ========================================
+ * ════════════════════════════════════════════════════════════════════════════════
+ * GEMINI-CLIENT.JS - THE AI INTERPRETER
+ * ════════════════════════════════════════════════════════════════════════════════
  *
  * Gemini API Client for Quannex
  *
- * Handles communication with Google's Gemini API for AI-powered
- * organizational analysis and KPI extraction.
- *
- * Supports "Bring Your Own Key" (BYOK) for immediate prototyping.
- *
- * Date: Sprint 2 implementation, documented December 16, 2025
- *
- * FEATURES:
- * - Strategic Lens integration (Growth/Stability/Innovation)
- * - Vocabulary Style integration (Grounded/Professional/Systems/Poetic)
- * - Octave determination with stage-based constraints
- * - Reference library integration for accurate octave matching
- * - Tiered model fallback (gemini-2.5-flash -> gemini-1.5-flash)
- *
- * DEPENDENCIES:
- * - js/ai/octave-reference-library.js (OCTAVES, BREATH_AXES, detectOrganizationStage)
- *
- * EXPORTS:
- * - GeminiClient: Main API client class (ES module export)
- *
- * ========================================
- * NOTES FOR FUTURE CLAUDE
- * ========================================
- *
- * API ARCHITECTURE:
- * 1. TIERED FALLBACK: Tries gemini-2.5-flash first, falls back to gemini-1.5-flash
- * 2. API KEY: Uses "x-goog-api-key" header (Google's standard approach)
- * 3. BASE URL: https://generativelanguage.googleapis.com/v1beta/models
- *
- * OCTAVE CONSTRAINTS (Critical!):
- * - detectOrganizationStage() analyzes story text for lifecycle signals
- * - Stages: pre-seed, seed, series-a, growth, mature, legacy, transcendent
- * - Each stage has a MAXIMUM octave (prevents AI from over-inflating)
- * - constrainOctave() enforces the ceiling
- *
- * TWO MAIN METHODS:
- * 1. analyzeStory() - Maps organization story to 12 faces
- *    - Returns: faces[], archetype, overallOctave, extractedMetrics
- *    - Temperature: 0.2 (more deterministic)
- *
- * 2. extractKPIs() - Extracts KPIs from story
- *    - Two modes: 'quick' (12 KPIs) or 'full' (60 KPIs with elements)
- *    - Elemental structure: Earth/Water/Fire/Air/Ether per face
- *    - Temperature: 0.3 (slightly more creative)
- *
- * LENS + VOCABULARY SYSTEM:
- * - Lens: WHERE to look (growth=faces, stability=edges, innovation=vertices)
- * - Vocabulary: HOW to name (grounded, professional, systems, poetic)
- * - Both can have custom prompts or use defaults
- *
- * JSON PARSING:
- * - parseJSONResponse() strips markdown code blocks
- * - Validates faces.length === 12 (throws if not)
- *
- * GOTCHAS:
- * - If API returns 429, user hit rate limit
- * - Always check response.ok before parsing
- * - maxOutputTokens differs: 2000 for story, 4000 for KPIs
- * - The KPI mode affects both count and elemental structure
- *
- * ERROR HANDLING:
- * - Missing API key throws immediately
- * - Network errors cascade through try/catch
- * - Invalid JSON throws with original text in console
- *
- * USED BY: Demo orchestrator, AI-assisted face mapping flow
- * RELATED: js/ai/providers/ (alternative provider implementations)
- *
- * ========================================
+ * This module handles AI-powered organizational analysis through Google's Gemini API.
+ * It translates human stories into 12-face dodecahedron configurations.
  *
  * @module js/gemini-client
  * @author Deimantas Butrimas & Claude
- * @version 2.0 (Sprint 2 with comprehensive documentation)
+ * @version 2.1.0 - Gold documentation standard
+ * @see {@link ../docs/SYSTEM_ARCHITECTURE.md} - Unified system map
  *
- * USAGE:
+ * ════════════════════════════════════════════════════════════════════════════════
+ * PHILOSOPHICAL GROUNDING - AI AS INTERPRETER, NOT ORACLE
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * The AI serves as an INTERPRETER of organizational stories, NOT an oracle.
+ *
+ * KEY PRINCIPLE: The AI TRANSLATES human language into geometric configuration.
+ * It does NOT predict, prescribe, or judge. It mirrors back what is present.
+ *
+ * THE OCTAVE CONSTRAINT prevents "aspiration inflation":
+ * - A pre-seed startup CANNOT claim O5+ metrics authentically
+ * - Story signals like "runway", "founder", "first customers" indicate O1-O2
+ * - The constraint honors WHERE the organization truly IS, not where it dreams
+ *
+ * WHY THIS MATTERS:
+ * - Inflated octaves create false coherence readings
+ * - Organizations benefit from honest assessment, not flattery
+ * - The dodecahedron reflects reality; the AI serves as faithful translator
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NAVIGATION MAP - WHAT THIS FILE CONNECTS TO
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * DEPENDS ON:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  js/ai/octave-reference-library.js ───→ detectOrganizationStage()          │
+ * │                                    ───→ constrainOctave()                   │
+ * │                                    ───→ OCTAVES reference data              │
+ * │                                                                              │
+ * │  External: Google Gemini API ─────────→ generateContent endpoint            │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * EXPORTS:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  export class GeminiClient ───────────→ Main API client class              │
+ * │     .analyzeStory(text, context) ─────→ Maps story to 12 faces             │
+ * │     .extractKPIs(text, mode, octave) ─→ Extracts 12 or 60 KPIs             │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * USED BY:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  js/orchestrator/steps/story-input.js ─→ AI-assisted face mapping         │
+ * │  js/ai/mapping/kpi-extractor.js ───────→ Sprint2 extraction flow          │
+ * │  Demo Orchestrator (wizard Step 1) ────→ ?path=ai mode                    │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * OCTAVE CONSTRAINT TABLE - LIFECYCLE LIMITS
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ *   Stage         │ Max Octave │ Typical │ Example Signals
+ *   ──────────────┼────────────┼─────────┼─────────────────────────────────
+ *   pre-seed      │    O2      │   O1    │ "runway", "founder", "idea"
+ *   seed          │    O2      │  O1-O2  │ "burn rate", "first customers"
+ *   series-a      │    O3      │  O2-O3  │ "PMF", "scaling", "hiring"
+ *   growth        │    O4      │  O3-O4  │ "NPS", "culture", "innovation"
+ *   mature        │    O5      │  O4-O5  │ "integrated reporting", "ESG"
+ *   legacy        │    O6      │  O5-O6  │ "succession", "generational"
+ *   transcendent  │    O7      │  O6-O7  │ "systemic impact", "regenerative"
+ *
+ * ENFORCEMENT: constrainOctave() caps AI-assigned octaves at the stage maximum.
+ * If AI assigns O4 to a pre-seed startup, it becomes O2.
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NOTES FOR FUTURE CLAUDE - 10 KEY INSIGHTS
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * 1. TIERED FALLBACK:
+ *    Primary: gemini-2.5-flash (official Quickstart model)
+ *    Fallback: gemini-1.5-flash (if primary fails)
+ *    This ensures graceful degradation if newer model unavailable.
+ *
+ * 2. API KEY PATTERN:
+ *    Uses "x-goog-api-key" header (Google's standard approach).
+ *    BYOK (Bring Your Own Key) for immediate prototyping.
+ *    Key is passed via constructor, never stored globally.
+ *
+ * 3. TWO MAIN METHODS:
+ *    analyzeStory() → Maps narrative to 12 faces (temp: 0.2, more deterministic)
+ *    extractKPIs() → Extracts metrics (temp: 0.3, slightly creative)
+ *
+ * 4. OCTAVE CONSTRAINT IS CRITICAL:
+ *    detectOrganizationStage() analyzes story for lifecycle signals
+ *    Stages: pre-seed → seed → series-a → growth → mature → legacy → transcendent
+ *    constrainOctave() enforces the ceiling - this is INTENTIONAL DESIGN.
+ *
+ * 5. LENS + VOCABULARY SYSTEM:
+ *    Lens = WHERE to look (growth=faces, stability=edges, innovation=vertices)
+ *    Vocabulary = HOW to name (grounded, professional, systems, poetic)
+ *    Both can have custom prompts via lensPrompt/vocabularyPrompt parameters.
+ *
+ * 6. JSON PARSING SAFETY:
+ *    parseJSONResponse() strips markdown code blocks (```json ... ```)
+ *    Validates faces.length === 12 (throws if not)
+ *    Invalid JSON throws with original text logged for debugging.
+ *
+ * 7. TOKEN LIMITS DIFFER BY METHOD:
+ *    analyzeStory: maxOutputTokens = 2000
+ *    extractKPIs: maxOutputTokens = 4000 (more data)
+ *
+ * 8. KPI EXTRACTION MODES:
+ *    'quick': 12 KPIs (1 per face) - fast prototyping
+ *    'full': 60 KPIs (5 per face × 12) - elemental structure (Earth/Water/Fire/Air/Ether)
+ *
+ * 9. ARCHETYPE DETECTION:
+ *    Five archetypes: Builder, Nurturer, Innovator, Guardian, Connector
+ *    AI identifies primary + secondary archetype from story language.
+ *
+ * 10. EXTRACTED METRICS:
+ *     AI attempts to pull concrete numbers from story:
+ *     revenue, teamSize, runway, customers, growthRate
+ *     These are optional - null if not mentioned in story.
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * RISKS & RECOVERY
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * RISK: Rate limiting (HTTP 429)
+ * ────────────────────────────────
+ * Symptom: API returns 429 status
+ * Cause: User exceeded Gemini API rate limits (usually 60 req/min free tier)
+ * Recovery: Wait and retry, or prompt user to check API key quota
+ * Prevention: Debounce rapid requests, show loading state
+ *
+ * RISK: JSON parsing failure
+ * ──────────────────────────────
+ * Symptom: "Failed to parse AI response structure"
+ * Cause: AI returned malformed JSON or non-JSON text
+ * Recovery: Check console.error for raw text, may need prompt adjustment
+ * Prevention: parseJSONResponse() strips markdown, but edge cases exist
+ *
+ * RISK: Octave inflation
+ * ───────────────────────
+ * Symptom: Pre-seed startup shows O5+ octaves
+ * Cause: AI over-interpreted aspirational language in story
+ * Mitigation: constrainOctave() caps at stage maximum (working as designed)
+ * Check: detectedStage and maxOctave in result object
+ *
+ * RISK: Face count mismatch
+ * ─────────────────────────
+ * Symptom: "AI returned invalid face count (must be 12)"
+ * Cause: AI misunderstood prompt, returned fewer/more faces
+ * Recovery: Re-run analysis with clearer story input
+ * Prevention: Prompt explicitly states "all 12 faces" requirement
+ *
+ * RISK: API key invalid or missing
+ * ─────────────────────────────────
+ * Symptom: "API Key is missing" thrown immediately
+ * Cause: Constructor received null/undefined apiKey
+ * Recovery: Check UI flow - user must enter valid key before analysis
+ * Prevention: Validate key format before constructing client
+ *
+ * RISK: Network timeout
+ * ──────────────────────
+ * Symptom: Fetch hangs, no response
+ * Cause: Network issues or API service degradation
+ * Recovery: Implement timeout wrapper, show user-friendly error
+ * Note: No built-in timeout currently - consider adding AbortController
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * USAGE EXAMPLE
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
  * const ai = new GeminiClient(apiKey);
- * const result = await ai.analyzeStory(storyText, { lens: 'growth', vocabulary: 'professional' });
+ * const result = await ai.analyzeStory(storyText, {
+ *     lens: 'growth',
+ *     vocabulary: 'professional'
+ * });
+ *
+ * console.log(result.faces);          // 12 configured faces
+ * console.log(result.detectedStage);  // 'seed', 'growth', etc.
+ * console.log(result.maxOctave);      // Constraint applied
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
  */
 
 import { OCTAVES, BREATH_AXES, detectOrganizationStage, constrainOctave } from './ai/octave-reference-library.js';

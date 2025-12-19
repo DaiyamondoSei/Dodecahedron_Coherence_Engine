@@ -86,7 +86,16 @@
       "Bash(cmd /c del \"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\dev\\results-summary.html\")",
       "Bash(cmd /c \"dir /b \"\"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\pages\\*.html\"\"\")",
       "Bash(cmd /c \"dir /b \"\"c:\\Users\\murau\\OneDrive\\Stalinis kompiuteris\\POC\\*.html\"\"\")",
-      "Bash(cmd /c copy:*)"
+      "Bash(cmd /c copy:*)",
+      "Bash(move \"c:\\\\Users\\\\murau\\\\OneDrive\\\\Stalinis kompiuteris\\\\POC\\\\docs\\\\COMPLETE_SYSTEM_GUIDE.md\" \"c:\\\\Users\\\\murau\\\\OneDrive\\\\Stalinis kompiuteris\\\\POC\\\\docs\\\\archive\\\\2025-11_COMPLETE_SYSTEM_GUIDE.md\")",
+      "Bash(move \"c:\\\\Users\\\\murau\\\\OneDrive\\\\Stalinis kompiuteris\\\\POC\\\\docs\\\\DEMO_GUIDE.md\" \"c:\\\\Users\\\\murau\\\\OneDrive\\\\Stalinis kompiuteris\\\\POC\\\\docs\\\\archive\\\\2025-11_DEMO_GUIDE.md\")",
+      "Bash(move:*)",
+      "Bash(cmd /c dir \"c:\\\\Users\\\\murau\\\\OneDrive\\\\Stalinis kompiuteris\\\\POC\\\\pages\\\\octave-dna.html.backup\")",
+      "Bash(start \"\" \"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\" --remote-debugging-port=9222 \"http://localhost:8080/dev/test-octave-dna.html\")",
+      "Bash(cmd /c dir /b \"c:\\\\Users\\\\murau\\\\OneDrive\\\\Stalinis kompiuteris\\\\POC\\\\pages\\\\*.backup*\")",
+      "Bash(cmd /c:*)",
+      "Bash(git -C \"c:\\\\Users\\\\murau\\\\OneDrive\\\\Stalinis kompiuteris\\\\POC\" add css/octave-dna/ js/octave-dna/ pages/octave-dna.html dev/test-octave-dna.html)",
+      "Bash(git -C \"c:\\\\Users\\\\murau\\\\OneDrive\\\\Stalinis kompiuteris\\\\POC\" commit -m \"$\\(cat <<''EOF''\nrefactor\\(octave-dna\\): modularize from 2,689 to 218 lines \\(92% reduction\\)\n\nOCTAVE DNA MODULARIZATION COMPLETE\n\nFrom monolithic HTML to focused modular architecture:\n- 14 JavaScript modules across 6 subdirectories\n- 8 CSS modules with clean separation\n- Thin HTML orchestrator \\(218 lines\\)\n- Comprehensive \"Notes for Future Claude\" documentation\n\nModule Structure:\n├── state/          Central state registry\n├── scene/          THREE.js initialization & lighting\n├── visualization/  Helix geometry, helpers, rungs\n├── interaction/    Mouse & legend handlers\n├── animation/      RAF loop & resize\n├── panels/         Diagnostic panel, breath & pentagram tabs\n└── company/        Dropdown & data loading\n\nKey Achievements:\n- PHI constants from single source of truth \\(phi-harmonics.js\\)\n- Each module self-documenting with navigation maps\n- Test harness at dev/test-octave-dna.html\n- All 14 modules load and initialize correctly\n\n🧬 Built with consciousness for consciousness\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ],
     "deny": [],
     "ask": [

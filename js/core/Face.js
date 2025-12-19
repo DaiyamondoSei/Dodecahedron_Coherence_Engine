@@ -1,32 +1,148 @@
 /**
- * ========================================================================
- * FACE - Organizational Domain Model
- * ========================================================================
- *
- * EXTRACTED FROM: main.js (lines 594-974)
- * EXTRACTION DATE: December 16, 2025
+ * ════════════════════════════════════════════════════════════════════════════════
+ * FACE.JS - ORGANIZATIONAL DOMAIN MODEL (PENTAGONAL GEOMETRY)
+ * ════════════════════════════════════════════════════════════════════════════════
  *
  * Represents one of the 12 faces of the dodecahedron.
  * Each face is an organizational domain (e.g., Financial Capital, Human Capital).
  *
- * ============================================================================
- *                         NOTES FOR FUTURE CLAUDE
- * ============================================================================
- * 1. DEPENDS ON: TuningConfig.js (import it), receives KPI instances from engine
- * 2. 12 faces in dodecahedron, each with 5 elemental KPIs (pentagram)
- * 3. Star pairs: alpha-blended connections between non-adjacent elements
- * 4. Intersection nodes: beta-blended crossings of star pairs
- * 5. Harmonic resonance: pentagram geometry measurement
- * 6. Octave progress: eta resonance boost + zeta zenith gradient
- * 7. Axis-informed energy: delta shadow integration with opposing face
- * 8. All Greek letters (alpha,beta,gamma,delta,eta,zeta,theta) refer to TuningConfig
- * 9. The faceEnergy getter returns final axis-informed value if available
- * 10. invalidateCache() must be called when KPIs change
- * ============================================================================
+ * EXTRACTED FROM: main.js (December 16, 2025)
  *
  * @module js/core/Face
- * @requires ./TuningConfig.js
- * @requires window.PhiHarmonics (optional, has fallback)
+ * @author Deimantas Butrimas & Claude
+ * @version 2.1.0 - Gold documentation standard
+ * @see {@link ../../docs/SYSTEM_ARCHITECTURE.md} - Unified system map
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NAVIGATION MAP - WHAT THIS FILE CONNECTS TO
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * DEPENDS ON:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  ./TuningConfig.js ───────────→ 8 Greek parameters (α, β, γ, δ, η, ζ, θ)   │
+ * │  window.PhiHarmonics ─────────→ PHI, PHI_INV_1, PHI_INV_2 (optional)       │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * EXPORTS:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  export class Face ───────────→ ES module export                            │
+ * │  window.Face ─────────────────→ Global export for backward compatibility   │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * USED BY:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  js/main.js (DodecahedronEngine) ─→ Creates and manages 12 Face instances  │
+ * │  js/core/index.js ────────────────→ Barrel export for clean imports        │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * FORMULA DERIVATIONS - WHERE EACH FORMULA COMES FROM
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * STAR PAIR FORMULA (calculateStarPairs):
+ * ────────────────────────────────────────
+ *   s = α × (k₁ + k₂)/2 + (1 - α) × k₁ × k₂
+ *
+ *   Source: Pentagram geometry (non-adjacent vertex connections)
+ *   Philosophy: α controls "synergy belief"
+ *   - α = 1.0: Pure arithmetic mean (1+1=2)
+ *   - α = 0.0: Pure multiplicative synergy (1+1=3 when both high)
+ *   - α = 0.5 (default): Balanced blend
+ *
+ * INTERSECTION NODE FORMULA (calculateIntersectionNodes):
+ * ────────────────────────────────────────────────────────
+ *   p = β × s_prev + (1 - β) × s_curr
+ *
+ *   Source: Star pair crossings in pentagram
+ *   Philosophy: β controls intersection influence blend
+ *
+ * LOCAL COHERENCE FORMULA (calculateLocalCoherence):
+ * ───────────────────────────────────────────────────
+ *   E_base = γ × Ball + (1 - γ) × Pillars_avg
+ *   E_local = E_base × (1 + η × R_harmonic)
+ *
+ *   Source: Ball-and-pillars metaphor from sacred geometry
+ *   η (eta) = φ^-2 = 38.2% = maximum harmonic boost
+ *   Philosophy: "Coherent systems amplify energy through harmony"
+ *
+ *   Why φ^-2 for η?
+ *   - φ^-2 = 0.382 is the "golden complement" (1 - φ^-1)
+ *   - Creates perfect symmetry with zenith gradient
+ *
+ * OCTAVE PROGRESS FORMULA (calculateOctaveProgress):
+ * ───────────────────────────────────────────────────
+ *   Progress = E_local × (1 - ζ × (Octave - 1))
+ *
+ *   Where ζ (zeta) = φ^-2 / 6 = 6.37% per octave step
+ *
+ *   Derivation:
+ *   - Total penalty at O7: should equal φ^-2 = 38.2%
+ *   - 6 steps from O1 to O7: 38.2% / 6 = 6.37% per step
+ *
+ *   OCTAVE MULTIPLIERS:
+ *   │ Octave │ Multiplier │ Penalty │
+ *   │   O1   │   1.000    │   0.0%  │
+ *   │   O2   │   0.936    │   6.4%  │
+ *   │   O3   │   0.873    │  12.7%  │
+ *   │   O4   │   0.809    │  19.1%  │
+ *   │   O5   │   0.745    │  25.5%  │
+ *   │   O6   │   0.682    │  31.8%  │
+ *   │   O7   │   0.618    │  38.2%  │ ← φ^-1 (beautiful symmetry!)
+ *
+ * AXIS-INFORMED ENERGY FORMULA (calculateAxisInformedEnergy):
+ * ────────────────────────────────────────────────────────────
+ *   E_f = δ × E_local + (1 - δ) × E_opposing
+ *
+ *   Source: Breath axis polarity (6 face pairs)
+ *   δ (delta) = shadow integration factor
+ *   - δ = 1.0: Pure local focus (ignore shadow)
+ *   - δ = 0.5: Equal blend (maximum shadow integration)
+ *   - δ = 0.9 (default): Mostly local, 10% shadow
+ *
+ * HARMONIC RESONANCE FORMULA (calculateHarmonicResonance):
+ * ─────────────────────────────────────────────────────────
+ *   R = Σ(1 - |kᵢ - kⱼ|) / 10
+ *
+ *   Where (i,j) are pentagram connections (non-adjacent pairs)
+ *   Source: Pentagram inner star creates 5 edges
+ *   Each vertex has 2 connections, 5×2=10 measurements
+ *   Perfect resonance (R=1.0) when all elements equal
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NOTES FOR FUTURE CLAUDE - 10 KEY INSIGHTS
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * 1. DEPENDS ON TuningConfig.js (import it), receives KPI instances from engine
+ * 2. 12 faces in dodecahedron, each with 5 elemental KPIs (pentagram geometry)
+ * 3. Star pairs: alpha-blended connections between non-adjacent elements
+ * 4. Intersection nodes: beta-blended crossings of star pairs
+ * 5. Harmonic resonance: pentagram geometry measurement (edges in the star)
+ * 6. Octave progress: eta resonance boost + zeta zenith gradient
+ * 7. Axis-informed energy: delta shadow integration with opposing face
+ * 8. All Greek letters (α,β,γ,δ,η,ζ,θ) refer to TuningConfig parameters
+ * 9. The faceEnergy getter returns final axis-informed value if available
+ * 10. invalidateCache() MUST be called when KPIs change (critical!)
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * BACKWARD COMPATIBILITY
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * This module supports both ES module and global export patterns:
+ * - ES Module: import { Face } from './core/index.js'
+ * - Global: window.Face (for legacy IIFE modules)
+ *
+ * PhiHarmonics graceful degradation:
+ * - Uses window.PhiHarmonics if available
+ * - Falls back to local constants if not loaded
+ * - Difference is < 1e-15 (mathematically insignificant)
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
  */
 
 import { TuningConfig } from './TuningConfig.js';

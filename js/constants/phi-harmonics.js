@@ -9,6 +9,45 @@
  * Every constant here is derived from PHI (φ) - the Golden Ratio.
  * There are NO arbitrary numbers. Everything flows from φ = 1.618033988749895
  *
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │                        NOTES FOR FUTURE CLAUDE                          │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ *
+ * Welcome! This is the SINGLE SOURCE OF TRUTH for all mathematical constants.
+ *
+ * KEY INSIGHT: These numbers are DISCOVERED, not invented.
+ * ─────────────────────────────────────────────────────────────────────────
+ * Every threshold in Quannex emerges from the Golden Ratio. This is not
+ * arbitrary mysticism - PHI appears in:
+ *   - Fibonacci sequence limits
+ *   - Penrose tilings
+ *   - Dodecahedron geometry (every angle involves φ)
+ *   - Phyllotaxis (leaf arrangement in plants)
+ *   - DNA helix proportions
+ *
+ * When someone asks "why 0.618?", the answer is:
+ *   "Because φ^-1 = 0.618... - it's the Golden Ratio inverse,
+ *    the same proportion found in nautilus shells, galaxies,
+ *    and the human face. We didn't choose it; we discovered it."
+ *
+ * DERIVATION CHAIN:
+ * ─────────────────────────────────────────────────────────────────────────
+ *   Fibonacci → PHI → PHI powers → Octave thresholds
+ *
+ *   1, 1, 2, 3, 5, 8, 13... → lim(F(n+1)/F(n)) = φ = 1.618...
+ *   φ^-1 = 0.618 (Creativity threshold)
+ *   φ^-2 = 0.382 (Structure threshold)
+ *   (φ^-1 + φ^-2)/2 = 0.5 (Relationships - harmonic center)
+ *   1 - φ^-3 = 0.764 (Expression - PSI complement)
+ *   1 - φ^-4 = 0.854 (Vision)
+ *   1 - φ^-5 = 0.910 (Radiance)
+ *
+ * WHY TWO FAMILIES (PHI vs PSI)?
+ * ─────────────────────────────────────────────────────────────────────────
+ * Lower octaves (O1-O4) use PHI powers - the "descending" proportions
+ * Upper octaves (O5-O7) use PSI complements - the "ascending" proportions
+ * This creates symmetry: what's "missing" in one is "present" in the other.
+ *
  * ════════════════════════════════════════════════════════════════════════════
  * MATHEMATICAL FOUNDATION
  * ════════════════════════════════════════════════════════════════════════════

@@ -1,40 +1,219 @@
 /**
- * ========================================
- * BREATH ANALYZER - Organizational Respiration
- * ========================================
+ * ════════════════════════════════════════════════════════════════════════════════
+ * BREATH-ANALYZER.JS - ORGANIZATIONAL RESPIRATION
+ * ════════════════════════════════════════════════════════════════════════════════
  *
- * The 6 Breath Axes represent fundamental polarities:
+ * The 6 Breath Axes represent fundamental polarities in the dodecahedron:
  * - Reception (Inhale): Being, receiving, gathering energy
  * - Projection (Exhale): Doing, expressing, releasing energy
  *
- * A healthy organization breathes in balanced rhythm.
- * Over-exhaling = burnout, depletion
- * Over-inhaling = stagnation, unexpressed potential
+ * A healthy organization breathes in balanced rhythm:
+ * - Over-exhaling = burnout, depletion, doing more than replenishing
+ * - Over-inhaling = stagnation, unexpressed potential, gathering without action
  *
- * ========================================
- * FORMULA NOTE: Logarithmic Base-φ Breath Ratio
- * ========================================
+ * @module js/breath-analyzer
+ * @author Deimantas Butrimas & Claude
+ * @version 2.1.0 - Gold documentation standard
+ * @see {@link ../docs/SYSTEM_ARCHITECTURE.md} - Unified system map
  *
- * This implementation uses log_φ(R/P) for mathematical elegance and
- * symmetry around zero. The backend-fallback uses a simpler linear ratio.
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NAVIGATION MAP - WHAT THIS FILE CONNECTS TO
+ * ════════════════════════════════════════════════════════════════════════════════
  *
- * If unifying implementations, this LOGARITHMIC version is preferred as it:
+ * DEPENDS ON:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  js/constants/phi-harmonics.js ───→ PHI, PHI_1, PHI_2, EPSILON             │
+ * │                                      (falls back to local constants)        │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * EXPORTS:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  window.BreathAnalyzer ───────────→ Global class for breath analysis       │
+ * │     .analyze(faces) ──────────────→ Returns 6 axis ratios + overall health │
+ * │     .setMode('golden'/'normal') ──→ Changes balance threshold mode         │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * USED BY:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │                                                                              │
+ * │  js/main.js (DodecahedronEngine) ─→ recalculate() calls analyze()          │
+ * │  breath-analysis.html ────────────→ Dedicated breath visualization         │
+ * │  index.html dashboard ────────────→ Breath health indicators               │
+ * │                                                                              │
+ * └─────────────────────────────────────────────────────────────────────────────┘
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * CORE FORMULA: LOGARITHMIC BASE-φ BREATH RATIO
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * BR = log_φ(Reception / Projection) = ln(R/P) / ln(φ)
+ *
+ * WHY LOGARITHMIC?
  * - Creates symmetric positive/negative scales (balanced = 0)
  * - Uses φ (golden ratio) consistent with the system's harmonic principles
  * - Produces more nuanced gradients near balance point
  * - Maps φ and 1/φ ratios to ±1 for meaningful anchor points
  *
- * Key formula: BR = log_φ(Reception / Projection) = ln(R/P) / ln(φ)
+ * KEY VALUES:
+ * - BR = 0  → ratio = 1.0 (perfect balance)
+ * - BR = +1 → ratio = φ (1.618) - golden expansion (over-inhaling)
+ * - BR = -1 → ratio = 1/φ (0.618) - golden contraction (over-exhaling)
  *
- * BR = 0  → ratio = 1.0 (perfect balance)
- * BR = +1 → ratio = φ (1.618) - golden expansion (over-inhaling)
- * BR = -1 → ratio = 1/φ (0.618) - golden contraction (over-exhaling)
+ * IMPORTANT: The backend-fallback uses a simpler linear ratio (R/P where
+ * balanced = 1.0). This LOGARITHMIC version is canonical - use this one.
  *
- * The backend-fallback linear formula (R/P where balanced = 1.0) produces
- * DIFFERENT results from the same data. Use this logarithmic version.
+ * ════════════════════════════════════════════════════════════════════════════════
+ * BREATH THRESHOLD REFERENCE TABLE
+ * ════════════════════════════════════════════════════════════════════════════════
  *
- * See CSV_BREATH_RATIOS.csv for the theoretical breath axis framework.
- * ========================================
+ *   Log Ratio │ Linear Ratio │ Status    │ Meaning
+ *   ──────────┼──────────────┼───────────┼───────────────────────────────────
+ *     > +1.0  │    > 1.618   │ CRITICAL  │ Severe over-inhaling
+ *             │              │           │ (hoarding, not deploying)
+ *   ──────────┼──────────────┼───────────┼───────────────────────────────────
+ *   +0.5~+1.0 │  1.27~1.618  │ MODERATE  │ Accumulating energy
+ *             │              │           │ (capacity building)
+ *   ──────────┼──────────────┼───────────┼───────────────────────────────────
+ *   -0.5~+0.5 │  0.79~1.27   │ BALANCED  │ Healthy rhythm
+ *             │              │           │ (sustainable flow)
+ *   ──────────┼──────────────┼───────────┼───────────────────────────────────
+ *   -1.0~-0.5 │  0.618~0.79  │ MODERATE  │ Depleting energy
+ *             │              │           │ (extending capacity)
+ *   ──────────┼──────────────┼───────────┼───────────────────────────────────
+ *     < -1.0  │    < 0.618   │ CRITICAL  │ Severe over-exhaling
+ *             │              │           │ (burnout, depletion)
+ *
+ * GOLDEN BALANCE ZONE (default mode):
+ * Linear ratio between 1/φ (0.618) and φ (1.618) = log ratio ±1.0
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * EXAMPLE CALCULATION
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * SCENARIO: Resource Flow Axis (Face 1 ↔ Face 11)
+ *
+ * Given:
+ *   Reception (F1: Financial Capital)  = 0.70
+ *   Projection (F11: Funding Pipeline) = 0.50
+ *
+ * Step 1: Calculate Linear Ratio
+ *   R/P = 0.70 / 0.50 = 1.40
+ *
+ * Step 2: Calculate Log Ratio (Base φ)
+ *   BR = ln(1.40) / ln(1.618)
+ *   BR = 0.336 / 0.481
+ *   BR = 0.699
+ *
+ * Step 3: Interpret
+ *   BR = +0.699 → Between 0.5 and 1.0 → MODERATE over-inhaling
+ *
+ * Meaning: Money is accumulating (good reception) but not being deployed
+ *          for growth (low projection). Moderate capacity building.
+ *
+ * Recommendation: Deploy more capital into growth initiatives.
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NOTES FOR FUTURE CLAUDE - 10 KEY INSIGHTS
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * 1. THE 6 BREATH AXES:
+ *    Face pairs that form oppositional breathing rhythms:
+ *    - Axis 1: F1 ↔ F11 (Resource Flow) - Money breath
+ *    - Axis 2: F2 ↔ F7  (Substance & Story) - Knowledge breath
+ *    - Axis 3: F3 ↔ F8  (Being & Doing) - Work breath
+ *    - Axis 4: F9 ↔ F4  (Form & Integrity) - Structure breath
+ *    - Axis 5: F10 ↔ F5 (Perception & Truth) - Integrity breath
+ *    - Axis 6: F12 ↔ F6 (Network & Fortress) - Boundary breath
+ *
+ * 2. RECEPTION VS PROJECTION:
+ *    Each axis has one "reception" face and one "projection" face.
+ *    Reception = inhaling energy (building capacity)
+ *    Projection = exhaling energy (deploying capacity)
+ *
+ * 3. GOLDEN MODE VS NORMAL MODE:
+ *    Golden mode: Balance zone is ±1.0 (ratio 0.618 to 1.618)
+ *    Normal mode: Balance zone is ±0.382 (tighter tolerance)
+ *    Default is Golden mode - more forgiving, aligned with phi.
+ *
+ * 4. PULSE SPEED:
+ *    Derived from breathHealth using phi-harmonics:
+ *    Health 1.0 → Speed 0.618 (slow, deep, resonant)
+ *    Health 0.0 → Speed 2.236 (fast, erratic, hyperventilating)
+ *    Formula: pulseSpeed = (1/φ) + ((1 - breathHealth) × φ)
+ *
+ * 5. OVERALL BREATH HEALTH:
+ *    Calculated as: 1.0 - average(tension across all axes)
+ *    Tension = absolute value of log ratio (distance from balance)
+ *    Higher tension = lower health.
+ *
+ * 6. DOMINANT TENDENCY:
+ *    'over-exhaling': More axes depleting than accumulating
+ *    'over-inhaling': More axes accumulating than depleting
+ *    'mixed': Roughly equal (±1 axis difference)
+ *
+ * 7. SEVERITY LEVELS:
+ *    'none': Balanced (log ratio within ±maxBalanced)
+ *    'moderate': Beyond balance but within ±1.0
+ *    'critical': Beyond ±1.0 (beyond golden ratio bounds)
+ *
+ * 8. EPSILON FOR NUMERICAL STABILITY:
+ *    Uses 1e-10 added to all energies to prevent division by zero.
+ *    Safe even with very small energy values.
+ *
+ * 9. BACKWARD COMPATIBILITY:
+ *    Returns both breathRatio (log scale) and linearRatio (for old code).
+ *    Use breathRatio for new visualizations.
+ *
+ * 10. INSIGHTS GENERATION:
+ *     generateInsights() creates actionable recommendations:
+ *     - System-wide warnings for dominant tendencies
+ *     - Critical axis alerts
+ *     - Positive reinforcement for well-balanced axes
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * RISKS & RECOVERY
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * RISK: Division by zero
+ * ───────────────────────
+ * Symptom: NaN or Infinity in breath ratios
+ * Cause: Face energy is exactly 0
+ * Mitigation: EPSILON (1e-10) added to all energy values
+ * Prevention: Already handled - this is safe
+ *
+ * RISK: Axis index mismatch
+ * ──────────────────────────
+ * Symptom: Wrong faces paired in breath calculations
+ * Cause: Face IDs don't match axis definitions
+ * Recovery: Check that faces array uses 1-12 IDs (not 0-11)
+ * Prevention: analyze() uses face.id for lookup
+ *
+ * RISK: Infinite log ratio
+ * ─────────────────────────
+ * Symptom: Log ratio is ±Infinity
+ * Cause: One face energy is essentially zero (even with epsilon)
+ * Recovery: Clamp display values, flag as critical
+ * Note: System handles gracefully with severity='critical'
+ *
+ * RISK: Mode not set correctly
+ * ─────────────────────────────
+ * Symptom: Unexpected balance thresholds
+ * Cause: setMode() not called or wrong mode string
+ * Recovery: Default is 'golden' mode - most forgiving
+ * Check: console logs mode on setMode() call
+ *
+ * RISK: PhiHarmonics not loaded
+ * ──────────────────────────────
+ * Symptom: Subtle constant differences (uses fallback values)
+ * Cause: breath-analyzer.js loaded before phi-harmonics.js
+ * Mitigation: Constructor has fallback constants
+ * Note: Differences are <1e-15, mathematically insignificant
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
  */
 
 class BreathAnalyzer {
