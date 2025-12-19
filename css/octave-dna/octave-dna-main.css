@@ -1,0 +1,52 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * OCTAVE DNA - MAIN CSS AGGREGATOR
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Single entry point for all Octave DNA visualization styles.
+ * Import order matters for CSS specificity.
+ *
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │                        NOTES FOR FUTURE CLAUDE                          │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ *
+ * IMPORT ORDER RATIONALE:
+ * 1. Base - Reset and fundamental styles (no dependencies)
+ * 2. Animations - Keyframes used by other modules
+ * 3. Header - Top navigation bar
+ * 4. Legend - Side panel for helix items
+ * 5. Tooltips - Hover information overlays
+ * 6. Panels - Diagnostic panel and tabs (largest module)
+ * 7. Company - Company selector dropdown (depends on header styles)
+ *
+ * WHAT THIS SESSION LEARNED:
+ * ─────────────────────────────────────────────────────────────────────────
+ * The original 870+ lines of inline CSS were tangled together. By separating
+ * into focused modules, each file is now ~100-150 lines - easy to read,
+ * understand, and modify.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * @version 1.0.0 - Extracted from octave-dna.html monolith
+ * @created 2025-12-19
+ */
+
+/* Base styles - reset, body, canvas */
+@import url('./octave-dna-base.css');
+
+/* Keyframe animations - used throughout */
+@import url('./octave-dna-animations.css');
+
+/* Header and navigation controls */
+@import url('./octave-dna-header.css');
+
+/* Side legend panel */
+@import url('./octave-dna-legend.css');
+
+/* Tooltip overlays */
+@import url('./octave-dna-tooltips.css');
+
+/* Diagnostic panels and tabs */
+@import url('./octave-dna-panels.css');
+
+/* Company selector dropdown */
+@import url('./octave-dna-company.css');

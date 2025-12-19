@@ -1,0 +1,62 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * OCTAVE DNA - TOOLTIP STYLES
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Hover tooltips for helix items showing detailed face questions.
+ *
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │                        NOTES FOR FUTURE CLAUDE                          │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ *
+ * Tooltips are positioned via JavaScript (fixed positioning).
+ * The .visible class triggers the opacity/transform transition.
+ *
+ * pointer-events: none ensures the tooltip doesn't interfere with mouse
+ * interactions on elements beneath it.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+.helix-tooltip {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 255, 204, 0.4);
+    border-radius: 8px;
+    padding: 12px 16px;
+    max-width: 300px;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.helix-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.helix-tooltip-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #00ffcc;
+    margin-bottom: 8px;
+}
+
+.helix-tooltip-question {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 6px 0;
+    padding-left: 8px;
+    border-left: 2px solid rgba(0, 255, 204, 0.4);
+}
+
+.helix-tooltip-question strong {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: normal;
+    font-size: 10px;
+    display: block;
+    margin-bottom: 2px;
+}

@@ -1,0 +1,119 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * OCTAVE DNA - COMPANY SELECTOR
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Dropdown for switching between company datasets.
+ *
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │                        NOTES FOR FUTURE CLAUDE                          │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ *
+ * The company selector uses CSS custom property --company-color which is
+ * set dynamically via JavaScript for each company option. This allows
+ * each company to have its own brand color accent.
+ *
+ * The dropdown arrow (▼) rotates 180deg when open using the .open class.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* Container */
+.company-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Current selection button */
+.company-current {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 30px 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+.company-current:hover {
+    background: rgba(0, 255, 204, 0.1);
+    border-color: #00ffcc;
+    color: #00ffcc;
+}
+
+.company-current::after {
+    content: '▼';
+    position: absolute;
+    right: 12px;
+    font-size: 8px;
+    transition: transform 0.3s ease;
+}
+
+.company-dropdown.open .company-current::after {
+    transform: rotate(180deg);
+}
+
+/* Options container */
+.company-options {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 280px;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-radius: 12px;
+    padding: 8px;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.company-dropdown.open .company-options {
+    display: block;
+    animation: dropdownIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Individual option */
+.company-option {
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    margin: 4px 0;
+}
+
+.company-option:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--company-color);
+}
+
+.company-option.active {
+    background: rgba(0, 255, 204, 0.1);
+    border-color: #00ffcc;
+}
+
+.company-option-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--company-color);
+    margin-bottom: 4px;
+}
+
+.company-option-stage {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 6px;
+}
+
+.company-option-octaves {
+    font-size: 9px;
+    color: var(--company-color);
+    opacity: 0.8;
+}

@@ -1,0 +1,65 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * OCTAVE DNA - ANIMATIONS
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * All @keyframes definitions for the Octave DNA visualization.
+ *
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │                        NOTES FOR FUTURE CLAUDE                          │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ *
+ * ANIMATION PHILOSOPHY:
+ * - fadeIn: Gentle entrance for UI elements (0.6s delay for orchestration)
+ * - panelIn: Scale + opacity for modal-like panels
+ * - dropdownIn: Slide down for menus
+ * - spin: Loading spinner with playful bounce easing
+ * - pulse-blocked: Attention-grabbing for blocked octaves
+ * - pulse-aspirational: Subtle breathing for aspirational octaves
+ *
+ * The cubic-bezier(0.16, 1, 0.3, 1) creates a smooth, Apple-like feel.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* Fade in for legend panel */
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+/* Panel entrance animation */
+@keyframes panelIn {
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Dropdown menu entrance */
+@keyframes dropdownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading spinner */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Pulsing for blocked octaves (needs attention) */
+@keyframes pulse-blocked {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.4); }
+    50% { box-shadow: 0 0 8px 2px rgba(255, 68, 68, 0.6); }
+}
+
+/* Subtle breathing for aspirational octaves */
+@keyframes pulse-aspirational {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}

@@ -1,0 +1,88 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * OCTAVE DNA - HEADER STYLES
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Top navigation bar with title, controls, and company selector container.
+ *
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │                        NOTES FOR FUTURE CLAUDE                          │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ *
+ * The header uses backdrop-filter: blur(20px) for the frosted glass effect.
+ * This is well-supported in modern browsers but may need fallback for older ones.
+ *
+ * Button hover states use translateY(-1px) for a subtle "lift" effect that
+ * provides satisfying tactile feedback.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* Main header container */
+.ui-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Title section */
+.title {
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.title-accent {
+    color: #00ffcc;
+    font-weight: 600;
+}
+
+.subtitle {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 4px;
+    letter-spacing: 2px;
+}
+
+/* Controls section */
+.controls {
+    display: flex;
+    gap: 12px;
+}
+
+/* Standard button style */
+.btn {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.btn:hover {
+    background: rgba(0, 255, 204, 0.1);
+    border-color: #00ffcc;
+    color: #00ffcc;
+    transform: translateY(-1px);
+}

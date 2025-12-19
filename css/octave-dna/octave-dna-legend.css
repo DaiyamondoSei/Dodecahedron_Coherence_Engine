@@ -1,0 +1,88 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * OCTAVE DNA - LEGEND STYLES
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Side panel showing the 6 breath axes (DNA helixes).
+ *
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │                        NOTES FOR FUTURE CLAUDE                          │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ *
+ * Each .helix-item has a colored left border that matches its helix color.
+ * The border color is set dynamically via JavaScript using inline styles.
+ *
+ * The legend fades in with a 0.5s delay to allow the 3D scene to render first,
+ * creating a nice orchestrated entrance.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* Legend container */
+.legend {
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 255, 204, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 280px;
+    font-size: 11px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    opacity: 0;
+    animation: fadeIn 0.6s ease forwards 0.5s;
+}
+
+.legend-title {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 16px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Individual helix item */
+.helix-item {
+    margin-bottom: 12px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+    border-left: 2px solid;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.helix-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(4px);
+}
+
+.helix-item[title] {
+    cursor: help;
+}
+
+.helix-name {
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 11px;
+}
+
+.helix-faces {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+}
+
+/* Sprint 3 Task 27: Breath Name Styling */
+.breath-name {
+    font-size: 10px;
+    color: rgba(0, 255, 204, 0.8);
+    font-style: italic;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}

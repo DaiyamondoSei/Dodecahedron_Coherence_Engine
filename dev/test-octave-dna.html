@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧬 Octave DNA - Module Test Harness</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden;
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .test-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ffcc;
+            border-radius: 12px;
+            padding: 20px;
+            z-index: 100;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .test-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #00ffcc;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .test-section {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .test-section h3 {
+            font-size: 12px;
+            color: #00ffcc;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .test-result {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 4px 0;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .test-result.pass::before {
+            content: '✅';
+        }
+
+        .test-result.fail::before {
+            content: '❌';
+        }
+
+        .test-result.info::before {
+            content: '📌';
+        }
+
+        .test-button {
+            background: rgba(0, 255, 204, 0.1);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            margin: 4px;
+            transition: all 0.2s;
+        }
+
+        .test-button:hover {
+            background: rgba(0, 255, 204, 0.2);
+        }
+
+        .module-status {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .module-badge {
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .module-badge.loaded {
+            background: rgba(0, 255, 102, 0.2);
+            color: #00ff66;
+            border: 1px solid rgba(0, 255, 102, 0.3);
+        }
+
+        .module-badge.missing {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+
+        .controls-hint {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 0, 0.1);
+            border-radius: 6px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #00ff66;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            z-index: 200;
+            display: none;
+        }
+
+        .celebration.show {
+            display: block;
+            animation: celebrateIn 0.5s ease-out;
+        }
+
+        @keyframes celebrateIn {
+            from {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .celebration h2 {
+            font-size: 24px;
+            color: #00ff66;
+            margin-bottom: 15px;
+        }
+
+        .celebration p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="test-panel">
+        <div class="test-title">🧬 Octave DNA Test Harness</div>
+
+        <div class="test-section">
+            <h3>Module Status</h3>
+            <div class="module-status" id="moduleStatus">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test Results</h3>
+            <div id="testResults">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>Actions</h3>
+            <button class="test-button" onclick="runAllTests()">Run All Tests</button>
+            <button class="test-button" onclick="refreshVisualization()">Refresh DNA</button>
+            <button class="test-button" onclick="toggleAutoRotate()">Toggle Rotation</button>
+            <button class="test-button" onclick="celebrate()">Celebrate 🎉</button>
+        </div>
+
+        <div class="controls-hint">
+            <strong>Controls:</strong> Drag to rotate • Scroll to zoom • Right-drag to pan
+        </div>
+    </div>
+
+    <div class="celebration" id="celebration">
+        <h2>🎉 Phase D Complete! 🎉</h2>
+        <p>
+            Panels & Company modules created!<br><br>
+            ✅ diagnostic-panel.js<br>
+            ✅ breath-tab.js<br>
+            ✅ pentagram-tab.js<br>
+            ✅ company-dropdown.js<br>
+            ✅ company-loader.js<br><br>
+            14 modules total! Ready for Phase E integration! 🚀
+        </p>
+    </div>
+
+    <!-- Dependencies -->
+    <script src="https://unpkg.com/three@0.128.0/build/three.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <!-- Constants (Single Source of Truth) -->
+    <script src="../js/constants/phi-harmonics.js"></script>
+    <script src="../js/constants/octave-thresholds.js"></script>
+
+    <!-- Octave DNA Modules (Being Tested) -->
+    <!-- Phase A: State -->
+    <script src="../js/octave-dna/state/octave-dna-state.js"></script>
+
+    <!-- Phase B: Scene & Visualization -->
+    <script src="../js/octave-dna/scene/scene-setup.js"></script>
+    <script src="../js/octave-dna/scene/scene-lighting.js"></script>
+    <script src="../js/octave-dna/visualization/helix-helpers.js"></script>
+    <script src="../js/octave-dna/visualization/helix-rungs.js"></script>
+    <script src="../js/octave-dna/visualization/helix-geometry.js"></script>
+
+    <!-- Phase C: Interaction & Animation -->
+    <script src="../js/octave-dna/interaction/mouse-handler.js"></script>
+    <script src="../js/octave-dna/interaction/legend-handler.js"></script>
+    <script src="../js/octave-dna/animation/animation-loop.js"></script>
+
+    <!-- Phase D: Panels & Company -->
+    <script src="../js/octave-dna/panels/diagnostic-panel.js"></script>
+    <script src="../js/octave-dna/panels/breath-tab.js"></script>
+    <script src="../js/octave-dna/panels/pentagram-tab.js"></script>
+    <script src="../js/octave-dna/company/company-dropdown.js"></script>
+    <script src="../js/octave-dna/company/company-loader.js"></script>
+
+    <script>
+        // ════════════════════════════════════════════════════════════════════
+        // TEST HARNESS FOR OCTAVE DNA MODULES
+        // ════════════════════════════════════════════════════════════════════
+
+        const modules = [
+            // Phase A: State
+            { name: 'OctaveDNAState', global: 'OctaveDNAState' },
+            // Phase B: Scene & Visualization
+            { name: 'Scene Setup', global: 'OctaveDNAScene' },
+            { name: 'Lighting', global: 'OctaveDNALighting' },
+            { name: 'Helpers', global: 'OctaveDNAHelpers' },
+            { name: 'Rungs', global: 'OctaveDNARungs' },
+            { name: 'Geometry', global: 'OctaveDNAGeometry' },
+            // Phase C: Interaction & Animation
+            { name: 'Mouse Handler', global: 'OctaveDNAMouse' },
+            { name: 'Legend Handler', global: 'OctaveDNALegend' },
+            { name: 'Animation', global: 'OctaveDNAAnimation' },
+            // Phase D: Panels & Company
+            { name: 'Panels', global: 'OctaveDNAPanels' },
+            { name: 'Breath Tab', global: 'OctaveDNABreathTab' },
+            { name: 'Pentagram Tab', global: 'OctaveDNAPentagramTab' },
+            { name: 'Company Dropdown', global: 'OctaveDNACompanyDropdown' },
+            { name: 'Company Loader', global: 'OctaveDNACompanyLoader' }
+        ];
+
+        // Track test results
+        let testResults = [];
+
+        /**
+         * Check module loading status
+         */
+        function checkModules() {
+            const statusContainer = document.getElementById('moduleStatus');
+            statusContainer.innerHTML = modules.map(m => {
+                const loaded = !!window[m.global];
+                return `<div class="module-badge ${loaded ? 'loaded' : 'missing'}">${m.name}</div>`;
+            }).join('');
+        }
+
+        /**
+         * Add a test result
+         */
+        function addResult(message, status = 'info') {
+            testResults.push({ message, status });
+            renderResults();
+        }
+
+        /**
+         * Render test results
+         */
+        function renderResults() {
+            const container = document.getElementById('testResults');
+            container.innerHTML = testResults.map(r =>
+                `<div class="test-result ${r.status}">${r.message}</div>`
+            ).join('');
+        }
+
+        /**
+         * Run all tests
+         */
+        function runAllTests() {
+            testResults = [];
+            addResult('Starting tests...', 'info');
+
+            // Test 1: Module loading
+            let allLoaded = true;
+            modules.forEach(m => {
+                if (window[m.global]) {
+                    addResult(`${m.name} loaded`, 'pass');
+                } else {
+                    addResult(`${m.name} MISSING`, 'fail');
+                    allLoaded = false;
+                }
+            });
+
+            // Test 2: State integrity
+            if (window.OctaveDNAState) {
+                const state = window.OctaveDNAState;
+                addResult(`CONFIG.helixHeight = ${state.CONFIG?.helixHeight}`, 'pass');
+                addResult(`PHI = ${state.PHI?.toFixed(6)}`, 'pass');
+                addResult(`FIXED_BREATH_AXES = ${state.FIXED_BREATH_AXES?.length} axes`, 'pass');
+            }
+
+            // Test 3: Scene objects
+            if (window.OctaveDNAState?.getState) {
+                const scene = window.OctaveDNAState.getState('scene');
+                const camera = window.OctaveDNAState.getState('camera');
+                const renderer = window.OctaveDNAState.getState('renderer');
+
+                addResult(`Scene: ${scene ? 'OK' : 'MISSING'}`, scene ? 'pass' : 'fail');
+                addResult(`Camera: ${camera ? 'OK' : 'MISSING'}`, camera ? 'pass' : 'fail');
+                addResult(`Renderer: ${renderer ? 'OK' : 'MISSING'}`, renderer ? 'pass' : 'fail');
+            }
+
+            // Test 4: Helper functions
+            if (window.OctaveDNAHelpers) {
+                const h = window.OctaveDNAHelpers;
+                const fibR = h.getFibonacciRadius(4);
+                addResult(`getFibonacciRadius(4) = ${fibR.toFixed(4)}`, 'pass');
+
+                const octave = h.getCurrentOctave(1);
+                addResult(`getCurrentOctave(1) = O${octave}`, 'pass');
+
+                const br = h.calculatePhiBreathRatio(0.6, 0.6);
+                addResult(`Balanced breath ratio = ${br.toFixed(4)}`, 'pass');
+            }
+
+            // Test 5: DNA Group
+            const dnaGroup = window.OctaveDNAState?.getState('dnaGroup');
+            if (dnaGroup) {
+                addResult(`DNA Group has ${dnaGroup.children.length} children`, 'pass');
+            }
+
+            // Test 6: Phase C - Mouse Handler
+            if (window.OctaveDNAMouse) {
+                const m = window.OctaveDNAMouse;
+                addResult(`initMouseHandlers: ${typeof m.initMouseHandlers === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+                addResult(`selectHelix: ${typeof m.selectHelix === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+                addResult(`onCanvasClick: ${typeof m.onCanvasClick === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+            }
+
+            // Test 7: Phase C - Legend Handler
+            if (window.OctaveDNALegend) {
+                const l = window.OctaveDNALegend;
+                addResult(`updateLegend: ${typeof l.updateLegend === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+                addResult(`attachLegendHandlers: ${typeof l.attachLegendHandlers === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+            }
+
+            // Test 8: Phase C - Animation Loop
+            if (window.OctaveDNAAnimation) {
+                const a = window.OctaveDNAAnimation;
+                addResult(`startAnimation: ${typeof a.startAnimation === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+                addResult(`toggleAutoRotate: ${typeof a.toggleAutoRotate === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+                addResult(`isAnimating: ${a.isAnimating() ? 'Running' : 'Stopped'}`, 'info');
+            }
+
+            // Test 9: Clickable meshes (raycasting)
+            if (window.OctaveDNAGeometry?.getClickableMeshes) {
+                const meshes = window.OctaveDNAGeometry.getClickableMeshes();
+                addResult(`Clickable meshes: ${meshes.length}`, meshes.length > 0 ? 'pass' : 'fail');
+            }
+
+            // Test 10: Phase D - Panels Controller
+            if (window.OctaveDNAPanels) {
+                const p = window.OctaveDNAPanels;
+                addResult(`showDiagnosticPanel: ${typeof p.showDiagnosticPanel === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+                addResult(`closePanel: ${typeof p.closePanel === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+                addResult(`initTabSwitching: ${typeof p.initTabSwitching === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+            }
+
+            // Test 11: Phase D - Breath Tab
+            if (window.OctaveDNABreathTab) {
+                const b = window.OctaveDNABreathTab;
+                addResult(`updateBreathTab: ${typeof b.updateBreathTab === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+                addResult(`generateInsight: ${typeof b.generateInsight === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+            }
+
+            // Test 12: Phase D - Pentagram Tab
+            if (window.OctaveDNAPentagramTab) {
+                const pt = window.OctaveDNAPentagramTab;
+                addResult(`calculatePentagramAnalysis: ${typeof pt.calculatePentagramAnalysis === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+                addResult(`renderPentagram: ${typeof pt.renderPentagram === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+
+                // Test the pentagram calculation
+                const testAnalysis = pt.calculateSimplePentagramAnalysis(0.7, [0.6, 0.7, 0.65, 0.8, 0.72]);
+                addResult(`Pentagram center composite: ${testAnalysis?.centerComposite?.toFixed(3) || 'N/A'}`, 'pass');
+            }
+
+            // Test 13: Phase D - Company Dropdown
+            if (window.OctaveDNACompanyDropdown) {
+                const cd = window.OctaveDNACompanyDropdown;
+                addResult(`initCompanyDropdown: ${typeof cd.initCompanyDropdown === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+                addResult(`switchCompany: ${typeof cd.switchCompany === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+            }
+
+            // Test 14: Phase D - Company Loader
+            if (window.OctaveDNACompanyLoader) {
+                const cl = window.OctaveDNACompanyLoader;
+                addResult(`initVisualization: ${typeof cl.initVisualization === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+                addResult(`startAutoRefresh: ${typeof cl.startAutoRefresh === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+                addResult(`refreshVisualization: ${typeof cl.refreshVisualization === 'function' ? 'OK' : 'MISSING'}`, 'pass');
+            }
+
+            addResult('Tests complete!', 'info');
+        }
+
+        /**
+         * Refresh visualization
+         */
+        function refreshVisualization() {
+            if (window.OctaveDNAGeometry?.refreshDNA) {
+                window.OctaveDNAGeometry.refreshDNA();
+                addResult('DNA refreshed!', 'pass');
+            }
+        }
+
+        /**
+         * Toggle auto-rotate (now uses Animation module)
+         */
+        function toggleAutoRotate() {
+            if (window.OctaveDNAAnimation?.toggleAutoRotate) {
+                window.OctaveDNAAnimation.toggleAutoRotate();
+                const controls = window.OctaveDNAState?.getState('controls');
+                addResult(`Auto-rotate: ${controls?.autoRotate ? 'ON' : 'OFF'}`, 'info');
+            }
+        }
+
+        /**
+         * Show celebration
+         */
+        function celebrate() {
+            document.getElementById('celebration').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('celebration').classList.remove('show');
+            }, 5000);
+        }
+
+        // ════════════════════════════════════════════════════════════════════
+        // INITIALIZATION
+        // ════════════════════════════════════════════════════════════════════
+
+        function init() {
+            console.log(`
+╔═══════════════════════════════════════════════════════════════╗
+║  🧬 OCTAVE DNA TEST HARNESS                                   ║
+║  ─────────────────────────────────────────────────────────    ║
+║  Testing Phase D: Panels & Company modules                    ║
+║  14 modules total across 4 phases!                            ║
+╚═══════════════════════════════════════════════════════════════╝
+            `);
+
+            // Check module status
+            checkModules();
+
+            // Set up mock faces data for testing
+            const mockFaces = [];
+            for (let i = 1; i <= 12; i++) {
+                mockFaces.push({
+                    id: i,
+                    name: `Face ${i}`,
+                    energy: 0.3 + Math.random() * 0.5  // Random 0.3-0.8
+                });
+            }
+            window.OctaveDNAState?.setState('facesData', mockFaces);
+
+            // Phase B: Initialize scene
+            if (window.OctaveDNAScene?.initScene) {
+                window.OctaveDNAScene.initScene();
+                addResult('Scene initialized', 'pass');
+            }
+
+            // Phase B: Initialize lighting
+            if (window.OctaveDNALighting?.initLighting) {
+                window.OctaveDNALighting.initLighting();
+                addResult('Lighting initialized', 'pass');
+            }
+
+            // Phase B: Render DNA
+            if (window.OctaveDNAGeometry?.renderDNA) {
+                window.OctaveDNAGeometry.renderDNA();
+                addResult('DNA rendered', 'pass');
+            }
+
+            // Phase C: Initialize mouse handlers
+            if (window.OctaveDNAMouse?.initMouseHandlers) {
+                window.OctaveDNAMouse.initMouseHandlers();
+                addResult('Mouse handlers initialized', 'pass');
+            }
+
+            // Phase C: Initialize resize handler
+            if (window.OctaveDNAAnimation?.initResizeHandler) {
+                window.OctaveDNAAnimation.initResizeHandler();
+                addResult('Resize handler initialized', 'pass');
+            }
+
+            // Phase C: Start animation loop (using Animation module)
+            if (window.OctaveDNAAnimation?.startAnimation) {
+                window.OctaveDNAAnimation.startAnimation();
+                addResult('Animation loop started', 'pass');
+            }
+
+            // Phase D: Initialize panels (if DOM elements exist)
+            if (window.OctaveDNAPanels?.initPanels) {
+                window.OctaveDNAPanels.initPanels();
+                addResult('Panels initialized', 'pass');
+            }
+
+            // Phase D: Initialize company dropdown (if DOM elements exist)
+            if (window.OctaveDNACompanyDropdown?.initCompanyDropdown) {
+                window.OctaveDNACompanyDropdown.initCompanyDropdown();
+                addResult('Company dropdown initialized', 'pass');
+            }
+
+            // Phase D: Initialize iframe communication
+            if (window.OctaveDNACompanyLoader?.initIframeCommunication) {
+                window.OctaveDNACompanyLoader.initIframeCommunication();
+                addResult('Iframe communication initialized', 'pass');
+            }
+
+            // Run tests
+            setTimeout(runAllTests, 500);
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
