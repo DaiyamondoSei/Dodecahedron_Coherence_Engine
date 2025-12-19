@@ -107,6 +107,53 @@ POC/
 
 **Best for:** Explaining organizational maturity, evolution path
 
+**Modular Architecture:** See `js/octave-dna/` below for the refactored module structure.
+
+---
+
+#### 5a. **js/octave-dna/** - DNA Helix Modules (14 files)
+
+```
+js/octave-dna/
+├── index.js                    # Navigation map for Future Claude
+├── octave-dna-main.js          # Thin orchestrator (218 lines)
+├── README.md                   # Comprehensive module documentation
+│
+├── state/
+│   └── octave-dna-state.js     # Central state registry
+│
+├── scene/
+│   ├── scene-setup.js          # THREE.js camera, renderer, fog
+│   └── scene-lighting.js       # Ambient + 3 point lights
+│
+├── visualization/
+│   ├── helix-geometry.js       # DNA helix creation (PHI-normalized)
+│   ├── helix-helpers.js        # Octave detection, color utilities
+│   └── helix-rungs.js          # Breath rungs between strands
+│
+├── interaction/
+│   ├── mouse-handler.js        # Raycasting & click handling
+│   └── legend-handler.js       # Legend clicks & tooltips
+│
+├── animation/
+│   └── animation-loop.js       # RAF loop & resize handling
+│
+├── panels/
+│   ├── diagnostic-panel.js     # Panel visibility & tabs
+│   ├── breath-tab.js           # Breath ratio analysis
+│   └── pentagram-tab.js        # 5-element pentagram analysis
+│
+└── company/
+    ├── company-dropdown.js     # Company selector UI
+    └── company-loader.js       # Data loading & sessionStorage sync
+```
+
+**Key Features:**
+- PHI constants imported from `phi-harmonics.js` (Single Source of Truth)
+- Each module exports to `window.OctaveDNA*` namespace
+- Self-documenting with "Notes for Future Claude" headers
+- Reduced from 2,689-line monolith to 218-line orchestrator (92% reduction)
+
 ---
 
 #### 6. **simulator.html** - Coherence Simulator

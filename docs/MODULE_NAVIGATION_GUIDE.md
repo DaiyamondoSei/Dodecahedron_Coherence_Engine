@@ -164,7 +164,7 @@ Step 5: ADVANCED ANALYSIS (advanced/*.js)
 └─────────────────────────────────────────────────────────────────┘
                                  │
                                  ▼
-Step 6: VISUALIZATION (dodecahedron-viz.js + UI modules)
+Step 6: VISUALIZATION (dodecahedron-viz.js + octave-dna/ + UI modules)
 ┌─────────────────────────────────────────────────────────────────┐
 │  Visual Outputs:                                                │
 │                                                                 │
@@ -173,7 +173,73 @@ Step 6: VISUALIZATION (dodecahedron-viz.js + UI modules)
 │  • Breath axis charts (6 opposing pairs)                        │
 │  • Shadow pattern overlays                                      │
 │  • Global coherence meter                                       │
+│  • DNA Helix (js/octave-dna/ - 14 modular files)                │
 └─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Octave DNA Module Architecture
+
+The DNA Helix visualization (`pages/octave-dna.html`) was refactored from a 2,689-line monolith to 14 focused modules:
+
+```
+js/octave-dna/
+│
+├── octave-dna-main.js          # Thin orchestrator (218 lines)
+│           │
+│           ├── state/octave-dna-state.js      # Central state registry
+│           │
+│           ├── scene/
+│           │   ├── scene-setup.js             # THREE.js init
+│           │   └── scene-lighting.js          # Ambient + point lights
+│           │
+│           ├── visualization/
+│           │   ├── helix-geometry.js          # DNA helix creation
+│           │   ├── helix-helpers.js           # PHI utilities
+│           │   └── helix-rungs.js             # Breath rungs
+│           │
+│           ├── interaction/
+│           │   ├── mouse-handler.js           # Raycasting
+│           │   └── legend-handler.js          # Legend UI
+│           │
+│           ├── animation/animation-loop.js    # RAF loop
+│           │
+│           ├── panels/
+│           │   ├── diagnostic-panel.js        # Panel controller
+│           │   ├── breath-tab.js              # Breath analysis
+│           │   └── pentagram-tab.js           # Pentagram analysis
+│           │
+│           └── company/
+│               ├── company-dropdown.js        # Company selector
+│               └── company-loader.js          # Data loading
+│
+└── index.js                    # Navigation map + documentation
+```
+
+### Key Integration Points
+
+| Module | Global Export | Used By |
+|--------|---------------|---------|
+| `octave-dna-state.js` | `window.OctaveDNAState` | All modules (central store) |
+| `helix-geometry.js` | `window.OctaveDNAGeometry` | Main orchestrator |
+| `company-loader.js` | `window.OctaveDNACompany` | SessionStorage sync with orchestrator |
+
+### Data Flow: Orchestrator → DNA Helix
+
+```
+demo-orchestrator-logic.js
+        │
+        │ sessionStorage.setItem('customCompanyData', {...})
+        ▼
+octave-dna-main.js
+        │
+        │ Priority loading:
+        │ 1. customCompanyData (sessionStorage) ← Manual/AI Entry
+        │ 2. CompanyLoader templates            ← Company Selection
+        │ 3. Mock data fallback                 ← Development
+        ▼
+helix-geometry.js → Creates 6 DNA helixes with 7 octave levels
 ```
 
 ---
