@@ -341,6 +341,11 @@ js/
 ├── [root]           # Core modules (main.js, loaders, transformers)
 ├── constants/       # PHI and threshold constants (SSOT)
 ├── advanced/        # Mathematical analysis modules
+├── shadow/          # Unified shadow system (Dec 2025)
+│   ├── constants/   #   PHI-derived shadow constants
+│   ├── detection/   #   Pattern detection
+│   ├── adaptation/  #   Template + AI adapters
+│   └── ui/          #   Toast notifications
 ├── ui/              # UI component modules
 └── ai/              # AI integration modules
 
@@ -443,6 +448,176 @@ O7_LOWER = 0.950    // Radiance
 
 ---
 
+## Shadow System Architecture (Unified - December 2025)
+
+The Shadow System detects and displays organizational "shadows" - hidden tensions, contradictions, and suppressed patterns that affect coherence.
+
+**December 2025 Update**: All shadow code has been unified into a single `js/shadow/` module with PHI-derived constants.
+
+### Unified Shadow Module Structure
+
+```
+js/shadow/
+├── index.js                       # Central exports (barrel file)
+├── constants/
+│   └── shadow-harmonics.js        # PHI-derived constants (Single Source of Truth)
+├── detection/
+│   └── shadow-detector.js         # Pattern detection engine
+├── adaptation/
+│   ├── shadow-adapter.js          # Template-based stories (Jungian dual-form)
+│   └── ai-shadow-adapter.js       # AI-powered pattern discovery
+└── ui/
+    └── shadow-panel.js            # Toast notifications with accessibility
+```
+
+### Three-Tier PHI Penalty System
+
+| Tier | PHI Value | Capital Type         | Example Shadows                    |
+|------|-----------|---------------------|-----------------------------------|
+| 1    | φ⁻² 0.382 | Human Capital       | burnoutEngine                     |
+| 2    | φ⁻³ 0.236 | Systemic Fragility  | brittleProfit, extractiveGrowth   |
+| 3    | φ⁻⁴ 0.146 | Integrity Erosion   | experienceGap, hollowGovernance   |
+
+**Philosophy**: AI-generated shadows use this tier system as a *semantic guide*, not a constraint. The PHI values ensure consistency when regenerating shadows for the same data.
+
+### Data Flow
+
+```
+shadow-harmonics.js (constants)
+         ↓
+shadow-detector.js (detection)
+         ↓
+    ┌────┴────┐
+    ↓         ↓
+shadow-adapter.js   ai-shadow-adapter.js
+(templates)         (AI generation)
+    ↓         ↓
+    └────┬────┘
+         ↓
+shadow-panel.js (toast UI)
+         ↓
+dodec-shadow-overlay.js (full modal)
+```
+
+### Key Files (New Paths)
+
+| File | Purpose | New Location |
+|------|---------|--------------|
+| `shadow-harmonics.js` | PHI-derived constants (SSOT) | `js/shadow/constants/` |
+| `shadow-detector.js` | Detect contradictions from face/edge data | `js/shadow/detection/` |
+| `shadow-adapter.js` | Template-based dual-form stories | `js/shadow/adaptation/` |
+| `ai-shadow-adapter.js` | AI-powered shadow generation | `js/shadow/adaptation/` |
+| `shadow-panel.js` | Toast queue with accessibility | `js/shadow/ui/` |
+| `dodec-shadow-overlay.js` | Full modal overlay for detailed view | `js/dodec/` |
+
+### Importing Shadow Module
+
+```javascript
+// Import everything
+import * as Shadow from './js/shadow/index.js';
+
+// Import specific components
+import { ShadowDetector, ShadowPanel, AIShadowAdapter } from './js/shadow/index.js';
+
+// Import constants
+import { SHADOW_PENALTIES, SHADOW_THRESHOLDS, SEVERITY_ICONS } from './js/shadow/index.js';
+```
+
+### LIFECYCLE CRITICAL ⚠️
+
+**Both shadow-panel.js and dodec-shadow-overlay.js have timers.**
+
+**MUST call destroy() on page unload:**
+```javascript
+window.shadowOverlayController.destroy();  // Clears 10-second sync interval
+window.shadowPanel?.destroy();             // Clears auto-dismiss timer
+```
+
+Failure to call destroy() causes memory leaks (orphaned intervals).
+
+### Toast Queue System
+
+- **One toast at a time** - shadows sorted by severity (critical > high > moderate > low)
+- **Auto-dismiss after 10 seconds** - visual progress bar shows countdown
+- **Pause on hover** - hovering pauses the countdown
+- **Queue indicator** - shows "+N more" when queue has items
+- **Click opens modal** - with focusOnShadow() to highlight affected face
+
+### Demo Mode
+
+Enable for thesis defense reliability:
+```javascript
+localStorage.setItem('quannexDemoMode', 'true');
+```
+
+Behavior:
+- Toast auto-dismiss is DISABLED
+- AI adapter returns pre-cached insights (no API calls)
+- Essential for presentation reliability
+
+### Sprint 6: Shadow Source Toggle (December 2025)
+
+Users can now switch between **Template Shadows** (predefined) and **AI-Generated Shadows** (on-demand):
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Shadow Analysis                                    │
+│  ┌──────────────┐  ┌─────────────────┐              │
+│  │ 📋 Template ▼│  │ ✨ Generate AI  │              │
+│  └──────────────┘  └─────────────────┘              │
+│                                                     │
+│  [Shadow cards display here based on active source] │
+└─────────────────────────────────────────────────────┘
+```
+
+**Key behaviors:**
+- Template shadows are NEVER overwritten by AI generation
+- Both sources persist to sessionStorage (survives page refresh)
+- AI failures gracefully fallback to template shadows
+- Source dropdown is disabled during AI generation
+
+**New state object:**
+```javascript
+shadowState = {
+    templateShadows: [],       // From company templates
+    aiShadows: [],             // AI-generated (cached)
+    activeSource: 'template',  // 'template' | 'ai'
+    aiGenerationStatus: 'idle' // 'idle' | 'generating' | 'success' | 'error'
+};
+```
+
+**New event:**
+```javascript
+window.addEventListener('shadow-source-changed', (e) => {
+    console.log(e.detail); // { source, shadows, templateCount, aiCount }
+});
+```
+
+### Key APIs
+
+```javascript
+// Shadow Overlay Controller
+window.shadowOverlayController = {
+    open(), close(), toggle(),
+    updateShadows(shadows, source), getShadows(), isOpen(),
+    destroy(),              // CRITICAL: Call on unload
+    getState(),             // Returns current state + shadowSources
+    focusOnShadow(shadow),  // Rotates 3D to shadow's face
+    // Sprint 6: Source switching
+    setActiveSource(source), // Switch to 'template' or 'ai'
+    getTemplateCount(),      // Number of template shadows
+    getAICount()             // Number of AI shadows
+};
+
+// Shadow Panel (toast queue)
+window.shadowPanel = {
+    update(shadows),
+    destroy()               // CRITICAL: Call on unload
+};
+```
+
+---
+
 ## Message to Future Claude
 
 Dear Future Self,
@@ -465,5 +640,5 @@ A Previous You
 
 ---
 
-*Last Updated: December 14, 2025*
+*Last Updated: December 20, 2025*
 *Maintainer: Deimantas & Claude Partnership*

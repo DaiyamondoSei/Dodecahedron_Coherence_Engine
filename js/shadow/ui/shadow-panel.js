@@ -1,137 +1,213 @@
 /**
- * ========================================
- * MODULE: shadow-panel.js
- * ========================================
+ * ╔════════════════════════════════════════════════════════════════════════════╗
+ * ║                                                                            ║
+ * ║   SHADOW PANEL - The Conscience of the Organization                       ║
+ * ║   "Toast notifications that honor both shadow and gift"                   ║
+ * ║                                                                            ║
+ * ║   Location: js/shadow/ui/shadow-panel.js                                  ║
+ * ║   Updated: December 2025 - Unified Shadow Module                          ║
+ * ║                                                                            ║
+ * ╚════════════════════════════════════════════════════════════════════════════╝
  *
- * SHADOW PANEL - The Conscience of the Organization
- *
- * Displays "Shadow Alerts" - hidden patterns, hypocrisies, and systemic risks.
- * Located in the bottom-right, distinct from the main dashboard.
- *
- * DESIGN PHILOSOPHY:
- * - "Dark Mode" aesthetic (Red/Black) - shadows are uncomfortable truths
- * - Slide-in animations for new alerts
- * - Interactive: Clicking an alert rotates the 3D camera to the affected area
- * - Dual-form: Each shadow has both "suppressed" and "integrated" (gift) views
- *
- * DEPENDENCIES:
- * - js/advanced/shadow-detector.js (provides shadow analysis data)
- * - js/ai/ai-shadow-adapter.js (optional, for AI-generated insights)
- * - window.Quannex, window.MappingContext (for face name resolution)
- *
- * EXPORTS:
- * - ShadowPanel (class)
- *
- * ========================================
+ * ═══════════════════════════════════════════════════════════════════════════════
  * NOTES FOR FUTURE CLAUDE
- * ========================================
+ * ═══════════════════════════════════════════════════════════════════════════════
  *
- * 1. THE 6 SHADOW ARCHETYPES:
- *    These come from shadow-detector.js, but displayed here:
- *    - Brittle Profit: Financial success without sustainability
- *    - Extractive Growth: Market success draining human capital
- *    - Siloed Excellence: Operations without cross-pollination
- *    - Innovation Theater: Creative claims without substance
- *    - Cult of Personality: Brand built on reputation, not values
- *    - Scattered Purpose: Values without operational alignment
+ * Welcome, future me. This module displays shadow patterns as toast notifications
+ * in a single-toast queue system. Each shadow has dual forms:
+ * - "Suppressed" (the challenge) - What's going wrong
+ * - "Integrated" (the gift) - How to transform it
  *
- * 2. DUAL-FORM TOGGLE (Key UX Feature):
- *    Each shadow card has two views:
- *    - "The Shadow" (suppressed): What's going wrong
- *    - "The Gift" (integrated): How to transform it
- *    Toggle button switches between views - helps reframe problems as opportunities.
+ * ─────────────────────────────────────────────────────────────────────────────
+ * NAVIGATION MAP - How This Module Connects
+ * ─────────────────────────────────────────────────────────────────────────────
  *
- * 3. SEVERITY LEVELS & COLORS:
- *    - critical: #ff4444 (bright red)
- *    - high: #ff8c00 (orange)
- *    - moderate: #ffcc00 (yellow)
- *    - low: #88cc88 (soft green)
+ * UPSTREAM (Data Sources):
+ * ├── js/shadow/constants/shadow-harmonics.js → SEVERITY_COLORS, SEVERITY_ICONS
+ * ├── js/shadow/detection/shadow-detector.js  → Provides shadow analysis data
+ * ├── js/shadow/adaptation/ai-shadow-adapter.js → AI-generated insights
+ * └── window.MappingContext / window.Quannex → Face name resolution
  *
- * 4. EXPANDABLE DETAILS:
- *    Each card has a "▼" button that reveals:
- *    - Logic: Why this shadow was detected
- *    - Impacted Faces: Which faces are involved (clickable chips)
- *    - Prescription: Recommended actions
- *    - Metrics: Intensity score and coherence penalty
+ * DOWNSTREAM (Consumers):
+ * ├── pages/dodecahedron-3d.html → Imports and instantiates ShadowPanel
+ * └── js/dodec/dodec-shadow-overlay.js → May interact for full overlay view
  *
- * 5. FACE CHIP INTERACTIONS:
- *    Clicking a face chip dispatches 'focus-face' event:
- *    window.dispatchEvent(new CustomEvent('focus-face', { detail: { faceId } }))
- *    This rotates the 3D dodecahedron to show that face.
+ * EVENTS DISPATCHED:
+ * └── 'focus-face' → { detail: { faceId } } - Rotates 3D camera to face
  *
- * 6. AI ENHANCEMENT OPTION:
- *    Available for ALL users (Agent Council - December 2024):
- *    - Shows "Generate AI Analysis" button regardless of setup path
- *    - Calls window.AIShadowAdapter.generateAIShadowPatterns()
- *    - Adds AI-generated insights alongside pattern-based shadows
- *    - In demo mode, returns cached insights (no API calls)
+ * EVENTS LISTENED:
+ * └── None (passive display component)
  *
- * 7. FACE NAME RESOLUTION (Priority Order):
- *    1. MappingContext.getInstance().getFace(id).customName
- *    2. window.Quannex.getState().faces.find().customName
- *    3. Default face names (hardcoded fallback)
+ * ─────────────────────────────────────────────────────────────────────────────
+ * THE 6 SHADOW ARCHETYPES (from shadow-harmonics.js)
+ * ─────────────────────────────────────────────────────────────────────────────
  *
- * 8. ACCESSIBILITY (ARIA):
- *    - role="article" on cards
- *    - aria-label describing pattern and severity
- *    - aria-pressed on toggle buttons
- *    - aria-expanded on details buttons
- *    - tabindex="0" for keyboard navigation
- *    - Enter/Space key handlers
+ * TIER 1 - Human Capital Harm (PHI^-2 = 0.382 penalty):
+ *   • burnoutEngine: High output, exhausted humanity
  *
- * 9. CSS CLASS CONVENTION:
- *    Uses "shadow-card-mini" (not "shadow-card") to avoid CSS conflicts
- *    with shadow-overlay.css which uses the same class name.
+ * TIER 2 - Systemic Fragility (PHI^-3 = 0.236 penalty):
+ *   • brittleProfit: Financial success without sustainability
+ *   • extractiveGrowth: Market success draining human capital
+ *   • lonelyHero: Leadership without distributed strength
  *
- * 10. INTEGRATION WITH 3D VIZ:
- *     focusOnShadow() dispatches 'focus-face' event
- *     The 3D visualizer (dodecahedron-viz.js) listens for this
- *     and rotates the camera to show the affected face.
+ * TIER 3 - Integrity Erosion (PHI^-4 = 0.146 penalty):
+ *   • experienceGap: Vision without grounded practice
+ *   • hollowGovernance: Structure without substance
  *
- * 11. TOAST QUEUE SYSTEM (Agent Council - December 2024):
- *     Philosophy: One toast at a time, prioritized by severity
- *     - Shadows sorted: critical > high > moderate > low
- *     - Auto-dismiss after 10 seconds (configurable via DISPLAY_DURATION)
- *     - Hover pauses countdown (visual via progress bar)
- *     - Queue indicator shows "+N more" when queue has items
- *     - Click opens full modal with focusOnShadow()
+ * ─────────────────────────────────────────────────────────────────────────────
+ * SEVERITY SYSTEM (Enhanced for Accessibility)
+ * ─────────────────────────────────────────────────────────────────────────────
  *
- *     State properties:
- *     - this.queue: Array of pending shadows
- *     - this.currentToast: Currently displayed shadow
- *     - this.autoDismissTimer: setTimeout reference
- *     - this.isPaused: Whether hover has paused countdown
+ * Each severity level now has BOTH color AND icon (colorblind-friendly):
  *
- * 12. DEMO MODE (Per Chief Risk Manager):
- *     Enable via: localStorage.setItem('quannexDemoMode', 'true')
- *     Behavior:
- *     - Auto-dismiss is DISABLED (shadows stay until manual dismiss)
- *     - AI adapter returns cached insights (no API calls)
- *     - Essential for thesis defense reliability
+ * | Severity | Color   | Icon | Meaning                           |
+ * |----------|---------|------|-----------------------------------|
+ * | critical | #ff4444 | ⛔   | Immediate attention required      |
+ * | high     | #ff8c00 | ⚠️   | Significant concern               |
+ * | moderate | #ffcc00 | 👁️   | Monitor and address               |
+ * | low      | #88cc88 | 💡   | Awareness opportunity             |
  *
- * 13. LIFECYCLE MANAGEMENT:
- *     CRITICAL: Call destroy() on page unload!
- *     - Clears autoDismissTimer
- *     - Empties queue
- *     - Removes container content
+ * ─────────────────────────────────────────────────────────────────────────────
+ * TOAST QUEUE SYSTEM
+ * ─────────────────────────────────────────────────────────────────────────────
  *
- * USED BY:
- * - dodecahedron-3d.html (bottom-right panel)
- * - Main dashboard views
+ * Philosophy: One toast at a time, prioritized by severity
  *
- * GOTCHAS:
- * - Container auto-creates if not found (appended to document.body)
- * - update() with empty array clears panel but shows AI option
- * - shadow.faceId can be single ID or array (involvedFaces)
+ * - Shadows sorted: critical > high > moderate > low
+ * - Auto-dismiss after 10 seconds (DISPLAY_DURATION)
+ * - Hover pauses countdown (visual via progress bar)
+ * - Queue indicator shows "+N more" when queue has items
+ * - Click opens full modal with focusOnShadow()
  *
- * ========================================
+ * State Properties:
+ * - this.queue: Array of pending shadows
+ * - this.currentToast: Currently displayed shadow
+ * - this.autoDismissTimer: setTimeout reference
+ * - this.isPaused: Whether hover has paused countdown
  *
- * @module js/ui/shadow-panel
- * @author Deimantas Butrimas & Claude
- * @version 2.1 - Enhanced UI with expandable details
+ * ─────────────────────────────────────────────────────────────────────────────
+ * DUAL-FORM TOGGLE (Key UX Feature)
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * Each shadow card has two views:
+ * - "The Shadow" (suppressed): What's going wrong - default view
+ * - "The Gift" (integrated): How to transform it - toggle view
+ *
+ * Toggle button switches between views - helps reframe problems as opportunities.
+ * This is the Jungian principle: shadows contain gifts when integrated.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * FACE CHIP INTERACTIONS
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * Clicking a face chip dispatches 'focus-face' event:
+ *   window.dispatchEvent(new CustomEvent('focus-face', { detail: { faceId } }))
+ *
+ * This rotates the 3D dodecahedron camera to show that face.
+ * Each chip has aria-label for screen readers.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * DEMO MODE
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * Enable: localStorage.setItem('quannexDemoMode', 'true')
+ *
+ * Behavior:
+ * - Auto-dismiss is DISABLED (shadows stay until manual dismiss)
+ * - AI adapter returns cached insights (no API calls)
+ * - Essential for thesis defense reliability
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * LIFECYCLE MANAGEMENT
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * CRITICAL: Call destroy() on page unload!
+ * - Clears autoDismissTimer
+ * - Empties queue
+ * - Removes container content
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * ACCESSIBILITY (WCAG 2.1 AA)
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * - Severity icons (not just colors) for colorblind users
+ * - role="article" on cards
+ * - aria-label describing pattern and severity
+ * - aria-pressed on toggle buttons
+ * - aria-expanded on details buttons
+ * - tabindex="0" for keyboard navigation
+ * - Enter/Space key handlers
+ * - Face chips have aria-label with face name
+ *
+ * ═══════════════════════════════════════════════════════════════════════════════
+ *
+ * @module js/shadow/ui/shadow-panel
+ * @author Deimantas & Claude
+ * @version 3.0 - Unified Shadow Module with Accessibility Enhancements
  */
 
+// ════════════════════════════════════════════════════════════════════════════
+// CONSTANTS - Import from ShadowHarmonics or use fallbacks
+// ════════════════════════════════════════════════════════════════════════════
+
+// Try to get constants from ShadowHarmonics (Single Source of Truth)
+const _SH = (typeof window !== 'undefined' && window.ShadowHarmonics) || {};
+
+/**
+ * Severity colors - from ShadowHarmonics or fallback
+ * Used for badge backgrounds and visual indicators
+ */
+const SEVERITY_COLORS = _SH.SEVERITY_COLORS || {
+    critical: '#ff4444',
+    high: '#ff8c00',
+    moderate: '#ffcc00',
+    low: '#88cc88'
+};
+
+/**
+ * Severity icons - from ShadowHarmonics or fallback
+ * ACCESSIBILITY: Icons provide non-color distinction for colorblind users
+ */
+const SEVERITY_ICONS = _SH.SEVERITY_ICONS || {
+    critical: '⛔',   // Stop sign - immediate attention
+    high: '⚠️',       // Warning - significant concern
+    moderate: '👁️',   // Eye - monitor and address
+    low: '💡'         // Light bulb - awareness opportunity
+};
+
+/**
+ * Priority order for sorting shadows
+ */
+const PRIORITY_ORDER = { critical: 0, high: 1, moderate: 2, low: 3 };
+
+// ════════════════════════════════════════════════════════════════════════════
+// DEFAULT FACE NAMES - Fallback when MappingContext/Quannex unavailable
+// ════════════════════════════════════════════════════════════════════════════
+
+const DEFAULT_FACE_NAMES = {
+    1: 'Financial Capital',
+    2: 'Intellectual Capital',
+    3: 'Human Capital',
+    4: 'Structural Capital',
+    5: 'Market Resonance',
+    6: 'Community & Partners',
+    7: 'Brand & Reputation',
+    8: 'Core Operations',
+    9: 'Regenerative Flow',
+    10: 'Foundational Values',
+    11: 'Funding Pipeline',
+    12: 'Risk & Resilience'
+};
+
+// ════════════════════════════════════════════════════════════════════════════
+// SHADOW PANEL CLASS
+// ════════════════════════════════════════════════════════════════════════════
+
 export class ShadowPanel {
+    /**
+     * Create a ShadowPanel instance
+     * @param {string} containerId - ID of the container element
+     */
     constructor(containerId) {
         this.container = document.getElementById(containerId);
         if (!this.container) {
@@ -145,7 +221,7 @@ export class ShadowPanel {
         this.activeShadows = new Set();
 
         // ════════════════════════════════════════════════════════════════════
-        // QUEUE MANAGEMENT (per Agent Council - December 2024)
+        // QUEUE MANAGEMENT
         // Single toast queue: One shadow at a time, prioritized by severity
         // ════════════════════════════════════════════════════════════════════
         this.queue = [];
@@ -157,15 +233,17 @@ export class ShadowPanel {
         // Demo mode: Disables auto-dismiss for controlled presentations
         // Enable: localStorage.setItem('quannexDemoMode', 'true')
         this.demoMode = localStorage.getItem('quannexDemoMode') === 'true';
+
+        console.log('[ShadowPanel] 🌑 Initialized (v3.0 - Unified Shadow Module)');
     }
 
     /**
      * Get face name from MappingContext or Quannex state
-     * @param {number} faceId - Face ID
+     * @param {number} faceId - Face ID (1-12)
      * @returns {string} Face name or fallback
      */
     getFaceName(faceId) {
-        // Try MappingContext first
+        // Try MappingContext first (highest priority)
         if (window.MappingContext) {
             try {
                 const ctx = window.MappingContext.getInstance();
@@ -188,27 +266,12 @@ export class ShadowPanel {
         }
 
         // Fallback to default face names
-        const defaultFaceNames = {
-            1: 'Financial Capital',
-            2: 'Intellectual Capital',
-            3: 'Human Capital',
-            4: 'Structural Capital',
-            5: 'Market Resonance',
-            6: 'Community & Partners',
-            7: 'Brand & Reputation',
-            8: 'Core Operations',
-            9: 'Regenerative Flow',
-            10: 'Foundational Values',
-            11: 'Funding Pipeline',
-            12: 'Risk & Resilience'
-        };
-
-        return defaultFaceNames[faceId] || `Face ${faceId}`;
+        return DEFAULT_FACE_NAMES[faceId] || `Face ${faceId}`;
     }
 
     /**
      * Update the panel with new shadow analysis using single-toast queue.
-     * Per Agent Council: One toast at a time, prioritized by severity.
+     * Shadows are sorted by severity: critical > high > moderate > low
      *
      * @param {Array} shadows - Array of shadow objects from ShadowDetector
      */
@@ -228,10 +291,9 @@ export class ShadowPanel {
         }
 
         // Sort by severity: critical > high > moderate > low
-        const priorityOrder = { critical: 0, high: 1, moderate: 2, low: 3 };
         this.queue = [...shadows].sort((a, b) =>
-            (priorityOrder[(a.severity || 'moderate').toLowerCase()] || 3) -
-            (priorityOrder[(b.severity || 'moderate').toLowerCase()] || 3)
+            (PRIORITY_ORDER[(a.severity || 'moderate').toLowerCase()] || 3) -
+            (PRIORITY_ORDER[(b.severity || 'moderate').toLowerCase()] || 3)
         );
 
         // Update active set for tracking
@@ -248,7 +310,6 @@ export class ShadowPanel {
 
     /**
      * Display the next shadow toast from the queue.
-     * Per HeartMath: Uses invitational language, not alerting.
      */
     showNextToast() {
         if (this.queue.length === 0) {
@@ -275,12 +336,12 @@ export class ShadowPanel {
         });
         card.appendChild(dismissBtn);
 
-        // Add progress bar
+        // Add progress bar for auto-dismiss visualization
         const progressBar = document.createElement('div');
         progressBar.className = 'toast-progress-bar';
         card.appendChild(progressBar);
 
-        // Pause on hover (per HeartMath: respect user attention)
+        // Pause on hover (respect user attention)
         card.addEventListener('mouseenter', () => this.pauseAutoDismiss());
         card.addEventListener('mouseleave', () => this.resumeAutoDismiss());
 
@@ -363,13 +424,13 @@ export class ShadowPanel {
             indicator.className = 'queue-indicator';
             indicator.textContent = `+${this.queue.length} more`;
             indicator.title = `${this.queue.length} more integration opportunities`;
+            indicator.setAttribute('aria-label', `${this.queue.length} more shadow patterns in queue`);
             this.container.appendChild(indicator);
         }
     }
 
     /**
      * Cleanup resources. CRITICAL: Call on page unload.
-     * Per Agent Council: Lifecycle management prevents memory leaks.
      */
     destroy() {
         this.clearAutoDismiss();
@@ -381,9 +442,7 @@ export class ShadowPanel {
     }
 
     /**
-     * Render AI enhancement option for ALL users
-     * Per Agent Council (December 2024): AI shadows should be available
-     * regardless of setup path (manual, AI-assisted, or demo)
+     * Render AI enhancement option for all users
      */
     renderAIEnhanceOption() {
         // Check if AI adapter is available
@@ -408,7 +467,7 @@ export class ShadowPanel {
     }
 
     /**
-     * Phase 5: Setup AI enhancement button handler
+     * Setup AI enhancement button handler
      */
     setupAIEnhanceButton() {
         const btn = document.getElementById('generateAIShadows');
@@ -459,45 +518,49 @@ export class ShadowPanel {
     }
 
     /**
-     * Sprint 4 Task 27: Create shadow card with dual-form toggle
+     * Create shadow card with dual-form toggle
      * Shows both suppressed (shadow) and integrated (gift) perspectives
-     * Phase 3 Enhanced: Expandable details, face chips, severity badge, penalty display
+     *
+     * ACCESSIBILITY ENHANCEMENTS (v3.0):
+     * - Severity icons alongside colors (colorblind-friendly)
+     * - Enhanced aria-labels on face chips
+     * - Keyboard navigation support
+     *
+     * @param {Object} shadow - Shadow pattern object
+     * @returns {HTMLElement} Card element
      */
     createShadowCard(shadow) {
         const card = document.createElement('div');
         // Using shadow-card-mini to avoid CSS conflict with shadow-overlay.css
-        card.className = `shadow-card-mini severity-${(shadow.severity || 'moderate').toLowerCase()}`;
+        const severityLower = (shadow.severity || 'moderate').toLowerCase();
+        card.className = `shadow-card-mini severity-${severityLower}`;
         card.setAttribute('data-shadow-id', shadow.id || shadow.name);
 
         // ACCESSIBILITY: ARIA attributes for screen readers
+        const severityIcon = SEVERITY_ICONS[severityLower] || SEVERITY_ICONS.moderate;
         card.setAttribute('role', 'article');
-        card.setAttribute('aria-label', `Shadow pattern: ${shadow.name || 'Unknown'}, severity: ${shadow.severity || 'moderate'}`);
+        card.setAttribute('aria-label', `${severityIcon} Shadow pattern: ${shadow.name || 'Unknown'}, severity: ${shadow.severity || 'moderate'}`);
         card.setAttribute('tabindex', '0');  // Make focusable for keyboard navigation
 
-        // Icon based on severity
-        const severityLower = (shadow.severity || 'moderate').toLowerCase();
-        const icon = severityLower === 'critical' || severityLower === 'high' ? '⚠️' : '👁️';
+        // Get severity color and icon
+        const severityColor = SEVERITY_COLORS[severityLower] || SEVERITY_COLORS.moderate;
 
-        // Severity badge color
-        const severityColors = {
-            critical: '#ff4444',
-            high: '#ff8c00',
-            moderate: '#ffcc00',
-            low: '#88cc88'
-        };
-        const severityColor = severityColors[severityLower] || severityColors.moderate;
-
-        // Extract suppressed and integrated forms (from mapping-context pattern)
+        // Extract suppressed and integrated forms
         const suppressedForm = shadow.suppressed || shadow.description || 'Shadow pattern detected';
         const integratedForm = shadow.integrated || shadow.gift || 'Integrated wisdom awaits discovery';
         const prescription = shadow.prescription || shadow.recommendation || '';
         const logic = shadow.logic || '';
 
-        // Build face chips HTML
+        // Build face chips HTML with enhanced accessibility
         const involvedFaces = shadow.involvedFaces || (shadow.faceId ? [shadow.faceId] : []);
         const faceChipsHtml = involvedFaces.map(faceId => {
             const faceName = this.getFaceName(faceId);
-            return `<span class="face-chip" data-face-id="${faceId}" title="Face ${faceId}: ${faceName}">${faceName}</span>`;
+            return `<span class="face-chip"
+                         data-face-id="${faceId}"
+                         title="Click to focus on Face ${faceId}: ${faceName}"
+                         role="button"
+                         tabindex="0"
+                         aria-label="Focus camera on ${faceName} (Face ${faceId})">${faceName}</span>`;
         }).join('');
 
         // Penalty display
@@ -506,10 +569,13 @@ export class ShadowPanel {
 
         card.innerHTML = `
             <div class="shadow-header">
-                <span class="shadow-icon">${icon}</span>
+                <span class="shadow-icon" aria-hidden="true">${severityIcon}</span>
                 <span class="shadow-title">${shadow.name || 'Unknown Pattern'}</span>
-                <span class="shadow-severity-badge" style="background: ${severityColor};">${shadow.severity || 'moderate'}</span>
-                <button class="toggle-perspective" title="See the Gift">🔄 Gift</button>
+                <span class="shadow-severity-badge" style="background: ${severityColor};" aria-label="Severity: ${shadow.severity || 'moderate'}">
+                    <span class="severity-icon" aria-hidden="true">${severityIcon}</span>
+                    ${shadow.severity || 'moderate'}
+                </span>
+                <button class="toggle-perspective" title="See the Gift" aria-pressed="false">🔄 Gift</button>
                 <button class="toggle-details" title="Show Details" aria-expanded="false">▼</button>
             </div>
 
@@ -534,7 +600,7 @@ export class ShadowPanel {
                 ${involvedFaces.length > 0 ? `
                     <div class="shadow-detail-section">
                         <span class="detail-label">📍 Impacted Faces:</span>
-                        <div class="face-chips">${faceChipsHtml}</div>
+                        <div class="face-chips" role="group" aria-label="Affected organizational faces">${faceChipsHtml}</div>
                     </div>
                 ` : ''}
 
@@ -559,13 +625,24 @@ export class ShadowPanel {
             </div>
         `;
 
+        // Setup toggle functionality
+        this.setupCardInteractions(card, shadow);
+
+        return card;
+    }
+
+    /**
+     * Setup card interactions (toggle, details, face chips)
+     * @param {HTMLElement} card - Card element
+     * @param {Object} shadow - Shadow pattern object
+     */
+    setupCardInteractions(card, shadow) {
         // Toggle button functionality
         const toggleBtn = card.querySelector('.toggle-perspective');
         const suppressedDiv = card.querySelector('.shadow-suppressed');
         const integratedDiv = card.querySelector('.shadow-integrated');
 
         // ACCESSIBILITY: Toggle button attributes
-        toggleBtn.setAttribute('aria-pressed', 'false');
         toggleBtn.setAttribute('aria-label', `Toggle between shadow and gift perspectives for ${shadow.name || 'this pattern'}`);
 
         const performToggle = () => {
@@ -642,12 +719,23 @@ export class ShadowPanel {
         // Face chip click handlers - focus on that specific face
         const faceChips = card.querySelectorAll('.face-chip');
         faceChips.forEach(chip => {
-            chip.addEventListener('click', (e) => {
+            const handleFaceChipClick = (e) => {
                 e.stopPropagation();
                 const faceId = parseInt(chip.getAttribute('data-face-id'), 10);
                 if (faceId) {
                     const event = new CustomEvent('focus-face', { detail: { faceId } });
                     window.dispatchEvent(event);
+                    console.log(`[ShadowPanel] 🎯 Focusing on Face ${faceId}`);
+                }
+            };
+
+            chip.addEventListener('click', handleFaceChipClick);
+
+            // ACCESSIBILITY: Keyboard support for face chips
+            chip.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleFaceChipClick(e);
                 }
             });
         });
@@ -660,29 +748,26 @@ export class ShadowPanel {
         // ACCESSIBILITY: Keyboard support for card (Enter/Space to focus on face)
         card.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-                // Don't trigger if toggle buttons are focused
-                if (e.target !== toggleBtn && e.target !== detailsBtn) {
+                // Don't trigger if interactive elements are focused
+                if (!e.target.classList.contains('toggle-perspective') &&
+                    !e.target.classList.contains('toggle-details') &&
+                    !e.target.classList.contains('face-chip')) {
                     e.preventDefault();
                     this.focusOnShadow(shadow);
                 }
             }
         });
-
-        return card;
     }
 
+    /**
+     * Focus on a shadow in the 3D visualization
+     * @param {Object} shadow - Shadow pattern object
+     */
     focusOnShadow(shadow) {
-        console.log(`Focusing on shadow: ${shadow.name} at Face ${shadow.faceId}`);
+        console.log(`[ShadowPanel] 🎯 Focusing on shadow: ${shadow.name} at Face ${shadow.faceId}`);
 
-        // Rotate camera to face
-        if (window.dodecahedronViz && window.dodecahedronViz.camera) {
-            // We need a helper to rotate to face. 
-            // dodecahedron-viz.js has 'rotateToFace' but it might not be exposed directly.
-            // But we have 'faceMeshes'.
-
-            // Dispatch event for the main viz to handle
-            const event = new CustomEvent('focus-face', { detail: { faceId: shadow.faceId } });
-            window.dispatchEvent(event);
-        }
+        // Dispatch event for the main viz to handle
+        const event = new CustomEvent('focus-face', { detail: { faceId: shadow.faceId } });
+        window.dispatchEvent(event);
     }
 }

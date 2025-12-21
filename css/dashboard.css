@@ -53,8 +53,17 @@
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); text-shadow: 0 0 30px rgba(0, 255, 204, 0.8); }
-            50% { transform: scale(1.02); text-shadow: 0 0 50px rgba(0, 255, 204, 1); }
+
+            0%,
+            100% {
+                transform: scale(1);
+                text-shadow: 0 0 30px rgba(0, 255, 204, 0.8);
+            }
+
+            50% {
+                transform: scale(1.02);
+                text-shadow: 0 0 50px rgba(0, 255, 204, 1);
+            }
         }
 
         .status {
@@ -65,9 +74,20 @@
             margin-top: 10px;
         }
 
-        .status.healthy { background: rgba(0, 255, 102, 0.3); color: #00ff66; }
-        .status.dimming { background: rgba(255, 255, 0, 0.3); color: #ffff00; }
-        .status.critical { background: rgba(255, 102, 102, 0.3); color: #ff6666; }
+        .status.healthy {
+            background: rgba(0, 255, 102, 0.3);
+            color: #00ff66;
+        }
+
+        .status.dimming {
+            background: rgba(255, 255, 0, 0.3);
+            color: #ffff00;
+        }
+
+        .status.critical {
+            background: rgba(255, 102, 102, 0.3);
+            color: #ff6666;
+        }
 
         .dashboard {
             display: grid;
@@ -218,7 +238,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .footer {
@@ -633,7 +655,7 @@
             border-radius: 3px;
         }
 
-/* =========================================
+        /* =========================================
    SHADOW PANEL MINI (Bottom-Right Panel)
    =========================================
 
@@ -647,630 +669,756 @@
    @see css/shadow-overlay.css for modal overlay styles
 */
 
-.shadow-panel-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 350px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 2000;
-    pointer-events: none; /* Allow clicks through container */
-}
+        .shadow-panel-container {
+            position: fixed;
+            bottom: 80px;  /* Raised above Harmonic Tuner button */
+            left: 50%;
+            transform: translateX(-50%);  /* Center horizontally */
+            width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 2000;
+            pointer-events: none;
+            /* Allow clicks through container */
+        }
 
-.shadow-card-mini {
-    background: rgba(20, 0, 0, 0.95);
-    border-left: 4px solid #ff4444;
-    padding: 15px;
-    border-radius: 4px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
-    color: #fff;
-    pointer-events: auto; /* Re-enable clicks on cards */
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    overflow: hidden;
-}
+        .shadow-card-mini {
+            background: rgba(20, 0, 0, 0.95);
+            border-left: 4px solid #ff4444;
+            padding: 19px;
+            border-radius: 4px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+            color: #fff;
+            pointer-events: auto;
+            /* Re-enable clicks on cards */
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
 
-@keyframes slideIn {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
 
-.shadow-card-mini:hover {
-    transform: translateX(-5px);
-    background: rgba(40, 0, 0, 1);
-    box-shadow: 0 10px 30px rgba(255, 68, 68, 0.2);
-}
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
 
-.shadow-card-mini.severity-high {
-    border-left-color: #ff0000;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
-    animation: slideIn 0.5s ease, pulse-red 2s infinite;
-}
+        .shadow-card-mini:hover {
+            transform: translateX(-5px);
+            background: rgba(40, 0, 0, 1);
+            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.2);
+        }
 
-@keyframes pulse-red {
-    0% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.2); }
-    50% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.4); }
-    100% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.2); }
-}
+        .shadow-card-mini.severity-high {
+            border-left-color: #ff0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+            /* Per Agent Council: Finite animation (3 pulses) to prevent GPU drain */
+            animation: slideIn 0.5s ease, pulse-red 2s 3;
+        }
 
-.shadow-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 5px;
-}
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+            }
 
-.shadow-icon {
-    font-size: 18px;
-}
+            50% {
+                box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
+            }
 
-.shadow-title {
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 1px;
-    color: #ff8888;
-}
+            100% {
+                box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+            }
+        }
 
-.shadow-message {
-    font-size: 13px;
-    line-height: 1.4;
-    opacity: 0.9;
-    margin-bottom: 8px;
-}
+        .shadow-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-.shadow-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    opacity: 0.6;
-    text-transform: uppercase;
-}
+        .shadow-icon {
+            font-size: 18px;
+        }
 
-/* Face Detail Panel - Shadow Section */
-.shadow-section {
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(50, 0, 0, 0.3);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 68, 68, 0.3);
-    display: none; /* Hidden by default */
-}
+        .shadow-title {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: #ff8888;
+        }
 
-.shadow-section.visible {
-    display: block;
-    animation: fadeIn 0.3s ease;
-}
+        .shadow-message {
+            font-size: 13px;
+            line-height: 1.4;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
 
-.shadow-section-title {
-    font-size: 11px;
-    text-transform: uppercase;
-    color: #ff4444;
-    margin-bottom: 10px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
+        .shadow-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            opacity: 0.6;
+            text-transform: uppercase;
+        }
 
-/* Sprint 4 Task 27: Shadow Dual-Form Toggle */
-.shadow-card-mini .toggle-perspective {
-    margin-left: auto;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-size: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: #fff;
-}
+        /* Face Detail Panel - Shadow Section */
+        .shadow-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(50, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            display: none;
+            /* Hidden by default */
+        }
 
-.shadow-card-mini .toggle-perspective:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-}
+        .shadow-section.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
 
-.shadow-card-mini .shadow-suppressed,
-.shadow-card-mini .shadow-integrated {
-    display: none;
-    padding: 10px;
-    border-radius: 6px;
-    margin: 10px 0;
-    transition: all 0.3s ease;
-}
+        .shadow-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #ff4444;
+            margin-bottom: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
 
-.shadow-card-mini .shadow-suppressed.active {
-    display: block;
-    background: rgba(255, 100, 100, 0.1);
-    border-left: 3px solid #ff6666;
-}
+        /* Sprint 4 Task 27: Shadow Dual-Form Toggle */
+        .shadow-card-mini .toggle-perspective {
+            margin-left: auto;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 4px 8px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #fff;
+        }
 
-.shadow-card-mini .shadow-integrated.active {
-    display: block;
-    background: rgba(100, 255, 150, 0.1);
-    border-left: 3px solid #66ff99;
-}
+        .shadow-card-mini .toggle-perspective:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
 
-.shadow-card-mini .shadow-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #ff8888;
-    margin-bottom: 6px;
-}
+        .shadow-card-mini .shadow-suppressed,
+        .shadow-card-mini .shadow-integrated {
+            display: none;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
 
-.shadow-card-mini .shadow-prescription {
-    margin-top: 10px;
-    padding: 10px;
-    background: rgba(0, 255, 204, 0.05);
-    border-radius: 4px;
-    font-size: 12px;
-    line-height: 1.5;
-}
+        .shadow-card-mini .shadow-suppressed.active {
+            display: block;
+            background: rgba(255, 100, 100, 0.1);
+            border-left: 3px solid #ff6666;
+        }
 
-.shadow-card-mini.showing-gift {
-    border-left-color: #66ff99;
-    background: rgba(0, 20, 0, 0.95);
-}
+        .shadow-card-mini .shadow-integrated.active {
+            display: block;
+            background: rgba(100, 255, 150, 0.1);
+            border-left: 3px solid #66ff99;
+        }
 
-.shadow-card-mini.showing-gift:hover {
-    background: rgba(0, 40, 0, 1);
-    box-shadow: 0 10px 30px rgba(102, 255, 153, 0.2);
-}
+        .shadow-card-mini .shadow-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ff8888;
+            margin-bottom: 6px;
+        }
 
-.shadow-card-mini.severity-critical {
-    border-left-color: #ff0000;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
-}
+        .shadow-card-mini .shadow-prescription {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 255, 204, 0.05);
+            border-radius: 4px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
 
-.shadow-card-mini.severity-significant {
-    border-left-color: #ff8800;
-    box-shadow: 0 0 10px rgba(255, 136, 0, 0.2);
-}
+        .shadow-card-mini.showing-gift {
+            border-left-color: #66ff99;
+            background: rgba(0, 20, 0, 0.95);
+        }
 
-/* =========================================
+        .shadow-card-mini.showing-gift:hover {
+            background: rgba(0, 40, 0, 1);
+            box-shadow: 0 10px 30px rgba(102, 255, 153, 0.2);
+        }
+
+        .shadow-card-mini.severity-critical {
+            border-left-color: #ff0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .shadow-card-mini.severity-significant {
+            border-left-color: #ff8800;
+            box-shadow: 0 0 10px rgba(255, 136, 0, 0.2);
+        }
+
+        /* =========================================
    SHADOW PANEL ACCESSIBILITY
    ========================================= */
 
-/* Focus indicators for keyboard navigation */
-.shadow-card-mini:focus {
-    outline: 2px solid #00ffcc;
-    outline-offset: 2px;
-    box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
-}
+        /* Focus indicators for keyboard navigation */
+        .shadow-card-mini:focus {
+            outline: 2px solid #00ffcc;
+            outline-offset: 2px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+        }
 
-.shadow-card-mini:focus-visible {
-    outline: 3px solid #00ffcc;
-    outline-offset: 3px;
-}
+        .shadow-card-mini:focus-visible {
+            outline: 3px solid #00ffcc;
+            outline-offset: 3px;
+        }
 
-/* Focus indicator for toggle button */
-.shadow-card-mini .toggle-perspective:focus {
-    outline: 2px solid #fff;
-    outline-offset: 1px;
-}
+        /* Focus indicator for toggle button */
+        .shadow-card-mini .toggle-perspective:focus {
+            outline: 2px solid #fff;
+            outline-offset: 1px;
+        }
 
-.shadow-card-mini .toggle-perspective:focus-visible {
-    background: rgba(255, 255, 255, 0.3);
-}
+        .shadow-card-mini .toggle-perspective:focus-visible {
+            background: rgba(255, 255, 255, 0.3);
+        }
 
-/* Reduced motion preference for accessibility */
-@media (prefers-reduced-motion: reduce) {
-    .shadow-card-mini {
-        animation: none;
-    }
+        /* Reduced motion preference for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            .shadow-card-mini {
+                animation: none;
+            }
 
-    .shadow-card-mini:hover {
-        transform: none;
-    }
+            .shadow-card-mini:hover {
+                transform: none;
+            }
 
-    .shadow-card-mini .toggle-perspective {
-        transition: none;
-    }
-}
+            .shadow-card-mini .toggle-perspective {
+                transition: none;
+            }
+        }
 
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    .shadow-card-mini {
-        border: 2px solid #ff4444;
-    }
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .shadow-card-mini {
+                border: 2px solid #ff4444;
+            }
 
-    .shadow-card-mini.severity-critical {
-        border-color: #ff0000;
-        border-width: 3px;
-    }
+            .shadow-card-mini.severity-critical {
+                border-color: #ff0000;
+                border-width: 3px;
+            }
 
-    .shadow-card-mini:focus {
-        outline-width: 4px;
-    }
-}
+            .shadow-card-mini:focus {
+                outline-width: 4px;
+            }
+        }
 
-/* =========================================
+        /* =========================================
    SHADOW PANEL ENHANCED UI (Phase 3)
    ========================================= */
 
-/* Header Layout */
-.shadow-card-mini .shadow-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 68, 68, 0.2);
-    margin-bottom: 10px;
-}
+        /* Header Layout */
+        .shadow-card-mini .shadow-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 68, 68, 0.2);
+            margin-bottom: 10px;
+        }
 
-.shadow-card-mini .shadow-icon {
-    font-size: 16px;
-    flex-shrink: 0;
-}
+        .shadow-card-mini .shadow-icon {
+            font-size: 16px;
+            flex-shrink: 0;
+        }
 
-.shadow-card-mini .shadow-title {
-    flex: 1;
-    font-weight: 600;
-    font-size: 13px;
-    color: #ff8888;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+        .shadow-card-mini .shadow-title {
+            flex: 1;
+            font-weight: 600;
+            font-size: 13px;
+            color: #ff8888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-/* Severity Badge */
-.shadow-card-mini .shadow-severity-badge {
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #000;
-    flex-shrink: 0;
-}
+        /* Severity Badge */
+        .shadow-card-mini .shadow-severity-badge {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #000;
+            flex-shrink: 0;
+        }
 
-/* Toggle Details Button */
-.shadow-card-mini .toggle-details {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    padding: 4px 6px;
-    font-size: 10px;
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.6);
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
+        /* Toggle Details Button */
+        .shadow-card-mini .toggle-details {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 4px 6px;
+            font-size: 10px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
 
-.shadow-card-mini .toggle-details:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-}
+        .shadow-card-mini .toggle-details:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
 
-.shadow-card-mini .toggle-details:focus {
-    outline: 2px solid rgba(255, 255, 255, 0.5);
-    outline-offset: 1px;
-}
+        .shadow-card-mini .toggle-details:focus {
+            outline: 2px solid rgba(255, 255, 255, 0.5);
+            outline-offset: 1px;
+        }
 
-/* Expandable Details Section */
-.shadow-card-mini .shadow-details {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-    opacity: 0;
-    margin-top: 0;
-}
+        /* Expandable Details Section */
+        .shadow-card-mini .shadow-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+            margin-top: 0;
+        }
 
-.shadow-card-mini .shadow-details.expanded {
-    max-height: 300px;
-    opacity: 1;
-    margin-top: 12px;
-    overflow-y: auto;
-}
+        .shadow-card-mini .shadow-details.expanded {
+            max-height: 300px;
+            opacity: 1;
+            margin-top: 12px;
+            overflow-y: auto;
+        }
 
-/* Detail Sections */
-.shadow-card-mini .shadow-detail-section {
-    padding: 8px 10px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    margin-bottom: 8px;
-}
+        /* Detail Sections */
+        .shadow-card-mini .shadow-detail-section {
+            padding: 8px 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
 
-.shadow-card-mini .shadow-detail-section:last-child {
-    margin-bottom: 0;
-}
+        .shadow-card-mini .shadow-detail-section:last-child {
+            margin-bottom: 0;
+        }
 
-.shadow-card-mini .detail-label {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.6);
-    display: block;
-    margin-bottom: 4px;
-}
+        .shadow-card-mini .detail-label {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            display: block;
+            margin-bottom: 4px;
+        }
 
-.shadow-card-mini .detail-value {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.4;
-}
+        .shadow-card-mini .detail-value {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.4;
+        }
 
-.shadow-card-mini .prescription-text {
-    color: #00ffcc;
-}
+        .shadow-card-mini .prescription-text {
+            color: #00ffcc;
+        }
 
-/* Face Chips */
-.shadow-card-mini .face-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 4px;
-}
+        /* Face Chips */
+        .shadow-card-mini .face-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
 
-.shadow-card-mini .face-chip {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 10px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.85);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
+        .shadow-card-mini .face-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.85);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
 
-.shadow-card-mini .face-chip:hover {
-    background: rgba(0, 255, 204, 0.15);
-    border-color: rgba(0, 255, 204, 0.4);
-    transform: translateY(-1px);
-}
+        .shadow-card-mini .face-chip:hover {
+            background: rgba(0, 255, 204, 0.15);
+            border-color: rgba(0, 255, 204, 0.4);
+            transform: translateY(-1px);
+        }
 
-/* Metrics Section */
-.shadow-card-mini .shadow-metrics {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
+        /* Metrics Section */
+        .shadow-card-mini .shadow-metrics {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
 
-.shadow-card-mini .shadow-intensity {
-    font-size: 11px;
-    color: #ffaa66;
-}
+        .shadow-card-mini .shadow-intensity {
+            font-size: 11px;
+            color: #ffaa66;
+        }
 
-.shadow-card-mini .shadow-penalty {
-    font-size: 11px;
-    color: #ff6666;
-    font-weight: 600;
-}
+        .shadow-card-mini .shadow-penalty {
+            font-size: 11px;
+            color: #ff6666;
+            font-weight: 600;
+        }
 
-/* Meta Section (bottom) */
-.shadow-card-mini .shadow-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.5);
-}
+        /* Meta Section (bottom) */
+        .shadow-card-mini .shadow-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+        }
 
-.shadow-card-mini .shadow-source {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px 6px;
-    border-radius: 4px;
-}
+        .shadow-card-mini .shadow-source {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
 
-.shadow-card-mini .shadow-score-mini {
-    font-weight: 600;
-    color: rgba(255, 170, 68, 0.8);
-}
+        .shadow-card-mini .shadow-score-mini {
+            font-weight: 600;
+            color: rgba(255, 170, 68, 0.8);
+        }
 
-/* =========================================
+        /* =========================================
+   TOAST QUEUE SYSTEM (Agent Council - Dec 2025)
+   Dismiss button, progress bar, queue indicator
+   ========================================= */
+
+        /* Dismiss Button - appears on hover, positioned above expand triangle */
+        .toast-dismiss-btn {
+            position: absolute;
+            top: 4px;
+            right: 321px;
+            width: 21px;
+            height: 21px;
+            background: rgba(255, 68, 68, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: #ff8888;
+            font-size: 16px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s, background-color 0.2s;
+            z-index: 10;
+        }
+
+        .shadow-card-mini:hover .toast-dismiss-btn {
+            opacity: 1;
+        }
+
+        .toast-dismiss-btn:hover {
+            background: rgba(255, 68, 68, 0.4);
+            color: #fff;
+        }
+
+        /* Progress Bar - auto-dismiss countdown */
+        .toast-progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(90deg, #ff4444, #ff8844);
+            animation: progressShrink 10s linear forwards;
+            border-radius: 0 0 4px 4px;
+        }
+
+        @keyframes progressShrink {
+            from {
+                width: 100%;
+            }
+
+            to {
+                width: 0%;
+            }
+        }
+
+        .shadow-card-mini:hover .toast-progress-bar {
+            animation-play-state: paused;
+        }
+
+        /* Queue Indicator - shows remaining count */
+        .queue-indicator {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #ff4444, #ff8844);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(255, 68, 68, 0.4);
+        }
+
+        /* Breathing Animation - per HeartMath (subtle, somatic) */
+        .shadow-card-mini {
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.95;
+            }
+
+            50% {
+                transform: scale(1.01);
+                opacity: 1;
+            }
+        }
+
+        .shadow-card-mini:hover {
+            animation-play-state: paused;
+        }
+
+        /* Performance Containment */
+        .shadow-panel-container {
+            contain: layout style;
+        }
+
+        .shadow-card-mini {
+            contain: content;
+            position: relative;
+        }
+
+        /* =========================================
    SHADOW AI ENHANCEMENT (Phase 5)
    ========================================= */
 
-.shadow-ai-enhance {
-    margin-top: 16px;
-    padding-top: 16px;
-    text-align: center;
-}
+        .shadow-ai-enhance {
+            margin-top: 16px;
+            padding-top: 16px;
+            text-align: center;
+        }
 
-.shadow-ai-enhance .ai-enhance-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(147, 112, 219, 0.4), transparent);
-    margin-bottom: 12px;
-}
+        .shadow-ai-enhance .ai-enhance-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(147, 112, 219, 0.4), transparent);
+            margin-bottom: 12px;
+        }
 
-.shadow-ai-enhance .ai-enhance-prompt {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 10px;
-}
+        .shadow-ai-enhance .ai-enhance-prompt {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 10px;
+        }
 
-.shadow-ai-enhance .ai-enhance-btn {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
-    border: 1px solid rgba(139, 92, 246, 0.4);
-    color: #a78bfa;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    transition: all 0.2s ease;
-}
+        .shadow-ai-enhance .ai-enhance-btn {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            color: #a78bfa;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
 
-.shadow-ai-enhance .ai-enhance-btn:hover {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-}
+        .shadow-ai-enhance .ai-enhance-btn:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
 
-.shadow-ai-enhance .ai-enhance-btn:disabled {
-    opacity: 0.6;
-    cursor: wait;
-    transform: none;
-    box-shadow: none;
-}
+        .shadow-ai-enhance .ai-enhance-btn:disabled {
+            opacity: 0.6;
+            cursor: wait;
+            transform: none;
+            box-shadow: none;
+        }
 
-.shadow-ai-enhance .ai-enhance-success {
-    color: #66ff99;
-    font-size: 12px;
-    padding: 10px;
-}
+        .shadow-ai-enhance .ai-enhance-success {
+            color: #66ff99;
+            font-size: 12px;
+            padding: 10px;
+        }
 
-/* =========================================
+        /* =========================================
    VOICE INTERFACE (Phase 5)
    ========================================= */
 
-.voice-toggle {
-    position: fixed;
-    bottom: 20px;
-    right: 390px;  /* Moved left to avoid overlap with shadow panel (350px + 20px gap + 20px) */
-    background: rgba(0, 255, 204, 0.1);
-    border: 1px solid #00ffcc;
-    color: #00ffcc;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 600;
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
-    z-index: 1000;
-}
+        .voice-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 390px;
+            /* Moved left to avoid overlap with shadow panel (350px + 20px gap + 20px) */
+            background: rgba(0, 255, 204, 0.1);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
 
-.voice-toggle:hover {
-    background: rgba(0, 255, 204, 0.2);
-    box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
-    transform: translateY(-2px);
-}
+        .voice-toggle:hover {
+            background: rgba(0, 255, 204, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+            transform: translateY(-2px);
+        }
 
-.voice-interface {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    width: 350px;
-    height: 500px;
-    background: rgba(10, 15, 30, 0.95);
-    border: 1px solid rgba(0, 255, 204, 0.3);
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    transform: translateY(20px);
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-}
+        .voice-interface {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: rgba(10, 15, 30, 0.95);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            transform: translateY(20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
 
-.voice-interface.visible {
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: all;
-}
+        .voice-interface.visible {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
 
-.voice-header {
-    padding: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .voice-header {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.voice-title {
-    color: #00ffcc;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
+        .voice-title {
+            color: #00ffcc;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-.voice-close {
-    background: none;
-    border: none;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 20px;
-    cursor: pointer;
-    transition: color 0.2s;
-}
+        .voice-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
 
-.voice-close:hover {
-    color: #fff;
-}
+        .voice-close:hover {
+            color: #fff;
+        }
 
-.voice-messages {
-    flex: 1;
-    padding: 15px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+        .voice-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-.message {
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 14px;
-    line-height: 1.4;
-    max-width: 85%;
-    animation: fadeIn 0.3s ease;
-}
+        .message {
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.4;
+            max-width: 85%;
+            animation: fadeIn 0.3s ease;
+        }
 
-.message.system {
-    background: rgba(0, 255, 204, 0.1);
-    border-left: 3px solid #00ffcc;
-    align-self: flex-start;
-    color: #e0e0e0;
-}
+        .message.system {
+            background: rgba(0, 255, 204, 0.1);
+            border-left: 3px solid #00ffcc;
+            align-self: flex-start;
+            color: #e0e0e0;
+        }
 
-.message.user {
-    background: rgba(255, 255, 255, 0.1);
-    align-self: flex-end;
-    color: #fff;
-}
+        .message.user {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-end;
+            color: #fff;
+        }
 
-.message.typing {
-    font-style: italic;
-    opacity: 0.7;
-}
+        .message.typing {
+            font-style: italic;
+            opacity: 0.7;
+        }
 
-.voice-input-area {
-    padding: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    gap: 10px;
-}
+        .voice-input-area {
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 10px;
+        }
 
-#voiceInput {
-    flex: 1;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 10px;
-    border-radius: 4px;
-    color: #fff;
-    font-family: 'Rajdhani', sans-serif;
-}
+        #voiceInput {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 4px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+        }
 
-#voiceInput:focus {
-    outline: none;
-    border-color: #00ffcc;
-}
+        #voiceInput:focus {
+            outline: none;
+            border-color: #00ffcc;
+        }
 
-#voiceSend {
-    background: #00ffcc;
-    color: #000;
-    border: none;
-    padding: 0 15px;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
-}
+        #voiceSend {
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            padding: 0 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
 
-#voiceSend:hover {
-    background: #00ccaa;
-    box-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
-}
+        #voiceSend:hover {
+            background: #00ccaa;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+        }

@@ -83,7 +83,22 @@
                     <h2>Shadow Analysis</h2>
                     <span class="shadow-overlay-subtitle">Organizational patterns requiring attention</span>
                 </div>
+                <!-- Sprint 6: Source Toggle Dropdown -->
+                <div class="shadow-source-toggle">
+                    <select id="shadowSourceSelect" class="shadow-source-select" title="Switch shadow source">
+                        <option value="template">📋 Template</option>
+                        <option value="ai">✨ AI-Generated</option>
+                    </select>
+                    <span class="shadow-source-count" id="shadowSourceCount">(0)</span>
+                </div>
                 <button class="shadow-overlay-close" id="closeShadowOverlay" title="Close (ESC)">×</button>
+            </div>
+            <!-- Sprint 6: Persistent AI Controls Bar -->
+            <div class="shadow-ai-controls" id="shadowAIControls">
+                <button class="shadow-ai-generate-btn" id="generateAIShadowsBtn" title="Generate AI shadow analysis">
+                    ✨ Generate AI Analysis
+                </button>
+                <span class="ai-status" id="aiGenerationStatus"></span>
             </div>
             <div class="shadow-overlay-content" id="shadowOverlayContent">
                 <!-- Shadow cards will be rendered here -->
@@ -459,6 +474,20 @@
     <script src="https://unpkg.com/three@0.128.0/build/three.js"></script>
     <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
+    <!-- ════════════════════════════════════════════════════════════════════════
+         PHI CONSTANTS - Single Source of Truth
+         MUST load before any scripts that use golden ratio mathematics
+         ════════════════════════════════════════════════════════════════════════ -->
+    <script src="../js/constants/phi-harmonics.js"></script>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SHADOW HARMONICS - Shadow System Constants
+         MUST load after phi-harmonics.js, before shadow-detector.js
+         Three-tier PHI-derived penalty system for organizational shadows
+         Loaded as module to support ES module exports
+         ════════════════════════════════════════════════════════════════════════ -->
+    <script type="module" src="../js/shadow/constants/shadow-harmonics.js"></script>
+
     <!-- Load breath analyzer first -->
     <script src="../js/breath-analyzer.js?v=20251207"></script>
 
@@ -584,9 +613,9 @@
         // ║ SECTION 1: ES Module Imports                                           ║
         // ╚════════════════════════════════════════════════════════════════════════╝
         import { VisualizationManager } from '../js/advanced/visualization-manager.js';
-        import { ShadowPanel } from '../js/ui/shadow-panel.js';
+        import { ShadowPanel } from '../js/shadow/ui/shadow-panel.js';  // Updated path - Dec 2025
         import { VoiceModule } from '../js/ai/voice-module.js';
-        import { AIShadowAdapter } from '../js/ai/adapters/ai-shadow-adapter.js';
+        import { AIShadowAdapter } from '../js/shadow/adaptation/ai-shadow-adapter.js';  // Updated path - Dec 2025
         import { ProviderFactory, getGeminiProvider, getOpenAIProvider } from '../js/ai/providers/provider-factory.js';
         import { GeminiProvider } from '../js/ai/providers/gemini-provider.js';
         import { OpenAIProvider } from '../js/ai/providers/openai-provider.js';
@@ -880,7 +909,7 @@
                     import('../js/advanced/spectral-analyzer.js'),
                     import('../js/advanced/edge-analyzer.js'),
                     import('../js/advanced/vertex-analyzer.js?v=2'),
-                    import('../js/advanced/shadow-detector.js'),
+                    import('../js/shadow/detection/shadow-detector.js'),  // Updated path - Dec 2025
                     import('../js/advanced/ai-edge-interpreter.js'),
                 ]);
 

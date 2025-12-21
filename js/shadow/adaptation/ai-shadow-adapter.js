@@ -1,7 +1,7 @@
 /**
- * ========================================
+ * ═══════════════════════════════════════════════════════════════════════════
  * AI SHADOW ADAPTER - AI-Powered Shadow Generation
- * ========================================
+ * ═══════════════════════════════════════════════════════════════════════════
  *
  * Extends ShadowAdapter with AI capabilities to generate:
  * - Unique shadow patterns based on custom face configurations
@@ -11,11 +11,11 @@
  * Falls back to template-based detection when AI is unavailable.
  *
  * @module AIShadowAdapter
- * @version Sprint 5 - Shadow Remediation Enhancement
+ * @version Enhanced - December 2025 Modularization
  *
- * ========================================
+ * ═══════════════════════════════════════════════════════════════════════════
  * NOTES FOR FUTURE CLAUDE
- * ========================================
+ * ═══════════════════════════════════════════════════════════════════════════
  *
  * 1. TWO MODES OF OPERATION:
  *    A) AI Mode: Uses Gemini/OpenAI to generate contextual shadows
@@ -28,76 +28,116 @@
  *       - Uses fallbackDetection() method
  *       - Generates shadows from spectral/contradiction patterns
  *
- * 2. PHI-DERIVED THRESHOLDS:
- *    All thresholds are mathematically derived from the Golden Ratio:
- *    - HIGH_THRESHOLD = 0.764 = PSI_3 = 1 - φ³ (Mastery level)
- *    - LOW_THRESHOLD = 0.236 = PHI_3 = φ³ (Shadows emerging)
- *    - PHI_INV = 0.618 = φ^-1 (Primary balance point)
- *    Source: js/constants/phi-harmonics.js
+ * ────────────────────────────────────────────────────────────────────────────
+ * 2. PHI-DERIVED THRESHOLDS (from shadow-harmonics.js)
+ * ────────────────────────────────────────────────────────────────────────────
  *
- * 3. CACHE STRATEGY:
+ *    All thresholds are mathematically derived from the Golden Ratio:
+ *
+ *    HIGH_THRESHOLD = 0.764 = PSI_3 = 1 - φ⁻³  (Mastery level)
+ *    LOW_THRESHOLD  = 0.236 = PHI_3 = φ⁻³     (Shadows emerging)
+ *    PHI_INV        = 0.618 = φ⁻¹             (Primary balance point)
+ *
+ *    Primary source: js/shadow/constants/shadow-harmonics.js
+ *    Root source: js/constants/phi-harmonics.js
+ *
+ * ────────────────────────────────────────────────────────────────────────────
+ * 3. CACHE STRATEGY
+ * ────────────────────────────────────────────────────────────────────────────
+ *
  *    - 5-minute TTL for AI responses (configurable via cacheTimeout)
  *    - Cache key based on face IDs + organization context hash
  *    - Prevents redundant API calls on repeated requests
  *
- * 4. DEMO MODE (Agent Council - December 2024):
+ * ────────────────────────────────────────────────────────────────────────────
+ * 4. DEMO MODE (Agent Council - December 2024)
+ * ────────────────────────────────────────────────────────────────────────────
+ *
  *    Enable via: localStorage.setItem('quannexDemoMode', 'true')
  *    Behavior:
  *    - Bypasses AI entirely, returns DEMO_SHADOW_CACHE
  *    - Essential for thesis defense reliability
  *    - Pre-generated insights avoid API latency/failures
  *
- * 5. SHADOW NORMALIZATION:
+ * ────────────────────────────────────────────────────────────────────────────
+ * 5. SHADOW NORMALIZATION
+ * ────────────────────────────────────────────────────────────────────────────
+ *
  *    AI responses are normalized via _normalizeShadow():
  *    - Ensures consistent field names (suppressed, integrated, prescription)
  *    - Generates unique IDs if not provided
  *    - Maps severity to valid values (critical/high/moderate/low)
  *
- * 6. PROMPT ENGINEERING:
+ * ────────────────────────────────────────────────────────────────────────────
+ * 6. PROMPT ENGINEERING
+ * ────────────────────────────────────────────────────────────────────────────
+ *
  *    _buildShadowDiscoveryPrompt() crafts a structured prompt:
  *    - Organization context (type, stage, story)
  *    - All 12 faces with current health percentages
  *    - Instructions for shadow analysis format
  *    - Request for exactly 3-5 unique shadow patterns
  *
- * 7. ERROR HANDLING:
+ * ────────────────────────────────────────────────────────────────────────────
+ * 7. NAVIGATION MAP
+ * ────────────────────────────────────────────────────────────────────────────
+ *
+ *    This module connects to:
+ *
+ *    IMPORTS FROM:
+ *    ├─ js/ai/core/mapping-context.js → Face names, breath axes
+ *    └─ js/shadow/constants/shadow-harmonics.js → Thresholds (via window)
+ *
+ *    USED BY:
+ *    ├─ js/shadow/ui/shadow-panel.js → AI enhance button
+ *    └─ js/dodec/dodec-shadow-overlay.js → AI shadow source
+ *
+ *    PROVIDERS:
+ *    ├─ js/ai/providers/gemini-provider.js
+ *    └─ js/ai/providers/openai-provider.js
+ *
+ * ────────────────────────────────────────────────────────────────────────────
+ * 8. ERROR HANDLING
+ * ────────────────────────────────────────────────────────────────────────────
+ *
  *    All AI calls wrapped in try/catch with fallback:
  *    - Console logs errors for debugging
  *    - Falls back to template detection
  *    - Never throws to calling code
  *
- * USED BY:
- * - shadow-panel.js (via window.AIShadowAdapter)
- * - dodec-shadow-overlay.js (AI enhancement button)
- *
- * ========================================
+ * ═══════════════════════════════════════════════════════════════════════════
  */
 
-import { MappingContext } from '../core/mapping-context.js';
+import { MappingContext } from '../../ai/core/mapping-context.js';
 
-// ========================================
-// PHI CONSTANTS - Single Source Reference
-// ========================================
-// Primary source: js/constants/phi-harmonics.js
-const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+// ═══════════════════════════════════════════════════════════════════════════
+// PHI CONSTANTS - From Shadow Harmonics (Single Source of Truth)
+// ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * PHI-derived constants for shadow detection thresholds
+ * Import thresholds from ShadowHarmonics, falling back to PhiHarmonics, then inline
  *
- * Using PHI powers for mathematically coherent thresholds:
- * - PHI_INV (φ^-1 ≈ 0.618): Golden ratio inverse - primary balance point
- * - HIGH_THRESHOLD (Ψ³ ≈ 0.764): Mastery level - high shadow integration
- * - LOW_THRESHOLD (φ^-3 ≈ 0.236): Minimal threshold - shadows emerging
+ * Priority:
+ * 1. window.ShadowHarmonics.SHADOW_THRESHOLDS (preferred)
+ * 2. window.PhiHarmonics (fallback)
+ * 3. Inline constants (last resort)
  */
-const PHI_INV = _PH.PHI_1 || 0.618033988749895;           // φ^-1 ≈ 0.618
-const HIGH_THRESHOLD = _PH.PSI_3 || 0.763932022500210;    // Ψ³ ≈ 0.764 (was 0.7)
-const LOW_THRESHOLD = _PH.PHI_3 || 0.2360679774997896;    // φ^-3 ≈ 0.236 (was 0.3)
+const _SH = (typeof window !== 'undefined' && window.ShadowHarmonics) || {};
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
 
-// ========================================
+// PHI-derived constants for shadow detection thresholds
+const PHI_INV = _PH.PHI_1 || 0.618033988749895;           // φ⁻¹ ≈ 0.618
+const HIGH_THRESHOLD = _SH.SHADOW_THRESHOLDS?.HIGH || _PH.PSI_3 || 0.763932022500210;    // Ψ³ ≈ 0.764
+const LOW_THRESHOLD = _SH.SHADOW_THRESHOLDS?.LOW || _PH.PHI_3 || 0.2360679774997896;     // φ⁻³ ≈ 0.236
+
+// ═══════════════════════════════════════════════════════════════════════════
 // DEMO MODE CACHE - Pre-generated Insights
-// ========================================
-// Per Agent Council (December 2024): For thesis demo reliability
-// These cached shadows bypass AI calls during demo presentations
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Per Agent Council (December 2024): For thesis demo reliability
+ * These cached shadows bypass AI calls during demo presentations
+ */
 const DEMO_SHADOW_CACHE = [
     {
         id: 'demo_shadow_1',
@@ -127,6 +167,10 @@ const DEMO_SHADOW_CACHE = [
         prescription: 'Define "good enough" criteria upfront; celebrate quality wins equally with speed.'
     }
 ];
+
+// ═══════════════════════════════════════════════════════════════════════════
+// AI SHADOW ADAPTER CLASS
+// ═══════════════════════════════════════════════════════════════════════════
 
 /**
  * AIShadowAdapter - AI-Powered Shadow Pattern Discovery
@@ -158,9 +202,9 @@ class AIShadowAdapter {
         return this;
     }
 
-    // ========================================
+    // ════════════════════════════════════════════════════════════════════════
     // AI SHADOW DISCOVERY
-    // ========================================
+    // ════════════════════════════════════════════════════════════════════════
 
     /**
      * Generate unique shadow patterns using AI analysis
@@ -319,13 +363,17 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
         };
     }
 
-    // ========================================
+    // ════════════════════════════════════════════════════════════════════════
     // FALLBACK DETECTION (Template-Based)
-    // ========================================
+    // ════════════════════════════════════════════════════════════════════════
 
     /**
      * Fallback to template-based shadow detection when AI is unavailable
-     * Uses energy thresholds to detect the 6 archetypal patterns
+     * Uses PHI-derived energy thresholds to detect the 6 archetypal patterns
+     *
+     * Thresholds from shadow-harmonics.js:
+     * - HIGH_THRESHOLD = PSI_3 (0.764) - Mastery level
+     * - LOW_THRESHOLD = PHI_3 (0.236) - Shadows emerging
      *
      * @param {Array} faces - Array of face objects
      * @returns {Array} Detected shadow patterns
@@ -433,9 +481,9 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
         return patterns;
     }
 
-    // ========================================
+    // ════════════════════════════════════════════════════════════════════════
     // SHADOW ENRICHMENT
-    // ========================================
+    // ════════════════════════════════════════════════════════════════════════
 
     /**
      * Enrich existing shadow with AI-generated narrative
@@ -517,9 +565,9 @@ OUTPUT FORMAT (JSON only):
         }
     }
 
-    // ========================================
+    // ════════════════════════════════════════════════════════════════════════
     // CACHING
-    // ========================================
+    // ════════════════════════════════════════════════════════════════════════
 
     /**
      * Generate cache key from faces and context
@@ -564,7 +612,10 @@ OUTPUT FORMAT (JSON only):
     }
 }
 
-// Export for ES6 modules
+// ═══════════════════════════════════════════════════════════════════════════
+// EXPORTS
+// ═══════════════════════════════════════════════════════════════════════════
+
 export { AIShadowAdapter };
 
 // Also expose globally for non-module usage

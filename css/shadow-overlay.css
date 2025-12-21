@@ -654,6 +654,7 @@
 
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
+
     .shadow-overlay,
     .shadow-overlay-container,
     .shadow-card__details,
@@ -933,4 +934,161 @@
 .shadow-overlay-empty .ai-enhance-btn {
     padding: 12px 24px;
     font-size: 14px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SPRINT 6: SHADOW SOURCE TOGGLE
+   Allows switching between template and AI-generated shadows
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* Source toggle container - sits in header flex row */
+.shadow-source-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    margin-right: 16px;
+}
+
+/* Custom styled dropdown */
+.shadow-source-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(138, 43, 226, 0.2);
+    border: 1px solid rgba(138, 43, 226, 0.4);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 8px 32px 8px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    min-width: 140px;
+}
+
+.shadow-source-select:hover {
+    background-color: rgba(138, 43, 226, 0.3);
+    border-color: rgba(138, 43, 226, 0.6);
+}
+
+.shadow-source-select:focus {
+    outline: none;
+    border-color: rgba(138, 43, 226, 0.8);
+    box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2);
+}
+
+.shadow-source-select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.shadow-source-select option {
+    background: #1a1a2e;
+    color: white;
+    padding: 8px;
+}
+
+/* Count badge next to dropdown */
+.shadow-source-count {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SPRINT 6: PERSISTENT AI CONTROLS BAR
+   Always-visible AI generation button between header and content
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.shadow-ai-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.15), rgba(75, 0, 130, 0.15));
+    border-bottom: 1px solid rgba(138, 43, 226, 0.2);
+}
+
+/* Prominent AI generate button */
+.shadow-ai-generate-btn {
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.6), rgba(75, 0, 130, 0.6));
+    border: 1px solid rgba(138, 43, 226, 0.5);
+    border-radius: 8px;
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.shadow-ai-generate-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.8), rgba(75, 0, 130, 0.8));
+    border-color: rgba(138, 43, 226, 0.8);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+}
+
+.shadow-ai-generate-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.shadow-ai-generate-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Status indicator */
+.ai-status {
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.ai-status-info {
+    color: rgba(100, 149, 237, 0.9);
+}
+
+.ai-status-success {
+    color: rgba(102, 255, 153, 0.9);
+}
+
+.ai-status-error {
+    color: rgba(255, 100, 100, 0.9);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SPRINT 6: SOURCE BADGE ON SHADOW CARDS
+   Visual indicator of which source the shadow came from
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.shadow-source-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.shadow-source-badge.template {
+    background: rgba(100, 149, 237, 0.3);
+    color: rgba(100, 149, 237, 1);
+    border: 1px solid rgba(100, 149, 237, 0.5);
+}
+
+.shadow-source-badge.ai {
+    background: rgba(138, 43, 226, 0.3);
+    color: rgba(200, 150, 255, 1);
+    border: 1px solid rgba(138, 43, 226, 0.5);
 }
