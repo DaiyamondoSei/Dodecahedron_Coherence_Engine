@@ -10,6 +10,7 @@
  * @author Deimantas & Claude (Co-created with consciousness and love)
  * @version 1.0.0 - Initial extraction from dodecahedron-3d.html
  * @version 1.1.0 - Sprint 6: Shadow Source Toggle (December 2025)
+ * @version 1.2.0 - Sprint 7: UX Redesign - Elegant Toggle Switch (December 2025)
  *
  * PURPOSE:
  * Shadow Overlay Controller - Progressive Disclosure System for organizational
@@ -276,57 +277,34 @@
         if (!shadowOverlayContent) return;
 
         // Empty state - with AI enhance option for ALL paths
-        // Per Agent Council (December 2024): AI should be available regardless of setup mode
+        // ════════════════════════════════════════════════════════════════════════
+        // EMPTY STATE HANDLING
+        // ════════════════════════════════════════════════════════════════════════
+        //
+        // Sprint 7 (December 2025): Simplified empty state UI.
+        // AI generation is now handled by the toggle above - no inline buttons.
+        // Users see a clean message directing them to use the toggle for AI.
+        //
+        // ════════════════════════════════════════════════════════════════════════
         if (currentShadows.length === 0) {
-            const geminiKey = localStorage.getItem('quannex_gemini_api_key');
-            const openaiKey = localStorage.getItem('quannex_openai_api_key');
-            const hasApiKey = !!geminiKey || !!openaiKey;
-            const preferredProvider = localStorage.getItem('quannex_preferred_provider') || 'gemini';
-            const activeProvider = geminiKey ? 'Gemini' : (openaiKey ? 'OpenAI' : null);
+            const hasAIGenerated = shadowState.aiShadows.length > 0;
 
             shadowOverlayContent.innerHTML = `
                 <div class="shadow-overlay-empty">
                     <div class="shadow-overlay-empty-icon">✨</div>
                     <h3>No Shadow Patterns Detected</h3>
                     <p>The organization shows strong coherence with no hidden tensions.</p>
-
-                    <div class="shadow-ai-enhance-overlay">
-                            <div class="ai-enhance-divider"></div>
-                            <p class="ai-enhance-prompt">
-                                ${hasApiKey
-                                    ? '✨ AI analysis available (' + activeProvider + ')'
-                                    : 'Add AI to discover hidden patterns'}
-                            </p>
-
-                            ${!hasApiKey ? `
-                                <div class="ai-key-input-section">
-                                    <select id="overlay-ai-provider-select" class="ai-provider-select">
-                                        <option value="gemini">Gemini</option>
-                                        <option value="openai">OpenAI</option>
-                                    </select>
-                                    <input type="password"
-                                           id="overlay-ai-api-key-input"
-                                           placeholder="Enter API key..."
-                                           class="ai-key-input"
-                                    />
-                                    <button class="ai-save-key-btn" id="overlaySaveApiKey">Save</button>
-                                </div>
-                                <p class="ai-key-hint">Key stored locally only</p>
-                            ` : ''}
-
-                            <button class="ai-enhance-btn" id="overlayGenerateAIShadows" ${!hasApiKey ? 'disabled' : ''}>
-                                ✨ Generate AI Shadow Analysis
-                            </button>
-
-                            ${hasApiKey ? `
-                                <button class="ai-clear-key-btn" id="overlayClearApiKey">Clear API Key</button>
-                            ` : ''}
-                        </div>
+                    ${!hasAIGenerated ? `
+                        <p class="empty-state-hint">
+                            💡 Try switching to <strong>AI</strong> mode above for deeper pattern discovery
+                        </p>
+                    ` : `
+                        <p class="empty-state-hint">
+                            ✅ AI analysis complete - no additional patterns found
+                        </p>
+                    `}
                 </div>
             `;
-
-            // Setup AI handlers for empty state
-            setupOverlayAIHandlers();
             return;
         }
 
@@ -374,272 +352,42 @@
     // AI SHADOW ANALYSIS HANDLERS
     // ════════════════════════════════════════════════════════════════════════
 
+    // ════════════════════════════════════════════════════════════════════════
+    // DEPRECATED: OLD OVERLAY AI HANDLERS (Sprint 5/6)
+    // ════════════════════════════════════════════════════════════════════════
+    //
+    // Sprint 7 (December 2025): These handlers were for the old inline
+    // AI enhancement buttons in the empty state. Now deprecated.
+    // AI generation is handled by ShadowSourceToggle.generateAIShadows().
+    //
+    // ════════════════════════════════════════════════════════════════════════
+
     /**
-     * Setup API key and generate handlers for the overlay
+     * @deprecated Sprint 7: Old AI handlers replaced by ShadowSourceToggle
+     * This was for the inline API key input and generate button.
+     * Now a no-op - kept for backward compatibility.
      */
     function setupOverlayAIHandlers() {
-        // Save API key button
-        const saveBtn = document.getElementById('overlaySaveApiKey');
-        if (saveBtn) {
-            saveBtn.addEventListener('click', () => {
-                const providerSelect = document.getElementById('overlay-ai-provider-select');
-                const input = document.getElementById('overlay-ai-api-key-input');
-                const provider = providerSelect?.value || 'gemini';
-                const key = input?.value?.trim();
-
-                if (!key || key.length < 20) {
-                    alert('Please enter a valid API key (minimum 20 characters)');
-                    return;
-                }
-
-                // Store key using existing quannex_ namespace convention
-                if (provider === 'gemini') {
-                    localStorage.setItem('quannex_gemini_api_key', key);
-                } else {
-                    localStorage.setItem('quannex_openai_api_key', key);
-                }
-                localStorage.setItem('quannex_preferred_provider', provider);
-
-                console.log('[ShadowOverlay] ✅ API key saved');
-
-                // Refresh the overlay
-                renderShadowCards();
-            });
-        }
-
-        // Clear API key button
-        const clearBtn = document.getElementById('overlayClearApiKey');
-        if (clearBtn) {
-            clearBtn.addEventListener('click', () => {
-                localStorage.removeItem('quannex_gemini_api_key');
-                localStorage.removeItem('quannex_openai_api_key');
-                console.log('[ShadowOverlay] API keys cleared');
-                renderShadowCards();
-            });
-        }
-
-        // Generate AI shadows button
-        const generateBtn = document.getElementById('overlayGenerateAIShadows');
-        if (generateBtn) {
-            generateBtn.addEventListener('click', async () => {
-                await generateAIShadows(generateBtn);
-            });
-        }
+        // No-op: Sprint 7 removed inline AI enhancement UI
+        console.log('[ShadowOverlay] setupOverlayAIHandlers deprecated - use toggle');
     }
 
     /**
-     * Generate AI shadow patterns using AIShadowAdapter
-     * Sprint 6: Updated to use shadowState system
-     *
-     * @param {HTMLButtonElement} btn - The generate button element
+     * @deprecated Sprint 7: Replaced by ShadowSourceToggle.generateAIShadows()
+     * Old function for inline button AI generation. Now a no-op.
+     * @param {HTMLButtonElement} btn - Unused
      */
     async function generateAIShadows(btn) {
-        const geminiKey = localStorage.getItem('quannex_gemini_api_key');
-        const openaiKey = localStorage.getItem('quannex_openai_api_key');
-        const preferredProvider = localStorage.getItem('quannex_preferred_provider') || 'gemini';
-
-        if (!geminiKey && !openaiKey) {
-            alert('Please enter an API key first');
-            return;
-        }
-
-        // Update generation status
-        shadowState.aiGenerationStatus = 'generating';
-        updateSourceDropdown(); // Disable dropdown during generation
-
-        btn.disabled = true;
-        btn.textContent = '🔄 Analyzing...';
-
-        try {
-            // Get current state
-            const state = global.Quannex?.getState?.();
-            if (!state || !state.faces) {
-                throw new Error('No face data available');
-            }
-
-            // Create provider using factory methods
-            let provider = null;
-
-            if (preferredProvider === 'gemini' && geminiKey && global.getGeminiProvider) {
-                provider = await global.getGeminiProvider(geminiKey);
-            } else if (preferredProvider === 'openai' && openaiKey && global.getOpenAIProvider) {
-                provider = await global.getOpenAIProvider(openaiKey);
-            } else if (geminiKey && global.getGeminiProvider) {
-                provider = await global.getGeminiProvider(geminiKey);
-            } else if (openaiKey && global.getOpenAIProvider) {
-                provider = await global.getOpenAIProvider(openaiKey);
-            }
-
-            if (!provider || provider.name === 'OfflineProvider') {
-                throw new Error('AI provider unavailable');
-            }
-
-            // Create adapter with provider
-            const aiAdapter = new global.AIShadowAdapter({ provider });
-
-            // Generate shadows with semantic understanding of face relationships
-            const aiShadows = await aiAdapter.generateAIShadowPatterns(
-                state.faces,
-                {
-                    companyName: state.companyName || 'Organization',
-                    context: state
-                }
-            );
-
-            if (aiShadows && aiShadows.length > 0) {
-                // Mark as AI-generated
-                aiShadows.forEach(s => s.source = 'ai');
-
-                // Sprint 6: Store in aiShadows bucket (don't overwrite template!)
-                shadowState.aiShadows = aiShadows;
-                shadowState.activeSource = 'ai';
-                shadowState.aiGenerationStatus = 'success';
-
-                // Update currentShadows to point to AI results
-                currentShadows = aiShadows;
-
-                // Update UI
-                updateSourceDropdown();
-                updateSourceDropdownCount();
-                renderShadowCards();
-                saveToSessionStorage();
-
-                // Dispatch event for other listeners
-                global.dispatchEvent(new CustomEvent('shadows-updated', {
-                    detail: { shadows: aiShadows }
-                }));
-
-                console.log(`[ShadowOverlay] ✨ Generated ${aiShadows.length} AI shadows`);
-            } else {
-                shadowState.aiGenerationStatus = 'success';
-                btn.textContent = '✅ No hidden patterns found';
-                updateSourceDropdown();
-            }
-        } catch (e) {
-            console.error('[ShadowOverlay] AI generation failed:', e);
-            shadowState.aiGenerationStatus = 'error';
-
-            // CRITICAL: Never lose template shadows - graceful fallback
-            if (shadowState.templateShadows.length > 0) {
-                shadowState.activeSource = 'template';
-                currentShadows = shadowState.templateShadows;
-                showTemporaryStatus('AI unavailable - showing template shadows', 'error');
-                renderShadowCards();
-            }
-
-            updateSourceDropdown();
-            btn.textContent = '❌ ' + (e.message || 'AI error');
-            btn.disabled = false;
-        }
+        console.log('[ShadowOverlay] generateAIShadows deprecated - use ShadowSourceToggle');
     }
 
     /**
-     * Generate AI shadows from the persistent button in the AI controls bar
-     * Sprint 6: Separate handler for the always-visible AI button
-     *
-     * @param {HTMLButtonElement} btn - The persistent generate button
+     * @deprecated Sprint 7: Replaced by ShadowSourceToggle.generateAIShadows()
+     * Old function for persistent bar button. Now a no-op.
+     * @param {HTMLButtonElement} btn - Unused
      */
     async function generateAIShadowsFromPersistentButton(btn) {
-        const geminiKey = localStorage.getItem('quannex_gemini_api_key');
-        const openaiKey = localStorage.getItem('quannex_openai_api_key');
-        const preferredProvider = localStorage.getItem('quannex_preferred_provider') || 'gemini';
-
-        if (!geminiKey && !openaiKey) {
-            showTemporaryStatus('Please configure an API key first', 'error');
-            return;
-        }
-
-        // Update generation status
-        shadowState.aiGenerationStatus = 'generating';
-        updateSourceDropdown(); // Disable dropdown
-        showTemporaryStatus('Analyzing organizational patterns...', 'info');
-
-        btn.disabled = true;
-        const originalText = btn.textContent;
-        btn.textContent = '🔄 Analyzing...';
-
-        try {
-            // Get current state
-            const state = global.Quannex?.getState?.();
-            if (!state || !state.faces) {
-                throw new Error('No face data available');
-            }
-
-            // Create provider
-            let provider = null;
-
-            if (preferredProvider === 'gemini' && geminiKey && global.getGeminiProvider) {
-                provider = await global.getGeminiProvider(geminiKey);
-            } else if (preferredProvider === 'openai' && openaiKey && global.getOpenAIProvider) {
-                provider = await global.getOpenAIProvider(openaiKey);
-            } else if (geminiKey && global.getGeminiProvider) {
-                provider = await global.getGeminiProvider(geminiKey);
-            } else if (openaiKey && global.getOpenAIProvider) {
-                provider = await global.getOpenAIProvider(openaiKey);
-            }
-
-            if (!provider || provider.name === 'OfflineProvider') {
-                throw new Error('AI provider unavailable');
-            }
-
-            // Create adapter and generate
-            const aiAdapter = new global.AIShadowAdapter({ provider });
-            const aiShadows = await aiAdapter.generateAIShadowPatterns(
-                state.faces,
-                {
-                    companyName: state.companyName || 'Organization',
-                    context: state
-                }
-            );
-
-            if (aiShadows && aiShadows.length > 0) {
-                // Mark as AI-generated
-                aiShadows.forEach(s => s.source = 'ai');
-
-                // Store in AI bucket and switch source
-                shadowState.aiShadows = aiShadows;
-                shadowState.activeSource = 'ai';
-                shadowState.aiGenerationStatus = 'success';
-                currentShadows = aiShadows;
-
-                // Update UI
-                updateSourceDropdown();
-                updateSourceDropdownCount();
-                renderShadowCards();
-                saveToSessionStorage();
-
-                showTemporaryStatus(`✨ Generated ${aiShadows.length} AI shadows`, 'success');
-
-                // Dispatch event
-                global.dispatchEvent(new CustomEvent('shadows-updated', {
-                    detail: { shadows: aiShadows }
-                }));
-
-                console.log(`[ShadowOverlay] ✨ Generated ${aiShadows.length} AI shadows from persistent button`);
-            } else {
-                shadowState.aiGenerationStatus = 'success';
-                showTemporaryStatus('✅ No hidden patterns found', 'success');
-            }
-
-            btn.textContent = originalText;
-            btn.disabled = false;
-
-        } catch (e) {
-            console.error('[ShadowOverlay] AI generation failed:', e);
-            shadowState.aiGenerationStatus = 'error';
-
-            // Graceful fallback to template
-            if (shadowState.templateShadows.length > 0) {
-                shadowState.activeSource = 'template';
-                currentShadows = shadowState.templateShadows;
-                renderShadowCards();
-            }
-
-            updateSourceDropdown();
-            showTemporaryStatus('❌ ' + (e.message || 'AI generation failed'), 'error');
-            btn.textContent = originalText;
-            btn.disabled = false;
-        }
+        console.log('[ShadowOverlay] generateAIShadowsFromPersistentButton deprecated');
     }
 
     /**
@@ -709,28 +457,887 @@
     }
 
     // ════════════════════════════════════════════════════════════════════════
-    // SOURCE SWITCHING (Sprint 6 - Shadow System Enhancement)
+    // SHADOW SOURCE TOGGLE (Sprint 7 - UX Redesign)
     // ════════════════════════════════════════════════════════════════════════
     //
-    // These functions handle switching between template and AI shadow sources.
-    // The key principle: switching is just a reference change, never data loss.
+    // ╔════════════════════════════════════════════════════════════════════════════╗
+    // ║                                                                            ║
+    // ║   SHADOW SOURCE TOGGLE - The Day/Night Switch Component                   ║
+    // ║   "One toggle to rule them all, one toggle to find them"                  ║
+    // ║                                                                            ║
+    // ║   Location: js/dodec/dodec-shadow-overlay.js                              ║
+    // ║   Created: December 2025                                                   ║
+    // ║                                                                            ║
+    // ╚════════════════════════════════════════════════════════════════════════════╝
     //
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // NOTES FOR FUTURE CLAUDE
+    // ═══════════════════════════════════════════════════════════════════════════════
+    //
+    // Welcome, future me. This class handles the elegant toggle between shadow sources.
+    //
+    // ─────────────────────────────────────────────────────────────────────────────
+    // WHAT THIS DOES
+    // ─────────────────────────────────────────────────────────────────────────────
+    //
+    // The ShadowSourceToggle is a stateful UI component that:
+    // 1. Detects what kind of data the user entered (template company vs custom)
+    // 2. Adapts its appearance based on that context
+    // 3. Manages transitions between Template/Universal shadows and AI shadows
+    // 4. Caches AI results to prevent redundant API calls
+    //
+    // ─────────────────────────────────────────────────────────────────────────────
+    // THE THREE MODES
+    // ─────────────────────────────────────────────────────────────────────────────
+    //
+    // | Mode              | When                        | Toggle Shows          |
+    // |-------------------|-----------------------------|-----------------------|
+    // | template-company  | User selected a template    | Template ⟷ AI        |
+    // | custom-data       | Manual or AI-generated data | Universal ⟷ AI       |
+    // | no-data           | No faces data available     | Graceful message      |
+    //
+    // ─────────────────────────────────────────────────────────────────────────────
+    // DATA INTEGRITY INVARIANTS
+    // ─────────────────────────────────────────────────────────────────────────────
+    //
+    // INVARIANT 1: activeSource is NEVER undefined
+    //   - Always one of: 'template' | 'ai' | 'universal'
+    //   - Validated in switchSource() before any state change
+    //
+    // INVARIANT 2: AI shadows are cached, never re-fetched
+    //   - Once aiGenerationStatus = 'success', we use cached aiShadows
+    //   - Prevents redundant Gemini API calls
+    //
+    // INVARIANT 3: Mode determination is pure
+    //   - determineMode() returns same output for same Quannex state
+    //   - No side effects, no external dependencies beyond window.Quannex
+    //
+    // ─────────────────────────────────────────────────────────────────────────────
+    // CONNECTING FILES
+    // ─────────────────────────────────────────────────────────────────────────────
+    //
+    // UPSTREAM (feeds data to us):
+    // ├── js/shadow/detection/shadow-detector.js → Provides template shadows
+    // ├── js/shadow/adaptation/ai-shadow-adapter.js → Generates AI shadows
+    // └── window.Quannex.getState() → Provides face data and company context
+    //
+    // DOWNSTREAM (we feed data to):
+    // └── renderShadowCards() → Displays the shadow cards in overlay
+    //
+    // ═══════════════════════════════════════════════════════════════════════════════
+    //
+    // UNIVERSAL BASELINE SHADOWS (for custom data mode)
+    // ─────────────────────────────────────────────────────────────────────────────
+    // When users enter custom data (not template), these universal patterns
+    // provide baseline shadow analysis that applies to ANY organization.
+    //
+    const UNIVERSAL_SHADOWS = [
+        {
+            id: 'dataCompleteness',
+            name: 'Data Completeness',
+            description: 'Evaluates whether all organizational faces have sufficient data',
+            suppressed: 'Some organizational domains have sparse or missing data, creating blind spots in coherence analysis.',
+            integrated: 'Acknowledging data gaps is the first step toward comprehensive organizational awareness.',
+            prescription: 'Review faces with low values and consider what information might be missing.',
+            severity: 'info',
+            penalty: 0.1,  // Minimal penalty - informational
+            source: 'universal',
+            universalCheck: (faces) => {
+                const emptyFaces = faces.filter(f => !f.value || f.value < 10).length;
+                return emptyFaces > 3;  // Triggers if more than 3 faces are sparse
+            }
+        },
+        {
+            id: 'balanceDistribution',
+            name: 'Balance Distribution',
+            description: 'Checks if coherence is heavily skewed toward certain domains',
+            suppressed: 'Organizational energy may be concentrated in specific areas while others are neglected.',
+            integrated: 'Intentional focus is healthy; unconscious neglect creates fragility.',
+            prescription: 'Examine faces with extreme high or low values and assess if the distribution is intentional.',
+            severity: 'warning',
+            penalty: 0.146,  // PHI-4 tier (φ⁻⁴)
+            source: 'universal',
+            universalCheck: (faces) => {
+                const values = faces.map(f => f.value || 0);
+                const max = Math.max(...values);
+                const min = Math.min(...values);
+                return (max - min) > 60;  // More than 60% spread
+            }
+        }
+    ];
+
+    /**
+     * Toggle component reference (singleton pattern)
+     * @type {ShadowSourceToggle|null}
+     */
+    let shadowSourceToggle = null;
+
+    /**
+     * ═══════════════════════════════════════════════════════════════════════════
+     * SHADOW SOURCE TOGGLE CLASS
+     * ═══════════════════════════════════════════════════════════════════════════
+     *
+     * @class ShadowSourceToggle
+     * @description Elegant toggle switch for shadow source selection with adaptive UI
+     */
+    /**
+     * Sprint 8: Tooltip content for smart guidance
+     * Phi-timed delay: φ² × 1000 ≈ 382ms
+     */
+    const TOGGLE_TOOLTIPS = {
+        template: {
+            title: '📋 Template Analysis',
+            description: 'Pre-computed shadow patterns based on your KPI data',
+            hint: 'Fast • Consistent • Universal patterns'
+        },
+        ai: {
+            title: '✨ AI Analysis',
+            description: 'Fresh insights generated by AI based on your specific company data',
+            hint: 'Dynamic • Contextual • Unique to your situation'
+        }
+    };
+    const PHI_SQUARED_MS = 382; // φ² × 1000 for tooltip delay
+
+    class ShadowSourceToggle {
+        /**
+         * Initialize the toggle component with DOM references and default state.
+         *
+         * @param {HTMLElement} container - The .shadow-toggle-wrapper element (Sprint 8)
+         */
+        constructor(container) {
+            // ═══════════════════════════════════════════════════════════════════
+            // DOM REFERENCES - Cached for performance
+            // ═══════════════════════════════════════════════════════════════════
+
+            this.container = container;
+            this.toggle = container?.querySelector('.shadow-source-toggle');
+            this.tooltip = container?.querySelector('.shadow-toggle-tooltip');
+            this.tooltipTitle = container?.querySelector('.tooltip-title');
+            this.tooltipDescription = container?.querySelector('.tooltip-description');
+            this.tooltipHint = container?.querySelector('.tooltip-hint');
+            this.loadingText = container?.querySelector('.shadow-toggle-loading-text');
+            this.cardsContainer = document.querySelector('.shadow-overlay-content');
+
+            // Tooltip timing state
+            this.tooltipShowTimeout = null;
+            this.tooltipHideTimeout = null;
+
+            if (!this.container) {
+                console.warn('[ShadowSourceToggle] Container not found - toggle disabled');
+                return;
+            }
+
+            // ═══════════════════════════════════════════════════════════════════
+            // DETERMINE MODE AND RENDER
+            // ═══════════════════════════════════════════════════════════════════
+
+            this.mode = this.determineMode();
+            this.renderForMode();
+            this.bindEvents();
+            this.bindTooltipEvents();
+            this.showFirstUseHint();
+
+            console.log(`[ShadowSourceToggle] 🔄 Initialized in ${this.mode} mode`);
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // MODE DETECTION - Determines UI adaptation
+        // ═══════════════════════════════════════════════════════════════════════
+
+        /**
+         * Detect the data source context to determine toggle mode.
+         *
+         * @returns {Object} Data source information
+         */
+        detectDataSource() {
+            const state = global.Quannex?.getState?.();
+            const stored = sessionStorage.getItem('customCompanyData');
+            let storedData = null;
+
+            try {
+                storedData = stored ? JSON.parse(stored) : null;
+            } catch (e) {
+                // Ignore parse errors
+            }
+
+            return {
+                hasTemplateCompany: !!(storedData?.companyName && storedData?.isTemplate),
+                hasCustomData: !!(state?.faces?.length > 0) && !(storedData?.isTemplate),
+                faceCount: state?.faces?.length || 0,
+                dataSource: storedData?.dataSource || 'unknown'
+            };
+        }
+
+        /**
+         * Determine which UI mode to use based on data context.
+         *
+         * PURE FUNCTION: Same input → same output.
+         *
+         * @returns {('template-company'|'custom-data'|'no-data')} The detected mode
+         */
+        determineMode() {
+            const source = this.detectDataSource();
+
+            if (source.faceCount === 0) {
+                return 'no-data';
+            }
+            if (source.hasTemplateCompany) {
+                return 'template-company';
+            }
+            if (source.hasCustomData) {
+                return 'custom-data';
+            }
+            return 'template-company';  // Default fallback
+        }
+
+        /**
+         * Render the toggle according to the detected mode.
+         */
+        renderForMode() {
+            switch (this.mode) {
+                case 'no-data':
+                    this.renderNoDataState();
+                    break;
+                case 'custom-data':
+                    this.renderCustomDataMode();
+                    break;
+                case 'template-company':
+                default:
+                    this.renderNormalToggle();
+                    break;
+            }
+        }
+
+        /**
+         * Refresh the toggle by re-evaluating mode.
+         * Called when overlay opens to handle timing issues where toggle
+         * initialized before Quannex engine loaded data.
+         *
+         * TIMING FIX: The toggle may initialize in 'no-data' mode at page load,
+         * but by the time the user opens the overlay, data is available.
+         */
+        refresh() {
+            const newMode = this.determineMode();
+
+            // If mode hasn't changed, just update the status
+            if (newMode === this.mode) {
+                this.updateVisualState();
+                return;
+            }
+
+            console.log(`[ShadowSourceToggle] 🔄 Mode changed: ${this.mode} → ${newMode}`);
+            this.mode = newMode;
+
+            // If transitioning OUT of no-data mode, restore toggle HTML first
+            if (!this.toggle && newMode !== 'no-data') {
+                this.restoreToggleHTML();
+            }
+
+            this.renderForMode();
+
+            // Re-bind events if toggle was restored
+            if (this.toggle) {
+                this.bindEvents();
+            }
+        }
+
+        /**
+         * Restore the toggle HTML structure after it was replaced by no-data state.
+         * Sprint 8: Now uses compact structure with tooltip.
+         */
+        restoreToggleHTML() {
+            this.container.innerHTML = `
+                <span class="shadow-toggle-label">Viewing:</span>
+                <div class="shadow-source-toggle shadow-source-toggle--compact" id="shadowSourceToggle"
+                     role="switch" aria-checked="false" tabindex="0"
+                     aria-label="Switch between template and AI shadow analysis">
+                    <span class="toggle-option toggle-option--template active" data-tooltip="template">
+                        <span class="toggle-icon">📋</span>
+                    </span>
+                    <div class="toggle-track">
+                        <div class="toggle-thumb">
+                            <div class="toggle-thumb-glow"></div>
+                        </div>
+                    </div>
+                    <span class="toggle-option toggle-option--ai" data-tooltip="ai">
+                        <span class="toggle-icon">✨</span>
+                    </span>
+                </div>
+                <div class="shadow-toggle-tooltip" id="shadowToggleTooltip" role="tooltip" aria-hidden="true">
+                    <div class="tooltip-title" id="tooltipTitle">📋 Template Analysis</div>
+                    <div class="tooltip-description" id="tooltipDescription">Pre-computed shadow patterns based on your KPI data</div>
+                    <div class="tooltip-hint" id="tooltipHint">Fast • Consistent • Universal patterns</div>
+                </div>
+                <span class="shadow-toggle-loading-text" id="shadowToggleLoadingText" aria-live="polite"></span>
+            `;
+
+            // Re-cache DOM references
+            this.toggle = this.container.querySelector('.shadow-source-toggle');
+            this.tooltip = this.container.querySelector('.shadow-toggle-tooltip');
+            this.tooltipTitle = this.container.querySelector('.tooltip-title');
+            this.tooltipDescription = this.container.querySelector('.tooltip-description');
+            this.tooltipHint = this.container.querySelector('.tooltip-hint');
+            this.loadingText = this.container.querySelector('.shadow-toggle-loading-text');
+
+            // Re-bind tooltip events
+            this.bindTooltipEvents();
+
+            console.log('[ShadowSourceToggle] Toggle HTML restored (compact with tooltip)');
+        }
+
+        /**
+         * Render normal toggle for template company mode.
+         * Sprint 8: Compact mode - no text labels, tooltip explains.
+         */
+        renderNormalToggle() {
+            // Sprint 8: Text labels hidden in compact mode, tooltip handles explanation
+            // Update tooltip to show template context
+            if (this.tooltipDescription) {
+                this.tooltipDescription.textContent = TOGGLE_TOOLTIPS.template.description;
+            }
+
+            // Set initial toggle position
+            this.updateVisualState();
+
+            console.log(`[ShadowSourceToggle] Template mode: ${shadowState.templateShadows.length} patterns`);
+        }
+
+        /**
+         * Render toggle for custom data mode (manual/AI entry).
+         * Sprint 8: Compact mode with "Universal" context in tooltip.
+         */
+        renderCustomDataMode() {
+            // Sprint 8: Update tooltip for custom data context
+            if (this.tooltipDescription) {
+                this.tooltipDescription.textContent = 'Universal patterns for your custom data';
+            }
+
+            // Add visual indicator
+            this.container.classList.add('custom-data-mode');
+
+            // Load universal baseline shadows
+            const faces = global.Quannex?.getState?.()?.faces || [];
+            const universalShadows = UNIVERSAL_SHADOWS
+                .filter(shadow => shadow.universalCheck(faces))
+                .map(shadow => ({ ...shadow }));
+
+            // If no template shadows exist, use universal
+            if (shadowState.templateShadows.length === 0) {
+                shadowState.templateShadows = universalShadows;
+                currentShadows = universalShadows;
+            }
+
+            // Default to AI for custom data (template patterns don't apply)
+            if (shadowState.aiShadows.length > 0) {
+                shadowState.activeSource = 'ai';
+                currentShadows = shadowState.aiShadows;
+            }
+
+            // Update toggle position
+            this.updateVisualState();
+
+            console.log('[ShadowSourceToggle] Custom data mode: AI analysis recommended');
+        }
+
+        /**
+         * Render graceful no-data state when faces array is empty.
+         * Clears DOM references since innerHTML is replaced.
+         */
+        renderNoDataState() {
+            this.container.innerHTML = `
+                <div class="shadow-no-data">
+                    <span class="no-data-icon">⚠️</span>
+                    <span class="no-data-text">No shadow data available</span>
+                    <span class="no-data-hint">Return to demo to enter company data</span>
+                </div>
+            `;
+
+            // Clear stale DOM references (important for refresh() detection)
+            this.toggle = null;
+            this.statusText = null;
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // EVENT BINDING - Keyboard & Mouse Accessibility
+        // ═══════════════════════════════════════════════════════════════════════
+
+        /**
+         * Bind click and keyboard events for the toggle.
+         * Implements WCAG 2.1 keyboard accessibility requirements.
+         */
+        bindEvents() {
+            if (!this.toggle) return;  // Guard for no-data mode
+            if (this.toggle.dataset.eventsBound) return;  // Prevent double-binding
+
+            // Mouse click
+            this.toggle.addEventListener('click', () => this.handleToggle());
+
+            // Keyboard: Enter and Space activate the toggle (WCAG requirement)
+            this.toggle.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.handleToggle();
+                }
+            });
+
+            // Mark as bound
+            this.toggle.dataset.eventsBound = 'true';
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // TOOLTIP HANDLING - Sprint 8 Smart Guidance
+        // ═══════════════════════════════════════════════════════════════════════
+
+        /**
+         * Bind tooltip show/hide events with phi-timed delay.
+         * Shows contextual help based on which option is being hovered.
+         */
+        bindTooltipEvents() {
+            if (!this.toggle || !this.tooltip) return;
+
+            // Detect which option is being hovered
+            const templateOption = this.toggle.querySelector('.toggle-option--template');
+            const aiOption = this.toggle.querySelector('.toggle-option--ai');
+
+            // Template option hover
+            if (templateOption) {
+                templateOption.addEventListener('mouseenter', () => this.showTooltip('template'));
+                templateOption.addEventListener('mouseleave', () => this.hideTooltip());
+            }
+
+            // AI option hover
+            if (aiOption) {
+                aiOption.addEventListener('mouseenter', () => this.showTooltip('ai'));
+                aiOption.addEventListener('mouseleave', () => this.hideTooltip());
+            }
+
+            // Track hover (show current active state tooltip)
+            const track = this.toggle.querySelector('.toggle-track');
+            if (track) {
+                track.addEventListener('mouseenter', () => {
+                    const currentSource = shadowState.activeSource === 'ai' ? 'ai' : 'template';
+                    this.showTooltip(currentSource);
+                });
+                track.addEventListener('mouseleave', () => this.hideTooltip());
+            }
+        }
+
+        /**
+         * Show tooltip with phi-timed delay (382ms).
+         * Updates content based on the source type.
+         *
+         * @param {('template'|'ai')} source - Which tooltip content to show
+         */
+        showTooltip(source) {
+            // Clear any pending hide
+            if (this.tooltipHideTimeout) {
+                clearTimeout(this.tooltipHideTimeout);
+                this.tooltipHideTimeout = null;
+            }
+
+            // Phi-timed delay before showing
+            this.tooltipShowTimeout = setTimeout(() => {
+                const content = TOGGLE_TOOLTIPS[source];
+                if (content && this.tooltip) {
+                    // Update content
+                    if (this.tooltipTitle) this.tooltipTitle.textContent = content.title;
+                    if (this.tooltipDescription) this.tooltipDescription.textContent = content.description;
+                    if (this.tooltipHint) this.tooltipHint.textContent = content.hint;
+
+                    // Show with CSS class (for JS-controlled timing)
+                    this.tooltip.classList.add('visible');
+                    this.tooltip.setAttribute('aria-hidden', 'false');
+                }
+            }, PHI_SQUARED_MS);
+        }
+
+        /**
+         * Hide tooltip with brief delay (prevents flicker on quick movements).
+         */
+        hideTooltip() {
+            // Clear any pending show
+            if (this.tooltipShowTimeout) {
+                clearTimeout(this.tooltipShowTimeout);
+                this.tooltipShowTimeout = null;
+            }
+
+            // Brief delay before hiding (prevents flicker)
+            this.tooltipHideTimeout = setTimeout(() => {
+                if (this.tooltip) {
+                    this.tooltip.classList.remove('visible');
+                    this.tooltip.setAttribute('aria-hidden', 'true');
+                }
+            }, 100);
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // FIRST-USE HINT - Sprint 8 Discoverability
+        // ═══════════════════════════════════════════════════════════════════════
+
+        /**
+         * Show a subtle pulse animation on first use to draw attention.
+         * Remembers in localStorage to only show once.
+         */
+        showFirstUseHint() {
+            if (!this.toggle) return;
+
+            const STORAGE_KEY = 'quannex_shadowToggleSeen';
+
+            if (!localStorage.getItem(STORAGE_KEY)) {
+                // Add pulse animation
+                this.toggle.classList.add('first-use-pulse');
+
+                // Remove after animation completes (2 cycles × 1.5s = 3s)
+                setTimeout(() => {
+                    this.toggle.classList.remove('first-use-pulse');
+                    localStorage.setItem(STORAGE_KEY, 'true');
+                }, 3000);
+
+                console.log('[ShadowSourceToggle] ✨ First-use hint shown');
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // TOGGLE HANDLER - The Core Interaction Logic
+        // ═══════════════════════════════════════════════════════════════════════
+
+        /**
+         * Handle toggle interaction - switches between sources.
+         *
+         * LOGIC FLOW:
+         * 1. If already generating → do nothing (prevent double-clicks)
+         * 2. If switching TO AI and AI not yet generated → generate first
+         * 3. Otherwise → just switch the view
+         *
+         * @async
+         * @returns {Promise<void>}
+         */
+        async handleToggle() {
+            // GUARD: Prevent multiple clicks during generation
+            if (shadowState.aiGenerationStatus === 'generating') {
+                console.log('[ShadowSourceToggle] Toggle blocked - generation in progress');
+                return;
+            }
+
+            const currentSource = shadowState.activeSource;
+            const switchingToAI = currentSource === 'template' || currentSource === 'universal';
+
+            if (switchingToAI && shadowState.aiShadows.length === 0) {
+                // First time switching to AI - need to generate
+                await this.generateAIShadows();
+            } else {
+                // Just switch views
+                const newSource = switchingToAI ? 'ai' : 'template';
+                this.switchSource(newSource);
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // AI GENERATION - Gemini API Integration
+        // ═══════════════════════════════════════════════════════════════════════
+
+        /**
+         * Generate AI shadow patterns using the AIShadowAdapter.
+         *
+         * INVARIANT ENFORCEMENT:
+         * - Once aiShadows has data, we NEVER re-generate (use cached)
+         * - aiShadows are cached in shadowState for the session
+         *
+         * @async
+         * @returns {Promise<void>}
+         */
+        async generateAIShadows() {
+            // ─────────────────────────────────────────────────────────────────
+            // SET LOADING STATE
+            // ─────────────────────────────────────────────────────────────────
+            shadowState.aiGenerationStatus = 'generating';
+            this.toggle?.classList.add('generating');
+            this.updateStatus('Generating AI insights...');
+
+            // Show loading text
+            if (this.loadingText) {
+                this.loadingText.textContent = 'Analyzing your organization...';
+                this.loadingText.classList.add('visible');
+                console.log('[ShadowSourceToggle] Loading text shown');
+            }
+
+            // Hide the "Generate" badge during generation
+            const badge = this.toggle?.querySelector('.toggle-badge--generate');
+            if (badge) badge.style.display = 'none';
+
+            try {
+                // Use existing generateAIShadowsFromPersistentButton logic
+                // but simplified for toggle context
+                const geminiKey = localStorage.getItem('quannex_gemini_api_key');
+                const openaiKey = localStorage.getItem('quannex_openai_api_key');
+                const preferredProvider = localStorage.getItem('quannex_preferred_provider') || 'gemini';
+
+                if (!geminiKey && !openaiKey) {
+                    throw new Error('Please configure an API key first');
+                }
+
+                const state = global.Quannex?.getState?.();
+                if (!state || !state.faces || state.faces.length === 0) {
+                    throw new Error('No face data available for AI analysis');
+                }
+
+                // Create provider
+                let provider = null;
+
+                if (preferredProvider === 'gemini' && geminiKey && global.getGeminiProvider) {
+                    provider = await global.getGeminiProvider(geminiKey);
+                } else if (preferredProvider === 'openai' && openaiKey && global.getOpenAIProvider) {
+                    provider = await global.getOpenAIProvider(openaiKey);
+                } else if (geminiKey && global.getGeminiProvider) {
+                    provider = await global.getGeminiProvider(geminiKey);
+                } else if (openaiKey && global.getOpenAIProvider) {
+                    provider = await global.getOpenAIProvider(openaiKey);
+                }
+
+                if (!provider || provider.name === 'OfflineProvider') {
+                    throw new Error('AI provider unavailable');
+                }
+
+                // Generate shadows
+                const aiAdapter = new global.AIShadowAdapter({ provider });
+                const aiShadows = await aiAdapter.generateAIShadowPatterns(
+                    state.faces,
+                    {
+                        companyName: state.companyName || 'Organization',
+                        context: state
+                    }
+                );
+
+                if (aiShadows && aiShadows.length > 0) {
+                    // Mark as AI-generated
+                    aiShadows.forEach(s => s.source = 'ai');
+
+                    // Cache in shadowState
+                    shadowState.aiShadows = aiShadows;
+                    shadowState.aiGenerationStatus = 'success';
+
+                    // Show ready celebration
+                    this.toggle?.classList.add('ai-ready');
+
+                    console.log(`[ShadowSourceToggle] ✨ Generated ${aiShadows.length} AI shadow patterns`);
+
+                    // Switch to AI view
+                    this.switchSource('ai');
+
+                    // Dispatch event with source to prevent overwriting template shadows
+                    global.dispatchEvent(new CustomEvent('shadows-updated', {
+                        detail: { shadows: aiShadows, source: 'ai' }
+                    }));
+
+                    saveToSessionStorage();
+                } else {
+                    shadowState.aiGenerationStatus = 'success';
+                    this.updateStatus('✅ No hidden patterns found');
+                }
+
+            } catch (error) {
+                // ─────────────────────────────────────────────────────────────
+                // ERROR HANDLING - Graceful degradation
+                // ─────────────────────────────────────────────────────────────
+                console.error('[ShadowSourceToggle] AI generation failed:', error);
+
+                shadowState.aiGenerationStatus = 'error';
+
+                // User-friendly error message
+                const message = error.message.includes('API') || error.message.includes('key')
+                    ? 'AI unavailable - check API key'
+                    : 'AI generation failed - using templates';
+
+                this.updateStatus(message);
+
+                // Show the badge again
+                if (badge) badge.style.display = '';
+
+            } finally {
+                // ─────────────────────────────────────────────────────────────
+                // CLEANUP - Always hide loading state (Sprint 9 bugfix)
+                // ─────────────────────────────────────────────────────────────
+                // Using finally ensures loading text is hidden regardless of:
+                // - Success with results
+                // - Success with no results
+                // - Any exception thrown during generation
+                this.toggle?.classList.remove('generating');
+                if (this.loadingText) {
+                    this.loadingText.classList.remove('visible');
+                    // Clear text content to prevent flash during rerender/refresh
+                    // (opacity transition means text lingers briefly; clearing prevents any flash)
+                    this.loadingText.textContent = '';
+                    console.log('[ShadowSourceToggle] Loading text hidden (finally block)');
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // SOURCE SWITCHING - View Transitions
+        // ═══════════════════════════════════════════════════════════════════════
+
+        /**
+         * Switch the active shadow source and update UI accordingly.
+         *
+         * DATA INTEGRITY:
+         * - Validates newSource before accepting
+         * - Updates ARIA attributes for screen readers
+         * - Triggers smooth card transition
+         *
+         * @param {('template'|'ai'|'universal')} newSource - The source to switch to
+         */
+        switchSource(newSource) {
+            // ─────────────────────────────────────────────────────────────────
+            // VALIDATE SOURCE (INVARIANT: source is never undefined)
+            // ─────────────────────────────────────────────────────────────────
+            const validSources = ['template', 'ai', 'universal'];
+            if (!validSources.includes(newSource)) {
+                console.error(`[ShadowSourceToggle] Invalid source: ${newSource}, falling back to 'template'`);
+                newSource = 'template';
+            }
+
+            shadowState.activeSource = newSource;
+            shadowState.aiGenerationStatus = shadowState.aiGenerationStatus === 'generating' ? 'idle' : shadowState.aiGenerationStatus;
+            this.toggle?.classList.remove('generating');
+
+            // ─────────────────────────────────────────────────────────────────
+            // UPDATE CURRENT SHADOWS
+            // ─────────────────────────────────────────────────────────────────
+            currentShadows = newSource === 'ai'
+                ? shadowState.aiShadows
+                : shadowState.templateShadows;
+
+            // ─────────────────────────────────────────────────────────────────
+            // UPDATE VISUAL STATE
+            // ─────────────────────────────────────────────────────────────────
+            this.updateVisualState();
+
+            // ─────────────────────────────────────────────────────────────────
+            // TRANSITION CARDS WITH ANIMATION
+            // ─────────────────────────────────────────────────────────────────
+            this.transitionCards();
+
+            // ─────────────────────────────────────────────────────────────────
+            // UPDATE STATUS TEXT
+            // ─────────────────────────────────────────────────────────────────
+            if (newSource === 'ai') {
+                const count = shadowState.aiShadows.length;
+                this.updateStatus(`${count} AI-discovered patterns`);
+            } else if (this.mode === 'custom-data') {
+                const count = shadowState.templateShadows.length;
+                this.updateStatus(`${count} universal patterns`);
+            } else {
+                const count = shadowState.templateShadows.length;
+                this.updateStatus(`${count} patterns from archetypal library`);
+            }
+
+            // ─────────────────────────────────────────────────────────────────
+            // DISPATCH EVENT
+            // ─────────────────────────────────────────────────────────────────
+            global.dispatchEvent(new CustomEvent('shadow-source-changed', {
+                detail: {
+                    source: newSource,
+                    shadows: currentShadows,
+                    templateCount: shadowState.templateShadows.length,
+                    aiCount: shadowState.aiShadows.length
+                }
+            }));
+
+            console.log(`[ShadowSourceToggle] Switched to ${newSource} (${currentShadows.length} shadows)`);
+        }
+
+        /**
+         * Update the visual state of the toggle (aria, classes, position).
+         */
+        updateVisualState() {
+            if (!this.toggle) return;
+
+            const isAI = shadowState.activeSource === 'ai';
+
+            // Update ARIA for accessibility
+            this.toggle.setAttribute('aria-checked', isAI);
+
+            // Update option active states
+            const templateOption = this.toggle.querySelector('.toggle-option--template');
+            const aiOption = this.toggle.querySelector('.toggle-option--ai');
+
+            if (templateOption) {
+                templateOption.classList.toggle('active', !isAI);
+            }
+            if (aiOption) {
+                aiOption.classList.toggle('active', isAI);
+            }
+
+            // Hide generate badge if AI already generated
+            if (shadowState.aiShadows.length > 0) {
+                this.toggle.classList.add('ai-ready');
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // CARD TRANSITIONS - Smooth Visual Updates
+        // ═══════════════════════════════════════════════════════════════════════
+
+        /**
+         * Smoothly transition between shadow card sets.
+         * Uses CSS opacity transition for elegant fade effect.
+         */
+        transitionCards() {
+            const cardsContainer = document.querySelector('.shadow-overlay-content');
+            if (!cardsContainer) {
+                // Just render directly
+                renderShadowCards();
+                return;
+            }
+
+            // Start fade out
+            cardsContainer.classList.add('transitioning');
+
+            // After fade out completes, swap content and fade in
+            setTimeout(() => {
+                renderShadowCards();
+                cardsContainer.classList.remove('transitioning');
+            }, 300);  // Match CSS transition duration
+        }
+
+        /**
+         * Update the status text below the toggle.
+         *
+         * @param {string} text - Status message to display
+         */
+        updateStatus(text) {
+            if (this.statusText) {
+                this.statusText.textContent = text;
+            }
+        }
+
+        // NOTE: refresh() method defined earlier (line ~691) handles timing issues
+        // and restores toggle HTML when transitioning from no-data mode.
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // LEGACY SOURCE SWITCHING (Deprecated but maintained for compatibility)
     // ════════════════════════════════════════════════════════════════════════
 
     /**
-     * Handle source change from the dropdown
+     * Handle source change from the dropdown (DEPRECATED - use toggle)
      * @param {string} newSource - 'template' | 'ai'
+     * @deprecated Use ShadowSourceToggle instead
      */
     function handleSourceChange(newSource) {
-        // Block switching during AI generation
+        // If toggle exists, delegate to it
+        if (shadowSourceToggle) {
+            shadowSourceToggle.switchSource(newSource);
+            return;
+        }
+
+        // Legacy fallback for old dropdown
         if (shadowState.aiGenerationStatus === 'generating') {
             console.log('[ShadowOverlay] Blocked source switch - AI generation in progress');
-            // Reset dropdown to current source
             updateSourceDropdown();
             return;
         }
 
-        // No-op if same source
         if (shadowState.activeSource === newSource) {
             return;
         }
@@ -738,19 +1345,15 @@
         console.log(`[ShadowOverlay] Switching source: ${shadowState.activeSource} → ${newSource}`);
 
         shadowState.activeSource = newSource;
-
-        // Update currentShadows to reflect new source
         currentShadows = newSource === 'template'
             ? shadowState.templateShadows
             : shadowState.aiShadows;
 
-        // Update UI
         updateSourceDropdown();
         updateSourceDropdownCount();
         renderShadowCards();
         saveToSessionStorage();
 
-        // Dispatch event for other listeners
         global.dispatchEvent(new CustomEvent('shadow-source-changed', {
             detail: {
                 source: newSource,
@@ -764,14 +1367,20 @@
     }
 
     /**
-     * Update the source dropdown to reflect current state
+     * Update the source dropdown to reflect current state (DEPRECATED)
+     * @deprecated Use ShadowSourceToggle instead
      */
     function updateSourceDropdown() {
+        // Legacy: Update old dropdown if it exists
         const sourceSelect = document.getElementById('shadowSourceSelect');
         if (sourceSelect) {
             sourceSelect.value = shadowState.activeSource;
-            // Disable during generation
             sourceSelect.disabled = shadowState.aiGenerationStatus === 'generating';
+        }
+
+        // New: Update toggle if it exists
+        if (shadowSourceToggle) {
+            shadowSourceToggle.updateVisualState();
         }
     }
 
@@ -869,6 +1478,11 @@
      */
     function openShadowOverlay() {
         if (!shadowOverlay || overlayOpen) return;
+
+        // TIMING FIX: Refresh toggle to re-evaluate mode in case data loaded after init
+        if (shadowSourceToggle) {
+            shadowSourceToggle.refresh();
+        }
 
         renderShadowCards();
         shadowOverlay.classList.add('visible');
@@ -980,11 +1594,16 @@
     /**
      * Listen for shadow pattern updates from the main engine
      * The engine/shadow panel will dispatch this event when shadows change
+     *
+     * IMPORTANT: The source parameter prevents AI shadows from overwriting
+     * template shadows. Without it, all shadows default to 'template' source.
+     * (Sprint 9.1 bugfix)
      */
     function initShadowIntegration() {
         global.addEventListener('shadows-updated', (event) => {
             const shadows = event.detail?.shadows || [];
-            updateShadowIndicator(shadows);
+            const source = event.detail?.source || 'template';
+            updateShadowIndicator(shadows, source);
         });
     }
 
@@ -1055,9 +1674,17 @@
         // Sprint 6: Load persisted shadow sources from sessionStorage
         loadFromSessionStorage();
 
-        // Sprint 6: Update UI to reflect loaded state
-        updateSourceDropdown();
-        updateSourceDropdownCount();
+        // Sprint 7: Initialize the new toggle component
+        const toggleContainer = document.getElementById('shadowSourceToggleContainer');
+        if (toggleContainer) {
+            shadowSourceToggle = new ShadowSourceToggle(toggleContainer);
+            console.log('[ShadowOverlay] 🔄 Shadow source toggle initialized');
+        } else {
+            // Fallback: Use legacy dropdown if toggle not in DOM
+            updateSourceDropdown();
+            updateSourceDropdownCount();
+            console.log('[ShadowOverlay] Using legacy dropdown (toggle container not found)');
+        }
 
         // Initial sync after a delay (waiting for engine to initialize)
         setTimeout(syncWithShadowPanel, 2000);
@@ -1150,7 +1777,11 @@
         // Sprint 6: Source switching APIs
         setActiveSource: handleSourceChange,
         getTemplateCount: () => shadowState.templateShadows.length,
-        getAICount: () => shadowState.aiShadows.length
+        getAICount: () => shadowState.aiShadows.length,
+        // Sprint 7: Toggle component access
+        refreshToggle: () => shadowSourceToggle?.refresh(),
+        getToggle: () => shadowSourceToggle,
+        renderShadowCards: renderShadowCards
     };
 
 })(typeof window !== 'undefined' ? window : this);

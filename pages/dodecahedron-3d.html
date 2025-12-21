@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../css/dodec/dodec-main.css">
     <link rel="stylesheet" href="../css/harmonic-tuner.css">
     <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/shadow-overlay.css">
 </head>
 
 <body>
@@ -83,22 +84,34 @@
                     <h2>Shadow Analysis</h2>
                     <span class="shadow-overlay-subtitle">Organizational patterns requiring attention</span>
                 </div>
-                <!-- Sprint 6: Source Toggle Dropdown -->
-                <div class="shadow-source-toggle">
-                    <select id="shadowSourceSelect" class="shadow-source-select" title="Switch shadow source">
-                        <option value="template">📋 Template</option>
-                        <option value="ai">✨ AI-Generated</option>
-                    </select>
-                    <span class="shadow-source-count" id="shadowSourceCount">(0)</span>
+                <!-- Sprint 8: Toggle integrated into header with smart tooltips -->
+                <div class="shadow-toggle-wrapper" id="shadowSourceToggleContainer">
+                    <span class="shadow-toggle-label">Viewing:</span>
+                    <div class="shadow-source-toggle shadow-source-toggle--compact" id="shadowSourceToggle"
+                         role="switch" aria-checked="false" tabindex="0"
+                         aria-label="Switch between template and AI shadow analysis">
+                        <span class="toggle-option toggle-option--template active" data-tooltip="template">
+                            <span class="toggle-icon">📋</span>
+                        </span>
+                        <div class="toggle-track">
+                            <div class="toggle-thumb">
+                                <div class="toggle-thumb-glow"></div>
+                            </div>
+                        </div>
+                        <span class="toggle-option toggle-option--ai" data-tooltip="ai">
+                            <span class="toggle-icon">✨</span>
+                        </span>
+                    </div>
+                    <!-- Smart tooltip - shows on hover after phi-delay -->
+                    <div class="shadow-toggle-tooltip" id="shadowToggleTooltip" role="tooltip" aria-hidden="true">
+                        <div class="tooltip-title" id="tooltipTitle">📋 Template Analysis</div>
+                        <div class="tooltip-description" id="tooltipDescription">Pre-computed shadow patterns based on your KPI data</div>
+                        <div class="tooltip-hint" id="tooltipHint">Fast • Consistent • Universal patterns</div>
+                    </div>
+                    <!-- Loading text during AI generation -->
+                    <span class="shadow-toggle-loading-text" id="shadowToggleLoadingText" aria-live="polite"></span>
                 </div>
                 <button class="shadow-overlay-close" id="closeShadowOverlay" title="Close (ESC)">×</button>
-            </div>
-            <!-- Sprint 6: Persistent AI Controls Bar -->
-            <div class="shadow-ai-controls" id="shadowAIControls">
-                <button class="shadow-ai-generate-btn" id="generateAIShadowsBtn" title="Generate AI shadow analysis">
-                    ✨ Generate AI Analysis
-                </button>
-                <span class="ai-status" id="aiGenerationStatus"></span>
             </div>
             <div class="shadow-overlay-content" id="shadowOverlayContent">
                 <!-- Shadow cards will be rendered here -->

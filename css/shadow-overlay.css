@@ -66,18 +66,20 @@
     transform: scale(1) translateY(0);
 }
 
-/* Overlay Header */
+/* Overlay Header - Sprint 8: Now contains integrated toggle */
 .shadow-overlay-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
     padding: 24px 30px;
     border-bottom: 1px solid rgba(255, 68, 68, 0.2);
 }
 
 .shadow-overlay-title {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    margin-left: -15px;
     gap: 4px;
 }
 
@@ -89,6 +91,20 @@
 
 .shadow-overlay-icon {
     font-size: 28px;
+    filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.4));
+    animation: icon-pulse 3s ease-in-out infinite;
+}
+
+@keyframes icon-pulse {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.3));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 14px rgba(255, 107, 107, 0.6));
+    }
 }
 
 .shadow-overlay-title h2 {
@@ -97,12 +113,13 @@
     font-weight: 300;
     color: #ff6b6b;
     letter-spacing: 1px;
+    text-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
 }
 
 .shadow-overlay-subtitle {
     font-size: 12px;
     color: rgba(255, 255, 255, 0.5);
-    margin-left: 40px;
+    height: 11px;
 }
 
 .shadow-overlay-close {
@@ -178,7 +195,22 @@
 .shadow-overlay-empty h3 {
     margin: 0 0 8px 0;
     font-weight: 300;
-    color: #00ffcc;
+    color: #ff8b8b;  /* Sprint 9.1: Cyan → Red for theme consistency */
+}
+
+/* Sprint 7: Empty state hint - directs user to toggle */
+.empty-state-hint {
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: rgba(255, 139, 139, 0.1);  /* Sprint 9.1: Cyan → Red */
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    display: inline-block;
+}
+
+.empty-state-hint strong {
+    color: #ff8b8b;  /* Sprint 9.1: Cyan → Red */
 }
 
 
@@ -544,7 +576,7 @@
 }
 
 .vertex-chip {
-    border-left: 2px solid rgba(0, 255, 204, 0.5);
+    border-left: 2px solid rgba(255, 139, 139, 0.5);  /* Sprint 9.1: Cyan → Red */
 }
 
 
@@ -568,7 +600,7 @@
 }
 
 .prescription-action strong {
-    color: #00ffcc;
+    color: #ff8b8b;  /* Sprint 9.1: Cyan → Red */
 }
 
 .prescription-insight strong {
@@ -598,10 +630,11 @@
 .shadow-card__navigate-btn {
     width: 100%;
     padding: 12px 16px;
-    background: linear-gradient(135deg, rgba(0, 255, 204, 0.15), rgba(102, 255, 153, 0.15));
-    border: 1px solid rgba(0, 255, 204, 0.4);
+    /* Sprint 9.1: Cyan → Red gradient for theme consistency */
+    background: linear-gradient(135deg, rgba(255, 139, 139, 0.15), rgba(255, 170, 102, 0.15));
+    border: 1px solid rgba(255, 139, 139, 0.4);
     border-radius: 8px;
-    color: #00ffcc;
+    color: #ff8b8b;
     font-weight: 600;
     font-size: 13px;
     cursor: pointer;
@@ -609,9 +642,9 @@
 }
 
 .shadow-card__navigate-btn:hover {
-    background: linear-gradient(135deg, rgba(0, 255, 204, 0.25), rgba(102, 255, 153, 0.25));
+    background: linear-gradient(135deg, rgba(255, 139, 139, 0.25), rgba(255, 170, 102, 0.25));
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 255, 204, 0.2);
+    box-shadow: 0 4px 12px rgba(255, 139, 139, 0.2);
 }
 
 .shadow-card__navigate-btn:active {
@@ -783,287 +816,46 @@
     }
 }
 
-/* ==========================================
-   AI SHADOW ENHANCEMENT SECTION
-   Sprint 5 Addition
-   ========================================== */
-
-.shadow-ai-enhance {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px dashed rgba(255, 255, 255, 0.2);
-    text-align: center;
-}
-
-.ai-enhance-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
-    margin-bottom: 12px;
-}
-
-.ai-enhance-prompt {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 12px;
-}
-
-/* AI Key Input Section */
-.ai-key-input-section {
-    display: flex;
-    gap: 8px;
-    margin: 12px 0;
-    justify-content: center;
-}
-
-.ai-provider-select {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 6px;
-    padding: 8px 12px;
-    color: white;
-    font-size: 12px;
-    cursor: pointer;
-    min-width: 100px;
-}
-
-.ai-provider-select:focus {
-    outline: none;
-    border-color: rgba(99, 102, 241, 0.6);
-}
-
-.ai-key-input {
-    flex: 1;
-    max-width: 200px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 6px;
-    padding: 8px 12px;
-    color: white;
-    font-size: 12px;
-}
-
-.ai-key-input:focus {
-    outline: none;
-    border-color: rgba(99, 102, 241, 0.6);
-}
-
-.ai-key-input::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.ai-save-key-btn {
-    background: rgba(99, 102, 241, 0.3);
-    border: 1px solid rgba(99, 102, 241, 0.5);
-    border-radius: 6px;
-    padding: 8px 16px;
-    color: white;
-    cursor: pointer;
-    font-size: 12px;
-    transition: background 0.2s;
-}
-
-.ai-save-key-btn:hover {
-    background: rgba(99, 102, 241, 0.5);
-}
-
-.ai-key-hint {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.4);
-    margin: 4px 0 12px 0;
-}
-
-.ai-enhance-btn {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: all 0.2s;
-}
-
-.ai-enhance-btn:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-}
-
-.ai-enhance-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.ai-clear-key-btn {
-    display: block;
-    margin: 8px auto 0;
-    background: transparent;
-    border: none;
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 10px;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-.ai-clear-key-btn:hover {
-    color: rgba(255, 100, 100, 0.8);
-}
-
-.ai-enhance-success {
-    color: #66ff99;
-    font-size: 12px;
-}
-
-/* Shadow Overlay specific variant */
-.shadow-ai-enhance-overlay {
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px dashed rgba(255, 255, 255, 0.15);
-    text-align: center;
-}
-
-.shadow-overlay-empty .ai-enhance-prompt {
-    margin-bottom: 16px;
-}
-
-.shadow-overlay-empty .ai-key-input-section {
-    justify-content: center;
-    margin: 16px auto;
-    max-width: 400px;
-}
-
-.shadow-overlay-empty .ai-enhance-btn {
-    padding: 12px 24px;
-    font-size: 14px;
-}
-
 /* ════════════════════════════════════════════════════════════════════════════
-   SPRINT 6: SHADOW SOURCE TOGGLE
-   Allows switching between template and AI-generated shadows
+   DEPRECATED: AI SHADOW ENHANCEMENT SECTION (Sprint 5)
+   ════════════════════════════════════════════════════════════════════════════
+   Sprint 7 (December 2025): These styles are deprecated.
+   AI generation is now handled by the ShadowSourceToggle component.
+
+   Old elements removed:
+   - .shadow-ai-enhance
+   - .ai-enhance-divider, .ai-enhance-prompt, .ai-enhance-btn
+   - .ai-key-input-section, .ai-provider-select, .ai-key-input
+   - .shadow-ai-enhance-overlay
+
+   See: .shadow-source-toggle-container (Sprint 7) for new implementation.
    ════════════════════════════════════════════════════════════════════════════ */
 
-/* Source toggle container - sits in header flex row */
-.shadow-source-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-left: auto;
-    margin-right: 16px;
-}
-
-/* Custom styled dropdown */
-.shadow-source-select {
-    appearance: none;
-    -webkit-appearance: none;
-    background: rgba(138, 43, 226, 0.2);
-    border: 1px solid rgba(138, 43, 226, 0.4);
-    border-radius: 8px;
-    color: rgba(255, 255, 255, 0.9);
-    padding: 8px 32px 8px 12px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    min-width: 140px;
-}
-
-.shadow-source-select:hover {
-    background-color: rgba(138, 43, 226, 0.3);
-    border-color: rgba(138, 43, 226, 0.6);
-}
-
-.shadow-source-select:focus {
-    outline: none;
-    border-color: rgba(138, 43, 226, 0.8);
-    box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2);
-}
-
-.shadow-source-select:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.shadow-source-select option {
-    background: #1a1a2e;
-    color: white;
-    padding: 8px;
-}
-
-/* Count badge next to dropdown */
-.shadow-source-count {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 12px;
-    font-weight: 500;
-}
-
 /* ════════════════════════════════════════════════════════════════════════════
-   SPRINT 6: PERSISTENT AI CONTROLS BAR
-   Always-visible AI generation button between header and content
+   DEPRECATED: SPRINT 6 SHADOW SOURCE DROPDOWN
+   ════════════════════════════════════════════════════════════════════════════
+   Sprint 7 (December 2025): Replaced by elegant toggle switch.
+   Old dropdown-based source switching removed.
+
+   Old elements removed:
+   - .shadow-source-toggle (old dropdown container)
+   - .shadow-source-select, .shadow-source-count
+
+   See: .shadow-source-toggle-container (Sprint 7) for new implementation.
    ════════════════════════════════════════════════════════════════════════════ */
 
-.shadow-ai-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    padding: 12px 20px;
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.15), rgba(75, 0, 130, 0.15));
-    border-bottom: 1px solid rgba(138, 43, 226, 0.2);
-}
+/* ════════════════════════════════════════════════════════════════════════════
+   DEPRECATED: SPRINT 6 PERSISTENT AI CONTROLS BAR
+   ════════════════════════════════════════════════════════════════════════════
+   Sprint 7 (December 2025): AI generation now integrated into toggle.
+   Old separate AI controls bar removed.
 
-/* Prominent AI generate button */
-.shadow-ai-generate-btn {
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.6), rgba(75, 0, 130, 0.6));
-    border: 1px solid rgba(138, 43, 226, 0.5);
-    border-radius: 8px;
-    color: white;
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+   Old elements removed:
+   - .shadow-ai-controls
+   - .shadow-ai-generate-btn
 
-.shadow-ai-generate-btn:hover:not(:disabled) {
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.8), rgba(75, 0, 130, 0.8));
-    border-color: rgba(138, 43, 226, 0.8);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
-}
-
-.shadow-ai-generate-btn:active:not(:disabled) {
-    transform: translateY(0);
-}
-
-.shadow-ai-generate-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* Status indicator */
-.ai-status {
-    font-size: 13px;
-    font-weight: 500;
-    transition: color 0.2s ease;
-}
-
-.ai-status-info {
-    color: rgba(100, 149, 237, 0.9);
-}
-
-.ai-status-success {
-    color: rgba(102, 255, 153, 0.9);
-}
-
-.ai-status-error {
-    color: rgba(255, 100, 100, 0.9);
-}
+   AI generation now triggered by clicking to the AI side of the toggle.
+   ════════════════════════════════════════════════════════════════════════════ */
 
 /* ════════════════════════════════════════════════════════════════════════════
    SPRINT 6: SOURCE BADGE ON SHADOW CARDS
@@ -1091,4 +883,568 @@
     background: rgba(138, 43, 226, 0.3);
     color: rgba(200, 150, 255, 1);
     border: 1px solid rgba(138, 43, 226, 0.5);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SHADOW SOURCE TOGGLE - Elegant Day/Night Switch
+   ════════════════════════════════════════════════════════════════════════════════
+
+   ═══════════════════════════════════════════════════════════════════════════════
+   NOTES FOR FUTURE CLAUDE
+   ═══════════════════════════════════════════════════════════════════════════════
+
+   Welcome, future me. This is the CSS for the unified shadow source toggle.
+
+   ─────────────────────────────────────────────────────────────────────────────
+   WHAT THIS DOES
+   ─────────────────────────────────────────────────────────────────────────────
+
+   The toggle replaces the scattered buttons and ugly dropdown with ONE elegant
+   switch that transforms the view between Template shadows and AI shadows.
+
+   ─────────────────────────────────────────────────────────────────────────────
+   THE THREE MODES (via container classes)
+   ─────────────────────────────────────────────────────────────────────────────
+
+   | Mode                | Class Added              | Visual Change            |
+   |---------------------|--------------------------|--------------------------|
+   | template-company    | (default)                | Template ⟷ AI           |
+   | custom-data         | .custom-data-mode        | Universal ⟷ AI + header |
+   | no-data             | (renders different HTML) | Graceful message         |
+
+   ─────────────────────────────────────────────────────────────────────────────
+   CONNECTING FILES
+   ─────────────────────────────────────────────────────────────────────────────
+
+   UPSTREAM (provides the HTML):
+   └── js/dodec/dodec-shadow-overlay.js → ShadowSourceToggle class
+
+   DESIGN TOKENS USED:
+   - Primary accent: #00ffcc (teal)
+   - Secondary accent: #66ff99 (light green)
+   - Background: rgba(0, 0, 0, 0.x) gradients
+
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   CONTAINER - Wraps the entire toggle component
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.shadow-source-toggle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, rgba(40, 20, 20, 0.4), rgba(25, 10, 15, 0.4));
+    border-bottom: 1px solid rgba(255, 107, 107, 0.15);
+    margin-bottom: 16px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   TOGGLE SWITCH - The pill-shaped clickable switch
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.shadow-source-toggle {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 107, 107, 0.25);
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.shadow-source-toggle:hover {
+    border-color: rgba(255, 107, 107, 0.4);
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.15);
+}
+
+.shadow-source-toggle:focus {
+    outline: none;
+    border-color: rgba(0, 255, 204, 0.6);
+    /* Keep cyan for accessibility focus ring */
+    box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.2);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   TOGGLE OPTIONS - Template / AI Labels
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.toggle-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+/* Template mode: soft red/amber - earthy, grounded */
+.toggle-option--template.active {
+    color: #ff8b8b;
+    text-shadow: 0 0 10px rgba(255, 139, 139, 0.5);
+    background: rgba(255, 139, 139, 0.1);
+}
+
+/* AI mode: violet-pink - mystical, technological */
+.toggle-option--ai.active {
+    color: #e879f9;
+    text-shadow: 0 0 10px rgba(232, 121, 249, 0.5);
+    background: rgba(232, 121, 249, 0.1);
+}
+
+.toggle-icon {
+    font-size: 16px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   TOGGLE TRACK - The horizontal slider background
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.toggle-track {
+    position: relative;
+    width: 50px;
+    height: 26px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-radius: 13px;
+    transition: all 0.3s ease;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   TOGGLE THUMB - The moving circle
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #ff8b8b, #ffb3b3);
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+}
+
+.toggle-thumb-glow {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: radial-gradient(circle, rgba(255, 107, 107, 0.3), transparent);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.shadow-source-toggle:hover .toggle-thumb-glow {
+    opacity: 1;
+}
+
+/* AI Active State - Thumb moves right and changes color */
+.shadow-source-toggle[aria-checked="true"] .toggle-thumb {
+    left: calc(100% - 22px);
+    background: linear-gradient(135deg, #e879f9, #c084fc);
+    box-shadow: 0 2px 8px rgba(232, 121, 249, 0.4);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   GENERATE BADGE - Shows when AI not yet generated
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.toggle-badge--generate {
+    font-size: 9px;
+    padding: 2px 6px;
+    background: rgba(232, 121, 249, 0.2);
+    border: 1px solid rgba(232, 121, 249, 0.4);
+    border-radius: 8px;
+    color: #e879f9;
+    animation: pulse-subtle 2s infinite;
+}
+
+@keyframes pulse-subtle {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Hide badge when AI has been generated */
+.shadow-source-toggle.ai-ready .toggle-badge--generate {
+    display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   STATUS TEXT - Context message below the toggle
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.toggle-status {
+    text-align: center;
+}
+
+.toggle-status-text {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   LOADING STATE - Generating AI insights
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Disable toggle during AI generation */
+.shadow-source-toggle.generating {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: wait;
+}
+
+.shadow-source-toggle.generating .toggle-thumb {
+    animation: generating-pulse 1s infinite;
+}
+
+@keyframes generating-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+        transform: scale(1);
+    }
+
+    50% {
+        box-shadow: 0 2px 20px rgba(255, 107, 107, 0.8);
+        transform: scale(1.1);
+    }
+}
+
+/* Loading text below toggle */
+.shadow-toggle-loading-text {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.shadow-toggle-loading-text.visible {
+    opacity: 1;
+}
+
+/* AI Ready celebration pulse */
+.shadow-source-toggle.ai-ready {
+    animation: ai-ready-pulse 0.6s ease-out;
+}
+
+@keyframes ai-ready-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(232, 121, 249, 0.5);
+    }
+
+    100% {
+        box-shadow: 0 0 0 12px rgba(232, 121, 249, 0);
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   CARD TRANSITIONS - Smooth fade when switching sources
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.shadow-overlay-content {
+    transition: opacity 0.3s ease;
+}
+
+.shadow-overlay-content.transitioning {
+    opacity: 0.5;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   CUSTOM DATA MODE - When user entered manual/AI data
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.shadow-source-toggle-container.custom-data-mode {
+    background: linear-gradient(135deg, rgba(20, 40, 50, 0.4), rgba(10, 20, 30, 0.4));
+    border-bottom-color: rgba(100, 200, 255, 0.2);
+}
+
+.shadow-source-toggle-container.custom-data-mode::before {
+    content: '🔮 Custom Data Analysis';
+    display: block;
+    font-size: 10px;
+    color: rgba(100, 200, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   NO DATA STATE - Graceful fallback message
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.shadow-no-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 24px;
+    text-align: center;
+}
+
+.no-data-icon {
+    font-size: 32px;
+}
+
+.no-data-text {
+    font-size: 14px;
+    color: rgba(255, 200, 100, 0.8);
+    font-weight: 500;
+}
+
+.no-data-hint {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SPRINT 8: HEADER-INTEGRATED TOGGLE WITH SMART TOOLTIPS
+   ════════════════════════════════════════════════════════════════════════════
+
+   The toggle is now embedded in the header for cleaner visual hierarchy.
+   Tooltips provide contextual guidance on hover with phi-based timing (382ms).
+
+   Structure:
+   .shadow-toggle-wrapper (in header)
+   ├── .shadow-source-toggle.shadow-source-toggle--compact
+   └── .shadow-toggle-tooltip
+
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   TOGGLE WRAPPER - Positioned in header between title and close button
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.shadow-toggle-wrapper {
+    position: relative;
+    margin-left: auto;
+    margin-right: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+/* "Viewing:" label above toggle */
+.shadow-toggle-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   COMPACT TOGGLE - Scaled down for header integration
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.shadow-source-toggle--compact {
+    gap: 8px;
+    padding: 4px 6px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 107, 107, 0.25);
+}
+
+.shadow-source-toggle--compact .toggle-option {
+    padding: 4px 8px;
+    gap: 4px;
+    font-size: 11px;
+}
+
+.shadow-source-toggle--compact .toggle-icon {
+    font-size: 14px;
+}
+
+.shadow-source-toggle--compact .toggle-text {
+    display: none;
+    /* Hide text labels in compact mode */
+}
+
+.shadow-source-toggle--compact .toggle-track {
+    width: 36px;
+    height: 18px;
+    border-radius: 9px;
+}
+
+.shadow-source-toggle--compact .toggle-thumb {
+    width: 14px;
+    height: 14px;
+    top: 1px;
+    left: 1px;
+}
+
+.shadow-source-toggle--compact[aria-checked="true"] .toggle-thumb {
+    left: calc(100% - 15px);
+}
+
+.shadow-source-toggle--compact .toggle-badge {
+    display: none;
+    /* Hide badge in compact mode */
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SMART TOOLTIP - Shows on hover with phi-timed delay
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.shadow-toggle-tooltip {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+
+    /* Glass morphism background */
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-radius: 10px;
+    padding: 14px 18px;
+
+    /* Hidden by default */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    /* Smooth entrance */
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+
+    /* Above everything */
+    z-index: 10001;
+
+    /* Size constraints */
+    min-width: 220px;
+    max-width: 280px;
+    white-space: normal;
+    text-align: left;
+
+    /* Depth effect */
+    backdrop-filter: blur(12px);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(255, 107, 107, 0.1);
+}
+
+/* Tooltip arrow */
+.shadow-toggle-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 12px;
+    height: 12px;
+    background: rgba(0, 0, 0, 0.95);
+    border-left: 1px solid rgba(255, 107, 107, 0.3);
+    border-top: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+/* Show tooltip on wrapper hover (CSS-only, JS adds delay) */
+.shadow-toggle-wrapper:hover .shadow-toggle-tooltip,
+.shadow-toggle-tooltip.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Tooltip content structure */
+.tooltip-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ff8b8b;
+    margin-bottom: 6px;
+    text-shadow: 0 0 8px rgba(255, 139, 139, 0.3);
+}
+
+.tooltip-description {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.tooltip-hint {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   FIRST-USE PULSE - Draws attention on first view
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.shadow-source-toggle--compact.first-use-pulse {
+    animation: first-use-glow 1.5s ease-in-out 2;
+}
+
+@keyframes first-use-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 6px rgba(255, 107, 107, 0.25),
+            0 0 20px rgba(255, 107, 107, 0.3);
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   RESPONSIVE ADJUSTMENTS FOR COMPACT TOGGLE
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+    .shadow-toggle-wrapper {
+        margin-right: 12px;
+    }
+
+    .shadow-source-toggle--compact {
+        padding: 3px 4px;
+    }
+
+    .shadow-source-toggle--compact .toggle-track {
+        width: 30px;
+        height: 16px;
+    }
+
+    .shadow-source-toggle--compact .toggle-thumb {
+        width: 12px;
+        height: 12px;
+    }
+
+    .shadow-source-toggle--compact[aria-checked="true"] .toggle-thumb {
+        left: calc(100% - 13px);
+    }
+
+    .shadow-toggle-tooltip {
+        min-width: 180px;
+        max-width: 220px;
+        padding: 12px 14px;
+    }
 }

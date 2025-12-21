@@ -1091,29 +1091,54 @@ class MappingContext {
     fromJSON(data) {
         if (!data) return;
 
+        // Writable properties for FaceMapping (excludes computed getters like isComplete)
+        // Note: isComplete is computed from name, so it will be correct after name is restored
+        const faceWritableProps = ['name', 'icon', 'octave', 'archetype', 'kpis',
+                                   'validated', 'sentiment', 'reasoning', 'source', 'namedAt'];
+
         if (data.faces) {
             data.faces.forEach(fConfig => {
                 const face = this._faces.get(fConfig.id);
                 if (face) {
-                    Object.assign(face, fConfig);
+                    // Selectively assign only writable properties to avoid
+                    // "Cannot set property X which has only a getter" errors
+                    faceWritableProps.forEach(prop => {
+                        if (fConfig[prop] !== undefined) {
+                            face[prop] = fConfig[prop];
+                        }
+                    });
                 }
             });
         }
+
+        // Writable properties for EdgeMapping
+        const edgeWritableProps = ['sourceId', 'targetId', 'name', 'tension', 'flow', 'validated'];
 
         if (data.edges) {
             data.edges.forEach(eConfig => {
                 const edge = this._edges.get(eConfig.id);
                 if (edge) {
-                    Object.assign(edge, eConfig);
+                    edgeWritableProps.forEach(prop => {
+                        if (eConfig[prop] !== undefined) {
+                            edge[prop] = eConfig[prop];
+                        }
+                    });
                 }
             });
         }
+
+        // Writable properties for VertexMapping
+        const vertexWritableProps = ['faceIds', 'name', 'resonance', 'validated'];
 
         if (data.vertices) {
             data.vertices.forEach(vConfig => {
                 const vertex = this._vertices.get(vConfig.id);
                 if (vertex) {
-                    Object.assign(vertex, vConfig);
+                    vertexWritableProps.forEach(prop => {
+                        if (vConfig[prop] !== undefined) {
+                            vertex[prop] = vConfig[prop];
+                        }
+                    });
                 }
             });
         }

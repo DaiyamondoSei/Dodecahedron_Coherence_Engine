@@ -518,12 +518,15 @@ export class DodecahedronEngine {
         face._faceEnergy = energy;      // Private cache for faceEnergy getter
         face._localCoherence = energy;  // Backup cache (legacy support)
 
-        // Apply KPI normalized scores if available
+        // Apply KPI values if available
+        // Note: normalizedScore is a computed getter in KPI.js that derives from
+        // value + direction + boundaries + metricType. We update the underlying
+        // value instead, and normalizedScore will compute correctly.
         if (resultFace.kpis && face.elementalKPIs) {
           resultFace.kpis.forEach(resultKpi => {
             const kpi = face.elementalKPIs.find(k => k.id === resultKpi.id);
-            if (kpi && resultKpi.normalizedScore !== undefined) {
-              kpi.normalizedScore = resultKpi.normalizedScore;
+            if (kpi && resultKpi.value !== undefined) {
+              kpi.value = resultKpi.value;  // This triggers normalizedScore recalculation
             }
           });
         }

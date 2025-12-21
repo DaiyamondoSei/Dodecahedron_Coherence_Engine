@@ -441,80 +441,32 @@ export class ShadowPanel {
         console.log('[ShadowPanel] 🌙 Destroyed - resources cleaned up');
     }
 
+    // ════════════════════════════════════════════════════════════════════════
+    // DEPRECATED: AI ENHANCEMENT OPTION
+    // ════════════════════════════════════════════════════════════════════════
+    //
+    // Sprint 7 (December 2025): AI generation moved to shadow overlay toggle.
+    // The toast panel now focuses purely on shadow display, not generation.
+    // Users can access AI shadows via the elegant toggle in the shadow overlay.
+    //
+    // Legacy methods kept as no-ops for backward compatibility.
+    // ════════════════════════════════════════════════════════════════════════
+
     /**
-     * Render AI enhancement option for all users
+     * @deprecated Sprint 7: AI generation moved to shadow overlay toggle
+     * This method is now a no-op. AI shadows are generated via the
+     * ShadowSourceToggle component in the shadow overlay modal.
      */
     renderAIEnhanceOption() {
-        // Check if AI adapter is available
-        if (!window.AIShadowAdapter) {
-            console.log('[ShadowPanel] AI shadow adapter not available');
-            return;
-        }
-
-        // Create the AI enhance section
-        const aiSection = document.createElement('div');
-        aiSection.className = 'shadow-ai-enhance';
-        aiSection.innerHTML = `
-            <div class="ai-enhance-divider"></div>
-            <p class="ai-enhance-prompt">Want deeper AI-generated insights?</p>
-            <button class="ai-enhance-btn" id="generateAIShadows">
-                ✨ Generate AI Analysis
-            </button>
-        `;
-
-        this.container.appendChild(aiSection);
-        this.setupAIEnhanceButton();
+        // No-op: AI enhancement now handled by shadow overlay toggle
+        console.log('[ShadowPanel] AI enhancement now available via shadow overlay toggle');
     }
 
     /**
-     * Setup AI enhancement button handler
+     * @deprecated Sprint 7: AI generation moved to shadow overlay toggle
      */
     setupAIEnhanceButton() {
-        const btn = document.getElementById('generateAIShadows');
-        if (!btn) return;
-
-        btn.addEventListener('click', async () => {
-            btn.disabled = true;
-            btn.textContent = '🔄 Analyzing...';
-
-            try {
-                // Get current state
-                const state = window.Quannex?.getState?.();
-                if (!state || !state.faces) {
-                    throw new Error('No face data available');
-                }
-
-                // Create AI adapter instance
-                const AIShadowAdapter = window.AIShadowAdapter;
-                const aiAdapter = new AIShadowAdapter();
-
-                // Generate AI shadows
-                const aiShadows = await aiAdapter.generateAIShadowPatterns(
-                    state.faces,
-                    { companyName: state.companyName || 'Organization', context: state }
-                );
-
-                if (aiShadows && aiShadows.length > 0) {
-                    // Update panel with AI shadows
-                    this.update(aiShadows);
-
-                    // Replace AI button with success message
-                    const aiSection = btn.closest('.shadow-ai-enhance');
-                    if (aiSection) {
-                        aiSection.innerHTML = '<p class="ai-enhance-success">✅ AI insights generated</p>';
-                    }
-
-                    console.log(`[ShadowPanel] ✨ Generated ${aiShadows.length} AI shadow insights`);
-                } else {
-                    btn.textContent = '✅ No additional shadows found';
-                    btn.disabled = true;
-                }
-            } catch (e) {
-                console.warn('[ShadowPanel] AI generation failed:', e);
-                btn.textContent = '❌ AI unavailable';
-                btn.disabled = true;
-            }
-        });
+        // No-op: Preserved for backward compatibility
     }
 
     /**
