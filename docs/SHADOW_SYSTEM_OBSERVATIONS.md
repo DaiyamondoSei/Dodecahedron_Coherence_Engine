@@ -177,8 +177,9 @@ FACE ID MAPPING:
 
 ### Structure Achievement
 
-**Original:** 1,785 lines in `dodec-shadow-overlay.js`
-**After:** 6 modules totaling ~1,990 lines + thin orchestrator (~80 lines)
+**Original:** 1,785 lines in `js/dodec/dodec-shadow-overlay.js`
+**After:** 6 modules in `js/shadow/overlay/` totaling ~1,990 lines
+**Plus:** Thin orchestrator in `js/dodec/dodec-shadow-overlay-orchestrator.js` (~80 lines)
 
 | Module | Lines | Responsibility |
 |--------|-------|---------------|

@@ -3,6 +3,7 @@
  * SHADOW EVENT HANDLERS - Keyboard & Mouse Event Binding
  * ═══════════════════════════════════════════════════════════════════════════════
  *
+ * Location: js/shadow/overlay/shadow-event-handlers.js
  * Extracted from: dodec-shadow-overlay.js (Phase 3E modularization)
  * Date: December 21, 2025
  *
@@ -42,31 +43,38 @@
  *
  * NAVIGATION MAP:
  * ───────────────
- *   shadow-event-handlers.js  ← YOU ARE HERE
- *        │
- *        ├─ IMPORTS FROM:
- *        │   └─ shadow-overlay-controller.js (open, close, toggle, isOpen)
- *        │
- *        └─ USED BY:
- *            └─ Main orchestrator (calls init on DOMContentLoaded)
+ *   js/shadow/overlay/
+ *   └── shadow-event-handlers.js  ← YOU ARE HERE
+ *            │
+ *            ├─ IMPORTS FROM:
+ *            │   └─ shadow-overlay-controller.js (open, close, toggle, isOpen)
+ *            │
+ *            └─ USED BY:
+ *                └─ Main orchestrator (calls init on DOMContentLoaded)
  *
  * ═══════════════════════════════════════════════════════════════════════════════
  */
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// DEPENDENCIES
+// MODULE WRAPPER (IIFE to avoid global scope pollution)
 // ═══════════════════════════════════════════════════════════════════════════════
+(function(global) {
+    'use strict';
 
-/**
- * Get overlay controller (loaded before this module)
- * @returns {Object} ShadowOverlayController API
- */
-const getController = () => window.ShadowOverlayController || {
-    open: () => {},
-    close: () => {},
-    toggle: () => {},
-    isOpen: () => false
-};
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // DEPENDENCIES
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    /**
+     * Get overlay controller (loaded before this module)
+     * @returns {Object} ShadowOverlayController API
+     */
+    const getController = () => global.ShadowOverlayController || {
+        open: () => {},
+        close: () => {},
+        toggle: () => {},
+        isOpen: () => false
+    };
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // STATE
@@ -250,13 +258,12 @@ function cleanup() {
     console.log('[ShadowEventHandlers] Cleaned up event listeners');
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// EXPORTS
-// ═══════════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // EXPORTS
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-// Export to window for module integration
-if (typeof window !== 'undefined') {
-    window.ShadowEventHandlers = {
+    // Export to window for module integration
+    global.ShadowEventHandlers = {
         // Initialization
         init,
 
@@ -271,4 +278,5 @@ if (typeof window !== 'undefined') {
     };
 
     console.log('[ShadowEventHandlers] Module loaded');
-}
+
+})(typeof window !== 'undefined' ? window : this);

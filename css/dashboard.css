@@ -672,8 +672,7 @@
         .shadow-panel-container {
             position: fixed;
             bottom: 80px;  /* Raised above Harmonic Tuner button */
-            left: 50%;
-            transform: translateX(-50%);  /* Center horizontally */
+            right: 20px;   /* Right-aligned for non-intrusive notifications */
             width: 350px;
             display: flex;
             flex-direction: column;
@@ -1215,61 +1214,14 @@
         }
 
         /* =========================================
-   SHADOW AI ENHANCEMENT (Phase 5)
-   ========================================= */
-
-        .shadow-ai-enhance {
-            margin-top: 16px;
-            padding-top: 16px;
-            text-align: center;
-        }
-
-        .shadow-ai-enhance .ai-enhance-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(147, 112, 219, 0.4), transparent);
-            margin-bottom: 12px;
-        }
-
-        .shadow-ai-enhance .ai-enhance-prompt {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 10px;
-        }
-
-        .shadow-ai-enhance .ai-enhance-btn {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            color: #a78bfa;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .shadow-ai-enhance .ai-enhance-btn:hover {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-        }
-
-        .shadow-ai-enhance .ai-enhance-btn:disabled {
-            opacity: 0.6;
-            cursor: wait;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .shadow-ai-enhance .ai-enhance-success {
-            color: #66ff99;
-            font-size: 12px;
-            padding: 10px;
-        }
-
-        /* =========================================
    VOICE INTERFACE (Phase 5)
    ========================================= */
+
+        /* ═══════════════════════════════════════════════════════════════
+           DEPRECATED: SHADOW AI ENHANCEMENT (Phase 5)
+           Sprint 7: Moved to shadow-overlay.css - ShadowSourceToggle
+           Styles removed to avoid dead code.
+           ═══════════════════════════════════════════════════════════════ */
 
         .voice-toggle {
             position: fixed;

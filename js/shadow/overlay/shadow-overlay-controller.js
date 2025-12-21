@@ -3,6 +3,7 @@
  * SHADOW OVERLAY CONTROLLER - Modal Open/Close/Toggle Management
  * ═══════════════════════════════════════════════════════════════════════════════
  *
+ * Location: js/shadow/overlay/shadow-overlay-controller.js
  * Extracted from: dodec-shadow-overlay.js (Phase 3D modularization)
  * Date: December 21, 2025
  *
@@ -14,90 +15,89 @@
  * NOTES FOR FUTURE CLAUDE
  * ───────────────────────────────────────────────────────────────────────────────
  *
- * Welcome! This module manages the shadow overlay MODAL behavior.
+ * Welcome! This module manages the overlay modal lifecycle.
  *
- * KEY INSIGHT: The overlay is a PROGRESSIVE DISCLOSURE mechanism.
- * Users see a small shadow count in the HUD, then can expand to see full details.
+ * KEY INSIGHT: The overlay is the PORTAL between 3D visualization and shadow cards.
+ * When a user clicks a shadow card, we dispatch a 'focus-face' event so the
+ * dodecahedron rotates to show the affected face.
  *
- * MODAL BEHAVIOR:
- * ───────────────
- * - Body scroll is LOCKED when overlay is open (prevents background scrolling)
- * - ESC key closes the overlay (handled by event-handlers module)
- * - Clicking backdrop closes (handled by event-handlers module)
- * - Focus trap could be added for full WCAG compliance (future enhancement)
+ * LIFECYCLE:
+ * ──────────
+ * 1. open()  → Show overlay, render cards, prevent body scroll
+ * 2. close() → Hide overlay, restore body scroll
+ * 3. toggle() → Switch between open/closed
  *
- * TIMING CONSIDERATION:
- * ─────────────────────
- * On overlay open, we call toggle.refresh() because:
- * 1. The toggle might have initialized before Quannex engine loaded data
- * 2. By the time user opens overlay, data is available
- * 3. refresh() re-evaluates mode and restores toggle HTML if needed
+ * FOCUS-ON-FACE FEATURE:
+ * ──────────────────────
+ * When user clicks a shadow card, we:
+ * 1. Extract faceId from the shadow
+ * 2. Close the overlay
+ * 3. Dispatch 'focus-face' custom event
+ * 4. The dodecahedron controller listens and rotates
  *
- * FOCUS-ON-FACE INTEGRATION:
- * ──────────────────────────
- * When user clicks a shadow card, we dispatch 'focus-face' custom event.
- * The 3D visualization listens for this and rotates the dodecahedron.
+ * BODY SCROLL LOCK:
+ * ─────────────────
+ * When overlay is open: document.body.style.overflow = 'hidden'
+ * When overlay closes: document.body.style.overflow = ''
+ *
+ * This prevents background scroll while viewing shadows.
  *
  * NAVIGATION MAP:
  * ───────────────
- *   shadow-overlay-controller.js  ← YOU ARE HERE
- *        │
- *        ├─ IMPORTS FROM:
- *        │   ├─ shadow-state-manager.js (getCurrentShadows)
- *        │   └─ shadow-card-renderer.js (renderShadowCards)
- *        │
- *        ├─ COLLABORATES WITH:
- *        │   └─ shadow-source-toggle.js (calls toggle.refresh on open)
- *        │
- *        └─ USED BY:
- *            ├─ shadow-event-handlers.js (keyboard/click handlers)
- *            └─ shadow-system-integration.js (external API)
+ *   js/shadow/overlay/
+ *   └── shadow-overlay-controller.js  ← YOU ARE HERE
+ *            │
+ *            ├─ IMPORTS FROM:
+ *            │   ├─ shadow-state-manager.js (getCurrentShadows)
+ *            │   ├─ shadow-card-renderer.js (renderShadowCards)
+ *            │   └─ shadow-source-toggle.js (refresh on open)
+ *            │
+ *            └─ USED BY:
+ *                ├─ shadow-event-handlers.js (open, close, toggle)
+ *                └─ shadow-system-integration.js (refreshIfOpen)
  *
  * ═══════════════════════════════════════════════════════════════════════════════
  */
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// DEPENDENCIES
+// MODULE WRAPPER (IIFE to avoid global scope pollution)
 // ═══════════════════════════════════════════════════════════════════════════════
+(function(global) {
+    'use strict';
 
-/**
- * Get card renderer (loaded before this module)
- * @returns {Object} ShadowCardRenderer API
- */
-const getCardRenderer = () => window.ShadowCardRenderer || {
-    renderShadowCards: () => {}
-};
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // DEPENDENCIES
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    /**
+     * Get state manager (loaded before this module)
+     * @returns {Object} ShadowStateManager API
+     */
+    const getStateManager = () => global.ShadowStateManager || {
+        getCurrentShadows: () => []
+    };
+
+    /**
+     * Get card renderer (loaded before this module)
+     * @returns {Object} ShadowCardRenderer API
+     */
+    const getCardRenderer = () => global.ShadowCardRenderer || {
+        renderShadowCards: () => {}
+    };
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**
- * Overlay open/close state
+ * Overlay open state
  * @type {boolean}
  */
 let overlayOpen = false;
 
 /**
- * Currently focused shadow (for getState API)
- * @type {string|null}
- */
-let activeShadowId = null;
-
-/**
- * Reference to ShadowSourceToggle instance
- * Set by init(), used for refresh on overlay open
- * @type {Object|null}
- */
-let shadowSourceToggle = null;
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// DOM REFERENCES
-// ═══════════════════════════════════════════════════════════════════════════════
-
-/**
- * Cached DOM element references
- * Populated on init() call
+ * DOM element references (set during init)
+ * @type {Object}
  */
 let elements = {
     overlay: null,
@@ -106,6 +106,12 @@ let elements = {
     shadowCount: null
 };
 
+/**
+ * Source toggle instance (set externally)
+ * @type {Object|null}
+ */
+let shadowSourceToggle = null;
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // INITIALIZATION
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -113,26 +119,23 @@ let elements = {
 /**
  * Initialize the overlay controller with DOM references
  *
- * @param {Object} options - Configuration options
- * @param {HTMLElement} options.overlay - The shadow overlay element
- * @param {HTMLElement} options.overlayContent - The overlay content container
- * @param {HTMLElement} [options.coherenceHud] - The coherence HUD element
- * @param {HTMLElement} [options.shadowCount] - The shadow count display element
- * @param {Object} [options.sourceToggle] - The ShadowSourceToggle instance
+ * @param {Object} refs - DOM element references
+ * @param {HTMLElement} refs.overlay - The overlay container
+ * @param {HTMLElement} refs.overlayContent - The content area for cards
+ * @param {HTMLElement} [refs.coherenceHud] - The HUD indicator
+ * @param {HTMLElement} [refs.shadowCount] - The shadow count element
  */
-function init(options = {}) {
-    elements.overlay = options.overlay || document.getElementById('shadowOverlay');
-    elements.overlayContent = options.overlayContent || document.getElementById('shadowOverlayContent');
-    elements.coherenceHud = options.coherenceHud || document.getElementById('coherenceHud');
-    elements.shadowCount = options.shadowCount || document.getElementById('shadowCount');
-
-    shadowSourceToggle = options.sourceToggle || null;
+function init(refs = {}) {
+    elements.overlay = refs.overlay || document.getElementById('shadowOverlay');
+    elements.overlayContent = refs.overlayContent || document.getElementById('shadowOverlayContent');
+    elements.coherenceHud = refs.coherenceHud || document.getElementById('coherenceHud');
+    elements.shadowCount = refs.shadowCount || document.getElementById('shadowCount');
 
     console.log('[ShadowOverlayController] Initialized');
 }
 
 /**
- * Set the source toggle reference (for refresh on open)
+ * Set the source toggle instance for refresh on open
  *
  * @param {Object} toggle - ShadowSourceToggle instance
  */
@@ -141,41 +144,43 @@ function setSourceToggle(toggle) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// OVERLAY OPEN/CLOSE
+// OVERLAY LIFECYCLE
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**
- * Open the shadow overlay panel
+ * Open the shadow overlay
  *
- * TIMING FIX: Refreshes toggle to re-evaluate mode in case data loaded after init.
+ * TIMING CONSIDERATION:
+ * We call shadowSourceToggle.refresh() because the toggle may have
+ * initialized in 'no-data' mode at page load, but by the time user
+ * opens the overlay, Quannex engine has loaded data.
  */
-function openShadowOverlay() {
+function open() {
     if (!elements.overlay || overlayOpen) return;
 
-    // TIMING FIX: Refresh toggle to re-evaluate mode in case data loaded after init
-    if (shadowSourceToggle) {
+    // Refresh source toggle (fixes timing issues)
+    if (shadowSourceToggle && typeof shadowSourceToggle.refresh === 'function') {
         shadowSourceToggle.refresh();
     }
 
-    // Render the shadow cards
+    // Render current shadows
     const cardRenderer = getCardRenderer();
-    if (elements.overlayContent) {
-        cardRenderer.renderShadowCards(elements.overlayContent, focusOnShadowFace);
-    }
+    cardRenderer.renderShadowCards(elements.overlayContent, focusOnShadowFace);
 
+    // Show overlay with animation
     elements.overlay.classList.add('visible');
     overlayOpen = true;
 
-    // Prevent body scroll while overlay is open
+    // Prevent body scroll
     document.body.style.overflow = 'hidden';
 
     console.log('[ShadowOverlayController] Opened');
 }
 
 /**
- * Close the shadow overlay panel
+ * Close the shadow overlay
  */
-function closeShadowOverlay() {
+function close() {
     if (!elements.overlay || !overlayOpen) return;
 
     elements.overlay.classList.remove('visible');
@@ -188,95 +193,15 @@ function closeShadowOverlay() {
 }
 
 /**
- * Toggle the shadow overlay panel
+ * Toggle the shadow overlay open/closed
  */
-function toggleShadowOverlay() {
+function toggle() {
     if (overlayOpen) {
-        closeShadowOverlay();
+        close();
     } else {
-        openShadowOverlay();
+        open();
     }
 }
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// FOCUS ON SHADOW FACE
-// ═══════════════════════════════════════════════════════════════════════════════
-
-/**
- * Focus the 3D view on the face associated with a shadow
- *
- * Dispatches 'focus-face' custom event that the 3D visualization listens for.
- * Stores the activeShadowId for getState() API.
- *
- * @param {Object} shadow - Shadow pattern object
- * @param {number} [shadow.faceId] - Primary affected face ID
- * @param {number[]} [shadow.involvedFaces] - All affected face IDs
- */
-function focusOnShadowFace(shadow) {
-    if (!shadow) return;
-
-    const faceId = shadow.faceId || (shadow.involvedFaces && shadow.involvedFaces[0]);
-    if (!faceId) {
-        console.warn('[ShadowOverlayController] Shadow has no face ID for focus:', shadow.name);
-        return;
-    }
-
-    activeShadowId = shadow.id || shadow.name;
-
-    // Dispatch focus event for 3D visualization
-    window.dispatchEvent(new CustomEvent('focus-face', {
-        detail: {
-            faceId: faceId,
-            shadow: shadow,
-            source: 'shadow-overlay'
-        }
-    }));
-
-    console.log(`[ShadowOverlayController] Focus on face ${faceId} for shadow: ${shadow.name}`);
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// HUD INDICATOR UPDATES
-// ═══════════════════════════════════════════════════════════════════════════════
-
-/**
- * Update the shadow count display in the HUD
- *
- * @param {number} count - Number of shadows
- */
-function updateShadowCount(count) {
-    if (elements.shadowCount) {
-        elements.shadowCount.textContent = count;
-    }
-
-    // Add/remove .has-shadows class for pulsing indicator
-    if (elements.coherenceHud) {
-        if (count > 0) {
-            elements.coherenceHud.classList.add('has-shadows');
-        } else {
-            elements.coherenceHud.classList.remove('has-shadows');
-        }
-    }
-}
-
-/**
- * Re-render the overlay content if open
- * Called when shadows are updated while overlay is visible
- */
-function refreshIfOpen() {
-    if (!overlayOpen) return;
-
-    const cardRenderer = getCardRenderer();
-    if (elements.overlayContent) {
-        cardRenderer.renderShadowCards(elements.overlayContent, focusOnShadowFace);
-    }
-
-    console.log('[ShadowOverlayController] Refreshed overlay content');
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// STATE ACCESSORS
-// ═══════════════════════════════════════════════════════════════════════════════
 
 /**
  * Check if overlay is currently open
@@ -287,29 +212,89 @@ function isOpen() {
     return overlayOpen;
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// FOCUS-ON-FACE FEATURE
+// ═══════════════════════════════════════════════════════════════════════════════
+
 /**
- * Get the currently focused shadow ID
+ * Focus on a specific face in the 3D view when shadow card is clicked.
  *
- * @returns {string|null} Active shadow ID or null
+ * PORTAL BEHAVIOR:
+ * 1. Close the overlay
+ * 2. Dispatch 'focus-face' event with faceId
+ * 3. The dodecahedron controller rotates to show the face
+ *
+ * @param {Object} shadow - Shadow pattern object
  */
-function getActiveShadowId() {
-    return activeShadowId;
+function focusOnShadowFace(shadow) {
+    const faceId = shadow.faceId || shadow.involvedFaces?.[0];
+
+    if (!faceId) {
+        console.log('[ShadowOverlayController] No face ID in shadow, cannot focus');
+        return;
+    }
+
+    // Close overlay first
+    close();
+
+    // Dispatch focus event
+    window.dispatchEvent(new CustomEvent('focus-face', {
+        detail: { faceId }
+    }));
+
+    console.log(`[ShadowOverlayController] Focusing on face ${faceId}`);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// HUD UPDATES
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Update the shadow count in the HUD indicator
+ *
+ * @param {number} count - Number of shadows to display
+ */
+function updateShadowCount(count) {
+    if (elements.shadowCount) {
+        elements.shadowCount.textContent = count;
+    }
+
+    // Update HUD visibility
+    if (elements.coherenceHud) {
+        if (count > 0) {
+            elements.coherenceHud.classList.add('has-shadows');
+        } else {
+            elements.coherenceHud.classList.remove('has-shadows');
+        }
+    }
 }
 
 /**
- * Get full controller state for debugging/API
+ * Refresh overlay content if currently open.
+ * Called when shadow data updates externally.
+ */
+function refreshIfOpen() {
+    if (!overlayOpen) return;
+
+    const cardRenderer = getCardRenderer();
+    cardRenderer.renderShadowCards(elements.overlayContent, focusOnShadowFace);
+
+    console.log('[ShadowOverlayController] Refreshed while open');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STATE INSPECTION
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Get current controller state for debugging
  *
  * @returns {Object} Current state
  */
 function getState() {
-    const stateManager = window.ShadowStateManager;
-    const currentShadows = stateManager?.getCurrentShadows() || [];
-
     return {
         overlayOpen,
-        activeShadowId,
-        shadowCount: currentShadows.length,
-        hasShadows: currentShadows.length > 0,
+        hasElements: !!elements.overlay,
         hasToggle: !!shadowSourceToggle
     };
 }
@@ -319,17 +304,12 @@ function getState() {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**
- * Clean up controller state
- * Called on destroy to prevent memory leaks
+ * Cleanup controller resources
  */
 function cleanup() {
     if (overlayOpen) {
-        closeShadowOverlay();
+        close();
     }
-
-    overlayOpen = false;
-    activeShadowId = null;
-    shadowSourceToggle = null;
 
     elements = {
         overlay: null,
@@ -338,35 +318,36 @@ function cleanup() {
         shadowCount: null
     };
 
+    shadowSourceToggle = null;
+    overlayOpen = false;
+
     console.log('[ShadowOverlayController] Cleaned up');
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// EXPORTS
-// ═══════════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // EXPORTS
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-// Export to window for module integration
-if (typeof window !== 'undefined') {
-    window.ShadowOverlayController = {
+    // Export to window for module integration
+    global.ShadowOverlayController = {
         // Initialization
         init,
         setSourceToggle,
 
-        // Core operations
-        open: openShadowOverlay,
-        close: closeShadowOverlay,
-        toggle: toggleShadowOverlay,
+        // Lifecycle
+        open,
+        close,
+        toggle,
+        isOpen,
 
-        // Focus functionality
+        // Focus feature
         focusOnShadowFace,
 
         // HUD updates
         updateShadowCount,
         refreshIfOpen,
 
-        // State accessors
-        isOpen,
-        getActiveShadowId,
+        // State inspection
         getState,
 
         // Cleanup
@@ -374,4 +355,5 @@ if (typeof window !== 'undefined') {
     };
 
     console.log('[ShadowOverlayController] Module loaded');
-}
+
+})(typeof window !== 'undefined' ? window : this);

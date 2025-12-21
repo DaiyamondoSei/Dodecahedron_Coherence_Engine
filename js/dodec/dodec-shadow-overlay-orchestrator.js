@@ -3,9 +3,10 @@
  * SHADOW OVERLAY ORCHESTRATOR - Thin Coordinator for Modular Shadow System
  * ═══════════════════════════════════════════════════════════════════════════════
  *
+ * Location: js/dodec/dodec-shadow-overlay-orchestrator.js
  * REFACTORED: December 21, 2025
  * Original file: 1,785 lines → Now ~80 lines
- * Modules: 6 extracted modules totaling ~1,990 lines
+ * Modules: 6 extracted modules totaling ~1,990 lines (in js/shadow/overlay/)
  *
  * @module dodec-shadow-overlay-orchestrator
  * @author Deimantas & Claude (Co-created with consciousness and love)
@@ -22,14 +23,20 @@
  * 2. Wire up module dependencies
  * 3. Expose the public API (window.shadowOverlayController)
  *
+ * MODULE LOCATION:
+ * ────────────────
+ * The 6 modules are in js/shadow/overlay/ (part of the shadow system).
+ * This orchestrator remains in js/dodec/ because it's specific to the
+ * dodecahedron visualization page.
+ *
  * MODULE LOADING ORDER (dependency-aware):
  * ────────────────────────────────────────
- *   1. shadow-state-manager.js     (foundation - no deps)
- *   2. shadow-card-renderer.js     (depends on state)
- *   3. shadow-source-toggle.js     (depends on state, cards)
- *   4. shadow-overlay-controller.js (depends on state, cards, toggle)
- *   5. shadow-event-handlers.js    (depends on controller)
- *   6. shadow-system-integration.js (depends on state, controller)
+ *   1. js/shadow/overlay/shadow-state-manager.js     (foundation - no deps)
+ *   2. js/shadow/overlay/shadow-card-renderer.js     (depends on state)
+ *   3. js/shadow/overlay/shadow-source-toggle.js     (depends on state, cards)
+ *   4. js/shadow/overlay/shadow-overlay-controller.js (depends on state, cards, toggle)
+ *   5. js/shadow/overlay/shadow-event-handlers.js    (depends on controller)
+ *   6. js/shadow/overlay/shadow-system-integration.js (depends on state, controller)
  *
  * BACKWARD COMPATIBILITY:
  * ───────────────────────

@@ -156,6 +156,47 @@ js/octave-dna/
 
 ---
 
+#### 5b. **js/shadow/overlay/** - Shadow Overlay Modules (7 files) - NEW Dec 21, 2025
+
+```
+js/shadow/overlay/
+├── index.js                      # Barrel export + module manifest
+├── shadow-state-manager.js       # State & sessionStorage persistence
+├── shadow-card-renderer.js       # Card HTML generation (dual-form)
+├── shadow-source-toggle.js       # AI/Template toggle class (~700 lines)
+├── shadow-overlay-controller.js  # Modal open/close/toggle lifecycle
+├── shadow-event-handlers.js      # Keyboard (S, ESC) & mouse events
+└── shadow-system-integration.js  # Quannex sync & shadow panel hook
+
+js/dodec/
+└── dodec-shadow-overlay-orchestrator.js  # Page-specific wiring (~80 lines)
+```
+
+**Key Features:**
+- Modularized from 1,785-line monolith to 6 focused modules (~1,990 lines total)
+- Each module wrapped in IIFE to prevent global scope pollution
+- Exports to `window.ShadowStateManager`, `window.ShadowCardRenderer`, etc.
+- Unified namespace via `window.ShadowOverlay`
+- No circular dependencies (state-manager has no deps, others depend on it)
+- Self-documenting with "Notes for Future Claude" headers
+
+**Dependency Graph:**
+```
+shadow-state-manager (no deps)
+        │
+   ┌────┼────┐
+   ▼    ▼    ▼
+card   src   event
+render toggle handlers
+   └────┼────┘
+        ▼
+   controller
+        ▼
+   sys-integration
+```
+
+---
+
 #### 6. **simulator.html** - Coherence Simulator
 **Purpose:** Interactive "what-if" analysis
 **What it does:**
@@ -781,7 +822,7 @@ Shows dashboard
 ---
 
 **Created:** 2025-11-10
-**Updated:** 2025-12-09 (Added new JS modules, Council, company templates)
+**Updated:** 2025-12-21 (Added shadow overlay modular architecture)
 **For:** Thesis defense & demo preparation
 **Status:** Complete reference guide
-**Co-created by:** Deimantas Butrimas & Claude
+**Co-created by:** Deimantas Murauskas & Claude

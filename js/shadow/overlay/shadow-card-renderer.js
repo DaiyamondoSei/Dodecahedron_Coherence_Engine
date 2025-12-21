@@ -3,6 +3,7 @@
  * SHADOW CARD RENDERER - Card HTML Generation & Interactions
  * ═══════════════════════════════════════════════════════════════════════════════
  *
+ * Location: js/shadow/overlay/shadow-card-renderer.js
  * Extracted from: dodec-shadow-overlay.js (Phase 3B modularization)
  * Date: December 21, 2025
  *
@@ -44,27 +45,34 @@
  *
  * NAVIGATION MAP:
  * ───────────────
- *   shadow-card-renderer.js  ← YOU ARE HERE
- *        │
- *        ├─ IMPORTS FROM:
- *        │   └─ shadow-state-manager.js (getCurrentShadows, getShadowState)
- *        │
- *        └─ USED BY:
- *            ├─ shadow-overlay-controller.js (calls render on open)
- *            └─ shadow-source-toggle.js (calls render on source change)
+ *   js/shadow/overlay/
+ *   └── shadow-card-renderer.js  ← YOU ARE HERE
+ *            │
+ *            ├─ IMPORTS FROM:
+ *            │   └─ shadow-state-manager.js (getCurrentShadows, getShadowState)
+ *            │
+ *            └─ USED BY:
+ *                ├─ shadow-overlay-controller.js (calls render on open)
+ *                └─ shadow-source-toggle.js (calls render on source change)
  *
  * ═══════════════════════════════════════════════════════════════════════════════
  */
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// DEPENDENCIES
+// MODULE WRAPPER (IIFE to avoid global scope pollution)
 // ═══════════════════════════════════════════════════════════════════════════════
+(function(global) {
+    'use strict';
 
-// Import state from ShadowStateManager (loaded before this module)
-const getStateManager = () => window.ShadowStateManager || {
-    getCurrentShadows: () => [],
-    getShadowState: () => ({ aiShadows: [] })
-};
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // DEPENDENCIES
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    // Import state from ShadowStateManager (loaded before this module)
+    const getStateManager = () => global.ShadowStateManager || {
+        getCurrentShadows: () => [],
+        getShadowState: () => ({ aiShadows: [] })
+    };
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // CARD HTML GENERATION
@@ -285,13 +293,12 @@ function transitionCards(container, onCardClick) {
     }, 200);
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// EXPORTS
-// ═══════════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // EXPORTS
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-// Export to window for module integration
-if (typeof window !== 'undefined') {
-    window.ShadowCardRenderer = {
+    // Export to window for module integration
+    global.ShadowCardRenderer = {
         // HTML generation
         createShadowCardHtml,
         createEmptyStateHtml,
@@ -306,4 +313,5 @@ if (typeof window !== 'undefined') {
     };
 
     console.log('[ShadowCardRenderer] Module loaded');
-}
+
+})(typeof window !== 'undefined' ? window : this);

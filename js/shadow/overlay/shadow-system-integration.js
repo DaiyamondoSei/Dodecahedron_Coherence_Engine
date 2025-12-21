@@ -3,6 +3,7 @@
  * SHADOW SYSTEM INTEGRATION - External Hooks & Sync Management
  * ═══════════════════════════════════════════════════════════════════════════════
  *
+ * Location: js/shadow/overlay/shadow-system-integration.js
  * Extracted from: dodec-shadow-overlay.js (Phase 3F modularization)
  * Date: December 21, 2025
  *
@@ -54,42 +55,49 @@
  *
  * NAVIGATION MAP:
  * ───────────────
- *   shadow-system-integration.js  ← YOU ARE HERE
- *        │
- *        ├─ IMPORTS FROM:
- *        │   ├─ shadow-state-manager.js (updateShadowsForSource, saveToSessionStorage)
- *        │   └─ shadow-overlay-controller.js (updateShadowCount, refreshIfOpen)
- *        │
- *        └─ HOOKS INTO:
- *            ├─ window.Quannex (getState for shadow data)
- *            └─ window.shadowPanel (update hook)
+ *   js/shadow/overlay/
+ *   └── shadow-system-integration.js  ← YOU ARE HERE
+ *            │
+ *            ├─ IMPORTS FROM:
+ *            │   ├─ shadow-state-manager.js (updateShadowsForSource, saveToSessionStorage)
+ *            │   └─ shadow-overlay-controller.js (updateShadowCount, refreshIfOpen)
+ *            │
+ *            └─ HOOKS INTO:
+ *                ├─ window.Quannex (getState for shadow data)
+ *                └─ window.shadowPanel (update hook)
  *
  * ═══════════════════════════════════════════════════════════════════════════════
  */
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// DEPENDENCIES
+// MODULE WRAPPER (IIFE to avoid global scope pollution)
 // ═══════════════════════════════════════════════════════════════════════════════
+(function(global) {
+    'use strict';
 
-/**
- * Get state manager (loaded before this module)
- * @returns {Object} ShadowStateManager API
- */
-const getStateManager = () => window.ShadowStateManager || {
-    getCurrentShadows: () => [],
-    updateShadowsForSource: () => {},
-    saveToSessionStorage: () => {},
-    loadFromSessionStorage: () => {}
-};
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // DEPENDENCIES
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-/**
- * Get overlay controller (loaded before this module)
- * @returns {Object} ShadowOverlayController API
- */
-const getController = () => window.ShadowOverlayController || {
-    updateShadowCount: () => {},
-    refreshIfOpen: () => {}
-};
+    /**
+     * Get state manager (loaded before this module)
+     * @returns {Object} ShadowStateManager API
+     */
+    const getStateManager = () => global.ShadowStateManager || {
+        getCurrentShadows: () => [],
+        updateShadowsForSource: () => {},
+        saveToSessionStorage: () => {},
+        loadFromSessionStorage: () => {}
+    };
+
+    /**
+     * Get overlay controller (loaded before this module)
+     * @returns {Object} ShadowOverlayController API
+     */
+    const getController = () => global.ShadowOverlayController || {
+        updateShadowCount: () => {},
+        refreshIfOpen: () => {}
+    };
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // STATE
@@ -337,13 +345,12 @@ function cleanup() {
     console.log('[ShadowSystemIntegration] Cleaned up (interval stopped, state saved)');
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// EXPORTS
-// ═══════════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // EXPORTS
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-// Export to window for module integration
-if (typeof window !== 'undefined') {
-    window.ShadowSystemIntegration = {
+    // Export to window for module integration
+    global.ShadowSystemIntegration = {
         // Initialization
         init,
 
@@ -366,4 +373,5 @@ if (typeof window !== 'undefined') {
     };
 
     console.log('[ShadowSystemIntegration] Module loaded');
-}
+
+})(typeof window !== 'undefined' ? window : this);

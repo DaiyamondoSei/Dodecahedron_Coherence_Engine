@@ -3,6 +3,7 @@
  * SHADOW SOURCE TOGGLE - AI/Template Shadow Switching Component
  * ═══════════════════════════════════════════════════════════════════════════════
  *
+ * Location: js/shadow/overlay/shadow-source-toggle.js
  * Extracted from: dodec-shadow-overlay.js (Phase 3C modularization)
  * Date: December 21, 2025
  *
@@ -40,8 +41,8 @@
  *
  * GENERATION GUARD:
  * ─────────────────
- * There's a race condition risk if user clicks toggle rapidly. The guard at
- * line 1017 in the original file (now handleToggle method) prevents this:
+ * There's a race condition risk if user clicks toggle rapidly. The guard
+ * in handleToggle() prevents this:
  *   if (shadowState.aiGenerationStatus === 'generating') return;
  *
  * ACCESSIBILITY (WCAG 2.1):
@@ -52,46 +53,53 @@
  *
  * NAVIGATION MAP:
  * ───────────────
- *   shadow-source-toggle.js  ← YOU ARE HERE
- *        │
- *        ├─ IMPORTS FROM:
- *        │   ├─ shadow-state-manager.js (shadowState, saveToSessionStorage)
- *        │   └─ shadow-card-renderer.js (renderShadowCards - for transitions)
- *        │
- *        ├─ USES (globals):
- *        │   ├─ global.Quannex (getState)
- *        │   ├─ global.AIShadowAdapter (AI generation)
- *        │   ├─ global.getGeminiProvider / getOpenAIProvider
- *        │   └─ localStorage (API keys, first-use hint)
- *        │
- *        └─ USED BY:
- *            └─ shadow-overlay-controller.js (creates instance, calls refresh)
+ *   js/shadow/overlay/
+ *   └── shadow-source-toggle.js  ← YOU ARE HERE
+ *            │
+ *            ├─ IMPORTS FROM:
+ *            │   ├─ shadow-state-manager.js (shadowState, saveToSessionStorage)
+ *            │   └─ shadow-card-renderer.js (renderShadowCards - for transitions)
+ *            │
+ *            ├─ USES (globals):
+ *            │   ├─ global.Quannex (getState)
+ *            │   ├─ global.AIShadowAdapter (AI generation)
+ *            │   ├─ global.getGeminiProvider / getOpenAIProvider
+ *            │   └─ localStorage (API keys, first-use hint)
+ *            │
+ *            └─ USED BY:
+ *                └─ shadow-overlay-controller.js (creates instance, calls refresh)
  *
  * ═══════════════════════════════════════════════════════════════════════════════
  */
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// DEPENDENCIES
+// MODULE WRAPPER (IIFE to avoid global scope pollution)
 // ═══════════════════════════════════════════════════════════════════════════════
+(function(global) {
+    'use strict';
 
-/**
- * Get state manager (loaded before this module)
- * @returns {Object} ShadowStateManager API
- */
-const getStateManager = () => window.ShadowStateManager || {
-    shadowState: { templateShadows: [], aiShadows: [], activeSource: 'template', aiGenerationStatus: 'idle' },
-    getCurrentShadows: () => [],
-    setCurrentShadows: () => {},
-    saveToSessionStorage: () => {}
-};
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // DEPENDENCIES
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-/**
- * Get card renderer (loaded before this module)
- * @returns {Object} ShadowCardRenderer API
- */
-const getCardRenderer = () => window.ShadowCardRenderer || {
-    renderShadowCards: () => {}
-};
+    /**
+     * Get state manager (loaded before this module)
+     * @returns {Object} ShadowStateManager API
+     */
+    const getStateManager = () => global.ShadowStateManager || {
+        shadowState: { templateShadows: [], aiShadows: [], activeSource: 'template', aiGenerationStatus: 'idle' },
+        getCurrentShadows: () => [],
+        setCurrentShadows: () => {},
+        saveToSessionStorage: () => {}
+    };
+
+    /**
+     * Get card renderer (loaded before this module)
+     * @returns {Object} ShadowCardRenderer API
+     */
+    const getCardRenderer = () => global.ShadowCardRenderer || {
+        renderShadowCards: () => {}
+    };
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // CONSTANTS
@@ -931,20 +939,20 @@ class ShadowSourceToggle {
     // and restores toggle HTML when transitioning from no-data mode.
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// EXPORTS
-// ═══════════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // EXPORTS
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-// Export to window for module integration
-if (typeof window !== 'undefined') {
-    window.ShadowSourceToggle = ShadowSourceToggle;
+    // Export to window for module integration
+    global.ShadowSourceToggle = ShadowSourceToggle;
 
     // Also export constants for testing/debugging
-    window.ShadowSourceToggleConstants = {
+    global.ShadowSourceToggleConstants = {
         TOGGLE_TOOLTIPS,
         PHI_SQUARED_MS,
         UNIVERSAL_SHADOWS
     };
 
     console.log('[ShadowSourceToggle] Module loaded');
-}
+
+})(typeof window !== 'undefined' ? window : this);

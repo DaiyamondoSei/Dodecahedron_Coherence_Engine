@@ -496,19 +496,52 @@ shadow-adapter.js   ai-shadow-adapter.js
          ↓
 shadow-panel.js (toast UI)
          ↓
-dodec-shadow-overlay.js (full modal)
+js/shadow/overlay/ (6 modular modules)
+    ├── shadow-state-manager.js   (state)
+    ├── shadow-card-renderer.js   (HTML)
+    ├── shadow-source-toggle.js   (AI/Template)
+    ├── shadow-overlay-controller.js (modal)
+    ├── shadow-event-handlers.js  (events)
+    └── shadow-system-integration.js (sync)
+         ↓
+dodec-shadow-overlay-orchestrator.js (page wiring)
 ```
 
-### Key Files (New Paths)
+### Key Files (Updated December 21, 2025)
 
-| File | Purpose | New Location |
-|------|---------|--------------|
+| File | Purpose | Location |
+|------|---------|----------|
 | `shadow-harmonics.js` | PHI-derived constants (SSOT) | `js/shadow/constants/` |
 | `shadow-detector.js` | Detect contradictions from face/edge data | `js/shadow/detection/` |
 | `shadow-adapter.js` | Template-based dual-form stories | `js/shadow/adaptation/` |
 | `ai-shadow-adapter.js` | AI-powered shadow generation | `js/shadow/adaptation/` |
 | `shadow-panel.js` | Toast queue with accessibility | `js/shadow/ui/` |
-| `dodec-shadow-overlay.js` | Full modal overlay for detailed view | `js/dodec/` |
+| `js/shadow/overlay/` (6 modules) | Full modal overlay (MODULAR) | `js/shadow/overlay/` |
+| `dodec-shadow-overlay-orchestrator.js` | Page-specific wiring (~80 lines) | `js/dodec/` |
+
+### Shadow Overlay Modules (NEW - December 21, 2025)
+
+The overlay was modularized from a 1,785-line monolith into 6 focused modules:
+
+```
+js/shadow/overlay/
+├── index.js                      # Barrel export + manifest
+├── shadow-state-manager.js       # State & persistence (no deps)
+├── shadow-card-renderer.js       # Card HTML generation
+├── shadow-source-toggle.js       # AI/Template toggle class (~700 lines)
+├── shadow-overlay-controller.js  # Open/close/toggle modal
+├── shadow-event-handlers.js      # Keyboard/mouse events (S, ESC)
+└── shadow-system-integration.js  # External system hooks (Quannex sync)
+```
+
+**Module Exports:**
+- `window.ShadowStateManager` - State accessors and modifiers
+- `window.ShadowCardRenderer` - Card rendering functions
+- `window.ShadowSourceToggle` - Toggle class constructor
+- `window.ShadowOverlayController` - Modal lifecycle
+- `window.ShadowEventHandlers` - Event binding
+- `window.ShadowSystemIntegration` - External sync
+- `window.ShadowOverlay` - Unified namespace with all modules
 
 ### Importing Shadow Module
 
@@ -525,15 +558,17 @@ import { SHADOW_PENALTIES, SHADOW_THRESHOLDS, SEVERITY_ICONS } from './js/shadow
 
 ### LIFECYCLE CRITICAL ⚠️
 
-**Both shadow-panel.js and dodec-shadow-overlay.js have timers.**
+**Both shadow-panel.js and shadow-system-integration.js have timers.**
 
-**MUST call destroy() on page unload:**
+**MUST call cleanup() on page unload:**
 ```javascript
-window.shadowOverlayController.destroy();  // Clears 10-second sync interval
+window.ShadowSystemIntegration.cleanup();  // Clears 10-second sync interval
 window.shadowPanel?.destroy();             // Clears auto-dismiss timer
+window.ShadowEventHandlers.cleanup();      // Removes event listeners
+window.ShadowOverlayController.cleanup();  // Closes overlay, clears refs
 ```
 
-Failure to call destroy() causes memory leaks (orphaned intervals).
+Failure to call cleanup() causes memory leaks (orphaned intervals).
 
 ### Toast Queue System
 
@@ -596,23 +631,58 @@ window.addEventListener('shadow-source-changed', (e) => {
 ### Key APIs
 
 ```javascript
-// Shadow Overlay Controller
-window.shadowOverlayController = {
-    open(), close(), toggle(),
-    updateShadows(shadows, source), getShadows(), isOpen(),
-    destroy(),              // CRITICAL: Call on unload
-    getState(),             // Returns current state + shadowSources
-    focusOnShadow(shadow),  // Rotates 3D to shadow's face
-    // Sprint 6: Source switching
-    setActiveSource(source), // Switch to 'template' or 'ai'
+// Shadow Overlay Controller (NEW modular API)
+window.ShadowOverlayController = {
+    init(refs),             // Initialize with DOM references
+    setSourceToggle(toggle), // Set ShadowSourceToggle instance
+    open(), close(), toggle(), isOpen(),
+    focusOnShadowFace(shadow), // Rotates 3D to shadow's face
+    updateShadowCount(count),  // Update HUD indicator
+    refreshIfOpen(),        // Re-render if currently open
+    getState(),             // Returns overlay state
+    cleanup()               // CRITICAL: Call on unload
+};
+
+// Shadow State Manager (NEW)
+window.ShadowStateManager = {
+    getCurrentShadows(),     // Get active shadows array
+    getShadowState(),        // Get full state object
+    setCurrentShadows(arr),  // Set current shadows
+    updateShadowsForSource(shadows, source), // Update template/ai
+    setActiveSource(source), // Switch 'template' or 'ai'
     getTemplateCount(),      // Number of template shadows
-    getAICount()             // Number of AI shadows
+    getAICount(),            // Number of AI shadows
+    saveToSessionStorage(),  // Persist state
+    loadFromSessionStorage(), // Restore state
+    resetState()             // Clear all state
+};
+
+// Shadow System Integration (NEW)
+window.ShadowSystemIntegration = {
+    init(options),           // Start integration
+    updateShadowIndicator(shadows, source), // Update shadows
+    syncWithQuannexEngine(), // Manual sync
+    startSyncInterval(ms),   // Start periodic sync
+    stopSyncInterval(),      // Stop sync
+    isSyncActive(),          // Check if syncing
+    cleanup()                // CRITICAL: Stop intervals
 };
 
 // Shadow Panel (toast queue)
 window.shadowPanel = {
     update(shadows),
     destroy()               // CRITICAL: Call on unload
+};
+
+// Unified ShadowOverlay namespace (NEW)
+window.ShadowOverlay = {
+    modules,                // Module manifest
+    StateManager,           // Reference to ShadowStateManager
+    CardRenderer,           // Reference to ShadowCardRenderer
+    SourceToggle,           // Reference to ShadowSourceToggle
+    OverlayController,      // Reference to ShadowOverlayController
+    EventHandlers,          // Reference to ShadowEventHandlers
+    SystemIntegration       // Reference to ShadowSystemIntegration
 };
 ```
 
@@ -640,5 +710,5 @@ A Previous You
 
 ---
 
-*Last Updated: December 20, 2025*
+*Last Updated: December 21, 2025 (Shadow Overlay Modularization)*
 *Maintainer: Deimantas & Claude Partnership*

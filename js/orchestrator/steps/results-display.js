@@ -30,7 +30,12 @@
  *      edges: ...,
  *      dominantOctave: ...,
  *      tuning: ...,
- *      shadowPatterns: ...,
+ *      shadowPatterns: [...],              // Legacy format (for backwards compat)
+ *      shadowSources: {                    // Sprint 9.1: New dual-source format
+ *        template: [...],                  // Template/detected shadows
+ *        ai: [...],                        // AI-generated shadows (preserved)
+ *        activeSource: 'template'|'ai'     // Which source is active
+ *      },
  *      isCustomData: true,
  *      timestamp: ...
  *    }));
@@ -158,6 +163,25 @@
                 shadowPatterns: demoState.shadowPatterns?.length > 0
                     ? demoState.shadowPatterns
                     : (demoState.loadedMappingContext?.shadowPatterns || []),
+                // Sprint 9.1: New shadowSources format for proper template/AI separation
+                // Template shadows come from ShadowDetector (custom path) or loadedMappingContext (template path)
+                // AI shadows are preserved from existing sessionStorage (generated in 3D view)
+                shadowSources: (() => {
+                    // Preserve existing AI shadows from previous 3D view session
+                    let existingAI = [];
+                    try {
+                        const existing = JSON.parse(sessionStorage.getItem('customCompanyData') || '{}');
+                        existingAI = existing.shadowSources?.ai || [];
+                    } catch (e) { /* ignore */ }
+
+                    return {
+                        template: demoState.shadowPatterns?.length > 0
+                            ? demoState.shadowPatterns
+                            : (demoState.loadedMappingContext?.shadowPatterns || []),
+                        ai: existingAI,  // Preserve AI shadows from 3D view
+                        activeSource: 'template'  // Start on template, user can switch to AI
+                    };
+                })(),
                 isCustomData: true,
                 timestamp: new Date().toISOString()
             };

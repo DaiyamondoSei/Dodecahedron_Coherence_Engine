@@ -11,7 +11,7 @@
 ```
 
 **Co-Created:** Deimantas & Claude
-**Date:** December 2025
+**Date:** December 2025 (Updated December 21, 2025 - Post-Modularization)
 **Purpose:** Complete reference for the shadow detection and display system
 
 ---
@@ -32,7 +32,7 @@ Welcome, future me! This document is your guide to the shadow system - the ethic
 
 6. **Template vs AI** - There are two shadow sources: template-based (instant, archetypal) and AI-generated (Gemini/OpenAI, contextual).
 
-7. **Two display modes** - Toast notifications (`shadow-panel.js`) for individual alerts, overlay (`dodec-shadow-overlay.js`) for full analysis.
+7. **Two display modes** - Toast notifications (`shadow-panel.js`) for individual alerts, overlay (`js/shadow/overlay/` modules) for full analysis.
 
 8. **MAX_PENALTY = 0.910** - Never completely zero out a face. The PSI_5 limit ensures there's always some energy remaining.
 
@@ -79,7 +79,7 @@ Welcome, future me! This document is your guide to the shadow system - the ethic
                           ▼
                  ┌──────────────────┐
                  │ SHADOW STATE     │
-                 │ (in overlay.js)  │
+                 │ (state-manager)  │
                  │                  │
                  │ templateShadows  │
                  │ aiShadows        │
@@ -90,8 +90,8 @@ Welcome, future me! This document is your guide to the shadow system - the ethic
           ▼                               ▼
  ┌──────────────────┐           ┌──────────────────┐
  │ SHADOW PANEL     │           │ SHADOW OVERLAY   │
- │ shadow-panel.js  │           │ dodec-shadow-    │
- │                  │           │ overlay.js       │
+ │ shadow-panel.js  │           │ js/shadow/overlay│
+ │                  │           │ (6 modules)      │
  │ Toast queue      │           │                  │
  │ Single-toast     │           │ Full modal       │
  │ Auto-dismiss     │           │ Card grid        │
@@ -248,9 +248,9 @@ The shadow system is organized in four layers, each with a single responsibility
 ┌────────────────────────────────────────────────────────────────────────────┐
 │ LAYER 4: UI (Display)                                                      │
 │ ┌─────────────────────────┐  ┌─────────────────────────────────────────┐  │
-│ │ shadow-panel.js         │  │ dodec-shadow-overlay.js (1,785 lines)   │  │
-│ │ Toast notifications     │  │ Full overlay modal with AI toggle       │  │
-│ │ Queue system            │  │ Card grid, ShadowSourceToggle class     │  │
+│ │ shadow-panel.js         │  │ js/shadow/overlay/ (MODULAR!)          │  │
+│ │ Toast notifications     │  │ 6 focused modules (~1,990 lines total) │  │
+│ │ Queue system            │  │ + thin orchestrator in js/dodec/       │  │
 │ └─────────────────────────┘  └─────────────────────────────────────────┘  │
 └────────────────────────────────────────────────────────────────────────────┘
                                         │
@@ -301,7 +301,54 @@ The shadow system is organized in four layers, each with a single responsibility
 | 3 | `js/shadow/adaptation/shadow-adapter.js` | ~350 | Template stories |
 | 3 | `js/shadow/adaptation/ai-shadow-adapter.js` | ~550 | AI stories |
 | 4 | `js/shadow/ui/shadow-panel.js` | ~600 | Toast notifications |
-| 4 | `js/dodec/dodec-shadow-overlay.js` | ~1,785 | Full overlay modal |
+| 4 | `js/shadow/overlay/` (6 modules) | ~1,990 | Full overlay modal |
+| 4 | `js/dodec/dodec-shadow-overlay-orchestrator.js` | ~80 | Page-specific wiring |
+
+### Shadow Overlay Module Details (NEW - December 21, 2025)
+
+The overlay was modularized from a 1,785-line monolith into 6 focused modules:
+
+```
+js/shadow/overlay/
+├── index.js                      (~180 lines) - Barrel export + manifest
+├── shadow-state-manager.js       (~230 lines) - State & persistence
+├── shadow-card-renderer.js       (~270 lines) - Card HTML generation
+├── shadow-source-toggle.js       (~700 lines) - AI/Template toggle class
+├── shadow-overlay-controller.js  (~280 lines) - Open/close/toggle modal
+├── shadow-event-handlers.js      (~230 lines) - Keyboard/mouse events
+└── shadow-system-integration.js  (~280 lines) - External system hooks
+
+js/dodec/
+└── dodec-shadow-overlay-orchestrator.js (~80 lines) - Page wiring
+```
+
+**Dependency Graph (no circular dependencies):**
+
+```
+                    ┌─────────────────────┐
+                    │ shadow-state-manager │ (no deps)
+                    └──────────┬──────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              ▼                ▼                ▼
+    ┌─────────────────┐ ┌───────────────┐ ┌────────────────┐
+    │ card-renderer   │ │ source-toggle │ │ event-handlers │
+    └────────┬────────┘ └───────┬───────┘ └────────┬───────┘
+             │                  │                   │
+             └──────────────────┼───────────────────┘
+                               ▼
+                    ┌─────────────────────┐
+                    │ overlay-controller  │
+                    └──────────┬──────────┘
+                               │
+                    ┌─────────────────────┐
+                    │ system-integration  │
+                    └──────────┬──────────┘
+                               │
+                    ┌─────────────────────┐
+                    │     index.js        │
+                    └─────────────────────┘
+```
 
 ---
 
@@ -342,10 +389,10 @@ Stories use dynamic placeholders:
 
 ## SHADOW STATE MANAGEMENT
 
-The overlay module maintains a centralized state for shadow data:
+The overlay module maintains a centralized state for shadow data in `js/shadow/overlay/shadow-state-manager.js`:
 
 ```javascript
-// From dodec-shadow-overlay.js
+// From js/shadow/overlay/shadow-state-manager.js
 
 const shadowState = {
     templateShadows: [],      // From ShadowAdapter (instant)
@@ -505,14 +552,18 @@ const integrated = shadow.story.integrated;
 ### Console Verification
 
 ```javascript
-// Check shadow state
-console.log(window.shadowState);
+// Check shadow state (via ShadowStateManager)
+console.log(window.ShadowStateManager.getShadowState());
 
 // Check detected shadows
-console.log(window.currentShadows);
+console.log(window.ShadowStateManager.getCurrentShadows());
 
 // Check ShadowSourceToggle
 console.log(window.shadowSourceToggle);
+
+// Check all overlay modules
+console.log(window.ShadowOverlay);  // Full module manifest
+console.log(window.SHADOW_OVERLAY_MODULES);  // Module details
 ```
 
 ---

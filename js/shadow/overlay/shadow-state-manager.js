@@ -3,6 +3,7 @@
  * SHADOW STATE MANAGER - Centralized State for Shadow System
  * ═══════════════════════════════════════════════════════════════════════════════
  *
+ * Location: js/shadow/overlay/shadow-state-manager.js
  * Extracted from: dodec-shadow-overlay.js (Phase 3A modularization)
  * Date: December 21, 2025
  *
@@ -40,32 +41,39 @@
  *
  * NAVIGATION MAP:
  * ───────────────
- *   shadow-state-manager.js  ← YOU ARE HERE (no dependencies)
- *        │
- *        └─ USED BY:
- *            ├─ shadow-card-renderer.js (reads currentShadows)
- *            ├─ shadow-source-toggle.js (reads/writes state)
- *            ├─ shadow-overlay-controller.js (reads state)
- *            └─ index.js (exports all)
+ *   js/shadow/overlay/
+ *   └── shadow-state-manager.js  ← YOU ARE HERE (no dependencies)
+ *            │
+ *            └─ USED BY:
+ *                ├─ shadow-card-renderer.js (reads currentShadows)
+ *                ├─ shadow-source-toggle.js (reads/writes state)
+ *                ├─ shadow-overlay-controller.js (reads state)
+ *                └─ index.js (exports all)
  *
  * ═══════════════════════════════════════════════════════════════════════════════
  */
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// STATE OBJECT
+// MODULE WRAPPER (IIFE to avoid global scope pollution)
 // ═══════════════════════════════════════════════════════════════════════════════
+(function(global) {
+    'use strict';
 
-/**
- * Central shadow state object
- *
- * INVARIANTS:
- * - templateShadows and aiShadows are NEVER undefined (always arrays)
- * - activeSource is ALWAYS 'template' or 'ai'
- * - aiGenerationStatus tracks async AI operations
- *
- * @type {Object}
- */
-const shadowState = {
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // STATE OBJECT
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    /**
+     * Central shadow state object
+     *
+     * INVARIANTS:
+     * - templateShadows and aiShadows are NEVER undefined (always arrays)
+     * - activeSource is ALWAYS 'template' or 'ai'
+     * - aiGenerationStatus tracks async AI operations
+     *
+     * @type {Object}
+     */
+    const shadowState = {
     templateShadows: [],       // Original shadows from company template (preserved)
     aiShadows: [],             // AI-generated shadows (cached between switches)
     activeSource: 'template',  // 'template' | 'ai' - which source is displayed
@@ -237,13 +245,12 @@ function resetState() {
     currentShadows = [];
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// EXPORTS
-// ═══════════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // EXPORTS
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-// Export to window for module integration
-if (typeof window !== 'undefined') {
-    window.ShadowStateManager = {
+    // Export to window for module integration
+    global.ShadowStateManager = {
         // State objects (read access)
         shadowState,
         getCurrentShadows,
@@ -267,4 +274,5 @@ if (typeof window !== 'undefined') {
     };
 
     console.log('[ShadowStateManager] Module loaded');
-}
+
+})(typeof window !== 'undefined' ? window : this);
