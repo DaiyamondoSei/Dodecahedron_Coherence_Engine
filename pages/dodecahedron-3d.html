@@ -2360,11 +2360,34 @@
     <script src="../js/dodec/dodec-tour.js"></script>
 
     <!-- ════════════════════════════════════════════════════════════════════════
-         SHADOW OVERLAY CONTROLLER - Extracted 2025-12-17
+         SHADOW OVERLAY SYSTEM - Modularized 2025-12-21
          Progressive disclosure system for organizational shadow patterns
-         See js/dodec/dodec-shadow-overlay.js for implementation details
+
+         MODULARIZATION: 1,785 lines → 6 modules + thin orchestrator (~80 lines)
+
+         Module Load Order (dependency-aware):
+         1. shadow-state-manager.js     (foundation - no deps)
+         2. shadow-card-renderer.js     (depends on state)
+         3. shadow-source-toggle.js     (depends on state, cards)
+         4. shadow-overlay-controller.js (depends on state, cards, toggle)
+         5. shadow-event-handlers.js    (depends on controller)
+         6. shadow-system-integration.js (depends on state, controller)
+         7. orchestrator                 (coordinates all modules)
+
+         See js/dodec/shadow-overlay/ for module implementations
          ════════════════════════════════════════════════════════════════════════ -->
-    <script src="../js/dodec/dodec-shadow-overlay.js"></script>
+
+    <!-- Shadow Overlay Modules (load in dependency order) -->
+    <script src="../js/dodec/shadow-overlay/shadow-state-manager.js"></script>
+    <script src="../js/dodec/shadow-overlay/shadow-card-renderer.js"></script>
+    <script src="../js/dodec/shadow-overlay/shadow-source-toggle.js"></script>
+    <script src="../js/dodec/shadow-overlay/shadow-overlay-controller.js"></script>
+    <script src="../js/dodec/shadow-overlay/shadow-event-handlers.js"></script>
+    <script src="../js/dodec/shadow-overlay/shadow-system-integration.js"></script>
+    <script src="../js/dodec/shadow-overlay/index.js"></script>
+
+    <!-- Shadow Overlay Orchestrator (thin coordinator) -->
+    <script src="../js/dodec/dodec-shadow-overlay-orchestrator.js"></script>
 
 </body>
 

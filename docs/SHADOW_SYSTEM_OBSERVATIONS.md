@@ -173,5 +173,47 @@ FACE ID MAPPING:
 
 ---
 
+## Modularization Completion Notes (Track 3)
+
+### Structure Achievement
+
+**Original:** 1,785 lines in `dodec-shadow-overlay.js`
+**After:** 6 modules totaling ~1,990 lines + thin orchestrator (~80 lines)
+
+| Module | Lines | Responsibility |
+|--------|-------|---------------|
+| shadow-state-manager.js | ~230 | State & sessionStorage persistence |
+| shadow-card-renderer.js | ~270 | Card HTML generation & interactions |
+| shadow-source-toggle.js | ~700 | AI/Template toggle with tooltips |
+| shadow-overlay-controller.js | ~280 | Modal open/close/toggle |
+| shadow-event-handlers.js | ~230 | Keyboard/mouse event binding |
+| shadow-system-integration.js | ~280 | Quannex sync, interval, shadow panel hook |
+
+### Dependency Graph (Verified No Circular Dependencies)
+
+```
+ShadowStateManager (foundation - no deps)
+       │
+       ├──> ShadowCardRenderer
+       │           │
+       ├──> ShadowSourceToggle ────┐
+       │                           │
+       └──> ShadowOverlayController <──┘
+                   │
+       ┌───────────┴───────────┐
+       │                       │
+ShadowEventHandlers    ShadowSystemIntegration
+```
+
+### Future Enhancement: Module Loading
+
+Currently modules load via `<script>` tags in order. Future enhancement could:
+1. Convert to ES6 modules with `import`/`export`
+2. Use dynamic `import()` for code splitting
+3. Add module bundler (Vite/Rollup) for production builds
+
+---
+
 *Last updated: December 21, 2025*
 *Session: refactor/shadow-system-enhancement branch*
+*Modularization: COMPLETE*

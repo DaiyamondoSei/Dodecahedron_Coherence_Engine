@@ -20,12 +20,12 @@
  *
  * MODULARIZATION STATUS:
  * ──────────────────────
- * ✅ shadow-state-manager.js - COMPLETE (state & persistence)
- * 🔄 shadow-card-renderer.js - TODO (card HTML generation)
- * 🔄 shadow-source-toggle.js - TODO (ShadowSourceToggle class)
- * 🔄 shadow-overlay-controller.js - TODO (open/close/toggle)
- * 🔄 shadow-event-handlers.js - TODO (keyboard/mouse events)
- * 🔄 shadow-system-integration.js - TODO (external hooks)
+ * ✅ shadow-state-manager.js - COMPLETE (~230 lines - state & persistence)
+ * ✅ shadow-card-renderer.js - COMPLETE (~270 lines - card HTML generation)
+ * ✅ shadow-source-toggle.js - COMPLETE (~700 lines - ShadowSourceToggle class)
+ * ✅ shadow-overlay-controller.js - COMPLETE (~280 lines - open/close/toggle)
+ * ✅ shadow-event-handlers.js - COMPLETE (~230 lines - keyboard/mouse events)
+ * ✅ shadow-system-integration.js - COMPLETE (~280 lines - external hooks)
  *
  * PLANNED STRUCTURE:
  * ─────────────────────────────────────────────────────────────────────────────
@@ -33,14 +33,16 @@
  *   js/dodec/
  *   ├── shadow-overlay/
  *   │   ├── index.js                      (YOU ARE HERE - barrel export)
- *   │   ├── shadow-state-manager.js       ✅ (state & persistence)
- *   │   ├── shadow-card-renderer.js       🔄 (card HTML generation)
- *   │   ├── shadow-source-toggle.js       🔄 (ShadowSourceToggle class)
- *   │   ├── shadow-overlay-controller.js  🔄 (open/close/toggle)
- *   │   ├── shadow-event-handlers.js      🔄 (keyboard/mouse events)
- *   │   └── shadow-system-integration.js  🔄 (external hooks)
+ *   │   ├── shadow-state-manager.js       ✅ (~230 lines - state & persistence)
+ *   │   ├── shadow-card-renderer.js       ✅ (~270 lines - card HTML generation)
+ *   │   ├── shadow-source-toggle.js       ✅ (~700 lines - ShadowSourceToggle class)
+ *   │   ├── shadow-overlay-controller.js  ✅ (~280 lines - open/close/toggle)
+ *   │   ├── shadow-event-handlers.js      ✅ (~230 lines - keyboard/mouse events)
+ *   │   └── shadow-system-integration.js  ✅ (~280 lines - external hooks)
  *   │
  *   └── dodec-shadow-overlay.js           (thin orchestrator ~80 lines)
+ *
+ * TOTAL EXTRACTION: ~1,990 lines across 6 modules
  *
  * DEPENDENCY GRAPH (no circular dependencies):
  * ─────────────────────────────────────────────────────────────────────────────
@@ -111,38 +113,44 @@ const SHADOW_OVERLAY_MODULES = {
     stateManager: {
         path: './shadow-overlay/shadow-state-manager.js',
         status: 'complete',
+        lines: 230,
         exports: 'window.ShadowStateManager',
         dependencies: []
     },
     cardRenderer: {
         path: './shadow-overlay/shadow-card-renderer.js',
-        status: 'pending',
+        status: 'complete',
+        lines: 270,
         exports: 'window.ShadowCardRenderer',
         dependencies: ['stateManager']
     },
     sourceToggle: {
         path: './shadow-overlay/shadow-source-toggle.js',
-        status: 'pending',
+        status: 'complete',
+        lines: 700,
         exports: 'window.ShadowSourceToggle',
-        dependencies: ['stateManager']
+        dependencies: ['stateManager', 'cardRenderer']
     },
     overlayController: {
         path: './shadow-overlay/shadow-overlay-controller.js',
-        status: 'pending',
+        status: 'complete',
+        lines: 280,
         exports: 'window.ShadowOverlayController',
         dependencies: ['stateManager', 'cardRenderer', 'sourceToggle']
     },
     eventHandlers: {
         path: './shadow-overlay/shadow-event-handlers.js',
-        status: 'pending',
+        status: 'complete',
+        lines: 230,
         exports: 'window.ShadowEventHandlers',
         dependencies: ['overlayController']
     },
     systemIntegration: {
         path: './shadow-overlay/shadow-system-integration.js',
-        status: 'pending',
+        status: 'complete',
+        lines: 280,
         exports: 'window.ShadowSystemIntegration',
-        dependencies: ['overlayController']
+        dependencies: ['stateManager', 'overlayController']
     }
 };
 
@@ -150,14 +158,21 @@ const SHADOW_OVERLAY_MODULES = {
 if (typeof window !== 'undefined') {
     window.SHADOW_OVERLAY_MODULES = SHADOW_OVERLAY_MODULES;
 
-    // Re-export ShadowStateManager for convenience
+    // Re-export all modules for convenience
     window.ShadowOverlay = {
         modules: SHADOW_OVERLAY_MODULES,
         StateManager: window.ShadowStateManager,
-        // Future modules will be added here as they're completed
+        CardRenderer: window.ShadowCardRenderer,
+        SourceToggle: window.ShadowSourceToggle,
+        OverlayController: window.ShadowOverlayController,
+        EventHandlers: window.ShadowEventHandlers,
+        SystemIntegration: window.ShadowSystemIntegration
     };
 
-    console.log('[ShadowOverlay/index] Module system initialized');
-    console.log('[ShadowOverlay/index] Completed modules: stateManager');
-    console.log('[ShadowOverlay/index] Pending: cardRenderer, sourceToggle, overlayController, eventHandlers, systemIntegration');
+    // Calculate total lines
+    const totalLines = Object.values(SHADOW_OVERLAY_MODULES)
+        .reduce((sum, m) => sum + (m.lines || 0), 0);
+
+    console.log('[ShadowOverlay/index] ✅ All 6 modules complete');
+    console.log(`[ShadowOverlay/index] Total extraction: ${totalLines} lines`);
 }
