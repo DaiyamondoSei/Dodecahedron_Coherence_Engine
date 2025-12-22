@@ -215,6 +215,160 @@ Currently modules load via `<script>` tags in order. Future enhancement could:
 
 ---
 
-*Last updated: December 21, 2025*
+## December 22, 2025 - Shadow Card Enhancement v2.0
+
+### Session Theme
+Template extraction and rich card UI - from flat text displays to interactive cards with face chips, 3 prescription types, and 3D navigation.
+
+---
+
+### Ideas & Opportunities Discovered
+
+#### 1. Face Chip Click Navigation
+- **Currently:** Navigate button focuses on first affected face only
+- **Opportunity:** Make individual face chips clickable to navigate to THAT specific face
+- **Benefit:** More granular exploration of shadow-face relationships
+
+#### 2. Prescription Progress Tracking
+- **Currently:** Prescriptions are static text
+- **Opportunity:** Add checkboxes or progress indicators for action prescriptions
+- **Benefit:** Users could track shadow integration journey over time
+
+#### 3. Shadow-to-Shadow Visual Relationships
+- **Currently:** Shadows shown independently in cards
+- **Opportunity:** Visual connections between shadows that share faces
+- **Pattern:** If shadows A and B both involve Face 3, they're related
+- **Benefit:** Reveals systemic patterns across shadows
+
+#### 4. Voice/Audio Shadow Narratives
+- **Currently:** Text-only narratives
+- **Opportunity:** TTS option for shadow/gift narratives
+- **Benefit:** More immersive, accessible experience
+
+---
+
+### Issues Noticed During Implementation
+
+#### 1. MappingContext Dependency Fragility
+- **Location:** `shadow-card-templates.js:createFaceChip()`
+- **Issue:** Falls back to "Face {id}" if MappingContext unavailable
+- **When:** MappingContext loads after templates or in different scope
+- **Mitigation:** Lazy loading pattern implemented
+- **Recommendation:** Consider passing MappingContext explicitly in future
+
+#### 2. Energy Values Missing from Template Shadows
+- **Location:** Shadow detector archetypal patterns (burnoutEngine, etc.)
+- **Issue:** Template shadows have face IDs but not individual face energy values
+- **Result:** Face chips show default 50% energy for all template shadows
+- **Recommendation:** Enhance template patterns with typical energy signatures
+
+#### 3. Large Card Details Section Overflow
+- **Location:** Cards with 4+ affected faces
+- **Issue:** Details section can become quite tall
+- **Potential:** Add max-height with scroll for face chips grid
+- **Note:** CSS exists but may need tuning for extreme cases
+
+---
+
+### Patterns Discovered
+
+#### 1. Template Extraction Pattern (v2.0)
+```javascript
+// Templates module: WHAT to render (pure functions)
+const getTemplates = () => global.ShadowCardTemplates || fallback;
+html = templates.createShadowCardHtml(shadow);
+
+// Renderer module: WHEN/HOW to render (orchestration)
+renderShadowCards(container, callback);
+setupCardInteractions(container, shadows);
+```
+**Benefit:** Clean separation - template changes don't touch event handlers
+
+#### 2. PHI-Derived Energy Thresholds
+```javascript
+const PHI_3 = 0.236;  // 24% - LOW threshold
+const PSI_3 = 0.764;  // 76% - HIGH threshold
+```
+- Pattern: Use sacred geometry constants for status boundaries
+- Status: `high` (≥76%), `low` (≤24%), `moderate` (between)
+- Source: `js/constants/phi-harmonics.js`
+
+#### 3. BEM Naming for CSS/JS Alignment
+```javascript
+// OLD (broken): .shadow-suppressed
+// NEW (works):  .shadow-card__suppressed
+```
+**Lesson:** Mixing naming conventions causes subtle bugs - the gift toggle was broken for this exact reason
+
+#### 4. Backwards-Compatible Data Normalization
+```javascript
+// Normalizer handles BOTH formats
+if (shadow.prescriptions && typeof shadow.prescriptions === 'object') {
+    // New: { action, insight, opportunity }
+} else if (shadow.prescription) {
+    // Legacy: single string
+}
+// Always outputs consistent shape
+```
+
+---
+
+### Architectural Insights
+
+#### 1. Module Extraction Timing Is Critical
+- **Lesson:** Extract modules BEFORE adding complexity
+- **What we did:** Extracted templates before enhancing cards
+- **Result:** Clean separation from the start, no refactoring debt
+
+#### 2. IIFE Pattern for Browser Modules
+```javascript
+(function(global) {
+    'use strict';
+    // Private module code
+    global.ModuleName = { /* public exports */ };
+})(typeof window !== 'undefined' ? window : this);
+```
+- Used across all shadow overlay modules
+- Provides scope isolation without build tooling
+- Future: Consider ES modules when build system added
+
+#### 3. Documentation as Navigation (Notes for Future Claude)
+- WHY > WHAT in comments
+- ASCII diagrams provide instant orientation
+- Navigation maps show import/export relationships
+- Reduces context-gathering time dramatically
+
+---
+
+### Testing Checklist (v2.0 Features)
+
+- [x] Toggle between Template and AI sources
+- [x] Gift toggle shows gift, hides shadow (BEM fix verified)
+- [x] Severity badges display with correct colors
+- [x] Card header click expands/collapses details
+- [ ] Face chips show names when MappingContext available
+- [ ] Navigate button focuses 3D view and highlights faces
+- [ ] Three prescription types display (action/insight/opportunity)
+- [ ] Empty state message when no shadows
+- [ ] Cards transition smoothly on source change
+
+---
+
+### v2.0 Module Structure Update
+
+| Module | Lines | Change |
+|--------|-------|--------|
+| shadow-state-manager.js | ~230 | Unchanged |
+| **shadow-card-templates.js** | **~450** | **NEW** (extracted from renderer) |
+| shadow-card-renderer.js | ~415 | Refactored (now uses templates) |
+| shadow-source-toggle.js | ~700 | Unchanged |
+| shadow-overlay-controller.js | ~280 | Unchanged |
+| shadow-event-handlers.js | ~230 | Unchanged |
+| shadow-system-integration.js | ~280 | Unchanged |
+| **TOTAL** | **~2,585** | +595 lines (richer cards) |
+
+---
+
+*Last updated: December 22, 2025*
 *Session: refactor/shadow-system-enhancement branch*
-*Modularization: COMPLETE*
+*Card Enhancement v2.0: COMPLETE*

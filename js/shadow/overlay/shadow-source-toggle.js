@@ -775,10 +775,14 @@ class ShadowSourceToggle {
             // - Any exception thrown during generation
             this.toggle?.classList.remove('generating');
             if (this.loadingText) {
-                this.loadingText.classList.remove('visible');
-                // Clear text content to prevent flash during rerender/refresh
-                // (opacity transition means text lingers briefly; clearing prevents any flash)
+                // CRITICAL FIX (Sprint 9.2): Clear text FIRST, THEN remove class
+                // This ensures the text is already empty when opacity transition starts,
+                // preventing "Analyzing your organization..." from lingering visually
                 this.loadingText.textContent = '';
+                // Use requestAnimationFrame to ensure text is cleared before transition
+                requestAnimationFrame(() => {
+                    this.loadingText?.classList.remove('visible');
+                });
                 console.log('[ShadowSourceToggle] Loading text hidden (finally block)');
             }
         }

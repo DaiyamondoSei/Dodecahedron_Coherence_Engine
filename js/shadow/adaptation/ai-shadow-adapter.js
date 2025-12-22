@@ -304,7 +304,11 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
         "narrative": "2-3 sentences describing the potential when integrated",
         "opportunity": "How to transform this shadow (1 sentence)"
       },
-      "prescription": "Specific actionable recommendation (1-2 sentences)"
+      "prescriptions": {
+        "action": "What to DO - immediate, specific action (1 sentence)",
+        "insight": "What to UNDERSTAND - deeper pattern at play (1 sentence)",
+        "opportunity": "What becomes POSSIBLE - the transformation awaiting (1 sentence)"
+      }
     }
   ]
 }`;
@@ -338,11 +342,43 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
     }
 
     /**
-     * Normalize shadow object to ensure required fields
+     * Normalize shadow object to ensure required fields.
+     *
+     * WHY: Shadows come from multiple sources:
+     * - AI generation (structured with title/narrative/insight + prescriptions object)
+     * - Template detection (simple strings + single prescription)
+     * - Legacy data in sessionStorage (old format)
+     *
+     * This function ensures ALL shadows have the same shape
+     * before reaching the card renderer.
+     *
+     * PRESCRIPTIONS HANDLING:
+     * - New format: { action, insight, opportunity } object
+     * - Legacy format: single prescription string (→ becomes action)
+     *
      * @private
      */
     _normalizeShadow(shadow) {
         if (!shadow || !shadow.name) return null;
+
+        // Normalize prescriptions (support BOTH formats for backwards compatibility)
+        let prescriptions = {
+            action: '',
+            insight: '',
+            opportunity: ''
+        };
+
+        if (shadow.prescriptions && typeof shadow.prescriptions === 'object') {
+            // New structured format from AI (v2.0)
+            prescriptions = {
+                action: shadow.prescriptions.action || '',
+                insight: shadow.prescriptions.insight || '',
+                opportunity: shadow.prescriptions.opportunity || ''
+            };
+        } else if (shadow.prescription) {
+            // Legacy single string - treat as action
+            prescriptions.action = shadow.prescription;
+        }
 
         return {
             id: shadow.id || shadow.name.toLowerCase().replace(/\s+/g, '-'),
@@ -355,7 +391,10 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
             integrated: typeof shadow.integrated === 'string'
                 ? shadow.integrated
                 : shadow.integrated?.narrative || shadow.integrated?.title || 'Integration potential awaits',
-            prescription: shadow.prescription || shadow.recommendation || '',
+            // NEW: 3-type prescriptions object
+            prescriptions,
+            // LEGACY: Keep single prescription for backwards compatibility
+            prescription: prescriptions.action || shadow.prescription || shadow.recommendation || '',
             aiGenerated: true,
             // Preserve full structure if available
             suppressedFull: typeof shadow.suppressed === 'object' ? shadow.suppressed : null,
@@ -404,7 +443,11 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
                 severity: energies[12] < 0.2 ? 'critical' : 'significant',
                 suppressed: `${getName(highFace)} is flourishing, but ${getName(12)} remains neglected. Success without resilience is fragile.`,
                 integrated: `The gap between ${getName(highFace)} and ${getName(12)} reveals your growth edge. Building this bridge creates antifragility.`,
-                prescription: 'Invest in resilience: succession planning, knowledge documentation, system redundancy.'
+                prescriptions: {
+                    action: 'Create a resilience roadmap: succession planning, knowledge documentation, system redundancy.',
+                    insight: 'Profit without protection is borrowed time—every success increases the stakes of failure.',
+                    opportunity: 'Antifragile wealth: the more you stress-test, the stronger you become.'
+                }
             });
         }
 
@@ -418,7 +461,11 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
                 severity: energies[9] < 0.2 ? 'critical' : 'significant',
                 suppressed: `${getName(highFace)} grows by depleting ${getName(9)}. Sawing off the branch you're sitting on.`,
                 integrated: `${getName(highFace)} can become regenerative through ${getName(9)}. Growth that nourishes its source.`,
-                prescription: 'Transition to regenerative practices: circular design, ethical sourcing, local investment.'
+                prescriptions: {
+                    action: 'Audit your supply chain and identify three ways to "give back" to your sources.',
+                    insight: 'Extraction feels efficient but compounds into scarcity—regeneration feels slow but compounds into abundance.',
+                    opportunity: 'Becoming a regenerative force means you never run out of what you need most.'
+                }
             });
         }
 
@@ -434,7 +481,11 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
                 severity: 'significant',
                 suppressed: `${getName(highFace)} promises what ${getName(lowFace)} cannot deliver. The say-do gap erodes trust.`,
                 integrated: `Aligning ${getName(highFace)} with ${getName(lowFace)} creates authentic brand power.`,
-                prescription: 'Bridge the say-do gap: improve operations to match brand promise, or adjust messaging to match reality.'
+                prescriptions: {
+                    action: 'Mystery-shop your own experience and document every gap between promise and delivery.',
+                    insight: 'The gap is visible to everyone except those inside—customers feel what you can\'t see.',
+                    opportunity: 'Closing this gap creates word-of-mouth that no marketing budget can buy.'
+                }
             });
         }
 
@@ -447,7 +498,11 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
                 severity: energies[3] < 0.2 ? 'critical' : 'significant',
                 suppressed: `${getName(8)} runs efficiently while ${getName(3)} depletes. The machine runs perfectly; the operators collapse.`,
                 integrated: `Sustainable excellence emerges when ${getName(8)} honors ${getName(3)}. Performance with well-being.`,
-                prescription: 'Invest in team well-being, psychological safety, and sustainable work rhythms. Slow down to speed up.'
+                prescriptions: {
+                    action: 'Institute mandatory recovery time: 4-day work week pilot or "no meetings" days.',
+                    insight: 'Efficiency without humanity is a debt that compounds in turnover, illness, and quiet quitting.',
+                    opportunity: 'Sustainable brilliance: teams that thrive outperform teams that survive.'
+                }
             });
         }
 
@@ -460,7 +515,11 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
                 severity: 'moderate',
                 suppressed: `${getName(4)} is elaborate, but ${getName(10)} is absent. Rules without soul.`,
                 integrated: `${getName(4)} becomes meaningful when infused with ${getName(10)}. Structure that serves purpose.`,
-                prescription: 'Breathe soul into structure: clarify values, create rituals, ensure governance serves purpose.'
+                prescriptions: {
+                    action: 'Run a "values audit": for each major policy, ask "What value does this serve?"',
+                    insight: 'Structure without meaning breeds compliance without commitment—the letter kills, the spirit gives life.',
+                    opportunity: 'Governance that embodies values creates self-organizing alignment.'
+                }
             });
         }
 
@@ -473,7 +532,11 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
                 severity: 'significant',
                 suppressed: `${getName(2)} concentrates in one place while ${getName(12)} has no backup. Brilliant but fragile.`,
                 integrated: `${getName(2)} multiplied through others creates ${getName(12)}. Shared genius is resilient genius.`,
-                prescription: 'Build redundancy: document knowledge, train others, create a "cultural carrier" team.'
+                prescriptions: {
+                    action: 'Start a "knowledge sharing" practice: every hero documents one thing they know that no one else does.',
+                    insight: 'Single points of brilliance are single points of failure—the hero\'s absence is catastrophic.',
+                    opportunity: 'Distributed genius: many people carrying the flame means it can never go out.'
+                }
             });
         }
 

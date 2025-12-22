@@ -2360,25 +2360,27 @@
     <script src="../js/dodec/dodec-tour.js"></script>
 
     <!-- ════════════════════════════════════════════════════════════════════════
-         SHADOW OVERLAY SYSTEM - Modularized 2025-12-21
+         SHADOW OVERLAY SYSTEM - Modularized 2025-12-21, Enhanced 2025-12-22 (v2.0)
          Progressive disclosure system for organizational shadow patterns
 
-         MODULARIZATION: 1,785 lines → 6 modules + thin orchestrator (~80 lines)
+         MODULARIZATION v2.0: ~2,585 lines → 7 modules + thin orchestrator (~80 lines)
 
          Module Load Order (dependency-aware):
          1. shadow-state-manager.js     (foundation - no deps)
-         2. shadow-card-renderer.js     (depends on state)
-         3. shadow-source-toggle.js     (depends on state, cards)
-         4. shadow-overlay-controller.js (depends on state, cards, toggle)
-         5. shadow-event-handlers.js    (depends on controller)
-         6. shadow-system-integration.js (depends on state, controller)
-         7. orchestrator                 (coordinates all modules)
+         2. shadow-card-templates.js    (pure HTML generation - v2.0 NEW)
+         3. shadow-card-renderer.js     (depends on state, templates - v2.0 refactored)
+         4. shadow-source-toggle.js     (depends on state, cards)
+         5. shadow-overlay-controller.js (depends on state, cards, toggle)
+         6. shadow-event-handlers.js    (depends on controller)
+         7. shadow-system-integration.js (depends on state, controller)
+         8. orchestrator                 (coordinates all modules)
 
          See js/shadow/overlay/ for module implementations
          ════════════════════════════════════════════════════════════════════════ -->
 
     <!-- Shadow Overlay Modules (load in dependency order) -->
     <script src="../js/shadow/overlay/shadow-state-manager.js"></script>
+    <script src="../js/shadow/overlay/shadow-card-templates.js"></script>
     <script src="../js/shadow/overlay/shadow-card-renderer.js"></script>
     <script src="../js/shadow/overlay/shadow-source-toggle.js"></script>
     <script src="../js/shadow/overlay/shadow-overlay-controller.js"></script>
