@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../css/harmonic-tuner.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/shadow-overlay.css">
+    <link rel="stylesheet" href="../css/data-integrity.css">
 </head>
 
 <body>
@@ -72,6 +73,18 @@
                 View All →
             </button>
         </div>
+        <!-- Integrity Indicator (appears on hover, Sprint 6) -->
+        <div class="integrity-indicator" id="integrityIndicator">
+            <div class="integrity-indicator-divider"></div>
+            <div class="integrity-indicator-content">
+                <span class="integrity-indicator-icon">🛡️</span>
+                <span class="integrity-indicator-count" id="integrityCount">0</span>
+                <span class="integrity-indicator-label">Issues</span>
+            </div>
+            <button class="integrity-indicator-btn" id="openIntegrityOverlay" title="View Data Integrity Report (I)">
+                View Report →
+            </button>
+        </div>
     </div>
 
     <!-- Full-Screen Shadow Overlay -->
@@ -127,6 +140,14 @@
         </div>
     </div>
 
+    <!-- Full-Screen Data Integrity Overlay (Sprint 6) -->
+    <div class="integrity-overlay" id="integrityOverlay" hidden>
+        <div class="integrity-overlay-backdrop"></div>
+        <div class="integrity-overlay-container">
+            <!-- Content generated dynamically by integrity-overlay.js -->
+        </div>
+    </div>
+
     <!-- Keyboard Hints Overlay (Sprint 3.5) -->
     <div class="keyboard-hints-overlay" id="keyboardHints">
         <div class="keyboard-hints-title">⌨️ Keyboard Shortcuts</div>
@@ -156,6 +177,8 @@
             <div class="keyboard-hints-section">Views & Features</div>
             <span class="keyboard-hint-key">S</span>
             <span class="keyboard-hint-desc">Toggle shadow analysis overlay</span>
+            <span class="keyboard-hint-key">I</span>
+            <span class="keyboard-hint-desc">Toggle data integrity report</span>
             <span class="keyboard-hint-key">O</span>
             <span class="keyboard-hint-desc">Toggle octave layers</span>
             <span class="keyboard-hint-key">D</span>
@@ -492,6 +515,20 @@
          MUST load before any scripts that use golden ratio mathematics
          ════════════════════════════════════════════════════════════════════════ -->
     <script src="../js/constants/phi-harmonics.js"></script>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         DATA VALIDATOR - Corruption Detection & PHI-Derived Defaults
+         ════════════════════════════════════════════════════════════════════════ -->
+    <script src="../js/data-system/data-validator.js"></script>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         DATA INTEGRITY VISIBILITY - HUD Badge, Overlay, Orchestrator (Sprint 6)
+         MUST load after data-validator.js (our data source)
+         These make DataValidator's corruption detection VISIBLE in the UI
+         ════════════════════════════════════════════════════════════════════════ -->
+    <script src="../js/data-system/integrity-indicator.js"></script>
+    <script src="../js/data-system/integrity-overlay.js"></script>
+    <script src="../js/data-system/integrity-orchestrator.js"></script>
 
     <!-- ════════════════════════════════════════════════════════════════════════
          SHADOW HARMONICS - Shadow System Constants
@@ -1104,6 +1141,15 @@
                     source: window.location.pathname
                 });
                 console.log('[3D View] ✅ CrossWindowSync listener active');
+            }
+
+            // ────────────────────────────────────────────────────────────────────────
+            // 5.1.5 DATA INTEGRITY VISIBILITY (Sprint 6)
+            // Initialize the integrity indicator, overlay, and orchestrator
+            // ────────────────────────────────────────────────────────────────────────
+            if (window.IntegrityOrchestrator) {
+                window.IntegrityOrchestrator.init();
+                console.log('[3D View] ✅ IntegrityOrchestrator initialized');
             }
 
             // Use window.vizManager to ensure single instance across all code

@@ -546,8 +546,21 @@ export class DodecahedronEngine {
       this.generateVerticesFromTopology();
     }
 
-    // Run advanced analysis with correct face energies
-    this.runAdvancedAnalysis();
+    // ════════════════════════════════════════════════════════════════════════════
+    // NOTE FOR FUTURE CLAUDE (2025-12-26):
+    // ════════════════════════════════════════════════════════════════════════════
+    // Previously, this method called `this.runAdvancedAnalysis()` which was a BUG:
+    // - The method didn't exist on DodecahedronEngine class
+    // - The function exists in dodecahedron-3d.html as window.runAdvancedAnalysis()
+    // - The call silently failed (no crash, but no analysis ran)
+    //
+    // FIX: Advanced analysis (spectral, breath, shadows) is the visualization
+    // layer's responsibility, not the data engine's. When dodecahedron-3d.html
+    // loads data via switchMode(), it calls window.runAdvancedAnalysis() itself.
+    //
+    // This method's job is DATA APPLICATION only - applying pre-calculated
+    // face energies and global coherence. Analysis happens at visualization level.
+    // ════════════════════════════════════════════════════════════════════════════
 
     console.log('✅ Pre-calculated results applied successfully');
   }
@@ -648,19 +661,28 @@ export class DodecahedronEngine {
       if (row.KPI_ID) csvFormat++;
       if (row.id && !row.KPI_ID) uiFormat++;
 
+      // Use DataValidator if available for robust value parsing
+      const V = window.DataValidator;
+      const kpiName = row.KPI_Name || row.name || kpiId;
+      const faceId = parseInt(row.Face_ID !== undefined ? row.Face_ID : row.faceId) || null;
+
       const kpi = new KPI({
         // Support both formats
         id: kpiId,
-        name: row.KPI_Name || row.name || kpiId,
-        value: parseFloat(row.Value !== undefined ? row.Value : row.value) || 0,
-        weight: parseFloat(row.Weight !== undefined ? row.Weight : row.weight) || 1.0,
+        name: kpiName,
+        value: V
+          ? V.validateNumber(row.Value !== undefined ? row.Value : row.value, `KPI ${kpiId} (${kpiName}) value`, 0)
+          : parseFloat(row.Value !== undefined ? row.Value : row.value) || 0,
+        weight: V
+          ? V.validateNumber(row.Weight !== undefined ? row.Weight : row.weight, `KPI ${kpiId} weight`, 1.0)
+          : parseFloat(row.Weight !== undefined ? row.Weight : row.weight) || 1.0,
         direction: row.Direction || row.direction || '↑',
         targetMin: parseFloat(row.Target_Min !== undefined ? row.Target_Min : row.targetMin) || 0,
         targetIdeal: parseFloat(row.Target_Ideal !== undefined ? row.Target_Ideal : row.targetIdeal) || 100,
         healthyMin: parseFloat(row.Healthy_Min !== undefined ? row.Healthy_Min : row.healthyMin),
         healthyMax: parseFloat(row.Healthy_Max !== undefined ? row.Healthy_Max : row.healthyMax),
         absoluteMax: parseFloat(row.Absolute_Max !== undefined ? row.Absolute_Max : row.absoluteMax),
-        faceId: parseInt(row.Face_ID !== undefined ? row.Face_ID : row.faceId) || null,
+        faceId: faceId,
         element: row.Element || row.element || 'Earth'
       });
 
@@ -774,6 +796,11 @@ export class DodecahedronEngine {
    * NOW WITH AXIS-INFORMED FEEDBACK LOOP
    */
   recalculate() {
+    // Clear corruption log for fresh calculation tracking
+    if (window.DataValidator) {
+      window.DataValidator.clearLog();
+    }
+
     // Clear cached global coherence (forces recalculation)
     this._cachedGlobalCoherence = undefined;
 
@@ -862,6 +889,21 @@ export class DodecahedronEngine {
       const faces = vertex.faceIds.map(id => this.faces.find(f => f.id === id)).filter(f => f);
       vertex.calculateVortexEnergy(faces);
     });
+
+    // 7. Report any data integrity issues
+    if (window.DataValidator) {
+      const report = window.DataValidator.getCorruptionReport();
+      if (!report.healthy) {
+        console.warn(`⚠️ DATA INTEGRITY: ${report.issueCount} issues detected during calculation`);
+        console.warn('   Run DataValidator.getCorruptionReport() for details');
+      }
+
+      // 8. Emit data integrity update event for UI components (Sprint 6)
+      // This triggers IntegrityIndicator and IntegrityOverlay updates
+      document.dispatchEvent(new CustomEvent('quannex:data-integrity-updated', {
+        detail: report
+      }));
+    }
   }
 
   /**

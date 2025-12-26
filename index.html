@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌟 Quannex Coherence Engine - University Demo</title>
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/data-integrity.css">
 </head>
 
 <body>
@@ -16,6 +17,13 @@
             <div class="global-coherence tooltip" id="globalCoherence"
                 data-tooltip="Average energy across all 12 organizational faces - Higher is better!">—</div>
             <div class="status" id="globalStatus">Initializing...</div>
+
+            <!-- Data Integrity Indicator - Per-Face Quality Badges -->
+            <div class="data-integrity-header" id="dataIntegrityHeader" style="display: none;">
+                <div class="data-integrity-header__summary" id="faceQualitySummary">
+                    <!-- Face quality summary badges will be inserted here by FaceQualityBadge.js -->
+                </div>
+            </div>
         </div>
 
         <!-- Company Selector -->
@@ -84,6 +92,9 @@
 
     <!-- Load spectral analyzer -->
     <script src="./js/spectral-analyzer.js"></script>
+
+    <!-- Load data integrity components -->
+    <script src="./js/data-system/face-quality-badge.js"></script>
 
     <!-- Load the serverless engine (ES Module) -->
     <script type="module" src="./js/main.js"></script>
@@ -272,6 +283,9 @@
 
             // Display spectral analysis
             displaySpectralAnalysis();
+
+            // Update face quality badges
+            refreshFaceQuality();
         }
 
         /**
@@ -795,8 +809,74 @@
             `;
         }
 
+        // ============================================
+        // DATA INTEGRITY: Face Quality Badges
+        // ============================================
+
+        /**
+         * Initialize Face Quality Badge system
+         */
+        function initFaceQualityBadges() {
+            if (window.FaceQualityBadge) {
+                window.FaceQualityBadge.init();
+                console.log('🏷️ FaceQualityBadge initialized');
+
+                // Listen for quality updates
+                document.addEventListener('quannex:face-quality-updated', updateFaceQualityDisplay);
+            } else {
+                console.log('⏳ FaceQualityBadge not loaded yet');
+            }
+        }
+
+        /**
+         * Update face quality display in header
+         */
+        function updateFaceQualityDisplay(event) {
+            const headerContainer = document.getElementById('dataIntegrityHeader');
+            const summaryContainer = document.getElementById('faceQualitySummary');
+
+            if (!headerContainer || !summaryContainer) return;
+
+            const summary = event ? event.detail.summary : window.FaceQualityBadge.getSummary();
+
+            // Show header if there are any issues
+            if (summary.warning > 0 || summary.critical > 0) {
+                headerContainer.style.display = 'block';
+                summaryContainer.innerHTML = window.FaceQualityBadge.getSummaryHTML();
+                console.log('🏷️ Face quality: ', summary);
+            } else {
+                // All healthy - optionally show or hide
+                headerContainer.style.display = 'block';
+                summaryContainer.innerHTML = window.FaceQualityBadge.getSummaryHTML();
+            }
+        }
+
+        /**
+         * Manually trigger face quality update (after data load)
+         * Shows header even if DataValidator isn't available (all healthy state)
+         */
+        function refreshFaceQuality() {
+            if (window.FaceQualityBadge) {
+                // Ensure FaceQualityBadge is initialized (idempotent)
+                window.FaceQualityBadge.init();
+
+                if (window.DataValidator) {
+                    // DataValidator available - get real corruption report
+                    const report = window.DataValidator.getCorruptionReport();
+                    window.FaceQualityBadge.updateFromReport(report);
+                } else {
+                    // No DataValidator - show all-healthy state directly
+                    updateFaceQualityDisplay(null);
+                }
+            }
+        }
+
         // Initialize when page loads
-        window.addEventListener('load', init);
+        window.addEventListener('load', () => {
+            init();
+            // Init badges after a short delay to ensure modules are loaded
+            setTimeout(initFaceQualityBadges, 500);
+        });
     </script>
 </body>
 

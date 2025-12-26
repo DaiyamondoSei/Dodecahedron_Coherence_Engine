@@ -1,0 +1,1325 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════════
+ * DATA INTEGRITY OVERLAY & INDICATOR STYLES
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * Visual representation of data quality and integrity status.
+ * Surfaces DataValidator corruption reports to users through:
+ * - HUD badge (always visible, shows issue count)
+ * - Full-screen overlay (detailed issue breakdown by face)
+ * - Severity-coded cards (healthy → minimal → moderate → critical)
+ *
+ * @version 1.0.0
+ * @created 2025-12-26 by Claude Opus 4.5
+ * @module Data Integrity UI
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NOTES FOR FUTURE CLAUDE
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * COLOR THEME DECISION:
+ * ─────────────────────────────────────────────────────────────────────────────────
+ * We use GOLD/AMBER tones (#ffaa44, #ffc266) rather than red because:
+ * - Data integrity is about QUALITY and PROTECTION, not danger
+ * - Red is reserved for shadow system (warnings about organizational patterns)
+ * - Gold represents value, quality, trustworthiness
+ * - Amber provides warmth without alarm
+ *
+ * PATTERN REFERENCE:
+ * ─────────────────────────────────────────────────────────────────────────────────
+ * This CSS follows patterns from shadow-overlay.css:
+ * - BEM naming: .integrity-card__header, .integrity-card.expanded
+ * - Severity hierarchy with border-left progression
+ * - Staggered card animations with phi-based timing
+ * - Backdrop blur and portal entrance animation
+ * - Accessibility: focus states, reduced motion, high contrast
+ *
+ * SEVERITY COLORS (Gold/Amber Gradient):
+ * ─────────────────────────────────────────────────────────────────────────────────
+ * - Healthy:  #66ff99 (green - no issues)
+ * - Minimal:  #ffd700 (gold - 1-2 substitutions)
+ * - Moderate: #ffaa44 (amber - 3-5 substitutions)
+ * - Critical: #ff8844 (orange-amber - 6+ substitutions or cascade risk)
+ *
+ * KEYBOARD SHORTCUT: 'I' for Integrity (like 'S' for Shadows)
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SECTION 1: INTEGRITY INDICATOR (HUD BADGE)
+   ════════════════════════════════════════════════════════════════════════════════
+
+   Always-visible badge in the coherence HUD showing data quality status.
+   Uses progressive disclosure - expands on hover to reveal details button.
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+.data-integrity-indicator {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+    margin-top: 0;
+}
+
+/* Expand on hover or when explicitly expanded */
+.coherence-hud:hover .data-integrity-indicator,
+.coherence-hud.integrity-expanded .data-integrity-indicator {
+    max-height: 100px;
+    opacity: 1;
+    margin-top: 10px;
+}
+
+.integrity-indicator-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 170, 68, 0.5), transparent);
+    margin-bottom: 10px;
+}
+
+.integrity-indicator-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.integrity-indicator-icon {
+    font-size: 16px;
+}
+
+.integrity-indicator-count {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffaa44;
+    transition: color 0.3s ease;
+}
+
+/* Severity-based count colors */
+.integrity-indicator-count.severity-healthy {
+    color: #66ff99;
+}
+
+.integrity-indicator-count.severity-minimal {
+    color: #ffd700;
+}
+
+.integrity-indicator-count.severity-moderate {
+    color: #ffaa44;
+}
+
+.integrity-indicator-count.severity-critical {
+    color: #ff8844;
+}
+
+.integrity-indicator-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.integrity-indicator-btn {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(255, 170, 68, 0.15);
+    border: 1px solid rgba(255, 170, 68, 0.3);
+    border-radius: 6px;
+    color: #ffaa44;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.integrity-indicator-btn:hover {
+    background: rgba(255, 170, 68, 0.25);
+    border-color: rgba(255, 170, 68, 0.5);
+    transform: translateY(-1px);
+}
+
+/* Notification Dot - Pulse when issues exist */
+.coherence-hud.has-integrity-issues::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: 10px;
+    height: 10px;
+    background: #ffaa44;
+    border-radius: 50%;
+    animation: integrityPulse 2s ease-in-out infinite;
+}
+
+@keyframes integrityPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 170, 68, 0.4);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(255, 170, 68, 0);
+        transform: scale(1.1);
+    }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SECTION 2: INTEGRITY OVERLAY (FULL-SCREEN MODAL)
+   ════════════════════════════════════════════════════════════════════════════════
+
+   Full-screen overlay displaying detailed data integrity report.
+   Opens with 'I' key or clicking the indicator button.
+   Uses portal entrance animation for "window into data quality" feel.
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+.integrity-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                visibility 0.4s;
+}
+
+.integrity-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Backdrop with blur bloom effect */
+.integrity-overlay-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+}
+
+.integrity-overlay.visible .integrity-overlay-backdrop {
+    animation: integrity-backdrop-bloom 0.5s ease-out forwards;
+}
+
+@keyframes integrity-backdrop-bloom {
+    0% {
+        backdrop-filter: blur(0px);
+        background: rgba(0, 0, 0, 0);
+    }
+    100% {
+        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.85);
+    }
+}
+
+/* Container with portal entrance */
+.integrity-overlay-container {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    max-height: 85vh;
+    background: linear-gradient(135deg, rgba(30, 25, 15, 0.98), rgba(25, 20, 10, 0.98));
+    border: 1px solid rgba(255, 170, 68, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 25px 80px rgba(255, 170, 68, 0.15), 0 0 100px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.85) translateY(30px) rotateX(5deg);
+    transform-origin: center center;
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.4s ease-out;
+}
+
+.integrity-overlay.visible .integrity-overlay-container {
+    transform: scale(1) translateY(0) rotateX(0deg);
+    opacity: 1;
+    animation: integrity-container-glow 0.8s ease-out;
+}
+
+@keyframes integrity-container-glow {
+    0% {
+        box-shadow:
+            0 0 0 0 rgba(255, 170, 68, 0.4),
+            0 25px 80px rgba(255, 170, 68, 0.15);
+    }
+    50% {
+        box-shadow:
+            0 0 60px 20px rgba(255, 170, 68, 0.2),
+            0 25px 80px rgba(255, 170, 68, 0.25);
+    }
+    100% {
+        box-shadow:
+            0 0 0 0 rgba(255, 170, 68, 0),
+            0 25px 80px rgba(255, 170, 68, 0.15),
+            0 0 100px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* Header */
+.integrity-overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 30px;
+    border-bottom: 1px solid rgba(255, 170, 68, 0.2);
+}
+
+.integrity-overlay-title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.integrity-overlay-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.integrity-overlay-icon {
+    font-size: 28px;
+    filter: drop-shadow(0 0 8px rgba(255, 170, 68, 0.4));
+    animation: integrity-icon-pulse 3s ease-in-out infinite;
+}
+
+@keyframes integrity-icon-pulse {
+    0%, 100% {
+        filter: drop-shadow(0 0 8px rgba(255, 170, 68, 0.3));
+    }
+    50% {
+        filter: drop-shadow(0 0 14px rgba(255, 170, 68, 0.6));
+    }
+}
+
+.integrity-overlay-title h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 300;
+    color: #ffaa44;
+    letter-spacing: 1px;
+    text-shadow: 0 0 20px rgba(255, 170, 68, 0.3);
+}
+
+.integrity-overlay-subtitle {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.integrity-overlay-close {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 170, 68, 0.1);
+    border: 1px solid rgba(255, 170, 68, 0.3);
+    border-radius: 50%;
+    color: #ffaa44;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.integrity-overlay-close:hover {
+    background: rgba(255, 170, 68, 0.2);
+    transform: rotate(90deg);
+}
+
+.integrity-overlay-close:focus {
+    outline: 2px solid rgba(255, 170, 68, 0.5);
+    outline-offset: 2px;
+}
+
+/* Content Area */
+.integrity-overlay-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Summary Stats Bar */
+.integrity-summary {
+    display: flex;
+    justify-content: space-around;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 170, 68, 0.15);
+}
+
+.integrity-stat {
+    text-align: center;
+}
+
+.integrity-stat-value {
+    font-size: 28px;
+    font-weight: 300;
+    color: #ffaa44;
+}
+
+.integrity-stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 4px;
+}
+
+/* Footer */
+.integrity-overlay-footer {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 16px 30px;
+    border-top: 1px solid rgba(255, 170, 68, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 16px 16px;
+}
+
+.integrity-overlay-hint {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.integrity-overlay-hint .key-hint {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    font-family: monospace;
+    margin-right: 6px;
+}
+
+/* Empty/Healthy State */
+.integrity-overlay-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.integrity-overlay-empty-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 20px rgba(102, 255, 153, 0.3));
+}
+
+.integrity-overlay-empty h3 {
+    margin: 0 0 8px 0;
+    font-weight: 300;
+    font-size: 24px;
+    color: #66ff99;
+}
+
+.integrity-overlay-empty p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SECTION 3: INTEGRITY CARDS (ISSUE DISPLAY)
+   ════════════════════════════════════════════════════════════════════════════════
+
+   Individual cards showing data integrity issues grouped by face.
+   Uses BEM naming and severity-based visual hierarchy.
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+.integrity-card {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 0;
+    border-left: 4px solid #ffaa44;
+    transition: all 0.2s ease;
+    overflow: visible;
+}
+
+.integrity-card:hover {
+    background: rgba(255, 170, 68, 0.08);
+}
+
+/* Card Header - Click to Expand */
+.integrity-card__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-radius: 12px 12px 0 0;
+}
+
+.integrity-card:not(.expanded) .integrity-card__header {
+    border-radius: 12px;
+}
+
+.integrity-card__header:hover {
+    background: rgba(255, 170, 68, 0.12);
+}
+
+.integrity-card__icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.integrity-card__title {
+    flex: 1;
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.integrity-card__count {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(255, 170, 68, 0.2);
+    color: #ffaa44;
+    flex-shrink: 0;
+}
+
+.integrity-card__expand-indicator {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    transition: transform 0.3s ease;
+    margin-left: 4px;
+    flex-shrink: 0;
+}
+
+.integrity-card.expanded .integrity-card__expand-indicator {
+    transform: rotate(180deg);
+}
+
+/* Card Details - Expandable */
+.integrity-card__details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 12px 12px;
+}
+
+.integrity-card.expanded .integrity-card__details {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Custom scrollbar */
+.integrity-card__details::-webkit-scrollbar {
+    width: 6px;
+}
+
+.integrity-card__details::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.integrity-card__details::-webkit-scrollbar-thumb {
+    background: rgba(255, 170, 68, 0.4);
+    border-radius: 3px;
+}
+
+.integrity-card__details::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 170, 68, 0.6);
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SECTION 4: ISSUE ITEMS (INDIVIDUAL SUBSTITUTIONS)
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+.integrity-issue {
+    padding: 12px 20px;
+    border-top: 1px solid rgba(255, 170, 68, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.integrity-issue:first-child {
+    border-top: none;
+}
+
+.integrity-issue__context {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.integrity-issue__values {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.integrity-issue__original {
+    padding: 4px 8px;
+    background: rgba(255, 68, 68, 0.15);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: 4px;
+    color: #ff8888;
+    font-family: monospace;
+    font-size: 11px;
+    text-decoration: line-through;
+}
+
+.integrity-issue__arrow {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.integrity-issue__substituted {
+    padding: 4px 8px;
+    background: rgba(102, 255, 153, 0.15);
+    border: 1px solid rgba(102, 255, 153, 0.3);
+    border-radius: 4px;
+    color: #66ff99;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.integrity-issue__timestamp {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.3);
+    font-style: italic;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SECTION 5: SEVERITY HIERARCHY
+   ════════════════════════════════════════════════════════════════════════════════
+
+   Visual weight progression based on issue severity.
+   Uses border thickness and background glow intensity.
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+/* HEALTHY - No issues, green glow */
+.integrity-card.severity-healthy {
+    border-left-color: #66ff99;
+    border-left-width: 4px;
+}
+
+.integrity-card.severity-healthy .integrity-card__count {
+    background: rgba(102, 255, 153, 0.2);
+    color: #66ff99;
+}
+
+/* MINIMAL - 1-2 substitutions, gold */
+.integrity-card.severity-minimal {
+    border-left-color: #ffd700;
+    border-left-width: 4px;
+}
+
+.integrity-card.severity-minimal .integrity-card__count {
+    background: rgba(255, 215, 0, 0.2);
+    color: #ffd700;
+}
+
+/* MODERATE - 3-5 substitutions, amber */
+.integrity-card.severity-moderate {
+    border-left-color: #ffaa44;
+    border-left-width: 5px;
+    background: linear-gradient(90deg,
+        rgba(255, 170, 68, 0.08) 0%,
+        rgba(0, 0, 0, 0.4) 20%);
+}
+
+.integrity-card.severity-moderate .integrity-card__count {
+    background: rgba(255, 170, 68, 0.25);
+    color: #ffaa44;
+}
+
+/* CRITICAL - 6+ substitutions, orange-amber with pulse */
+.integrity-card.severity-critical {
+    border-left-color: #ff8844;
+    border-left-width: 6px;
+    background: linear-gradient(90deg,
+        rgba(255, 136, 68, 0.12) 0%,
+        rgba(0, 0, 0, 0.4) 25%);
+    box-shadow:
+        inset 0 0 20px rgba(255, 136, 68, 0.08),
+        0 0 15px rgba(255, 136, 68, 0.1);
+    animation: integrity-critical-pulse 3s ease-in-out infinite;
+}
+
+.integrity-card.severity-critical .integrity-card__count {
+    background: rgba(255, 136, 68, 0.3);
+    color: #ff8844;
+}
+
+@keyframes integrity-critical-pulse {
+    0%, 100% {
+        box-shadow:
+            inset 0 0 20px rgba(255, 136, 68, 0.08),
+            0 0 15px rgba(255, 136, 68, 0.08);
+    }
+    50% {
+        box-shadow:
+            inset 0 0 30px rgba(255, 136, 68, 0.12),
+            0 0 25px rgba(255, 136, 68, 0.15);
+    }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SECTION 6: STAGGERED CARD ANIMATIONS
+   ════════════════════════════════════════════════════════════════════════════════
+
+   Cards cascade in with phi-based timing delays.
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+.integrity-overlay.visible .integrity-overlay-content .integrity-card {
+    animation: integrity-card-cascade 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+}
+
+.integrity-overlay.visible .integrity-overlay-content .integrity-card:nth-child(1) {
+    animation-delay: 0.15s;
+}
+.integrity-overlay.visible .integrity-overlay-content .integrity-card:nth-child(2) {
+    animation-delay: 0.23s;
+}
+.integrity-overlay.visible .integrity-overlay-content .integrity-card:nth-child(3) {
+    animation-delay: 0.31s;
+}
+.integrity-overlay.visible .integrity-overlay-content .integrity-card:nth-child(4) {
+    animation-delay: 0.39s;
+}
+.integrity-overlay.visible .integrity-overlay-content .integrity-card:nth-child(5) {
+    animation-delay: 0.47s;
+}
+.integrity-overlay.visible .integrity-overlay-content .integrity-card:nth-child(6) {
+    animation-delay: 0.55s;
+}
+
+@keyframes integrity-card-cascade {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SECTION 7: CIRCUIT BREAKER FAILURE UI
+   ════════════════════════════════════════════════════════════════════════════════
+
+   Full-screen graceful failure when data quality is below threshold.
+   Shows when >50% of data is corrupted, blocking calculation.
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+.integrity-failure {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s;
+}
+
+.integrity-failure.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.integrity-failure-container {
+    max-width: 600px;
+    padding: 40px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(40, 30, 20, 0.9), rgba(30, 20, 15, 0.9));
+    border: 2px solid rgba(255, 136, 68, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 0 100px rgba(255, 136, 68, 0.2);
+}
+
+.integrity-failure-icon {
+    font-size: 72px;
+    margin-bottom: 24px;
+    animation: failure-icon-shake 0.5s ease-in-out;
+}
+
+@keyframes failure-icon-shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.integrity-failure h2 {
+    margin: 0 0 16px 0;
+    font-size: 28px;
+    font-weight: 300;
+    color: #ff8844;
+}
+
+.integrity-failure p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.integrity-failure-details {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.integrity-failure-details h4 {
+    margin: 0 0 12px 0;
+    color: #ffaa44;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.integrity-failure-details ul {
+    margin: 0;
+    padding-left: 20px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+}
+
+.integrity-failure-details li {
+    margin-bottom: 8px;
+}
+
+.integrity-failure-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.integrity-failure-btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.integrity-failure-btn--primary {
+    background: linear-gradient(135deg, rgba(255, 170, 68, 0.3), rgba(255, 136, 68, 0.3));
+    border: 1px solid rgba(255, 170, 68, 0.5);
+    color: #ffaa44;
+}
+
+.integrity-failure-btn--primary:hover {
+    background: linear-gradient(135deg, rgba(255, 170, 68, 0.4), rgba(255, 136, 68, 0.4));
+    transform: translateY(-2px);
+}
+
+.integrity-failure-btn--secondary {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.integrity-failure-btn--secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SECTION 8: ACCESSIBILITY
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+/* Focus states */
+.integrity-card__header:focus {
+    outline: 2px solid rgba(255, 170, 68, 0.5);
+    outline-offset: -2px;
+}
+
+.integrity-card__header:focus-visible {
+    outline: 3px solid #ffaa44;
+    outline-offset: -3px;
+}
+
+.integrity-overlay-close:focus-visible {
+    outline: 3px solid #ffaa44;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .integrity-overlay,
+    .integrity-overlay-container,
+    .integrity-card,
+    .integrity-card__details,
+    .integrity-card__expand-indicator,
+    .integrity-overlay-close,
+    .data-integrity-indicator {
+        transition: none;
+        animation: none;
+    }
+
+    .integrity-overlay.visible .integrity-overlay-content .integrity-card {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .integrity-overlay-container {
+        border: 2px solid #ffaa44;
+    }
+
+    .integrity-card {
+        border-left-width: 6px;
+    }
+
+    .integrity-card__header {
+        border-bottom: 2px solid rgba(255, 170, 68, 0.5);
+    }
+
+    .integrity-issue {
+        border-top: 2px solid rgba(255, 170, 68, 0.3);
+    }
+
+    .integrity-card__header:focus,
+    .integrity-overlay-close:focus {
+        outline-width: 4px;
+    }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SECTION 9: RESPONSIVE DESIGN
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .integrity-overlay-container {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .integrity-overlay-header {
+        padding: 16px 20px;
+    }
+
+    .integrity-overlay-content {
+        padding: 16px 20px;
+        gap: 12px;
+    }
+
+    .integrity-card__header {
+        padding: 12px 16px;
+        gap: 8px;
+    }
+
+    .integrity-card__title {
+        font-size: 14px;
+    }
+
+    .integrity-issue {
+        padding: 10px 16px;
+    }
+
+    .integrity-overlay-footer {
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 20px;
+    }
+
+    .integrity-summary {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .integrity-overlay-title h2 {
+        font-size: 18px;
+    }
+
+    .integrity-overlay-icon {
+        font-size: 22px;
+    }
+
+    .integrity-card__count {
+        display: none;
+    }
+
+    .integrity-issue__values {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .integrity-failure-container {
+        padding: 24px;
+        margin: 16px;
+    }
+
+    .integrity-failure-actions {
+        flex-direction: column;
+    }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SECTION 10: FOCUS MODE (Hide Other Elements)
+   ════════════════════════════════════════════════════════════════════════════════
+
+   When integrity overlay is visible, hide distracting UI elements.
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+/* Hide Harmonic Tuner when integrity overlay is visible */
+body:has(.integrity-overlay.visible) .tuner-toggle,
+body:has(.integrity-overlay.visible) .tuner {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(20px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SECTION 11: FACE QUALITY BADGES
+   ════════════════════════════════════════════════════════════════════════════════
+
+   Per-face data integrity indicators. Each of the 12 dodecahedron faces gets
+   a badge showing its quality status:
+
+   - Healthy (✓): All KPIs valid, no substitutions
+   - Warning (⚠): 1-2 substitutions, data partially compromised
+   - Critical (⛔): 3+ substitutions, face data unreliable
+
+   WHY PER-FACE BADGES:
+   ─────────────────────────────────────────────────────────────────────────────────
+   A global "3 issues" count doesn't show WHERE problems are concentrated.
+   Per-face badges reveal whether issues are spread evenly (worse for analysis)
+   or clustered on one face (better - other faces remain trustworthy).
+
+   THRESHOLD DERIVATION:
+   ─────────────────────────────────────────────────────────────────────────────────
+   Each face has 6 KPIs (1 Ball + 5 Pillars).
+   PHI^-2 (0.382) × 6 ≈ 2.3 → threshold at 3 issues for critical status.
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   11.1 Base Badge Styles
+   ────────────────────────────────────────────────────────────────────────────── */
+
+.face-quality-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--badge-color, rgba(255, 255, 255, 0.2));
+    transition: all 0.2s ease;
+    cursor: default;
+    font-family: inherit;
+}
+
+.face-quality-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   11.2 Badge Size Variants
+   ────────────────────────────────────────────────────────────────────────────── */
+
+.face-quality-badge--small {
+    padding: 2px 6px;
+    font-size: 11px;
+    gap: 3px;
+    border-radius: 4px;
+}
+
+.face-quality-badge--small .face-badge__icon {
+    font-size: 10px;
+}
+
+.face-quality-badge--medium {
+    padding: 4px 10px;
+    font-size: 13px;
+    gap: 5px;
+}
+
+.face-quality-badge--medium .face-badge__icon {
+    font-size: 14px;
+}
+
+.face-quality-badge--large {
+    padding: 8px 14px;
+    font-size: 15px;
+    gap: 8px;
+    border-radius: 8px;
+}
+
+.face-quality-badge--large .face-badge__icon {
+    font-size: 18px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   11.3 Badge Components (BEM)
+   ────────────────────────────────────────────────────────────────────────────── */
+
+.face-badge__icon {
+    font-size: 12px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 4px var(--badge-color));
+}
+
+.face-badge__id {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.5px;
+}
+
+.face-badge__count {
+    font-size: 10px;
+    padding: 1px 4px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    color: var(--badge-color);
+    font-weight: 700;
+}
+
+.face-badge__label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   11.4 Status Colors (Healthy / Warning / Critical)
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/* HEALTHY - Green glow, all KPIs valid */
+.face-quality-healthy {
+    --badge-color: #66ff99;
+    background: rgba(102, 255, 153, 0.1);
+    border-color: rgba(102, 255, 153, 0.3);
+}
+
+.face-quality-healthy .face-badge__icon {
+    color: #66ff99;
+}
+
+.face-quality-healthy .face-badge__id {
+    color: #66ff99;
+}
+
+/* WARNING - Gold, 1-2 substitutions */
+.face-quality-warning {
+    --badge-color: #ffd700;
+    background: rgba(255, 215, 0, 0.1);
+    border-color: rgba(255, 215, 0, 0.3);
+}
+
+.face-quality-warning .face-badge__icon {
+    color: #ffd700;
+}
+
+.face-quality-warning .face-badge__id {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* CRITICAL - Orange-amber, 3+ substitutions with pulse */
+.face-quality-critical {
+    --badge-color: #ff8844;
+    background: rgba(255, 136, 68, 0.15);
+    border-color: rgba(255, 136, 68, 0.4);
+    animation: face-badge-critical-pulse 2s ease-in-out infinite;
+}
+
+.face-quality-critical .face-badge__icon {
+    color: #ff8844;
+}
+
+.face-quality-critical .face-badge__id {
+    color: #ff8844;
+}
+
+@keyframes face-badge-critical-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 136, 68, 0);
+    }
+    50% {
+        box-shadow: 0 0 8px 2px rgba(255, 136, 68, 0.3);
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   11.5 Face Quality Grid (12 badges layout)
+   ────────────────────────────────────────────────────────────────────────────── */
+
+.face-quality-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 170, 68, 0.1);
+}
+
+/* 2 rows of 6 badges = 12 faces */
+.face-quality-grid .face-quality-badge {
+    justify-content: center;
+}
+
+/* Responsive: 4 columns on smaller screens */
+@media (max-width: 600px) {
+    .face-quality-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+    }
+}
+
+/* Responsive: 3 columns on very small screens */
+@media (max-width: 400px) {
+    .face-quality-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   11.6 Face Quality Summary (compact counts)
+   ────────────────────────────────────────────────────────────────────────────── */
+
+.face-quality-summary {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.face-quality-summary__item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.face-quality-summary__icon {
+    font-size: 14px;
+}
+
+.face-quality-summary__count {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.face-quality-summary__healthy .face-quality-summary__icon,
+.face-quality-summary__healthy .face-quality-summary__count {
+    color: #66ff99;
+}
+
+.face-quality-summary__warning .face-quality-summary__icon,
+.face-quality-summary__warning .face-quality-summary__count {
+    color: #ffd700;
+}
+
+.face-quality-summary__critical .face-quality-summary__icon,
+.face-quality-summary__critical .face-quality-summary__count {
+    color: #ff8844;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   11.7 Reduced Motion & High Contrast
+   ────────────────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    .face-quality-badge,
+    .face-quality-critical {
+        transition: none;
+        animation: none;
+    }
+}
+
+@media (prefers-contrast: high) {
+    .face-quality-badge {
+        border-width: 2px;
+    }
+
+    .face-quality-healthy {
+        border-color: #66ff99;
+    }
+
+    .face-quality-warning {
+        border-color: #ffd700;
+    }
+
+    .face-quality-critical {
+        border-color: #ff8844;
+    }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   SECTION 12: HEADER DATA INTEGRITY INDICATOR
+   ════════════════════════════════════════════════════════════════════════════════
+
+   Compact indicator in page headers (index.html, calculations.html, etc.)
+   Shows face quality summary: healthy/warning/critical counts at a glance.
+
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+.data-integrity-header {
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 170, 68, 0.2);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.data-integrity-header__summary {
+    display: inline-block;
+}
+
+/* Adjust face quality summary for header context */
+.data-integrity-header .face-quality-summary {
+    gap: 20px;
+    padding: 4px 12px;
+    background: transparent;
+}
+
+.data-integrity-header .face-quality-summary__item {
+    gap: 6px;
+}
+
+.data-integrity-header .face-quality-summary__icon {
+    font-size: 16px;
+}
+
+.data-integrity-header .face-quality-summary__count {
+    font-size: 18px;
+    font-weight: 700;
+}

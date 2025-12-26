@@ -22,17 +22,19 @@
  * EXPORTS (to window/global):
  * - updateStats(): Updates coherence HUD and face counts
  * - setupUIControls(): Initializes button event listeners
- * - setupKeyboardShortcuts(): Registers 14 keyboard shortcuts
+ * - setupKeyboardShortcuts(): Registers 15 keyboard shortcuts
  *
  * NOTES FOR FUTURE CLAUDE:
  * ========================================
- * KEYBOARD SHORTCUTS (14 total):
+ * KEYBOARD SHORTCUTS (15 total):
  * - Esc: Close panel/overlays
  * - R: Reset camera view
  * - Space: Toggle animation pause (prevents page scroll)
  * - A: Toggle auto-rotation
  * - O: Toggle octave layers
  * - D: Open DNA helix view (new tab)
+ * - S: Toggle shadow overlay (handled by shadow system)
+ * - I: Toggle data integrity overlay
  * - P: Toggle presentation mode
  * - L: Cycle font scale (Normal → Large → XLarge)
  * - C: Toggle high contrast (projector mode)
@@ -356,6 +358,8 @@
      * - A: Toggle auto-rotation
      * - O: Toggle octave layers
      * - D: Open DNA helix (new tab)
+     * - S: Toggle shadow overlay (handled by shadow system)
+     * - I: Toggle data integrity overlay
      * - P: Toggle presentation mode
      * - L: Cycle font scale
      * - C: Toggle high contrast
@@ -546,6 +550,23 @@
             }
 
             // ========================================
+            // I - Toggle data integrity overlay (Sprint 6)
+            // ========================================
+            if (e.key === 'i' || e.key === 'I') {
+                // Don't trigger when typing in input fields
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+                if (global.IntegrityOrchestrator?.toggleOverlay) {
+                    global.IntegrityOrchestrator.toggleOverlay();
+                    console.log('[dodec-controls] Data integrity overlay toggled');
+                } else if (global.IntegrityOverlay?.toggle) {
+                    // Fallback if orchestrator not available
+                    global.IntegrityOverlay.toggle();
+                    console.log('[dodec-controls] Data integrity overlay toggled (direct)');
+                }
+            }
+
+            // ========================================
             // F - Toggle fullscreen
             // ========================================
             if (e.key === 'f' || e.key === 'F') {
@@ -583,7 +604,7 @@
             }
         });
 
-        console.log('[dodec-controls] Keyboard shortcuts registered (14 shortcuts)');
+        console.log('[dodec-controls] Keyboard shortcuts registered (15 shortcuts)');
     }
 
     // ========================================
