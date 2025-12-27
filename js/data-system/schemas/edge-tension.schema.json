@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quannex.io/schemas/edge-tension.json",
+  "title": "Quannex Edge Tension Map",
+  "description": "The 30 connections between organizational domains with integrity tracking",
+  "type": "object",
+  "required": ["$version", "$source", "edges"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "$version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "$generatedAt": { "type": "string", "format": "date-time" },
+    "$source": { "type": "string" },
+    "$philosophy": {
+      "type": "object",
+      "properties": {
+        "purpose": { "type": "string" },
+        "sacredGeometry": { "type": "string" },
+        "interpretation": {
+          "type": "object",
+          "properties": {
+            "lowTension": { "type": "string" },
+            "highTension": { "type": "string" }
+          }
+        }
+      }
+    },
+    "$topology": {
+      "type": "object",
+      "properties": {
+        "expectedEdges": { "type": "integer", "const": 30 },
+        "actualEdges": { "type": "integer" },
+        "validated": { "type": "boolean" },
+        "violations": { "type": "array" },
+        "elementalDistribution": {
+          "type": "object",
+          "properties": {
+            "Fire": { "type": "integer" },
+            "Water": { "type": "integer" },
+            "Air": { "type": "integer" },
+            "Earth": { "type": "integer" },
+            "Ether": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "$integrityReport": {
+      "type": "object",
+      "properties": {
+        "totalRecords": { "type": "integer" },
+        "substitutionCount": { "type": "integer" },
+        "incompleteData": {
+          "type": ["object", "null"],
+          "properties": {
+            "field": { "type": "string" },
+            "issue": { "type": "string" },
+            "severity": { "type": "string" }
+          }
+        },
+        "substitutions": { "type": "array" }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "minItems": 30,
+      "maxItems": 30,
+      "items": { "$ref": "#/definitions/Edge" }
+    }
+  },
+  "definitions": {
+    "Edge": {
+      "type": "object",
+      "required": ["id", "faceA", "faceB", "computed"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^E\\d+-\\d+$" },
+        "faceA": { "$ref": "#/definitions/FaceReference" },
+        "faceB": { "$ref": "#/definitions/FaceReference" },
+        "philosophy": {
+          "type": "object",
+          "properties": {
+            "element": { "type": "string" },
+            "question": { "type": "string" },
+            "archetype": { "type": "string" }
+          }
+        },
+        "computed": {
+          "type": "object",
+          "properties": {
+            "tension": { "type": "number", "minimum": 0 },
+            "breathRatio": { "type": "number", "minimum": 0 },
+            "kpiCoherence": { "type": "number", "minimum": 0, "maximum": 1 },
+            "wasSubstituted": { "type": "boolean" }
+          }
+        },
+        "diagnostics": {
+          "type": "object",
+          "properties": {
+            "status": { "enum": ["harmonious", "moderate", "critical"] },
+            "interpretation": { "type": "string" }
+          }
+        }
+      }
+    },
+    "FaceReference": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "name": { "type": "string" },
+        "energy": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

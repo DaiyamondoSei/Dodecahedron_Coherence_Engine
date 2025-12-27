@@ -1,0 +1,303 @@
+{
+  "$schema": "./schemas/breath-ratios.schema.json",
+  "$version": "2.0.0",
+  "$generatedAt": "2025-12-26T19:49:43.428Z",
+  "$source": "CSV_BREATH_RATIOS.csv",
+  "$philosophy": {
+    "purpose": "Map of 6 harmonic axes - the organization's breathing pattern",
+    "sacredGeometry": "Each axis pairs opposite faces of the dodecahedron",
+    "interpretation": {
+      "balanced": "Ratio 0.8-1.2 = healthy breath",
+      "strongExhale": "Ratio < 0.8 = projecting more than receiving",
+      "abundantInhale": "Ratio > 1.2 = receiving more than projecting",
+      "extreme": "Ratio > 3.0 = critical imbalance requiring intervention"
+    }
+  },
+  "$topology": {
+    "expectedAxes": 6,
+    "actualAxes": 6,
+    "validated": true,
+    "violations": [],
+    "axisPairs": [
+      [
+        1,
+        11
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        8
+      ],
+      [
+        4,
+        9
+      ],
+      [
+        5,
+        10
+      ],
+      [
+        6,
+        12
+      ]
+    ]
+  },
+  "$integrityReport": {
+    "totalRecords": 6,
+    "substitutionCount": 0,
+    "criticalAxes": [
+      {
+        "axis": 1,
+        "ratio": 0.24,
+        "severity": "extreme",
+        "interpretation": "Projection far exceeds reception"
+      },
+      {
+        "axis": 2,
+        "ratio": 0.123,
+        "severity": "extreme",
+        "interpretation": "Projection far exceeds reception"
+      },
+      {
+        "axis": 5,
+        "ratio": 0.208,
+        "severity": "extreme",
+        "interpretation": "Projection far exceeds reception"
+      }
+    ],
+    "octaveDataComplete": false,
+    "octavesPopulated": [
+      "O1"
+    ],
+    "octavesMissing": [
+      "O2",
+      "O3",
+      "O4",
+      "O5",
+      "O6",
+      "O7"
+    ],
+    "substitutions": []
+  },
+  "axes": [
+    {
+      "id": 1,
+      "archetype": "Resource Flow",
+      "projection": {
+        "faceId": 11,
+        "name": "Funding Pipeline",
+        "energy": 0.3819660112501051
+      },
+      "reception": {
+        "faceId": 1,
+        "name": "Financial Capital",
+        "energy": 0.3819660112501051
+      },
+      "philosophy": {
+        "question": "Is funding flowing into financial stability?",
+        "currentState": "Extreme exhale - unsustainable output",
+        "intervention": "Critical imbalance requires attention"
+      },
+      "computed": {
+        "breathRatio": 0.24,
+        "status": "extreme",
+        "wasSubstituted": false
+      },
+      "octaves": {
+        "O1": {
+          "manifestation": "Survival",
+          "score": 0.3819660112501051
+        },
+        "O2": null,
+        "O3": null,
+        "O4": null,
+        "O5": null,
+        "O6": null,
+        "O7": null
+      }
+    },
+    {
+      "id": 2,
+      "archetype": "Substance & Story",
+      "projection": {
+        "faceId": 7,
+        "name": "Brand & Reputation",
+        "energy": 0.3819660112501051
+      },
+      "reception": {
+        "faceId": 2,
+        "name": "Intellectual Capital",
+        "energy": 0.3819660112501051
+      },
+      "philosophy": {
+        "question": "Does our story reflect our substance?",
+        "currentState": "Extreme exhale - unsustainable output",
+        "intervention": "Critical imbalance requires attention"
+      },
+      "computed": {
+        "breathRatio": 0.123,
+        "status": "extreme",
+        "wasSubstituted": false
+      },
+      "octaves": {
+        "O1": {
+          "manifestation": "Survival",
+          "score": 0.3819660112501051
+        },
+        "O2": null,
+        "O3": null,
+        "O4": null,
+        "O5": null,
+        "O6": null,
+        "O7": null
+      }
+    },
+    {
+      "id": 3,
+      "archetype": "Being & Doing",
+      "projection": {
+        "faceId": 8,
+        "name": "Core Operations",
+        "energy": 0.3819660112501051
+      },
+      "reception": {
+        "faceId": 3,
+        "name": "Human Capital",
+        "energy": 0.3819660112501051
+      },
+      "philosophy": {
+        "question": "Do we have capacity to do our work?",
+        "currentState": "Balanced breath - healthy exchange",
+        "intervention": null
+      },
+      "computed": {
+        "breathRatio": 1,
+        "status": "balanced",
+        "wasSubstituted": false
+      },
+      "octaves": {
+        "O1": {
+          "manifestation": "Survival",
+          "score": 0.3819660112501051
+        },
+        "O2": null,
+        "O3": null,
+        "O4": null,
+        "O5": null,
+        "O6": null,
+        "O7": null
+      }
+    },
+    {
+      "id": 4,
+      "archetype": "Form & Integrity",
+      "projection": {
+        "faceId": 9,
+        "name": "Regenerative Flow",
+        "energy": 0.3819660112501051
+      },
+      "reception": {
+        "faceId": 4,
+        "name": "Structural Capital",
+        "energy": 0.3819660112501051
+      },
+      "philosophy": {
+        "question": "Does regeneration strengthen our structure?",
+        "currentState": "Strong exhale - external expression",
+        "intervention": null
+      },
+      "computed": {
+        "breathRatio": 0.401,
+        "status": "strongExhale",
+        "wasSubstituted": false
+      },
+      "octaves": {
+        "O1": {
+          "manifestation": "Survival",
+          "score": 0.3819660112501051
+        },
+        "O2": null,
+        "O3": null,
+        "O4": null,
+        "O5": null,
+        "O6": null,
+        "O7": null
+      }
+    },
+    {
+      "id": 5,
+      "archetype": "Perception & Truth",
+      "projection": {
+        "faceId": 10,
+        "name": "Foundational Values",
+        "energy": 0.3819660112501051
+      },
+      "reception": {
+        "faceId": 5,
+        "name": "Market Resonance",
+        "energy": 0.3819660112501051
+      },
+      "philosophy": {
+        "question": "Does the world see what we believe in?",
+        "currentState": "Extreme exhale - unsustainable output",
+        "intervention": "Critical imbalance requires attention"
+      },
+      "computed": {
+        "breathRatio": 0.208,
+        "status": "extreme",
+        "wasSubstituted": false
+      },
+      "octaves": {
+        "O1": {
+          "manifestation": "Survival",
+          "score": 0.3819660112501051
+        },
+        "O2": null,
+        "O3": null,
+        "O4": null,
+        "O5": null,
+        "O6": null,
+        "O7": null
+      }
+    },
+    {
+      "id": 6,
+      "archetype": "Network & Fortress",
+      "projection": {
+        "faceId": 12,
+        "name": "Risk & Resilience",
+        "energy": 0.3819660112501051
+      },
+      "reception": {
+        "faceId": 6,
+        "name": "Community & Partners",
+        "energy": 0.3819660112501051
+      },
+      "philosophy": {
+        "question": "Does our network provide resilience?",
+        "currentState": "Balanced breath - healthy exchange",
+        "intervention": null
+      },
+      "computed": {
+        "breathRatio": 1,
+        "status": "balanced",
+        "wasSubstituted": false
+      },
+      "octaves": {
+        "O1": {
+          "manifestation": "Survival",
+          "score": 0.3819660112501051
+        },
+        "O2": null,
+        "O3": null,
+        "O4": null,
+        "O5": null,
+        "O6": null,
+        "O7": null
+      }
+    }
+  ]
+}

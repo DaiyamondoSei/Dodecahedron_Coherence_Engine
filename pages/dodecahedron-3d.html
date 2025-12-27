@@ -522,6 +522,11 @@
     <script src="../js/data-system/data-validator.js"></script>
 
     <!-- ════════════════════════════════════════════════════════════════════════
+         JSON DATA LOADER - JSON-first loading with CSV fallback
+         ════════════════════════════════════════════════════════════════════════ -->
+    <script src="../js/data-system/json-data-loader.js"></script>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
          DATA INTEGRITY VISIBILITY - HUD Badge, Overlay, Orchestrator (Sprint 6)
          MUST load after data-validator.js (our data source)
          These make DataValidator's corruption detection VISIBLE in the UI
@@ -1113,16 +1118,22 @@
                         console.log('[3D View] 🔄 Orchestrator state changed, refreshing data...');
                         // Reload data from sessionStorage (which was just updated)
                         // NOTE: Do NOT use location.reload() here - it causes an infinite loop!
-                        // Instead, refresh the visualization data in-place
-                        setTimeout(() => {
+                        // Instead, reinitialize engine from sessionStorage and refresh visualization
+                        setTimeout(async () => {
                             const customDataJson = sessionStorage.getItem('customCompanyData');
                             if (customDataJson) {
                                 const newData = JSON.parse(customDataJson);
-                                console.log('[3D View] 📦 Refreshing with updated data:', {
+                                console.log('[3D View] 📦 Reinitializing engine with updated data:', {
                                     kpis: newData.kpis?.length,
                                     faces: newData.faceConfig?.faces?.length
                                 });
-                                // Refresh visualization without full page reload
+                                // CRITICAL FIX: Reinitialize engine from sessionStorage
+                                // This ensures face data (elementalKPIs, etc.) is properly populated
+                                if (window.CompanyLoader?.switchCompany) {
+                                    await window.CompanyLoader.switchCompany('custom');
+                                    console.log('[3D View] ✅ Engine reinitialized from sessionStorage');
+                                }
+                                // Now refresh visualization with the updated engine state
                                 if (window.refreshVisualization) {
                                     window.refreshVisualization();
                                 } else {

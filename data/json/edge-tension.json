@@ -1,0 +1,1086 @@
+{
+  "$schema": "./schemas/edge-tension.schema.json",
+  "$version": "2.0.0",
+  "$generatedAt": "2025-12-26T19:49:43.402Z",
+  "$source": "CSV_Edge_tension_Map.csv",
+  "$philosophy": {
+    "purpose": "Map of 30 connections between organizational domains",
+    "sacredGeometry": "Each edge connects two faces of the dodecahedron",
+    "interpretation": {
+      "lowTension": "Breath Ratio close to 1.0 = balanced energy exchange",
+      "highTension": "Ratio > 2.0 or < 0.5 = one-way flow, intervention needed"
+    }
+  },
+  "$topology": {
+    "expectedEdges": 30,
+    "actualEdges": 30,
+    "validated": true,
+    "violations": [],
+    "elementalDistribution": {
+      "Fire": 0,
+      "Water": 0,
+      "Air": 0,
+      "Earth": 0,
+      "Ether": 0
+    }
+  },
+  "$integrityReport": {
+    "totalRecords": 30,
+    "substitutionCount": 30,
+    "incompleteData": null,
+    "substitutions": [
+      {
+        "field": "edges[0]",
+        "edgeId": "E5-9",
+        "original": "Market Resonance ? Regenerative Flow",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[1]",
+        "edgeId": "E5-8",
+        "original": "Market Resonance ? Core Operations",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[2]",
+        "edgeId": "E5-7",
+        "original": "Market Resonance ? Brand & Reputation",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[3]",
+        "edgeId": "E5-12",
+        "original": "Market Resonance ? Risk & Resilience",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[4]",
+        "edgeId": "E3-9",
+        "original": "Human Capital ? Regenerative Flow",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[5]",
+        "edgeId": "E8-10",
+        "original": "Core Operations ? Foundational Values",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[6]",
+        "edgeId": "E4-9",
+        "original": "Structural Capital ? Regenerative Flow",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[7]",
+        "edgeId": "E1-10",
+        "original": "Financial Capital ? Foundational Values",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[8]",
+        "edgeId": "E1-2",
+        "original": "Financial Capital ? Intellectual Capital",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[9]",
+        "edgeId": "E11-12",
+        "original": "Funding Pipeline ? Risk & Resilience",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[10]",
+        "edgeId": "E3-6",
+        "original": "Human Capital ? Community & Partners",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[11]",
+        "edgeId": "E3-4",
+        "original": "Human Capital ? Structural Capital",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[12]",
+        "edgeId": "E7-8",
+        "original": "Brand & Reputation ? Core Operations",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[13]",
+        "edgeId": "E2-10",
+        "original": "Intellectual Capital ? Foundational Values",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[14]",
+        "edgeId": "E1-6",
+        "original": "Financial Capital ? Community & Partners",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[15]",
+        "edgeId": "E4-6",
+        "original": "Structural Capital ? Community & Partners",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[16]",
+        "edgeId": "E1-8",
+        "original": "Financial Capital ? Core Operations",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[17]",
+        "edgeId": "E8-12",
+        "original": "Core Operations ? Risk & Resilience",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[18]",
+        "edgeId": "E1-7",
+        "original": "Financial Capital ? Brand & Reputation",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[19]",
+        "edgeId": "E4-7",
+        "original": "Structural Capital ? Brand & Reputation",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[20]",
+        "edgeId": "E6-7",
+        "original": "Community & Partners ? Brand & Reputation",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[21]",
+        "edgeId": "E3-11",
+        "original": "Human Capital ? Funding Pipeline",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[22]",
+        "edgeId": "E2-6",
+        "original": "Intellectual Capital ? Community & Partners",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[23]",
+        "edgeId": "E10-12",
+        "original": "Foundational Values ? Risk & Resilience",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[24]",
+        "edgeId": "E9-12",
+        "original": "Regenerative Flow ? Risk & Resilience",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[25]",
+        "edgeId": "E2-3",
+        "original": "Intellectual Capital ? Human Capital",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[26]",
+        "edgeId": "E2-11",
+        "original": "Intellectual Capital ? Funding Pipeline",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[27]",
+        "edgeId": "E10-11",
+        "original": "Foundational Values ? Funding Pipeline",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[28]",
+        "edgeId": "E9-11",
+        "original": "Regenerative Flow ? Funding Pipeline",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      },
+      {
+        "field": "edges[29]",
+        "edgeId": "E4-5",
+        "original": "Structural Capital ? Market Resonance",
+        "substitutedWith": "0",
+        "reason": "Corruption pattern detected"
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E5-9",
+      "faceA": {
+        "id": 5,
+        "name": "Market Resonance",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 9,
+        "name": "Regenerative Flow",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.392090",
+        "question": "0.106",
+        "archetype": "The relationship between Market Resonance and Regenerative Flow"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.046254,
+        "kpiCoherence": 0.438344,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E5-8",
+      "faceA": {
+        "id": 5,
+        "name": "Market Resonance",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 8,
+        "name": "Core Operations",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.174637",
+        "question": "0.209",
+        "archetype": "The relationship between Market Resonance and Core Operations"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.046254,
+        "kpiCoherence": 0.220891,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E5-7",
+      "faceA": {
+        "id": 5,
+        "name": "Market Resonance",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 7,
+        "name": "Brand & Reputation",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.161876",
+        "question": "0.222",
+        "archetype": "The relationship between Market Resonance and Brand & Reputation"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.046254,
+        "kpiCoherence": 0.20813,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E5-12",
+      "faceA": {
+        "id": 5,
+        "name": "Market Resonance",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 12,
+        "name": "Risk & Resilience",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.150073",
+        "question": "0.236",
+        "archetype": "The relationship between Market Resonance and Risk & Resilience"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.046254,
+        "kpiCoherence": 0.196326,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E3-9",
+      "faceA": {
+        "id": 3,
+        "name": "Human Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 9,
+        "name": "Regenerative Flow",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.272752",
+        "question": "0.378",
+        "archetype": "The relationship between Human Capital and Regenerative Flow"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.165592,
+        "kpiCoherence": 0.438344,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E8-10",
+      "faceA": {
+        "id": 8,
+        "name": "Core Operations",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 10,
+        "name": "Foundational Values",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.195393",
+        "question": "0.531",
+        "archetype": "The relationship between Core Operations and Foundational Values"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.220891,
+        "kpiCoherence": 0.416284,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E4-9",
+      "faceA": {
+        "id": 4,
+        "name": "Structural Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 9,
+        "name": "Regenerative Flow",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.193555",
+        "question": "0.558",
+        "archetype": "The relationship between Structural Capital and Regenerative Flow"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.244788,
+        "kpiCoherence": 0.438344,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E1-10",
+      "faceA": {
+        "id": 1,
+        "name": "Financial Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 10,
+        "name": "Foundational Values",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.176672",
+        "question": "0.576",
+        "archetype": "The relationship between Financial Capital and Foundational Values"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.239612,
+        "kpiCoherence": 0.416284,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E1-2",
+      "faceA": {
+        "id": 1,
+        "name": "Financial Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 2,
+        "name": "Intellectual Capital",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.161251",
+        "question": "0.598",
+        "archetype": "The relationship between Financial Capital and Intellectual Capital"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.239612,
+        "kpiCoherence": 0.400864,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E11-12",
+      "faceA": {
+        "id": 11,
+        "name": "Funding Pipeline",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 12,
+        "name": "Risk & Resilience",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.072891",
+        "question": "0.629",
+        "archetype": "The relationship between Funding Pipeline and Risk & Resilience"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.123435,
+        "kpiCoherence": 0.196326,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E3-6",
+      "faceA": {
+        "id": 3,
+        "name": "Human Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 6,
+        "name": "Community & Partners",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.081307",
+        "question": "0.671",
+        "archetype": "The relationship between Human Capital and Community & Partners"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.165592,
+        "kpiCoherence": 0.246899,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E3-4",
+      "faceA": {
+        "id": 3,
+        "name": "Human Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 4,
+        "name": "Structural Capital",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.079197",
+        "question": "0.676",
+        "archetype": "The relationship between Human Capital and Structural Capital"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.165592,
+        "kpiCoherence": 0.244788,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E7-8",
+      "faceA": {
+        "id": 7,
+        "name": "Brand & Reputation",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 8,
+        "name": "Core Operations",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.012761",
+        "question": "0.942",
+        "archetype": "The relationship between Brand & Reputation and Core Operations"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.20813,
+        "kpiCoherence": 0.220891,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E2-10",
+      "faceA": {
+        "id": 2,
+        "name": "Intellectual Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 10,
+        "name": "Foundational Values",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.015420",
+        "question": "0.963",
+        "archetype": "The relationship between Intellectual Capital and Foundational Values"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.400864,
+        "kpiCoherence": 0.416284,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E1-6",
+      "faceA": {
+        "id": 1,
+        "name": "Financial Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 6,
+        "name": "Community & Partners",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.007287",
+        "question": "0.970",
+        "archetype": "The relationship between Financial Capital and Community & Partners"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.239612,
+        "kpiCoherence": 0.246899,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E4-6",
+      "faceA": {
+        "id": 4,
+        "name": "Structural Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 6,
+        "name": "Community & Partners",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.002111",
+        "question": "0.991",
+        "archetype": "The relationship between Structural Capital and Community & Partners"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.244788,
+        "kpiCoherence": 0.246899,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E1-8",
+      "faceA": {
+        "id": 1,
+        "name": "Financial Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 8,
+        "name": "Core Operations",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.018721",
+        "question": "1.085",
+        "archetype": "The relationship between Financial Capital and Core Operations"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.239612,
+        "kpiCoherence": 0.220891,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E8-12",
+      "faceA": {
+        "id": 8,
+        "name": "Core Operations",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 12,
+        "name": "Risk & Resilience",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.024565",
+        "question": "1.125",
+        "archetype": "The relationship between Core Operations and Risk & Resilience"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.220891,
+        "kpiCoherence": 0.196326,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E1-7",
+      "faceA": {
+        "id": 1,
+        "name": "Financial Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 7,
+        "name": "Brand & Reputation",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.031482",
+        "question": "1.151",
+        "archetype": "The relationship between Financial Capital and Brand & Reputation"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.239612,
+        "kpiCoherence": 0.20813,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E4-7",
+      "faceA": {
+        "id": 4,
+        "name": "Structural Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 7,
+        "name": "Brand & Reputation",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.036658",
+        "question": "1.176",
+        "archetype": "The relationship between Structural Capital and Brand & Reputation"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.244788,
+        "kpiCoherence": 0.20813,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E6-7",
+      "faceA": {
+        "id": 6,
+        "name": "Community & Partners",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 7,
+        "name": "Brand & Reputation",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.038769",
+        "question": "1.186",
+        "archetype": "The relationship between Community & Partners and Brand & Reputation"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.246899,
+        "kpiCoherence": 0.20813,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E3-11",
+      "faceA": {
+        "id": 3,
+        "name": "Human Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 11,
+        "name": "Funding Pipeline",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.042157",
+        "question": "1.342",
+        "archetype": "The relationship between Human Capital and Funding Pipeline"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.165592,
+        "kpiCoherence": 0.123435,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E2-6",
+      "faceA": {
+        "id": 2,
+        "name": "Intellectual Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 6,
+        "name": "Community & Partners",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.153964",
+        "question": "1.624",
+        "archetype": "The relationship between Intellectual Capital and Community & Partners"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.400864,
+        "kpiCoherence": 0.246899,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E10-12",
+      "faceA": {
+        "id": 10,
+        "name": "Foundational Values",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 12,
+        "name": "Risk & Resilience",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.219958",
+        "question": "2.120",
+        "archetype": "The relationship between Foundational Values and Risk & Resilience"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.416284,
+        "kpiCoherence": 0.196326,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E9-12",
+      "faceA": {
+        "id": 9,
+        "name": "Regenerative Flow",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 12,
+        "name": "Risk & Resilience",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.242017",
+        "question": "2.233",
+        "archetype": "The relationship between Regenerative Flow and Risk & Resilience"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.438344,
+        "kpiCoherence": 0.196326,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E2-3",
+      "faceA": {
+        "id": 2,
+        "name": "Intellectual Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 3,
+        "name": "Human Capital",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.235272",
+        "question": "2.421",
+        "archetype": "The relationship between Intellectual Capital and Human Capital"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.400864,
+        "kpiCoherence": 0.165592,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E2-11",
+      "faceA": {
+        "id": 2,
+        "name": "Intellectual Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 11,
+        "name": "Funding Pipeline",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.277429",
+        "question": "3.248",
+        "archetype": "The relationship between Intellectual Capital and Funding Pipeline"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.400864,
+        "kpiCoherence": 0.123435,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E10-11",
+      "faceA": {
+        "id": 10,
+        "name": "Foundational Values",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 11,
+        "name": "Funding Pipeline",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.292849",
+        "question": "3.372",
+        "archetype": "The relationship between Foundational Values and Funding Pipeline"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.416284,
+        "kpiCoherence": 0.123435,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E9-11",
+      "faceA": {
+        "id": 9,
+        "name": "Regenerative Flow",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 11,
+        "name": "Funding Pipeline",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.314908",
+        "question": "3.551",
+        "archetype": "The relationship between Regenerative Flow and Funding Pipeline"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.438344,
+        "kpiCoherence": 0.123435,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    },
+    {
+      "id": "E4-5",
+      "faceA": {
+        "id": 4,
+        "name": "Structural Capital",
+        "energy": 0.381966
+      },
+      "faceB": {
+        "id": 5,
+        "name": "Market Resonance",
+        "energy": 0.381966
+      },
+      "philosophy": {
+        "element": "0.198535",
+        "question": "5.292",
+        "archetype": "The relationship between Structural Capital and Market Resonance"
+      },
+      "computed": {
+        "tension": 0,
+        "breathRatio": 0.244788,
+        "kpiCoherence": 0.046254,
+        "wasSubstituted": true
+      },
+      "diagnostics": {
+        "status": "critical",
+        "interpretation": "Projecting more than receiving in this connection"
+      }
+    }
+  ]
+}

@@ -1,0 +1,248 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quannex.io/schemas/kpi-database.json",
+  "title": "Quannex KPI Database",
+  "description": "Self-documenting KPI data with integrity tracking and sacred geometry validation",
+  "type": "object",
+  "required": ["$version", "$source", "kpis"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "$version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Schema version (semver)"
+    },
+    "$generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO timestamp of generation"
+    },
+    "$source": {
+      "type": "string",
+      "description": "Source CSV filename"
+    },
+    "$philosophy": {
+      "type": "object",
+      "description": "Human-readable meaning layer",
+      "properties": {
+        "purpose": { "type": "string" },
+        "sacredGeometry": { "type": "string" },
+        "interpretation": {
+          "type": "object",
+          "properties": {
+            "healthy": { "type": "string" },
+            "critical": { "type": "string" },
+            "zeroEnergy": { "type": "string" }
+          }
+        }
+      }
+    },
+    "$topology": {
+      "type": "object",
+      "description": "Sacred geometry validation",
+      "properties": {
+        "expectedFaces": { "type": "integer", "const": 12 },
+        "actualFaces": { "type": "integer" },
+        "validated": { "type": "boolean" },
+        "violations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "constraint": { "type": "string" },
+              "expected": { "type": "integer" },
+              "actual": { "type": "integer" },
+              "message": { "type": "string" }
+            }
+          }
+        },
+        "constraints": {
+          "type": "object",
+          "properties": {
+            "kpiIdPattern": { "type": "string" },
+            "faceIdRange": { "type": "array", "items": { "type": "integer" } },
+            "octavePattern": { "type": "string" }
+          }
+        }
+      }
+    },
+    "$validationRules": {
+      "type": "object",
+      "description": "Validation configuration",
+      "properties": {
+        "corruptionPatterns": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "defaults": {
+          "type": "object",
+          "properties": {
+            "faceEnergy": { "type": "number" },
+            "kpiNormalized": { "type": "number" },
+            "kpiValue": { "type": "number" }
+          }
+        },
+        "phiConstants": {
+          "type": "object",
+          "properties": {
+            "PHI": { "type": "number" },
+            "PHI_1": { "type": "number" },
+            "PHI_2": { "type": "number" },
+            "PHI_3": { "type": "number" },
+            "PHI_MIDPOINT": { "type": "number" }
+          }
+        }
+      }
+    },
+    "$integrityReport": {
+      "type": "object",
+      "description": "Data integrity audit trail",
+      "properties": {
+        "totalRecords": { "type": "integer" },
+        "substitutionCount": { "type": "integer" },
+        "topologyValid": { "type": "boolean" },
+        "anomalies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string" },
+              "face": { "type": "integer" },
+              "kpiId": { "type": "string" },
+              "description": { "type": "string" },
+              "severity": { "enum": ["info", "warning", "critical"] },
+              "recommendation": { "type": "string" }
+            }
+          }
+        },
+        "substitutions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": { "type": "string" },
+              "kpiId": { "type": "string" },
+              "original": { "type": "string" },
+              "substituted": { "type": "number" },
+              "substitutedWith": { "type": "string" },
+              "reason": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "kpis": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "description": "The 12 organizational domains",
+      "items": { "$ref": "#/definitions/KPI" }
+    }
+  },
+  "definitions": {
+    "KPI": {
+      "type": "object",
+      "required": ["id", "name", "faceId", "computed"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z]\\d+\\.\\d+$",
+          "description": "KPI identifier (e.g., F1.1)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable KPI name"
+        },
+        "faceId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12,
+          "description": "Dodecahedron face ID (1-12)"
+        },
+        "faceName": {
+          "type": "string",
+          "description": "Human-readable face name"
+        },
+        "octave": {
+          "type": "string",
+          "pattern": "^O[1-7]$",
+          "description": "Development octave (O1-O7)"
+        },
+        "direction": {
+          "type": "string",
+          "enum": ["up", "down", "band"],
+          "description": "KPI direction (up=higher-is-better, band=plateau-aware)"
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "KPI weight in calculations"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Measurement unit"
+        },
+        "philosophy": {
+          "type": "object",
+          "description": "Philosophical context",
+          "properties": {
+            "element": {
+              "type": "string",
+              "enum": ["Earth", "Water", "Fire", "Air", "Ether"]
+            },
+            "question": { "type": "string" },
+            "healthyRange": { "type": "string" }
+          }
+        },
+        "raw": {
+          "type": "object",
+          "description": "Original values from CSV",
+          "properties": {
+            "value": { "type": "string" },
+            "target_ideal": { "type": "string" },
+            "target_min": { "type": "string" },
+            "wasCorrupted": { "type": "boolean" }
+          }
+        },
+        "computed": {
+          "type": "object",
+          "required": ["normalized", "wasSubstituted"],
+          "description": "Calculated values",
+          "properties": {
+            "normalized": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Normalized score (0-1)"
+            },
+            "faceEnergy": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Face coherence energy (0-1)"
+            },
+            "wasSubstituted": {
+              "type": "boolean",
+              "description": "True if PHI-derived default was used"
+            }
+          }
+        },
+        "diagnostics": {
+          "type": "object",
+          "description": "Diagnostic metadata",
+          "properties": {
+            "healthyMin": { "type": ["number", "null"] },
+            "healthyMax": { "type": ["number", "null"] },
+            "absoluteMax": { "type": ["number", "null"] },
+            "isPlateauKPI": { "type": "boolean" },
+            "rationale": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

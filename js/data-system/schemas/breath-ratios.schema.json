@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quannex.io/schemas/breath-ratios.json",
+  "title": "Quannex Breath Ratios",
+  "description": "The 6 harmonic axes - the organization's breathing pattern",
+  "type": "object",
+  "required": ["$version", "$source", "axes"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "$version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "$generatedAt": { "type": "string", "format": "date-time" },
+    "$source": { "type": "string" },
+    "$philosophy": {
+      "type": "object",
+      "properties": {
+        "purpose": { "type": "string" },
+        "sacredGeometry": { "type": "string" },
+        "interpretation": {
+          "type": "object",
+          "properties": {
+            "balanced": { "type": "string" },
+            "strongExhale": { "type": "string" },
+            "abundantInhale": { "type": "string" },
+            "extreme": { "type": "string" }
+          }
+        }
+      }
+    },
+    "$topology": {
+      "type": "object",
+      "properties": {
+        "expectedAxes": { "type": "integer", "const": 6 },
+        "actualAxes": { "type": "integer" },
+        "validated": { "type": "boolean" },
+        "violations": { "type": "array" },
+        "axisPairs": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      }
+    },
+    "$integrityReport": {
+      "type": "object",
+      "properties": {
+        "totalRecords": { "type": "integer" },
+        "substitutionCount": { "type": "integer" },
+        "criticalAxes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "axis": { "type": "integer" },
+              "ratio": { "type": "number" },
+              "severity": { "type": "string" },
+              "interpretation": { "type": "string" }
+            }
+          }
+        },
+        "octaveDataComplete": { "type": "boolean" },
+        "octavesPopulated": { "type": "array", "items": { "type": "string" } },
+        "octavesMissing": { "type": "array", "items": { "type": "string" } },
+        "substitutions": { "type": "array" }
+      }
+    },
+    "axes": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": { "$ref": "#/definitions/Axis" }
+    }
+  },
+  "definitions": {
+    "Axis": {
+      "type": "object",
+      "required": ["id", "archetype", "projection", "reception", "computed"],
+      "properties": {
+        "id": { "type": "integer", "minimum": 1, "maximum": 6 },
+        "archetype": { "type": "string" },
+        "projection": {
+          "type": "object",
+          "properties": {
+            "faceId": { "type": "integer" },
+            "name": { "type": "string" },
+            "energy": { "type": "number" }
+          }
+        },
+        "reception": {
+          "type": "object",
+          "properties": {
+            "faceId": { "type": "integer" },
+            "name": { "type": "string" },
+            "energy": { "type": "number" }
+          }
+        },
+        "philosophy": {
+          "type": "object",
+          "properties": {
+            "question": { "type": "string" },
+            "currentState": { "type": "string" },
+            "intervention": { "type": ["string", "null"] }
+          }
+        },
+        "computed": {
+          "type": "object",
+          "properties": {
+            "breathRatio": { "type": "number" },
+            "status": { "enum": ["balanced", "strongExhale", "abundantInhale", "extreme"] },
+            "wasSubstituted": { "type": "boolean" }
+          }
+        },
+        "octaves": {
+          "type": "object",
+          "properties": {
+            "O1": { "type": ["object", "null"] },
+            "O2": { "type": ["object", "null"] },
+            "O3": { "type": ["object", "null"] },
+            "O4": { "type": ["object", "null"] },
+            "O5": { "type": ["object", "null"] },
+            "O6": { "type": ["object", "null"] },
+            "O7": { "type": ["object", "null"] }
+          }
+        }
+      }
+    }
+  }
+}

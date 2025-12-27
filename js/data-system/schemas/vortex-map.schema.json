@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quannex.io/schemas/vortex-map.json",
+  "title": "Quannex Vortex Map",
+  "description": "The 20 triadic intersections where 3 domains meet",
+  "type": "object",
+  "required": ["$version", "$source", "vertices"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "$version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "$generatedAt": { "type": "string", "format": "date-time" },
+    "$source": { "type": "string" },
+    "$philosophy": {
+      "type": "object",
+      "properties": {
+        "purpose": { "type": "string" },
+        "sacredGeometry": { "type": "string" },
+        "interpretation": {
+          "type": "object",
+          "properties": {
+            "lowLambda": { "type": "string" },
+            "highLambda": { "type": "string" }
+          }
+        }
+      }
+    },
+    "$topology": {
+      "type": "object",
+      "properties": {
+        "expectedVertices": { "type": "integer", "const": 20 },
+        "actualVertices": { "type": "integer" },
+        "validated": { "type": "boolean" },
+        "violations": { "type": "array" },
+        "triadicConstraint": { "type": "string" }
+      }
+    },
+    "$integrityReport": {
+      "type": "object",
+      "properties": {
+        "totalRecords": { "type": "integer" },
+        "substitutionCount": { "type": "integer" },
+        "harmonyHubs": { "type": "array", "items": { "type": "string" } },
+        "bermudaTriangles": { "type": "array", "items": { "type": "string" } },
+        "averageLambda": { "type": "number" },
+        "substitutions": { "type": "array" }
+      }
+    },
+    "vertices": {
+      "type": "array",
+      "minItems": 20,
+      "maxItems": 20,
+      "items": { "$ref": "#/definitions/Vertex" }
+    }
+  },
+  "definitions": {
+    "Vertex": {
+      "type": "object",
+      "required": ["id", "faces", "computed"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^V\\d+$" },
+        "faces": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer", "minimum": 1, "maximum": 12 },
+              "name": { "type": "string" },
+              "energy": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          }
+        },
+        "philosophy": {
+          "type": "object",
+          "properties": {
+            "archetype": { "type": "string" },
+            "question": { "type": "string" },
+            "status": { "enum": ["Harmony Hub", "Bermuda Triangle", "Moderate"] }
+          }
+        },
+        "computed": {
+          "type": "object",
+          "properties": {
+            "macroVMean": { "type": "number" },
+            "vortexStrength": { "type": "number" },
+            "microVMean": { "type": "number" },
+            "overallCoherence": { "type": "number" },
+            "wasSubstituted": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  }
+}

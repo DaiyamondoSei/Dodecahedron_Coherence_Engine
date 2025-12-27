@@ -9,6 +9,12 @@
  * It centralizes loading from three sources and synthesizes them
  * into a unified context object that all other modules consume.
  *
+ * UPDATE v2.1.0 (2025-12-26):
+ * Added JSON-first loading strategy via JSONDataLoader.
+ * - Tries data/json/{type}.json first (pre-validated, self-documenting)
+ * - Falls back to CSV parsing if JSON not available
+ * - Backward compatible - works even without JSONDataLoader
+ *
  * THE THREE DATA SOURCES:
  * ┌─────────────────────────────────────────────────────────────┐
  * │ 1. STATIC CSVs (Base Models - The Geometry)                │
@@ -133,7 +139,7 @@
  *
  * @module js/unified-data-loader
  * @author Deimantas Butrimas & Claude
- * @version 2.0.0 - Documented with Notes for Future Claude
+ * @version 2.1.0 - Added JSON-first loading via JSONDataLoader
  */
 
 import { AIEdgeInterpreter } from './advanced/ai-edge-interpreter.js';
@@ -199,31 +205,149 @@ export class UnifiedDataLoader {
 
     /**
      * Load the static CSV models that define the Dodecahedron's physics
+     *
+     * v2.1.0: Now uses JSON-first loading strategy via JSONDataLoader.
+     * Falls back to CSV parsing if JSON files not available.
      */
     async loadBaseModels() {
         if (this.cache.has('baseModels')) {
             return this.cache.get('baseModels');
         }
 
-        console.log('   📂 Loading base CSV models...');
-        // Use getBasePath() to work from any subdirectory (e.g., pages/)
-        const basePath = this.getBasePath();
-        const [edges, vertices] = await Promise.all([
-            this.fetchCSV(`${basePath}data/CSV_Edge_tension_Map.csv`),
-            this.fetchCSV(`${basePath}data/CSV_Vortex_Map.csv`)
-        ]);
+        // Check if JSONDataLoader is available for JSON-first loading
+        const jsonLoader = typeof window !== 'undefined' && window.JSONDataLoader;
 
-        const models = {
-            edgeDefinitions: this.parseEdgeCSV(edges),
-            vertexDefinitions: this.parseVertexCSV(vertices)
-        };
+        let edgeDefinitions, vertexDefinitions;
 
+        if (jsonLoader) {
+            // JSON-FIRST STRATEGY: Try pre-validated JSON files
+            console.log('   📂 Loading base models (JSON-first)...');
+            try {
+                const [edgeData, vertexData] = await Promise.all([
+                    jsonLoader.load('edge-tension'),
+                    jsonLoader.load('vortex-map')
+                ]);
+
+                // Extract data arrays from self-documenting JSON structure
+                edgeDefinitions = this.transformJSONEdges(edgeData);
+                vertexDefinitions = this.transformJSONVertices(vertexData);
+
+                console.log(`   ✅ Loaded ${edgeDefinitions.length} edges, ${vertexDefinitions.length} vertices from JSON`);
+            } catch (jsonError) {
+                console.log('   ⚠️ JSON loading failed, falling back to CSV:', jsonError.message);
+                // Fall through to CSV loading
+                edgeDefinitions = null;
+            }
+        }
+
+        // CSV FALLBACK: If JSONDataLoader not available or JSON loading failed
+        if (!edgeDefinitions) {
+            console.log('   📂 Loading base CSV models...');
+            const basePath = this.getBasePath();
+            const [edgesCSV, verticesCSV] = await Promise.all([
+                this.fetchCSV(`${basePath}data/CSV_Edge_tension_Map.csv`),
+                this.fetchCSV(`${basePath}data/CSV_Vortex_Map.csv`)
+            ]);
+
+            edgeDefinitions = this.parseEdgeCSV(edgesCSV);
+            vertexDefinitions = this.parseVertexCSV(verticesCSV);
+            console.log(`   ✅ Loaded ${edgeDefinitions.length} edges, ${vertexDefinitions.length} vertices from CSV`);
+        }
+
+        const models = { edgeDefinitions, vertexDefinitions };
         this.cache.set('baseModels', models);
         return models;
     }
 
     /**
+     * Transform JSON edge data to the format expected by synthesizeContext
+     * Maps from self-documenting JSON structure to edge definitions
+     * @param {Object} jsonData - Data from JSONDataLoader
+     * @returns {Array} Edge definitions array
+     */
+    transformJSONEdges(jsonData) {
+        // Handle both self-documenting JSON (has .edges) and raw arrays
+        const edges = jsonData.edges || jsonData;
+
+        return edges.map(edge => ({
+            id: edge.id,
+            face1Id: edge.faceA?.id || edge.face1Id,
+            face2Id: edge.faceB?.id || edge.face2Id,
+            archetype: edge.philosophy?.archetype || edge.archetype,
+            element: edge.philosophy?.element || edge.element,
+            question: edge.philosophy?.question || edge.question,
+            // Preserve computed values if available
+            tension: edge.computed?.tension,
+            breathRatio: edge.computed?.breathRatio,
+            wasSubstituted: edge.computed?.wasSubstituted
+        }));
+    }
+
+    /**
+     * Transform JSON vertex data to the format expected by synthesizeContext
+     * Maps from self-documenting JSON structure to vertex definitions
+     * @param {Object} jsonData - Data from JSONDataLoader
+     * @returns {Array} Vertex definitions array
+     */
+    transformJSONVertices(jsonData) {
+        // Handle both self-documenting JSON (has .vertices) and raw arrays
+        const vertices = jsonData.vertices || jsonData;
+
+        return vertices.map(vertex => ({
+            id: vertex.id,
+            faceIds: vertex.faces?.map(f => f.id) || vertex.faceIds,
+            archetype: vertex.philosophy?.archetype || vertex.archetype,
+            // Preserve computed values if available
+            vortexStrength: vertex.computed?.vortexStrength,
+            overallCoherence: vertex.computed?.overallCoherence,
+            wasSubstituted: vertex.computed?.wasSubstituted
+        }));
+    }
+
+    /**
+     * Transform JSON KPI data to the format expected by company profile
+     * Maps from self-documenting JSON structure to KPI definitions
+     * @param {Object} jsonData - Data from JSONDataLoader
+     * @returns {Array} KPI definitions array
+     */
+    transformJSONKPIs(jsonData) {
+        // Handle both self-documenting JSON (has .kpis) and raw arrays
+        const kpis = jsonData.kpis || jsonData;
+
+        return kpis.map(kpi => ({
+            // Core identification
+            id: kpi.id,
+            name: kpi.name,
+            faceId: kpi.faceId,
+            faceName: kpi.faceName,
+            octave: kpi.octave,
+            // Direction and measurement
+            direction: kpi.direction,
+            weight: kpi.weight,
+            unit: kpi.unit,
+            // Raw values (preserved from original CSV)
+            value: kpi.raw?.value || kpi.value,
+            target_ideal: kpi.raw?.target_ideal || kpi.target_ideal,
+            target_min: kpi.raw?.target_min || kpi.target_min,
+            // Computed values (pre-validated)
+            normalized: kpi.computed?.normalized,
+            faceEnergy: kpi.computed?.faceEnergy,
+            wasSubstituted: kpi.computed?.wasSubstituted,
+            // Diagnostics
+            healthyMin: kpi.diagnostics?.healthyMin,
+            healthyMax: kpi.diagnostics?.healthyMax,
+            isPlateauKPI: kpi.diagnostics?.isPlateauKPI,
+            rationale: kpi.diagnostics?.rationale,
+            // Philosophy layer
+            element: kpi.philosophy?.element,
+            question: kpi.philosophy?.question
+        }));
+    }
+
+    /**
      * Load a company profile from the companies folder
+     *
+     * v2.1.0: Now supports JSON-first loading for KPIs via JSONDataLoader.
      */
     async loadCompanyProfile(companyId) {
         const basePath = this.getBasePath();
@@ -232,10 +356,28 @@ export class UnifiedDataLoader {
             const profileReq = await fetch(`${basePath}companies/${companyId}/company.json`);
             const profile = await profileReq.json();
 
-            // Load KPIs
-            const kpiReq = await fetch(`${basePath}companies/${companyId}/kpis.csv`);
-            const kpiText = await kpiReq.text();
-            const kpis = this.parseKPIs(kpiText);
+            // Load KPIs (JSON-first with CSV fallback)
+            let kpis;
+            const jsonLoader = typeof window !== 'undefined' && window.JSONDataLoader;
+
+            if (jsonLoader) {
+                try {
+                    // Try JSON-first for KPIs
+                    const kpiData = await jsonLoader.load('kpi-database');
+                    kpis = this.transformJSONKPIs(kpiData);
+                    console.log(`   ✅ Loaded ${kpis.length} KPIs from JSON`);
+                } catch (jsonErr) {
+                    console.log('   ⚠️ KPI JSON not available, falling back to CSV');
+                    kpis = null;
+                }
+            }
+
+            if (!kpis) {
+                // CSV fallback
+                const kpiReq = await fetch(`${basePath}companies/${companyId}/kpis.csv`);
+                const kpiText = await kpiReq.text();
+                kpis = this.parseKPIs(kpiText);
+            }
 
             // Try to load rich shadowPatterns and tuning from mapping-context.json
             // (mapping-context has proper object format vs company.json string format)

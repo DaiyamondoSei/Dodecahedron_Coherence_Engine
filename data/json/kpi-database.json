@@ -1,0 +1,467 @@
+{
+  "$schema": "./schemas/kpi-database.schema.json",
+  "$version": "2.0.0",
+  "$generatedAt": "2025-12-26T19:49:43.374Z",
+  "$source": "CSV_KPI_Database.csv",
+  "$philosophy": {
+    "purpose": "Map of 12 organizational consciousness domains",
+    "sacredGeometry": "Each KPI represents one face of the dodecahedron",
+    "interpretation": {
+      "healthy": "When Face Energy > 0.618 (PHI^-1), the domain thrives",
+      "critical": "When Face Energy < 0.236 (PHI^-3), intervention needed",
+      "zeroEnergy": "Not absence of effort, but perception below threshold"
+    }
+  },
+  "$topology": {
+    "expectedFaces": 12,
+    "actualFaces": 12,
+    "validated": true,
+    "violations": [],
+    "constraints": {
+      "kpiIdPattern": "^[FLPSER]\\d+\\.\\d+$",
+      "faceIdRange": [
+        1,
+        12
+      ],
+      "octavePattern": "^O[1-7]$"
+    }
+  },
+  "$validationRules": {
+    "corruptionPatterns": [
+      "[object Object]",
+      "#N/A",
+      "#REF!",
+      "#VALUE!",
+      "#DIV/0!",
+      "undefined",
+      "null",
+      "NaN"
+    ],
+    "defaults": {
+      "faceEnergy": 0.3819660112501051,
+      "kpiNormalized": 0.5,
+      "kpiValue": 0.6180339887498948
+    },
+    "phiConstants": {
+      "PHI": 1.618033988749895,
+      "PHI_1": 0.6180339887498948,
+      "PHI_2": 0.3819660112501051,
+      "PHI_3": 0.23606797749978967,
+      "PHI_MIDPOINT": 0.5
+    }
+  },
+  "$integrityReport": {
+    "totalRecords": 12,
+    "substitutionCount": 0,
+    "topologyValid": true,
+    "anomalies": [
+      {
+        "type": "zeroEnergy",
+        "face": 5,
+        "kpiId": "P1.1",
+        "description": "Founder has zero energy",
+        "severity": "critical",
+        "recommendation": "Review data source for Clarity Score"
+      }
+    ],
+    "substitutions": []
+  },
+  "kpis": [
+    {
+      "id": "F1.1",
+      "name": "Months of Runway",
+      "faceId": 1,
+      "faceName": "Deimantas",
+      "octave": "O1",
+      "direction": "up",
+      "weight": 1,
+      "unit": "Months",
+      "philosophy": {
+        "element": "Earth",
+        "question": "How long can we survive without new resources?",
+        "healthyRange": "Target: 12, Minimum: 1"
+      },
+      "raw": {
+        "value": "5.322742857",
+        "target_ideal": "12",
+        "target_min": "1",
+        "wasCorrupted": false
+      },
+      "computed": {
+        "normalized": 0.392977,
+        "faceEnergy": 0.392977,
+        "wasSubstituted": false
+      },
+      "diagnostics": {
+        "healthyMin": 12,
+        "healthyMax": null,
+        "absoluteMax": null,
+        "isPlateauKPI": false,
+        "rationale": "(N/A)"
+      }
+    },
+    {
+      "id": "L2.1",
+      "name": "% Thesis Drafted",
+      "faceId": 2,
+      "faceName": "Founder",
+      "octave": "O1",
+      "direction": "up",
+      "weight": 1,
+      "unit": "%",
+      "philosophy": {
+        "element": "Air",
+        "question": "How unique and protected is our knowledge?",
+        "healthyRange": "Target: 100, Minimum: 0"
+      },
+      "raw": {
+        "value": "60.93714286",
+        "target_ideal": "100",
+        "target_min": "0",
+        "wasCorrupted": false
+      },
+      "computed": {
+        "normalized": 0.609371,
+        "faceEnergy": 0.609371,
+        "wasSubstituted": false
+      },
+      "diagnostics": {
+        "healthyMin": 100,
+        "healthyMax": null,
+        "absoluteMax": null,
+        "isPlateauKPI": false,
+        "rationale": "(N/A)"
+      }
+    },
+    {
+      "id": "L1.1",
+      "name": "Founder Energy Lvl",
+      "faceId": 3,
+      "faceName": "Founder",
+      "octave": "O1",
+      "direction": "band",
+      "weight": 1,
+      "unit": "Balanced (0-10)",
+      "philosophy": {
+        "element": "Fire",
+        "question": "How sustainable is our team energy?",
+        "healthyRange": "Optimal range: not too high, not too low"
+      },
+      "raw": {
+        "value": "5.3744",
+        "target_ideal": "7",
+        "target_min": "5",
+        "wasCorrupted": false
+      },
+      "computed": {
+        "normalized": 0.1872,
+        "faceEnergy": 0.1872,
+        "wasSubstituted": false
+      },
+      "diagnostics": {
+        "healthyMin": 7,
+        "healthyMax": 8.5,
+        "absoluteMax": 10,
+        "isPlateauKPI": true,
+        "rationale": "10"
+      }
+    },
+    {
+      "id": "P2.1",
+      "name": "% Gov Docs Drafted",
+      "faceId": 4,
+      "faceName": "Founder",
+      "octave": "O1",
+      "direction": "up",
+      "weight": 1,
+      "unit": "%",
+      "philosophy": {
+        "element": "Earth",
+        "question": "How solid is our operational foundation?",
+        "healthyRange": "Target: 100, Minimum: 0"
+      },
+      "raw": {
+        "value": "37.2",
+        "target_ideal": "100",
+        "target_min": "0",
+        "wasCorrupted": false
+      },
+      "computed": {
+        "normalized": 0.372,
+        "faceEnergy": 0.372,
+        "wasSubstituted": false
+      },
+      "diagnostics": {
+        "healthyMin": 100,
+        "healthyMax": null,
+        "absoluteMax": null,
+        "isPlateauKPI": false,
+        "rationale": "(N/A)"
+      }
+    },
+    {
+      "id": "P1.1",
+      "name": "Clarity Score",
+      "faceId": 5,
+      "faceName": "Founder",
+      "octave": "O1",
+      "direction": "up",
+      "weight": 1,
+      "unit": "Score (0-5)",
+      "philosophy": {
+        "element": "Air",
+        "question": "Does the world perceive our value?",
+        "healthyRange": "Target: 4.5, Minimum: 2"
+      },
+      "raw": {
+        "value": "1.290528",
+        "target_ideal": "4.5",
+        "target_min": "2",
+        "wasCorrupted": false
+      },
+      "computed": {
+        "normalized": 0,
+        "faceEnergy": 0,
+        "wasSubstituted": false
+      },
+      "diagnostics": {
+        "healthyMin": 4.5,
+        "healthyMax": null,
+        "absoluteMax": null,
+        "isPlateauKPI": false,
+        "rationale": "(N/A)"
+      }
+    },
+    {
+      "id": "S2.1",
+      "name": "Strat. Convos",
+      "faceId": 6,
+      "faceName": "Founder",
+      "octave": "O1",
+      "direction": "up",
+      "weight": 1,
+      "unit": "#",
+      "philosophy": {
+        "element": "Water",
+        "question": "How strong is our support network?",
+        "healthyRange": "Target: 4, Minimum: 0"
+      },
+      "raw": {
+        "value": "1.609904762",
+        "target_ideal": "4",
+        "target_min": "0",
+        "wasCorrupted": false
+      },
+      "computed": {
+        "normalized": 0.402476,
+        "faceEnergy": 0.402476,
+        "wasSubstituted": false
+      },
+      "diagnostics": {
+        "healthyMin": 2,
+        "healthyMax": 4,
+        "absoluteMax": 8,
+        "isPlateauKPI": false,
+        "rationale": "8"
+      }
+    },
+    {
+      "id": "S1.1",
+      "name": "Engaging Posts",
+      "faceId": 7,
+      "faceName": "Founder",
+      "octave": "O1",
+      "direction": "up",
+      "weight": 1,
+      "unit": "# / week",
+      "philosophy": {
+        "element": "Fire",
+        "question": "How clear is our voice in the market?",
+        "healthyRange": "Target: 2, Minimum: 0"
+      },
+      "raw": {
+        "value": "0.62647619",
+        "target_ideal": "2",
+        "target_min": "0",
+        "wasCorrupted": false
+      },
+      "computed": {
+        "normalized": 0.313238,
+        "faceEnergy": 0.313238,
+        "wasSubstituted": false
+      },
+      "diagnostics": {
+        "healthyMin": 2,
+        "healthyMax": null,
+        "absoluteMax": null,
+        "isPlateauKPI": false,
+        "rationale": "(N/A)"
+      }
+    },
+    {
+      "id": "P3.1",
+      "name": "\"Live\" Test Done",
+      "faceId": 8,
+      "faceName": "Founder",
+      "octave": "O1",
+      "direction": "up",
+      "weight": 1,
+      "unit": "0 or 1",
+      "philosophy": {
+        "element": "Earth",
+        "question": "How efficiently do we transform inputs to outputs?",
+        "healthyRange": "Target: 1, Minimum: 0"
+      },
+      "raw": {
+        "value": "0.407402869",
+        "target_ideal": "1",
+        "target_min": "0",
+        "wasCorrupted": false
+      },
+      "computed": {
+        "normalized": 0.407403,
+        "faceEnergy": 0.407403,
+        "wasSubstituted": false
+      },
+      "diagnostics": {
+        "healthyMin": 1,
+        "healthyMax": null,
+        "absoluteMax": null,
+        "isPlateauKPI": false,
+        "rationale": "(N/A)"
+      }
+    },
+    {
+      "id": "E1.1",
+      "name": "# Regen Choices",
+      "faceId": 9,
+      "faceName": "Founder",
+      "octave": "O1",
+      "direction": "up",
+      "weight": 1,
+      "unit": "#",
+      "philosophy": {
+        "element": "Ether",
+        "question": "Does our work regenerate rather than extract?",
+        "healthyRange": "Target: 10, Minimum: 0"
+      },
+      "raw": {
+        "value": "6.702133333",
+        "target_ideal": "10",
+        "target_min": "0",
+        "wasCorrupted": false
+      },
+      "computed": {
+        "normalized": 0.670213,
+        "faceEnergy": 0.670213,
+        "wasSubstituted": false
+      },
+      "diagnostics": {
+        "healthyMin": 100,
+        "healthyMax": null,
+        "absoluteMax": null,
+        "isPlateauKPI": false,
+        "rationale": "(N/A)"
+      }
+    },
+    {
+      "id": "L3.1",
+      "name": "# Value Checks",
+      "faceId": 10,
+      "faceName": "Founder",
+      "octave": "O1",
+      "direction": "up",
+      "weight": 1,
+      "unit": "#",
+      "philosophy": {
+        "element": "Ether",
+        "question": "Are our actions aligned with our stated values?",
+        "healthyRange": "Target: 20, Minimum: 0"
+      },
+      "raw": {
+        "value": "13.40426667",
+        "target_ideal": "20",
+        "target_min": "0",
+        "wasCorrupted": false
+      },
+      "computed": {
+        "normalized": 0.670213,
+        "faceEnergy": 0.670213,
+        "wasSubstituted": false
+      },
+      "diagnostics": {
+        "healthyMin": 100,
+        "healthyMax": null,
+        "absoluteMax": null,
+        "isPlateauKPI": false,
+        "rationale": "(N/A)"
+      }
+    },
+    {
+      "id": "F1.2",
+      "name": "# Funding Opps",
+      "faceId": 11,
+      "faceName": "Founder",
+      "octave": "O1",
+      "direction": "up",
+      "weight": 1,
+      "unit": "#",
+      "philosophy": {
+        "element": "Fire",
+        "question": "Is there a healthy pipeline of future resources?",
+        "healthyRange": "Target: 4, Minimum: 0"
+      },
+      "raw": {
+        "value": "0.76984381",
+        "target_ideal": "4",
+        "target_min": "0",
+        "wasCorrupted": false
+      },
+      "computed": {
+        "normalized": 0.192461,
+        "faceEnergy": 0.192461,
+        "wasSubstituted": false
+      },
+      "diagnostics": {
+        "healthyMin": 1,
+        "healthyMax": 4,
+        "absoluteMax": 10,
+        "isPlateauKPI": false,
+        "rationale": "10"
+      }
+    },
+    {
+      "id": "R1.1",
+      "name": "Bus Factor",
+      "faceId": 12,
+      "faceName": "Founder",
+      "octave": "O1",
+      "direction": "up",
+      "weight": 1,
+      "unit": "#",
+      "philosophy": {
+        "element": "Water",
+        "question": "Can we weather unexpected storms?",
+        "healthyRange": "Target: 2, Minimum: 1"
+      },
+      "raw": {
+        "value": "1.269078095",
+        "target_ideal": "2",
+        "target_min": "1",
+        "wasCorrupted": false
+      },
+      "computed": {
+        "normalized": 0.269078,
+        "faceEnergy": 0.269078,
+        "wasSubstituted": false
+      },
+      "diagnostics": {
+        "healthyMin": 2,
+        "healthyMax": null,
+        "absoluteMax": null,
+        "isPlateauKPI": false,
+        "rationale": "(N/A)"
+      }
+    }
+  ]
+}

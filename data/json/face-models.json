@@ -1,0 +1,2602 @@
+{
+  "$schema": "./schemas/face-models.schema.json",
+  "$version": "2.0.0",
+  "$generatedAt": "2025-12-26T19:49:43.440Z",
+  "$source": "CSV_Face_Models.csv",
+  "$philosophy": {
+    "purpose": "Detailed pentagram analysis per face",
+    "note": "Generic conversion - full transformation pending"
+  },
+  "$integrityReport": {
+    "totalRecords": 323,
+    "substitutionCount": 0,
+    "conversionType": "generic",
+    "substitutions": []
+  },
+  "records": [
+    {
+      "Face 1": "The ''Ball\" (Primary Face KPI)",
+      "Financial Capital": "KPI_ID",
+      "": "",
+      "Financial Capital�(F1)": "Months of Runway",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Months of Runway",
+      "Financial Capital": "F1.1",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Weighted Average (K?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "The 5 \"Pillars\" (Connecting Edge KPIs)",
+      "Financial Capital": "Element",
+      "": "",
+      "Financial Capital�(F1)": "Wight (w)",
+      "Pentagram Calculation Engine": "Star Pair Values (s?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Raw Cash in Bank (�)",
+      "Financial Capital": "Earth",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Monthly Burn Rate (�)",
+      "Financial Capital": "Water",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# of Funding Opportunities Pursued",
+      "Financial Capital": "Fire",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Clarity Score of Financials to Stakeholders (1-5)",
+      "Financial Capital": "Air",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Funding Alignment Index (1-5)",
+      "Financial Capital": "Ether",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pentagram Analysis of Pillars",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Weighted Avg. of Pillars (K):",
+      "Financial Capital": "0.477619048",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Intersection Nodes (p?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Center Composte of Pillars (C):",
+      "Financial Capital": "0.364095238",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Nuanced Avg. Pillar Health:",
+      "Financial Capital": "0.443561905",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pillar Symetry Score (S_f):",
+      "Financial Capital": "0.849819836",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Final Face Health Synthesis",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Self-Coherence (Ball Health):",
+      "Financial Capital": "0.392976623",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Relational Coherence (Pillar Health):",
+      "Financial Capital": "0.443561905",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Center Composite (C):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Structural Integrity (Pillar Symmetry):",
+      "Financial Capital": "0.849819836",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Nuanced Avg. Pillar Health:",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "LOCAL COHERENCE SCORE (E_f)",
+      "Financial Capital": "0.254134395",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Axis-Informed Grand Synthesis",
+      "Financial Capital": "Value",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "1. Local Coherence Score:",
+      "Financial Capital": "0.254134395",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "2. Opposing Face Coherence (Face 11):",
+      "Financial Capital": "0.10891297",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "3. Axis Coherence Factor (?):",
+      "Financial Capital": "0.9",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "FINAL, AXIS-INFORMED FACE ENERGY (E_f):",
+      "Financial Capital": "0.239612252",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "SENSITIVITY AMPLIFIER - FACE ENERGY:",
+      "Financial Capital": "0.26",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Face 2",
+      "Financial Capital": "Intellectual Capital",
+      "": "",
+      "Financial Capital�(F1)": "Intellectual Capital�(F2)",
+      "Pentagram Calculation Engine": "Pentagram Calculation Engine",
+      "Pair Sums (r?)": "Pair Sums (r?)"
+    },
+    {
+      "Face 1": "The ''Ball\" (Primary Face KPI)",
+      "Financial Capital": "KPI_ID",
+      "": "",
+      "Financial Capital�(F1)": "IP Security & Formalization",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "% Thesis Drafted",
+      "Financial Capital": "L2.1",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Weighted Average (K?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "The 5 \"Pillars\" (Connecting Edge KPIs)",
+      "Financial Capital": "Element",
+      "": "",
+      "Financial Capital�(F1)": "Wight (w)",
+      "Pentagram Calculation Engine": "Star Pair Values (s?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Data Backup Frequency",
+      "Financial Capital": "Earth",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Weekly Progress on Thesis (%)",
+      "Financial Capital": "Water",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Hours Logged on IP Dev",
+      "Financial Capital": "Fire",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Clarity of Core Model Docs",
+      "Financial Capital": "Air",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Ethical IP Score",
+      "Financial Capital": "Ether",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pentagram Analysis of Pillars",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Weighted Avg. of Pillars (K):",
+      "Financial Capital": "0.637142857",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Intersection Nodes (p?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Center Composte of Pillars (C):",
+      "Financial Capital": "0.544571429",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Nuanced Avg. Pillar Health:",
+      "Financial Capital": "0.609371429",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pillar Symetry Score (S_f):",
+      "Financial Capital": "0.785362194",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Final Face Health Synthesis",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Self-Coherence (Ball Health):",
+      "Financial Capital": "0.609371429",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Relational Coherence (Pillar Health):",
+      "Financial Capital": "0.609371429",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Center Composite (C):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Structural Integrity (Pillar Symmetry):",
+      "Financial Capital": "0.785362194",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Nuanced Avg. Pillar Health:",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "LOCAL COHERENCE SCORE (E_f)",
+      "Financial Capital": "0.42495541",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Axis-Informed Grand Synthesis",
+      "Financial Capital": "Value",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "1. Local Coherence Score:",
+      "Financial Capital": "0.42495541",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "2. Opposing Face Coherence (Face 7):",
+      "Financial Capital": "0.184038507",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "3. Axis Coherence Factor (?):",
+      "Financial Capital": "0.9",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "FINAL, AXIS-INFORMED FACE ENERGY (E_f):",
+      "Financial Capital": "0.40086372",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "SENSITIVITY AMPLIFIER - FACE ENERGY:",
+      "Financial Capital": "0.402142694",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Face 3",
+      "Financial Capital": "Human Capital",
+      "": "",
+      "Financial Capital�(F1)": "Human Capital�(F3)",
+      "Pentagram Calculation Engine": "Pentagram Calculation Engine",
+      "Pair Sums (r?)": "Pair Sums (r?)"
+    },
+    {
+      "Face 1": "The ''Ball\" (Primary Face KPI)",
+      "Financial Capital": "KPI_ID",
+      "": "",
+      "Financial Capital�(F1)": "Founder Sustainability",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Founder Energy Lvl",
+      "Financial Capital": "L1.1",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Weighted Average (K?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "The 5 \"Pillars\" (Connecting Edge KPIs)",
+      "Financial Capital": "Element",
+      "": "",
+      "Financial Capital�(F1)": "Wight (w)",
+      "Pentagram Calculation Engine": "Star Pair Values (s?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Average Hours of Sleep",
+      "Financial Capital": "Earth",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Founder Energy Level (1-10)",
+      "Financial Capital": "Water",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Hours Spent in Learning/Development",
+      "Financial Capital": "Fire",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Frequency of Self-Reflection/Journaling",
+      "Financial Capital": "Air",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "\"Joy in the Work\" Score (1-5)",
+      "Financial Capital": "Ether",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pentagram Analysis of Pillars",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Weighted Avg. of Pillars (K):",
+      "Financial Capital": "0.791428571",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Intersection Nodes (p?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Center Composte of Pillars (C):",
+      "Financial Capital": "0.712571429",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Nuanced Avg. Pillar Health:",
+      "Financial Capital": "0.767771429",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pillar Symetry Score (S_f):",
+      "Financial Capital": "0.927521995",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Final Face Health Synthesis",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Self-Coherence (Ball Health):",
+      "Financial Capital": "0.1872",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Relational Coherence (Pillar Health):",
+      "Financial Capital": "0.767771429",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Center Composite (C):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Structural Integrity (Pillar Symmetry):",
+      "Financial Capital": "0.927521995",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Nuanced Avg. Pillar Health:",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "LOCAL COHERENCE SCORE (E_f)",
+      "Financial Capital": "0.158679464",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Axis-Informed Grand Synthesis",
+      "Financial Capital": "Value",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "1. Local Coherence Score:",
+      "Financial Capital": "0.158679464",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "2. Opposing Face Coherence (Face 8):",
+      "Financial Capital": "0.227803635",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "3. Axis Coherence Factor (?):",
+      "Financial Capital": "0.9",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "FINAL, AXIS-INFORMED FACE ENERGY (E_f):",
+      "Financial Capital": "0.165591882",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "SENSITIVITY AMPLIFIER - FACE ENERGY:",
+      "Financial Capital": "0.207899667",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Face 4",
+      "Financial Capital": "Structural Capital",
+      "": "",
+      "Financial Capital�(F1)": "Structural Capital�(F4)",
+      "Pentagram Calculation Engine": "Pentagram Calculation Engine",
+      "Pair Sums (r?)": "Pair Sums (r?)"
+    },
+    {
+      "Face 1": "The ''Ball\" (Primary Face KPI)",
+      "Financial Capital": "KPI_ID",
+      "": "",
+      "Financial Capital�(F1)": "Governance Foundation Integrity",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "% Gov Docs Drafted",
+      "Financial Capital": "P2.1",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Weighted Average (K?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "The 5 \"Pillars\" (Connecting Edge KPIs)",
+      "Financial Capital": "Element",
+      "": "",
+      "Financial Capital�(F1)": "Wight (w)",
+      "Pentagram Calculation Engine": "Star Pair Values (s?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "% of Legal Registration Complete",
+      "Financial Capital": "Earth",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Decision Protocol Clarity (1-5)",
+      "Financial Capital": "Water",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# of Documented \"Value Alignment Checks\"",
+      "Financial Capital": "Fire",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "% of Core Governance Docs Drafted",
+      "Financial Capital": "Air",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Perceived Fairness of Structure (1-5)",
+      "Financial Capital": "Ether",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pentagram Analysis of Pillars",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Weighted Avg. of Pillars (K):",
+      "Financial Capital": "0.42",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Intersection Nodes (p?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Center Composte of Pillars (C):",
+      "Financial Capital": "0.26",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Nuanced Avg. Pillar Health:",
+      "Financial Capital": "0.372",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pillar Symetry Score (S_f):",
+      "Financial Capital": "0.813989248",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Final Face Health Synthesis",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Self-Coherence (Ball Health):",
+      "Financial Capital": "0.372",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Relational Coherence (Pillar Health):",
+      "Financial Capital": "0.372",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Center Composite (C):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Structural Integrity (Pillar Symmetry):",
+      "Financial Capital": "0.813989248",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Nuanced Avg. Pillar Health:",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "LOCAL COHERENCE SCORE (E_f)",
+      "Financial Capital": "0.220594",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Axis-Informed Grand Synthesis",
+      "Financial Capital": "Value",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "1. Local Coherence Score:",
+      "Financial Capital": "0.220594",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "2. Opposing Face Coherence (Face 9):",
+      "Financial Capital": "0.46253795",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "3. Axis Coherence Factor (?):",
+      "Financial Capital": "0.9",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "FINAL, AXIS-INFORMED FACE ENERGY (E_f):",
+      "Financial Capital": "0.244788395",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "SENSITIVITY AMPLIFIER - FACE ENERGY:",
+      "Financial Capital": "0.264862561",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Face 5",
+      "Financial Capital": "Market Resonance",
+      "": "",
+      "Financial Capital�(F1)": "Market Resonance�(F5)",
+      "Pentagram Calculation Engine": "Pentagram Calculation Engine",
+      "Pair Sums (r?)": "Pair Sums (r?)"
+    },
+    {
+      "Face 1": "The ''Ball\" (Primary Face KPI)",
+      "Financial Capital": "KPI_ID",
+      "": "",
+      "Financial Capital�(F1)": "Initial Message Coherence",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Clarity Score",
+      "Financial Capital": "P1.1",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Weighted Average (K?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "The 5 \"Pillars\" (Connecting Edge KPIs)",
+      "Financial Capital": "Element",
+      "": "",
+      "Financial Capital�(F1)": "Wight (w)",
+      "Pentagram Calculation Engine": "Star Pair Values (s?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Clarity Score of one-sentence pitch (1-5)",
+      "Financial Capital": "Earth",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Weekly Website Traffic",
+      "Financial Capital": "Water",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# of Engaging Social Media Posts",
+      "Financial Capital": "Fire",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Quality of Feedback from listeners",
+      "Financial Capital": "Air",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Founder's \"Felt Resonance\" when speaking (1-5)",
+      "Financial Capital": "Ether",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pentagram Analysis of Pillars",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Weighted Avg. of Pillars (K):",
+      "Financial Capital": "0.3224",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Intersection Nodes (p?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Center Composte of Pillars (C):",
+      "Financial Capital": "0.20368",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Nuanced Avg. Pillar Health:",
+      "Financial Capital": "0.286784",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pillar Symetry Score (S_f):",
+      "Financial Capital": "0.814159638",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Final Face Health Synthesis",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Self-Coherence (Ball Health):",
+      "Financial Capital": "0",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Relational Coherence (Pillar Health):",
+      "Financial Capital": "0.286784",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Center Composite (C):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Structural Integrity (Pillar Symmetry):",
+      "Financial Capital": "0.814159638",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Nuanced Avg. Pillar Health:",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "LOCAL COHERENCE SCORE (E_f)",
+      "Financial Capital": "0",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Axis-Informed Grand Synthesis",
+      "Financial Capital": "Value",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "1. Local Coherence Score:",
+      "Financial Capital": "0",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "2. Opposing Face Coherence (Face 10):",
+      "Financial Capital": "0.46253795",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "3. Axis Coherence Factor (?):",
+      "Financial Capital": "0.9",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "FINAL, AXIS-INFORMED FACE ENERGY (E_f):",
+      "Financial Capital": "0.046253795",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "SENSITIVITY AMPLIFIER - FACE ENERGY:",
+      "Financial Capital": "0.140036744",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Face 6",
+      "Financial Capital": "Community & Partners",
+      "": "",
+      "Financial Capital�(F1)": "Community & Partners�(F6)",
+      "Pentagram Calculation Engine": "Pentagram Calculation Engine",
+      "Pair Sums (r?)": "Pair Sums (r?)"
+    },
+    {
+      "Face 1": "The ''Ball\" (Primary Face KPI)",
+      "Financial Capital": "KPI_ID",
+      "": "",
+      "Financial Capital�(F1)": "Network Foundation Strength",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Strat. Convos",
+      "Financial Capital": "S2.1",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Weighted Average (K?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "The 5 \"Pillars\" (Connecting Edge KPIs)",
+      "Financial Capital": "Element",
+      "": "",
+      "Financial Capital�(F1)": "Wight (w)",
+      "Pentagram Calculation Engine": "Star Pair Values (s?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# of Committed Advisors",
+      "Financial Capital": "Earth",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# of In-Depth Strategic Conversations",
+      "Financial Capital": "Water",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# of Active Collaboration Projects",
+      "Financial Capital": "Fire",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Clarity of Partnership \"Ask\" (1-5)",
+      "Financial Capital": "Air",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Values Alignment Score of Top 3 Partners (1-5)",
+      "Financial Capital": "Ether",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pentagram Analysis of Pillars",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Weighted Avg. of Pillars (K):",
+      "Financial Capital": "0.433333333",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Intersection Nodes (p?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Center Composte of Pillars (C):",
+      "Financial Capital": "0.33047619",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Nuanced Avg. Pillar Health:",
+      "Financial Capital": "0.40247619",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pillar Symetry Score (S_f):",
+      "Financial Capital": "0.855839281",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Final Face Health Synthesis",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Self-Coherence (Ball Health):",
+      "Financial Capital": "0.40247619",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Relational Coherence (Pillar Health):",
+      "Financial Capital": "0.40247619",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Center Composite (C):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Structural Integrity (Pillar Symmetry):",
+      "Financial Capital": "0.855839281",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Nuanced Avg. Pillar Health:",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "LOCAL COHERENCE SCORE (E_f)",
+      "Financial Capital": "0.253221009",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Axis-Informed Grand Synthesis",
+      "Financial Capital": "Value",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "1. Local Coherence Score:",
+      "Financial Capital": "0.253221009",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "2. Opposing Face Coherence (Face 12):",
+      "Financial Capital": "0.190004699",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "3. Axis Coherence Factor (?):",
+      "Financial Capital": "0.9",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "FINAL, AXIS-INFORMED FACE ENERGY (E_f):",
+      "Financial Capital": "0.246899378",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "SENSITIVITY AMPLIFIER - FACE ENERGY:",
+      "Financial Capital": "0.266509943",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Face 7",
+      "Financial Capital": "Brand & Reputation",
+      "": "",
+      "Financial Capital�(F1)": "Brand & Reputation�(F7)",
+      "Pentagram Calculation Engine": "Pentagram Calculation Engine",
+      "Pair Sums (r?)": "Pair Sums (r?)"
+    },
+    {
+      "Face 1": "The ''Ball\" (Primary Face KPI)",
+      "Financial Capital": "KPI_ID",
+      "": "",
+      "Financial Capital�(F1)": "Foundational Brand Integrity",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Engaging Posts",
+      "Financial Capital": "S1.1",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Weighted Average (K?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "The 5 \"Pillars\" (Connecting Edge KPIs)",
+      "Financial Capital": "Element",
+      "": "",
+      "Financial Capital�(F1)": "Wight (w)",
+      "Pentagram Calculation Engine": "Star Pair Values (s?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Message Consistency Score (1-5)",
+      "Financial Capital": "Earth",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Social Media Engagement Rate (%)",
+      "Financial Capital": "Water",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# of Engaging Posts",
+      "Financial Capital": "Fire",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Initial Brand Trust Score (Survey, 1-5)",
+      "Financial Capital": "Air",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Brand-Values Alignment Score (1-5)",
+      "Financial Capital": "Ether",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pentagram Analysis of Pillars",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Weighted Avg. of Pillars (K):",
+      "Financial Capital": "0.345238095",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Intersection Nodes (p?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Center Composte of Pillars (C):",
+      "Financial Capital": "0.238571429",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Nuanced Avg. Pillar Health:",
+      "Financial Capital": "0.313238095",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pillar Symetry Score (S_f):",
+      "Financial Capital": "0.861832942",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Final Face Health Synthesis",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Self-Coherence (Ball Health):",
+      "Financial Capital": "0.313238095",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Relational Coherence (Pillar Health):",
+      "Financial Capital": "0.313238095",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Center Composite (C):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Structural Integrity (Pillar Symmetry):",
+      "Financial Capital": "0.861832942",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Nuanced Avg. Pillar Health:",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "LOCAL COHERENCE SCORE (E_f)",
+      "Financial Capital": "0.184038507",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Axis-Informed Grand Synthesis",
+      "Financial Capital": "Value",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "1. Local Coherence Score:",
+      "Financial Capital": "0.184038507",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "2. Opposing Face Coherence (Face 2):",
+      "Financial Capital": "0.42495541",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "3. Axis Coherence Factor (?):",
+      "Financial Capital": "0.9",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "FINAL, AXIS-INFORMED FACE ENERGY (E_f):",
+      "Financial Capital": "0.208130197",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "SENSITIVITY AMPLIFIER - FACE ENERGY:",
+      "Financial Capital": "0.237310931",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Face 8",
+      "Financial Capital": "Core Operations",
+      "": "",
+      "Financial Capital�(F1)": "Core Operations�(F8)",
+      "Pentagram Calculation Engine": "Pentagram Calculation Engine",
+      "Pair Sums (r?)": "Pair Sums (r?)"
+    },
+    {
+      "Face 1": "The ''Ball\" (Primary Face KPI)",
+      "Financial Capital": "KPI_ID",
+      "": "",
+      "Financial Capital�(F1)": "Operational Viability",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "\"Live\" Test Done",
+      "Financial Capital": "P3.1",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Weighted Average (K?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "The 5 \"Pillars\" (Connecting Edge KPIs)",
+      "Financial Capital": "Element",
+      "": "",
+      "Financial Capital�(F1)": "Wight (w)",
+      "Pentagram Calculation Engine": "Star Pair Values (s?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "\"Live\" Test Completion (0 or 1)",
+      "Financial Capital": "Earth",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Founder Hours Logged on Core Ops",
+      "Financial Capital": "Water",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Development Cycle Time (Days per Iteration)",
+      "Financial Capital": "Fire",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Process Documentation Clarity (1-5)",
+      "Financial Capital": "Air",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Operational-Values Alignment Score (1-5)",
+      "Financial Capital": "Ether",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pentagram Analysis of Pillars",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Weighted Avg. of Pillars (K):",
+      "Financial Capital": "0.435123351",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Intersection Nodes (p?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Center Composte of Pillars (C):",
+      "Financial Capital": "0.342721744",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Nuanced Avg. Pillar Health:",
+      "Financial Capital": "0.407402869",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pillar Symetry Score (S_f):",
+      "Financial Capital": "0.710918346",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Final Face Health Synthesis",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Self-Coherence (Ball Health):",
+      "Financial Capital": "0.407402869",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Relational Coherence (Pillar Health):",
+      "Financial Capital": "0.407402869",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Center Composite (C):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Structural Integrity (Pillar Symmetry):",
+      "Financial Capital": "0.710918346",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Nuanced Avg. Pillar Health:",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "LOCAL COHERENCE SCORE (E_f)",
+      "Financial Capital": "0.227803635",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Axis-Informed Grand Synthesis",
+      "Financial Capital": "Value",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "1. Local Coherence Score:",
+      "Financial Capital": "0.227803635",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "2. Opposing Face Coherence (Face 3):",
+      "Financial Capital": "0.158679464",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "3. Axis Coherence Factor (?):",
+      "Financial Capital": "0.9",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "FINAL, AXIS-INFORMED FACE ENERGY (E_f):",
+      "Financial Capital": "0.220891218",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "SENSITIVITY AMPLIFIER - FACE ENERGY:",
+      "Financial Capital": "0.24667313",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Face 9",
+      "Financial Capital": "Regenerative Flow",
+      "": "",
+      "Financial Capital�(F1)": "Regenerative Flow�(F9)",
+      "Pentagram Calculation Engine": "Pentagram Calculation Engine",
+      "Pair Sums (r?)": "Pair Sums (r?)"
+    },
+    {
+      "Face 1": "The ''Ball\" (Primary Face KPI)",
+      "Financial Capital": "KPI_ID",
+      "": "",
+      "Financial Capital�(F1)": "Regenerative Intent & Practice",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# Regen Choices",
+      "Financial Capital": "E1.1",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Weighted Average (K?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "The 5 \"Pillars\" (Connecting Edge KPIs)",
+      "Financial Capital": "Element",
+      "": "",
+      "Financial Capital�(F1)": "Wight (w)",
+      "Pentagram Calculation Engine": "Star Pair Values (s?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# of Documented Regenerative Choices",
+      "Financial Capital": "Earth",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Founder's Felt Sense of Integrity (1-5)",
+      "Financial Capital": "Water",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Hours Spent Researching Regenerative Practices",
+      "Financial Capital": "Fire",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Clarity of Public Stance on Regeneration (1-5)",
+      "Financial Capital": "Air",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Felt Connection to Planetary Purpose (1-5)",
+      "Financial Capital": "Ether",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pentagram Analysis of Pillars",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Weighted Avg. of Pillars (K):",
+      "Financial Capital": "0.693333333",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Intersection Nodes (p?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Center Composte of Pillars (C):",
+      "Financial Capital": "0.616266667",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Nuanced Avg. Pillar Health:",
+      "Financial Capital": "0.670213333",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pillar Symetry Score (S_f):",
+      "Financial Capital": "0.710057477",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Final Face Health Synthesis",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Self-Coherence (Ball Health):",
+      "Financial Capital": "0.670213333",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Relational Coherence (Pillar Health):",
+      "Financial Capital": "0.670213333",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Center Composite (C):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Structural Integrity (Pillar Symmetry):",
+      "Financial Capital": "0.710057477",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Nuanced Avg. Pillar Health:",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "LOCAL COHERENCE SCORE (E_f)",
+      "Financial Capital": "0.46253795",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Axis-Informed Grand Synthesis",
+      "Financial Capital": "Value",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "1. Local Coherence Score:",
+      "Financial Capital": "0.46253795",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "2. Opposing Face Coherence (Face 4):",
+      "Financial Capital": "0.220594",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "3. Axis Coherence Factor (?):",
+      "Financial Capital": "0.9",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "FINAL, AXIS-INFORMED FACE ENERGY (E_f):",
+      "Financial Capital": "0.438343555",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "SENSITIVITY AMPLIFIER - FACE ENERGY:",
+      "Financial Capital": "0.438654183",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Face 10",
+      "Financial Capital": "Foundational Values",
+      "": "",
+      "Financial Capital�(F1)": "Foundational Values�(F10)",
+      "Pentagram Calculation Engine": "Pentagram Calculation Engine",
+      "Pair Sums (r?)": "Pair Sums (r?)"
+    },
+    {
+      "Face 1": "The ''Ball\" (Primary Face KPI)",
+      "Financial Capital": "KPI_ID",
+      "": "",
+      "Financial Capital�(F1)": "Lived Values & Cultural Integrity",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# Value Checks",
+      "Financial Capital": "L3.1",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Weighted Average (K?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "The 5 \"Pillars\" (Connecting Edge KPIs)",
+      "Financial Capital": "Element",
+      "": "",
+      "Financial Capital�(F1)": "Wight (w)",
+      "Pentagram Calculation Engine": "Star Pair Values (s?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# of Documented \"Value Alignment Checks\"",
+      "Financial Capital": "Earth",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Cultural Integrity Score (Team Poll, 1-10)",
+      "Financial Capital": "Water",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Time Spent in Values-Based Discussions",
+      "Financial Capital": "Fire",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Clarity of Published Values Statement (1-5)",
+      "Financial Capital": "Air",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Perceived Authenticity of Values (Founder Score, 1-5)",
+      "Financial Capital": "Ether",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pentagram Analysis of Pillars",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Weighted Avg. of Pillars (K):",
+      "Financial Capital": "0.693333333",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Intersection Nodes (p?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Center Composte of Pillars (C):",
+      "Financial Capital": "0.616266667",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Nuanced Avg. Pillar Health:",
+      "Financial Capital": "0.670213333",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pillar Symetry Score (S_f):",
+      "Financial Capital": "0.710057477",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Final Face Health Synthesis",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Self-Coherence (Ball Health):",
+      "Financial Capital": "0.670213333",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Relational Coherence (Pillar Health):",
+      "Financial Capital": "0.670213333",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Center Composite (C):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Structural Integrity (Pillar Symmetry):",
+      "Financial Capital": "0.710057477",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Nuanced Avg. Pillar Health:",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "LOCAL COHERENCE SCORE (E_f)",
+      "Financial Capital": "0.46253795",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Axis-Informed Grand Synthesis",
+      "Financial Capital": "Value",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "1. Local Coherence Score:",
+      "Financial Capital": "0.46253795",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "2. Opposing Face Coherence (Face 5):",
+      "Financial Capital": "0",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "3. Axis Coherence Factor (?):",
+      "Financial Capital": "0.9",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "FINAL, AXIS-INFORMED FACE ENERGY (E_f):",
+      "Financial Capital": "0.416284155",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "SENSITIVITY AMPLIFIER - FACE ENERGY:",
+      "Financial Capital": "0.417057761",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Face 11",
+      "Financial Capital": "Funding Pipeline",
+      "": "",
+      "Financial Capital�(F1)": "Funding Pipeline�(F11)",
+      "Pentagram Calculation Engine": "Pentagram Calculation Engine",
+      "Pair Sums (r?)": "Pair Sums (r?)"
+    },
+    {
+      "Face 1": "The ''Ball\" (Primary Face KPI)",
+      "Financial Capital": "KPI_ID",
+      "": "",
+      "Financial Capital�(F1)": "Pipeline Viability & Coherence",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# Funding Opps",
+      "Financial Capital": "F1.2",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Weighted Average (K?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "The 5 \"Pillars\" (Connecting Edge KPIs)",
+      "Financial Capital": "Element",
+      "": "",
+      "Financial Capital�(F1)": "Wight (w)",
+      "Pentagram Calculation Engine": "Star Pair Values (s?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# of Potential Funders Identified",
+      "Financial Capital": "Earth",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Strength of Relationship with Top Prospects (1-5)",
+      "Financial Capital": "Water",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "# of Funding Opportunities Pursued",
+      "Financial Capital": "Fire",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Clarity of Financial Ask (1-5)",
+      "Financial Capital": "Air",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Funding Alignment Index (from Edge KPIs)",
+      "Financial Capital": "Ether",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pentagram Analysis of Pillars",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Weighted Avg. of Pillars (K):",
+      "Financial Capital": "0.213809524",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Intersection Nodes (p?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Center Composte of Pillars (C):",
+      "Financial Capital": "0.142647619",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Nuanced Avg. Pillar Health:",
+      "Financial Capital": "0.192460952",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pillar Symetry Score (S_f):",
+      "Financial Capital": "0.93933195",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Final Face Health Synthesis",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Self-Coherence (Ball Health):",
+      "Financial Capital": "0.192460952",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Relational Coherence (Pillar Health):",
+      "Financial Capital": "0.192460952",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Center Composite (C):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Structural Integrity (Pillar Symmetry):",
+      "Financial Capital": "0.93933195",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Nuanced Avg. Pillar Health:",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "LOCAL COHERENCE SCORE (E_f)",
+      "Financial Capital": "0.10891297",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Axis-Informed Grand Synthesis",
+      "Financial Capital": "Value",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "1. Local Coherence Score:",
+      "Financial Capital": "0.10891297",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "2. Opposing Face Coherence (Face 1):",
+      "Financial Capital": "0.254134395",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "3. Axis Coherence Factor (?):",
+      "Financial Capital": "0.9",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "FINAL, AXIS-INFORMED FACE ENERGY (E_f):",
+      "Financial Capital": "0.123435112",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "SENSITIVITY AMPLIFIER - FACE ENERGY:",
+      "Financial Capital": "0.181493789",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Face 12",
+      "Financial Capital": "Risk & Resilience",
+      "": "",
+      "Financial Capital�(F1)": "Risk & Resilience�(F12)",
+      "Pentagram Calculation Engine": "Pentagram Calculation Engine",
+      "Pair Sums (r?)": "Pair Sums (r?)"
+    },
+    {
+      "Face 1": "The ''Ball\" (Primary Face KPI)",
+      "Financial Capital": "KPI_ID",
+      "": "",
+      "Financial Capital�(F1)": "Systemic Fragility Assessment",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Bus Factor",
+      "Financial Capital": "R1.1",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Weighted Average (K?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "The 5 \"Pillars\" (Connecting Edge KPIs)",
+      "Financial Capital": "Element",
+      "": "",
+      "Financial Capital�(F1)": "Wight (w)",
+      "Pentagram Calculation Engine": "Star Pair Values (s?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Bus Factor",
+      "Financial Capital": "Earth",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Founder's Psychological Resilience Score (1-5)",
+      "Financial Capital": "Water",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": "r? (k?+k?)"
+    },
+    {
+      "Face 1": "Hours Spent in Scenario Planning",
+      "Financial Capital": "Fire",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Clarity of Risk Documentation (1-5)",
+      "Financial Capital": "Air",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Ethical Resilience Score (from Edge KPIs)",
+      "Financial Capital": "Ether",
+      "": "",
+      "Financial Capital�(F1)": "0.2",
+      "Pentagram Calculation Engine": "s? (k?+k?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pentagram Analysis of Pillars",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant: ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Weighted Avg. of Pillars (K):",
+      "Financial Capital": "0.660095238",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Intersection Nodes (p?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Center Composte of Pillars (C):",
+      "Financial Capital": "0.574907937",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Nuanced Avg. Pillar Health:",
+      "Financial Capital": "0.634539048",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Pillar Symetry Score (S_f):",
+      "Financial Capital": "0.777725293",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Final Face Health Synthesis",
+      "Financial Capital": "Score",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "p? (s?+s?):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Self-Coherence (Ball Health):",
+      "Financial Capital": "0.269078095",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Relational Coherence (Pillar Health):",
+      "Financial Capital": "0.634539048",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Center Composite (C):",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Structural Integrity (Pillar Symmetry):",
+      "Financial Capital": "0.777725293",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Constant ? =",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "",
+      "Financial Capital": "",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "Nuanced Avg. Pillar Health:",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "LOCAL COHERENCE SCORE (E_f)",
+      "Financial Capital": "0.190004699",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "Axis-Informed Grand Synthesis",
+      "Financial Capital": "Value",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "1. Local Coherence Score:",
+      "Financial Capital": "0.190004699",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "2. Opposing Face Coherence (Face 6):",
+      "Financial Capital": "0.253221009",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "3. Axis Coherence Factor (?):",
+      "Financial Capital": "0.9",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "FINAL, AXIS-INFORMED FACE ENERGY (E_f):",
+      "Financial Capital": "0.19633",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    },
+    {
+      "Face 1": "SENSITIVITY AMPLIFIER - FACE ENERGY:",
+      "Financial Capital": "0.22887",
+      "": "",
+      "Financial Capital�(F1)": "",
+      "Pentagram Calculation Engine": "",
+      "Pair Sums (r?)": ""
+    }
+  ]
+}

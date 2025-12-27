@@ -1,0 +1,109 @@
+{
+  "$schema": "./schemas/spiral-dashboard.schema.json",
+  "$version": "2.0.0",
+  "$generatedAt": "2025-12-26T19:49:43.460Z",
+  "$source": "CSV_SPIRAL_DASHBOARD.csv",
+  "$philosophy": {
+    "purpose": "Executive summary metrics",
+    "note": "Generic conversion - full transformation pending"
+  },
+  "$integrityReport": {
+    "totalRecords": 13,
+    "substitutionCount": 0,
+    "conversionType": "generic",
+    "substitutions": []
+  },
+  "records": [
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "Octave Coherence",
+      "4.80%": "Score",
+      "Seedling Stage:": "Status",
+      "Seedling": "Organizatio's Octave",
+      "": "1"
+    },
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "O1 - Survival",
+      "4.80%": "36.44%",
+      "Seedling Stage:": "Weak",
+      "Seedling": "",
+      "": ""
+    },
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "O2 - Structure",
+      "4.80%": "0.00%",
+      "Seedling Stage:": "Weak",
+      "Seedling": "",
+      "": ""
+    },
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "O3 - Relationships",
+      "4.80%": "0.00%",
+      "Seedling Stage:": "Weak",
+      "Seedling": "",
+      "": ""
+    },
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "O4 - Creativity",
+      "4.80%": "0.00%",
+      "Seedling Stage:": "Weak",
+      "Seedling": "",
+      "": ""
+    },
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "O5 - Expression",
+      "4.80%": "0.00%",
+      "Seedling Stage:": "Weak",
+      "Seedling": "",
+      "": ""
+    },
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "O6 - Vision",
+      "4.80%": "0.00%",
+      "Seedling Stage:": "Weak",
+      "Seedling": "",
+      "": ""
+    },
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "O7 - Radiance",
+      "4.80%": "0.00%",
+      "Seedling Stage:": "Weak",
+      "Seedling": "",
+      "": ""
+    },
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "Primary Strategic Focus",
+      "4.80%": "",
+      "Seedling Stage:": "",
+      "Seedling": "",
+      "": ""
+    },
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "Diagnostic Indicators:",
+      "4.80%": "",
+      "Seedling Stage:": "",
+      "Seedling": "",
+      "": ""
+    },
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "Being-Action Balance = 187%",
+      "4.80%": "Dissonance Index = 24%",
+      "Seedling Stage:": "",
+      "Seedling": "",
+      "": ""
+    },
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "Tactical Solution:",
+      "4.80%": "",
+      "Seedling Stage:": "",
+      "Seedling": "",
+      "": ""
+    },
+    {
+      "GLOBAL COHERENCE (Spiral Integrity Score)": "Highest Leverage Action:",
+      "4.80%": "Founder Energy Lvl achieve the target of 0.573591881535853",
+      "Seedling Stage:": "",
+      "Seedling": "",
+      "": ""
+    }
+  ]
+}

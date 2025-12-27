@@ -1,0 +1,674 @@
+{
+  "$schema": "./schemas/vortex-map.schema.json",
+  "$version": "2.0.0",
+  "$generatedAt": "2025-12-26T19:49:43.417Z",
+  "$source": "CSV_Vortex_Map.csv",
+  "$philosophy": {
+    "purpose": "Map of 20 triadic intersections where 3 domains meet",
+    "sacredGeometry": "Each vertex is a crossroads of organizational energy",
+    "interpretation": {
+      "lowLambda": "lambda < 0.05 = harmony hub, domains aligned",
+      "highLambda": "lambda > 0.2 = turbulent crossroads, domains conflicting"
+    }
+  },
+  "$topology": {
+    "expectedVertices": 20,
+    "actualVertices": 20,
+    "validated": true,
+    "violations": [],
+    "triadicConstraint": "Each vertex connects exactly 3 faces"
+  },
+  "$integrityReport": {
+    "totalRecords": 20,
+    "substitutionCount": 0,
+    "harmonyHubs": [
+      "V14",
+      "V4"
+    ],
+    "bermudaTriangles": [],
+    "averageLambda": 0.119057,
+    "substitutions": []
+  },
+  "vertices": [
+    {
+      "id": "V1",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.239612
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.400864
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.246899
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.295792,
+        "vortexStrength": 0.107501,
+        "microVMean": 0.161251,
+        "overallCoherence": 0.728,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V10",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.244788
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.046254
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.20813
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.166391,
+        "vortexStrength": 0.132356,
+        "microVMean": 0.198535,
+        "overallCoherence": 0.705,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V11",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.165592
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.244788
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.123435
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.177938,
+        "vortexStrength": 0.080902,
+        "microVMean": 0.121353,
+        "overallCoherence": 0.712,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V12",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.244788
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.20813
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.123435
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.192118,
+        "vortexStrength": 0.080902,
+        "microVMean": 0.121353,
+        "overallCoherence": 0.581,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V13",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.046254
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.20813
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.220891
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.158425,
+        "vortexStrength": 0.116425,
+        "microVMean": 0.174637,
+        "overallCoherence": 0.649,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V14",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.20813
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.220891
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.196326
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Harmony Hub"
+      },
+      "computed": {
+        "macroVMean": 0.208449,
+        "vortexStrength": 0.016377,
+        "microVMean": 0.024565,
+        "overallCoherence": 0.585,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V15",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.20813
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.123435
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.196326
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.175964,
+        "vortexStrength": 0.056463,
+        "microVMean": 0.084695,
+        "overallCoherence": 0.537,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V16",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.220891
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.438344
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.196326
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.285187,
+        "vortexStrength": 0.161345,
+        "microVMean": 0.242017,
+        "overallCoherence": 0.74,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V17",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.438344
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.416284
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.196326
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.350318,
+        "vortexStrength": 0.161345,
+        "microVMean": 0.242017,
+        "overallCoherence": 0.88,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V18",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.416284
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.123435
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.196326
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.245349,
+        "vortexStrength": 0.195233,
+        "microVMean": 0.292849,
+        "overallCoherence": 0.5,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V19",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.165592
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.244788
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.246899
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.219093,
+        "vortexStrength": 0.054205,
+        "microVMean": 0.081307,
+        "overallCoherence": 0.778,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V2",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.239612
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.046254
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.246899
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.177588,
+        "vortexStrength": 0.133764,
+        "microVMean": 0.200646,
+        "overallCoherence": 0.535,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V20",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.239612
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.438344
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.400864
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.359607,
+        "vortexStrength": 0.132488,
+        "microVMean": 0.198731,
+        "overallCoherence": 0.67,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V3",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.239612
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.220891
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.438344
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.299616,
+        "vortexStrength": 0.144968,
+        "microVMean": 0.217452,
+        "overallCoherence": 0.623,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V4",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.400864
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.438344
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.416284
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Harmony Hub"
+      },
+      "computed": {
+        "macroVMean": 0.418497,
+        "vortexStrength": 0.024987,
+        "microVMean": 0.03748,
+        "overallCoherence": 0.825,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V5",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.400864
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.165592
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.416284
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.32758,
+        "vortexStrength": 0.167128,
+        "microVMean": 0.250692,
+        "overallCoherence": 0.727,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V6",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.165592
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.246899
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.400864
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.271118,
+        "vortexStrength": 0.156848,
+        "microVMean": 0.235272,
+        "overallCoherence": 0.71,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V7",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.165592
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.416284
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.123435
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.235104,
+        "vortexStrength": 0.195233,
+        "microVMean": 0.292849,
+        "overallCoherence": 0.502,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V8",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.244788
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.046254
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.246899
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.179314,
+        "vortexStrength": 0.133764,
+        "microVMean": 0.200646,
+        "overallCoherence": 0.549,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V9",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.239612
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.046254
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.220891
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
+        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.168919,
+        "vortexStrength": 0.128906,
+        "microVMean": 0.193358,
+        "overallCoherence": 0.514,
+        "wasSubstituted": false
+      }
+    }
+  ]
+}

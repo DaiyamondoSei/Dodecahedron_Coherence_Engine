@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quannex CSV to JSON Migration Tool</title>
+    <style>
+        :root {
+            --phi: 1.618033988749895;
+            --phi-1: 0.618033988749895;
+            --phi-2: 0.381966011250105;
+
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border-color: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent-gold: #ffd700;
+            --accent-green: #66ff99;
+            --accent-blue: #58a6ff;
+            --accent-red: #ff6b6b;
+            --accent-amber: #ffaa44;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        header .version {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-header h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-content {
+            padding: 1rem;
+        }
+
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .file-item:hover {
+            background: var(--bg-primary);
+        }
+
+        .file-item .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .file-item .status-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .status-icon.pending { background: var(--bg-primary); color: var(--text-secondary); }
+        .status-icon.success { background: var(--accent-green); color: var(--bg-primary); }
+        .status-icon.error { background: var(--accent-red); color: white; }
+        .status-icon.warning { background: var(--accent-amber); color: var(--bg-primary); }
+
+        .file-item .file-name {
+            font-weight: 500;
+        }
+
+        .file-item .file-meta {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4899e5;
+        }
+
+        .btn-primary:disabled {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+        }
+
+        .btn-small {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .report-section {
+            margin-bottom: 1rem;
+        }
+
+        .report-section h3 {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+
+        .stat-item {
+            background: var(--bg-tertiary);
+            padding: 0.75rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-item .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .stat-item .label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .substitution-list {
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.875rem;
+        }
+
+        .substitution-item {
+            padding: 0.5rem;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            margin-bottom: 0.25rem;
+        }
+
+        .substitution-item .field {
+            color: var(--accent-blue);
+        }
+
+        .substitution-item .original {
+            color: var(--accent-red);
+            text-decoration: line-through;
+        }
+
+        .substitution-item .new {
+            color: var(--accent-green);
+        }
+
+        .json-preview {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            max-height: 400px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .topology-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .topology-badge.valid {
+            background: rgba(102, 255, 153, 0.2);
+            color: var(--accent-green);
+        }
+
+        .topology-badge.invalid {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent-red);
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .drop-zone.dragover {
+            border-color: var(--accent-blue);
+            background: rgba(88, 166, 255, 0.1);
+        }
+
+        .drop-zone input {
+            display: none;
+        }
+
+        .philosophy-note {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(102, 255, 153, 0.1));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .philosophy-note strong {
+            color: var(--accent-gold);
+        }
+
+        .loader {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--text-secondary);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                <span>🔄</span>
+                Quannex CSV → JSON Migration Tool
+            </h1>
+            <div class="version">v2.0.0 | Self-Documenting Data with Integrity Tracking</div>
+        </header>
+
+        <div class="philosophy-note">
+            <strong>Philosophy:</strong> This tool transforms raw CSV data into self-documenting JSON
+            with integrity tracking, topology validation, and PHI-derived substitutions.
+            Every corruption is visible. Every substitution is auditable.
+        </div>
+
+        <div class="grid">
+            <!-- Source Files Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>📁 Source Files</h2>
+                    <button class="btn btn-primary btn-small" id="migrateAllBtn" disabled>
+                        Migrate All
+                    </button>
+                </div>
+                <div class="panel-content">
+                    <div class="drop-zone" id="dropZone">
+                        <p>Drop CSV files here or click to select</p>
+                        <p style="font-size: 0.875rem; margin-top: 0.5rem;">
+                            Or load from <code>/data/</code> folder
+                        </p>
+                        <input type="file" id="fileInput" multiple accept=".csv">
+                    </div>
+                    <button class="btn btn-primary" id="loadFromDataBtn" style="width: 100%; margin-bottom: 1rem;">
+                        Load CSV Files from /data/
+                    </button>
+                    <div class="file-list" id="fileList">
+                        <!-- Files will be listed here -->
+                        <div class="file-item" style="justify-content: center; color: var(--text-secondary);">
+                            No files loaded yet
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversion Report Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>📊 Conversion Report</h2>
+                    <div id="topologyBadge" class="topology-badge valid" style="display: none;">
+                        <span>✓</span> Topology Valid
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <div class="report-section">
+                        <h3>Statistics</h3>
+                        <div class="stat-grid">
+                            <div class="stat-item">
+                                <div class="value" id="statRecords">0</div>
+                                <div class="label">Total Records</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="value" id="statSubstitutions">0</div>
+                                <div class="label">Substitutions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="value" id="statFiles">0</div>
+                                <div class="label">Files Converted</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-section">
+                        <h3>Substitutions Made</h3>
+                        <div class="substitution-list" id="substitutionList">
+                            <div style="color: var(--text-secondary); text-align: center; padding: 1rem;">
+                                No substitutions yet
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JSON Preview Panel -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>📄 JSON Preview</h2>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-primary btn-small" id="copyJsonBtn" disabled>
+                        📋 Copy
+                    </button>
+                    <button class="btn btn-success btn-small" id="downloadJsonBtn" disabled>
+                        💾 Download
+                    </button>
+                </div>
+            </div>
+            <div class="panel-content">
+                <div class="json-preview" id="jsonPreview">
+{
+  "$schema": "./schemas/kpi-database.schema.json",
+  "$version": "2.0.0",
+  "$philosophy": {
+    "purpose": "Awaiting conversion...",
+    "note": "Load CSV files to see the self-documenting JSON output"
+  }
+}
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+            <button class="btn btn-primary" id="downloadAllBtn" disabled>
+                📦 Download All as ZIP
+            </button>
+            <a href="../pages/dodecahedron-3d.html" class="btn btn-primary">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Load dependencies -->
+    <script src="../js/constants/phi-harmonics.js"></script>
+    <script src="../js/data-system/data-validator.js"></script>
+    <script src="../js/data-system/csv-to-json-converter.js"></script>
+
+    <script>
+        // ====================================================================
+        // Migration Tool Application
+        // ====================================================================
+
+        const state = {
+            files: {},           // Map of filename to content
+            converted: {},       // Map of type to converted JSON
+            currentPreview: null // Currently previewed conversion
+        };
+
+        // DOM Elements
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const loadFromDataBtn = document.getElementById('loadFromDataBtn');
+        const migrateAllBtn = document.getElementById('migrateAllBtn');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+        const copyJsonBtn = document.getElementById('copyJsonBtn');
+        const downloadJsonBtn = document.getElementById('downloadJsonBtn');
+        const jsonPreview = document.getElementById('jsonPreview');
+        const substitutionList = document.getElementById('substitutionList');
+        const topologyBadge = document.getElementById('topologyBadge');
+
+        // Stats
+        const statRecords = document.getElementById('statRecords');
+        const statSubstitutions = document.getElementById('statSubstitutions');
+        const statFiles = document.getElementById('statFiles');
+
+        // ====================================================================
+        // File Loading
+        // ====================================================================
+
+        // CSV type mapping
+        const CSV_TYPE_MAP = {
+            'CSV_KPI_Database.csv': 'kpi-database',
+            'CSV_Edge_tension_Map.csv': 'edge-tension',
+            'CSV_Vortex_Map.csv': 'vortex-map',
+            'CSV_BREATH_RATIOS.csv': 'breath-ratios',
+            'CSV_Face_Models.csv': 'face-models',
+            'CSV_Dodeca_Engine.csv': 'dodeca-engine',
+            'CSV_System_Coherence.csv': 'system-coherence',
+            'CSV_SPIRAL_DASHBOARD.csv': 'spiral-dashboard'
+        };
+
+        // Load from /data/ folder
+        loadFromDataBtn.addEventListener('click', async () => {
+            loadFromDataBtn.disabled = true;
+            loadFromDataBtn.innerHTML = '<span class="loader"></span> Loading...';
+
+            const csvFiles = Object.keys(CSV_TYPE_MAP);
+            const loaded = [];
+
+            for (const filename of csvFiles) {
+                try {
+                    const response = await fetch(`../data/${filename}`);
+                    if (response.ok) {
+                        const content = await response.text();
+                        state.files[filename] = content;
+                        loaded.push(filename);
+                    }
+                } catch (e) {
+                    console.warn(`Could not load ${filename}:`, e);
+                }
+            }
+
+            renderFileList();
+            loadFromDataBtn.disabled = false;
+            loadFromDataBtn.innerHTML = 'Load CSV Files from /data/';
+
+            if (loaded.length > 0) {
+                migrateAllBtn.disabled = false;
+            }
+        });
+
+        // Drag and drop
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', () => {
+            handleFiles(fileInput.files);
+        });
+
+        function handleFiles(files) {
+            for (const file of files) {
+                if (file.name.endsWith('.csv')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        state.files[file.name] = e.target.result;
+                        renderFileList();
+                        migrateAllBtn.disabled = false;
+                    };
+                    reader.readAsText(file);
+                }
+            }
+        }
+
+        // ====================================================================
+        // File List Rendering
+        // ====================================================================
+
+        function renderFileList() {
+            const filenames = Object.keys(state.files);
+
+            if (filenames.length === 0) {
+                fileList.innerHTML = `
+                    <div class="file-item" style="justify-content: center; color: var(--text-secondary);">
+                        No files loaded yet
+                    </div>
+                `;
+                return;
+            }
+
+            fileList.innerHTML = filenames.map(filename => {
+                const type = CSV_TYPE_MAP[filename];
+                const converted = state.converted[type];
+                const status = converted ? 'success' : 'pending';
+                const statusIcon = converted ? '✓' : '○';
+                const records = converted?.$integrityReport?.totalRecords || '—';
+
+                return `
+                    <div class="file-item" data-filename="${filename}">
+                        <div class="file-info">
+                            <div class="status-icon ${status}">${statusIcon}</div>
+                            <div>
+                                <div class="file-name">${filename}</div>
+                                <div class="file-meta">${records} records</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-small convert-btn"
+                                data-filename="${filename}"
+                                ${!type ? 'disabled title="Unknown CSV type"' : ''}>
+                            ${converted ? 'View' : 'Convert'} →
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            // Bind convert buttons
+            document.querySelectorAll('.convert-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const filename = btn.dataset.filename;
+                    convertFile(filename);
+                });
+            });
+        }
+
+        // ====================================================================
+        // Conversion
+        // ====================================================================
+
+        function convertFile(filename) {
+            const type = CSV_TYPE_MAP[filename];
+            if (!type) {
+                alert(`Unknown CSV type: ${filename}`);
+                return;
+            }
+
+            const content = state.files[filename];
+            if (!content) {
+                alert(`No content loaded for ${filename}`);
+                return;
+            }
+
+            try {
+                // Check if CSVToJSONConverter is available
+                if (!window.CSVToJSONConverter) {
+                    throw new Error('CSVToJSONConverter not loaded');
+                }
+
+                const result = window.CSVToJSONConverter.convert(type, content);
+                state.converted[type] = result;
+                state.currentPreview = type;
+
+                renderFileList();
+                updatePreview(result);
+                updateStats();
+
+                console.log(`[MigrationTool] Converted ${filename} →`, result);
+
+            } catch (e) {
+                console.error(`[MigrationTool] Conversion failed:`, e);
+                alert(`Conversion failed: ${e.message}`);
+            }
+        }
+
+        migrateAllBtn.addEventListener('click', () => {
+            const filenames = Object.keys(state.files);
+            for (const filename of filenames) {
+                if (CSV_TYPE_MAP[filename]) {
+                    convertFile(filename);
+                }
+            }
+        });
+
+        // ====================================================================
+        // UI Updates
+        // ====================================================================
+
+        function updatePreview(result) {
+            jsonPreview.textContent = JSON.stringify(result, null, 2);
+            copyJsonBtn.disabled = false;
+            downloadJsonBtn.disabled = false;
+
+            // Update topology badge
+            const topologyValid = result.$topology?.validated !== false;
+            topologyBadge.style.display = 'flex';
+            topologyBadge.className = `topology-badge ${topologyValid ? 'valid' : 'invalid'}`;
+            topologyBadge.innerHTML = topologyValid
+                ? '<span>✓</span> Topology Valid'
+                : '<span>✗</span> Topology Invalid';
+
+            // Update substitution list
+            const subs = result.$integrityReport?.substitutions || [];
+            if (subs.length === 0) {
+                substitutionList.innerHTML = `
+                    <div style="color: var(--accent-green); text-align: center; padding: 1rem;">
+                        ✓ No substitutions needed - data is clean
+                    </div>
+                `;
+            } else {
+                substitutionList.innerHTML = subs.map(s => `
+                    <div class="substitution-item">
+                        <span class="field">${s.field || s.kpiId}</span>:
+                        <span class="original">"${s.original}"</span> →
+                        <span class="new">${s.substitutedWith} (${s.substituted || s.substitutedWith})</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateStats() {
+            let totalRecords = 0;
+            let totalSubstitutions = 0;
+            let totalFiles = 0;
+
+            for (const result of Object.values(state.converted)) {
+                totalRecords += result.$integrityReport?.totalRecords || 0;
+                totalSubstitutions += result.$integrityReport?.substitutionCount || 0;
+                totalFiles++;
+            }
+
+            statRecords.textContent = totalRecords;
+            statSubstitutions.textContent = totalSubstitutions;
+            statFiles.textContent = totalFiles;
+
+            if (totalFiles > 0) {
+                downloadAllBtn.disabled = false;
+            }
+        }
+
+        // ====================================================================
+        // Export
+        // ====================================================================
+
+        copyJsonBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(jsonPreview.textContent);
+            copyJsonBtn.innerHTML = '✓ Copied!';
+            setTimeout(() => {
+                copyJsonBtn.innerHTML = '📋 Copy';
+            }, 2000);
+        });
+
+        downloadJsonBtn.addEventListener('click', () => {
+            if (!state.currentPreview) return;
+
+            const result = state.converted[state.currentPreview];
+            const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${state.currentPreview}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        downloadAllBtn.addEventListener('click', async () => {
+            // Create a simple multi-file download (in real app would use JSZip)
+            for (const [type, result] of Object.entries(state.converted)) {
+                const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${type}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+
+                // Small delay between downloads
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        });
+
+        // ====================================================================
+        // Initialize
+        // ====================================================================
+
+        console.log('🔄 Quannex CSV to JSON Migration Tool loaded');
+
+        // Check for dependencies
+        if (!window.CSVToJSONConverter) {
+            console.warn('CSVToJSONConverter not loaded - some features may not work');
+        }
+        if (!window.DataValidator) {
+            console.warn('DataValidator not loaded - corruption detection may be limited');
+        }
+        if (!window.PhiHarmonics) {
+            console.warn('PhiHarmonics not loaded - using fallback constants');
+        }
+    </script>
+</body>
+</html>

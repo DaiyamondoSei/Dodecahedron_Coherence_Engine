@@ -27,6 +27,7 @@
  * │  js/advanced/index.js ────────────→ OrganizationalCoherenceEngine          │
  * │  js/spectral-analyzer.js ─────────→ window.SpectralAnalyzer (eigenvalues)  │
  * │  js/breath-analyzer.js ───────────→ window.BreathAnalyzer (6 axes)         │
+ * │  js/data-system/json-data-loader.js ─→ window.JSONDataLoader (optional)    │
  * │                                                                              │
  * └─────────────────────────────────────────────────────────────────────────────┘
  *
@@ -115,7 +116,7 @@
  *
  * 5. THE QUANNEX GLOBAL API:
  *    window.Quannex exposes:
- *    - init(): Load from CSVs (default Quannex AI company)
+ *    - init(): Load from JSON (with CSV fallback) (default Quannex AI company)
  *    - initWithCompany(company): Load custom company data
  *    - getState(): Full system state for UI
  *    - updateKPI(id, value): Modify single KPI, triggers recalculate
@@ -434,22 +435,149 @@ export class DodecahedronEngine {
     }
   }
 
+  // ========================================
+  // JSON-FIRST LOADING WITH CSV FALLBACK
+  // ========================================
+
   /**
-   * Initialize system from CSV data
+   * Load data using JSON-first strategy with CSV fallback
+   *
+   * Uses JSONDataLoader when available for:
+   * - Pre-validated JSON data
+   * - Pre-computed substitutions (no runtime corruption)
+   * - Self-documenting structure with $integrityReport
+   *
+   * Falls back to CSV loading if JSON unavailable.
+   *
+   * @param {string} type - Data type ('kpi-database', 'edge-tension', 'vortex-map', 'breath-ratios')
+   * @param {string} csvFilename - CSV filename for fallback
+   * @returns {Promise<Array<Object>>} Parsed data array
+   */
+  async loadWithJSONFirst(type, csvFilename) {
+    // Check if JSONDataLoader is available
+    if (window.JSONDataLoader) {
+      try {
+        console.log(`📦 Attempting JSON-first load for: ${type}`);
+        const jsonData = await window.JSONDataLoader.load(type);
+
+        if (jsonData) {
+          // Extract data array from self-documenting JSON structure
+          const dataArray = window.JSONDataLoader.extractDataArray(jsonData, type);
+
+          // Log integrity status
+          if (jsonData.$integrityReport) {
+            const report = jsonData.$integrityReport;
+            if (report.substitutionCount > 0) {
+              console.log(`📊 ${type}: ${report.substitutionCount} pre-computed substitutions applied`);
+            }
+            if (!report.topologyValid) {
+              console.warn(`⚠️ ${type}: Topology validation failed`);
+            }
+          }
+
+          console.log(`✅ Loaded ${type} from JSON (${dataArray.length} records)`);
+          return this.transformJSONToInternal(dataArray, type);
+        }
+      } catch (error) {
+        console.log(`📦 JSON load failed for ${type}, falling back to CSV:`, error.message);
+      }
+    }
+
+    // Fallback to CSV
+    console.log(`📄 Loading ${type} from CSV: ${csvFilename}`);
+    return this.loadCSV(csvFilename);
+  }
+
+  /**
+   * Transform JSON data format to internal format expected by createKPIs/createEdges/etc.
+   *
+   * JSON files have a different structure (camelCase, nested objects) that needs
+   * to be transformed to the format that createKPIs() and createEdges() expect.
+   *
+   * @param {Array<Object>} dataArray - Raw data from JSON
+   * @param {string} type - Data type
+   * @returns {Array<Object>} Transformed data matching internal format
+   */
+  transformJSONToInternal(dataArray, type) {
+    switch (type) {
+      case 'kpi-database':
+        return dataArray.map(kpi => ({
+          // Map JSON format to CSV format expected by createKPIs()
+          KPI_ID: kpi.id,
+          KPI_Name: kpi.name,
+          Face_ID: kpi.faceId,
+          Value: kpi.raw?.value ?? kpi.computed?.normalized ?? 0,
+          Weight: kpi.weight ?? 1.0,
+          Direction: kpi.direction === 'up' ? '↑' : (kpi.direction === 'down' ? '↓' : kpi.direction),
+          Target_Min: kpi.raw?.target_min ?? kpi.targetMin ?? 0,
+          Target_Ideal: kpi.raw?.target_ideal ?? kpi.targetIdeal ?? 100,
+          Healthy_Min: kpi.diagnostics?.healthyMin,
+          Healthy_Max: kpi.diagnostics?.healthyMax,
+          Absolute_Max: kpi.diagnostics?.absoluteMax,
+          Element: kpi.philosophy?.element ?? 'Earth'
+        }));
+
+      case 'edge-tension':
+        return dataArray.map(edge => ({
+          Edge_ID: edge.id,
+          Face_A_ID: edge.faceA?.id ?? edge.face1Id,
+          Face_B_ID: edge.faceB?.id ?? edge.face2Id,
+          'Edge Archytype': edge.philosophy?.element ?? edge.archetype,
+          Description: edge.philosophy?.question ?? edge.description
+        }));
+
+      case 'vortex-map':
+        return dataArray.map(vertex => ({
+          Vertex_ID: vertex.id,
+          Face_1_ID: vertex.faces?.[0]?.id ?? vertex.faceIds?.[0],
+          Face_2_ID: vertex.faces?.[1]?.id ?? vertex.faceIds?.[1],
+          Face_3_ID: vertex.faces?.[2]?.id ?? vertex.faceIds?.[2],
+          Name: vertex.philosophy?.archetype ?? vertex.name
+        }));
+
+      default:
+        // Return as-is for unknown types
+        return dataArray;
+    }
+  }
+
+  /**
+   * Initialize system from data (JSON-first with CSV fallback)
+   *
+   * LOADING STRATEGY (December 2025):
+   * 1. If JSONDataLoader is available, try JSON files first
+   *    - Pre-validated data (no runtime corruption handling needed)
+   *    - Pre-computed substitutions tracked in $integrityReport
+   *    - Self-documenting structure with $philosophy metadata
+   * 2. If JSON fails or JSONDataLoader unavailable, fall back to CSV
+   *    - Runtime DataValidator handles corruption
+   *    - Original CSV parsing behavior preserved
+   *
+   * JSON files location: /data/json/{type}.json
+   * CSV files location: /data/CSV_{type}.csv
    */
   async initialize() {
     console.log('🌟 Initializing Quannex Coherence Engine...');
 
-    // Load CSV data
-    const kpiData = await this.loadCSV('CSV_KPI_DATABASE.csv');
-    const faceData = await this.loadCSV('CSV_FACE_MODELS.csv');
-    const edgeData = await this.loadCSV('CSV_Edge_tension_Map.csv');
-    const vertexData = await this.loadCSV('CSV_Vortex_Map.csv');
+    // Detect loading mode
+    const loadingMode = window.JSONDataLoader ? 'JSON-first' : 'CSV-only';
+    console.log(`📦 Loading mode: ${loadingMode}`);
+
+    // Load data using JSON-first strategy with CSV fallback
+    const kpiData = await this.loadWithJSONFirst('kpi-database', 'CSV_KPI_DATABASE.csv');
+    const edgeData = await this.loadWithJSONFirst('edge-tension', 'CSV_Edge_tension_Map.csv');
+    const vertexData = await this.loadWithJSONFirst('vortex-map', 'CSV_Vortex_Map.csv');
+
+    // NOTE: CSV_FACE_MODELS.csv is NOT loaded here. That file contains a pentagram
+    // calculation worksheet (323 rows of formulas), not structured face configuration.
+    // Faces are created from hardcoded topology (12 faces) with names from:
+    // - Custom company config (via initializeWithCompany), or
+    // - Default face names defined in createFaces()
 
     // Create KPIs
     this.createKPIs(kpiData);
 
-    // Create Faces (simplified for POC)
+    // Create Faces (from topology, not from CSV)
     this.createFaces();
 
     // Create Edges and Vertices
