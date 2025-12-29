@@ -9,6 +9,7 @@
  * @module js/core/Edge
  * @author Deimantas Butrimas & Claude
  * @version 2.1.0 - Gold documentation standard
+ * @see {@link ../../docs/EDGE_DYNAMICS_REFERENCE.md} - Complete edge theory & philosophy
  *
  * ════════════════════════════════════════════════════════════════════════════════
  * WHY 30 EDGES? THE GEOMETRY OF RELATIONSHIP

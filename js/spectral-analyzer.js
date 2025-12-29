@@ -14,6 +14,7 @@
  * the fundamental modes of resonance and dissonance that underlie the visible metrics.
  *
  * Date: Original implementation, documented December 16, 2025
+ * @see {@link ../docs/math/SPECTRAL_IMPLEMENTATION.md} - Graph Laplacian implementation details
  *
  * MATHEMATICAL FOUNDATION:
  * ========================

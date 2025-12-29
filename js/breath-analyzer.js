@@ -15,6 +15,7 @@
  * @author Deimantas Butrimas & Claude
  * @version 2.1.0 - Gold documentation standard
  * @see {@link ../docs/SYSTEM_ARCHITECTURE.md} - Unified system map
+ * @see {@link ../docs/BREATH_AXIS_REFERENCE.md} - Complete breath axis theory & philosophy
  *
  * ════════════════════════════════════════════════════════════════════════════════
  * NAVIGATION MAP - WHAT THIS FILE CONNECTS TO

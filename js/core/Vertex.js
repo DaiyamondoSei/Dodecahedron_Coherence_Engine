@@ -9,6 +9,7 @@
  * @module js/core/Vertex
  * @author Deimantas Butrimas & Claude
  * @version 2.1.0 - Gold documentation standard
+ * @see {@link ../../docs/VERTEX_DYNAMICS_REFERENCE.md} - Complete vertex theory & philosophy
  *
  * ════════════════════════════════════════════════════════════════════════════════
  * WHY 20 VERTICES? THE GEOMETRY OF CONVERGENCE

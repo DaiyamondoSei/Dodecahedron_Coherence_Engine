@@ -14,6 +14,8 @@
  * @author Deimantas Butrimas & Claude
  * @version 2.1.0 - Gold documentation standard
  * @see {@link ../docs/SYSTEM_ARCHITECTURE.md} - Unified system map
+ * @see {@link ../docs/SYSTEM_COHERENCE_REFERENCE.md} - How breath, edges & vertices dance together
+ * @see {@link ../docs/DOCUMENTATION_INDEX.md} - The living spine of all documentation
  *
  * ════════════════════════════════════════════════════════════════════════════════
  * NAVIGATION MAP - WHAT THIS FILE CONNECTS TO

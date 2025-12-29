@@ -9,6 +9,7 @@
  * Each edge represents the relationship and flow between two organizational domains (Faces).
  *
  * Date: Documented December 16, 2025
+ * @see {@link ../../docs/EDGE_DYNAMICS_REFERENCE.md} - Complete edge theory & philosophy
  *
  * CORE CONCEPTS:
  * - Edges carry TENSION (energy difference between faces)

@@ -9,6 +9,7 @@
  * Each vertex is where exactly 3 faces meet - a "Triple Convergence" of domains.
  *
  * Date: Documented December 16, 2025
+ * @see {@link ../../docs/VERTEX_DYNAMICS_REFERENCE.md} - Complete vertex theory & philosophy
  *
  * CORE CONCEPTS:
  * - Vertices are VORTEX POINTS where energy converges

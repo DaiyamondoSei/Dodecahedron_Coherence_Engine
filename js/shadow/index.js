@@ -6,6 +6,7 @@
  * ║                                                                            ║
  * ║   Location: js/shadow/index.js                                            ║
  * ║   Created: December 2025                                                  ║
+ * ║   @see {@link ../../docs/SHADOW_SYSTEM_ARCHITECTURE.md} - Complete shadow system reference
  * ║                                                                            ║
  * ╚════════════════════════════════════════════════════════════════════════════╝
  *
