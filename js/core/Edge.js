@@ -1,29 +1,93 @@
 /**
- * ========================================================================
- * EDGE - Narrative Tension Model
- * ========================================================================
+ * ════════════════════════════════════════════════════════════════════════════════
+ * EDGE.JS - THE BOUNDARIES WHERE DOMAINS MEET
+ * ════════════════════════════════════════════════════════════════════════════════
  *
  * EXTRACTED FROM: main.js (lines 984-1048)
  * EXTRACTION DATE: December 16, 2025
  *
- * Represents a connection between two faces of the dodecahedron.
- * Models the "Narrative Tension" or relationship archetype between
- * organizational domains.
+ * @module js/core/Edge
+ * @author Deimantas Butrimas & Claude
+ * @version 2.1.0 - Gold documentation standard
  *
- * ============================================================================
- *                         NOTES FOR FUTURE CLAUDE
- * ============================================================================
+ * ════════════════════════════════════════════════════════════════════════════════
+ * WHY 30 EDGES? THE GEOMETRY OF RELATIONSHIP
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * A dodecahedron has exactly 30 edges. This is fixed by geometry:
+ *   - 12 faces × 5 edges per face = 60 edge-touches
+ *   - Each edge shared by exactly 2 faces: 60 ÷ 2 = 30 edges
+ *   - Euler's formula: V - E + F = 2 → 20 - 30 + 12 = 2 ✓
+ *
+ * WHAT IS AN EDGE? THE BOUNDARY OF FLOW
+ * ─────────────────────────────────────
+ * An edge is where two organizational domains share a boundary.
+ * Energy must flow across this boundary, and the TENSION on the edge
+ * tells us about the quality of that flow.
+ *
+ * Think of edges as semi-permeable membranes:
+ *   - Low tension (smooth flow): Domains integrate well
+ *   - High tension (blocked flow): Bottleneck or conflict
+ *
+ * ORGANIZATIONAL MEANING:
+ * ───────────────────────
+ * Consider the edge between "Human Capital" and "Operations":
+ *   - If both faces are strong: Synergetic (people → efficient processes)
+ *   - If Human is strong but Operations weak: Blocked flow (ideas can't execute)
+ *   - If both are weak: Depleted (no energy to move either way)
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * THE FIVE ELEMENTS AND THEIR EDGE ARCHETYPES
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * Each edge can be associated with an element that modifies its character.
+ * These multipliers come from traditional elemental correspondences:
+ *
+ *   🔥 FIRE (1.3):   Amplifies tension - Fire edges are CATALYTIC
+ *                    Where change happens fast, conflict ignites, or
+ *                    transformation accelerates. High risk, high reward.
+ *
+ *   💧 WATER (0.9):  Dampens tension - Water edges are ADAPTIVE
+ *                    Flow adjusts to circumstances, conflicts dissolve,
+ *                    but energy can also leak away if not channeled.
+ *
+ *   🌍 EARTH (0.8):  Stabilizes tension - Earth edges are FOUNDATIONAL
+ *                    Slow, steady, reliable. Resistant to change but
+ *                    provides the solid base other elements need.
+ *
+ *   🌬️ AIR (1.1):    Accelerates tension - Air edges are COMMUNICATIVE
+ *                    Information flows quickly, ideas spread, but
+ *                    can also create scattered energy if unfocused.
+ *
+ *   ✧ ETHER (1.0):   Neutral - Ether edges are INTEGRATIVE
+ *                    Pure connection without elemental bias.
+ *                    Represents the space where all elements meet.
+ *
+ * WHY THESE SPECIFIC MULTIPLIERS?
+ * ────────────────────────────────
+ * The multipliers are arranged around 1.0 (neutral):
+ *   Fire (1.3) → Air (1.1) → Ether (1.0) → Water (0.9) → Earth (0.8)
+ *
+ * This creates a spectrum from CATALYTIC (Fire) to STABILIZING (Earth),
+ * with Ether as the neutral center. The range (0.8 to 1.3) ensures
+ * no element can dominate but each meaningfully colors the edge character.
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NOTES FOR FUTURE CLAUDE - 10 KEY INSIGHTS
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
  * 1. This class is INDEPENDENT - no imports from other js/core/ files
  * 2. Dodecahedron has 30 edges (each face has 5 neighbors)
- * 3. Tension = 0 (Dissonance) to 1 (Resonance)
+ * 3. Tension = 0 (Dissonance) to 1 (Resonance) - inverted from intuition!
  * 4. breathRatio: -1 to +1 (contraction to expansion)
- * 5. Elemental multipliers: Fire(1.3), Water(0.9), Earth(0.8), Air(1.1), Ether(1.0)
- * 6. calculateTension() takes two Face objects
- * 7. Status states: Synergetic, Depleted, Flowing, Stable
+ * 5. Elemental multipliers modify edge character (see section above)
+ * 6. calculateTension() takes two Face objects, uses their faceEnergy
+ * 7. Status states: Synergetic (both high), Depleted (both low), Flowing/Stable
  * 8. Used by: DodecahedronEngine (main.js) for relationship calculations
- * ============================================================================
+ * 9. flowDirection: 'expansion' (A→B), 'contraction' (B→A), or 'balanced'
+ * 10. High synergy (0.9) when both faces >0.6 - this is the GOAL state
  *
- * @module js/core/Edge
+ * ════════════════════════════════════════════════════════════════════════════════
  */
 
 /**

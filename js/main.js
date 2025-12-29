@@ -694,18 +694,80 @@ export class DodecahedronEngine {
   }
 
   /**
-   * Generate edges dynamically from dodecahedron topology
-   * Each face shares an edge with 5 neighbors
+   * ════════════════════════════════════════════════════════════════════════════
+   * GENERATE EDGES FROM DODECAHEDRON TOPOLOGY
+   * ════════════════════════════════════════════════════════════════════════════
+   *
+   * WHY 30 EDGES? THE GEOMETRY OF CONNECTION
+   * ─────────────────────────────────────────
+   *
+   * A dodecahedron has exactly 30 edges. This is not arbitrary:
+   *   - 12 faces × 5 edges per face = 60 edge-touches
+   *   - Each edge is shared by exactly 2 faces
+   *   - Therefore: 60 ÷ 2 = 30 unique edges
+   *
+   * This also follows Euler's formula: V - E + F = 2
+   *   20 vertices - 30 edges + 12 faces = 2 ✓
+   *
+   * WHY EDGES MATTER FOR ORGANIZATIONS:
+   * ────────────────────────────────────
+   * Edges represent TENSION between adjacent domains. When two organizational
+   * domains share a boundary (an edge), energy must flow between them.
+   *
+   * High tension = large energy difference between faces
+   *   → Indicates a bottleneck or blockage in the flow
+   *   → Example: Strong Human Capital but weak Operations = people
+   *     generating ideas that can't be implemented
+   *
+   * Low tension = smooth energy flow
+   *   → Indicates healthy integration between domains
+   *   → The organization breathes smoothly at this junction
+   *
+   * THE EDGE TOPOLOGY BELOW:
+   * ─────────────────────────
+   * This topology is FIXED by the geometry of the dodecahedron. Each face
+   * is pentagonal, sharing one edge with each of 5 neighbors. The specific
+   * face-pairs below derive from the standard dodecahedron vertex coordinates
+   * where face adjacency is determined by shared vertices.
+   *
+   * Face 1 is adjacent to faces {2,3,4,5,6} - the "north pole" neighborhood
+   * Face 12 is adjacent to faces {7,8,9,10,11} - the "south pole" neighborhood
+   * Faces 2-6 and 7-11 form the equatorial belt, interlocking like fingers
+   *
    */
   generateEdgesFromTopology() {
-    // Dodecahedron edge topology: which faces share edges
+    // ════════════════════════════════════════════════════════════════════════
+    // DODECAHEDRON EDGE TOPOLOGY
+    // ════════════════════════════════════════════════════════════════════════
+    //
+    // Organized by face neighborhood:
+    //
+    // NORTH POLE (Face 1) - connected to its 5 neighbors
+    // EQUATORIAL BELT - faces 2-6 and 7-11 interlocking
+    // SOUTH POLE (Face 12) - connected to its 5 neighbors
+    //
+    // Each row groups edges by their "latitude" in the dodecahedron
+    //
     const edgeTopology = [
+      // Face 1 (North Pole) connections - 5 edges radiating outward
       [1, 2], [1, 3], [1, 4], [1, 5], [1, 6],
+
+      // Upper equatorial belt - Face 2's remaining connections
       [2, 3], [2, 7], [2, 11], [2, 6],
+
+      // Upper equatorial - Face 3's remaining connections
       [3, 4], [3, 7], [3, 8],
+
+      // Upper equatorial - Face 4's remaining connections
       [4, 5], [4, 8], [4, 9],
+
+      // Upper equatorial - Face 5's remaining connections
       [5, 6], [5, 9], [5, 10],
+
+      // Upper equatorial - Face 6's remaining connections
       [6, 10], [6, 11],
+
+      // Lower equatorial belt - connecting to Face 12 (South Pole)
       [7, 8], [7, 11], [7, 12],
       [8, 9], [8, 12],
       [9, 10], [9, 12],
@@ -740,16 +802,116 @@ export class DodecahedronEngine {
   }
 
   /**
-   * Generate vertices dynamically from edge topology
-   * Each vertex is where 3 faces meet
+   * ════════════════════════════════════════════════════════════════════════════
+   * GENERATE VERTICES FROM DODECAHEDRON TOPOLOGY
+   * ════════════════════════════════════════════════════════════════════════════
+   *
+   * WHY 20 VERTICES? THE GEOMETRY OF CONVERGENCE
+   * ─────────────────────────────────────────────
+   *
+   * A dodecahedron has exactly 20 vertices. This emerges from:
+   *   - 12 faces × 5 vertices per face = 60 vertex-touches
+   *   - Each vertex is shared by exactly 3 faces
+   *   - Therefore: 60 ÷ 3 = 20 unique vertices
+   *
+   * Again, Euler's formula: V - E + F = 2
+   *   20 vertices - 30 edges + 12 faces = 2 ✓
+   *
+   * THE MYSTICAL SIGNIFICANCE OF "3 FACES MEETING":
+   * ────────────────────────────────────────────────
+   * At each vertex, EXACTLY 3 organizational domains converge. This is
+   * profound - it means every point of maximum leverage in an organization
+   * involves the interplay of precisely THREE domains, not two, not four.
+   *
+   * This creates VORTEX points - places where energy spirals and transforms.
+   * Think of water going down a drain - it needs 3 dimensions to spiral.
+   * Similarly, organizational transformation happens at these triadic points.
+   *
+   * WHY VERTICES MATTER FOR ORGANIZATIONS:
+   * ───────────────────────────────────────
+   * Vertices are LEVERAGE POINTS. A small intervention at a vertex
+   * ripples into all 3 connected domains simultaneously.
+   *
+   * High vortex energy = all 3 domains are strong and aligned
+   *   → This is a point of organizational genius
+   *   → Innovation and breakthrough happen here
+   *
+   * Low vortex energy = one or more domains are weak
+   *   → This is a point of organizational vulnerability
+   *   → Problems manifest here as symptoms
+   *
+   * EXAMPLE: Vertex [3, 7, 8] = Human Capital + Brand + Operations
+   * ─────────────────────────────────────────────────────────────────
+   * If this vertex has high energy, the organization has achieved
+   * "people-brand-process alignment" - employees embody the brand
+   * through excellent operations. This is rare and valuable.
+   *
+   * If this vertex has low energy, there's a disconnect between
+   * who the company says it is (Brand), who works there (Human),
+   * and what actually gets done (Operations). Customers feel this.
+   *
+   * THE VERTEX TOPOLOGY BELOW:
+   * ──────────────────────────
+   * Organized by "latitude" like the edges:
+   *   - 5 vertices around Face 1 (North Pole)
+   *   - 10 vertices in the equatorial belt
+   *   - 5 vertices around Face 12 (South Pole)
+   *
    */
   generateVerticesFromTopology() {
-    // Dodecahedron vertex topology: which 3 faces meet at each vertex
+    // ════════════════════════════════════════════════════════════════════════
+    // DODECAHEDRON VERTEX TOPOLOGY
+    // ════════════════════════════════════════════════════════════════════════
+    //
+    // Each vertex lists the 3 faces that meet there.
+    // The order matters: faces are listed in clockwise order when
+    // viewed from outside the dodecahedron looking at the vertex.
+    //
+    // Organized by latitude:
+    //   V1-V5:   Around Face 1 (North Pole)
+    //   V6-V15:  Equatorial belt (where most dynamics happen)
+    //   V16-V20: Around Face 12 (South Pole)
+    //
     const vertexTopology = [
-      [1, 2, 3], [1, 3, 4], [1, 4, 5], [1, 5, 6], [1, 6, 2],
-      [2, 7, 3], [3, 7, 8], [3, 8, 4], [4, 8, 9], [4, 9, 5],
-      [5, 9, 10], [5, 10, 6], [6, 10, 11], [6, 11, 2], [2, 11, 7],
-      [7, 12, 8], [8, 12, 9], [9, 12, 10], [10, 12, 11], [11, 12, 7]
+      // ──────────────────────────────────────────────────────────────────────
+      // NORTH POLAR VERTICES (V1-V5): Where Face 1 meets its neighbors
+      // These represent the "visionary" leverage points of the organization
+      // ──────────────────────────────────────────────────────────────────────
+      [1, 2, 3],   // V1: Financial + Intellectual + Human
+      [1, 3, 4],   // V2: Financial + Human + Structural
+      [1, 4, 5],   // V3: Financial + Structural + Market
+      [1, 5, 6],   // V4: Financial + Market + Community
+      [1, 6, 2],   // V5: Financial + Community + Intellectual
+
+      // ──────────────────────────────────────────────────────────────────────
+      // UPPER EQUATORIAL VERTICES (V6-V10): The "creative tension" zone
+      // Where upper and lower hemispheres begin to interface
+      // ──────────────────────────────────────────────────────────────────────
+      [2, 7, 3],   // V6: Intellectual + Brand + Human
+      [3, 7, 8],   // V7: Human + Brand + Operations
+      [3, 8, 4],   // V8: Human + Operations + Structural
+      [4, 8, 9],   // V9: Structural + Operations + Regenerative
+      [4, 9, 5],   // V10: Structural + Regenerative + Market
+
+      // ──────────────────────────────────────────────────────────────────────
+      // LOWER EQUATORIAL VERTICES (V11-V15): The "grounding" zone
+      // Where vision meets implementation
+      // ──────────────────────────────────────────────────────────────────────
+      [5, 9, 10],  // V11: Market + Regenerative + Values
+      [5, 10, 6],  // V12: Market + Values + Community
+      [6, 10, 11], // V13: Community + Values + Funding
+      [6, 11, 2],  // V14: Community + Funding + Intellectual
+      [2, 11, 7],  // V15: Intellectual + Funding + Brand
+
+      // ──────────────────────────────────────────────────────────────────────
+      // SOUTH POLAR VERTICES (V16-V20): Where Face 12 meets its neighbors
+      // These represent the "resilience" leverage points of the organization
+      // ──────────────────────────────────────────────────────────────────────
+      [7, 12, 8],  // V16: Brand + Risk + Operations
+      [8, 12, 9],  // V17: Operations + Risk + Regenerative
+      [9, 12, 10], // V18: Regenerative + Risk + Values
+      [10, 12, 11],// V19: Values + Risk + Funding
+      [11, 12, 7]  // V20: Funding + Risk + Brand
     ];
 
     vertexTopology.forEach((faceIds, index) => {
@@ -940,15 +1102,55 @@ export class DodecahedronEngine {
     // But we explicitly calculate it here to ensure base states are ready
     this.faces.forEach(face => face.calculateLocalCoherence());
 
-    // 3. PASS 2: Calculate Axis-Informed Energy (The Feedback Loop)
-    // We need the Axis Map (Polar Opposites)
+    // ════════════════════════════════════════════════════════════════════════
+    // PASS 2: Calculate Axis-Informed Energy (The Breath Feedback Loop)
+    // ════════════════════════════════════════════════════════════════════════
+    //
+    // THE 6 BREATH AXES - WHY THESE SPECIFIC PAIRS?
+    // ──────────────────────────────────────────────
+    //
+    // In a dodecahedron, each of the 12 faces has exactly ONE face directly
+    // opposite to it - as far away as geometrically possible. These 6 pairs
+    // of polar opposites form the BREATH AXES.
+    //
+    // Think of it like breathing:
+    //   - One face INHALES (receives energy from the environment)
+    //   - Its opposite EXHALES (projects energy outward)
+    //   - Together they form a complete breath cycle
+    //
+    // WHY THIS MATTERS FOR ORGANIZATIONS:
+    // ──────────────────────────────────────────────
+    // Organizations breathe too. Consider Axis 1↔11:
+    //   - Face 1 (Financial Capital): Money flowing IN
+    //   - Face 11 (Funding Pipeline): Money flowing OUT to growth
+    //
+    // If Financial Capital is strong but Funding Pipeline is weak,
+    // the organization is "holding its breath" - accumulating but not investing.
+    // The axisInformedEnergy() calculation detects this imbalance.
+    //
+    // THE 6 AXES AND THEIR ORGANIZATIONAL MEANING:
+    // ──────────────────────────────────────────────
+    //   Axis 1: Financial (1) ↔ Funding (11)      - Capital breath
+    //   Axis 2: Intellectual (2) ↔ Brand (7)      - Knowledge-to-reputation breath
+    //   Axis 3: Human (3) ↔ Operations (8)        - People-to-process breath
+    //   Axis 4: Structural (4) ↔ Regenerative (9) - Stability-to-renewal breath
+    //   Axis 5: Market (5) ↔ Values (10)          - External-to-internal breath
+    //   Axis 6: Community (6) ↔ Risk (12)         - Partnership-to-resilience breath
+    //
+    // GEOMETRIC PROOF:
+    // ──────────────────────────────────────────────
+    // In a regular dodecahedron centered at origin, opposite faces have
+    // centers that are exactly antipodal (pointing in opposite directions).
+    // The numbering {1↔11, 2↔7, 3↔8, 4↔9, 5↔10, 6↔12} follows the standard
+    // dodecahedron face labeling used in crystallography and sacred geometry.
+    //
     const axisMap = {
-      1: 11, 11: 1,
-      2: 7, 7: 2,
-      3: 8, 8: 3,
-      4: 9, 9: 4,
-      5: 10, 10: 5,
-      6: 12, 12: 6
+      1: 11, 11: 1,   // Financial ↔ Funding
+      2: 7,  7: 2,    // Intellectual ↔ Brand
+      3: 8,  8: 3,    // Human ↔ Operations
+      4: 9,  9: 4,    // Structural ↔ Regenerative
+      5: 10, 10: 5,   // Market ↔ Values
+      6: 12, 12: 6    // Community ↔ Risk
     };
 
     this.faces.forEach(face => {

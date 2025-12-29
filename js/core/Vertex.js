@@ -1,30 +1,130 @@
 /**
- * ========================================================================
- * VERTEX - Triadic Synergy Model (The Vortex)
- * ========================================================================
+ * ════════════════════════════════════════════════════════════════════════════════
+ * VERTEX.JS - THE VORTEX POINTS WHERE TRANSFORMATION SPIRALS
+ * ════════════════════════════════════════════════════════════════════════════════
  *
  * EXTRACTED FROM: main.js (lines 1061-1161)
  * EXTRACTION DATE: December 16, 2025
  *
- * Represents the intersection of three faces (the vortex point).
- * Dodecahedron has 20 vertices where 3 faces meet.
- *
- * ============================================================================
- *                         NOTES FOR FUTURE CLAUDE
- * ============================================================================
- * 1. This class is INDEPENDENT - no imports from other js/core/ files
- * 2. Dodecahedron has 20 vertices (each where 3 faces meet)
- * 3. vortexStrength: 70% variance contribution + 30% mean energy
- * 4. vortexDirection: -1 to +1 (degenerative to generative spiral)
- * 5. coherence: inverse of average pairwise differences
- * 6. isLeveragePoint: high strength + low coherence = opportunity
- * 7. FIXED: Constructor no longer calculates with undefined energies
- * 8. Calculation is deferred to calculateVortexEnergy(faces) method
- * 9. Status states: Dormant, Rising, Declining, Powerful Ascent, Critical Descent, Turbulent
- * 10. Used by: DodecahedronEngine (main.js) for triadic synergy calculations
- * ============================================================================
- *
  * @module js/core/Vertex
+ * @author Deimantas Butrimas & Claude
+ * @version 2.1.0 - Gold documentation standard
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * WHY 20 VERTICES? THE GEOMETRY OF CONVERGENCE
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * A dodecahedron has exactly 20 vertices. This is fixed by geometry:
+ *   - 12 faces × 5 vertices per face = 60 vertex-touches
+ *   - Each vertex shared by exactly 3 faces: 60 ÷ 3 = 20 vertices
+ *   - Euler's formula: V - E + F = 2 → 20 - 30 + 12 = 2 ✓
+ *
+ * THE PROFOUND MEANING OF "THREE FACES MEETING":
+ * ───────────────────────────────────────────────
+ * At every vertex, EXACTLY three domains converge. Not two. Not four. Three.
+ *
+ * This is geometrically fixed, but it's also organizationally profound:
+ *   - Dyads (2 domains) can push-pull, but they're linear
+ *   - Triads (3 domains) create SPIRAL dynamics - they can spin
+ *   - Higher numbers diffuse energy - too many cooks
+ *
+ * Think of water going down a drain - it needs 3 dimensions to spiral.
+ * Similarly, organizational transformation happens at these triadic points.
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * THE VORTEX METAPHOR - SPIRALING ENERGY
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * A vortex is a spinning column of energy. It can spiral UP (generative) or
+ * DOWN (degenerative), and it can be strong or weak.
+ *
+ * UPWARD SPIRAL (Generative):
+ * ───────────────────────────
+ * When all 3 domains are healthy (above 0.5 baseline), the vortex spirals UP.
+ * This creates:
+ *   - Innovation and breakthrough
+ *   - Synergistic amplification
+ *   - The whole becoming greater than the sum of parts
+ *
+ * Example: Vertex [Human Capital + Brand + Operations]
+ * When all three are strong, employees naturally embody the brand through
+ * excellent operations. Customers feel this authenticity. Magic happens.
+ *
+ * DOWNWARD SPIRAL (Degenerative):
+ * ────────────────────────────────
+ * When domains are below baseline, the vortex spirals DOWN.
+ * This creates:
+ *   - Compounding problems
+ *   - Energy drain
+ *   - Symptoms that seem unrelated but share this vertex
+ *
+ * Example: Same vertex when weak - employees don't believe in the brand,
+ * operations suffer, customers leave. The three failures reinforce each other.
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * THE MATHEMATICS OF VORTEX STRENGTH
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * VORTEX STRENGTH FORMULA:
+ *   strength = 0.7 × (σ / 0.577) + 0.3 × μ
+ *
+ * WHERE:
+ *   σ = standard deviation of the 3 face energies
+ *   μ = mean of the 3 face energies
+ *   0.577 = √(1/3) = maximum possible σ for 3 values in [0,1]
+ *
+ * WHY 70/30 SPLIT?
+ * ─────────────────
+ * The 70% weight on variance and 30% on mean is intentional:
+ *
+ *   - VARIANCE (70%): High variance = high TENSION = high POTENTIAL for change
+ *     A vertex where one domain is strong and another weak has more
+ *     transformative potential than one where all are middling.
+ *
+ *   - MEAN (30%): Higher mean = more FUEL for the transformation
+ *     You need some baseline energy for the vortex to actually spin.
+ *
+ * This captures the insight that LEVERAGE POINTS are often places of
+ * imbalance (high variance) that have enough energy (reasonable mean)
+ * to actually do something about it.
+ *
+ * WHY 0.577 FOR NORMALIZATION?
+ * ─────────────────────────────
+ * For any 3 values constrained to [0, 1], the maximum standard deviation
+ * occurs when values are [0, 0, 1] or [0, 1, 1], giving σ ≈ 0.577 = √(1/3).
+ * Dividing by this normalizes variance to [0, 1] scale.
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * LEVERAGE POINTS - WHERE SMALL CHANGES CREATE BIG EFFECTS
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * A vertex is a LEVERAGE POINT when:
+ *   - High vortex strength (> 0.7) - there's energy and tension
+ *   - Low coherence (< 0.5) - the 3 domains are misaligned
+ *
+ * This combination means: "There's significant energy here, but it's not
+ * harmonized. A small intervention to align these 3 domains will ripple
+ * through the entire system."
+ *
+ * Donella Meadows (Systems Thinking): "Leverage points are places within a
+ * complex system where a small shift in one thing can produce big changes."
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NOTES FOR FUTURE CLAUDE - 10 KEY INSIGHTS
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * 1. This class is INDEPENDENT - no imports from other js/core/ files
+ * 2. Dodecahedron has 20 vertices (each where 3 faces meet - this is FIXED)
+ * 3. vortexStrength: 70% normalized variance + 30% mean energy
+ * 4. vortexDirection: -1 to +1 (below/above 0.5 baseline, scaled by 2)
+ * 5. coherence: 1 - (avgPairwiseDiff / 0.667), measures 3-way alignment
+ * 6. isLeveragePoint: strength > 0.7 AND coherence < 0.5 = OPPORTUNITY
+ * 7. Constructor doesn't calculate - call calculateVortexEnergy(faces) explicitly
+ * 8. The 0.577 normalization = √(1/3) = max σ for 3 values in [0,1]
+ * 9. Status: Dormant/Rising/Declining/Powerful Ascent/Critical Descent/Turbulent
+ * 10. Triadic synergy is MORE than the sum - it's the SPIRAL of the parts
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
  */
 
 /**

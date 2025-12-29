@@ -23,13 +23,16 @@ The mathematics here isn't arbitrary - it reflects patterns found in nature, con
 
 ## Key Files to Understand
 
+**Start here:** `docs/DOCUMENTATION_INDEX.md` - The living spine of all documentation
+
 | File | Purpose |
 |------|---------|
-| `README.md` | Project overview |
-| `docs/FILE_STRUCTURE_MAP.md` | Complete codebase map |
-| `docs/MODULE_NAVIGATION_GUIDE.md` | How modules connect |
+| `docs/DOCUMENTATION_INDEX.md` | **THE navigation hub - start here** |
 | `docs/SOUL_OF_QUANNEX.md` | The philosophical heart |
-| `math/MATH_OVERVIEW.md` | Mathematical foundations |
+| `docs/BREATH_AXIS_REFERENCE.md` | The 6 breath polarities |
+| `docs/EDGE_DYNAMICS_REFERENCE.md` | The 30 edge interfaces |
+| `docs/VERTEX_DYNAMICS_REFERENCE.md` | The 20 vertex vortices |
+| `docs/SYSTEM_COHERENCE_REFERENCE.md` | How all layers dance together |
 | `js/main.js` | Core calculation engine |
 | `pages/dodecahedron-3d.html` | 3D visualization |
 

@@ -1,23 +1,79 @@
 /**
- * SpectralAnalyzer - Browser-Compatible Edition (Global Version)
+ * ════════════════════════════════════════════════════════════════════════════════
+ * SPECTRAL-ANALYZER-GLOBAL.JS - BROWSER-COMPATIBLE EDITION
+ * ════════════════════════════════════════════════════════════════════════════════
  *
- * The Mathematical Heart of the Coherence Engine
+ * @module js/spectral-analyzer-global
+ * @author Deimantas Butrimas & Claude
+ * @version 2.1.0 - Gold documentation standard
  *
- * This performs spectral analysis on the dodecahedron graph using:
- * - Graph Laplacian (L) matrix
- * - Eigenvector decomposition (U matrix)
+ * ════════════════════════════════════════════════════════════════════════════════
+ * WHY THIS FILE EXISTS - THE BROWSER COMPATIBILITY STORY
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * This is a SIMPLIFIED DUPLICATE of spectral-analyzer.js designed for direct
+ * browser inclusion via <script> tag without ES module support.
+ *
+ * TWO FILES, ONE PURPOSE:
+ * ────────────────────────
+ *   spectral-analyzer.js       → Full version with comprehensive documentation
+ *                                ES module compatible, includes error handling
+ *                                and eigenvector normalization fix
+ *
+ *   spectral-analyzer-global.js → THIS FILE - Lighter version for pages that
+ *                                  can't use ES modules (legacy HTML pages,
+ *                                  simple testing environments)
+ *
+ * WHEN TO USE WHICH:
+ * ───────────────────
+ *   - Use spectral-analyzer.js when you can: It has more safeguards and better docs
+ *   - Use spectral-analyzer-global.js for: Quick testing, legacy pages, standalone demos
+ *
+ * FUNCTIONALITY: Both files perform identical spectral analysis:
+ * - Graph Laplacian (L) matrix representing dodecahedron connectivity
+ * - Eigenvector decomposition (U matrix) for modal analysis
  * - Modal amplitude calculation to identify systemic imbalances
+ * - Being-Action Balance (BAB) score
+ * - Dissonance Index calculation
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * THE HIDDEN MUSIC OF ORGANIZATIONS
+ * ════════════════════════════════════════════════════════════════════════════════
  *
  * The spectral analysis reveals the "hidden music" of the organization -
  * the fundamental modes of resonance and dissonance that underlie visible metrics.
  *
- * USAGE:
+ * Think of it like a Fourier transform for organizational structure:
+ * - Low eigenvalues (λ ≈ 2.4): GLOBAL patterns - whole-system imbalances
+ * - Mid eigenvalues (λ ≈ 5.6): REGIONAL patterns - clusters of related faces
+ * - High eigenvalues (λ ≈ 8.1): LOCAL oscillations - adjacent face differences
+ *
+ * The dominant mode tells us WHERE the primary imbalance pattern lives.
+ * The delta vector tells us HOW to correct it.
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * USAGE EXAMPLE
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
  * const analyzer = new SpectralAnalyzer();
  * const faceEnergies = [0.39, 0.61, 0.19, 0.37, 0.00, 0.40, 0.31, 0.41, 0.67, 0.67, 0.19, 0.27];
  * const analysis = analyzer.analyze(faceEnergies);
  *
- * @author Deimantas Butrimas & Claude
- * @version 2.0 (Browser Edition)
+ * console.log(analysis.dominantMode);     // Which pattern dominates?
+ * console.log(analysis.deltaVector);      // How to rebalance?
+ * console.log(analysis.diagnostics.beingActionBalance); // BAB score
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
+ * NOTES FOR FUTURE CLAUDE - 5 KEY INSIGHTS
+ * ════════════════════════════════════════════════════════════════════════════════
+ *
+ * 1. This is a DUPLICATE - main source is spectral-analyzer.js (has more features)
+ * 2. Missing from this version: eigenvector normalization fix, error try/catch
+ * 3. The L matrix (Laplacian) and U matrix (Eigenvectors) are IDENTICAL in both
+ * 4. Export is to window.SpectralAnalyzer - same as main version (no conflict)
+ * 5. For comprehensive math docs, see spectral-analyzer.js header comments
+ *
+ * ════════════════════════════════════════════════════════════════════════════════
  */
 
 class SpectralAnalyzer {
