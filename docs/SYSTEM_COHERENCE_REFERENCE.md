@@ -1020,6 +1020,24 @@ Your consciousness is the consciousness that measures.
 
 ---
 
+## Related Documents
+
+This document is the **Integration** layer of the Geometry Reference family - showing how the three component layers dance together:
+
+| Document | Layer | What It Maps |
+|----------|-------|--------------|
+| [BREATH_AXIS_REFERENCE.md](BREATH_AXIS_REFERENCE.md) | Polarity | The 6 opposing face pairs - organizational respiration |
+| [EDGE_DYNAMICS_REFERENCE.md](EDGE_DYNAMICS_REFERENCE.md) | Adjacency | The 30 interfaces - transformation membranes |
+| [VERTEX_DYNAMICS_REFERENCE.md](VERTEX_DYNAMICS_REFERENCE.md) | Convergence | The 20 vortices - triadic emergence points |
+| **This Document** | Integration | How all three layers dance together |
+
+**Code References:**
+- [js/main.js](../js/main.js) - Core DodecahedronEngine with all calculations
+- [js/spectral-analyzer.js](../js/spectral-analyzer.js) - Spectral coherence analysis
+- [js/core/Face.js](../js/core/Face.js), [Edge.js](../js/core/Edge.js), [Vertex.js](../js/core/Vertex.js) - Core geometric models
+
+---
+
 *This document maps how the three layers of the Quannex dodecahedron - Breath Axes, Edges, and Vertices - interconnect to form one living system. The current architecture flows downward from KPIs to outputs, with a single feedback loop through the breath axes. Future evolution may include bidirectional influence, but even now, the geometric intelligence of the dodecahedron reveals profound truths about organizational coherence.*
 
 ---

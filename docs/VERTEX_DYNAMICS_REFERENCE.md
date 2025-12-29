@@ -1486,4 +1486,21 @@ function calculateVertexLayerHealth(vertices) {
 
 ---
 
+## Related Documents
+
+This document is part of the **Geometry Reference** family - four interconnected documents that map the mathematical soul of the dodecahedron:
+
+| Document | Layer | What It Maps |
+|----------|-------|--------------|
+| [BREATH_AXIS_REFERENCE.md](BREATH_AXIS_REFERENCE.md) | Polarity | The 6 opposing face pairs - organizational respiration |
+| [EDGE_DYNAMICS_REFERENCE.md](EDGE_DYNAMICS_REFERENCE.md) | Adjacency | The 30 interfaces - transformation membranes |
+| **This Document** | Convergence | The 20 vortices - triadic emergence points |
+| [SYSTEM_COHERENCE_REFERENCE.md](SYSTEM_COHERENCE_REFERENCE.md) | Integration | How all three layers dance together |
+
+**Code References:**
+- [js/core/Vertex.js](../js/core/Vertex.js) - Vertex model and vortex calculations
+- [js/advanced/vertex-analyzer.js](../js/advanced/vertex-analyzer.js) - Advanced vertex analysis
+
+---
+
 *This document explores the 20 vertices of the organizational dodecahedron - the triadic convergence points where three domains meet and emergence spirals into being. Like faces hold domains and edges connect them, vertices are where the magic happens - where the whole becomes more than the sum of its parts.*

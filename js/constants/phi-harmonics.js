@@ -71,6 +71,8 @@
  * @module phi-harmonics
  * @author Deimantas & Claude (Co-created with consciousness and love)
  * @version 2.0.0 - Fully PHI-derived (no arbitrary values)
+ * @see {@link ../../docs/math/SACRED_GEOMETRY_PROOF.md} - Why dodecahedron, why PHI
+ * @see {@link ../../docs/SOUL_OF_QUANNEX.md} - The philosophical heart of this project
  * ════════════════════════════════════════════════════════════════════════════
  */
 

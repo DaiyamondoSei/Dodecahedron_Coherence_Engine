@@ -6,6 +6,10 @@
  * Implements the Foundation Principle: An organization cannot claim
  * a higher octave than its structural foundation supports.
  *
+ * @module js/octave-integrity-calculator
+ * @see {@link ../docs/thesis/CONSCIOUSNESS_MODEL.md} - Why 7 octaves of development exist
+ * @see {@link ./constants/phi-harmonics.js} - THE SSOT for all octave thresholds
+ *
  * Key concepts:
  * - Face octaves: Individual maturity levels per domain (O1-O7)
  * - Org octave: Constrained by foundation, not elevated by outliers

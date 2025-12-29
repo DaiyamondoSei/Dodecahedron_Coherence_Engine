@@ -28,6 +28,8 @@
  *
  * @module js/core/TuningConfig
  * @requires window.PhiHarmonics (optional, has fallback)
+ * @see {@link ../constants/phi-harmonics.js} - THE SSOT for all PHI constants
+ * @see {@link ../../docs/SOUL_OF_QUANNEX.md} - The philosophical heart of this project
  */
 
 // ============================================================================

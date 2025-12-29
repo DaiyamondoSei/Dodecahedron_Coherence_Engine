@@ -15,6 +15,7 @@
  *
  * @module QuannexAI
  * @version Sprint 2
+ * @see {@link ../../docs/AI_SYSTEM_GUIDE.md} - Complete AI subsystem architecture (36 files)
  */
 
 // ========================================

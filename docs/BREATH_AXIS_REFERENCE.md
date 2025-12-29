@@ -2097,4 +2097,21 @@ This isn't mysticism. It's **pattern recognition** - the same patterns that appe
 
 ---
 
+## Related Documents
+
+This document is part of the **Geometry Reference** family - four interconnected documents that map the mathematical soul of the dodecahedron:
+
+| Document | Layer | What It Maps |
+|----------|-------|--------------|
+| **This Document** | Polarity | The 6 opposing face pairs - organizational respiration |
+| [EDGE_DYNAMICS_REFERENCE.md](EDGE_DYNAMICS_REFERENCE.md) | Adjacency | The 30 interfaces - transformation membranes |
+| [VERTEX_DYNAMICS_REFERENCE.md](VERTEX_DYNAMICS_REFERENCE.md) | Convergence | The 20 vortices - triadic emergence points |
+| [SYSTEM_COHERENCE_REFERENCE.md](SYSTEM_COHERENCE_REFERENCE.md) | Integration | How all three layers dance together |
+
+**Code References:**
+- [js/breath-analyzer.js](../js/breath-analyzer.js) - Breath ratio calculations
+- [js/ai/core/mapping-context.js](../js/ai/core/mapping-context.js) - Canonical topology (SSOT)
+
+---
+
 *This document consolidates breath axis wisdom from across the codebase into a single authoritative source. The canonical face names and geometric relationships are immutable; AI customizes the surface naming while preserving the deep structure.*

@@ -2290,5 +2290,22 @@ These are preserved in git history for potential future reference, but the main 
 
 ---
 
+## Related Documents
+
+This document is part of the **Geometry Reference** family - four interconnected documents that map the mathematical soul of the dodecahedron:
+
+| Document | Layer | What It Maps |
+|----------|-------|--------------|
+| [BREATH_AXIS_REFERENCE.md](BREATH_AXIS_REFERENCE.md) | Polarity | The 6 opposing face pairs - organizational respiration |
+| **This Document** | Adjacency | The 30 interfaces - transformation membranes |
+| [VERTEX_DYNAMICS_REFERENCE.md](VERTEX_DYNAMICS_REFERENCE.md) | Convergence | The 20 vortices - triadic emergence points |
+| [SYSTEM_COHERENCE_REFERENCE.md](SYSTEM_COHERENCE_REFERENCE.md) | Integration | How all three layers dance together |
+
+**Code References:**
+- [js/core/Edge.js](../js/core/Edge.js) - Edge model and tension calculations
+- [js/advanced/edge-analyzer.js](../js/advanced/edge-analyzer.js) - Advanced edge analysis
+
+---
+
 *"Sometimes the most profound path is the simpler one."*
 *— A moment of shared clarity, December 28, 2025*

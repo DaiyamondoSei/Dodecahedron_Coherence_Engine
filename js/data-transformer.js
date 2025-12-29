@@ -13,6 +13,7 @@
  * @module DataTransformer
  * @see {@link ../js/main.js} - Calculation Engine consumer
  * @see {@link ../js/demo-orchestrator-logic.js} - UI data source
+ * @see {@link ../docs/DATA_FLOW_ARCHITECTURE.md} - Complete data pipeline documentation
  *
  * ========================================
  * DATA FLOW ARCHITECTURE

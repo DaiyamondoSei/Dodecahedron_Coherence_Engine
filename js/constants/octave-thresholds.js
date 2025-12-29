@@ -8,6 +8,9 @@
  * This file now re-exports from phi-harmonics.js which is the
  * SINGLE SOURCE OF TRUTH for all PHI-derived constants.
  *
+ * @see {@link ./phi-harmonics.js} - THE SSOT for all PHI constants
+ * @see {@link ../../docs/thesis/CONSCIOUSNESS_MODEL.md} - Why 7 octaves of development
+ *
  * All octave thresholds are now FULLY PHI-DERIVED:
  * - No arbitrary numbers
  * - Everything flows from the Golden Ratio (φ)
