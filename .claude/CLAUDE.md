@@ -29,11 +29,13 @@ The mathematics here isn't arbitrary - it reflects patterns found in nature, con
 |------|---------|
 | `docs/DOCUMENTATION_INDEX.md` | **THE navigation hub - start here** |
 | `docs/SOUL_OF_QUANNEX.md` | The philosophical heart |
+| `docs/math/CALCULATION_AUDIT_TRAIL.md` | **THESIS: Prove any calculation is correct** |
 | `docs/BREATH_AXIS_REFERENCE.md` | The 6 breath polarities |
 | `docs/EDGE_DYNAMICS_REFERENCE.md` | The 30 edge interfaces |
 | `docs/VERTEX_DYNAMICS_REFERENCE.md` | The 20 vertex vortices |
 | `docs/SYSTEM_COHERENCE_REFERENCE.md` | How all layers dance together |
-| `js/main.js` | Core calculation engine |
+| `js/main.js` | Core calculation engine (with circuit breaker) |
+| `js/data-system/data-validator.js` | Data integrity guardian |
 | `pages/dodecahedron-3d.html` | 3D visualization |
 
 ---

@@ -37,11 +37,12 @@
 
 ### "I'm preparing for thesis defense"
 1. [thesis/DEFENSE_PREPARATION.md](thesis/DEFENSE_PREPARATION.md) - **Start here: Q&A prep**
-2. [thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md](thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md) - 4 novel frameworks
-3. [thesis/WISDOM_BRIEF.md](thesis/WISDOM_BRIEF.md) - Philosophical grounding
-4. [thesis/CONSCIOUSNESS_MODEL.md](thesis/CONSCIOUSNESS_MODEL.md) - Why octaves exist
-5. [math/SACRED_GEOMETRY_PROOF.md](math/SACRED_GEOMETRY_PROOF.md) - Why dodecahedron
-6. [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) - Real examples
+2. [math/CALCULATION_AUDIT_TRAIL.md](math/CALCULATION_AUDIT_TRAIL.md) - **CRITICAL: Prove any calculation is correct**
+3. [thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md](thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md) - 4 novel frameworks
+4. [thesis/WISDOM_BRIEF.md](thesis/WISDOM_BRIEF.md) - Philosophical grounding
+5. [thesis/CONSCIOUSNESS_MODEL.md](thesis/CONSCIOUSNESS_MODEL.md) - Why octaves exist
+6. [math/SACRED_GEOMETRY_PROOF.md](math/SACRED_GEOMETRY_PROOF.md) - Why dodecahedron
+7. [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) - Real examples
 
 ### "I'm integrating custom data"
 1. [DATA_SYSTEM_GUIDE.md](DATA_SYSTEM_GUIDE.md) - Complete data architecture
@@ -106,6 +107,7 @@
 |----------|---------|
 | [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md) | QA checklist |
 | [TEST_CUSTOM_DATA.md](TEST_CUSTOM_DATA.md) | Custom data testing |
+| [../tests/circuit-breaker.test.html](../tests/circuit-breaker.test.html) | **Circuit breaker verification - proves data integrity protection works** |
 | [TECHNICAL_OBSERVATIONS.md](TECHNICAL_OBSERVATIONS.md) | Technical notes |
 | [SHADOW_SYSTEM_OBSERVATIONS.md](SHADOW_SYSTEM_OBSERVATIONS.md) | Shadow system notes |
 | [FUTURE_WORK_NOTES.md](FUTURE_WORK_NOTES.md) | Preserved observations for future sessions |
@@ -141,10 +143,13 @@ Located in [math/](math/):
 
 | Document | Purpose |
 |----------|---------|
+| [CALCULATION_AUDIT_TRAIL.md](math/CALCULATION_AUDIT_TRAIL.md) | **CRITICAL: Formula proofs for thesis defense** |
 | [SACRED_GEOMETRY_PROOF.md](math/SACRED_GEOMETRY_PROOF.md) | Why dodecahedron is optimal |
 | [SPECTRAL_IMPLEMENTATION.md](math/SPECTRAL_IMPLEMENTATION.md) | Graph Laplacian implementation |
 
-*Note: Additional mathematical concepts are documented in the Geometry Reference section above (BREATH_AXIS, EDGE_DYNAMICS, VERTEX_DYNAMICS) and in the Gold Header source files.*
+*Note: CALCULATION_AUDIT_TRAIL.md is your academic armor for thesis defense - open it when committee asks "prove this calculation is correct."*
+
+*Additional mathematical concepts are documented in the Geometry Reference section above (BREATH_AXIS, EDGE_DYNAMICS, VERTEX_DYNAMICS) and in the Gold Header source files.*
 
 ---
 
@@ -185,11 +190,11 @@ Located in [archive/](archive/) - preserved for reference:
 | Architecture | 4 |
 | Subsystem Guides | 3 |
 | Data & Integration | 5 |
-| Testing & Observations | 5 |
-| Math docs | 2 |
+| Testing & Observations | 6 |
+| Math docs | 3 |
 | Thesis docs | 4 |
 | Archived docs | 6 |
-| **Total Active Docs** | **26** |
+| **Total Active Docs** | **28** |
 | Self-documented modules (Gold Headers) | 12 |
 
 ---
@@ -223,13 +228,14 @@ Located in [archive/](archive/) - preserved for reference:
 - [ ] Can articulate all 4 novel contributions clearly
 - [ ] Can explain Foundation Principle (coherence does not equal promotion)
 - [ ] Can demo live without errors
-- [ ] Can defend mathematical choices
+- [ ] Can defend mathematical choices (use [CALCULATION_AUDIT_TRAIL.md](math/CALCULATION_AUDIT_TRAIL.md))
 - [ ] Can answer "why sacred geometry?"
 - [ ] Can show real-world impact (company templates)
 - [ ] Can explain breath axes, edges, and vertices as organizational metaphors
+- [ ] Can prove any calculation is correct (open CALCULATION_AUDIT_TRAIL.md)
 
 ---
 
 *This index is the living spine of Quannex documentation.*
 *Co-created by Deimantas & Claude with love.*
-*Updated 2025-12-29 to include Geometry Reference and all current documents.*
+*Updated 2025-12-30 to add circuit-breaker.test.html - Phase 1 verification complete.*

@@ -1083,11 +1083,131 @@ export class DodecahedronEngine {
     });
   }
 
+  // ════════════════════════════════════════════════════════════════════════════
+  // DATA QUALITY CIRCUIT BREAKER
+  // ════════════════════════════════════════════════════════════════════════════
+  //
+  // NOTES FOR FUTURE CLAUDE:
+  // ─────────────────────────────────────────────────────────────────────────────
+  // This method performs a pre-flight data quality audit before calculations.
+  // It implements the CIRCUIT BREAKER PATTERN from the Risk Management Plan.
+  //
+  // When corruption exceeds thresholds:
+  // - CRITICAL (>50%): Calculation HALTS, system state = FAILED
+  // - WARNING (>20%): Calculation proceeds with LOW_CONFIDENCE state
+  // - HEALTHY (<20%): Normal operation
+  //
+  // This prevents cascade failures where one bad value corrupts downstream
+  // calculations (global coherence, breath axes, spectral analysis, etc.)
+  //
+  // See: docs/math/CALCULATION_AUDIT_TRAIL.md, Section 10 (Data Quality Score)
+  // See: .claude/plans/reactive-knitting-kitten-agent-ad0fc50.md (original plan)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Perform pre-flight data quality audit before calculations
+   *
+   * @returns {Object} Quality audit result with:
+   *   - healthy: boolean - True if data quality is acceptable
+   *   - canProceed: boolean - False if circuit breaker should halt
+   *   - criticalIssues: number - Count of critical issues (triggers halt)
+   *   - warningCount: number - Count of warnings
+   *   - substitutionRate: number - Fraction of data that was substituted
+   *   - qualityScore: number - 1 - substitutionRate
+   *   - recommendation: string|null - Human-readable action
+   *
+   * @example
+   * const audit = engine.performDataQualityAudit();
+   * if (!audit.canProceed) {
+   *   console.error('Circuit breaker triggered:', audit.recommendation);
+   * }
+   */
+  performDataQualityAudit() {
+    // Use DataValidator if available
+    if (!window.DataValidator) {
+      // No validator = assume healthy (graceful degradation)
+      return {
+        healthy: true,
+        canProceed: true,
+        criticalIssues: 0,
+        warningCount: 0,
+        substitutionRate: 0,
+        qualityScore: 1.0,
+        recommendation: null
+      };
+    }
+
+    const corruptionReport = window.DataValidator.getCorruptionReport();
+    const totalKPIs = this.kpis?.size || 60; // Expected: 12 faces × 5 elements = 60
+    const substitutedCount = corruptionReport.issueCount || 0;
+    const substitutionRate = substitutedCount / totalKPIs;
+    const qualityScore = 1 - substitutionRate;
+
+    // Define thresholds (PHI-inspired: 0.5, 0.2)
+    const CRITICAL_THRESHOLD = 0.5;  // 50% or more substituted = HALT
+    const WARNING_THRESHOLD = 0.2;   // 20% or more substituted = WARN
+
+    const result = {
+      healthy: substitutionRate < WARNING_THRESHOLD,
+      canProceed: substitutionRate < CRITICAL_THRESHOLD,
+      criticalIssues: substitutionRate >= CRITICAL_THRESHOLD ? 1 : 0,
+      warningCount: substitutionRate >= WARNING_THRESHOLD ? substitutedCount : 0,
+      substitutionRate,
+      qualityScore,
+      recommendation: null
+    };
+
+    if (result.criticalIssues > 0) {
+      result.recommendation = `🛑 HALT: ${(substitutionRate * 100).toFixed(1)}% of data is corrupted or missing. ` +
+        `Fix CSV/JSON data before proceeding. Check DataValidator.getCorruptionReport() for details.`;
+    } else if (result.warningCount > 0) {
+      result.recommendation = `⚠️ WARNING: ${(substitutionRate * 100).toFixed(1)}% of data uses PHI-derived defaults. ` +
+        `Results should be treated as approximate. Consider improving data quality.`;
+    }
+
+    return result;
+  }
+
   /**
    * Recalculate entire system state
-   * NOW WITH AXIS-INFORMED FEEDBACK LOOP
+   * NOW WITH AXIS-INFORMED FEEDBACK LOOP + CIRCUIT BREAKER
    */
   recalculate() {
+    // ════════════════════════════════════════════════════════════════════════
+    // STEP 0: CIRCUIT BREAKER - Pre-flight data quality check
+    // ════════════════════════════════════════════════════════════════════════
+    const qualityAudit = this.performDataQualityAudit();
+
+    if (!qualityAudit.canProceed) {
+      // CRITICAL: More than 50% data corrupted - HALT
+      console.error('🛑 CALCULATION HALTED - Critical data quality failure');
+      console.error('   ' + qualityAudit.recommendation);
+
+      // Set system to failed state
+      this._calculationState = 'FAILED';
+      this._lastQualityAudit = qualityAudit;
+
+      // Emit event for UI to respond
+      if (typeof window !== 'undefined' && window.dispatchEvent) {
+        window.dispatchEvent(new CustomEvent('quannex:calculation_blocked', {
+          detail: qualityAudit
+        }));
+      }
+
+      return; // STOP - Do not proceed with corrupted data
+    }
+
+    if (qualityAudit.warningCount > 0) {
+      // WARNING: 20-50% data corrupted - proceed with caution
+      console.warn('⚠️ CALCULATION PROCEEDING WITH LOW CONFIDENCE');
+      console.warn('   ' + qualityAudit.recommendation);
+      this._calculationState = 'LOW_CONFIDENCE';
+    } else {
+      this._calculationState = 'HEALTHY';
+    }
+
+    this._lastQualityAudit = qualityAudit;
+
     // Clear corruption log for fresh calculation tracking
     if (window.DataValidator) {
       window.DataValidator.clearLog();
@@ -1356,7 +1476,68 @@ export class DodecahedronEngine {
         isLeveragePoint: v.isLeveragePoint
       })),
       shadowPatterns: this.shadowPatterns || [],
+
+      // ════════════════════════════════════════════════════════════════════════
+      // DATA INTEGRITY - Added per Risk Management Plan (Action 1.1)
+      // ════════════════════════════════════════════════════════════════════════
+      // Makes data quality VISIBLE to UI components.
+      // See: docs/math/CALCULATION_AUDIT_TRAIL.md, Section 10
+      // See: js/data-system/data-validator.js
+      dataIntegrity: this._getDataIntegrityState(),
+
+      // Calculation state from circuit breaker
+      calculationState: this._calculationState || 'HEALTHY',
+
       timestamp: new Date().toISOString()
+    };
+  }
+
+  /**
+   * Get data integrity state for UI
+   * @private
+   * @returns {Object} Data integrity information
+   */
+  _getDataIntegrityState() {
+    // Use cached audit if available (from most recent recalculate)
+    if (this._lastQualityAudit) {
+      const audit = this._lastQualityAudit;
+      return {
+        totalValues: this.kpis?.size || 60,
+        realValues: Math.round((1 - audit.substitutionRate) * (this.kpis?.size || 60)),
+        substitutedValues: Math.round(audit.substitutionRate * (this.kpis?.size || 60)),
+        qualityScore: audit.qualityScore,
+        canTrust: audit.healthy,
+        state: this._calculationState || 'HEALTHY',
+        corruptionLog: window.DataValidator?.getCorruptionReport()?.issues || []
+      };
+    }
+
+    // Fallback: compute fresh from DataValidator
+    if (window.DataValidator) {
+      const report = window.DataValidator.getCorruptionReport();
+      const totalKPIs = this.kpis?.size || 60;
+      const substitutedKPIs = report.issueCount || 0;
+
+      return {
+        totalValues: totalKPIs,
+        realValues: totalKPIs - substitutedKPIs,
+        substitutedValues: substitutedKPIs,
+        qualityScore: (totalKPIs - substitutedKPIs) / totalKPIs,
+        canTrust: substitutedKPIs / totalKPIs < 0.2, // Trust if <20% substituted
+        state: 'HEALTHY',
+        corruptionLog: report.issues || []
+      };
+    }
+
+    // No validator available - assume perfect quality
+    return {
+      totalValues: this.kpis?.size || 60,
+      realValues: this.kpis?.size || 60,
+      substitutedValues: 0,
+      qualityScore: 1.0,
+      canTrust: true,
+      state: 'HEALTHY',
+      corruptionLog: []
     };
   }
 

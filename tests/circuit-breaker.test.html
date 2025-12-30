@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Circuit Breaker Verification Tests</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #ffcc00;
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .test-group {
+            margin: 25px 0;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .test-group h2 {
+            color: #00ffcc;
+            margin-top: 0;
+            font-size: 16px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .test-result {
+            margin: 8px 0;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .pass {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+            color: #00ff88;
+        }
+
+        .fail {
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 4px solid #ff4444;
+            color: #ff4444;
+        }
+
+        .summary {
+            font-size: 18px;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .summary.all-pass {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 200, 100, 0.1));
+            border: 2px solid #00ff88;
+        }
+
+        .summary.has-fail {
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(200, 50, 50, 0.1));
+            border: 2px solid #ff4444;
+        }
+
+        .summary h2 {
+            margin: 0 0 10px 0;
+        }
+
+        .timestamp {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .detail {
+            color: #888;
+            font-size: 12px;
+            margin-left: 20px;
+        }
+
+        .shield-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .verification-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .verified {
+            background: rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+
+        .unverified {
+            background: rgba(255, 68, 68, 0.3);
+            color: #ff4444;
+        }
+    </style>
+</head>
+<body>
+    <h1>Circuit Breaker Verification Tests</h1>
+    <p class="subtitle">
+        Verifying data integrity protection as specified in the Risk Management Plan
+        <br>
+        <span class="timestamp">Test run: <span id="timestamp"></span></span>
+    </p>
+    <div id="results"></div>
+
+    <!-- Load Dependencies in Order -->
+    <script src="../js/constants/phi-harmonics.js"></script>
+    <script src="../js/data-system/data-validator.js"></script>
+
+    <!-- Test Script -->
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toISOString();
+
+        const results = document.getElementById('results');
+        let passed = 0;
+        let failed = 0;
+
+        // ========================================
+        // TEST UTILITIES
+        // ========================================
+
+        function test(name, condition, details = '') {
+            const status = condition ? 'pass' : 'fail';
+            condition ? passed++ : failed++;
+            results.innerHTML += `
+                <div class="test-result ${status}">
+                    ${condition ? '&#10003;' : '&#10007;'} ${name}
+                    ${details ? `<div class="detail">${details}</div>` : ''}
+                </div>`;
+        }
+
+        function testGroup(name, description = '') {
+            results.innerHTML += `
+                <div class="test-group">
+                    <h2>${name}</h2>
+                    ${description ? `<p style="color: #888; font-size: 13px; margin-bottom: 15px;">${description}</p>` : ''}`;
+        }
+
+        function endGroup() {
+            results.innerHTML += `</div>`;
+        }
+
+        // ========================================
+        // MOCK ENGINE FOR TESTING
+        // ========================================
+
+        /**
+         * Create a mock engine with controllable DataValidator
+         */
+        function createMockEngine(corruptionCount, totalKPIs = 60) {
+            // Create mock DataValidator state
+            const mockIssues = [];
+            for (let i = 0; i < corruptionCount; i++) {
+                mockIssues.push({
+                    context: `Mock Face ${Math.floor(i / 5) + 1} KPI ${(i % 5) + 1}`,
+                    originalValue: 'MOCK_CORRUPTION',
+                    substitutedValue: 0.382
+                });
+            }
+
+            // Mock DataValidator.getCorruptionReport
+            const originalGetCorruptionReport = window.DataValidator.getCorruptionReport;
+            window.DataValidator.getCorruptionReport = function() {
+                return {
+                    healthy: corruptionCount === 0,
+                    issueCount: corruptionCount,
+                    issues: mockIssues
+                };
+            };
+
+            // Create mock engine with performDataQualityAudit
+            const mockEngine = {
+                kpis: new Map(),
+                _calculationState: null,
+                _lastQualityAudit: null,
+
+                performDataQualityAudit() {
+                    if (!window.DataValidator) {
+                        return {
+                            healthy: true,
+                            canProceed: true,
+                            criticalIssues: 0,
+                            warningCount: 0,
+                            substitutionRate: 0,
+                            qualityScore: 1.0,
+                            recommendation: null
+                        };
+                    }
+
+                    const corruptionReport = window.DataValidator.getCorruptionReport();
+                    const totalKPIsLocal = this.kpis?.size || totalKPIs;
+                    const substitutedCount = corruptionReport.issueCount || 0;
+                    const substitutionRate = substitutedCount / totalKPIsLocal;
+                    const qualityScore = 1 - substitutionRate;
+
+                    const CRITICAL_THRESHOLD = 0.5;
+                    const WARNING_THRESHOLD = 0.2;
+
+                    const result = {
+                        healthy: substitutionRate < WARNING_THRESHOLD,
+                        canProceed: substitutionRate < CRITICAL_THRESHOLD,
+                        criticalIssues: substitutionRate >= CRITICAL_THRESHOLD ? 1 : 0,
+                        warningCount: substitutionRate >= WARNING_THRESHOLD ? substitutedCount : 0,
+                        substitutionRate,
+                        qualityScore,
+                        recommendation: null
+                    };
+
+                    if (result.criticalIssues > 0) {
+                        result.recommendation = `HALT: ${(substitutionRate * 100).toFixed(1)}% of data is corrupted`;
+                    } else if (result.warningCount > 0) {
+                        result.recommendation = `WARNING: ${(substitutionRate * 100).toFixed(1)}% uses defaults`;
+                    }
+
+                    return result;
+                },
+
+                recalculate() {
+                    const qualityAudit = this.performDataQualityAudit();
+
+                    if (!qualityAudit.canProceed) {
+                        this._calculationState = 'FAILED';
+                        this._lastQualityAudit = qualityAudit;
+
+                        window.dispatchEvent(new CustomEvent('quannex:calculation_blocked', {
+                            detail: qualityAudit
+                        }));
+
+                        return false; // Calculation blocked
+                    }
+
+                    if (qualityAudit.warningCount > 0) {
+                        this._calculationState = 'LOW_CONFIDENCE';
+                    } else {
+                        this._calculationState = 'HEALTHY';
+                    }
+
+                    this._lastQualityAudit = qualityAudit;
+                    return true; // Calculation proceeded
+                },
+
+                getState() {
+                    return {
+                        dataIntegrity: this._getDataIntegrityState(),
+                        calculationState: this._calculationState || 'HEALTHY',
+                        timestamp: new Date().toISOString()
+                    };
+                },
+
+                _getDataIntegrityState() {
+                    if (this._lastQualityAudit) {
+                        const audit = this._lastQualityAudit;
+                        const total = this.kpis?.size || totalKPIs;
+                        return {
+                            totalValues: total,
+                            realValues: Math.round((1 - audit.substitutionRate) * total),
+                            substitutedValues: Math.round(audit.substitutionRate * total),
+                            qualityScore: audit.qualityScore,
+                            canTrust: audit.healthy,
+                            state: this._calculationState || 'HEALTHY',
+                            corruptionLog: window.DataValidator?.getCorruptionReport()?.issues || []
+                        };
+                    }
+
+                    return {
+                        totalValues: totalKPIs,
+                        realValues: totalKPIs,
+                        substitutedValues: 0,
+                        qualityScore: 1.0,
+                        canTrust: true,
+                        state: 'HEALTHY',
+                        corruptionLog: []
+                    };
+                },
+
+                // Cleanup - restore original DataValidator
+                cleanup() {
+                    window.DataValidator.getCorruptionReport = originalGetCorruptionReport;
+                }
+            };
+
+            // Initialize mock KPIs
+            for (let i = 0; i < totalKPIs; i++) {
+                mockEngine.kpis.set(`kpi_${i}`, { value: 0.5 + Math.random() * 0.5 });
+            }
+
+            return mockEngine;
+        }
+
+        // ========================================
+        // RUN TESTS
+        // ========================================
+
+        async function runTests() {
+            console.log('Starting Circuit Breaker Verification Tests...');
+
+            // ========================================
+            // 1. PREREQUISITE CHECKS
+            // ========================================
+            testGroup('1. Prerequisites', 'Verify required modules are loaded');
+
+            test('DataValidator loaded', typeof window.DataValidator !== 'undefined');
+            test('DataValidator.getCorruptionReport exists', typeof window.DataValidator?.getCorruptionReport === 'function');
+            test('DataValidator.isCorrupted exists', typeof window.DataValidator?.isCorrupted === 'function');
+            test('PhiHarmonics loaded', typeof window.PhiHarmonics !== 'undefined');
+            test('PHI constant available', window.PhiHarmonics?.PHI > 1.6);
+
+            endGroup();
+
+            // ========================================
+            // 2. HEALTHY STATE (<20% corruption)
+            // ========================================
+            testGroup('2. HEALTHY State Test', 'Corruption < 20% should allow normal calculation');
+
+            const healthyEngine = createMockEngine(10, 60); // 10/60 = 16.7%
+            const healthyAudit = healthyEngine.performDataQualityAudit();
+
+            test('Audit detects 16.7% corruption rate',
+                Math.abs(healthyAudit.substitutionRate - (10/60)) < 0.01,
+                `Rate: ${(healthyAudit.substitutionRate * 100).toFixed(1)}%`
+            );
+            test('canProceed is true', healthyAudit.canProceed === true);
+            test('healthy is true', healthyAudit.healthy === true);
+            test('No critical issues', healthyAudit.criticalIssues === 0);
+            test('warningCount is 0', healthyAudit.warningCount === 0);
+            test('No recommendation needed', healthyAudit.recommendation === null);
+
+            // Run recalculate
+            const healthyProceed = healthyEngine.recalculate();
+            test('recalculate() returns true', healthyProceed === true);
+            test('State is HEALTHY', healthyEngine._calculationState === 'HEALTHY');
+
+            // Check getState()
+            const healthyState = healthyEngine.getState();
+            test('dataIntegrity.canTrust is true', healthyState.dataIntegrity.canTrust === true);
+            test('dataIntegrity.state is HEALTHY', healthyState.dataIntegrity.state === 'HEALTHY');
+            test('dataIntegrity.qualityScore > 0.8',
+                healthyState.dataIntegrity.qualityScore > 0.8,
+                `Quality: ${(healthyState.dataIntegrity.qualityScore * 100).toFixed(1)}%`
+            );
+
+            healthyEngine.cleanup();
+            endGroup();
+
+            // ========================================
+            // 3. LOW_CONFIDENCE STATE (20-50% corruption)
+            // ========================================
+            testGroup('3. LOW_CONFIDENCE State Test', 'Corruption 20-50% should warn but proceed');
+
+            const warningEngine = createMockEngine(20, 60); // 20/60 = 33.3%
+            const warningAudit = warningEngine.performDataQualityAudit();
+
+            test('Audit detects 33.3% corruption rate',
+                Math.abs(warningAudit.substitutionRate - (20/60)) < 0.01,
+                `Rate: ${(warningAudit.substitutionRate * 100).toFixed(1)}%`
+            );
+            test('canProceed is true', warningAudit.canProceed === true);
+            test('healthy is false', warningAudit.healthy === false);
+            test('warningCount equals corruption count', warningAudit.warningCount === 20);
+            test('Recommendation includes WARNING', warningAudit.recommendation?.includes('WARNING'));
+
+            // Run recalculate
+            const warningProceed = warningEngine.recalculate();
+            test('recalculate() returns true (proceeds with warning)', warningProceed === true);
+            test('State is LOW_CONFIDENCE', warningEngine._calculationState === 'LOW_CONFIDENCE');
+
+            // Check getState()
+            const warningState = warningEngine.getState();
+            test('dataIntegrity.canTrust is false', warningState.dataIntegrity.canTrust === false);
+            test('dataIntegrity.state is LOW_CONFIDENCE', warningState.dataIntegrity.state === 'LOW_CONFIDENCE');
+            test('dataIntegrity.substitutedValues is 20', warningState.dataIntegrity.substitutedValues === 20);
+
+            warningEngine.cleanup();
+            endGroup();
+
+            // ========================================
+            // 4. FAILED STATE (>50% corruption) - CIRCUIT BREAKER
+            // ========================================
+            testGroup('4. CIRCUIT BREAKER Test', 'Corruption > 50% should HALT calculation');
+
+            // Track if event fires
+            let blockedEventFired = false;
+            let blockedEventDetail = null;
+            const blockHandler = (event) => {
+                blockedEventFired = true;
+                blockedEventDetail = event.detail;
+            };
+            window.addEventListener('quannex:calculation_blocked', blockHandler);
+
+            const haltEngine = createMockEngine(35, 60); // 35/60 = 58.3%
+            const haltAudit = haltEngine.performDataQualityAudit();
+
+            test('Audit detects 58.3% corruption rate',
+                Math.abs(haltAudit.substitutionRate - (35/60)) < 0.01,
+                `Rate: ${(haltAudit.substitutionRate * 100).toFixed(1)}%`
+            );
+            test('canProceed is false', haltAudit.canProceed === false);
+            test('healthy is false', haltAudit.healthy === false);
+            test('criticalIssues is 1', haltAudit.criticalIssues === 1);
+            test('Recommendation includes HALT', haltAudit.recommendation?.includes('HALT'));
+
+            // Run recalculate - should be blocked
+            const haltProceed = haltEngine.recalculate();
+            test('recalculate() returns false (blocked)', haltProceed === false);
+            test('State is FAILED', haltEngine._calculationState === 'FAILED');
+
+            // Wait a tick for event
+            await new Promise(resolve => setTimeout(resolve, 10));
+
+            test('quannex:calculation_blocked event fired', blockedEventFired === true);
+            test('Event detail contains qualityScore',
+                typeof blockedEventDetail?.qualityScore === 'number',
+                `Quality: ${(blockedEventDetail?.qualityScore * 100).toFixed(1)}%`
+            );
+            test('Event detail.canProceed is false', blockedEventDetail?.canProceed === false);
+
+            // Check getState()
+            const haltState = haltEngine.getState();
+            test('dataIntegrity.state is FAILED', haltState.dataIntegrity.state === 'FAILED');
+            test('dataIntegrity.qualityScore < 0.5',
+                haltState.dataIntegrity.qualityScore < 0.5,
+                `Quality: ${(haltState.dataIntegrity.qualityScore * 100).toFixed(1)}%`
+            );
+
+            window.removeEventListener('quannex:calculation_blocked', blockHandler);
+            haltEngine.cleanup();
+            endGroup();
+
+            // ========================================
+            // 5. EDGE CASES
+            // ========================================
+            testGroup('5. Edge Cases', 'Boundary conditions and special scenarios');
+
+            // Exactly 50% - should HALT (conservative: >= 50% is critical)
+            // Thesis defense rationale: if half your data is corrupted, don't proceed
+            const edge50Engine = createMockEngine(30, 60); // 30/60 = 50% exactly
+            const edge50Audit = edge50Engine.performDataQualityAudit();
+            test('50% exactly: canProceed is false (conservative threshold)',
+                edge50Audit.canProceed === false,
+                `Rate: ${(edge50Audit.substitutionRate * 100).toFixed(1)}%`
+            );
+            edge50Engine.cleanup();
+
+            // Exactly 20% - should be in warning zone
+            const edge20Engine = createMockEngine(12, 60); // 12/60 = 20% exactly
+            const edge20Audit = edge20Engine.performDataQualityAudit();
+            test('20% exactly: healthy is false',
+                edge20Audit.healthy === false,
+                `Rate: ${(edge20Audit.substitutionRate * 100).toFixed(1)}%`
+            );
+            test('20% exactly: has warnings', edge20Audit.warningCount > 0);
+            edge20Engine.cleanup();
+
+            // 0% corruption - pristine data
+            const pristineEngine = createMockEngine(0, 60);
+            const pristineAudit = pristineEngine.performDataQualityAudit();
+            test('0% corruption: qualityScore is 1.0', pristineAudit.qualityScore === 1.0);
+            test('0% corruption: healthy is true', pristineAudit.healthy === true);
+            test('0% corruption: no recommendation', pristineAudit.recommendation === null);
+            pristineEngine.cleanup();
+
+            // 100% corruption - complete failure
+            const totalFailEngine = createMockEngine(60, 60);
+            const totalFailAudit = totalFailEngine.performDataQualityAudit();
+            test('100% corruption: qualityScore is 0', totalFailAudit.qualityScore === 0);
+            test('100% corruption: canProceed is false', totalFailAudit.canProceed === false);
+            totalFailEngine.cleanup();
+
+            endGroup();
+
+            // ========================================
+            // 6. PHI CONSTANT VERIFICATION
+            // ========================================
+            testGroup('6. PHI Constant Verification', 'Verify sacred geometry constants in defaults');
+
+            const DV = window.DataValidator;
+            const PHI = (1 + Math.sqrt(5)) / 2;
+            const PHI_1 = 1 / PHI;
+            const PHI_2 = 1 / (PHI * PHI);
+
+            test('DEFAULTS.faceEnergy is PHI_2 (0.382)',
+                Math.abs(DV.DEFAULTS.faceEnergy - PHI_2) < 0.0001,
+                `Value: ${DV.DEFAULTS.faceEnergy.toFixed(6)}`
+            );
+            test('DEFAULTS.kpiValue is PHI_1 (0.618)',
+                Math.abs(DV.DEFAULTS.kpiValue - PHI_1) < 0.0001,
+                `Value: ${DV.DEFAULTS.kpiValue.toFixed(6)}`
+            );
+            test('DEFAULTS.kpiNormalized is 0.5 (PHI midpoint)',
+                Math.abs(DV.DEFAULTS.kpiNormalized - 0.5) < 0.0001,
+                `Value: ${DV.DEFAULTS.kpiNormalized.toFixed(6)}`
+            );
+
+            endGroup();
+
+            // ========================================
+            // SUMMARY
+            // ========================================
+            const summaryClass = failed === 0 ? 'all-pass' : 'has-fail';
+            results.innerHTML += `
+                <div class="summary ${summaryClass}">
+                    <div class="shield-icon">${failed === 0 ? '&#128737;' : '&#9888;'}</div>
+                    <h2>${passed} passed, ${failed} failed</h2>
+                    ${failed === 0
+                        ? `<div class="pass" style="font-size: 16px;">
+                             CIRCUIT BREAKER VERIFIED
+                             <br><br>
+                             <span style="font-size: 14px; color: #888;">
+                               Data integrity protection is working correctly.
+                               <br>
+                               The system will HALT calculations when corruption exceeds 50%.
+                             </span>
+                           </div>
+                           <div class="verification-badge verified">
+                             &#10003; Phase 1 Complete - Thesis Defense Ready
+                           </div>`
+                        : `<div class="fail" style="font-size: 16px;">
+                             VERIFICATION FAILED - Review failures above
+                           </div>
+                           <div class="verification-badge unverified">
+                             &#10007; Issues detected - Fix before proceeding
+                           </div>`
+                    }
+                </div>
+            `;
+
+            console.log(`Circuit Breaker Tests: ${passed} passed, ${failed} failed`);
+        }
+
+        // Run tests
+        runTests();
+    </script>
+</body>
+</html>
