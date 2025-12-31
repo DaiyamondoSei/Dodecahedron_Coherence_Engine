@@ -1,6 +1,6 @@
 # Quannex Documentation Index
 
-> *Last Updated: 2025-12-29*
+> *Last Updated: 2025-12-30*
 > *The Living Spine - Single Source of Truth for All Documentation*
 
 ---
@@ -98,6 +98,7 @@
 |----------|---------|
 | [DATA_SYSTEM_GUIDE.md](DATA_SYSTEM_GUIDE.md) | Complete data architecture - CSV, JSON, flows |
 | [DATA_FLOW_ARCHITECTURE.md](DATA_FLOW_ARCHITECTURE.md) | Data pipeline details |
+| [ENHANCED_JSON_DESIGN.md](ENHANCED_JSON_DESIGN.md) | **Thesis-ready JSON format with $philosophy, $mathematics layers** |
 | [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) | Custom data connection |
 | [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) | 4 teaching examples |
 | [INTELLIGENT_FACE_MAPPING.md](INTELLIGENT_FACE_MAPPING.md) | AI face mapping logic |
@@ -132,6 +133,7 @@ These modules have **comprehensive internal documentation**. Read the source fil
 | **Edge Tension** | `js/advanced/edge-analyzer.js` | Tension formula |
 | **Vertex Vortex** | `js/advanced/vertex-analyzer.js` | Leverage points |
 | **PHI Constants** | `js/constants/phi-harmonics.js` | Sacred geometry constants (SSOT) |
+| **CSV-to-JSON Converter** | `js/data-system/csv-to-json-converter.js` | Self-documenting data migration, $philosophy layers |
 
 **Why read source headers?** They contain the most current documentation, written for developers and future Claude to understand the code quickly.
 
@@ -189,13 +191,13 @@ Located in [archive/](archive/) - preserved for reference:
 | Geometry Reference | 4 |
 | Architecture | 4 |
 | Subsystem Guides | 3 |
-| Data & Integration | 5 |
+| Data & Integration | 6 |
 | Testing & Observations | 6 |
 | Math docs | 3 |
 | Thesis docs | 4 |
 | Archived docs | 6 |
-| **Total Active Docs** | **28** |
-| Self-documented modules (Gold Headers) | 12 |
+| **Total Active Docs** | **29** |
+| Self-documented modules (Gold Headers) | 13 |
 
 ---
 
@@ -238,4 +240,4 @@ Located in [archive/](archive/) - preserved for reference:
 
 *This index is the living spine of Quannex documentation.*
 *Co-created by Deimantas & Claude with love.*
-*Updated 2025-12-30 to add circuit-breaker.test.html - Phase 1 verification complete.*
+*Updated 2025-12-30 - Phase 2C-D complete: Enhanced JSON with $philosophy, $mathematics layers.*
