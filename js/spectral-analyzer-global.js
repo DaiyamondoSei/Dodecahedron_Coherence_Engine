@@ -4,7 +4,7 @@
  * ════════════════════════════════════════════════════════════════════════════════
  *
  * @module js/spectral-analyzer-global
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.1.0 - Gold documentation standard
  *
  * ════════════════════════════════════════════════════════════════════════════════

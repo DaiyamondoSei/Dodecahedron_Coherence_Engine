@@ -9,7 +9,7 @@
  * EXTRACTED FROM: main.js (December 16, 2025)
  *
  * @module js/core/Face
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.1.0 - Gold documentation standard
  * @see {@link ../../docs/SYSTEM_ARCHITECTURE.md} - Unified system map
  *

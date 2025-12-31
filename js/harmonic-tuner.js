@@ -101,7 +101,7 @@
  * ========================================
  *
  * @module js/harmonic-tuner
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.0.0 - Clean BEM rewrite
  */
 

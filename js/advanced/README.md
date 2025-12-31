@@ -319,8 +319,8 @@ Conditional pattern matching:
 
 ## Credits
 
-**Mathematics:** Deimantas Butrimas (Original Excel engine)
-**Implementation:** Claude Code & Deimantas Butrimas
+**Mathematics:** Deimantas Murauskas (Original Excel engine)
+**Implementation:** Claude Code & Deimantas Murauskas
 **License:** Proprietary (Bachelor Thesis 2025-2026)
 
 ---

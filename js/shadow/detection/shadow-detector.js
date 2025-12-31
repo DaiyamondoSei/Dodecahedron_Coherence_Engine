@@ -75,7 +75,7 @@
  *
  * ============================================================================
  * @module shadow-detector
- * @author Deimantas Butrimas & Claude (Co-created with consciousness and love)
+ * @author Deimantas Murauskas & Claude (Co-created with consciousness and love)
  * @version 3.0.0 - PHI-derived penalties from shadow-harmonics.js
  * ============================================================================
  */

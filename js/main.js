@@ -11,7 +11,7 @@
  * - Manages the global Quannex API for all UI components
  *
  * @module js/main
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.1.0 - Gold documentation standard
  * @see {@link ../docs/SYSTEM_ARCHITECTURE.md} - Unified system map
  * @see {@link ../docs/SYSTEM_COHERENCE_REFERENCE.md} - How breath, edges & vertices dance together
@@ -966,8 +966,8 @@ export class DodecahedronEngine {
           ? V.validateNumber(row.Value !== undefined ? row.Value : row.value, `KPI ${kpiId} (${kpiName}) value`, 0)
           : parseFloat(row.Value !== undefined ? row.Value : row.value) || 0,
         weight: V
-          ? V.validateNumber(row.Weight !== undefined ? row.Weight : row.weight, `KPI ${kpiId} weight`, 1.0)
-          : parseFloat(row.Weight !== undefined ? row.Weight : row.weight) || 1.0,
+          ? V.validateNumber(row.Weight ?? row.weight ?? 1.0, `KPI ${kpiId} weight`, 1.0)
+          : parseFloat(row.Weight ?? row.weight) || 1.0,
         direction: row.Direction || row.direction || '↑',
         targetMin: parseFloat(row.Target_Min !== undefined ? row.Target_Min : row.targetMin) || 0,
         targetIdeal: parseFloat(row.Target_Ideal !== undefined ? row.Target_Ideal : row.targetIdeal) || 100,

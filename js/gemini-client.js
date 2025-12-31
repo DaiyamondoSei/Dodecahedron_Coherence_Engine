@@ -9,7 +9,7 @@
  * It translates human stories into 12-face dodecahedron configurations.
  *
  * @module js/gemini-client
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.1.0 - Gold documentation standard
  * @see {@link ../docs/AI_SYSTEM_GUIDE.md} - Complete AI subsystem architecture
  * @see {@link ../docs/SYSTEM_ARCHITECTURE.md} - Unified system map

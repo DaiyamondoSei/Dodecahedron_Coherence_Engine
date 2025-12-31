@@ -7,7 +7,7 @@
  * EXTRACTION DATE: December 16, 2025
  *
  * @module js/core/Vertex
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.1.0 - Gold documentation standard
  * @see {@link ../../docs/VERTEX_DYNAMICS_REFERENCE.md} - Complete vertex theory & philosophy
  *

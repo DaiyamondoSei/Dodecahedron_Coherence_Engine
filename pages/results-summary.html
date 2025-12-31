@@ -781,8 +781,31 @@
                     throw new Error('Failed to load context');
                 }
 
+                // Initialize Quannex engine if not already done (for direct navigation)
+                // This ensures calculated values (faceEnergy, coherence) are available
+                let calculatedState = null;
+                if (window.Quannex) {
+                    // Check if engine has data for this company
+                    const currentState = window.Quannex.getState?.();
+                    if (!currentState?.faces || currentState.faces.length === 0) {
+                        console.log('[Report] Initializing Quannex engine for direct navigation...');
+                        await window.Quannex.initWithCompany({
+                            ...context.company,
+                            faceConfig: { faces: context.faces },
+                            kpis: context.kpis,
+                            shadowPatterns: context.shadowPatterns || []
+                        });
+                    }
+                    calculatedState = window.Quannex.getState?.();
+                }
+
+                // Use calculated state if available, otherwise fall back to raw context
+                const reportData = calculatedState?.faces?.length > 0
+                    ? { ...context, faces: calculatedState.faces }
+                    : context;
+
                 // Populate report
-                populateReport(context, companyId);
+                populateReport(reportData, companyId);
 
                 // Show content, hide loading
                 document.getElementById('loadingState').style.display = 'none';

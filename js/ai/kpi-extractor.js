@@ -104,7 +104,7 @@
  * ========================================
  *
  * @module js/ai/kpi-extractor
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version Sprint 2 - Task 10
  */
 

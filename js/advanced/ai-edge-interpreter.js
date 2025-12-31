@@ -9,7 +9,7 @@
  * const interpreter = new AIEdgeInterpreter();
  * const metadata = interpreter.generateEdgeMetadata(face1, face2, edgeElement);
  *
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 1.0
  */
 

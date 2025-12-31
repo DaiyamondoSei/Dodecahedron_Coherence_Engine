@@ -82,7 +82,7 @@
  * ========================================
  *
  * @module js/advanced/vertex-analyzer
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 4.1 (with comprehensive documentation)
  *
  * USAGE:

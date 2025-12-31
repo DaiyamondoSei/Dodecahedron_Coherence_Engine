@@ -7,7 +7,7 @@
  * EXTRACTION DATE: December 16, 2025
  *
  * @module js/core/Edge
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.1.0 - Gold documentation standard
  * @see {@link ../../docs/EDGE_DYNAMICS_REFERENCE.md} - Complete edge theory & philosophy
  *

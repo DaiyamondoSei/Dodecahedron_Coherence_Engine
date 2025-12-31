@@ -36,7 +36,7 @@
  * to distinguish "standard analysis" from "research extension."
  *
  * @module js/advanced/index
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.1.0 - Gold documentation standard with DynamicsAnalyzer integration
  * @see {@link ../docs/SYSTEM_ARCHITECTURE.md} - Unified system map
  *

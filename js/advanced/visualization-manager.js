@@ -57,7 +57,7 @@
  *
  * ========================================
  *
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.0 (Bug fix: topology-based vertex positioning)
  */
 

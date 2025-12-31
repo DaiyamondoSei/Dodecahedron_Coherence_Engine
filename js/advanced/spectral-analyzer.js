@@ -16,7 +16,7 @@
  * const faceEnergies = [0.39, 0.61, 0.19, 0.37, 0.00, 0.40, 0.31, 0.41, 0.67, 0.67, 0.19, 0.27];
  * const analysis = analyzer.analyze(faceEnergies);
  *
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.0 (Browser Edition)
  */
 

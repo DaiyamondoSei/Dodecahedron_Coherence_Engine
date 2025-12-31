@@ -378,4 +378,4 @@ Single source of truth for all octave-related calculations across the system.
 
 *Created: 2025-12-09*
 *Part of Quannex Mathematical Framework*
-*Co-created by: Deimantas Butrimas & Claude*
+*Co-created by: Deimantas Murauskas & Claude*

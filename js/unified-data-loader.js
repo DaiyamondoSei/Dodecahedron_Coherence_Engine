@@ -138,7 +138,7 @@
  * ========================================
  *
  * @module js/unified-data-loader
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.1.0 - Added JSON-first loading via JSONDataLoader
  * @see {@link ../docs/DATA_SYSTEM_GUIDE.md} - Complete data architecture guide
  * @see {@link ../docs/DATA_FLOW_ARCHITECTURE.md} - Data pipeline details

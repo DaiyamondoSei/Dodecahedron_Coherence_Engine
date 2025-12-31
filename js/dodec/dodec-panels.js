@@ -122,14 +122,33 @@
      * - Corner vertices (with Bermuda detection)
      * - Shadow patterns (with toggle)
      *
-     * @param {Object} face - Face data object with properties:
+     * @param {Object|number} faceOrId - Face data object or face ID (1-12)
+     *   If object, expects properties:
      *   - id: Face ID (1-12)
      *   - name: Display name
      *   - faceEnergy: Energy level (0-1)
      *   - elementalKPIs: Array of KPI objects
      *   - currentOctave: Octave level (1-7)
      */
-    function showFaceDetail(face) {
+    function showFaceDetail(faceOrId) {
+        // Type guard: Convert numeric ID to face object
+        let face = faceOrId;
+        if (typeof faceOrId === 'number') {
+            const companyData = S.companyData || global.Quannex?.getState?.();
+            face = companyData?.faces?.find(f => f.id === faceOrId);
+            if (!face) {
+                console.warn(`[dodec-panels] Face ID ${faceOrId} not found in company data`);
+                return;
+            }
+            console.log(`[dodec-panels] Resolved face ID ${faceOrId} to:`, face.name);
+        }
+
+        // Validate face object
+        if (!face || typeof face !== 'object') {
+            console.warn('[dodec-panels] Invalid face data provided:', faceOrId);
+            return;
+        }
+
         const panel = document.getElementById('faceDetailPanel');
         const title = document.getElementById('faceDetailTitle');
         const energyDisplay = document.getElementById('faceEnergyDisplay');

@@ -124,7 +124,7 @@
  * ========================================
  *
  * @module KPIMatcher
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.0.0 - Documented with Notes for Future Claude
  */
 

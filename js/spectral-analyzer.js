@@ -77,7 +77,7 @@
  * ========================================
  *
  * @module js/spectral-analyzer
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 1.1 (with comprehensive documentation)
  */
 

@@ -80,7 +80,7 @@
  * ========================================
  *
  * @module js/utils/integrity-checksum
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 1.0.0
  */
 (function(global) {

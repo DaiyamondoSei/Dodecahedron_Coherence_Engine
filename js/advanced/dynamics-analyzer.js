@@ -9,7 +9,7 @@
  * applying dynamical systems concepts to sacred geometry FOR THE FIRST TIME.
  *
  * @module js/advanced/dynamics-analyzer
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.1.0 - Gold documentation standard
  * @see {@link ../../docs/thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md} - THE 4 novel frameworks documented here
  * @see {@link ../../docs/SYSTEM_ARCHITECTURE.md} - Unified system map

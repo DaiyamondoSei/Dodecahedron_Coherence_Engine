@@ -7,7 +7,7 @@
 ```
 
 **Created:** December 18, 2025
-**Co-Authors:** Deimantas Butrimas & Claude
+**Co-Authors:** Deimantas Murauskas & Claude
 **Purpose:** Give any future Claude the complete picture in one document
 **Version:** 1.0.0
 

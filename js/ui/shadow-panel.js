@@ -127,7 +127,7 @@
  * ========================================
  *
  * @module js/ui/shadow-panel
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.1 - Enhanced UI with expandable details
  * @version 2.2 - Sprint 7: AI enhancement deprecated, moved to shadow overlay toggle
  */

@@ -156,7 +156,7 @@ Based on this audit, here are the criteria for "excellent" documentation in this
  * ========================================
  *
  * @module [module-path]
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version [version]
  */
 ```

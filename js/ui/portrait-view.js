@@ -94,7 +94,7 @@
  * ========================================
  *
  * @module js/ui/portrait-view
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 1.0.0
  */
 

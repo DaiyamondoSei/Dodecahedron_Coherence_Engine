@@ -237,5 +237,5 @@ See [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) for detailed profil
 
 **🔷 Where Sacred Geometry Meets Organizational Science 🔷**
 
-*Created by Deimantas Butrimas | Bachelor Thesis 2025*
+*Created by Deimantas Murauskas | Bachelor Thesis 2025*
 *Last updated: December 2025*

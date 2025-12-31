@@ -470,4 +470,4 @@ Result: Painful cognitive dissonance, but also deep authenticity
 
 *Created: 2025-01-16 | Updated: 2025-12-09 (PHI thresholds, Foundation Principle)*
 *Part of Quannex Mathematical Framework*
-*Co-created by: Deimantas Butrimas & Claude*
+*Co-created by: Deimantas Murauskas & Claude*

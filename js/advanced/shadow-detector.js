@@ -19,7 +19,7 @@
  * const analysis = detector.analyze(facesData, kpisData);
  * const shadows = analysis.detectedPatterns;
  *
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.1 (Normalized Output Edition)
  */
 

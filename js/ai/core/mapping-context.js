@@ -124,7 +124,7 @@
  * ========================================
  *
  * @module js/ai/core/mapping-context
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.0.0 - Sprint 2 Task 9 with comprehensive docs
  */
 

@@ -4,7 +4,7 @@
 
 **Version:** 2.0 (Browser-Compatible)
 **Date:** November 2025
-**Authors:** Deimantas Butrimas & Claude
+**Authors:** Deimantas Murauskas & Claude
 
 ---
 
@@ -1030,4 +1030,4 @@ This system represents a **complete, production-ready** implementation of sacred
 
 ---
 
-*Version 1.0 • November 2025 • Deimantas Butrimas & Claude*
+*Version 1.0 • November 2025 • Deimantas Murauskas & Claude*

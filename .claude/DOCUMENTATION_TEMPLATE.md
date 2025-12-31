@@ -45,7 +45,7 @@ Use these templates when documenting files in the Quannex codebase.
  * ========================================
  *
  * @module [module-path]
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version [X.Y]
  */
 ```

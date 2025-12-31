@@ -453,4 +453,4 @@ These templates demonstrate:
 
 *Created: 2025-12-09*
 *Part of Quannex POC Documentation*
-*Co-created by: Deimantas Butrimas & Claude*
+*Co-created by: Deimantas Murauskas & Claude*

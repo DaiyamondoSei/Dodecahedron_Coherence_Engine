@@ -17,7 +17,7 @@
  * DO NOT add code here. If you need to add functionality, create a new
  * module in js/orchestrator/ and document it in the SECTIONS below.
  *
- * @author Deimantas Butrimas & Claude
+ * @author Deimantas Murauskas & Claude
  * @version 2.0.0 (Phase 3 Modularization + Phase 5 Documentation)
  * @see {@link ../demo-orchestrator.html} - Main HTML entry point
  * @see {@link ../docs/SYSTEM_ARCHITECTURE.md} - Unified system map
