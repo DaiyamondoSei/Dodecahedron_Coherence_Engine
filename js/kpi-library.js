@@ -57,7 +57,285 @@
  */
 
 // ════════════════════════════════════════════════════════════════════════════
-// SECTION 1: ELEMENTAL EXPLANATIONS
+// SECTION 1A: OCTAVE WISDOM - THE 7 DEVELOPMENTAL STAGES
+// ════════════════════════════════════════════════════════════════════════════
+//
+// The 7 Octaves represent the developmental journey of an organization.
+// At O1, survival is everything. At O7, the organization radiates service.
+// Each octave has different KPI priorities and tolerances.
+//
+// KEY INSIGHT: An O1 organization shouldn't be judged by O7 standards.
+// The system adapts its expectations to meet organizations where they are.
+// ════════════════════════════════════════════════════════════════════════════
+
+const OCTAVE_WISDOM = {
+    O1: {
+        name: 'Survival',
+        focus: 'Existence',
+        level: 1,
+        color: '#DC143C',
+        icon: '🔴',
+        breathName: 'The Breath of Viability',
+        philosophy: 'Every step forward is a victory. We celebrate basic existence.',
+        kpiPriority: 'survival', // κ=0.618 - forgiving curve
+        tolerance: 'Maximum forgiveness - any progress is celebrated',
+        advice: 'Focus on immediate viability. Shadows are expected.',
+        questions: {
+            core: 'Are we still breathing as an organization?',
+            celebration: 'What kept us alive this week?',
+            warning: 'What threatens our basic existence?'
+        },
+        metricEmphasis: {
+            Earth: 1.5,   // Survival needs FOUNDATIONS
+            Water: 0.8,   // Flow is secondary
+            Fire: 0.6,    // Energy is conserved
+            Air: 0.5,     // Communication is minimal
+            Ether: 0.4    // Vision is luxury
+        }
+    },
+    O2: {
+        name: 'Structure',
+        focus: 'Stability',
+        level: 2,
+        color: '#FF8C00',
+        icon: '🟠',
+        breathName: 'The Breath of Efficiency',
+        philosophy: 'Building the foundation. Every system counts.',
+        kpiPriority: 'survival', // Still forgiving
+        tolerance: 'High forgiveness - foundations take time',
+        advice: 'Establish basic systems. Some chaos is normal.',
+        questions: {
+            core: 'Are our core processes reliable?',
+            celebration: 'What new system saved us time?',
+            warning: 'What process is breaking down?'
+        },
+        metricEmphasis: {
+            Earth: 1.3,   // Structure needs foundations
+            Water: 1.0,   // Flow starts to matter
+            Fire: 0.8,    // Energy building
+            Air: 0.7,     // Communication improving
+            Ether: 0.5    // Vision emerging
+        }
+    },
+    O3: {
+        name: 'Relationships',
+        focus: 'Connection',
+        level: 3,
+        color: '#FFD700',
+        icon: '🟡',
+        breathName: 'The Breath of Integrity',
+        philosophy: 'Growing the tribe. Connection is currency.',
+        kpiPriority: 'completion', // Balanced
+        tolerance: 'Moderate forgiveness - teams are forming',
+        advice: 'Invest in connections. Relationships compound.',
+        questions: {
+            core: 'Are our key relationships healthy?',
+            celebration: 'What connection deepened this week?',
+            warning: 'What relationship needs attention?'
+        },
+        metricEmphasis: {
+            Earth: 1.0,
+            Water: 1.4,   // Relationships ARE flow
+            Fire: 1.0,
+            Air: 1.2,     // Communication is relationships
+            Ether: 0.8
+        }
+    },
+    O4: {
+        name: 'Creativity',
+        focus: 'Possibility',
+        level: 4,
+        color: '#32CD32',
+        icon: '🟢',
+        breathName: 'The Breath of Possibility',
+        philosophy: 'Find your voice. Differentiation matters.',
+        kpiPriority: 'completion', // Balanced, central octave
+        tolerance: 'Balanced expectations - you are established',
+        advice: 'Express your unique value. Take creative risks.',
+        questions: {
+            core: 'Are we creating something unique?',
+            celebration: 'What did we innovate this week?',
+            warning: 'Where are we playing it too safe?'
+        },
+        metricEmphasis: {
+            Earth: 0.9,
+            Water: 1.1,
+            Fire: 1.4,    // CREATIVITY IS FIRE
+            Air: 1.1,
+            Ether: 1.0
+        }
+    },
+    O5: {
+        name: 'Expression',
+        focus: 'Clarity',
+        level: 5,
+        color: '#1E90FF',
+        icon: '🔵',
+        breathName: 'The Breath of Transparency',
+        philosophy: 'Amplify your signal. Be heard with clarity.',
+        kpiPriority: 'growth', // More demanding
+        tolerance: 'Moderate demands - coherence strengthens',
+        advice: 'Your message should be unmistakable.',
+        questions: {
+            core: 'Is our voice clear and authentic?',
+            celebration: 'Where did our message land powerfully?',
+            warning: 'Where is our signal getting lost?'
+        },
+        metricEmphasis: {
+            Earth: 0.8,
+            Water: 1.0,
+            Fire: 1.1,
+            Air: 1.5,     // Expression IS Air
+            Ether: 1.2
+        }
+    },
+    O6: {
+        name: 'Vision',
+        focus: 'Direction',
+        level: 6,
+        color: '#4B0082',
+        icon: '🟣',
+        breathName: 'The Breath of Legacy',
+        philosophy: 'Lead with foresight. See what comes next.',
+        kpiPriority: 'growth', // Demanding
+        tolerance: 'High demands - you set standards',
+        advice: 'Your vision should inspire generations.',
+        questions: {
+            core: 'Are we building for the long-term?',
+            celebration: 'What strategic insight emerged?',
+            warning: 'Are we trapped in short-term thinking?'
+        },
+        metricEmphasis: {
+            Earth: 0.7,
+            Water: 0.9,
+            Fire: 1.0,
+            Air: 1.2,
+            Ether: 1.5    // Vision IS Ether
+        }
+    },
+    O7: {
+        name: 'Radiance',
+        focus: 'Service',
+        level: 7,
+        color: '#FFFFFF',
+        icon: '⚪',
+        breathName: 'The Breath of Infinite Circulation',
+        philosophy: 'Excellence is the expectation. You ARE the standard.',
+        kpiPriority: 'growth', // Most demanding κ
+        tolerance: 'Excellence expected - full coherence matters',
+        advice: 'Your presence alone should elevate others.',
+        questions: {
+            core: 'Are we serving the greater good?',
+            celebration: 'How did we lift others this week?',
+            warning: 'Where has ego crept in?'
+        },
+        metricEmphasis: {
+            Earth: 1.0,   // All elements matter equally
+            Water: 1.0,   // at Radiance level
+            Fire: 1.0,
+            Air: 1.0,
+            Ether: 1.3    // Slight emphasis on purpose
+        }
+    }
+};
+
+// ════════════════════════════════════════════════════════════════════════════
+// SECTION 1B: BREATH AXIS QUESTIONS BY OCTAVE
+// ════════════════════════════════════════════════════════════════════════════
+//
+// The 6 Breath Axes connect opposing face pairs. Each axis has octave-specific
+// questions that reveal the health of the relationship between faces.
+// ════════════════════════════════════════════════════════════════════════════
+
+const BREATH_AXIS_WISDOM = {
+    // Axis 1: F11 (Funding Pipeline) ↔ F1 (Financial Capital)
+    'Resource Flow': {
+        projection: 'Funding Pipeline',
+        reception: 'Financial Capital',
+        octaves: {
+            O1: { exhale: 'Are we actively seeking any resources to exist?', inhale: 'Do we have enough cash to survive?', breathName: 'Viability' },
+            O2: { exhale: 'Is our funding pursuit efficient and systematic?', inhale: 'Is our capital being managed with discipline?', breathName: 'Efficiency' },
+            O3: { exhale: 'Are we building trust with values-aligned funders?', inhale: 'Is our capital use creating stakeholder trust?', breathName: 'Integrity' },
+            O4: { exhale: 'Are we seeking capital to fund bold experiments?', inhale: 'Is our capital base diverse enough for creative risks?', breathName: 'Possibility' },
+            O5: { exhale: 'Is our financial story attracting aligned capital?', inhale: 'Do our financial reports express our integrity?', breathName: 'Transparency' },
+            O6: { exhale: 'Are we seeking capital for 100-year projects?', inhale: 'Is our capital structured for generational stewardship?', breathName: 'Legacy' },
+            O7: { exhale: 'Is our very presence a magnet for sacred capital?', inhale: 'Is our capital a pure gift to the world?', breathName: 'Infinite Circulation' }
+        }
+    },
+    // Axis 2: F7 (Brand & Reputation) ↔ F2 (Intellectual Capital)
+    'Substance & Story': {
+        projection: 'Brand & Reputation',
+        reception: 'Intellectual Capital',
+        octaves: {
+            O1: { exhale: 'Do we have a basic, functional description of our idea?', inhale: 'Have we documented the core of the idea?', breathName: 'Articulation' },
+            O2: { exhale: 'Is our brand message consistent and reliable?', inhale: 'Is our IP robust and well-architected?', breathName: 'Consistency' },
+            O3: { exhale: 'Does our brand story build community and trust?', inhale: 'Is our IP being co-created with our partners?', breathName: 'Authenticity' },
+            O4: { exhale: 'Is our brand actively telling new, challenging stories?', inhale: 'Is our IP portfolio generating novel creations?', breathName: 'Genius' },
+            O5: { exhale: 'Is our brand\'s voice a beautiful and authentic work of art?', inhale: 'Is our knowledge expressed with masterful, simple elegance?', breathName: 'Beauty' },
+            O6: { exhale: 'Is our brand telling a story that can change the future?', inhale: 'Is our IP a legacy that will serve future generations?', breathName: 'Endurance' },
+            O7: { exhale: 'Is our brand an archetypal symbol for truth itself?', inhale: 'Is our knowledge a living field of planetary consciousness?', breathName: 'Revelation' }
+        }
+    },
+    // Axis 3: F8 (Core Operations) ↔ F3 (Human Capital)
+    'Being & Doing': {
+        projection: 'Core Operations',
+        reception: 'Human Capital',
+        octaves: {
+            O1: { exhale: 'Is any work getting done?', inhale: 'Does the founder have the energy to exist?', breathName: 'Sustainability' },
+            O2: { exhale: 'Is our work efficient and reliable?', inhale: 'Is our team stable and are roles clear?', breathName: 'Rhythm' },
+            O3: { exhale: 'Does our work feel collaborative and joyful?', inhale: 'Does our team feel safe and connected?', breathName: 'Belonging' },
+            O4: { exhale: 'Are we creating space for operational innovation?', inhale: 'Do our people have psychological safety to be creative?', breathName: 'Play' },
+            O5: { exhale: 'Are we transparently sharing how we work?', inhale: 'Is our culture a story worth telling?', breathName: 'Presence' },
+            O6: { exhale: 'Is our work a path to collective mastery?', inhale: 'Is our culture designed to outlive its founders?', breathName: 'Continuity' },
+            O7: { exhale: 'Is our work itself a form of meditation and service?', inhale: 'Is our collective being a source of healing for the world?', breathName: 'Oneness' }
+        }
+    },
+    // Axis 4: F4 (Structural Capital) ↔ F9 (Regenerative Flow)
+    'Form & Integrity': {
+        projection: 'Structural Capital',
+        reception: 'Regenerative Flow',
+        octaves: {
+            O1: { exhale: 'Do we have the basic legal forms to exist?', inhale: 'Are we making conscious, integrity-based choices?', breathName: 'Intention' },
+            O2: { exhale: 'Are our processes resilient and scalable?', inhale: 'Are those processes designed to reduce waste?', breathName: 'Resilience' },
+            O3: { exhale: 'Do our structures feel fair and empowering?', inhale: 'Are our relationships with stakeholders regenerative?', breathName: 'Participation' },
+            O4: { exhale: 'Does our governance allow for creative rule-breaking?', inhale: 'Is our creativity in service of regeneration?', breathName: 'Wisdom' },
+            O5: { exhale: 'Are we radically transparent about our structures?', inhale: 'Is our story of impact honest and verifiable?', breathName: 'Accountability' },
+            O6: { exhale: 'Is our governance model itself designed to evolve?', inhale: 'Are we a steward for future generations?', breathName: 'Evolution' },
+            O7: { exhale: 'Has our structure dissolved into emergent order?', inhale: 'Are we a living expression of the Earth healing itself?', breathName: 'Life Itself' }
+        }
+    },
+    // Axis 5: F5 (Market Resonance) ↔ F10 (Foundational Values)
+    'Perception & Truth': {
+        projection: 'Market Resonance',
+        reception: 'Foundational Values',
+        octaves: {
+            O1: { exhale: 'Does the market understand our basic message?', inhale: 'Are our actions grounded in our core values?', breathName: 'Clarity' },
+            O2: { exhale: 'Do customers have a reliable, stable experience?', inhale: 'Are our values embedded in our formal cultural systems?', breathName: 'Reliability' },
+            O3: { exhale: 'Are we building a loyal, trusting community?', inhale: 'Are our values lived in our daily relationships?', breathName: 'Loyalty' },
+            O4: { exhale: 'Is the market co-creating our product with us?', inhale: 'Are our values themselves a source of innovation?', breathName: 'Imagination' },
+            O5: { exhale: 'Does the market feel our authentic signal?', inhale: 'Is our public expression of values a beacon of truth?', breathName: 'Resonance' },
+            O6: { exhale: 'Is the market seeing us as a shaper of the future?', inhale: 'Are our values universal and timeless?', breathName: 'Destiny' },
+            O7: { exhale: 'Have "we" and "the market" dissolved into one field?', inhale: 'Have our values become a self-evident truth?', breathName: 'Unity' }
+        }
+    },
+    // Axis 6: F6 (Community & Partners) ↔ F12 (Risk & Resilience)
+    'Network & Fortress': {
+        projection: 'Community & Partners',
+        reception: 'Risk & Resilience',
+        octaves: {
+            O1: { exhale: 'Are we building a foundational support network?', inhale: 'Is our venture protected from single point of failure?', breathName: 'Support' },
+            O2: { exhale: 'Are our partnerships stable and well-integrated?', inhale: 'Are our core systems resilient and managed for risk?', breathName: 'Stability' },
+            O3: { exhale: 'Are our partnerships deep and mutually supportive?', inhale: 'Is our resilience built on a foundation of trust?', breathName: 'Synergy' },
+            O4: { exhale: 'Is our network a source of ecosystem-level innovation?', inhale: 'Is our innovation portfolio diverse enough to be resilient?', breathName: 'Emergence' },
+            O5: { exhale: 'Is the story of our ecosystem clear and inspiring?', inhale: 'Is our honesty about failures making us stronger?', breathName: 'Trust' },
+            O6: { exhale: 'Is our network consciously building a better future?', inhale: 'Is our vision itself resilient and able to self-correct?', breathName: 'Stewardship' },
+            O7: { exhale: 'Is our network a living prototype of a new civilization?', inhale: 'Have we mastered the art of becoming stronger from chaos?', breathName: 'Interbeing' }
+        }
+    }
+};
+
+// ════════════════════════════════════════════════════════════════════════════
+// SECTION 1C: ELEMENTAL EXPLANATIONS
 // ════════════════════════════════════════════════════════════════════════════
 
 const ELEMENTAL_WISDOM = {
@@ -673,33 +951,217 @@ function formatValueWithUnit(value, unit) {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
+// SECTION 4B: OCTAVE-AWARE HELPER FUNCTIONS
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Get octave wisdom for a specific octave level
+ * @param {string} octave - Octave identifier (O1-O7)
+ * @returns {Object} Octave wisdom object
+ */
+function getOctaveWisdom(octave) {
+    return OCTAVE_WISDOM[octave] || OCTAVE_WISDOM.O4; // Default to balanced O4
+}
+
+/**
+ * Get octave-weighted KPI suggestions
+ * At different octaves, different elements matter more.
+ * O1 (Survival) emphasizes Earth. O7 (Radiance) balances all.
+ *
+ * @param {string} faceName - The face domain name
+ * @param {string} element - The element (Earth, Water, Fire, Air, Ether)
+ * @param {string} octave - Octave level (O1-O7)
+ * @returns {Array} Array of weighted KPI suggestions
+ */
+function getOctaveKPISuggestions(faceName, element, octave = 'O4') {
+    const baseSuggestions = getKPISuggestions(faceName, element);
+    const octaveInfo = getOctaveWisdom(octave);
+
+    if (!baseSuggestions || !octaveInfo) return baseSuggestions;
+
+    // Get the element emphasis for this octave
+    const emphasis = octaveInfo.metricEmphasis[element] || 1.0;
+
+    // Enrich suggestions with octave context
+    return baseSuggestions.map(suggestion => ({
+        ...suggestion,
+        octaveRelevance: emphasis,
+        octaveAdvice: emphasis > 1.2 ? `Critical at ${octaveInfo.name} stage` :
+                      emphasis < 0.8 ? `Less urgent at ${octaveInfo.name} stage` :
+                      `Standard priority at ${octaveInfo.name} stage`,
+        recommendedMetricType: octaveInfo.kpiPriority,
+        octaveContext: {
+            name: octaveInfo.name,
+            focus: octaveInfo.focus,
+            tolerance: octaveInfo.tolerance
+        }
+    }));
+}
+
+/**
+ * Get breath axis questions for a face at a specific octave
+ * @param {string} faceName - The face name (must match BREATH_AXIS_WISDOM projections or receptions)
+ * @param {string} octave - Octave level (O1-O7)
+ * @returns {Object|null} Breath questions and context
+ */
+function getBreathAxisQuestion(faceName, octave = 'O4') {
+    for (const [axisName, axis] of Object.entries(BREATH_AXIS_WISDOM)) {
+        const octaveData = axis.octaves[octave];
+        if (!octaveData) continue;
+
+        if (axis.projection === faceName) {
+            return {
+                axis: axisName,
+                role: 'projection',
+                partner: axis.reception,
+                breathName: octaveData.breathName,
+                question: octaveData.exhale,
+                direction: 'exhale'
+            };
+        }
+        if (axis.reception === faceName) {
+            return {
+                axis: axisName,
+                role: 'reception',
+                partner: axis.projection,
+                breathName: octaveData.breathName,
+                question: octaveData.inhale,
+                direction: 'inhale'
+            };
+        }
+    }
+    return null;
+}
+
+/**
+ * Get complete breath axis wisdom for an axis at a specific octave
+ * @param {string} axisName - Name of the breath axis
+ * @param {string} octave - Octave level (O1-O7)
+ * @returns {Object|null} Complete axis wisdom
+ */
+function getBreathAxisWisdom(axisName, octave = 'O4') {
+    const axis = BREATH_AXIS_WISDOM[axisName];
+    if (!axis) return null;
+
+    const octaveData = axis.octaves[octave];
+    if (!octaveData) return null;
+
+    return {
+        axis: axisName,
+        projection: axis.projection,
+        reception: axis.reception,
+        octave,
+        breathName: octaveData.breathName,
+        exhaleQuestion: octaveData.exhale,
+        inhaleQuestion: octaveData.inhale
+    };
+}
+
+/**
+ * Get all breath axes
+ * @returns {Array} Array of breath axis names
+ */
+function getBreathAxes() {
+    return Object.keys(BREATH_AXIS_WISDOM);
+}
+
+/**
+ * Determine recommended octave-appropriate metric type
+ * Lower octaves use forgiving (survival) curves
+ * Higher octaves use demanding (growth) curves
+ *
+ * @param {string} octave - Octave level (O1-O7)
+ * @returns {string} Recommended metric type
+ */
+function getOctaveMetricType(octave) {
+    const octaveInfo = getOctaveWisdom(octave);
+    return octaveInfo?.kpiPriority || 'completion';
+}
+
+/**
+ * Get octave-specific reflection questions
+ * @param {string} octave - Octave level (O1-O7)
+ * @returns {Object} Questions for the octave
+ */
+function getOctaveQuestions(octave) {
+    const octaveInfo = getOctaveWisdom(octave);
+    return octaveInfo?.questions || {
+        core: 'How are we doing?',
+        celebration: 'What went well?',
+        warning: 'What needs attention?'
+    };
+}
+
+/**
+ * Get all octaves as an array (for iteration)
+ * @returns {Array} Array of octave objects with their keys
+ */
+function getAllOctaves() {
+    return Object.entries(OCTAVE_WISDOM).map(([key, value]) => ({
+        id: key,
+        ...value
+    }));
+}
+
+// ════════════════════════════════════════════════════════════════════════════
 // SECTION 5: MODULE EXPORTS
 // ════════════════════════════════════════════════════════════════════════════
 
 // Browser export
 window.KPILibrary = {
-    // Constants
+    // Core Constants
     ELEMENTAL_WISDOM,
     UNIT_TYPES,
     KPI_SUGGESTIONS,
 
-    // Helper functions
+    // Octave Wisdom Constants (NEW - Phase 1.5)
+    OCTAVE_WISDOM,
+    BREATH_AXIS_WISDOM,
+
+    // Core Helper functions
     getElementalWisdom,
     getKPISuggestions,
     getUnitTypes,
-    formatValueWithUnit
+    formatValueWithUnit,
+
+    // Octave-Aware Helper functions (NEW - Phase 1.5)
+    getOctaveWisdom,
+    getOctaveKPISuggestions,
+    getBreathAxisQuestion,
+    getBreathAxisWisdom,
+    getBreathAxes,
+    getOctaveMetricType,
+    getOctaveQuestions,
+    getAllOctaves
 };
 
 // CommonJS export for Node.js/testing
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
+        // Core Constants
         ELEMENTAL_WISDOM,
         UNIT_TYPES,
         KPI_SUGGESTIONS,
+
+        // Octave Wisdom Constants (NEW - Phase 1.5)
+        OCTAVE_WISDOM,
+        BREATH_AXIS_WISDOM,
+
+        // Core Helper functions
         getElementalWisdom,
         getKPISuggestions,
         getUnitTypes,
-        formatValueWithUnit
+        formatValueWithUnit,
+
+        // Octave-Aware Helper functions (NEW - Phase 1.5)
+        getOctaveWisdom,
+        getOctaveKPISuggestions,
+        getBreathAxisQuestion,
+        getBreathAxisWisdom,
+        getBreathAxes,
+        getOctaveMetricType,
+        getOctaveQuestions,
+        getAllOctaves
     };
 }
 
