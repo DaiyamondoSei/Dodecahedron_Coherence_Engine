@@ -1621,6 +1621,45 @@ window.Quannex = {
   },
 
   /**
+   * Update face energy by setting all KPIs in the face to target value
+   * @param {number} faceIndex - Index of the face (0-11)
+   * @param {number} targetEnergy - Target energy value (0-1)
+   * @returns {Object|null} Updated state or null if face not found
+   */
+  updateFaceEnergy(faceIndex, targetEnergy) {
+    const face = quannexEngine.faces[faceIndex];
+    if (!face) {
+      console.warn(`[Quannex] Face ${faceIndex} not found`);
+      return null;
+    }
+
+    // Clamp target to valid range
+    const clampedTarget = Math.max(0, Math.min(1, targetEnergy));
+
+    // Update all KPIs in this face to achieve target energy
+    // Since faceEnergy is the geometric mean, setting all to same value = that value
+    // We set the value directly (KPI.value is the raw score 0-1)
+    face.elementalKPIs.forEach(kpi => {
+      // Scale clampedTarget to KPI's actual range for proper normalization
+      kpi.value = clampedTarget * kpi.targetIdeal;
+    });
+
+    // Invalidate face cache so faceEnergy recalculates
+    face.invalidateCache();
+
+    console.log(`[Quannex] Face ${faceIndex} (${face.name}) energy → ${(clampedTarget * 100).toFixed(0)}%`);
+    return quannexEngine.getState();
+  },
+
+  /**
+   * Recalculate all coherence metrics
+   * @returns {Object} Updated state
+   */
+  recalculate() {
+    return quannexEngine.recalculate();
+  },
+
+  /**
    * Get all faces
    */
   getFaces() {

@@ -261,6 +261,164 @@
         }
 
         /* ========================================
+           STRATEGIC FOCUS SECTION
+           ======================================== */
+        .strategic-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .strategic-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .strategic-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .strategic-card-icon {
+            font-size: 28px;
+        }
+
+        .strategic-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .bab-score {
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+            margin: 16px 0;
+        }
+
+        .bab-score.balanced { color: var(--healthy); }
+        .bab-score.over-exhaling { color: var(--warning); }
+        .bab-score.over-inhaling { color: #a78bfa; }
+
+        .bab-status {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 0 auto 16px;
+            width: fit-content;
+        }
+
+        .bab-status.balanced {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--healthy);
+        }
+
+        .bab-status.over-exhaling {
+            background: rgba(255, 170, 0, 0.15);
+            color: var(--warning);
+        }
+
+        .bab-status.over-inhaling {
+            background: rgba(167, 139, 250, 0.15);
+            color: #a78bfa;
+        }
+
+        .bab-comparison {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            margin: 16px 0;
+        }
+
+        .bab-pole {
+            text-align: center;
+            flex: 1;
+        }
+
+        .bab-pole-label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .bab-pole-value {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .bab-divider {
+            font-size: 24px;
+            color: var(--text-secondary);
+            padding: 0 16px;
+        }
+
+        .bab-interpretation {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .leverage-face {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .leverage-reason {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .leverage-action {
+            background: rgba(0, 255, 204, 0.1);
+            border-left: 3px solid var(--accent);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 16px;
+        }
+
+        .leverage-impact {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .leverage-impact-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .leverage-impact-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--healthy);
+        }
+
+        @media (max-width: 768px) {
+            .strategic-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ========================================
            FACES GRID
            ======================================== */
         .face-grid {
@@ -696,6 +854,58 @@
                 </div>
             </section>
 
+            <!-- Strategic Focus Section -->
+            <section class="report-section strategic-focus">
+                <div class="section-header">
+                    <div class="section-icon">&#x1F3AF;</div>
+                    <div>
+                        <h2 class="section-title">Strategic Focus</h2>
+                        <p class="section-subtitle">Being-Action Balance and highest leverage intervention</p>
+                    </div>
+                </div>
+
+                <div class="strategic-grid">
+                    <!-- Being-Action Balance Card -->
+                    <div class="strategic-card bab-card" id="babCard">
+                        <div class="strategic-card-header">
+                            <div class="strategic-card-icon">&#x2696;</div>
+                            <div class="strategic-card-title">Being-Action Balance</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="bab-score" id="babScore">--</div>
+                            <div class="bab-status" id="babStatus">Calculating...</div>
+                        </div>
+                        <div class="bab-comparison">
+                            <div class="bab-pole">
+                                <span class="bab-pole-label">Reception (Being)</span>
+                                <span class="bab-pole-value" id="babReception">--</span>
+                            </div>
+                            <div class="bab-divider">&#x21C4;</div>
+                            <div class="bab-pole">
+                                <span class="bab-pole-label">Projection (Action)</span>
+                                <span class="bab-pole-value" id="babProjection">--</span>
+                            </div>
+                        </div>
+                        <div class="bab-interpretation" id="babInterpretation"></div>
+                    </div>
+
+                    <!-- Highest Leverage Action Card -->
+                    <div class="strategic-card leverage-card" id="leverageCard">
+                        <div class="strategic-card-header">
+                            <div class="strategic-card-icon">&#x1F4A1;</div>
+                            <div class="strategic-card-title">Highest Leverage Action</div>
+                        </div>
+                        <div class="leverage-face" id="leverageFaceName">--</div>
+                        <div class="leverage-reason" id="leverageReason"></div>
+                        <div class="leverage-action" id="leverageAction"></div>
+                        <div class="leverage-impact">
+                            <span class="leverage-impact-label">Expected Impact:</span>
+                            <span class="leverage-impact-value" id="leverageImpact">--</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Faces Section -->
             <section class="report-section">
                 <div class="section-header">
@@ -864,6 +1074,9 @@
             // Populate key insights
             populateInsights(context, faces);
 
+            // Populate strategic focus (BAB + Leverage)
+            populateStrategicFocus(context, faces);
+
             // Populate faces
             populateFaces(faces);
 
@@ -922,6 +1135,105 @@
                     </div>
                 </div>
             `;
+        }
+
+        /**
+         * Populate Strategic Focus section with BAB and Leverage cards
+         * ════════════════════════════════════════════════════════════════════════════
+         * Being-Action Balance (BAB) = avgReception / avgProjection × 100%
+         * Reception faces: [1, 2, 3, 9, 10, 12] (Being/Inhale)
+         * Projection faces: [4, 5, 6, 7, 8, 11] (Action/Exhale)
+         * Thresholds: >120% over-inhaling, <80% over-exhaling, else balanced
+         * ════════════════════════════════════════════════════════════════════════════
+         */
+        function populateStrategicFocus(context, faces) {
+            // Reception (Being) faces: indices 0, 1, 2, 8, 9, 11 (faces 1, 2, 3, 9, 10, 12)
+            const receptionIndices = [0, 1, 2, 8, 9, 11];
+            // Projection (Action) faces: indices 3, 4, 5, 6, 7, 10 (faces 4, 5, 6, 7, 8, 11)
+            const projectionIndices = [3, 4, 5, 6, 7, 10];
+
+            // Calculate average energies
+            let receptionSum = 0, projectionSum = 0;
+            receptionIndices.forEach(i => {
+                receptionSum += (faces[i]?.sentiment || 0.5);
+            });
+            projectionIndices.forEach(i => {
+                projectionSum += (faces[i]?.sentiment || 0.5);
+            });
+
+            const avgReception = receptionSum / receptionIndices.length;
+            const avgProjection = projectionSum / projectionIndices.length;
+
+            // BAB Score: Reception / Projection × 100%
+            const EPSILON = 1e-10;
+            const babScore = avgProjection > EPSILON ? (avgReception / avgProjection) : 1.0;
+            const babPercentage = Math.round(babScore * 100);
+
+            // Determine status
+            let statusClass, statusText, interpretation;
+            if (babPercentage > 120) {
+                statusClass = 'over-inhaling';
+                statusText = 'Over-Inhaling';
+                interpretation = 'The organization is receiving more than it expresses. Consider activating more output, delivery, and external engagement.';
+            } else if (babPercentage < 80) {
+                statusClass = 'over-exhaling';
+                statusText = 'Over-Exhaling';
+                interpretation = 'The organization is expressing more than it receives. Consider building internal capacity, learning, and resource accumulation.';
+            } else {
+                statusClass = 'balanced';
+                statusText = 'Balanced';
+                interpretation = 'Healthy balance between reception and projection. The organization breathes naturally.';
+            }
+
+            // Update BAB card
+            document.getElementById('babScore').textContent = babPercentage + '%';
+            document.getElementById('babScore').className = 'bab-score ' + statusClass;
+            document.getElementById('babStatus').textContent = statusText;
+            document.getElementById('babStatus').className = 'bab-status ' + statusClass;
+            document.getElementById('babReception').textContent = Math.round(avgReception * 100) + '%';
+            document.getElementById('babProjection').textContent = Math.round(avgProjection * 100) + '%';
+            document.getElementById('babInterpretation').textContent = interpretation;
+
+            // ════════════════════════════════════════════════════════════════════════════
+            // Calculate Highest Leverage Action
+            // Leverage = |deltaFromOptimal| × (1 - faceEnergy) × importance
+            // High leverage = low energy face with large gap from optimal (0.618)
+            // ════════════════════════════════════════════════════════════════════════════
+            const PHI_INVERSE = 0.618;
+            let maxLeverage = 0;
+            let leverageFace = null;
+            let leverageIndex = -1;
+
+            faces.forEach((face, index) => {
+                const energy = face.sentiment || 0.5;
+                const delta = Math.abs(energy - PHI_INVERSE);
+                const leverage = delta * (1 - energy) * 1.0; // All faces equal importance for now
+
+                if (leverage > maxLeverage) {
+                    maxLeverage = leverage;
+                    leverageFace = face;
+                    leverageIndex = index;
+                }
+            });
+
+            // Update Leverage card
+            if (leverageFace) {
+                const energy = Math.round((leverageFace.sentiment || 0.5) * 100);
+                const gap = Math.round(Math.abs(energy - 61.8));
+                const expectedImpact = Math.round(maxLeverage * 100 * 2); // Scaled for display
+
+                document.getElementById('leverageFaceName').textContent = leverageFace.name || `Face ${leverageIndex + 1}`;
+                document.getElementById('leverageReason').textContent =
+                    `Currently at ${energy}% energy, ${gap} points below optimal (61.8%). This represents the greatest opportunity for systemic improvement.`;
+                document.getElementById('leverageAction').innerHTML =
+                    `<strong>Recommended:</strong> Focus resources and attention on strengthening ${leverageFace.name || 'this domain'}. Small improvements here will ripple through connected faces.`;
+                document.getElementById('leverageImpact').textContent = `+${Math.min(expectedImpact, 15)}% coherence potential`;
+            } else {
+                document.getElementById('leverageFaceName').textContent = 'System Balanced';
+                document.getElementById('leverageReason').textContent = 'All faces are near optimal energy levels. No single high-leverage intervention identified.';
+                document.getElementById('leverageAction').innerHTML = '<strong>Recommended:</strong> Maintain current practices and monitor for emerging imbalances.';
+                document.getElementById('leverageImpact').textContent = 'Stable';
+            }
         }
 
         function populateFaces(faces) {
