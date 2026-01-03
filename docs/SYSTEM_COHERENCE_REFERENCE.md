@@ -1035,6 +1035,11 @@ This document is the **Integration** layer of the Geometry Reference family - sh
 - [js/main.js](../js/main.js) - Core DodecahedronEngine with all calculations
 - [js/spectral-analyzer.js](../js/spectral-analyzer.js) - Spectral coherence analysis
 - [js/core/Face.js](../js/core/Face.js), [Edge.js](../js/core/Edge.js), [Vertex.js](../js/core/Vertex.js) - Core geometric models
+- [js/constants/phi-harmonics.js](../js/constants/phi-harmonics.js) - PHI, ALPHA, BETA, GAMMA, DELTA and all mathematical foundations
+- [js/constants/kpi-constants.js](../js/constants/kpi-constants.js) - ELEMENTS, KPI_TYPES, KPI_LAYERS, AXIS_OPPOSITIONS
+- [js/constants/edge-constants.js](../js/constants/edge-constants.js) - EDGE_KPI_LIBRARY (30 edges), AI_EDGE_KPI_GENERATOR
+- [js/constants/vertex-constants.js](../js/constants/vertex-constants.js) - VERTEX_TRIADS (20 vertices), VERTEX_KPI_LIBRARY
+- [js/constants/consciousness-constants.js](../js/constants/consciousness-constants.js) - 213+ inquiry questions for contemplative measurement
 
 ---
 

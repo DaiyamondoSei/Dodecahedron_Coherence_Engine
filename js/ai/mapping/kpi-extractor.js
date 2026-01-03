@@ -1,24 +1,70 @@
 /**
- * ========================================
- * KPI EXTRACTOR - AI Data Extraction
- * ========================================
+ * ════════════════════════════════════════════════════════════════════════════
+ * KPI EXTRACTOR - AI DATA EXTRACTION FROM ORGANIZATIONAL NARRATIVES
+ * ════════════════════════════════════════════════════════════════════════════
  *
- * Extracts Key Performance Indicators from organizational narratives.
- * Supports both Quick (12 KPIs) and Full (60 KPIs) modes.
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │                        NOTES FOR FUTURE CLAUDE                          │
+ * └─────────────────────────────────────────────────────────────────────────┘
  *
- * Features:
- * - Automatic financial data detection
- * - Sentiment-based estimation when explicit data unavailable
- * - KPI validation and normalization
+ * KEY INSIGHT: This module EXTRACTS KPIs from narratives. It DISCOVERS.
+ * ─────────────────────────────────────────────────────────────────────────
+ * The library (kpi-library.js) SUGGESTS what to measure.
+ * The extractor (this file) DISCOVERS what's in the story.
  *
+ * These are complementary functions:
+ *   - Library: "Here are good KPIs for Financial Capital"
+ *   - Extractor: "I found revenue mentioned at $1.5M in this story"
+ *
+ * HOW EXTRACTION WORKS:
+ * ─────────────────────────────────────────────────────────────────────────
+ * 1. PATTERN MATCHING: Local regex patterns catch common metrics
+ *    (revenue, team size, runway, growth rate, customers, funding)
+ *
+ * 2. AI EXTRACTION: Gemini AI parses the full narrative for deeper insights
+ *    and maps them to the 12 dodecahedron faces
+ *
+ * 3. MERGE: Local patterns + AI insights = comprehensive KPI extraction
+ *
+ * EXTRACTION MODES:
+ * ─────────────────────────────────────────────────────────────────────────
+ *   - 'quick': 12 KPIs (1 per face) - Fast assessment
+ *   - 'full': 60 KPIs (5 per face) - Comprehensive analysis
+ *
+ * NAVIGATION MAP:
+ * ─────────────────────────────────────────────────────────────────────────
+ *   ↑ IMPORTS FROM:
+ *     • ../core/mapping-context.js → MappingContext singleton
+ *     • ../providers/index.js → AI provider (Gemini)
+ *
+ *   → CONSUMED BY:
+ *     • sprint2-init.js → Story analysis workflow
+ *     • pages/story-analyzer.html → UI for narrative input
+ *
+ *   ← RELATED TO:
+ *     • js/kpi-library.js → SUGGESTS KPIs (this file EXTRACTS)
+ *     • js/constants/kpi-constants.js → KPI_TYPES, ELEMENTS, layers
+ *     • data/CSV_Face_Models.csv → Face definitions for mapping
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * @file kpi-extractor.js - AI-powered KPI extraction from organizational stories
+ * @author Deimantas Murauskas & Claude
  * @module KPIExtractor
  * @version Sprint 2 - Task 14
+ * ════════════════════════════════════════════════════════════════════════════
  */
 
 import { MappingContext } from '../core/mapping-context.js';
 import { getProvider } from '../providers/index.js';
 
-// KPI Categories per face
+// ════════════════════════════════════════════════════════════════════════════
+// SECTION 1: KPI TEMPLATES BY FACE
+// ════════════════════════════════════════════════════════════════════════════
+// These templates define what KPIs to extract for each face.
+// quickKPIs: 1 per face (12 total) - for fast assessment
+// fullKPIs: 5 per face (60 total) - for comprehensive analysis
+// ════════════════════════════════════════════════════════════════════════════
+
 const KPI_TEMPLATES = {
     1: { // Financial Capital
         name: 'Financial Health',
@@ -82,7 +128,13 @@ const KPI_TEMPLATES = {
     }
 };
 
-// Common patterns to extract from text
+// ════════════════════════════════════════════════════════════════════════════
+// SECTION 2: TEXT EXTRACTION PATTERNS
+// ════════════════════════════════════════════════════════════════════════════
+// Regex patterns for local pattern matching (before AI extraction)
+// These catch common financial and organizational metrics from narrative text.
+// ════════════════════════════════════════════════════════════════════════════
+
 const EXTRACTION_PATTERNS = {
     revenue: /(?:revenue|sales|income|turnover)(?:\s+(?:of|is|was|:))?\s*\$?([\d,.]+)\s*(k|m|b|million|billion|thousand)?/i,
     teamSize: /(?:team|employees|staff|people|members)(?:\s+(?:of|has|have|is))?\s*(\d+)/i,
@@ -92,8 +144,17 @@ const EXTRACTION_PATTERNS = {
     funding: /(?:raised|funding|investment)(?:\s+(?:of|is))?\s*\$?([\d,.]+)\s*(k|m|million)?/i
 };
 
+// ════════════════════════════════════════════════════════════════════════════
+// SECTION 3: KPI EXTRACTOR CLASS
+// ════════════════════════════════════════════════════════════════════════════
+
 /**
  * KPIExtractor - Extracts and manages KPIs from narratives
+ *
+ * This class orchestrates:
+ * 1. Local pattern matching (fast, regex-based)
+ * 2. AI extraction (deep, context-aware)
+ * 3. Merging and validation of results
  */
 class KPIExtractor {
     constructor(options = {}) {
@@ -103,9 +164,9 @@ class KPIExtractor {
         this._financials = {};
     }
 
-    // ========================================
+    // ────────────────────────────────────────────────────────────────────────
     // INITIALIZATION
-    // ========================================
+    // ────────────────────────────────────────────────────────────────────────
 
     async init() {
         if (!this.provider) {
@@ -120,9 +181,9 @@ class KPIExtractor {
         }
     }
 
-    // ========================================
-    // KPI EXTRACTION
-    // ========================================
+    // ────────────────────────────────────────────────────────────────────────
+    // KPI EXTRACTION METHODS
+    // ────────────────────────────────────────────────────────────────────────
 
     /**
      * Extract KPIs from story text
@@ -413,13 +474,23 @@ class KPIExtractor {
     }
 }
 
-// ========================================
-// EXPORTS
-// ========================================
+// ════════════════════════════════════════════════════════════════════════════
+// SECTION 4: MODULE EXPORTS
+// ════════════════════════════════════════════════════════════════════════════
 
 export { KPIExtractor, KPI_TEMPLATES, EXTRACTION_PATTERNS };
 
-// Export for browser global
+// Browser global export for non-module contexts
 if (typeof window !== 'undefined') {
     window.KPIExtractor = KPIExtractor;
+    window.KPI_TEMPLATES = KPI_TEMPLATES;
+    window.EXTRACTION_PATTERNS = EXTRACTION_PATTERNS;
 }
+
+// ════════════════════════════════════════════════════════════════════════════
+// MODULE LOADED
+// ════════════════════════════════════════════════════════════════════════════
+console.log('🔍 KPI Extractor loaded - AI-powered narrative analysis');
+console.log('   KPI_TEMPLATES: 12 faces × quick/full modes');
+console.log('   EXTRACTION_PATTERNS: 6 financial regex patterns');
+console.log('   Remember: Library SUGGESTS, Extractor DISCOVERS');

@@ -24,6 +24,7 @@
 3. [EDGE_DYNAMICS_REFERENCE.md](EDGE_DYNAMICS_REFERENCE.md) - The 30 interfaces
 4. [VERTEX_DYNAMICS_REFERENCE.md](VERTEX_DYNAMICS_REFERENCE.md) - The 20 vortices
 5. [SYSTEM_COHERENCE_REFERENCE.md](SYSTEM_COHERENCE_REFERENCE.md) - How they dance together
+6. `js/constants/` folder - PHI-derived mathematical foundations & consciousness inquiries
 
 ### "I need to understand the whole system"
 1. [SOUL_OF_QUANNEX.md](SOUL_OF_QUANNEX.md) - Soul first, then architecture
@@ -98,6 +99,7 @@
 |----------|---------|
 | [DATA_SYSTEM_GUIDE.md](DATA_SYSTEM_GUIDE.md) | Complete data architecture - CSV, JSON, flows |
 | [DATA_FLOW_ARCHITECTURE.md](DATA_FLOW_ARCHITECTURE.md) | Data pipeline details |
+| [KPI_DATA_FLOW.md](KPI_DATA_FLOW.md) | **KPI lifecycle: Three-layer architecture (Ball, Pillar, Pentagram)** |
 | [ENHANCED_JSON_DESIGN.md](ENHANCED_JSON_DESIGN.md) | **Thesis-ready JSON format with $philosophy, $mathematics layers** |
 | [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) | Custom data connection |
 | [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) | 4 teaching examples |
@@ -133,6 +135,12 @@ These modules have **comprehensive internal documentation**. Read the source fil
 | **Edge Tension** | `js/advanced/edge-analyzer.js` | Tension formula |
 | **Vertex Vortex** | `js/advanced/vertex-analyzer.js` | Leverage points |
 | **PHI Constants** | `js/constants/phi-harmonics.js` | Sacred geometry constants (SSOT) |
+| **KPI Constants** | `js/constants/kpi-constants.js` | KPI types, elements, layers (SSOT) |
+| **Edge Constants** | `js/constants/edge-constants.js` | 30 edge KPIs, membrane model, exchange patterns |
+| **Vertex Constants** | `js/constants/vertex-constants.js` | 20 vertex archetypes, formulas, classifications |
+| **Consciousness Constants** | `js/constants/consciousness-constants.js` | 213+ inquiries, rituals, observer principle |
+| **KPI Library** | `js/kpi-library.js` | Suggestions, elemental wisdom |
+| **KPI Extractor** | `js/ai/mapping/kpi-extractor.js` | AI KPI extraction from narratives |
 | **CSV-to-JSON Converter** | `js/data-system/csv-to-json-converter.js` | Self-documenting data migration, $philosophy layers |
 
 **Why read source headers?** They contain the most current documentation, written for developers and future Claude to understand the code quickly.

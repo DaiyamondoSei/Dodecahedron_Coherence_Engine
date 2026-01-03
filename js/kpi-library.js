@@ -1,16 +1,64 @@
 /**
- * KPI Library - Smart Suggestions and Elemental Wisdom
+ * ════════════════════════════════════════════════════════════════════════════
+ * KPI LIBRARY - SMART SUGGESTIONS AND ELEMENTAL WISDOM
+ * ════════════════════════════════════════════════════════════════════════════
  *
- * Provides:
- * - KPI name suggestions based on face type
- * - Elemental explanations (Earth, Water, Fire, Air, Ether)
- * - Common unit types
- * - Default values and ranges
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │                        NOTES FOR FUTURE CLAUDE                          │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ *
+ * KEY INSIGHT: This is a SUGGESTION engine, not a definition source.
+ * ─────────────────────────────────────────────────────────────────────────
+ * The ACTUAL KPI definitions come from CSV/JSON data (data/CSV_KPI_Database.csv).
+ * This library provides contextual suggestions when users:
+ *   - Select face domains in the UI
+ *   - Choose elements for their KPIs
+ *   - Need inspiration for what to measure
+ *
+ * Think of this as a "wise advisor" that suggests, not a "database" that defines.
+ *
+ * ELEMENTAL WISDOM:
+ * ─────────────────────────────────────────────────────────────────────────
+ * Each element represents a lens through which to view any metric:
+ *   - 🌍 EARTH: Stability, resources, foundation (survival metrics)
+ *   - 💧 WATER: Flow, adaptability, growth (growth metrics)
+ *   - 🔥 FIRE: Energy, transformation, productivity (performance metrics)
+ *   - 🌬️ AIR: Communication, speed, connection (velocity metrics)
+ *   - ✨ ETHER: Vision, purpose, alignment (coherence metrics)
+ *
+ * METRIC TYPES AND CURVATURE (κ):
+ * ─────────────────────────────────────────────────────────────────────────
+ *   - 'survival' (κ=0.618): Early gains matter more - forgiving curve
+ *   - 'growth' (κ=1.618): Late gains compound - demanding curve
+ *   - 'completion' (κ=1.0): Linear progress - default
+ *
+ * NAVIGATION MAP:
+ * ─────────────────────────────────────────────────────────────────────────
+ *   ↑ IMPORTS FROM:
+ *     • js/constants/kpi-constants.js → ELEMENTS, KPI_TYPES, KPI_LAYERS
+ *     • js/constants/consciousness-constants.js → Elemental inquiries
+ *
+ *   → CONSUMED BY:
+ *     • js/ai/mapping/kpi-extractor.js → Uses suggestions for AI extraction
+ *     • UI components → KPI creation forms, element pickers
+ *     • pages/*.html → Interactive KPI configuration
+ *
+ *   ← RELATED TO:
+ *     • js/core/KPI.js → The actual KPI model (library suggests, KPI.js creates)
+ *     • data/CSV_KPI_Database.csv → The source of truth for actual KPI values
+ *     • docs/KPI_DATA_FLOW.md → Complete data flow documentation
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * @file kpi-library.js - Smart KPI Suggestions and Elemental Wisdom
+ * @author Deimantas Murauskas & Claude
+ * @description Contextual KPI suggestions based on face domains and elements.
+ *              NOT the source of truth - that's CSV/JSON data.
+ * ════════════════════════════════════════════════════════════════════════════
  */
 
-// ========================================
-// ELEMENTAL EXPLANATIONS
-// ========================================
+// ════════════════════════════════════════════════════════════════════════════
+// SECTION 1: ELEMENTAL EXPLANATIONS
+// ════════════════════════════════════════════════════════════════════════════
 
 const ELEMENTAL_WISDOM = {
     Earth: {
@@ -64,9 +112,9 @@ const ELEMENTAL_WISDOM = {
     }
 };
 
-// ========================================
-// UNIT TYPES
-// ========================================
+// ════════════════════════════════════════════════════════════════════════════
+// SECTION 2: UNIT TYPES
+// ════════════════════════════════════════════════════════════════════════════
 
 const UNIT_TYPES = [
     { value: 'number', label: 'Number', symbol: '', example: '42' },
@@ -82,9 +130,14 @@ const UNIT_TYPES = [
     { value: 'custom', label: 'Custom', symbol: '', example: 'custom' }
 ];
 
-// ========================================
-// KPI SUGGESTIONS BY FACE
-// ========================================
+// ════════════════════════════════════════════════════════════════════════════
+// SECTION 3: KPI SUGGESTIONS BY FACE
+// ════════════════════════════════════════════════════════════════════════════
+//
+// These are SUGGESTIONS, not definitions. Use them to inspire KPI creation.
+// Each face-element combination offers contextual wisdom for measurement.
+// The metricType determines the curvature (κ) applied to normalize scores.
+// ════════════════════════════════════════════════════════════════════════════
 
 const KPI_SUGGESTIONS = {
     // Standard Business Model
@@ -566,9 +619,9 @@ const KPI_SUGGESTIONS = {
     }
 };
 
-// ========================================
-// HELPER FUNCTIONS
-// ========================================
+// ════════════════════════════════════════════════════════════════════════════
+// SECTION 4: HELPER FUNCTIONS
+// ════════════════════════════════════════════════════════════════════════════
 
 /**
  * Get elemental description
@@ -619,15 +672,41 @@ function formatValueWithUnit(value, unit) {
     }
 }
 
-// Expose to window
+// ════════════════════════════════════════════════════════════════════════════
+// SECTION 5: MODULE EXPORTS
+// ════════════════════════════════════════════════════════════════════════════
+
+// Browser export
 window.KPILibrary = {
+    // Constants
     ELEMENTAL_WISDOM,
     UNIT_TYPES,
     KPI_SUGGESTIONS,
+
+    // Helper functions
     getElementalWisdom,
     getKPISuggestions,
     getUnitTypes,
     formatValueWithUnit
 };
 
-console.log('✅ KPI Library loaded - Elemental wisdom and smart suggestions available');
+// CommonJS export for Node.js/testing
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        ELEMENTAL_WISDOM,
+        UNIT_TYPES,
+        KPI_SUGGESTIONS,
+        getElementalWisdom,
+        getKPISuggestions,
+        getUnitTypes,
+        formatValueWithUnit
+    };
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// MODULE LOADED
+// ════════════════════════════════════════════════════════════════════════════
+console.log('📚 KPI Library loaded - Elemental wisdom and smart suggestions');
+console.log('   ELEMENTAL_WISDOM: 5 elements with archetypes');
+console.log('   KPI_SUGGESTIONS: Contextual suggestions by face & element');
+console.log('   Remember: This SUGGESTS, the CSV/JSON DEFINES');

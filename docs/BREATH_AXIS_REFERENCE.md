@@ -2111,6 +2111,9 @@ This document is part of the **Geometry Reference** family - four interconnected
 **Code References:**
 - [js/breath-analyzer.js](../js/breath-analyzer.js) - Breath ratio calculations
 - [js/ai/core/mapping-context.js](../js/ai/core/mapping-context.js) - Canonical topology (SSOT)
+- [js/constants/phi-harmonics.js](../js/constants/phi-harmonics.js) - PHI constants used in breath calculations
+- [js/constants/kpi-constants.js](../js/constants/kpi-constants.js) - AXIS_OPPOSITIONS (6 axis definitions)
+- [js/constants/consciousness-constants.js](../js/constants/consciousness-constants.js) - BREATH_NAMES (42 poetic names)
 
 ---
 

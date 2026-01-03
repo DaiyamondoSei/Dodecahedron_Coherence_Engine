@@ -2304,6 +2304,9 @@ This document is part of the **Geometry Reference** family - four interconnected
 **Code References:**
 - [js/core/Edge.js](../js/core/Edge.js) - Edge model and tension calculations
 - [js/advanced/edge-analyzer.js](../js/advanced/edge-analyzer.js) - Advanced edge analysis
+- [js/constants/edge-constants.js](../js/constants/edge-constants.js) - **EDGE_KPI_LIBRARY (30 edge KPIs), AI_EDGE_KPI_GENERATOR**
+- [js/constants/consciousness-constants.js](../js/constants/consciousness-constants.js) - EDGE_INTERFACE_INQUIRIES
+- [data/CSV_Edge_tension_Map.csv](../data/CSV_Edge_tension_Map.csv) - Source data for all 30 edges
 
 ---
 

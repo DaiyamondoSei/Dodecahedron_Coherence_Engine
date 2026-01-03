@@ -1500,6 +1500,8 @@ This document is part of the **Geometry Reference** family - four interconnected
 **Code References:**
 - [js/core/Vertex.js](../js/core/Vertex.js) - Vertex model and vortex calculations
 - [js/advanced/vertex-analyzer.js](../js/advanced/vertex-analyzer.js) - Advanced vertex analysis
+- [js/constants/vertex-constants.js](../js/constants/vertex-constants.js) - VERTEX_TRIADS (20 vertex definitions), VERTEX_KPI_LIBRARY, AI_VERTEX_KPI_GENERATOR
+- [js/constants/consciousness-constants.js](../js/constants/consciousness-constants.js) - VERTEX_EMERGENCE_INQUIRIES (60 triadic questions)
 
 ---
 
