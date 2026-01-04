@@ -372,16 +372,60 @@
 
         document.addEventListener('keydown', (e) => {
             // ========================================
-            // Esc - Close panel/overlays
+            // Esc - Close ALL panels/overlays
             // ========================================
             if (e.key === 'Escape') {
+                let closedSomething = false;
+
+                // Close face detail panel
                 if (typeof global.closeFaceDetail === 'function') {
-                    global.closeFaceDetail();
+                    const facePanel = document.getElementById('faceDetailPanel');
+                    if (facePanel && facePanel.classList.contains('visible')) {
+                        global.closeFaceDetail();
+                        closedSomething = true;
+                    }
                 }
-                // Also close keyboard hints overlay
+
+                // Close keyboard hints overlay
                 const hints = document.getElementById('keyboardHints');
                 if (hints && hints.classList.contains('visible')) {
                     hints.classList.remove('visible');
+                    closedSomething = true;
+                }
+
+                // Close guided tour (if active)
+                const tourOverlay = document.getElementById('tourOverlay');
+                if (tourOverlay && tourOverlay.classList.contains('active')) {
+                    if (typeof global.DodecTour?.end === 'function') {
+                        global.DodecTour.end();
+                    } else {
+                        tourOverlay.classList.remove('active');
+                    }
+                    closedSomething = true;
+                }
+
+                // Close shadow overlay (if visible)
+                const shadowOverlay = document.getElementById('shadowOverlay');
+                if (shadowOverlay && shadowOverlay.classList.contains('visible')) {
+                    shadowOverlay.classList.remove('visible');
+                    closedSomething = true;
+                }
+
+                // Close data integrity overlay (if visible)
+                if (global.IntegrityOverlay?.hide) {
+                    global.IntegrityOverlay.hide();
+                    closedSomething = true;
+                }
+
+                // Close analysis panel (if visible)
+                const analysisPanel = document.getElementById('analysisPanel');
+                if (analysisPanel && analysisPanel.classList.contains('visible')) {
+                    analysisPanel.classList.remove('visible');
+                    closedSomething = true;
+                }
+
+                if (closedSomething) {
+                    console.log('[dodec-controls] ESC: Closed overlays/panels');
                 }
             }
 
@@ -454,6 +498,8 @@
             // D - Open DNA Helix view
             // ========================================
             if (e.key === 'd' || e.key === 'D') {
+                e.preventDefault();
+                // Use relative path from /pages/ directory
                 global.open('octave-dna.html', '_blank');
             }
 

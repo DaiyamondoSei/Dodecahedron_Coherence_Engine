@@ -424,9 +424,9 @@
     font-weight: 600;
     font-size: 15px;
     color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* Allow titles to wrap for longer shadow names */
+    white-space: normal;
+    line-height: 1.3;
 }
 
 .shadow-card__severity-badge {
@@ -667,10 +667,9 @@
 
 .shadow-card__face-chip .face-name {
     color: rgba(255, 255, 255, 0.9);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 120px;
+    /* Allow face names to display fully - no truncation */
+    white-space: normal;
+    word-break: break-word;
 }
 
 .shadow-card__face-energy {

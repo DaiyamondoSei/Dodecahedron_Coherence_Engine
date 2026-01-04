@@ -1297,11 +1297,53 @@
                 }
             }
 
-            // Clear visualizations (Delegated)
+            // Clear visualizations - actually remove objects from scene
             function clearAdvancedVisualizations() {
-                // VisualizationManager doesn't have a clear method yet
-                // For now, just log - the update methods handle clearing internally
                 console.log('🧹 Clearing advanced visualizations');
+                const scene = window.scene;
+                if (!scene) return;
+
+                // Clear edge tension tubes
+                if (window.VisualizationManager && window.VisualizationManager.clearEdgeTensions) {
+                    window.VisualizationManager.clearEdgeTensions();
+                }
+
+                // Clear vertex vortex spheres
+                if (window.VisualizationManager && window.VisualizationManager.clearVertexVortices) {
+                    window.VisualizationManager.clearVertexVortices();
+                }
+
+                // Clear feedback loops
+                if (window.VisualizationManager && window.VisualizationManager.clearFeedbackLoops) {
+                    window.VisualizationManager.clearFeedbackLoops();
+                }
+
+                // Fallback: manually clear if VisualizationManager doesn't have methods
+                edgeLines.forEach(line => {
+                    if (line.parent) line.parent.remove(line);
+                    else if (scene) scene.remove(line);
+                    if (line.geometry) line.geometry.dispose();
+                    if (line.material) line.material.dispose();
+                });
+                edgeLines = [];
+
+                vertexSpheres.forEach(sphere => {
+                    if (sphere.parent) sphere.parent.remove(sphere);
+                    else if (scene) scene.remove(sphere);
+                    if (sphere.geometry) sphere.geometry.dispose();
+                    if (sphere.material) sphere.material.dispose();
+                });
+                vertexSpheres = [];
+
+                feedbackLoopLines.forEach(loop => {
+                    if (loop.parent) loop.parent.remove(loop);
+                    else if (scene) scene.remove(loop);
+                    if (loop.geometry) loop.geometry.dispose();
+                    if (loop.material) loop.material.dispose();
+                });
+                feedbackLoopLines = [];
+
+                console.log('✅ Advanced visualizations cleared');
             }
 
             // Expose functions to window for external access (dodecahedron-viz.js and switchMode)
@@ -1937,7 +1979,14 @@
                     controlsPanel.style.display = 'none';
                     analysisPanel.classList.remove('visible');
                     legend.style.display = 'none';
-                    modeSelector.style.display = 'none';
+                    // Keep mode selector visible so users can escape Minimal mode
+                    modeSelector.style.display = 'block';
+                    modeSelector.classList.add('minimal-mode-selector');
+                }
+
+                // Remove minimal-mode-selector class when not in minimal mode
+                if (mode !== 'minimal') {
+                    modeSelector.classList.remove('minimal-mode-selector');
                 }
             }
 

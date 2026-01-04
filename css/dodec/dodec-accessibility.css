@@ -42,79 +42,134 @@
 /* ════════════════════════════════════════════════════════════════════════════
    PRESENTATION MODE
    Toggle with 'P' key for thesis defense
+
+   ENHANCED for maximum impact during presentations:
+   - Hides distracting UI elements
+   - Maximizes 3D canvas visibility
+   - Larger fonts for projector readability
+   - Elegant border frame effect
    ════════════════════════════════════════════════════════════════════════════ */
 
 body.presentation-mode {
     font-size: 1.3em;
 }
 
-body.presentation-mode .controls-panel {
-    width: 340px;
+/* HIDE DISTRACTING ELEMENTS in presentation mode */
+body.presentation-mode .mode-selector,
+body.presentation-mode .controls-panel,
+body.presentation-mode .company-selector-panel,
+body.presentation-mode .company-selector,
+body.presentation-mode #companySelector,
+body.presentation-mode .legend-container,
+body.presentation-mode .page-header {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
 }
 
-body.presentation-mode .controls-panel h3 {
-    font-size: 16px;
-    letter-spacing: 3px;
+/* Keep Coherence HUD visible and prominent */
+body.presentation-mode .coherence-hud {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    padding: 20px 30px;
+    transform: scale(1.2);
+    transform-origin: top left;
+    /* Add glow effect */
+    box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
 }
 
-body.presentation-mode .control-button {
-    font-size: 14px;
-    padding: 15px 20px;
+body.presentation-mode .coherence-hud-value {
+    font-size: 48px;
 }
 
-body.presentation-mode .stats-value {
-    font-size: 20px;
-}
-
+/* Enlarged face detail panel when opened */
 body.presentation-mode .face-detail-panel {
-    width: 500px;
-    font-size: 1.1em;
+    width: 550px;
+    font-size: 1.15em;
+    /* Center it more for presentations */
+    right: 50%;
+    transform: translateX(50%);
 }
 
 body.presentation-mode .face-detail-title {
-    font-size: 26px;
+    font-size: 28px;
 }
 
 body.presentation-mode .face-energy-display {
-    font-size: 60px;
+    font-size: 72px;
 }
 
+/* Larger tooltips for readability */
 body.presentation-mode #faceTooltip,
 body.presentation-mode #edgeTooltip {
-    font-size: 14px;
-    padding: 15px 20px;
+    font-size: 16px;
+    padding: 18px 24px;
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
 }
 
-/* Presentation mode indicator */
+/* Presentation mode indicator - prominent banner */
 .presentation-indicator {
     position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0, 255, 204, 0.15);
-    border: 1px solid #00ffcc;
-    border-radius: 20px;
-    padding: 8px 20px;
-    font-size: 12px;
-    letter-spacing: 2px;
+    border: 2px solid #00ffcc;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 3px;
     color: #00ffcc;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
     pointer-events: none;
     z-index: 9999;
+    box-shadow: 0 0 30px rgba(0, 255, 204, 0.4);
+    animation: none;
 }
 
 body.presentation-mode .presentation-indicator {
     opacity: 1;
+    visibility: visible;
+    animation: presentation-glow 2s ease-in-out infinite;
 }
 
-/* Presentation mode: larger HUD */
-body.presentation-mode .coherence-hud {
-    padding: 16px 24px;
+@keyframes presentation-glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(0, 255, 204, 0.6);
+    }
 }
 
-body.presentation-mode .coherence-hud-value {
-    font-size: 42px;
+/* Add elegant frame border to canvas area */
+body.presentation-mode #canvas-container,
+body.presentation-mode .canvas-container {
+    border: 2px solid rgba(0, 255, 204, 0.3);
+    border-radius: 8px;
+    box-shadow:
+        inset 0 0 50px rgba(0, 255, 204, 0.05),
+        0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+/* HOVER TO REVEAL: Show hidden elements on hover for quick access */
+body.presentation-mode .mode-selector:hover,
+body.presentation-mode .controls-panel:hover,
+body.presentation-mode .legend-container:hover {
+    opacity: 0.9;
+    pointer-events: auto;
+}
+
+/* Smooth transition when entering/exiting */
+.mode-selector,
+.controls-panel,
+.company-selector-panel,
+.legend-container,
+.page-header {
+    transition: opacity 0.5s ease;
 }
 
 /* ════════════════════════════════════════════════════════════════════════════

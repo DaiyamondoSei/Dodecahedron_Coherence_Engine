@@ -325,6 +325,11 @@
             return;
         }
 
+        // Close any open panels first to avoid visual clutter
+        if (typeof global.closeFaceDetail === 'function') {
+            global.closeFaceDetail();
+        }
+
         console.log('🎯 Starting guided tour');
         currentStep = 0;
         el.overlay.classList.add('active');
