@@ -55,15 +55,46 @@ body.presentation-mode {
 }
 
 /* HIDE DISTRACTING ELEMENTS in presentation mode */
-body.presentation-mode .mode-selector,
-body.presentation-mode .controls-panel,
-body.presentation-mode .company-selector-panel,
-body.presentation-mode .company-selector,
-body.presentation-mode #companySelector,
-body.presentation-mode .legend-container,
+/* Using individual rules for better browser compatibility */
+body.presentation-mode .mode-selector {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.5s ease;
+}
+
+body.presentation-mode .controls-panel {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.5s ease;
+}
+
+body.presentation-mode .company-selector-panel {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.5s ease;
+}
+
+body.presentation-mode .company-selector {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.5s ease;
+}
+
+body.presentation-mode #companySelector {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.5s ease;
+}
+
+body.presentation-mode .legend-container {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.5s ease;
+}
+
 body.presentation-mode .page-header {
-    opacity: 0;
-    pointer-events: none;
+    opacity: 0 !important;
+    pointer-events: none !important;
     transition: opacity 0.5s ease;
 }
 

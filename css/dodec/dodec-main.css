@@ -93,6 +93,10 @@
 
 /* ════════════════════════════════════════════════════════════════════════════
    ACCESSIBILITY - Override styles (MUST BE LAST)
+   ════════════════════════════════════════════════════════════════════════════
+   NOTE: As of 2026-01-05, dodec-accessibility.css is loaded via direct <link>
+   tag in dodecahedron-3d.html for reliable cache-busting. The @import below
+   is commented out to avoid redundant loading.
    ════════════════════════════════════════════════════════════════════════════ */
 
-@import url("dodec-accessibility.css");
+/* @import url("dodec-accessibility.css"); */
