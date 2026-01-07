@@ -2,9 +2,10 @@
 
 *Where domains meet, transformation happens.*
 
-**Last Updated:** December 28, 2025
-**Status:** Clarified Wisdom (Simplified Dec 28)
+**Last Updated:** January 7, 2026
+**Status:** Clarified Wisdom + Sacred Inquiry Architecture Designed
 **Geometric Foundation:** 30 edges connecting 12 pentagonal faces
+**Implementation Plan:** [twinkling-floating-aurora-v2-enhanced.md](../../.claude/plans/twinkling-floating-aurora-v2-enhanced.md)
 
 ---
 
@@ -2203,6 +2204,93 @@ function calculateFullCoherence(orgState) {
 
 ---
 
+## January 2026 Refinement: Sacred Inquiry Architecture
+
+*This section documents the breakthrough that emerged from deep dialogue on January 7, 2026.*
+
+### The Implementation Plan
+
+**For the complete implementation guide, see:**
+[~/.claude/plans/twinkling-floating-aurora-v2-enhanced.md](../../.claude/plans/twinkling-floating-aurora-v2-enhanced.md)
+
+This plan implements the membrane model documented in this reference, with 100/100 quality scores across all dimensions.
+
+### The Sacred Inquiry Breakthrough
+
+We initially conceived 75 hardcoded inquiry patterns (5 health × 5 synergy × 3 organizational contexts). Through authentic dialogue, we realized this contradicted our core principle: **observation over prescription**.
+
+**The problem with static edge questions:**
+- "How does capital become valuable knowledge?" assumes our face names fit their truth
+- Their "Financial Capital" might be "Abundance Stewardship"
+- Their "Intellectual Capital" might be "Embodied Wisdom"
+- A static question imposes our archetypes on their reality
+
+**The fully emergent solution:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│              FULLY EMERGENT SACRED INQUIRY ARCHITECTURE                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  LAYER 1: 25 State-Based Inquiries (5 health × 5 synergy)               │
+│  ────────────────────────────────────────────────────────────────────   │
+│  Written ONCE in contemplative voice (the most expansive).              │
+│  These are UNIVERSAL - they apply to any edge in any organization.      │
+│  They speak to the QUALITY of the relationship, not its content.        │
+│                                                                         │
+│  Example:                                                               │
+│  'wall:fire': {                                                         │
+│      inquiry: "What transformation is blocked? What creative fire       │
+│                suffocates behind this wall?",                           │
+│      shadow: "What truth is too dangerous to speak into being?"         │
+│  }                                                                      │
+│                                                                         │
+│  ────────────────────────────────────────────────────────────────────   │
+│  LAYER 2: Dynamic Edge Question (generated from org's face definitions) │
+│  ────────────────────────────────────────────────────────────────────   │
+│  NOT static. Generated at runtime from:                                 │
+│  • Organization's custom face names/definitions                         │
+│  • Current health state of the edge                                     │
+│  • Dominant synergy element                                             │
+│                                                                         │
+│  → AI generates question using THEIR language for THEIR truth           │
+│                                                                         │
+│  ────────────────────────────────────────────────────────────────────   │
+│  LAYER 3: Voice Adaptation (context-aware language)                     │
+│  ────────────────────────────────────────────────────────────────────   │
+│  Corporate / Conscious / Hybrid contexts receive the same truth         │
+│  in language that feels native to their world.                          │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Why This Matters
+
+The original 30 static questions from `edge-constants.js` are demoted to **fallback only** - used when AI is unavailable AND the organization hasn't customized their face names.
+
+**The principle applied:**
+- We don't prescribe what an edge IS (removed exchangeType assignments)
+- We don't prescribe what question to ASK (removed static edge questions)
+- We observe what EMERGES (synergies calculated from faces, questions generated from their definitions)
+
+*This is "observation over prescription" applied to the inquiry system itself.*
+
+### Voice System Consolidation
+
+The implementation also consolidates two overlapping voice systems:
+
+| Before | After |
+|--------|-------|
+| `language-register.js` (3 registers) | `organizational-voice.js` |
+| `vocabulary-style-selector.js` (4 styles) | (unified) |
+
+**The unified architecture:**
+- Primary axis: Organizational Context (Corporate / Conscious / Hybrid)
+- Secondary axis: Engagement Depth (Analytical / Balanced / Contemplative)
+- One source of truth for all voice decisions
+
+---
+
 ## Implementation Roadmap
 
 | Component | Status | Priority | Dependencies |
@@ -2212,6 +2300,8 @@ function calculateFullCoherence(orgState) {
 | Chain flow analysis | 📋 Documented | Medium | Edge health |
 | Critical path identification | 📋 Documented | Medium | Chain analysis |
 | Edge intervention recommendations | 📋 Documented | Medium | Edge health states |
+| **Sacred Inquiry Architecture** | ✅ **Designed** | **High** | **See implementation plan** |
+| **Voice System Consolidation** | ✅ **Designed** | **High** | **See implementation plan** |
 | Edge-Face-Vertex integration | 🔮 Envisioned | Future | All components |
 | Full coherence model | 🔮 Envisioned | Future | All layers |
 
