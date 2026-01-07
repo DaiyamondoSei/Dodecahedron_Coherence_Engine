@@ -606,13 +606,23 @@
             const faceAId = parseInt(edgeId.split('-')[0]?.replace('E', '')) || 1;
             const faceBId = parseInt(edgeId.split('-')[1]) || 2;
 
-            const faceAEnergy = validateField(row[1], `${edgeId} Face A energy`, phi.PHI_2, tracking);
-            const faceBEnergy = validateField(row[2], `${edgeId} Face B energy`, phi.PHI_2, tracking);
-            const tension = validateField(row[3], `${edgeId} tension`, 0, tracking);
-            const breathRatio = validateField(row[4], `${edgeId} breath ratio`, 1.0, tracking);
-            const kpiCoherence = validateField(row[5], `${edgeId} KPI coherence`, 0, tracking);
-            const elementalNature = row[6] || 'Ether';
-            const theQuestion = row[7] || '';
+            // Phase 0.2 Fix: Correct column indices for CSV_Edge_tension_Map.csv
+            // CSV Structure (0-indexed):
+            // 0: Edge_ID, 1: Face_A_ID, 2: Face_B_ID, 3: Edge Archetype (text)
+            // 4: Face_A_Energy, 5: Face_B_Energy, 6: Edge_tension, 7: Breath Ratio
+            // 8: KPI Coherence, 9: KPI Name, 10: Metric, 11: Calculation, 12: KPI Value
+            // 13: Elemental Nature, 14: The Question
+            const edgeArchetype = row[3] || '';  // Text archetype like "Market Resonance → Regenerative Flow"
+            const faceAEnergy = validateField(row[4], `${edgeId} Face A energy`, phi.PHI_2, tracking);
+            const faceBEnergy = validateField(row[5], `${edgeId} Face B energy`, phi.PHI_2, tracking);
+            const tension = validateField(row[6], `${edgeId} tension`, 0, tracking);
+            const breathRatio = validateField(row[7], `${edgeId} breath ratio`, 1.0, tracking);
+            const kpiCoherence = validateField(row[8], `${edgeId} KPI coherence`, 0, tracking);
+            const kpiName = row[9] || '';        // Edge KPI Name
+            const kpiMetric = row[10] || '';     // How to measure
+            const kpiCalculation = row[11] || ''; // Calculation system
+            const elementalNature = row[13] || 'Ether';
+            const theQuestion = row[14] || '';
 
             if (tracking.wasSubstituted) {
                 substitutions.push({
@@ -640,7 +650,13 @@
                 philosophy: {
                     element: elementalNature,
                     question: theQuestion.replace(/^"|"$/g, ''),
-                    archetype: `The relationship between ${getFaceName(faceAId)} and ${getFaceName(faceBId)}`
+                    archetype: edgeArchetype.replace(/^"|"$/g, '') || `The relationship between ${getFaceName(faceAId)} and ${getFaceName(faceBId)}`
+                },
+
+                kpi: {
+                    name: kpiName.replace(/^"|"$/g, ''),
+                    metric: kpiMetric.replace(/^"|"$/g, ''),
+                    calculation: kpiCalculation.replace(/^"|"$/g, '')
                 },
 
                 computed: {

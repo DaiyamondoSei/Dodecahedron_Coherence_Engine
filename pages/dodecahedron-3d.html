@@ -1300,27 +1300,28 @@
             }
 
             // Clear visualizations - actually remove objects from scene
+            // Phase 0.1 Fix: Use vizManager.clearAll() as single source of truth
             function clearAdvancedVisualizations() {
                 console.log('🧹 Clearing advanced visualizations');
+
+                // PRIMARY: Use VisualizationManager's clearAll() method
+                // This properly clears the THREE.Group children that vizManager manages
+                if (window.vizManager && typeof window.vizManager.clearAll === 'function') {
+                    window.vizManager.clearAll();
+                    // Also clear local tracking arrays to stay in sync
+                    edgeLines = [];
+                    vertexSpheres = [];
+                    feedbackLoopLines = [];
+                    console.log('✅ Advanced visualizations cleared via vizManager');
+                    return;
+                }
+
+                // FALLBACK: If vizManager not initialized, clear local arrays manually
+                // (This path should rarely be hit after proper initialization)
+                console.warn('⚠️ vizManager not available, using fallback cleanup');
                 const scene = window.scene;
                 if (!scene) return;
 
-                // Clear edge tension tubes
-                if (window.VisualizationManager && window.VisualizationManager.clearEdgeTensions) {
-                    window.VisualizationManager.clearEdgeTensions();
-                }
-
-                // Clear vertex vortex spheres
-                if (window.VisualizationManager && window.VisualizationManager.clearVertexVortices) {
-                    window.VisualizationManager.clearVertexVortices();
-                }
-
-                // Clear feedback loops
-                if (window.VisualizationManager && window.VisualizationManager.clearFeedbackLoops) {
-                    window.VisualizationManager.clearFeedbackLoops();
-                }
-
-                // Fallback: manually clear if VisualizationManager doesn't have methods
                 edgeLines.forEach(line => {
                     if (line.parent) line.parent.remove(line);
                     else if (scene) scene.remove(line);
@@ -1345,7 +1346,7 @@
                 });
                 feedbackLoopLines = [];
 
-                console.log('✅ Advanced visualizations cleared');
+                console.log('✅ Advanced visualizations cleared (fallback)');
             }
 
             // Expose functions to window for external access (dodecahedron-viz.js and switchMode)

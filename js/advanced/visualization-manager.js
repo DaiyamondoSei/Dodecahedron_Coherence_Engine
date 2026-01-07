@@ -871,4 +871,49 @@ export class VisualizationManager {
         console.warn('[visualization-manager] Could not extract 20 vertex positions');
         return null;
     }
+
+    /**
+     * Clear all advanced visualizations
+     *
+     * Called when switching from Advanced/Complete to Standard/Minimal mode.
+     * Properly disposes geometries and materials to prevent memory leaks.
+     *
+     * Phase 0.1 Fix: This method is now the single source of truth for
+     * clearing visualizations. Called via window.vizManager.clearAll()
+     */
+    clearAll() {
+        console.log('🧹 [VisualizationManager] Clearing all advanced visualizations');
+
+        // Clear neon edge tubes
+        while (this.groups.neonEdges.children.length > 0) {
+            const obj = this.groups.neonEdges.children[0];
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) obj.material.dispose();
+            this.groups.neonEdges.remove(obj);
+        }
+
+        // Clear vertex spheres
+        while (this.groups.vertexSpheres.children.length > 0) {
+            const obj = this.groups.vertexSpheres.children[0];
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) obj.material.dispose();
+            this.groups.vertexSpheres.remove(obj);
+        }
+
+        // Clear feedback loop lines
+        while (this.groups.feedbackLoops.children.length > 0) {
+            const obj = this.groups.feedbackLoops.children[0];
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) obj.material.dispose();
+            this.groups.feedbackLoops.remove(obj);
+        }
+
+        // Clear cached vertex positions (force recalculation if needed)
+        this._cachedVertexPositions = null;
+
+        // Reset analysis state
+        this.currentAnalysis = null;
+
+        console.log('✅ [VisualizationManager] All visualizations cleared');
+    }
 }
