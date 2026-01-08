@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/breath-ratios.schema.json",
   "$version": "2.0.0",
-  "$generatedAt": "2025-12-26T19:49:43.428Z",
+  "$generatedAt": "2026-01-08T15:08:41.386Z",
   "$source": "CSV_BREATH_RATIOS.csv",
   "$philosophy": {
     "purpose": "Map of 6 harmonic axes - the organization's breathing pattern",

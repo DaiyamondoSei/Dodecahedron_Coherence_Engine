@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/edge-tension.schema.json",
   "$version": "2.0.0",
-  "$generatedAt": "2025-12-26T19:49:43.402Z",
+  "$generatedAt": "2026-01-08T15:08:41.370Z",
   "$source": "CSV_Edge_tension_Map.csv",
   "$philosophy": {
     "purpose": "Map of 30 connections between organizational domains",
@@ -26,220 +26,9 @@
   },
   "$integrityReport": {
     "totalRecords": 30,
-    "substitutionCount": 30,
+    "substitutionCount": 0,
     "incompleteData": null,
-    "substitutions": [
-      {
-        "field": "edges[0]",
-        "edgeId": "E5-9",
-        "original": "Market Resonance ? Regenerative Flow",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[1]",
-        "edgeId": "E5-8",
-        "original": "Market Resonance ? Core Operations",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[2]",
-        "edgeId": "E5-7",
-        "original": "Market Resonance ? Brand & Reputation",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[3]",
-        "edgeId": "E5-12",
-        "original": "Market Resonance ? Risk & Resilience",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[4]",
-        "edgeId": "E3-9",
-        "original": "Human Capital ? Regenerative Flow",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[5]",
-        "edgeId": "E8-10",
-        "original": "Core Operations ? Foundational Values",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[6]",
-        "edgeId": "E4-9",
-        "original": "Structural Capital ? Regenerative Flow",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[7]",
-        "edgeId": "E1-10",
-        "original": "Financial Capital ? Foundational Values",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[8]",
-        "edgeId": "E1-2",
-        "original": "Financial Capital ? Intellectual Capital",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[9]",
-        "edgeId": "E11-12",
-        "original": "Funding Pipeline ? Risk & Resilience",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[10]",
-        "edgeId": "E3-6",
-        "original": "Human Capital ? Community & Partners",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[11]",
-        "edgeId": "E3-4",
-        "original": "Human Capital ? Structural Capital",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[12]",
-        "edgeId": "E7-8",
-        "original": "Brand & Reputation ? Core Operations",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[13]",
-        "edgeId": "E2-10",
-        "original": "Intellectual Capital ? Foundational Values",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[14]",
-        "edgeId": "E1-6",
-        "original": "Financial Capital ? Community & Partners",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[15]",
-        "edgeId": "E4-6",
-        "original": "Structural Capital ? Community & Partners",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[16]",
-        "edgeId": "E1-8",
-        "original": "Financial Capital ? Core Operations",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[17]",
-        "edgeId": "E8-12",
-        "original": "Core Operations ? Risk & Resilience",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[18]",
-        "edgeId": "E1-7",
-        "original": "Financial Capital ? Brand & Reputation",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[19]",
-        "edgeId": "E4-7",
-        "original": "Structural Capital ? Brand & Reputation",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[20]",
-        "edgeId": "E6-7",
-        "original": "Community & Partners ? Brand & Reputation",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[21]",
-        "edgeId": "E3-11",
-        "original": "Human Capital ? Funding Pipeline",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[22]",
-        "edgeId": "E2-6",
-        "original": "Intellectual Capital ? Community & Partners",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[23]",
-        "edgeId": "E10-12",
-        "original": "Foundational Values ? Risk & Resilience",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[24]",
-        "edgeId": "E9-12",
-        "original": "Regenerative Flow ? Risk & Resilience",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[25]",
-        "edgeId": "E2-3",
-        "original": "Intellectual Capital ? Human Capital",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[26]",
-        "edgeId": "E2-11",
-        "original": "Intellectual Capital ? Funding Pipeline",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[27]",
-        "edgeId": "E10-11",
-        "original": "Foundational Values ? Funding Pipeline",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[28]",
-        "edgeId": "E9-11",
-        "original": "Regenerative Flow ? Funding Pipeline",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      },
-      {
-        "field": "edges[29]",
-        "edgeId": "E4-5",
-        "original": "Structural Capital ? Market Resonance",
-        "substitutedWith": "0",
-        "reason": "Corruption pattern detected"
-      }
-    ]
+    "substitutions": []
   },
   "edges": [
     {
@@ -247,23 +36,28 @@
       "faceA": {
         "id": 5,
         "name": "Market Resonance",
-        "energy": 0.381966
+        "energy": 0.046254
       },
       "faceB": {
         "id": 9,
         "name": "Regenerative Flow",
-        "energy": 0.381966
+        "energy": 0.438344
       },
       "philosophy": {
-        "element": "0.392090",
-        "question": "0.106",
-        "archetype": "The relationship between Market Resonance and Regenerative Flow"
+        "element": "Water (Flow)",
+        "question": "Is there a healthy flow of conversation between our market and community?",
+        "archetype": "Market Resonance ? Regenerative Flow"
+      },
+      "kpi": {
+        "name": "Market Community Engagement",
+        "metric": "A ratio of Employee Engagement Score vs. Number of Formal Policies/Rules. We want high engagement with minimal rules.",
+        "calculation": "Engagement_Score_Normalized / (1 + LOG(Number_of_Policies, 10)) <br> A sophisticated ratio where the positive impact of engagement is tempered by the complexity of bureaucracy."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.046254,
-        "kpiCoherence": 0.438344,
-        "wasSubstituted": true
+        "tension": 0.39209,
+        "breathRatio": 0.106,
+        "kpiCoherence": 0.608,
+        "wasSubstituted": false
       },
       "diagnostics": {
         "status": "critical",
@@ -275,23 +69,28 @@
       "faceA": {
         "id": 5,
         "name": "Market Resonance",
-        "energy": 0.381966
+        "energy": 0.046254
       },
       "faceB": {
         "id": 8,
         "name": "Core Operations",
-        "energy": 0.381966
+        "energy": 0.220891
       },
       "philosophy": {
-        "element": "0.174637",
-        "question": "0.209",
-        "archetype": "The relationship between Market Resonance and Core Operations"
+        "element": "Fire (Transformation)",
+        "question": "Does our market feedback transform into operational improvements?",
+        "archetype": "Market Resonance ? Core Operations"
+      },
+      "kpi": {
+        "name": "Brand-Experience Coherence",
+        "metric": "A comparison between Net Promoter Score (NPS) (a measure of brand loyalty) and Customer Satisfaction Score (CSAT) (a measure of product experience).",
+        "calculation": "= MIN(NPS_normalized, CSAT_normalized) / MAX(NPS_normalized, CSAT_normalized) <br> A ratio that is 1.0 when they are equal and trends to 0 as they diverge."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.046254,
-        "kpiCoherence": 0.220891,
-        "wasSubstituted": true
+        "tension": 0.174637,
+        "breathRatio": 0.209,
+        "kpiCoherence": 0.825,
+        "wasSubstituted": false
       },
       "diagnostics": {
         "status": "critical",
@@ -303,23 +102,28 @@
       "faceA": {
         "id": 5,
         "name": "Market Resonance",
-        "energy": 0.381966
+        "energy": 0.046254
       },
       "faceB": {
         "id": 7,
         "name": "Brand & Reputation",
-        "energy": 0.381966
+        "energy": 0.20813
       },
       "philosophy": {
-        "element": "0.161876",
-        "question": "0.222",
-        "archetype": "The relationship between Market Resonance and Brand & Reputation"
+        "element": "Ether (Purpose)",
+        "question": "Does our market resonance serve the highest purpose of our brand's truth?",
+        "archetype": "Market Resonance ? Brand & Reputation"
+      },
+      "kpi": {
+        "name": "Perception Integrity",
+        "metric": "The ratio of Short-term Engagement Metrics (e.g., social media likes/shares) vs. Long-term Trust Metrics (e.g., brand trust surveys, Net Promoter Score).",
+        "calculation": "Short_Term_Normalized / Long_Term_Normalized"
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.046254,
-        "kpiCoherence": 0.20813,
-        "wasSubstituted": true
+        "tension": 0.161876,
+        "breathRatio": 0.222,
+        "kpiCoherence": 0.838,
+        "wasSubstituted": false
       },
       "diagnostics": {
         "status": "critical",
@@ -331,23 +135,28 @@
       "faceA": {
         "id": 5,
         "name": "Market Resonance",
-        "energy": 0.381966
+        "energy": 0.046254
       },
       "faceB": {
         "id": 12,
         "name": "Risk & Resilience",
-        "energy": 0.381966
+        "energy": 0.196326
       },
       "philosophy": {
-        "element": "0.150073",
-        "question": "0.236",
-        "archetype": "The relationship between Market Resonance and Risk & Resilience"
+        "element": "Water (Flow)",
+        "question": "Is our brand a source of resilient, trust-based flow during a crisis?",
+        "archetype": "Market Resonance ? Risk & Resilience"
+      },
+      "kpi": {
+        "name": "Reputational Resilience",
+        "metric": "A qualitative score (1-5) derived from a \"crisis simulation\" or a wargaming exercise. How quickly and coherently can the team respond to a hypothetical PR crisis?",
+        "calculation": "= (Value - 1) / (5 - 1) <br> A normalized score of the team's simulated performance."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.046254,
-        "kpiCoherence": 0.196326,
-        "wasSubstituted": true
+        "tension": 0.150073,
+        "breathRatio": 0.236,
+        "kpiCoherence": 0.85,
+        "wasSubstituted": false
       },
       "diagnostics": {
         "status": "critical",
@@ -359,23 +168,28 @@
       "faceA": {
         "id": 3,
         "name": "Human Capital",
-        "energy": 0.381966
+        "energy": 0.165592
       },
       "faceB": {
         "id": 9,
         "name": "Regenerative Flow",
-        "energy": 0.381966
+        "energy": 0.438344
       },
       "philosophy": {
-        "element": "0.272752",
-        "question": "0.378",
-        "archetype": "The relationship between Human Capital and Regenerative Flow"
+        "element": "Ether (Purpose)",
+        "question": "How does our humanity serve and express our highest values?",
+        "archetype": "Human Capital ? Regenerative Flow"
+      },
+      "kpi": {
+        "name": "Cultural Integrity",
+        "metric": "A simple, anonymous team poll (even with just 2-3 people). \"On a scale of 1-10, how well did we live our values this week?\" The KPI is the average score.",
+        "calculation": "= (Value - 1) / (10 - 1)"
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.165592,
-        "kpiCoherence": 0.438344,
-        "wasSubstituted": true
+        "tension": 0.272752,
+        "breathRatio": 0.378,
+        "kpiCoherence": 0.727,
+        "wasSubstituted": false
       },
       "diagnostics": {
         "status": "critical",
@@ -387,26 +201,31 @@
       "faceA": {
         "id": 8,
         "name": "Core Operations",
-        "energy": 0.381966
+        "energy": 0.220891
       },
       "faceB": {
         "id": 10,
         "name": "Foundational Values",
-        "energy": 0.381966
+        "energy": 0.416284
       },
       "philosophy": {
-        "element": "0.195393",
-        "question": "0.531",
-        "archetype": "The relationship between Core Operations and Foundational Values"
+        "element": "Water (Flow)",
+        "question": "Is there a healthy flow of regenerative practice within our operations?",
+        "archetype": "Core Operations ? Foundational Values"
+      },
+      "kpi": {
+        "name": "Process Regeneration Rate",
+        "metric": "A checklist-based score. List the top 5 core processes. The KPI is the percentage of those processes that have a documented regenerative practice embedded within them (e.g., using green hosting, ethical sourcing, circular design principles).",
+        "calculation": "= Value / 100 <br> A simple percentage of process integrity."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.220891,
-        "kpiCoherence": 0.416284,
-        "wasSubstituted": true
+        "tension": 0.195393,
+        "breathRatio": 0.531,
+        "kpiCoherence": 0.805,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
+        "status": "moderate",
         "interpretation": "Projecting more than receiving in this connection"
       }
     },
@@ -415,26 +234,31 @@
       "faceA": {
         "id": 4,
         "name": "Structural Capital",
-        "energy": 0.381966
+        "energy": 0.244788
       },
       "faceB": {
         "id": 9,
         "name": "Regenerative Flow",
-        "energy": 0.381966
+        "energy": 0.438344
       },
       "philosophy": {
-        "element": "0.193555",
-        "question": "0.558",
-        "archetype": "The relationship between Structural Capital and Regenerative Flow"
+        "element": "Fire (Transformation)",
+        "question": "Can our structure transform to meet the needs of due diligence?",
+        "archetype": "Structural Capital ? Regenerative Flow"
+      },
+      "kpi": {
+        "name": "Investor Readiness Score",
+        "metric": "A checklist-based score (0-100%). (Legal Entity Formalized? +20, Founder Agreement in Place? +20, Financial Projections Built? +30, etc.)",
+        "calculation": "= Value / 100 <br> A simple percentage of readiness."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.244788,
-        "kpiCoherence": 0.438344,
-        "wasSubstituted": true
+        "tension": 0.193555,
+        "breathRatio": 0.558,
+        "kpiCoherence": 0.806,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
+        "status": "moderate",
         "interpretation": "Projecting more than receiving in this connection"
       }
     },
@@ -443,26 +267,31 @@
       "faceA": {
         "id": 1,
         "name": "Financial Capital",
-        "energy": 0.381966
+        "energy": 0.239612
       },
       "faceB": {
         "id": 10,
         "name": "Foundational Values",
-        "energy": 0.381966
+        "energy": 0.416284
       },
       "philosophy": {
-        "element": "0.176672",
-        "question": "0.576",
-        "archetype": "The relationship between Financial Capital and Foundational Values"
+        "element": "Ether (Purpose)",
+        "question": "How does our capital serve the highest purpose of regeneration?",
+        "archetype": "Financial Capital ? Foundational Values"
+      },
+      "kpi": {
+        "name": "Regenerative Capital Allocation",
+        "metric": "The ratio of Budget Allocated to Regenerative Projects vs. Total Operating Budget.",
+        "calculation": "= Regenerative_Budget / Total_Op_Budget <br> A simple, powerful percentage."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.239612,
-        "kpiCoherence": 0.416284,
-        "wasSubstituted": true
+        "tension": 0.176672,
+        "breathRatio": 0.576,
+        "kpiCoherence": 0.823,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
+        "status": "moderate",
         "interpretation": "Projecting more than receiving in this connection"
       }
     },
@@ -471,26 +300,31 @@
       "faceA": {
         "id": 1,
         "name": "Financial Capital",
-        "energy": 0.381966
+        "energy": 0.239612
       },
       "faceB": {
         "id": 2,
         "name": "Intellectual Capital",
-        "energy": 0.381966
+        "energy": 0.400864
       },
       "philosophy": {
-        "element": "0.161251",
-        "question": "0.598",
-        "archetype": "The relationship between Financial Capital and Intellectual Capital"
+        "element": "Fire (Transformation)",
+        "question": "How does our capital transform into valuable knowledge?",
+        "archetype": "Financial Capital ? Intellectual Capital"
+      },
+      "kpi": {
+        "name": "IP Monetization Potential",
+        "metric": "A qualitative score (1-10) based on an assessment of the IP's market relevance, defensibility, and potential revenue models.",
+        "calculation": "= (Value - 1) / (10 - 1)"
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.239612,
-        "kpiCoherence": 0.400864,
-        "wasSubstituted": true
+        "tension": 0.161251,
+        "breathRatio": 0.598,
+        "kpiCoherence": 0.839,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
+        "status": "moderate",
         "interpretation": "Projecting more than receiving in this connection"
       }
     },
@@ -499,26 +333,31 @@
       "faceA": {
         "id": 11,
         "name": "Funding Pipeline",
-        "energy": 0.381966
+        "energy": 0.123435
       },
       "faceB": {
         "id": 12,
         "name": "Risk & Resilience",
-        "energy": 0.381966
+        "energy": 0.196326
       },
       "philosophy": {
-        "element": "0.072891",
-        "question": "0.629",
-        "archetype": "The relationship between Funding Pipeline and Risk & Resilience"
+        "element": "Water (Flow)",
+        "question": "Does a healthy funding pipeline create a flow of resilience?",
+        "archetype": "Funding Pipeline ? Risk & Resilience"
+      },
+      "kpi": {
+        "name": "Funding Diversification Index",
+        "metric": "Calculated using the Herfindahl-Hirschman Index (HHI) on the potential funding sources in the pipeline. ? (% share of each source)�. A score near 1 = high concentration; a score near 0 = high diversification. Lower is better.",
+        "calculation": "= 1 - HHI_Score <br> Inverted to be a 0-1 coherence score."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.123435,
-        "kpiCoherence": 0.196326,
-        "wasSubstituted": true
+        "tension": 0.072891,
+        "breathRatio": 0.629,
+        "kpiCoherence": 0.927,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
+        "status": "moderate",
         "interpretation": "Projecting more than receiving in this connection"
       }
     },
@@ -527,26 +366,31 @@
       "faceA": {
         "id": 3,
         "name": "Human Capital",
-        "energy": 0.381966
+        "energy": 0.165592
       },
       "faceB": {
         "id": 6,
         "name": "Community & Partners",
-        "energy": 0.381966
+        "energy": 0.246899
       },
       "philosophy": {
-        "element": "0.081307",
-        "question": "0.671",
-        "archetype": "The relationship between Human Capital and Community & Partners"
+        "element": "Water (Flow)",
+        "question": "What is the emotional flow and quality of our human relationships?",
+        "archetype": "Human Capital ? Community & Partners"
+      },
+      "kpi": {
+        "name": "Ecosystem Co-creation Rate",
+        "metric": "The ratio of Hours spent in co-creative sessions with partners vs. Total internal project hours.",
+        "calculation": "Co-creative_Hours / Total_Hours"
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.165592,
-        "kpiCoherence": 0.246899,
-        "wasSubstituted": true
+        "tension": 0.081307,
+        "breathRatio": 0.671,
+        "kpiCoherence": 0.919,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
+        "status": "moderate",
         "interpretation": "Projecting more than receiving in this connection"
       }
     },
@@ -555,26 +399,31 @@
       "faceA": {
         "id": 3,
         "name": "Human Capital",
-        "energy": 0.381966
+        "energy": 0.165592
       },
       "faceB": {
         "id": 4,
         "name": "Structural Capital",
-        "energy": 0.381966
+        "energy": 0.244788
       },
       "philosophy": {
-        "element": "0.079197",
-        "question": "0.676",
-        "archetype": "The relationship between Human Capital and Structural Capital"
+        "element": "Earth (Grounding)",
+        "question": "How is our human energy grounded and supported by our structures?",
+        "archetype": "Human Capital ? Structural Capital"
+      },
+      "kpi": {
+        "name": "Embodied Governance",
+        "metric": "A ratio of Employee Engagement Score vs. Number of Formal Policies/Rules. We want high engagement with minimal rules.",
+        "calculation": "Engagement_Score_Normalized / (1 + LOG(Number_of_Policies, 10)) <br> A sophisticated ratio where the positive impact of engagement is tempered by the complexity of bureaucracy."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.165592,
-        "kpiCoherence": 0.244788,
-        "wasSubstituted": true
+        "tension": 0.079197,
+        "breathRatio": 0.676,
+        "kpiCoherence": 0.921,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
+        "status": "moderate",
         "interpretation": "Projecting more than receiving in this connection"
       }
     },
@@ -583,27 +432,32 @@
       "faceA": {
         "id": 7,
         "name": "Brand & Reputation",
-        "energy": 0.381966
+        "energy": 0.20813
       },
       "faceB": {
         "id": 8,
         "name": "Core Operations",
-        "energy": 0.381966
+        "energy": 0.220891
       },
       "philosophy": {
-        "element": "0.012761",
-        "question": "0.942",
-        "archetype": "The relationship between Brand & Reputation and Core Operations"
+        "element": "Fire (Transformation)",
+        "question": "Does our brand promise transform into operational excellence?",
+        "archetype": "Brand & Reputation ? Core Operations"
+      },
+      "kpi": {
+        "name": "Brand-Operational Integrity",
+        "metric": "A ratio comparing an external brand metric with an internal quality metric. E.g., Brand Trust Score from a stakeholder survey vs. (1 - Internal Defect/Error Rate)",
+        "calculation": "= MIN(Brand_Score_Norm, Quality_Score_Norm) / MAX(Brand_Score_Norm, Quality_Score_Norm) <br> A ratio that is 1.0 when perfectly aligned and trends to 0 as they diverge."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.20813,
-        "kpiCoherence": 0.220891,
-        "wasSubstituted": true
+        "tension": 0.012761,
+        "breathRatio": 0.942,
+        "kpiCoherence": 0.987,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "status": "harmonious",
+        "interpretation": "Near-perfect balance between giving and receiving"
       }
     },
     {
@@ -611,27 +465,32 @@
       "faceA": {
         "id": 2,
         "name": "Intellectual Capital",
-        "energy": 0.381966
+        "energy": 0.400864
       },
       "faceB": {
         "id": 10,
         "name": "Foundational Values",
-        "energy": 0.381966
+        "energy": 0.416284
       },
       "philosophy": {
-        "element": "0.015420",
-        "question": "0.963",
-        "archetype": "The relationship between Intellectual Capital and Foundational Values"
+        "element": "Earth (Grounding)",
+        "question": "Is our knowledge grounded in and aligned with our core values?",
+        "archetype": "Intellectual Capital ? Foundational Values"
+      },
+      "kpi": {
+        "name": "Ethical IP Score",
+        "metric": "A qualitative score (1-5) from an internal \"ethics review\" of the IP. Does it promote regeneration? Does it respect privacy? Is it honest?",
+        "calculation": "= (Value - 1) / (5 - 1)"
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.400864,
-        "kpiCoherence": 0.416284,
-        "wasSubstituted": true
+        "tension": 0.01542,
+        "breathRatio": 0.963,
+        "kpiCoherence": 0.985,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "status": "harmonious",
+        "interpretation": "Near-perfect balance between giving and receiving"
       }
     },
     {
@@ -639,27 +498,32 @@
       "faceA": {
         "id": 1,
         "name": "Financial Capital",
-        "energy": 0.381966
+        "energy": 0.239612
       },
       "faceB": {
         "id": 6,
         "name": "Community & Partners",
-        "energy": 0.381966
+        "energy": 0.246899
       },
       "philosophy": {
-        "element": "0.007287",
-        "question": "0.970",
-        "archetype": "The relationship between Financial Capital and Community & Partners"
+        "element": "Water (Flow)",
+        "question": "How does capital flow to and from our community in a healthy way?",
+        "archetype": "Financial Capital ? Community & Partners"
+      },
+      "kpi": {
+        "name": "Community Investment Ratio",
+        "metric": "The ratio of Value returned to community (e.g., local sourcing spend, donations) vs. Value extracted from community (e.g., revenue from that community).",
+        "calculation": "Value_Returned / Value_Extracted"
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.239612,
-        "kpiCoherence": 0.246899,
-        "wasSubstituted": true
+        "tension": 0.007287,
+        "breathRatio": 0.97,
+        "kpiCoherence": 0.993,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "status": "harmonious",
+        "interpretation": "Near-perfect balance between giving and receiving"
       }
     },
     {
@@ -667,27 +531,32 @@
       "faceA": {
         "id": 4,
         "name": "Structural Capital",
-        "energy": 0.381966
+        "energy": 0.244788
       },
       "faceB": {
         "id": 6,
         "name": "Community & Partners",
-        "energy": 0.381966
+        "energy": 0.246899
       },
       "philosophy": {
-        "element": "0.002111",
-        "question": "0.991",
-        "archetype": "The relationship between Structural Capital and Community & Partners"
+        "element": "Earth (Grounding)",
+        "question": "Are our partnerships grounded in clear, stable, formal agreements?",
+        "archetype": "Structural Capital ? Community & Partners"
+      },
+      "kpi": {
+        "name": "Partnership Onboarding Friction",
+        "metric": "The average number of days from \"handshake agreement\" to a fully signed, operational partnership agreement. This is a KPI where lower is better.",
+        "calculation": "= 1 - (Value / Max_Days_Target) <br> e.g., if target is 30 days, 1 - (Days / 30). Inverted to be a 0-1 coherence score."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.244788,
-        "kpiCoherence": 0.246899,
-        "wasSubstituted": true
+        "tension": 0.002111,
+        "breathRatio": 0.991,
+        "kpiCoherence": 0.998,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "status": "harmonious",
+        "interpretation": "Near-perfect balance between giving and receiving"
       }
     },
     {
@@ -695,27 +564,32 @@
       "faceA": {
         "id": 1,
         "name": "Financial Capital",
-        "energy": 0.381966
+        "energy": 0.239612
       },
       "faceB": {
         "id": 8,
         "name": "Core Operations",
-        "energy": 0.381966
+        "energy": 0.220891
       },
       "philosophy": {
-        "element": "0.018721",
-        "question": "1.085",
-        "archetype": "The relationship between Financial Capital and Core Operations"
+        "element": "Earth (Grounding)",
+        "question": "How is our capital grounded in real, tangible operational work?",
+        "archetype": "Financial Capital ? Core Operations"
+      },
+      "kpi": {
+        "name": "Operational ROI",
+        "metric": "The ratio of Operational Output (e.g., units of IP created) to the Operational Budget Spent.",
+        "calculation": "= Output / Budget"
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.239612,
-        "kpiCoherence": 0.220891,
-        "wasSubstituted": true
+        "tension": 0.018721,
+        "breathRatio": 1.085,
+        "kpiCoherence": 0.981,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "status": "harmonious",
+        "interpretation": "Near-perfect balance between giving and receiving"
       }
     },
     {
@@ -723,27 +597,32 @@
       "faceA": {
         "id": 8,
         "name": "Core Operations",
-        "energy": 0.381966
+        "energy": 0.220891
       },
       "faceB": {
         "id": 12,
         "name": "Risk & Resilience",
-        "energy": 0.381966
+        "energy": 0.196326
       },
       "philosophy": {
-        "element": "0.024565",
-        "question": "1.125",
-        "archetype": "The relationship between Core Operations and Risk & Resilience"
+        "element": "Air (Communication)",
+        "question": "Does operational clarity inform and reduce systemic risk?",
+        "archetype": "Core Operations ? Risk & Resilience"
+      },
+      "kpi": {
+        "name": "Operational Resilience",
+        "metric": "The Mean Time To Recover (MTTR) from a simulated or real system failure (e.g., website down, key software fails). Lower is better.",
+        "calculation": "= 1 - (MTTR_hours / Max_Acceptable_Downtime_hours) <br> Inverted to be a 0-1 coherence score."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.220891,
-        "kpiCoherence": 0.196326,
-        "wasSubstituted": true
+        "tension": 0.024565,
+        "breathRatio": 1.125,
+        "kpiCoherence": 0.975,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "status": "harmonious",
+        "interpretation": "Near-perfect balance between giving and receiving"
       }
     },
     {
@@ -751,27 +630,32 @@
       "faceA": {
         "id": 1,
         "name": "Financial Capital",
-        "energy": 0.381966
+        "energy": 0.239612
       },
       "faceB": {
         "id": 7,
         "name": "Brand & Reputation",
-        "energy": 0.381966
+        "energy": 0.20813
       },
       "philosophy": {
-        "element": "0.031482",
-        "question": "1.151",
-        "archetype": "The relationship between Financial Capital and Brand & Reputation"
+        "element": "Air (Communication)",
+        "question": "How do we communicate our financial value and story?",
+        "archetype": "Financial Capital ? Brand & Reputation"
+      },
+      "kpi": {
+        "name": "Resonance ROI",
+        "metric": "The ratio of a Brand Awareness Metric (e.g., website visitors, social media impressions) to the Marketing & Comms Budget.",
+        "calculation": "(Awareness_Metric / Budget) / Target_Ratio <br> Normalized against a benchmark to get a 0-1 score."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.239612,
-        "kpiCoherence": 0.20813,
-        "wasSubstituted": true
+        "tension": 0.031482,
+        "breathRatio": 1.151,
+        "kpiCoherence": 0.969,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "status": "harmonious",
+        "interpretation": "Near-perfect balance between giving and receiving"
       }
     },
     {
@@ -779,27 +663,32 @@
       "faceA": {
         "id": 4,
         "name": "Structural Capital",
-        "energy": 0.381966
+        "energy": 0.244788
       },
       "faceB": {
         "id": 7,
         "name": "Brand & Reputation",
-        "energy": 0.381966
+        "energy": 0.20813
       },
       "philosophy": {
-        "element": "0.036658",
-        "question": "1.176",
-        "archetype": "The relationship between Structural Capital and Brand & Reputation"
+        "element": "Ether (Purpose)",
+        "question": "Does our structure embody the highest integrity of our brand?",
+        "archetype": "Structural Capital ? Brand & Reputation"
+      },
+      "kpi": {
+        "name": "Reputational Integrity",
+        "metric": "A qualitative score (1-5) from an external ethics audit or a public perception survey. Do stakeholders perceive our governance and structure as fair, transparent, and aligned with our brand?",
+        "calculation": "= (Value - 1) / (5 - 1) <br> Simple normalization of the survey/audit score."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.244788,
-        "kpiCoherence": 0.20813,
-        "wasSubstituted": true
+        "tension": 0.036658,
+        "breathRatio": 1.176,
+        "kpiCoherence": 0.963,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "status": "harmonious",
+        "interpretation": "Near-perfect balance between giving and receiving"
       }
     },
     {
@@ -807,27 +696,32 @@
       "faceA": {
         "id": 6,
         "name": "Community & Partners",
-        "energy": 0.381966
+        "energy": 0.246899
       },
       "faceB": {
         "id": 7,
         "name": "Brand & Reputation",
-        "energy": 0.381966
+        "energy": 0.20813
       },
       "philosophy": {
-        "element": "0.038769",
-        "question": "1.186",
-        "archetype": "The relationship between Community & Partners and Brand & Reputation"
+        "element": "Air (Communication)",
+        "question": "Do we clearly communicate our brand's power to potential funders?",
+        "archetype": "Community & Partners ? Brand & Reputation"
+      },
+      "kpi": {
+        "name": "Brand Capitalization Score",
+        "metric": "A qualitative score (1-10) from investor/funder feedback. \"How much did our brand's clarity and reputation influence your interest?\" The KPI is the average score.",
+        "calculation": "= (Value - 1) / (10 - 1)"
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.246899,
-        "kpiCoherence": 0.20813,
-        "wasSubstituted": true
+        "tension": 0.038769,
+        "breathRatio": 1.186,
+        "kpiCoherence": 0.961,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "status": "harmonious",
+        "interpretation": "Near-perfect balance between giving and receiving"
       }
     },
     {
@@ -835,27 +729,32 @@
       "faceA": {
         "id": 3,
         "name": "Human Capital",
-        "energy": 0.381966
+        "energy": 0.165592
       },
       "faceB": {
         "id": 11,
         "name": "Funding Pipeline",
-        "energy": 0.381966
+        "energy": 0.123435
       },
       "philosophy": {
-        "element": "0.042157",
-        "question": "1.342",
-        "archetype": "The relationship between Human Capital and Funding Pipeline"
+        "element": "Fire (Transformation)",
+        "question": "How does our human passion transform into the energy that attracts resources?",
+        "archetype": "Human Capital ? Funding Pipeline"
+      },
+      "kpi": {
+        "name": "Founder-Funder Resonance",
+        "metric": "A qualitative score (1-10) assessing the alignment and quality of relationships within the funding pipeline. \"How much genuine trust and shared-values resonance exists with our top funding prospects?",
+        "calculation": "= (Value - 1) / (10 - 1)"
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.165592,
-        "kpiCoherence": 0.123435,
-        "wasSubstituted": true
+        "tension": 0.042157,
+        "breathRatio": 1.342,
+        "kpiCoherence": 0.958,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "status": "moderate",
+        "interpretation": "Receiving more than projecting in this connection"
       }
     },
     {
@@ -863,27 +762,32 @@
       "faceA": {
         "id": 2,
         "name": "Intellectual Capital",
-        "energy": 0.381966
+        "energy": 0.400864
       },
       "faceB": {
         "id": 6,
         "name": "Community & Partners",
-        "energy": 0.381966
+        "energy": 0.246899
       },
       "philosophy": {
-        "element": "0.153964",
-        "question": "1.624",
-        "archetype": "The relationship between Intellectual Capital and Community & Partners"
+        "element": "Water (Flow)",
+        "question": "How does our knowledge flow to our community? (Teaching)",
+        "archetype": "Intellectual Capital ? Community & Partners"
+      },
+      "kpi": {
+        "name": "Ecosystem Knowledge Flow",
+        "metric": "A qualitative score (1-5) based on the frequency and depth of collaborative sessions, feedback loops, and co-creative workshops with partners.",
+        "calculation": "= (Value - 1) / (5 - 1)"
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.400864,
-        "kpiCoherence": 0.246899,
-        "wasSubstituted": true
+        "tension": 0.153964,
+        "breathRatio": 1.624,
+        "kpiCoherence": 0.846,
+        "wasSubstituted": false
       },
       "diagnostics": {
-        "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "status": "moderate",
+        "interpretation": "Receiving more than projecting in this connection"
       }
     },
     {
@@ -891,27 +795,32 @@
       "faceA": {
         "id": 10,
         "name": "Foundational Values",
-        "energy": 0.381966
+        "energy": 0.416284
       },
       "faceB": {
         "id": 12,
         "name": "Risk & Resilience",
-        "energy": 0.381966
+        "energy": 0.196326
       },
       "philosophy": {
-        "element": "0.219958",
-        "question": "2.120",
-        "archetype": "The relationship between Foundational Values and Risk & Resilience"
+        "element": "Fire (Transformation)",
+        "question": "Do our values transform into resilience during a crisis?",
+        "archetype": "Foundational Values ? Risk & Resilience"
+      },
+      "kpi": {
+        "name": "Ethical Resilience",
+        "metric": "A score from a \"crisis scenario\" exercise. Faced with a difficult choice (e.g., take misaligned funding or face collapse), does the team adhere to its values? Scored 1-5.",
+        "calculation": "= (Value - 1) / (5 - 1)"
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.416284,
-        "kpiCoherence": 0.196326,
-        "wasSubstituted": true
+        "tension": 0.219958,
+        "breathRatio": 2.12,
+        "kpiCoherence": 0.78,
+        "wasSubstituted": false
       },
       "diagnostics": {
         "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "interpretation": "Receiving more than projecting in this connection"
       }
     },
     {
@@ -919,27 +828,32 @@
       "faceA": {
         "id": 9,
         "name": "Regenerative Flow",
-        "energy": 0.381966
+        "energy": 0.438344
       },
       "faceB": {
         "id": 12,
         "name": "Risk & Resilience",
-        "energy": 0.381966
+        "energy": 0.196326
       },
       "philosophy": {
-        "element": "0.242017",
-        "question": "2.233",
-        "archetype": "The relationship between Regenerative Flow and Risk & Resilience"
+        "element": "Fire (Transformation)",
+        "question": "Does our regenerative practice transform into greater systemic resilience?",
+        "archetype": "Regenerative Flow ? Risk & Resilience"
+      },
+      "kpi": {
+        "name": "Regenerative Resilience",
+        "metric": "A qualitative score (1-5) from a \"resilience wargame.\" \"If a primary supplier collapses, to what degree does our commitment to local/circular/regenerative alternatives insulate us from the shock?",
+        "calculation": "= (Value - 1) / (5 - 1) <br> A normalized score of the system's simulated resilience."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.438344,
-        "kpiCoherence": 0.196326,
-        "wasSubstituted": true
+        "tension": 0.242017,
+        "breathRatio": 2.233,
+        "kpiCoherence": 0.758,
+        "wasSubstituted": false
       },
       "diagnostics": {
         "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "interpretation": "Receiving more than projecting in this connection"
       }
     },
     {
@@ -947,27 +861,32 @@
       "faceA": {
         "id": 2,
         "name": "Intellectual Capital",
-        "energy": 0.381966
+        "energy": 0.400864
       },
       "faceB": {
         "id": 3,
         "name": "Human Capital",
-        "energy": 0.381966
+        "energy": 0.165592
       },
       "philosophy": {
-        "element": "0.235272",
-        "question": "2.421",
-        "archetype": "The relationship between Intellectual Capital and Human Capital"
+        "element": "Air (Communication)",
+        "question": "How do our people's minds connect to create shared knowledge?",
+        "archetype": "Intellectual Capital ? Human Capital"
+      },
+      "kpi": {
+        "name": "Vision Embodiment Rate",
+        "metric": "The ratio of Tangible IP Created (e.g., pages of thesis written, code modules completed) vs. Hours of Founder's Work Logged.",
+        "calculation": "IP_Units_Created / Hours_Worked <br> A direct measure of the \"Vision-to-IP Conversion Rate\" that we identified as a key blockage."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.400864,
-        "kpiCoherence": 0.165592,
-        "wasSubstituted": true
+        "tension": 0.235272,
+        "breathRatio": 2.421,
+        "kpiCoherence": 0.765,
+        "wasSubstituted": false
       },
       "diagnostics": {
         "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "interpretation": "Receiving more than projecting in this connection"
       }
     },
     {
@@ -975,27 +894,32 @@
       "faceA": {
         "id": 2,
         "name": "Intellectual Capital",
-        "energy": 0.381966
+        "energy": 0.400864
       },
       "faceB": {
         "id": 11,
         "name": "Funding Pipeline",
-        "energy": 0.381966
+        "energy": 0.123435
       },
       "philosophy": {
-        "element": "0.277429",
-        "question": "3.248",
-        "archetype": "The relationship between Intellectual Capital and Funding Pipeline"
+        "element": "Ether (Purpose)",
+        "question": "Does our knowledge serve the highest purpose of regeneration?",
+        "archetype": "Intellectual Capital ? Funding Pipeline"
+      },
+      "kpi": {
+        "name": "IP Generosity Rate",
+        "metric": "The ratio of Open Source / Creative Commons Contributions vs. Closed / Patented IP assets.",
+        "calculation": "= Open_Contributions / (Open_Contributions + Closed_Assets) <br> A simple percentage showing the \"generosity\" of the IP portfolio."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.400864,
-        "kpiCoherence": 0.123435,
-        "wasSubstituted": true
+        "tension": 0.277429,
+        "breathRatio": 3.248,
+        "kpiCoherence": 0.723,
+        "wasSubstituted": false
       },
       "diagnostics": {
         "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "interpretation": "Receiving more than projecting in this connection"
       }
     },
     {
@@ -1003,27 +927,32 @@
       "faceA": {
         "id": 10,
         "name": "Foundational Values",
-        "energy": 0.381966
+        "energy": 0.416284
       },
       "faceB": {
         "id": 11,
         "name": "Funding Pipeline",
-        "energy": 0.381966
+        "energy": 0.123435
       },
       "philosophy": {
-        "element": "0.292849",
-        "question": "3.372",
-        "archetype": "The relationship between Foundational Values and Funding Pipeline"
+        "element": "Air (Communication)",
+        "question": "Do we clearly communicate our values to our capital partners?",
+        "archetype": "Foundational Values ? Funding Pipeline"
+      },
+      "kpi": {
+        "name": "Funding Alignment Index",
+        "metric": "A qualitative score (1-5) assigned to each potential funding source based on a \"values-alignment checklist.\" The KPI is the weighted average score of the current funding pipeline.",
+        "calculation": "= (Weighted_Average_Score - 1) / (5 - 1)"
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.416284,
-        "kpiCoherence": 0.123435,
-        "wasSubstituted": true
+        "tension": 0.292849,
+        "breathRatio": 3.372,
+        "kpiCoherence": 0.707,
+        "wasSubstituted": false
       },
       "diagnostics": {
         "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "interpretation": "Receiving more than projecting in this connection"
       }
     },
     {
@@ -1031,27 +960,32 @@
       "faceA": {
         "id": 9,
         "name": "Regenerative Flow",
-        "energy": 0.381966
+        "energy": 0.438344
       },
       "faceB": {
         "id": 11,
         "name": "Funding Pipeline",
-        "energy": 0.381966
+        "energy": 0.123435
       },
       "philosophy": {
-        "element": "0.314908",
-        "question": "3.551",
-        "archetype": "The relationship between Regenerative Flow and Funding Pipeline"
+        "element": "Earth (Grounding)",
+        "question": "Is our regenerative impulse grounded in our core values?",
+        "archetype": "Regenerative Flow ? Funding Pipeline"
+      },
+      "kpi": {
+        "name": "Values Embodyment Score",
+        "metric": "The ratio of the # of Documented Regenerative Choices (KPI E1.1) to the # of Documented Value Alignment Checks (KPI L3.1).",
+        "calculation": "= (KPI_E1.1_Value / KPI_L3.1_Value) <br> A direct measure of how many value-checks result in a regenerative choice. Target is 1.0."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.438344,
-        "kpiCoherence": 0.123435,
-        "wasSubstituted": true
+        "tension": 0.314908,
+        "breathRatio": 3.551,
+        "kpiCoherence": 0.685,
+        "wasSubstituted": false
       },
       "diagnostics": {
         "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "interpretation": "Receiving more than projecting in this connection"
       }
     },
     {
@@ -1059,27 +993,32 @@
       "faceA": {
         "id": 4,
         "name": "Structural Capital",
-        "energy": 0.381966
+        "energy": 0.244788
       },
       "faceB": {
         "id": 5,
         "name": "Market Resonance",
-        "energy": 0.381966
+        "energy": 0.046254
       },
       "philosophy": {
-        "element": "0.198535",
-        "question": "5.292",
-        "archetype": "The relationship between Structural Capital and Market Resonance"
+        "element": "Air (Communication)",
+        "question": "Do our structures help or hinder the clarity of our public message?",
+        "archetype": "Structural Capital ? Market Resonance"
+      },
+      "kpi": {
+        "name": "Structural Resonance",
+        "metric": "A qualitative score (1-5) from a survey of key external stakeholders (advisors, early partners) asking them to rate the \"clarity and coherence of our organizational design.",
+        "calculation": "= (VALUE - 1) / (5 - 1) <br> Simple normalization of the survey score."
       },
       "computed": {
-        "tension": 0,
-        "breathRatio": 0.244788,
-        "kpiCoherence": 0.046254,
-        "wasSubstituted": true
+        "tension": 0.198535,
+        "breathRatio": 5.292,
+        "kpiCoherence": 0.801,
+        "wasSubstituted": false
       },
       "diagnostics": {
         "status": "critical",
-        "interpretation": "Projecting more than receiving in this connection"
+        "interpretation": "Receiving more than projecting in this connection"
       }
     }
   ]

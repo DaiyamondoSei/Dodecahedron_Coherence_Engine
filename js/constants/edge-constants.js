@@ -150,19 +150,25 @@ const EXCHANGE_TYPES = {
  * Each edge connects two adjacent faces and has a unique KPI that measures
  * the health of that interface. Data sourced from CSV_Edge_tension_Map.csv.
  *
+ * PURE MEMBRANE MODEL (January 2026):
+ * ─────────────────────────────────────────────────────────────────────────
+ * Edge character EMERGES DYNAMICALLY from synergy calculation, not static assignment.
+ * Use SacredInquiry.getDominantSynergy(faceA, faceB) to determine edge's elemental nature.
+ * The 'derivedFrom' field shows which synergy formula is MOST RELEVANT to this edge's KPI,
+ * but the actual dominant element is calculated at runtime from real face values.
+ *
  * @constant {Object}
  */
 const EDGE_KPI_LIBRARY = {
 
     // ═══════════════════════════════════════════════════════════════════════
-    // GROUNDING EXCHANGE EDGES - Stability & Structure
+    // THE 30 EDGE MEMBRANES - Pure interfaces, character emerges from synergy
     // ═══════════════════════════════════════════════════════════════════════
 
     'E3-4': {
         id: 'E3-4',
         faces: [3, 4],
         archetype: 'Human Capital <-> Structural Capital',
-        exchangeType: 'Grounding',
         kpiName: 'Embodied Governance',
         metric: 'Ratio of Employee Engagement Score vs. Number of Formal Policies/Rules',
         formula: 'Engagement_Score_Normalized / (1 + LOG(Number_of_Policies, 10))',
@@ -175,7 +181,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E4-6',
         faces: [4, 6],
         archetype: 'Structural Capital <-> Community & Partners',
-        exchangeType: 'Grounding',
         kpiName: 'Partnership Onboarding Friction',
         metric: 'Average days from handshake to operational agreement',
         formula: '1 - (Value / Max_Days_Target)',
@@ -188,7 +193,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E2-10',
         faces: [2, 10],
         archetype: 'Intellectual Capital <-> Foundational Values',
-        exchangeType: 'Grounding',
         kpiName: 'Ethical IP Score',
         metric: 'Qualitative score (1-5) from internal ethics review',
         formula: '(Value - 1) / (5 - 1)',
@@ -201,7 +205,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E1-8',
         faces: [1, 8],
         archetype: 'Financial Capital <-> Core Operations',
-        exchangeType: 'Grounding',
         kpiName: 'Operational ROI',
         metric: 'Ratio of Operational Output to Budget Spent',
         formula: 'Output / Budget',
@@ -214,7 +217,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E9-11',
         faces: [9, 11],
         archetype: 'Regenerative Flow <-> Funding Pipeline',
-        exchangeType: 'Grounding',
         kpiName: 'Values Embodiment Score',
         metric: 'Ratio of Regenerative Choices to Value Alignment Checks',
         formula: 'KPI_E1.1_Value / KPI_L3.1_Value',
@@ -223,15 +225,10 @@ const EDGE_KPI_LIBRARY = {
         shadow: 'Are we performing regeneration without embodying it?'
     },
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // FLOW EXCHANGE EDGES - Movement & Adaptability
-    // ═══════════════════════════════════════════════════════════════════════
-
     'E5-9': {
         id: 'E5-9',
         faces: [5, 9],
         archetype: 'Market Resonance <-> Regenerative Flow',
-        exchangeType: 'Flow',
         kpiName: 'Market Community Engagement',
         metric: 'Ratio of Engagement Score vs. Policy Complexity',
         formula: 'Engagement_Score_Normalized / (1 + LOG(Number_of_Policies, 10))',
@@ -244,7 +241,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E5-12',
         faces: [5, 12],
         archetype: 'Market Resonance <-> Risk & Resilience',
-        exchangeType: 'Flow',
         kpiName: 'Reputational Resilience',
         metric: 'Crisis simulation score (1-5)',
         formula: '(Value - 1) / (5 - 1)',
@@ -257,7 +253,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E11-12',
         faces: [11, 12],
         archetype: 'Funding Pipeline <-> Risk & Resilience',
-        exchangeType: 'Flow',
         kpiName: 'Funding Diversification Index',
         metric: 'Inverted Herfindahl-Hirschman Index on funding sources',
         formula: '1 - HHI_Score',
@@ -270,7 +265,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E3-6',
         faces: [3, 6],
         archetype: 'Human Capital <-> Community & Partners',
-        exchangeType: 'Flow',
         kpiName: 'Ecosystem Co-creation Rate',
         metric: 'Hours in co-creative sessions / Total project hours',
         formula: 'Co_creative_Hours / Total_Hours',
@@ -283,7 +277,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E8-10',
         faces: [8, 10],
         archetype: 'Core Operations <-> Foundational Values',
-        exchangeType: 'Flow',
         kpiName: 'Process Regeneration Rate',
         metric: 'Percentage of core processes with documented regenerative practice',
         formula: 'Value / 100',
@@ -296,7 +289,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E2-6',
         faces: [2, 6],
         archetype: 'Intellectual Capital <-> Community & Partners',
-        exchangeType: 'Flow',
         kpiName: 'Ecosystem Knowledge Flow',
         metric: 'Qualitative score (1-5) on collaborative knowledge sharing',
         formula: '(Value - 1) / (5 - 1)',
@@ -309,7 +301,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E1-6',
         faces: [1, 6],
         archetype: 'Financial Capital <-> Community & Partners',
-        exchangeType: 'Flow',
         kpiName: 'Community Investment Ratio',
         metric: 'Value returned to community / Value extracted from community',
         formula: 'Value_Returned / Value_Extracted',
@@ -318,15 +309,10 @@ const EDGE_KPI_LIBRARY = {
         shadow: 'Are we extracting more than we give?'
     },
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // TRANSFORMATION EXCHANGE EDGES - Change & Catalysis
-    // ═══════════════════════════════════════════════════════════════════════
-
     'E5-8': {
         id: 'E5-8',
         faces: [5, 8],
         archetype: 'Market Resonance <-> Core Operations',
-        exchangeType: 'Transformation',
         kpiName: 'Brand-Experience Coherence',
         metric: 'MIN(NPS, CSAT) / MAX(NPS, CSAT)',
         formula: 'MIN(NPS_normalized, CSAT_normalized) / MAX(NPS_normalized, CSAT_normalized)',
@@ -339,7 +325,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E4-9',
         faces: [4, 9],
         archetype: 'Structural Capital <-> Regenerative Flow',
-        exchangeType: 'Transformation',
         kpiName: 'Investor Readiness Score',
         metric: 'Checklist-based score (0-100%)',
         formula: 'Value / 100',
@@ -352,7 +337,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E1-2',
         faces: [1, 2],
         archetype: 'Financial Capital <-> Intellectual Capital',
-        exchangeType: 'Transformation',
         kpiName: 'IP Monetization Potential',
         metric: 'Qualitative score (1-10) on market relevance and defensibility',
         formula: '(Value - 1) / (10 - 1)',
@@ -365,7 +349,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E7-8',
         faces: [7, 8],
         archetype: 'Brand & Reputation <-> Core Operations',
-        exchangeType: 'Transformation',
         kpiName: 'Brand-Operational Integrity',
         metric: 'MIN(Brand Trust, Quality Score) / MAX(Brand Trust, Quality Score)',
         formula: 'MIN(Brand_Score_Norm, Quality_Score_Norm) / MAX(Brand_Score_Norm, Quality_Score_Norm)',
@@ -378,7 +361,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E3-11',
         faces: [3, 11],
         archetype: 'Human Capital <-> Funding Pipeline',
-        exchangeType: 'Transformation',
         kpiName: 'Founder-Funder Resonance',
         metric: 'Qualitative score (1-10) on relationship quality with funders',
         formula: '(Value - 1) / (10 - 1)',
@@ -391,7 +373,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E10-12',
         faces: [10, 12],
         archetype: 'Foundational Values <-> Risk & Resilience',
-        exchangeType: 'Transformation',
         kpiName: 'Ethical Resilience',
         metric: 'Crisis scenario adherence to values (1-5)',
         formula: '(Value - 1) / (5 - 1)',
@@ -404,7 +385,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E9-12',
         faces: [9, 12],
         archetype: 'Regenerative Flow <-> Risk & Resilience',
-        exchangeType: 'Transformation',
         kpiName: 'Regenerative Resilience',
         metric: 'Resilience wargame score on regenerative alternatives (1-5)',
         formula: '(Value - 1) / (5 - 1)',
@@ -413,15 +393,10 @@ const EDGE_KPI_LIBRARY = {
         shadow: 'Is regeneration a nice-to-have that disappears under stress?'
     },
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // COMMUNICATION EXCHANGE EDGES - Connection & Clarity
-    // ═══════════════════════════════════════════════════════════════════════
-
     'E8-12': {
         id: 'E8-12',
         faces: [8, 12],
         archetype: 'Core Operations <-> Risk & Resilience',
-        exchangeType: 'Communication',
         kpiName: 'Operational Resilience',
         metric: 'Mean Time To Recover (MTTR) from system failure',
         formula: '1 - (MTTR_hours / Max_Acceptable_Downtime_hours)',
@@ -434,7 +409,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E1-7',
         faces: [1, 7],
         archetype: 'Financial Capital <-> Brand & Reputation',
-        exchangeType: 'Communication',
         kpiName: 'Resonance ROI',
         metric: 'Brand awareness / Marketing budget (normalized)',
         formula: '(Awareness_Metric / Budget) / Target_Ratio',
@@ -447,7 +421,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E6-7',
         faces: [6, 7],
         archetype: 'Community & Partners <-> Brand & Reputation',
-        exchangeType: 'Communication',
         kpiName: 'Brand Capitalization Score',
         metric: 'Investor/funder feedback on brand influence (1-10)',
         formula: '(Value - 1) / (10 - 1)',
@@ -460,7 +433,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E2-3',
         faces: [2, 3],
         archetype: 'Intellectual Capital <-> Human Capital',
-        exchangeType: 'Communication',
         kpiName: 'Vision Embodiment Rate',
         metric: 'Tangible IP created / Hours of founder work',
         formula: 'IP_Units_Created / Hours_Worked',
@@ -473,7 +445,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E10-11',
         faces: [10, 11],
         archetype: 'Foundational Values <-> Funding Pipeline',
-        exchangeType: 'Communication',
         kpiName: 'Funding Alignment Index',
         metric: 'Weighted average values-alignment score of funding sources (1-5)',
         formula: '(Weighted_Average_Score - 1) / (5 - 1)',
@@ -486,7 +457,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E4-5',
         faces: [4, 5],
         archetype: 'Structural Capital <-> Market Resonance',
-        exchangeType: 'Communication',
         kpiName: 'Structural Resonance',
         metric: 'Stakeholder survey on organizational clarity (1-5)',
         formula: '(Value - 1) / (5 - 1)',
@@ -495,15 +465,10 @@ const EDGE_KPI_LIBRARY = {
         shadow: 'Is internal complexity confusing external perception?'
     },
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // PURPOSE EXCHANGE EDGES - Meaning & Alignment
-    // ═══════════════════════════════════════════════════════════════════════
-
     'E5-7': {
         id: 'E5-7',
         faces: [5, 7],
         archetype: 'Market Resonance <-> Brand & Reputation',
-        exchangeType: 'Purpose',
         kpiName: 'Perception Integrity',
         metric: 'Short-term engagement / Long-term trust metrics',
         formula: 'Short_Term_Normalized / Long_Term_Normalized',
@@ -516,7 +481,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E3-9',
         faces: [3, 9],
         archetype: 'Human Capital <-> Regenerative Flow',
-        exchangeType: 'Purpose',
         kpiName: 'Cultural Integrity',
         metric: 'Anonymous team poll: "How well did we live our values this week?" (1-10)',
         formula: '(Value - 1) / (10 - 1)',
@@ -529,7 +493,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E1-10',
         faces: [1, 10],
         archetype: 'Financial Capital <-> Foundational Values',
-        exchangeType: 'Purpose',
         kpiName: 'Regenerative Capital Allocation',
         metric: 'Regenerative budget / Total operating budget',
         formula: 'Regenerative_Budget / Total_Op_Budget',
@@ -542,7 +505,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E4-7',
         faces: [4, 7],
         archetype: 'Structural Capital <-> Brand & Reputation',
-        exchangeType: 'Purpose',
         kpiName: 'Reputational Integrity',
         metric: 'External ethics audit on governance perception (1-5)',
         formula: '(Value - 1) / (5 - 1)',
@@ -555,7 +517,6 @@ const EDGE_KPI_LIBRARY = {
         id: 'E2-11',
         faces: [2, 11],
         archetype: 'Intellectual Capital <-> Funding Pipeline',
-        exchangeType: 'Purpose',
         kpiName: 'IP Generosity Rate',
         metric: 'Open Source contributions / Total IP assets',
         formula: 'Open_Contributions / (Open_Contributions + Closed_Assets)',
@@ -673,13 +634,16 @@ function getEdgesForFace(faceNumber) {
 /**
  * Get edges by exchange type
  *
+ * @deprecated PURE MEMBRANE MODEL: Exchange type now emerges dynamically from synergy.
+ *             Use SacredInquiry.getInquiry(tension, faceA, faceB).dominantElement instead.
+ *             This function returns an empty array as exchangeType has been removed.
+ *
  * @param {string} exchangeType - 'Grounding', 'Flow', 'Transformation', 'Communication', 'Purpose'
- * @returns {Array} Array of edges with that exchange type
+ * @returns {Array} Empty array (deprecated)
  */
 function getEdgesByExchangeType(exchangeType) {
-    return Object.values(EDGE_KPI_LIBRARY).filter(
-        edge => edge.exchangeType === exchangeType
-    );
+    console.warn('[EdgeConstants] getEdgesByExchangeType is DEPRECATED. Use SacredInquiry.getInquiry() instead.');
+    return [];
 }
 
 /**
@@ -698,14 +662,14 @@ function getEdgeBetweenFaces(faceA, faceB) {
 /**
  * Get count of edges by exchange type
  *
- * @returns {Object} Counts by exchange type
+ * @deprecated PURE MEMBRANE MODEL: Exchange type now emerges dynamically from synergy.
+ *             Use SacredInquiry to calculate dominant elements at runtime.
+ *
+ * @returns {Object} Object with all counts at 0 (deprecated)
  */
 function getEdgeExchangeTypeCounts() {
-    const counts = { Grounding: 0, Flow: 0, Transformation: 0, Communication: 0, Purpose: 0 };
-    Object.values(EDGE_KPI_LIBRARY).forEach(edge => {
-        counts[edge.exchangeType]++;
-    });
-    return counts;
+    console.warn('[EdgeConstants] getEdgeExchangeTypeCounts is DEPRECATED. Exchange types emerge dynamically via SacredInquiry.');
+    return { Grounding: 0, Flow: 0, Transformation: 0, Communication: 0, Purpose: 0 };
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -735,8 +699,8 @@ if (typeof window !== 'undefined') {
         getEdgeExchangeTypeCounts
     };
 
-    console.log('🔗 Edge Constants loaded - 30 interface membranes defined');
-    console.log('   Exchange types: Grounding(5) Flow(7) Transformation(7) Communication(6) Purpose(5)');
+    console.log('🔗 Edge Constants loaded - 30 pure membrane interfaces');
+    console.log('   Pure Membrane Model: Edge character emerges from SacredInquiry synergy calculation');
 }
 
 // CommonJS export (for Node.js testing)

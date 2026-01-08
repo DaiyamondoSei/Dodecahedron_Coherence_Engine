@@ -1,14 +1,12 @@
 /**
  * Node.js Migration Script
  * Runs the CSV to JSON conversion and saves files directly to data/json/
+ *
+ * Enhanced January 2026: Now properly loads DataValidator dependency
  */
 
 const fs = require('fs');
 const path = require('path');
-
-// Load the converter source
-const converterPath = path.join(__dirname, '..', 'js', 'data-system', 'csv-to-json-converter.js');
-const converterSource = fs.readFileSync(converterPath, 'utf8');
 
 // Create a minimal browser-like environment
 const window = {};
@@ -19,6 +17,18 @@ const CustomEvent = function(name, options) {
     this.type = name;
     this.detail = options?.detail;
 };
+
+// Load DataValidator first (dependency of CSV converter)
+const validatorPath = path.join(__dirname, '..', 'js', 'data-system', 'data-validator.js');
+if (fs.existsSync(validatorPath)) {
+    const validatorSource = fs.readFileSync(validatorPath, 'utf8');
+    eval(validatorSource);
+    console.log('✅ DataValidator loaded');
+}
+
+// Load the converter source
+const converterPath = path.join(__dirname, '..', 'js', 'data-system', 'csv-to-json-converter.js');
+const converterSource = fs.readFileSync(converterPath, 'utf8');
 
 // Execute the converter module
 eval(converterSource);

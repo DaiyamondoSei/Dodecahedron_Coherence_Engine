@@ -713,22 +713,70 @@
     // (relationship between two organizational domains).
     // Reuses the face detail panel with edge-specific content.
     //
+    // ENHANCED January 2026: Sacred Inquiry Integration
     // ========================================
+
+    /**
+     * Build a face object for synergy calculation
+     *
+     * Retrieves element values for a face from Quannex state to enable
+     * accurate synergy calculation. Falls back to default values if not available.
+     *
+     * @param {number} faceId - Face ID (1-12)
+     * @param {string} faceName - Face name (for logging)
+     * @returns {Object} Face object with element values
+     */
+    function buildFaceForSynergy(faceId, faceName) {
+        // Try to get real face data from Quannex state
+        const faces = global.Quannex?.state?.faces || global.advancedAnalysisResults?.faces || [];
+        const face = faces.find(f => f.id === faceId || f.faceNumber === faceId);
+
+        if (face && face.elements) {
+            // Real data available
+            return {
+                id: faceId,
+                name: faceName,
+                earth: face.elements.earth || face.elements.Earth || 0.5,
+                water: face.elements.water || face.elements.Water || 0.5,
+                fire: face.elements.fire || face.elements.Fire || 0.5,
+                air: face.elements.air || face.elements.Air || 0.5,
+                ether: face.elements.ether || face.elements.Ether || 0.5
+            };
+        }
+
+        // Fallback: Generate reasonable defaults based on face ID
+        // This ensures synergy calculation always has data to work with
+        const phi = 0.618;
+        const variance = (faceId % 5) * 0.1; // Slight variation per face
+
+        return {
+            id: faceId,
+            name: faceName,
+            earth: phi + variance,
+            water: phi - variance * 0.5,
+            fire: phi + variance * 0.3,
+            air: phi - variance * 0.2,
+            ether: phi + variance * 0.4
+        };
+    }
 
     /**
      * Show edge detail panel with relationship data
      *
-     * Displays comprehensive information about an edge (relationship)
-     * between two faces, including tension, element, flow direction,
-     * guiding question, and KPI data if available from CSV.
+     * ENHANCED January 2026: Sacred Inquiry Architecture Integration
+     * - Uses SacredInquiry.getInquiry() for dynamic health state and synergies
+     * - Shows synergy bars for all 5 elements
+     * - Displays Sacred Inquiry question and shadow
+     * - Integrates with OrganizationalVoice for vocabulary adaptation
      *
      * @param {Object} edgeData - Edge data object with properties:
      *   - id: Edge ID
      *   - tension: Tension level (0-1)
-     *   - element: Elemental nature
+     *   - element: Elemental nature (legacy, now calculated dynamically)
      *   - face1Name, face2Name: Connected face names
      *   - face1Energy, face2Energy: Connected face energies
-     *   - question: Guiding question for the relationship
+     *   - face1Id, face2Id: Connected face IDs (for synergy calculation)
+     *   - question: Legacy guiding question (fallback)
      *   - color: Display color
      *   - healthStatus: Status text
      *   - flowDirection: Direction of energy flow
@@ -753,36 +801,175 @@
         energyDisplay.textContent = `${tensionPercent}% Tension`;
         energyDisplay.className = edgeData.tension > 0.6 ? 'critical' : edgeData.tension > 0.3 ? 'warning' : 'healthy';
 
+        // ========================================
+        // SACRED INQUIRY INTEGRATION (January 2026)
+        // ========================================
+        let sacredInquiry = null;
+        let synergies = null;
+        let healthState = null;
+        let dominantElement = null;
+
+        // Try to get Sacred Inquiry data
+        if (global.SacredInquiry) {
+            // Build face objects for synergy calculation
+            // Use face element data if available from Quannex state
+            const faceA = buildFaceForSynergy(edgeData.face1Id || 1, edgeData.face1Name);
+            const faceB = buildFaceForSynergy(edgeData.face2Id || 2, edgeData.face2Name);
+
+            // Get the full inquiry package
+            sacredInquiry = global.SacredInquiry.getInquiry(edgeData.tension || 0.5, faceA, faceB);
+            synergies = sacredInquiry.allSynergies;
+            healthState = sacredInquiry.healthState;
+            dominantElement = sacredInquiry.dominantElement;
+
+            console.log('🙏 Sacred Inquiry calculated:', sacredInquiry.summary);
+        }
+
+        // ========================================
+        // VOICE SYSTEM INTEGRATION
+        // ========================================
+        const voiceConfig = global.OrganizationalVoice?.VoiceState?.getConfig();
+        const vocab = voiceConfig?.vocabulary || {};
+
+        // Transform terms based on voice setting
+        const transformTerm = (term) => {
+            if (global.OrganizationalVoice?.ContentTransformer?.transformTerm) {
+                return global.OrganizationalVoice.ContentTransformer.transformTerm(term);
+            }
+            return term;
+        };
+
+        // ========================================
+        // BUILD SYNERGY BARS HTML
+        // ========================================
+        const buildSynergyBars = () => {
+            if (!synergies) return '';
+
+            const elements = [
+                { id: 'earth', name: 'Earth', symbol: '🜃', color: '#4a5568' },
+                { id: 'water', name: 'Water', symbol: '💧', color: '#3182ce' },
+                { id: 'fire', name: 'Fire', symbol: '🔥', color: '#e53e3e' },
+                { id: 'air', name: 'Air', symbol: '💨', color: '#38b2ac' },
+                { id: 'ether', name: 'Ether', symbol: '✧', color: '#805ad5' }
+            ];
+
+            return elements.map(el => {
+                const value = synergies[el.id] || 0;
+                const percent = Math.round(value * 100);
+                const isDominant = dominantElement?.id === el.id;
+
+                return `
+                    <div style="margin-bottom: 8px; ${isDominant ? 'background: rgba(255,255,255,0.05); padding: 6px; border-radius: 4px; margin: 0 -6px 8px -6px;' : ''}">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="font-size: 11px; ${isDominant ? 'font-weight: 600; color: ' + el.color + ';' : 'opacity: 0.7;'}">
+                                ${el.symbol} ${transformTerm(el.name)} ${isDominant ? '← dominant' : ''}
+                            </span>
+                            <span style="font-size: 11px; opacity: 0.7;">${percent}%</span>
+                        </div>
+                        <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
+                            <div style="height: 100%; width: ${percent}%; background: ${el.color}; border-radius: 2px; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        // ========================================
+        // BUILD SACRED INQUIRY SECTION
+        // ========================================
+        const buildSacredInquirySection = () => {
+            if (!sacredInquiry) return '';
+
+            return `
+                <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
+                        ${transformTerm('Sacred Inquiry')}
+                    </div>
+                    <div style="margin-bottom: 12px; padding: 12px; background: rgba(255,204,0,0.08); border-left: 3px solid #ffcc00; border-radius: 4px;">
+                        <div style="font-style: italic; color: #ffcc00; line-height: 1.6; font-size: 13px;">
+                            "${sacredInquiry.inquiry}"
+                        </div>
+                    </div>
+                    ${sacredInquiry.shadow ? `
+                        <div style="margin-top: 10px; padding: 10px; background: rgba(255,68,68,0.05); border-left: 2px solid rgba(255,68,68,0.4); border-radius: 4px;">
+                            <div style="font-size: 10px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Shadow Question</div>
+                            <div style="font-size: 11px; color: #ff8888; line-height: 1.5; font-style: italic;">
+                                "${sacredInquiry.shadow}"
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${sacredInquiry.gift ? `
+                        <div style="margin-top: 10px; padding: 10px; background: rgba(0,255,100,0.05); border-left: 2px solid rgba(0,255,100,0.4); border-radius: 4px;">
+                            <div style="font-size: 10px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Gift</div>
+                            <div style="font-size: 11px; color: #88ff88; line-height: 1.5;">
+                                ${sacredInquiry.gift}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        };
+
+        // ========================================
+        // BUILD HEALTH STATE SECTION
+        // ========================================
+        const buildHealthStateSection = () => {
+            if (!healthState) return '';
+
+            const stateColors = {
+                wall: '#ff4444',
+                gate: '#ffaa00',
+                membrane: '#00ff88',
+                hemorrhage: '#ff6600',
+                vortex: '#aa44ff'
+            };
+
+            return `
+                <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
+                        Edge Health State
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <span style="font-size: 20px;">${healthState.symbol || '🫧'}</span>
+                        <div>
+                            <div style="font-weight: 600; color: ${stateColors[healthState.id] || '#00ffcc'};">${healthState.name}</div>
+                            <div style="font-size: 11px; opacity: 0.7;">${healthState.description}</div>
+                        </div>
+                    </div>
+                    ${healthState.indicators ? `
+                        <div style="margin-top: 8px; font-size: 10px; opacity: 0.6;">
+                            <span style="text-transform: uppercase; letter-spacing: 1px;">Indicators:</span>
+                            ${healthState.indicators.map(i => `<span style="margin-left: 8px;">• ${i}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        };
+
         // Build edge metadata display
         kpiGrid.innerHTML = `
         <div style="padding: 20px; line-height: 1.8;">
             <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Edge Connection</div>
+                <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
+                    ${transformTerm('Edge')} Connection
+                </div>
                 <div style="font-size: 13px; color: #00ffcc;">${edgeData.face1Name} ↔ ${edgeData.face2Name}</div>
             </div>
 
-            <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Tension Analysis</div>
-                <div style="margin-bottom: 8px;">
-                    <span style="opacity: 0.7;">Status:</span>
-                    <span style="color: ${edgeData.color}; font-weight: 600;">${edgeData.healthStatus}</span>
-                </div>
-                <div style="margin-bottom: 8px;">
-                    <span style="opacity: 0.7;">Tension:</span>
-                    <span style="color: ${edgeData.color}; font-weight: 600;">${tensionPercent}%</span>
-                </div>
-                <div style="margin-bottom: 8px;">
-                    <span style="opacity: 0.7;">Element:</span>
-                    <span style="font-weight: 600;">${edgeData.element}</span>
-                </div>
-                <div>
-                    <span style="opacity: 0.7;">Flow Direction:</span>
-                    <span style="font-weight: 600;">${edgeData.flowDirection}</span>
-                    ${edgeData.breathRatio > 0 ? ' →' : edgeData.breathRatio < 0 ? ' ←' : ' ⚖️'}
-                </div>
-            </div>
+            ${buildHealthStateSection()}
 
-            ${edgeData.question ? `
+            ${synergies ? `
+                <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">
+                        Elemental Synergies
+                    </div>
+                    ${buildSynergyBars()}
+                </div>
+            ` : ''}
+
+            ${buildSacredInquirySection()}
+
+            ${!sacredInquiry && edgeData.question ? `
                 <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
                     <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Guiding Question</div>
                     <div style="font-style: italic; color: #ffcc00; line-height: 1.6;">"${edgeData.question}"</div>
@@ -797,7 +984,7 @@
                     </div>
                     ${edgeData.kpiCoherence !== null ? `
                         <div style="margin-bottom: 8px;">
-                            <span style="opacity: 0.7;">Coherence:</span>
+                            <span style="opacity: 0.7;">${transformTerm('Coherence')}:</span>
                             <span style="font-weight: 600;">${Math.round(edgeData.kpiCoherence * 100)}%</span>
                         </div>
                     ` : ''}

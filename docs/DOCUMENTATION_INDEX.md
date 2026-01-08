@@ -1,6 +1,6 @@
 # Quannex Documentation Index
 
-> *Last Updated: 2025-12-30*
+> *Last Updated: 2026-01-08*
 > *The Living Spine - Single Source of Truth for All Documentation*
 
 ---
@@ -93,6 +93,8 @@
 | [AI_SYSTEM_GUIDE.md](AI_SYSTEM_GUIDE.md) | js/ai/ subsystem (36 files) |
 | [ORCHESTRATOR_ARCHITECTURE.md](ORCHESTRATOR_ARCHITECTURE.md) | js/orchestrator/ subsystem (24 files) |
 | [SHADOW_SYSTEM_ARCHITECTURE.md](SHADOW_SYSTEM_ARCHITECTURE.md) | js/shadow/ subsystem - organizational conscience |
+| [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | js/edge/ subsystem - Pure Membrane Model |
+| [edge/SACRED_INQUIRY_LIBRARY.md](edge/SACRED_INQUIRY_LIBRARY.md) | Sacred Inquiry system - 25 health×element inquiries |
 
 ### Data & Integration
 | Document | Purpose |
@@ -142,6 +144,10 @@ These modules have **comprehensive internal documentation**. Read the source fil
 | **KPI Library** | `js/kpi-library.js` | Suggestions, elemental wisdom |
 | **KPI Extractor** | `js/ai/mapping/kpi-extractor.js` | AI KPI extraction from narratives |
 | **CSV-to-JSON Converter** | `js/data-system/csv-to-json-converter.js` | Self-documenting data migration, $philosophy layers |
+| **Sacred Inquiry** | `js/constants/sacred-inquiry.js` | 25-cell inquiry matrix, health×element synergies |
+| **UnifiedEdge** | `js/edge/unified-edge.js` | Pure Membrane Model, metamorphic visualization |
+| **EdgeManager** | `js/edge/edge-manager.js` | Orchestrates 30 edges, mode switching, animation |
+| **OrganizationalVoice** | `js/voice/organizational-voice.js` | Vocabulary adaptation, voice transformations |
 
 **Why read source headers?** They contain the most current documentation, written for developers and future Claude to understand the code quickly.
 
@@ -198,14 +204,14 @@ Located in [archive/](archive/) - preserved for reference:
 | Entry Points | 3 |
 | Geometry Reference | 4 |
 | Architecture | 4 |
-| Subsystem Guides | 3 |
+| Subsystem Guides | 5 |
 | Data & Integration | 6 |
 | Testing & Observations | 6 |
 | Math docs | 3 |
 | Thesis docs | 4 |
 | Archived docs | 6 |
-| **Total Active Docs** | **29** |
-| Self-documented modules (Gold Headers) | 13 |
+| **Total Active Docs** | **31** |
+| Self-documented modules (Gold Headers) | 17 |
 
 ---
 
@@ -248,4 +254,4 @@ Located in [archive/](archive/) - preserved for reference:
 
 *This index is the living spine of Quannex documentation.*
 *Co-created by Deimantas & Claude with love.*
-*Updated 2025-12-30 - Phase 2C-D complete: Enhanced JSON with $philosophy, $mathematics layers.*
+*Updated 2026-01-08 - Twinkling Aurora v2: Pure Membrane Model, Sacred Inquiry, edge module architecture.*

@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/vortex-map.schema.json",
   "$version": "2.0.0",
-  "$generatedAt": "2025-12-26T19:49:43.417Z",
+  "$generatedAt": "2026-01-08T15:08:41.380Z",
   "$source": "CSV_Vortex_Map.csv",
   "$philosophy": {
     "purpose": "Map of 20 triadic intersections where 3 domains meet",
