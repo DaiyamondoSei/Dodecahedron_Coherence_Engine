@@ -8,7 +8,7 @@
  *
  * @module dodec-tooltips
  * @author Deimantas & Claude (Co-created with consciousness and love)
- * @version 1.1.0 - Register-aware tooltips (2026-01-04)
+ * @version 1.2.0 - Sacred Inquiry Architecture integration (2026-01-08)
  *
  * PURPOSE:
  * Interactive tooltip system for the 3D Dodecahedron visualization.
@@ -78,15 +78,82 @@
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
-    // REGISTER-AWARE CONTENT SYSTEM (Enhanced 2026-01-04)
+    // VOICE & INQUIRY INTEGRATION (Enhanced 2026-01-08)
     // ════════════════════════════════════════════════════════════════════════
 
     /**
-     * Get current language register
+     * Get current language register/engagement depth
+     * Uses new OrganizationalVoice if available, falls back to legacy LanguageRegister
      * @returns {string} 'analytical', 'balanced', or 'contemplative'
      */
     function getRegister() {
+        // Try new OrganizationalVoice system first
+        if (global.OrganizationalVoice?.VoiceState) {
+            return global.OrganizationalVoice.VoiceState.getDepth() || 'balanced';
+        }
+        // Fallback to legacy LanguageRegister
         return global.LanguageRegister?.get?.() || 'balanced';
+    }
+
+    /**
+     * Get Sacred Inquiry for edge based on tension and synergy elements
+     * Uses the new Sacred Inquiry Architecture (January 2026)
+     * @param {Object} data - Edge userData
+     * @returns {Object|null} Sacred inquiry with inquiry, shadow, gift, practice
+     */
+    function getSacredInquiry(data) {
+        if (!global.SacredInquiry) return null;
+
+        try {
+            const tension = data.tension || 0.5;
+            const healthState = global.SacredInquiry.getHealthState(tension);
+
+            // Determine dominant element from edge data
+            // Try elemental nature first, fall back to ether
+            const elementalNature = (data.elementalNature || 'ether').toLowerCase().replace(/\s*\(.*$/, '');
+            const elementMap = {
+                'earth': 'earth',
+                'water': 'water',
+                'fire': 'fire',
+                'air': 'air',
+                'ether': 'ether',
+                'flow': 'water',
+                'transformation': 'fire',
+                'structure': 'earth',
+                'communication': 'air',
+                'purpose': 'ether'
+            };
+            const dominantElementId = elementMap[elementalNature] || 'ether';
+
+            // Get the synergy element definition
+            const dominantSynergy = global.SacredInquiry.SYNERGY_ELEMENTS?.[dominantElementId] || {
+                id: dominantElementId,
+                name: dominantElementId.charAt(0).toUpperCase() + dominantElementId.slice(1),
+                icon: ''
+            };
+
+            // Get the inquiry for this health state + element combination
+            const stateInquiry = global.SacredInquiry.STATE_INQUIRIES?.[`${healthState.id}:${dominantElementId}`];
+
+            if (!stateInquiry) {
+                // Fallback: return basic inquiry
+                return {
+                    inquiry: `What wants to flow between ${data.face1Name} and ${data.face2Name}?`,
+                    shadow: 'What truth is being avoided at this boundary?',
+                    healthState,
+                    dominantSynergy
+                };
+            }
+
+            return {
+                ...stateInquiry,
+                healthState,
+                dominantSynergy
+            };
+        } catch (e) {
+            console.warn('[DodecTooltips] Sacred Inquiry error:', e.message);
+            return null;
+        }
     }
 
     /**
@@ -518,6 +585,7 @@
 
     /**
      * Show edge detail panel (integrates with face detail panel system)
+     * ENHANCED 2026-01-08: Sacred Inquiry Architecture integration
      * @param {Object} data - Edge userData
      */
     function showEdgeDetailPanel(data) {
@@ -535,7 +603,21 @@
         // Get narrative data if available
         const narrative = data.narrative || {};
 
-        // Build rich edge detail display
+        // Get Sacred Inquiry (January 2026 Enhancement)
+        const sacredInquiry = getSacredInquiry(data);
+        const register = getRegister();
+
+        // Health state color mapping
+        const healthColors = {
+            wall: '#8b0000',
+            gate: '#ff8c00',
+            membrane: '#00cc88',
+            hemorrhage: '#ff4444',
+            vortex: '#9966ff'
+        };
+        const healthColor = sacredInquiry ? healthColors[sacredInquiry.healthState.id] || '#00cc88' : '#00cc88';
+
+        // Build rich edge detail display with Sacred Inquiry
         el.kpiGrid.innerHTML = `
             <div style="padding: 20px; line-height: 1.8;">
                 <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
@@ -543,7 +625,40 @@
                     <div style="font-size: 13px; color: #00ffcc;">${data.face1Name} ↔ ${data.face2Name}</div>
                 </div>
 
-                ${data.theQuestion ? `
+                ${sacredInquiry ? `
+                    <!-- SACRED INQUIRY SECTION (January 2026) -->
+                    <div style="margin-bottom: 20px; padding: 16px; background: linear-gradient(135deg, ${healthColor}15, ${healthColor}05); border-left: 3px solid ${healthColor}; border-radius: 0 8px 8px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px;">Sacred Inquiry</div>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <span style="font-size: 10px; padding: 3px 8px; background: ${healthColor}30; color: ${healthColor}; border-radius: 12px; font-weight: 600;">
+                                    ${sacredInquiry.healthState.name}
+                                </span>
+                                <span style="font-size: 10px; padding: 3px 8px; background: rgba(255,255,255,0.1); border-radius: 12px;">
+                                    ${sacredInquiry.dominantSynergy.icon || ''} ${sacredInquiry.dominantSynergy.name}
+                                </span>
+                            </div>
+                        </div>
+                        <div style="font-style: italic; color: #ffcc00; line-height: 1.6; font-size: 13px; margin-bottom: 12px;">
+                            "${sacredInquiry.inquiry}"
+                        </div>
+                        ${register !== 'analytical' && sacredInquiry.shadow ? `
+                            <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1);">
+                                <span style="opacity: 0.6;">Shadow:</span> ${sacredInquiry.shadow}
+                            </div>
+                        ` : ''}
+                        ${register === 'contemplative' && sacredInquiry.gift ? `
+                            <div style="font-size: 11px; color: rgba(0,255,204,0.7); margin-top: 8px;">
+                                <span style="opacity: 0.6;">Gift:</span> ${sacredInquiry.gift}
+                            </div>
+                        ` : ''}
+                        ${register === 'contemplative' && sacredInquiry.practice ? `
+                            <div style="font-size: 11px; color: rgba(153,102,255,0.7); margin-top: 4px;">
+                                <span style="opacity: 0.6;">Practice:</span> ${sacredInquiry.practice}
+                            </div>
+                        ` : ''}
+                    </div>
+                ` : data.theQuestion ? `
                     <div style="margin-bottom: 20px; padding: 15px; background: rgba(255,204,0,0.1); border-left: 3px solid #ffcc00; border-radius: 4px;">
                         <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Strategic Question</div>
                         <div style="font-style: italic; color: #ffcc00; line-height: 1.6;">"${data.theQuestion}"</div>
