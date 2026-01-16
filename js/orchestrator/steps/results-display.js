@@ -45,7 +45,7 @@
  *    - js/dodec/dodec-geometry.js
  *    - js/dodec/dodec-panels.js
  *    - js/dodec/dodec-shadow-overlay.js
- *    - js/ui/shadow-panel.js
+ *    - js/shadow/ui/shadow-panel.js (updated path - Jan 2026)
  *
  * 2. CROSS-WINDOW SYNC:
  *    CrossWindowSync.broadcast() sends STATE_UPDATE via BroadcastChannel

@@ -8,15 +8,13 @@
 
 ## Observations During This Session
 
-### 1. Inconsistency: Duplicate Shadow Panel Files
+### 1. ~~Inconsistency: Duplicate Shadow Panel Files~~ ✅ RESOLVED (January 2026)
 
-**Finding:** There are TWO shadow-panel.js files:
-- `js/shadow/ui/shadow-panel.js` (in the shadow module)
-- `js/ui/shadow-panel.js` (in general UI folder)
+**Finding:** There were TWO shadow-panel.js files:
+- `js/shadow/ui/shadow-panel.js` (in the shadow module) ← **KEPT (v3.0)**
+- `js/ui/shadow-panel.js` (in general UI folder) ← **DELETED**
 
-**Concern:** Potential for divergence if both are modified independently.
-
-**Recommendation:** Consolidate to single location (`js/shadow/ui/shadow-panel.js`) and deprecate the other.
+**Resolution:** Consolidated to single location (`js/shadow/ui/shadow-panel.js`). The duplicate v2.2 file was verified as dead code (no imports) and removed.
 
 ---
 
