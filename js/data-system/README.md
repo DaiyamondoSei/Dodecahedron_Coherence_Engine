@@ -56,7 +56,7 @@ if (!report.healthy) {
 ## Connection to Data Flow
 
 ```
-SpiralDASBOARD(1).xlsx  (Your reference - not runtime)
+data/SpiralDASBOARD(1).xlsx  (Your reference - not runtime)
         ↓
    Manual Export
         ↓

@@ -88,7 +88,7 @@ This is a **seed-to-tree** relationship:
 ## The Source: Excel File
 
 ### Location
-`/POC/SpiralDASBOARD(1).xlsx`
+`/POC/data/SpiralDASBOARD(1).xlsx`
 
 ### Sheet Structure
 
@@ -435,7 +435,8 @@ Each module is self-contained. Neither depends on the other's internal format.
 
 ```
 /POC/
-├── SpiralDASBOARD(1).xlsx    # THE SOURCE (has corruption)
+├── data/
+│   └── SpiralDASBOARD(1).xlsx    # THE SOURCE (Moved from root Jan 2026)
 ├── data/
 │   ├── json/                 # NEW: Pre-validated JSON (December 2025)
 │   │   ├── kpi-database.json     # 12 KPIs (topology-validated)
