@@ -32,7 +32,7 @@
  * ============================================================================
  */
 
-const Starfield = (function() {
+const Starfield = (function () {
     'use strict';
 
     // ========================================================================
@@ -269,7 +269,7 @@ const Starfield = (function() {
         // Create canvas if container exists
         const container = document.getElementById(containerId);
         if (!container) {
-            console.warn(`[Starfield] Container #${containerId} not found. Creating one.`);
+            Logger.warn('Starfield', `Container #${containerId} not found. Creating one.`);
             createDefaultContainer(containerId);
         }
 
@@ -433,7 +433,7 @@ const Starfield = (function() {
             isRunning = true;
             lastTime = performance.now();
             animationId = requestAnimationFrame(animate);
-            console.log('[Starfield] Started');
+            Logger.info('Starfield', 'Started');
         },
 
         /**
@@ -445,7 +445,7 @@ const Starfield = (function() {
                 cancelAnimationFrame(animationId);
                 animationId = null;
             }
-            console.log('[Starfield] Stopped');
+            Logger.info('Starfield', 'Stopped');
         },
 
         /**
@@ -455,7 +455,7 @@ const Starfield = (function() {
         warp(callback) {
             isHyperspace = true;
             hyperspaceStartTime = performance.now();
-            console.log('[Starfield] Hyperspace engaged!');
+            Logger.info('Starfield', 'Hyperspace engaged!');
 
             if (callback) {
                 setTimeout(callback, CONFIG.hyperspace.duration);

@@ -51,7 +51,7 @@
  * ============================================================================
  */
 
-const ConstellationDodecahedron = (function() {
+const ConstellationDodecahedron = (function () {
     'use strict';
 
     // ========================================================================
@@ -234,7 +234,7 @@ const ConstellationDodecahedron = (function() {
         canvas = document.getElementById(canvasId);
 
         if (!canvas) {
-            console.error(`[ConstellationDodecahedron] Canvas #${canvasId} not found`);
+            Logger.error('Constellation', `Canvas #${canvasId} not found`);
             return null;
         }
 
@@ -245,7 +245,7 @@ const ConstellationDodecahedron = (function() {
         createDodecahedron();
         setupEventListeners();
 
-        console.log('[ConstellationDodecahedron] Initialized');
+        Logger.info('Constellation', 'Initialized');
         return API;
     }
 
@@ -362,7 +362,7 @@ const ConstellationDodecahedron = (function() {
         let pentagramLineCount = 0;
         faces.forEach((faceIndices, faceIndex) => {
             if (faceIndices.length !== 5) {
-                console.warn(`Face ${faceIndex} has ${faceIndices.length} vertices, expected 5`);
+                Logger.warn('Constellation', `Face ${faceIndex} has ${faceIndices.length} vertices, expected 5`);
                 return;
             }
 
@@ -406,7 +406,7 @@ const ConstellationDodecahedron = (function() {
             }
         });
 
-        console.log(`[ConstellationDodecahedron] Created ${pentagramLineCount} pentagram lines across ${faces.length} faces (hidden until cursor approaches)`);
+        Logger.info('Constellation', `Created ${pentagramLineCount} pentagram lines across ${faces.length} faces (hidden until cursor approaches)`);
     }
 
     /**
@@ -464,7 +464,7 @@ const ConstellationDodecahedron = (function() {
 
                             // Early exit if we found all 12 faces
                             if (faces.length === 12) {
-                                console.log(`[ConstellationDodecahedron] Found all ${faces.length} pentagonal faces`);
+                                Logger.info('Constellation', `Found all ${faces.length} pentagonal faces`);
                                 return faces;
                             }
                         }
@@ -473,7 +473,7 @@ const ConstellationDodecahedron = (function() {
             }
         }
 
-        console.log(`[ConstellationDodecahedron] Found ${faces.length} pentagonal faces`);
+        Logger.info('Constellation', `Found ${faces.length} pentagonal faces`);
         return faces;
     }
 
@@ -573,7 +573,7 @@ const ConstellationDodecahedron = (function() {
             });
         });
 
-        console.log(`[ConstellationDodecahedron] Created ${edgeLines.length} edge lines (lamp reveals them)`);
+        Logger.info('Constellation', `Created ${edgeLines.length} edge lines (lamp reveals them)`);
     }
 
     /**
@@ -764,7 +764,7 @@ const ConstellationDodecahedron = (function() {
         });
 
         const totalParticles = vertexMeshes.length * clusterConfig.particleCount;
-        console.log(`[ConstellationDodecahedron] Created ${vertexMeshes.length} vertex clusters (${totalParticles} total star particles)`);
+        Logger.info('Constellation', `Created ${vertexMeshes.length} vertex clusters (${totalParticles} total star particles)`);
     }
 
     // ========================================================================
@@ -1160,7 +1160,7 @@ const ConstellationDodecahedron = (function() {
             if (isRunning) return;
             isRunning = true;
             animationId = requestAnimationFrame(animate);
-            console.log('[ConstellationDodecahedron] Started');
+            Logger.info('Constellation', 'Started');
         },
 
         /**
@@ -1172,7 +1172,7 @@ const ConstellationDodecahedron = (function() {
                 cancelAnimationFrame(animationId);
                 animationId = null;
             }
-            console.log('[ConstellationDodecahedron] Stopped');
+            Logger.info('Constellation', 'Stopped');
         },
 
         /**

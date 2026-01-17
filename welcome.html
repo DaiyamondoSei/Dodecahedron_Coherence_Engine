@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,6 +48,7 @@
     <!-- Modular Styles -->
     <link rel="stylesheet" href="css/welcome/welcome.css">
 </head>
+
 <body>
     <!-- ===================================================================
          BACKGROUND LAYERS
@@ -127,6 +129,9 @@
          Load order matters: dependencies before dependents
          =================================================================== -->
 
+    <!-- Global Utilities -->
+    <script src="js/utils/logger.js"></script>
+
     <!-- Core Modules -->
     <script src="js/welcome/starfield.js"></script>
     <script src="js/welcome/constellation-dodecahedron.js"></script>
@@ -136,4 +141,5 @@
     <!-- Main Orchestrator (initializes everything) -->
     <script src="js/welcome/welcome-main.js"></script>
 </body>
+
 </html>

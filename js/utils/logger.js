@@ -58,6 +58,7 @@
 
 (function (global) {
     'use strict';
+    console.log('🔍 Logger script executing...');
 
     // ════════════════════════════════════════════════════════════════════════════
     // CONSTANTS & STATE

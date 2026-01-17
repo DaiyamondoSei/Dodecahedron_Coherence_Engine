@@ -57,7 +57,7 @@
         const section = document.getElementById('nervousEndpoints');
 
         if (!section) {
-            console.warn('[orchestrator-utils] nervousEndpoints element not found');
+            Logger.warn('OrchestratorUtils', 'nervousEndpoints element not found');
             return;
         }
 
@@ -296,7 +296,7 @@
         const url = viewUrls[viewName];
         if (url) {
             window.open(url, '_blank');
-            console.log(`[orchestrator-utils] Launched view: ${viewName}`);
+            Logger.info('OrchestratorUtils', `Launched view: ${viewName}`);
         }
     }
 
@@ -330,7 +330,7 @@
         a.click();
 
         URL.revokeObjectURL(url);
-        console.log('[orchestrator-utils] Configuration saved');
+        Logger.info('OrchestratorUtils', 'Configuration saved');
     }
 
     /**
@@ -386,6 +386,6 @@
     global.showLoading = showLoading;
     global.hideLoading = hideLoading;
 
-    console.log('[orchestrator-utils] Module loaded');
+    Logger.info('OrchestratorUtils', 'Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

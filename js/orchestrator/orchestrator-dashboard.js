@@ -54,7 +54,7 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -76,8 +76,8 @@
 
     const missingModules = requiredModules.filter(mod => typeof global[mod] === 'undefined');
     if (missingModules.length > 0) {
-        console.warn('[orchestrator-dashboard] Missing modules:', missingModules.join(', '));
-        console.warn('[orchestrator-dashboard] Ensure dashboard/*.js files are loaded before this file');
+        Logger.warn('OrchestratorDashboard', `Missing modules: ${missingModules.join(', ')}`);
+        Logger.warn('OrchestratorDashboard', 'Ensure dashboard/*.js files are loaded before this file');
     }
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -147,7 +147,7 @@
 
         // Validate dependencies
         if (!OCTAVE_REFERENCE) {
-            console.error('[orchestrator-dashboard] OCTAVE_REFERENCE not loaded');
+            Logger.error('OrchestratorDashboard', 'OCTAVE_REFERENCE not loaded');
             return;
         }
 
@@ -205,104 +205,103 @@
             );
 
             // Use Foundation Principle result if available
-            if (integrityResult && integrityResult.orgOctave) {
-                dominantOctave = integrityResult.orgOctave;
-                octaveStage = `O${dominantOctave}`;
-                console.log('[orchestrator-dashboard] Foundation Principle applied:', {
-                    orgOctave: dominantOctave,
-                    geoMean: integrityResult.geoMean,
-                    spread: integrityResult.spread,
-                    penalty: integrityResult.penalty,
-                    warnings: integrityResult.warnings?.length || 0
-                });
-            }
+            dominantOctave = integrityResult.orgOctave;
+            octaveStage = `O${dominantOctave}`;
+            Logger.info('OrchestratorDashboard', 'Foundation Principle applied', {
+                orgOctave: dominantOctave,
+                geoMean: integrityResult.geoMean,
+                spread: integrityResult.spread,
+                penalty: integrityResult.penalty,
+                warnings: integrityResult.warnings?.length || 0
+            });
         }
+    }
         // ────────────────────────────────────────────────────────────────────
         // FALLBACK: If no face data, detect from global coherence
         // ────────────────────────────────────────────────────────────────────
         else if (!state.loadedMappingContext && state.coherenceResults) {
-            const avgCoherence = state.coherenceResults.globalCoherence || 0.5;
-            dominantOctave = detectOctaveFromCoherence ? detectOctaveFromCoherence(avgCoherence) : 3;
+        const avgCoherence = state.coherenceResults.globalCoherence || 0.5;
+        dominantOctave = detectOctaveFromCoherence ? detectOctaveFromCoherence(avgCoherence) : 3;
+    }
+
+    // ────────────────────────────────────────────────────────────────────
+    // STEP 3: Get reference data for current and next octave
+    // ────────────────────────────────────────────────────────────────────
+    const octaveData = OCTAVE_REFERENCE[dominantOctave] || OCTAVE_REFERENCE[1];
+    const nextOctave = Math.min(7, dominantOctave + 1);
+    const nextOctaveData = OCTAVE_REFERENCE[nextOctave];
+
+    // ────────────────────────────────────────────────────────────────────
+    // STEP 4: Update progress bar
+    // ────────────────────────────────────────────────────────────────────
+    const progressPercent = (dominantOctave / 7) * 100;
+    const progressFill = document.getElementById('octave-progress-fill');
+    const progressMarker = document.getElementById('octave-progress-marker');
+
+    if (progressFill) {
+        progressFill.style.width = `${progressPercent}%`;
+        progressFill.style.background = octaveData.gradient;
+    }
+    if (progressMarker) {
+        progressMarker.style.left = `${progressPercent}%`;
+    }
+
+    // ────────────────────────────────────────────────────────────────────
+    // STEP 5: Update octave badge
+    // ────────────────────────────────────────────────────────────────────
+    const badge = document.getElementById('octave-badge');
+    if (badge) {
+        badge.textContent = `O${dominantOctave}`;
+        badge.style.background = octaveData.gradient;
+    }
+
+    // ────────────────────────────────────────────────────────────────────
+    // STEP 6: Update name and description
+    // ────────────────────────────────────────────────────────────────────
+    const nameEl = document.getElementById('octave-name');
+    const focusEl = document.getElementById('octave-focus');
+    const descEl = document.getElementById('octave-description');
+
+    if (nameEl) {
+        nameEl.textContent = octaveData.name;
+        nameEl.style.color = octaveData.color;
+    }
+    if (focusEl) {
+        focusEl.innerHTML = `Focus: <span style="color: ${octaveData.color};">${octaveData.focus}</span>`;
+    }
+    if (descEl) {
+        descEl.textContent = octaveData.description;
+    }
+
+    // ────────────────────────────────────────────────────────────────────
+    // STEP 7: Update questions
+    // ────────────────────────────────────────────────────────────────────
+    const questionsEl = document.getElementById('octave-questions');
+    if (questionsEl) {
+        let questions = octaveData.questions;
+
+        // If we have breath axes, use their questions instead
+        if (breathAxes.length > 0) {
+            questions = breathAxes
+                .filter(axis => axis.projectionQuestion || axis.receptionQuestion)
+                .slice(0, 4)
+                .flatMap(axis => [axis.projectionQuestion, axis.receptionQuestion])
+                .filter(q => q)
+                .slice(0, 4);
         }
 
-        // ────────────────────────────────────────────────────────────────────
-        // STEP 3: Get reference data for current and next octave
-        // ────────────────────────────────────────────────────────────────────
-        const octaveData = OCTAVE_REFERENCE[dominantOctave] || OCTAVE_REFERENCE[1];
-        const nextOctave = Math.min(7, dominantOctave + 1);
-        const nextOctaveData = OCTAVE_REFERENCE[nextOctave];
+        questionsEl.innerHTML = questions.map((q, i) =>
+            `<div style="padding: 8px 0; ${i < questions.length - 1 ? 'border-bottom: 1px solid rgba(255,255,255,0.05);' : ''}">• ${q}</div>`
+        ).join('');
+    }
 
-        // ────────────────────────────────────────────────────────────────────
-        // STEP 4: Update progress bar
-        // ────────────────────────────────────────────────────────────────────
-        const progressPercent = (dominantOctave / 7) * 100;
-        const progressFill = document.getElementById('octave-progress-fill');
-        const progressMarker = document.getElementById('octave-progress-marker');
-
-        if (progressFill) {
-            progressFill.style.width = `${progressPercent}%`;
-            progressFill.style.background = octaveData.gradient;
-        }
-        if (progressMarker) {
-            progressMarker.style.left = `${progressPercent}%`;
-        }
-
-        // ────────────────────────────────────────────────────────────────────
-        // STEP 5: Update octave badge
-        // ────────────────────────────────────────────────────────────────────
-        const badge = document.getElementById('octave-badge');
-        if (badge) {
-            badge.textContent = `O${dominantOctave}`;
-            badge.style.background = octaveData.gradient;
-        }
-
-        // ────────────────────────────────────────────────────────────────────
-        // STEP 6: Update name and description
-        // ────────────────────────────────────────────────────────────────────
-        const nameEl = document.getElementById('octave-name');
-        const focusEl = document.getElementById('octave-focus');
-        const descEl = document.getElementById('octave-description');
-
-        if (nameEl) {
-            nameEl.textContent = octaveData.name;
-            nameEl.style.color = octaveData.color;
-        }
-        if (focusEl) {
-            focusEl.innerHTML = `Focus: <span style="color: ${octaveData.color};">${octaveData.focus}</span>`;
-        }
-        if (descEl) {
-            descEl.textContent = octaveData.description;
-        }
-
-        // ────────────────────────────────────────────────────────────────────
-        // STEP 7: Update questions
-        // ────────────────────────────────────────────────────────────────────
-        const questionsEl = document.getElementById('octave-questions');
-        if (questionsEl) {
-            let questions = octaveData.questions;
-
-            // If we have breath axes, use their questions instead
-            if (breathAxes.length > 0) {
-                questions = breathAxes
-                    .filter(axis => axis.projectionQuestion || axis.receptionQuestion)
-                    .slice(0, 4)
-                    .flatMap(axis => [axis.projectionQuestion, axis.receptionQuestion])
-                    .filter(q => q)
-                    .slice(0, 4);
-            }
-
-            questionsEl.innerHTML = questions.map((q, i) =>
-                `<div style="padding: 8px 0; ${i < questions.length - 1 ? 'border-bottom: 1px solid rgba(255,255,255,0.05);' : ''}">• ${q}</div>`
-            ).join('');
-        }
-
-        // ────────────────────────────────────────────────────────────────────
-        // STEP 8: Update next octave preview
-        // ────────────────────────────────────────────────────────────────────
-        const nextPreview = document.getElementById('next-octave-preview');
-        if (nextPreview) {
-            if (dominantOctave < 7) {
-                nextPreview.innerHTML = `
+    // ────────────────────────────────────────────────────────────────────
+    // STEP 8: Update next octave preview
+    // ────────────────────────────────────────────────────────────────────
+    const nextPreview = document.getElementById('next-octave-preview');
+    if (nextPreview) {
+        if (dominantOctave < 7) {
+            nextPreview.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
                         <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(167,139,250,0.2); border: 2px solid ${nextOctaveData.color}40; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: ${nextOctaveData.color};">O${nextOctave}</div>
                         <div>
@@ -317,9 +316,9 @@
                         <strong>To advance:</strong> ${octaveData.advanceHint}
                     </div>
                 `;
-            } else {
-                // At O7 - show completion message
-                nextPreview.innerHTML = `
+        } else {
+            // At O7 - show completion message
+            nextPreview.innerHTML = `
                     <div style="text-align: center; padding: 20px;">
                         <span style="font-size: 32px;">&#10024;</span>
                         <div style="font-weight: 600; color: #ffd43b; margin-top: 10px;">Full Radiance Achieved</div>
@@ -328,46 +327,46 @@
                         </div>
                     </div>
                 `;
-            }
         }
-
-        // ────────────────────────────────────────────────────────────────────
-        // STEP 9: Update breath insight
-        // ────────────────────────────────────────────────────────────────────
-        const breathNameEl = document.getElementById('dominant-breath-name');
-        const breathInsightEl = document.getElementById('dominant-breath-insight');
-
-        if (breathNameEl) {
-            breathNameEl.textContent = `"${dominantBreathName}"`;
-        }
-        if (breathInsightEl) {
-            breathInsightEl.textContent = octaveData.breathInsight;
-        }
-
-        // ────────────────────────────────────────────────────────────────────
-        // STEP 10: Highlight current octave in progress bar labels
-        // ────────────────────────────────────────────────────────────────────
-        const labels = document.querySelectorAll('#octave-progress-labels span');
-        labels.forEach((label, i) => {
-            if (i + 1 === dominantOctave) {
-                label.style.color = octaveData.color;
-                label.style.fontWeight = '600';
-            } else {
-                label.style.color = 'rgba(255,255,255,0.4)';
-                label.style.fontWeight = 'normal';
-            }
-        });
-
-        // ────────────────────────────────────────────────────────────────────
-        // STEP 11: Display Foundation Principle warnings
-        // ────────────────────────────────────────────────────────────────────
-        // Uses foundation-principle.js module
-        if (displayFoundationPrincipleWarnings) {
-            displayFoundationPrincipleWarnings(integrityResult, octaveData.color);
-        }
-
-        console.log(`[orchestrator-dashboard] Octave Dashboard initialized: O${dominantOctave} (${octaveData.name})`);
     }
+
+    // ────────────────────────────────────────────────────────────────────
+    // STEP 9: Update breath insight
+    // ────────────────────────────────────────────────────────────────────
+    const breathNameEl = document.getElementById('dominant-breath-name');
+    const breathInsightEl = document.getElementById('dominant-breath-insight');
+
+    if (breathNameEl) {
+        breathNameEl.textContent = `"${dominantBreathName}"`;
+    }
+    if (breathInsightEl) {
+        breathInsightEl.textContent = octaveData.breathInsight;
+    }
+
+    // ────────────────────────────────────────────────────────────────────
+    // STEP 10: Highlight current octave in progress bar labels
+    // ────────────────────────────────────────────────────────────────────
+    const labels = document.querySelectorAll('#octave-progress-labels span');
+    labels.forEach((label, i) => {
+        if (i + 1 === dominantOctave) {
+            label.style.color = octaveData.color;
+            label.style.fontWeight = '600';
+        } else {
+            label.style.color = 'rgba(255,255,255,0.4)';
+            label.style.fontWeight = 'normal';
+        }
+    });
+
+    // ────────────────────────────────────────────────────────────────────
+    // STEP 11: Display Foundation Principle warnings
+    // ────────────────────────────────────────────────────────────────────
+    // Uses foundation-principle.js module
+    if (displayFoundationPrincipleWarnings) {
+        displayFoundationPrincipleWarnings(integrityResult, octaveData.color);
+    }
+
+    Logger.info('OrchestratorDashboard', `Octave Dashboard initialized: O${dominantOctave} (${octaveData.name})`);
+}
 
     // ═══════════════════════════════════════════════════════════════════════
     // SECTION 3: EXPORTS
@@ -386,8 +385,8 @@
     // Export the main coordinator function
     global.initializeOctaveDashboard = initializeOctaveDashboard;
 
-    // Log module status
-    console.log('[orchestrator-dashboard] Thin coordinator loaded (Session 5 modular architecture)');
-    console.log('[orchestrator-dashboard] Modules integrated: octave-system, coherence-hero, foundation-principle, portrait-view-manager');
+// Log module status
+Logger.info('OrchestratorDashboard', 'Thin coordinator loaded (Session 5 modular architecture)');
+Logger.debug('OrchestratorDashboard', 'Modules integrated: octave-system, coherence-hero, foundation-principle, portrait-view-manager');
 
-})(typeof window !== 'undefined' ? window : this);
+}) (typeof window !== 'undefined' ? window : this);

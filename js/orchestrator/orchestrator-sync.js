@@ -22,7 +22,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -51,17 +51,17 @@
          */
         init() {
             if (typeof BroadcastChannel === 'undefined') {
-                console.warn('[CrossWindowSync] BroadcastChannel not supported in this browser');
+                Logger.warn('CrossWindowSync', 'BroadcastChannel not supported in this browser');
                 return false;
             }
 
             try {
                 this._channel = new BroadcastChannel(this.CHANNEL_NAME);
                 this._channel.onmessage = (event) => this._handleMessage(event.data);
-                console.log('[CrossWindowSync] Channel initialized:', this.CHANNEL_NAME);
+                Logger.info('CrossWindowSync', `Channel initialized: ${this.CHANNEL_NAME}`);
                 return true;
             } catch (e) {
-                console.error('[CrossWindowSync] Failed to create channel:', e);
+                Logger.error('CrossWindowSync', 'Failed to create channel', e);
                 return false;
             }
         },
@@ -83,9 +83,9 @@
 
             try {
                 this._channel.postMessage(message);
-                console.log(`[CrossWindowSync] Broadcast: ${type}`, payload);
+                Logger.debug('CrossWindowSync', `Broadcast: ${type}`, payload);
             } catch (e) {
-                console.error('[CrossWindowSync] Broadcast failed:', e);
+                Logger.error('CrossWindowSync', 'Broadcast failed', e);
             }
         },
 
@@ -106,7 +106,7 @@
          */
         _handleMessage(message) {
             const sourcePath = global.location ? global.location.pathname : '';
-            console.log(`[CrossWindowSync] Received: ${message.type} from ${message.source}`);
+            Logger.debug('CrossWindowSync', `Received: ${message.type} from ${message.source}`);
 
             // Skip messages from self
             if (message.source === sourcePath) {
@@ -129,7 +129,7 @@
             // Access demoState from global scope (loaded from orchestrator-state.js)
             const demoState = global.demoState;
             if (!demoState) {
-                console.warn('[CrossWindowSync] demoState not available for broadcast');
+                Logger.warn('CrossWindowSync', 'demoState not available for broadcast');
                 return;
             }
 
@@ -172,7 +172,7 @@
 
     // Listen for state requests (orchestrator responds to views asking for data)
     CrossWindowSync.on('STATE_REQUEST', (payload) => {
-        console.log('[CrossWindowSync] State requested by:', payload.requester);
+        Logger.info('CrossWindowSync', 'State requested by:', payload.requester);
         // Only orchestrator should respond
         const currentPath = global.location ? global.location.pathname : '';
         if (currentPath.includes('demo-orchestrator')) {
@@ -195,6 +195,6 @@
 
     global.CrossWindowSync = CrossWindowSync;
 
-    console.log('[orchestrator-sync] Module loaded');
+    Logger.info('CrossWindowSync', 'Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

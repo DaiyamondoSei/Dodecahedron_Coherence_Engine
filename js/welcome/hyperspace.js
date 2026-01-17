@@ -43,7 +43,7 @@
  * ============================================================================
  */
 
-const Hyperspace = (function() {
+const Hyperspace = (function () {
     'use strict';
 
     // ========================================================================
@@ -105,7 +105,7 @@ const Hyperspace = (function() {
 
         createOverlayElements();
 
-        console.log('[Hyperspace] Initialized');
+        Logger.info('Hyperspace', 'Initialized');
         return API;
     }
 
@@ -160,12 +160,12 @@ const Hyperspace = (function() {
      */
     function engage(destination, cardType = 'default') {
         if (isTransitioning) {
-            console.warn('[Hyperspace] Already transitioning');
+            Logger.warn('Hyperspace', 'Already transitioning');
             return Promise.resolve();
         }
 
         isTransitioning = true;
-        console.log(`[Hyperspace] Engaging warp to: ${destination}`);
+        Logger.info('Hyperspace', `Engaging warp to: ${destination}`);
 
         return new Promise((resolve) => {
             // Start the sequence

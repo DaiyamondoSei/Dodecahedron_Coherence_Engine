@@ -35,7 +35,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -70,7 +70,7 @@
      * @global
      */
     function initializeDemo() {
-        console.log('🌟 Quannex Demo Orchestrator initialized');
+        Logger.info('OrchestratorNav', 'Quannex Demo Orchestrator initialized');
 
         // Access demoState from global
         const state = global.demoState;
@@ -85,7 +85,7 @@
         // Issue #10 Fix: Handle ?restore=true from back navigation
         // This ensures state is restored when returning from sub-views
         if (shouldRestore) {
-            console.log('🔄 Restore flag detected - restoring session from back navigation');
+            Logger.info('OrchestratorNav', 'Restore flag detected - restoring session from back navigation');
             // Clear the restore parameter
             window.history.replaceState({}, document.title, window.location.pathname);
             // Fall through to normal session restoration below
@@ -93,7 +93,7 @@
 
         // PATH HANDLING: Check for ?path= parameter from welcome screen
         if (selectedPath) {
-            console.log(`🎯 Welcome screen path detected: ${selectedPath}`);
+            Logger.info('OrchestratorNav', `Welcome screen path detected: ${selectedPath}`);
             // Clear URL parameter to prevent re-triggering on refresh
             window.history.replaceState({}, document.title, window.location.pathname);
 
@@ -121,7 +121,7 @@
                         break;
 
                     default:
-                        console.warn(`Unknown path: ${selectedPath}, defaulting to Step 0`);
+                        Logger.warn('OrchestratorNav', `Unknown path: ${selectedPath}, defaulting to Step 0`);
                         goToStep(0);
                 }
             }, 100);
@@ -140,7 +140,7 @@
                 const minutesElapsed = (now - savedTime) / (1000 * 60);
 
                 if (minutesElapsed < 30) {
-                    console.log('[Demo] Restoring previous session data (saved', Math.round(minutesElapsed), 'minutes ago)');
+                    Logger.info('OrchestratorNav', `Restoring previous session data (saved ${Math.round(minutesElapsed)} minutes ago)`);
                     state.kpiData = parsed.kpis || [];
                     state.faceConfig = parsed.faceConfig || null;
                     state.coherenceResults = parsed.coherenceResults || null;
@@ -166,16 +166,16 @@
                                         sentiment: face.sentiment || face.faceEnergy || face.energy || 0.5
                                     });
                                 });
-                                console.log('[Demo] ✅ MappingContext synced with demoState');
+                                Logger.info('OrchestratorNav', 'MappingContext synced with demoState');
                                 // Store reference for later use
                                 state.loadedMappingContext = ctx.toJSON();
                             }
                         } catch (syncError) {
-                            console.warn('[Demo] MappingContext sync deferred (not yet loaded):', syncError.message);
+                            Logger.warn('OrchestratorNav', 'MappingContext sync deferred (not yet loaded):', syncError.message);
                         }
                     }
 
-                    console.log('[Demo] Session restored:', {
+                    Logger.info('OrchestratorNav', 'Session restored', {
                         kpiCount: state.kpiData?.length,
                         hasFaceConfig: !!state.faceConfig,
                         hasCoherence: !!state.coherenceResults
@@ -185,12 +185,12 @@
                         global.SessionManager.start();
                     }
                 } else {
-                    console.log('[Demo] Previous session expired (', Math.round(minutesElapsed), 'minutes old)');
+                    Logger.info('OrchestratorNav', `Previous session expired (${Math.round(minutesElapsed)} minutes old)`);
                     sessionStorage.removeItem('customCompanyData');
                 }
             }
         } catch (e) {
-            console.warn('[Demo] Session restore failed:', e.message);
+            Logger.warn('OrchestratorNav', 'Session restore failed', e.message);
         }
 
         updateProgress();
@@ -263,8 +263,8 @@
         // EXCEPTION: Skip validation for template flow (all steps already marked complete)
         if (stepNumber > 1 && window.Sprint2 && window.Sprint2.validationGate) {
             const isTemplateFlow = state.completedSteps.includes(1) &&
-                                   state.completedSteps.includes(2) &&
-                                   state.completedSteps.includes(3);
+                state.completedSteps.includes(2) &&
+                state.completedSteps.includes(3);
 
             if (!isTemplateFlow) {
                 const gateResult = window.Sprint2.canProceed();
@@ -340,7 +340,7 @@
             }
         }
 
-        console.log(`📍 Navigated to Step ${stepNumber}`);
+        Logger.info('OrchestratorNav', `Navigated to Step ${stepNumber}`);
     }
 
     // ========================================
@@ -432,7 +432,7 @@
         closeValidationModal();
         if (window.Sprint2 && window.Sprint2.validationGate) {
             window.Sprint2.validationGate.applyDefaults();
-            console.log('✅ Applied defaults to incomplete faces');
+            Logger.info('OrchestratorNav', 'Applied defaults to incomplete faces');
             // Now try to proceed - call via global
             if (typeof global.completeStep1 === 'function') {
                 global.completeStep1();
@@ -497,6 +497,6 @@
     // Register DOMContentLoaded listener to initialize the demo
     document.addEventListener('DOMContentLoaded', initializeDemo);
 
-    console.log('[orchestrator-navigation] Module loaded');
+    Logger.info('OrchestratorNav', 'Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

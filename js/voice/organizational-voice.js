@@ -293,10 +293,10 @@ const VoiceState = {
                 if (ENGAGEMENT_DEPTHS[depth]) this._depth = depth;
             }
         } catch (e) {
-            console.warn('VoiceState: Could not load from storage', e);
+            Logger.warn('Voice', 'Could not load from storage', e);
         }
 
-        console.log(`🗣️ Voice initialized: ${this._context}:${this._depth}`);
+        Logger.info('Voice', `Initialized: ${this._context}:${this._depth}`);
     },
 
     /**
@@ -332,7 +332,7 @@ const VoiceState = {
      */
     setContext(contextId) {
         if (!ORGANIZATIONAL_CONTEXTS[contextId]) {
-            console.error(`Invalid context: ${contextId}`);
+            Logger.error('Voice', `Invalid context: ${contextId}`);
             return false;
         }
 
@@ -348,7 +348,7 @@ const VoiceState = {
      */
     setDepth(depthId) {
         if (!ENGAGEMENT_DEPTHS[depthId]) {
-            console.error(`Invalid depth: ${depthId}`);
+            Logger.error('Voice', `Invalid depth: ${depthId}`);
             return false;
         }
 
@@ -400,7 +400,7 @@ const VoiceState = {
                 depth: this._depth
             }));
         } catch (e) {
-            console.warn('VoiceState: Could not persist', e);
+            Logger.warn('Voice', 'Could not persist', e);
         }
     },
 
@@ -408,11 +408,11 @@ const VoiceState = {
         const event = { type, previous, current, config: this.getConfig() };
 
         this._listeners.forEach(cb => {
-            try { cb(event); } catch (e) { console.error('Voice listener error:', e); }
+            try { cb(event); } catch (e) { Logger.error('Voice', 'Listener error:', e); }
         });
 
         window.dispatchEvent(new CustomEvent('quannex:voice-changed', { detail: event }));
-        console.log(`🗣️ Voice changed: ${this.getKey()}`);
+        Logger.info('Voice', `Changed: ${this.getKey()}`);
     }
 };
 
@@ -662,13 +662,13 @@ if (typeof window !== 'undefined') {
         // Initialization
         init() {
             VoiceState.init();
-            console.log('🗣️ Organizational Voice System initialized');
-            console.log('   Context: corporate | hybrid | conscious');
-            console.log('   Depth: analytical | balanced | contemplative');
+            Logger.info('Voice', 'System initialized');
+            Logger.debug('Voice', 'Context: corporate | hybrid | conscious');
+            Logger.debug('Voice', 'Depth: analytical | balanced | contemplative');
         }
     };
 
-    console.log('🗣️ Organizational Voice System v1.0.0 loaded');
+    Logger.info('Voice', 'System v1.0.0 loaded');
 }
 
 // CommonJS export

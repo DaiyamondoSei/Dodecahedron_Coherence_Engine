@@ -20,7 +20,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -54,7 +54,7 @@
             this.stop(); // Clear any existing timer
             this._warningShown = false;
             this._checkTimer = setInterval(() => this._checkSession(), this.CHECK_INTERVAL);
-            console.log('[SessionManager] Session monitoring started (30 min expiry, 25 min warning)');
+            Logger.info('OrchestratorSession', 'Session monitoring started (30 min expiry, 25 min warning)');
         },
 
         /**
@@ -101,7 +101,7 @@
                     }
                 }
             } catch (e) {
-                console.warn('[SessionManager] Check failed:', e.message);
+                Logger.warn('OrchestratorSession', 'Check failed', e.message);
             }
         },
 
@@ -213,7 +213,7 @@
             }
 
             this._notificationElement.style.display = 'block';
-            console.log(`[SessionManager] Session expiry warning shown (${minutesRemaining} min remaining)`);
+            Logger.info('OrchestratorSession', `Session expiry warning shown (${minutesRemaining} min remaining)`);
         },
 
         /**
@@ -237,13 +237,13 @@
                     sessionStorage.setItem('customCompanyData', JSON.stringify(parsed));
                     this._warningShown = false;
                     this._hideNotification();
-                    console.log('[SessionManager] Session extended for another 30 minutes');
+                    Logger.info('OrchestratorSession', 'Session extended for another 30 minutes');
 
                     // Show confirmation toast
                     this._showToast('Session extended! You have 30 more minutes.');
                 }
             } catch (e) {
-                console.error('[SessionManager] Extension failed:', e);
+                Logger.error('OrchestratorSession', 'Extension failed', e);
             }
         },
 
@@ -252,7 +252,7 @@
          */
         _handleExpiry() {
             this.stop();
-            console.log('[SessionManager] Session expired');
+            Logger.info('OrchestratorSession', 'Session expired');
 
             // Show final notification
             if (this._notificationElement) {
@@ -319,6 +319,6 @@
 
     global.SessionManager = SessionManager;
 
-    console.log('[orchestrator-session] Module loaded');
+    Logger.info('OrchestratorSession', 'Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

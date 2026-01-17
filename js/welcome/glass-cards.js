@@ -37,7 +37,7 @@
  * ============================================================================
  */
 
-const GlassCards = (function() {
+const GlassCards = (function () {
     'use strict';
 
     // ========================================================================
@@ -111,7 +111,7 @@ const GlassCards = (function() {
      */
     function init(options = {}) {
         if (isInitialized) {
-            console.warn('[GlassCards] Already initialized');
+            Logger.warn('GlassCards', 'Already initialized');
             return API;
         }
 
@@ -121,7 +121,7 @@ const GlassCards = (function() {
         const cardElements = document.querySelectorAll('.path-card');
 
         if (cardElements.length === 0) {
-            console.warn('[GlassCards] No .path-card elements found');
+            Logger.warn('GlassCards', 'No .path-card elements found');
             return API;
         }
 
@@ -134,7 +134,7 @@ const GlassCards = (function() {
         injectStyles();
 
         isInitialized = true;
-        console.log(`[GlassCards] Initialized ${cardElements.length} cards`);
+        Logger.info('GlassCards', `Initialized ${cardElements.length} cards`);
 
         return API;
     }
@@ -145,8 +145,8 @@ const GlassCards = (function() {
     function enhanceCard(card, index) {
         // Determine card type from class
         const type = card.classList.contains('template') ? 'template' :
-                     card.classList.contains('custom') ? 'custom' :
-                     card.classList.contains('ai') ? 'ai' : 'template';
+            card.classList.contains('custom') ? 'custom' :
+                card.classList.contains('ai') ? 'ai' : 'template';
 
         const accent = CONFIG.accents[type];
 

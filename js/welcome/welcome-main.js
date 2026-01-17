@@ -43,7 +43,7 @@
  * ============================================================================
  */
 
-const WelcomeExperience = (function() {
+const WelcomeExperience = (function () {
     'use strict';
 
     // ========================================================================
@@ -80,11 +80,11 @@ const WelcomeExperience = (function() {
      */
     function init() {
         if (isInitialized) {
-            console.warn('[WelcomeExperience] Already initialized');
+            Logger.warn('Welcome', 'Already initialized');
             return API;
         }
 
-        console.log('[WelcomeExperience] Initializing cosmic experience...');
+        Logger.info('Welcome', 'Initializing cosmic experience...');
 
         // Initialize modules in order
         initStarfield();
@@ -99,7 +99,7 @@ const WelcomeExperience = (function() {
         start();
 
         isInitialized = true;
-        console.log('[WelcomeExperience] Cosmic experience ready!');
+        Logger.info('Welcome', 'Cosmic experience ready!');
 
         return API;
     }
@@ -109,12 +109,12 @@ const WelcomeExperience = (function() {
      */
     function initStarfield() {
         if (typeof Starfield === 'undefined') {
-            console.warn('[WelcomeExperience] Starfield module not loaded');
+            Logger.warn('Welcome', 'Starfield module not loaded');
             return;
         }
 
         modules.starfield = Starfield.init('starfield-container');
-        console.log('[WelcomeExperience] Starfield initialized');
+        Logger.info('Welcome', 'Starfield initialized');
     }
 
     /**
@@ -122,12 +122,12 @@ const WelcomeExperience = (function() {
      */
     function initDodecahedron() {
         if (typeof ConstellationDodecahedron === 'undefined') {
-            console.warn('[WelcomeExperience] ConstellationDodecahedron module not loaded');
+            Logger.warn('Welcome', 'ConstellationDodecahedron module not loaded');
             return;
         }
 
         modules.dodecahedron = ConstellationDodecahedron.init('dodecahedron-canvas');
-        console.log('[WelcomeExperience] Dodecahedron initialized');
+        Logger.info('Welcome', 'Dodecahedron initialized');
     }
 
     /**
@@ -135,14 +135,14 @@ const WelcomeExperience = (function() {
      */
     function initGlassCards() {
         if (typeof GlassCards === 'undefined') {
-            console.warn('[WelcomeExperience] GlassCards module not loaded');
+            Logger.warn('Welcome', 'GlassCards module not loaded');
             return;
         }
 
         modules.glassCards = GlassCards.init({
             onWarp: handleCardWarp
         });
-        console.log('[WelcomeExperience] Glass cards initialized');
+        Logger.info('Welcome', 'Glass cards initialized');
     }
 
     /**
@@ -150,7 +150,7 @@ const WelcomeExperience = (function() {
      */
     function initHyperspace() {
         if (typeof Hyperspace === 'undefined') {
-            console.warn('[WelcomeExperience] Hyperspace module not loaded');
+            Logger.warn('Welcome', 'Hyperspace module not loaded');
             return;
         }
 
@@ -158,7 +158,7 @@ const WelcomeExperience = (function() {
             starfield: modules.starfield,
             dodecahedron: modules.dodecahedron
         });
-        console.log('[WelcomeExperience] Hyperspace initialized');
+        Logger.info('Welcome', 'Hyperspace initialized');
     }
 
     // ========================================================================
@@ -217,7 +217,7 @@ const WelcomeExperience = (function() {
      * @param {string} cardType - Type of card clicked
      */
     function handleCardWarp(destination, cardType) {
-        console.log(`[WelcomeExperience] Warp requested to: ${destination} (${cardType})`);
+        Logger.info('Welcome', `Warp requested to: ${destination} (${cardType})`);
 
         if (modules.hyperspace) {
             modules.hyperspace.engage(destination, cardType);
@@ -246,7 +246,7 @@ const WelcomeExperience = (function() {
             modules.dodecahedron.start();
         }
 
-        console.log('[WelcomeExperience] Animations started');
+        Logger.info('Welcome', 'Animations started');
     }
 
     /**
@@ -264,7 +264,7 @@ const WelcomeExperience = (function() {
             modules.dodecahedron.stop();
         }
 
-        console.log('[WelcomeExperience] Animations stopped');
+        Logger.info('Welcome', 'Animations stopped');
     }
 
     // ========================================================================

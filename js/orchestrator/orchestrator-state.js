@@ -22,7 +22,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -156,6 +156,6 @@
         PSI_3, PSI_4
     };
 
-    console.log('[orchestrator-state] Module loaded');
+    Logger.info('OrchestratorState', 'Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);
