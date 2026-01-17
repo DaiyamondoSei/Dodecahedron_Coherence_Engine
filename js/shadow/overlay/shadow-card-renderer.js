@@ -76,7 +76,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // MODULE WRAPPER (IIFE to avoid global scope pollution)
 // ═══════════════════════════════════════════════════════════════════════════════
-(function(global) {
+(function (global) {
     'use strict';
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -109,279 +109,279 @@
         createEmptyStateHtml: () => '<div class="shadow-overlay-empty">No shadows</div>'
     };
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// TEMPLATE DELEGATION
-// ═══════════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // TEMPLATE DELEGATION
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-/**
- * HTML generation is delegated to shadow-card-templates.js
- *
- * WHY: Templates were extracted in v2.0 for cleaner separation of concerns.
- * This module focuses on ORCHESTRATION (when to render, how to animate,
- * who handles events), while templates handle GENERATION (what HTML to produce).
- *
- * SEE: js/shadow/overlay/shadow-card-templates.js for:
- *   - createShadowCardHtml(shadow)
- *   - createEmptyStateHtml(hasAIGenerated)
- *   - createFaceChip(faceId, energy)
- *   - formatPrescriptions(prescriptions)
- *   - etc.
- */
+    /**
+     * HTML generation is delegated to shadow-card-templates.js
+     *
+     * WHY: Templates were extracted in v2.0 for cleaner separation of concerns.
+     * This module focuses on ORCHESTRATION (when to render, how to animate,
+     * who handles events), while templates handle GENERATION (what HTML to produce).
+     *
+     * SEE: js/shadow/overlay/shadow-card-templates.js for:
+     *   - createShadowCardHtml(shadow)
+     *   - createEmptyStateHtml(hasAIGenerated)
+     *   - createFaceChip(faceId, energy)
+     *   - formatPrescriptions(prescriptions)
+     *   - etc.
+     */
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// CARD RENDERING
-// ═══════════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // CARD RENDERING
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-/**
- * Render shadow cards into the overlay content area.
- *
- * WHY: This is the main entry point for rendering. It orchestrates:
- * 1. Getting current shadow data from state manager
- * 2. Generating HTML via templates module
- * 3. Setting up all interactive behaviors
- *
- * @param {HTMLElement} containerElement - The container to render into
- * @param {Function} onCardClick - Callback when card is clicked (receives shadow)
- */
-function renderShadowCards(containerElement, onCardClick) {
-    if (!containerElement) {
-        console.warn('[ShadowCardRenderer] No container element provided');
-        return;
-    }
-
-    const stateManager = getStateManager();
-    const templates = getTemplates();
-    const currentShadows = stateManager.getCurrentShadows();
-    const shadowState = stateManager.getShadowState();
-
-    // Empty state
-    if (currentShadows.length === 0) {
-        const hasAIGenerated = shadowState.aiShadows.length > 0;
-        containerElement.innerHTML = templates.createEmptyStateHtml(hasAIGenerated);
-        return;
-    }
-
-    // Render shadow cards using templates module
-    const cardsHtml = currentShadows.map(shadow => templates.createShadowCardHtml(shadow)).join('');
-    containerElement.innerHTML = cardsHtml;
-
-    // Setup card interactions
-    setupCardInteractions(containerElement, currentShadows, onCardClick);
-}
-
-/**
- * Setup all interactive behaviors on rendered cards.
- *
- * WHY: Cards need multiple interaction patterns:
- * 1. Perspective toggle (Shadow ↔ Gift)
- * 2. Expand/collapse details
- * 3. Navigate to 3D view
- * 4. Card click for general selection
- *
- * @param {HTMLElement} container - Container with rendered cards
- * @param {Array} shadows - Shadow data array
- * @param {Function} onCardClick - Callback for card clicks
- */
-function setupCardInteractions(container, shadows, onCardClick) {
-    container.querySelectorAll('.shadow-card').forEach((card, index) => {
-        const shadow = shadows[index];
-
-        // Card click -> focus face in 3D view
-        card.addEventListener('click', (e) => {
-            // Don't trigger if clicking interactive elements
-            if (e.target.closest('.shadow-card__toggle-perspective')) return;
-            if (e.target.closest('.shadow-card__navigate-btn')) return;
-            if (e.target.closest('.shadow-card__header')) return; // Header has its own handler
-
-            if (onCardClick && typeof onCardClick === 'function') {
-                onCardClick(shadow);
-            }
-        });
-
-        // Setup all interaction handlers
-        setupPerspectiveToggle(card);
-        setupExpandCollapse(card);
-        setupNavigateButton(card, shadow);
-    });
-}
-
-/**
- * Setup the Shadow/Gift perspective toggle on a card.
- *
- * WHY: Each shadow card has dual forms following Jungian psychology:
- * - The shadow (suppressed): The challenge, the problem
- * - The gift (integrated): The transformation, the opportunity
- *
- * This toggle lets users flip between perspectives.
- *
- * CRITICAL: Uses BEM class names (.shadow-card__suppressed) not
- * legacy names (.shadow-suppressed) - this fixes the toggle bug!
- *
- * @param {HTMLElement} card - The shadow card element
- */
-function setupPerspectiveToggle(card) {
-    // Use BEM naming convention (fixes toggle bug!)
-    const toggleBtn = card.querySelector('.shadow-card__toggle-perspective');
-    const suppressedDiv = card.querySelector('.shadow-card__suppressed');
-    const integratedDiv = card.querySelector('.shadow-card__integrated');
-
-    if (!toggleBtn || !suppressedDiv || !integratedDiv) return;
-
-    toggleBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isShowingShadow = suppressedDiv.classList.contains('active');
-
-        if (isShowingShadow) {
-            // Switch to Gift view
-            suppressedDiv.classList.remove('active');
-            integratedDiv.classList.add('active');
-            toggleBtn.textContent = 'See Shadow';
-            card.classList.add('showing-gift');
-        } else {
-            // Switch back to Shadow view
-            integratedDiv.classList.remove('active');
-            suppressedDiv.classList.add('active');
-            toggleBtn.textContent = 'See Gift';
-            card.classList.remove('showing-gift');
-        }
-    });
-}
-
-/**
- * Setup expand/collapse toggle on card header.
- *
- * WHY: Details are rich but potentially overwhelming. Progressive
- * disclosure lets users see summary first, then dive deeper.
- *
- * ACCESSIBILITY:
- * - Uses aria-expanded attribute
- * - Keyboard navigable (Enter/Space)
- * - Focus visible states (via CSS)
- *
- * @param {HTMLElement} card - The shadow card element
- */
-function setupExpandCollapse(card) {
-    const header = card.querySelector('.shadow-card__header');
-    const details = card.querySelector('.shadow-card__details');
-
-    if (!header) return;
-
-    header.addEventListener('click', (e) => {
-        // Don't toggle if clicking the toggle-perspective button
-        if (e.target.closest('.shadow-card__toggle-perspective')) return;
-
-        const isExpanded = card.classList.toggle('expanded');
-        header.setAttribute('aria-expanded', isExpanded);
-
-        if (details) {
-            details.setAttribute('aria-hidden', !isExpanded);
-        }
-    });
-
-    // Keyboard accessibility
-    header.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-            // Don't trigger if focus is on the toggle button
-            if (e.target.closest('.shadow-card__toggle-perspective')) return;
-
-            e.preventDefault();
-            header.click();
-        }
-    });
-}
-
-/**
- * Setup the "Focus in 3D" navigate button.
- *
- * WHY: Shadows are spatial - they exist between faces. The 3D view
- * reveals this relationship visually. This button bridges the
- * abstract (text) and the spatial (geometry).
- *
- * BEHAVIOR:
- * 1. Rotates dodecahedron to focus on first affected face
- * 2. Highlights all affected faces with red glow
- * 3. Closes overlay to reveal 3D view
- *
- * @param {HTMLElement} card - The shadow card element
- * @param {Object} shadow - The shadow data object
- */
-function setupNavigateButton(card, shadow) {
-    const btn = card.querySelector('.shadow-card__navigate-btn');
-    if (!btn) return;
-
-    btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-
-        const faceIds = shadow.involvedFaces || shadow.affectedFaces || [];
-        if (faceIds.length === 0) {
-            console.warn('[ShadowCardRenderer] No faces to navigate to');
+    /**
+     * Render shadow cards into the overlay content area.
+     *
+     * WHY: This is the main entry point for rendering. It orchestrates:
+     * 1. Getting current shadow data from state manager
+     * 2. Generating HTML via templates module
+     * 3. Setting up all interactive behaviors
+     *
+     * @param {HTMLElement} containerElement - The container to render into
+     * @param {Function} onCardClick - Callback when card is clicked (receives shadow)
+     */
+    function renderShadowCards(containerElement, onCardClick) {
+        if (!containerElement) {
+            console.warn('[ShadowCardRenderer] No container element provided');
             return;
         }
 
-        // Access Quannex global for 3D control
-        const quannex = global.Quannex || global.quannexEngine;
-        if (quannex?.focusOnFace) {
-            // Focus on first affected face
-            quannex.focusOnFace(faceIds[0]);
+        const stateManager = getStateManager();
+        const templates = getTemplates();
+        const currentShadows = stateManager.getCurrentShadows();
+        const shadowState = stateManager.getShadowState();
 
-            // Highlight all affected faces with red glow
-            faceIds.forEach(id => {
-                quannex.highlightFace?.(id, { color: 0xff4444, duration: 2000 });
-            });
+        // Empty state
+        if (currentShadows.length === 0) {
+            const hasAIGenerated = shadowState.aiShadows.length > 0;
+            containerElement.innerHTML = templates.createEmptyStateHtml(hasAIGenerated);
+            return;
         }
 
-        // Close overlay to reveal 3D view
-        const controller = global.ShadowOverlayController;
-        controller?.close?.();
-    });
-}
+        // Render shadow cards using templates module
+        const cardsHtml = currentShadows.map(shadow => templates.createShadowCardHtml(shadow)).join('');
+        containerElement.innerHTML = cardsHtml;
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// CARD TRANSITIONS
-// ═══════════════════════════════════════════════════════════════════════════════
+        // Setup card interactions
+        setupCardInteractions(containerElement, currentShadows, onCardClick);
+    }
 
-/**
- * Animate card transition when switching between shadow sources.
- *
- * WHY: When switching between Template and AI shadows, we want a
- * smooth visual transition rather than a jarring content swap.
- * This creates continuity and helps users understand the change.
- *
- * ANIMATION SEQUENCE:
- * 1. Fade out existing cards (200ms)
- * 2. Re-render with new source data
- * 3. Stagger fade-in new cards (50ms delay each)
- *
- * @param {HTMLElement} container - Container with cards
- * @param {Function} onCardClick - Callback for card clicks
- */
-function transitionCards(container, onCardClick) {
-    if (!container) return;
+    /**
+     * Setup all interactive behaviors on rendered cards.
+     *
+     * WHY: Cards need multiple interaction patterns:
+     * 1. Perspective toggle (Shadow ↔ Gift)
+     * 2. Expand/collapse details
+     * 3. Navigate to 3D view
+     * 4. Card click for general selection
+     *
+     * @param {HTMLElement} container - Container with rendered cards
+     * @param {Array} shadows - Shadow data array
+     * @param {Function} onCardClick - Callback for card clicks
+     */
+    function setupCardInteractions(container, shadows, onCardClick) {
+        container.querySelectorAll('.shadow-card').forEach((card, index) => {
+            const shadow = shadows[index];
 
-    // Get all current cards
-    const cards = container.querySelectorAll('.shadow-card');
+            // Card click -> focus face in 3D view
+            card.addEventListener('click', (e) => {
+                // Don't trigger if clicking interactive elements
+                if (e.target.closest('.shadow-card__toggle-perspective')) return;
+                if (e.target.closest('.shadow-card__navigate-btn')) return;
+                if (e.target.closest('.shadow-card__header')) return; // Header has its own handler
 
-    // Fade out existing cards
-    cards.forEach(card => card.classList.add('transitioning'));
+                if (onCardClick && typeof onCardClick === 'function') {
+                    onCardClick(shadow);
+                }
+            });
 
-    // After fade out, re-render with new source
-    setTimeout(() => {
-        renderShadowCards(container, onCardClick);
-
-        // Fade in new cards with stagger
-        const newCards = container.querySelectorAll('.shadow-card');
-        newCards.forEach((card, i) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(10px)';
-
-            setTimeout(() => {
-                card.style.transition = 'all 0.3s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, i * 50); // Stagger animation for visual flow
+            // Setup all interaction handlers
+            setupPerspectiveToggle(card);
+            setupExpandCollapse(card);
+            setupNavigateButton(card, shadow);
         });
-    }, 200);
-}
+    }
+
+    /**
+     * Setup the Shadow/Gift perspective toggle on a card.
+     *
+     * WHY: Each shadow card has dual forms following Jungian psychology:
+     * - The shadow (suppressed): The challenge, the problem
+     * - The gift (integrated): The transformation, the opportunity
+     *
+     * This toggle lets users flip between perspectives.
+     *
+     * CRITICAL: Uses BEM class names (.shadow-card__suppressed) not
+     * legacy names (.shadow-suppressed) - this fixes the toggle bug!
+     *
+     * @param {HTMLElement} card - The shadow card element
+     */
+    function setupPerspectiveToggle(card) {
+        // Use BEM naming convention (fixes toggle bug!)
+        const toggleBtn = card.querySelector('.shadow-card__toggle-perspective');
+        const suppressedDiv = card.querySelector('.shadow-card__suppressed');
+        const integratedDiv = card.querySelector('.shadow-card__integrated');
+
+        if (!toggleBtn || !suppressedDiv || !integratedDiv) return;
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isShowingShadow = suppressedDiv.classList.contains('active');
+
+            if (isShowingShadow) {
+                // Switch to Gift view
+                suppressedDiv.classList.remove('active');
+                integratedDiv.classList.add('active');
+                toggleBtn.textContent = 'See Shadow';
+                card.classList.add('showing-gift');
+            } else {
+                // Switch back to Shadow view
+                integratedDiv.classList.remove('active');
+                suppressedDiv.classList.add('active');
+                toggleBtn.textContent = 'See Gift';
+                card.classList.remove('showing-gift');
+            }
+        });
+    }
+
+    /**
+     * Setup expand/collapse toggle on card header.
+     *
+     * WHY: Details are rich but potentially overwhelming. Progressive
+     * disclosure lets users see summary first, then dive deeper.
+     *
+     * ACCESSIBILITY:
+     * - Uses aria-expanded attribute
+     * - Keyboard navigable (Enter/Space)
+     * - Focus visible states (via CSS)
+     *
+     * @param {HTMLElement} card - The shadow card element
+     */
+    function setupExpandCollapse(card) {
+        const header = card.querySelector('.shadow-card__header');
+        const details = card.querySelector('.shadow-card__details');
+
+        if (!header) return;
+
+        header.addEventListener('click', (e) => {
+            // Don't toggle if clicking the toggle-perspective button
+            if (e.target.closest('.shadow-card__toggle-perspective')) return;
+
+            const isExpanded = card.classList.toggle('expanded');
+            header.setAttribute('aria-expanded', isExpanded);
+
+            if (details) {
+                details.setAttribute('aria-hidden', !isExpanded);
+            }
+        });
+
+        // Keyboard accessibility
+        header.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                // Don't trigger if focus is on the toggle button
+                if (e.target.closest('.shadow-card__toggle-perspective')) return;
+
+                e.preventDefault();
+                header.click();
+            }
+        });
+    }
+
+    /**
+     * Setup the "Focus in 3D" navigate button.
+     *
+     * WHY: Shadows are spatial - they exist between faces. The 3D view
+     * reveals this relationship visually. This button bridges the
+     * abstract (text) and the spatial (geometry).
+     *
+     * BEHAVIOR:
+     * 1. Rotates dodecahedron to focus on first affected face
+     * 2. Highlights all affected faces with red glow
+     * 3. Closes overlay to reveal 3D view
+     *
+     * @param {HTMLElement} card - The shadow card element
+     * @param {Object} shadow - The shadow data object
+     */
+    function setupNavigateButton(card, shadow) {
+        const btn = card.querySelector('.shadow-card__navigate-btn');
+        if (!btn) return;
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            const faceIds = shadow.involvedFaces || shadow.affectedFaces || [];
+            if (faceIds.length === 0) {
+                console.warn('[ShadowCardRenderer] No faces to navigate to');
+                return;
+            }
+
+            // Access Quannex global for 3D control
+            const quannex = global.Quannex || global.quannexEngine;
+            if (quannex?.focusOnFace) {
+                // Focus on first affected face
+                quannex.focusOnFace(faceIds[0]);
+
+                // Highlight all affected faces with red glow
+                faceIds.forEach(id => {
+                    quannex.highlightFace?.(id, { color: 0xff4444, duration: 2000 });
+                });
+            }
+
+            // Close overlay to reveal 3D view
+            const controller = global.ShadowOverlayController;
+            controller?.close?.();
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // CARD TRANSITIONS
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    /**
+     * Animate card transition when switching between shadow sources.
+     *
+     * WHY: When switching between Template and AI shadows, we want a
+     * smooth visual transition rather than a jarring content swap.
+     * This creates continuity and helps users understand the change.
+     *
+     * ANIMATION SEQUENCE:
+     * 1. Fade out existing cards (200ms)
+     * 2. Re-render with new source data
+     * 3. Stagger fade-in new cards (50ms delay each)
+     *
+     * @param {HTMLElement} container - Container with cards
+     * @param {Function} onCardClick - Callback for card clicks
+     */
+    function transitionCards(container, onCardClick) {
+        if (!container) return;
+
+        // Get all current cards
+        const cards = container.querySelectorAll('.shadow-card');
+
+        // Fade out existing cards
+        cards.forEach(card => card.classList.add('transitioning'));
+
+        // After fade out, re-render with new source
+        setTimeout(() => {
+            renderShadowCards(container, onCardClick);
+
+            // Fade in new cards with stagger
+            const newCards = container.querySelectorAll('.shadow-card');
+            newCards.forEach((card, i) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(10px)';
+
+                setTimeout(() => {
+                    card.style.transition = 'all 0.3s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, i * 50); // Stagger animation for visual flow
+            });
+        }, 200);
+    }
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // EXPORTS

@@ -81,7 +81,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -141,7 +141,7 @@
             nextBtn.disabled = false;
         }
 
-        console.log('[face-configuration] Face editor populated with pre-loaded data');
+        Logger.debug('OrchestratorSteps', '[face-configuration] Face editor populated with pre-loaded data');
     }
 
     // ========================================
@@ -158,7 +158,7 @@
         const demoState = global.demoState;
         const goToStep = global.goToStep;
 
-        console.log('[face-configuration] Starting fresh with manual setup');
+        Logger.info('OrchestratorSteps', '[face-configuration] Starting fresh with manual setup');
 
         // Mark step 0 as complete
         markStepCompleted(0);
@@ -186,7 +186,7 @@
         const goToStep = global.goToStep;
         const selectTemplate = global.selectTemplate;
 
-        console.log('[face-configuration] Starting fresh with AI story mode');
+        Logger.info('OrchestratorSteps', '[face-configuration] Starting fresh with AI story mode');
 
         // Mark step 0 as complete
         markStepCompleted(0);
@@ -268,9 +268,9 @@
                     source: 'user'
                 }));
                 window.Sprint2.mappingContext.setAllFaces(facesConfig);
-                console.log('[face-configuration] Synced faces to MappingContext');
+                Logger.info('OrchestratorSteps', '[face-configuration] Synced faces to MappingContext');
             } catch (err) {
-                console.warn('[face-configuration] MappingContext sync failed:', err.message);
+                Logger.warn('OrchestratorSteps', '[face-configuration] MappingContext sync failed:', err.message);
             }
         }
 
@@ -278,12 +278,12 @@
         // EXCEPTION: Skip validation for template flow (all steps already marked complete)
         if (window.Sprint2 && window.Sprint2.validationGate) {
             const isTemplateFlow = demoState.completedSteps.includes(1) &&
-                                   demoState.completedSteps.includes(2) &&
-                                   demoState.completedSteps.includes(3);
+                demoState.completedSteps.includes(2) &&
+                demoState.completedSteps.includes(3);
 
             if (!isTemplateFlow) {
                 const gateResult = window.Sprint2.canProceed();
-                console.log('[face-configuration] Validation Gate:', gateResult);
+                Logger.info('OrchestratorSteps', '[face-configuration] Validation Gate:', gateResult);
 
                 // Block if validation fails - show empowering dialog
                 if (!gateResult.canProceed) {
@@ -291,7 +291,7 @@
                     return; // Block navigation
                 }
             } else {
-                console.log('[face-configuration] Validation Gate: Skipped (template flow)');
+                Logger.debug('OrchestratorSteps', '[face-configuration] Validation Gate: Skipped (template flow)');
             }
         }
 
@@ -299,7 +299,7 @@
         markStepCompleted(1);
 
         // Show success
-        console.log('[face-configuration] Step 1 completed:', demoState.faceConfig);
+        Logger.info('OrchestratorSteps', '[face-configuration] Step 1 completed:', demoState.faceConfig);
 
         // Go to next step
         goToStep(2);
@@ -349,7 +349,7 @@
                 id: i,
                 name: input ? input.value.trim() : `Face ${i}`,
                 icon: '',
-                octave: demoState.faceConfig?.faces?.[i-1]?.octave || 1
+                octave: demoState.faceConfig?.faces?.[i - 1]?.octave || 1
             });
         }
 
@@ -371,6 +371,6 @@
     global.validateFaces = validateFaces;
     global.getFaceConfiguration = getFaceConfiguration;
 
-    console.log('[face-configuration] Module loaded');
+    Logger.info('OrchestratorSteps', '[face-configuration] Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

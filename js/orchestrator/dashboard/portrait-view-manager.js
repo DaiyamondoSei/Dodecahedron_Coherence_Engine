@@ -83,7 +83,7 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -175,7 +175,7 @@
         // STEP 1: Validate state
         // ────────────────────────────────────────────────────────────────────
         if (!state || !state.coherenceResults) {
-            console.warn('[portrait-view-manager] No coherence results available for Portrait View');
+            Logger.warn('OrchestratorDash', '[portrait-view-manager] No coherence results available for Portrait View');
             return;
         }
 
@@ -187,7 +187,7 @@
         // from faceConfig if available.
         // ────────────────────────────────────────────────────────────────────
         if (!state.coherenceResults.faces || state.coherenceResults.faces.length === 0) {
-            console.warn('[portrait-view-manager] No face data, creating fallback');
+            Logger.warn('OrchestratorDash', '[portrait-view-manager] No face data, creating fallback');
             if (state.faceConfig && state.faceConfig.faces) {
                 state.coherenceResults.faces = state.faceConfig.faces.map(f => ({
                     id: f.id,
@@ -206,12 +206,12 @@
         // ────────────────────────────────────────────────────────────────────
         const waitForPortraitView = () => {
             if (typeof global.PortraitView === 'undefined') {
-                console.log('[portrait-view-manager] Waiting for PortraitView module...');
+                Logger.debug('OrchestratorDash', '[portrait-view-manager] Waiting for PortraitView module...');
                 setTimeout(waitForPortraitView, 100);
                 return;
             }
 
-            console.log('[portrait-view-manager] Initializing Portrait View');
+            Logger.info('OrchestratorDash', '[portrait-view-manager] Initializing Portrait View');
 
             // Transform coherence results to Portrait View format
             const portraitData = transformToPortraitData(state.coherenceResults);
@@ -226,7 +226,7 @@
             }
 
             portraitViewInstance.update(portraitData);
-            console.log('[portrait-view-manager] Portrait View updated');
+            Logger.debug('OrchestratorDash', '[portrait-view-manager] Portrait View updated');
         };
 
         waitForPortraitView();
@@ -522,6 +522,6 @@
         };
     }
 
-    console.log('[dashboard/portrait-view-manager] Module loaded - 2D visualization ready');
+    Logger.debug('OrchestratorDash', '[dashboard/portrait-view-manager] Module loaded - 2D visualization ready');
 
 })(typeof window !== 'undefined' ? window : this);

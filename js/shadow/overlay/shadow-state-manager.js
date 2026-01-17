@@ -56,7 +56,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // MODULE WRAPPER (IIFE to avoid global scope pollution)
 // ═══════════════════════════════════════════════════════════════════════════════
-(function(global) {
+(function (global) {
     'use strict';
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -74,176 +74,176 @@
      * @type {Object}
      */
     const shadowState = {
-    templateShadows: [],       // Original shadows from company template (preserved)
-    aiShadows: [],             // AI-generated shadows (cached between switches)
-    activeSource: 'template',  // 'template' | 'ai' - which source is displayed
-    aiGenerationStatus: 'idle' // 'idle' | 'generating' | 'success' | 'error'
-};
+        templateShadows: [],       // Original shadows from company template (preserved)
+        aiShadows: [],             // AI-generated shadows (cached between switches)
+        activeSource: 'template',  // 'template' | 'ai' - which source is displayed
+        aiGenerationStatus: 'idle' // 'idle' | 'generating' | 'success' | 'error'
+    };
 
-/**
- * Currently active shadows for display
- * This is a reference to either templateShadows or aiShadows based on activeSource
- *
- * @type {Array}
- */
-let currentShadows = [];
+    /**
+     * Currently active shadows for display
+     * This is a reference to either templateShadows or aiShadows based on activeSource
+     *
+     * @type {Array}
+     */
+    let currentShadows = [];
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// PERSISTENCE - SessionStorage Integration
-// ═══════════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // PERSISTENCE - SessionStorage Integration
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-/**
- * Save shadow sources to sessionStorage for persistence
- * Maintains backward compatibility with existing shadowPatterns field
- */
-function saveToSessionStorage() {
-    try {
-        const stored = sessionStorage.getItem('customCompanyData');
-        if (!stored) return;
+    /**
+     * Save shadow sources to sessionStorage for persistence
+     * Maintains backward compatibility with existing shadowPatterns field
+     */
+    function saveToSessionStorage() {
+        try {
+            const stored = sessionStorage.getItem('customCompanyData');
+            if (!stored) return;
 
-        const data = JSON.parse(stored);
+            const data = JSON.parse(stored);
 
-        // Preserve existing shadowPatterns for backward compatibility
-        // (based on active source for legacy code)
-        data.shadowPatterns = currentShadows;
+            // Preserve existing shadowPatterns for backward compatibility
+            // (based on active source for legacy code)
+            data.shadowPatterns = currentShadows;
 
-        // Add new shadowSources field for dual-source management
-        data.shadowSources = {
-            template: shadowState.templateShadows,
-            ai: shadowState.aiShadows,
-            activeSource: shadowState.activeSource
-        };
+            // Add new shadowSources field for dual-source management
+            data.shadowSources = {
+                template: shadowState.templateShadows,
+                ai: shadowState.aiShadows,
+                activeSource: shadowState.activeSource
+            };
 
-        sessionStorage.setItem('customCompanyData', JSON.stringify(data));
-        console.log('[ShadowStateManager] Saved shadow sources to sessionStorage');
-    } catch (e) {
-        console.warn('[ShadowStateManager] Failed to save to sessionStorage:', e);
-    }
-}
-
-/**
- * Load shadow sources from sessionStorage on init
- * Handles both new format (shadowSources) and legacy format (shadowPatterns)
- */
-function loadFromSessionStorage() {
-    try {
-        const stored = sessionStorage.getItem('customCompanyData');
-        if (!stored) return;
-
-        const data = JSON.parse(stored);
-
-        // Prefer new shadowSources format if available
-        if (data.shadowSources) {
-            shadowState.templateShadows = data.shadowSources.template || [];
-            shadowState.aiShadows = data.shadowSources.ai || [];
-            shadowState.activeSource = data.shadowSources.activeSource || 'template';
-            console.log('[ShadowStateManager] Loaded shadow sources from sessionStorage');
+            sessionStorage.setItem('customCompanyData', JSON.stringify(data));
+            Logger.debug('Shadow:StateManager', 'Saved shadow sources to sessionStorage');
+        } catch (e) {
+            Logger.warn('Shadow:StateManager', 'Failed to save to sessionStorage:', e);
         }
-        // Fall back to legacy shadowPatterns (treat as template)
-        else if (data.shadowPatterns) {
-            shadowState.templateShadows = data.shadowPatterns;
-            shadowState.activeSource = 'template';
-            console.log('[ShadowStateManager] Loaded legacy shadowPatterns as template');
+    }
+
+    /**
+     * Load shadow sources from sessionStorage on init
+     * Handles both new format (shadowSources) and legacy format (shadowPatterns)
+     */
+    function loadFromSessionStorage() {
+        try {
+            const stored = sessionStorage.getItem('customCompanyData');
+            if (!stored) return;
+
+            const data = JSON.parse(stored);
+
+            // Prefer new shadowSources format if available
+            if (data.shadowSources) {
+                shadowState.templateShadows = data.shadowSources.template || [];
+                shadowState.aiShadows = data.shadowSources.ai || [];
+                shadowState.activeSource = data.shadowSources.activeSource || 'template';
+                Logger.info('Shadow:StateManager', 'Loaded shadow sources from sessionStorage');
+            }
+            // Fall back to legacy shadowPatterns (treat as template)
+            else if (data.shadowPatterns) {
+                shadowState.templateShadows = data.shadowPatterns;
+                shadowState.activeSource = 'template';
+                Logger.info('Shadow:StateManager', 'Loaded legacy shadowPatterns as template');
+            }
+
+            // Update currentShadows based on active source
+            currentShadows = shadowState.activeSource === 'template'
+                ? shadowState.templateShadows
+                : shadowState.aiShadows;
+
+        } catch (e) {
+            Logger.warn('Shadow:StateManager', 'Failed to load from sessionStorage:', e);
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // STATE ACCESSORS
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    /**
+     * Get current shadows (based on active source)
+     * @returns {Array} Currently active shadow array
+     */
+    function getCurrentShadows() {
+        return currentShadows;
+    }
+
+    /**
+     * Set current shadows reference
+     * @param {Array} shadows - New shadows array
+     */
+    function setCurrentShadows(shadows) {
+        currentShadows = shadows;
+    }
+
+    /**
+     * Get the shadow state object
+     * @returns {Object} The central state object
+     */
+    function getShadowState() {
+        return shadowState;
+    }
+
+    /**
+     * Update shadows for a specific source
+     * @param {Array} shadows - Shadow patterns
+     * @param {string} source - 'template' | 'ai'
+     */
+    function updateShadowsForSource(shadows, source = 'template') {
+        if (source === 'template') {
+            shadowState.templateShadows = shadows;
+        } else if (source === 'ai') {
+            shadowState.aiShadows = shadows;
         }
 
         // Update currentShadows based on active source
         currentShadows = shadowState.activeSource === 'template'
             ? shadowState.templateShadows
             : shadowState.aiShadows;
-
-    } catch (e) {
-        console.warn('[ShadowStateManager] Failed to load from sessionStorage:', e);
-    }
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// STATE ACCESSORS
-// ═══════════════════════════════════════════════════════════════════════════════
-
-/**
- * Get current shadows (based on active source)
- * @returns {Array} Currently active shadow array
- */
-function getCurrentShadows() {
-    return currentShadows;
-}
-
-/**
- * Set current shadows reference
- * @param {Array} shadows - New shadows array
- */
-function setCurrentShadows(shadows) {
-    currentShadows = shadows;
-}
-
-/**
- * Get the shadow state object
- * @returns {Object} The central state object
- */
-function getShadowState() {
-    return shadowState;
-}
-
-/**
- * Update shadows for a specific source
- * @param {Array} shadows - Shadow patterns
- * @param {string} source - 'template' | 'ai'
- */
-function updateShadowsForSource(shadows, source = 'template') {
-    if (source === 'template') {
-        shadowState.templateShadows = shadows;
-    } else if (source === 'ai') {
-        shadowState.aiShadows = shadows;
     }
 
-    // Update currentShadows based on active source
-    currentShadows = shadowState.activeSource === 'template'
-        ? shadowState.templateShadows
-        : shadowState.aiShadows;
-}
+    /**
+     * Switch the active source
+     * @param {string} source - 'template' | 'ai'
+     */
+    function setActiveSource(source) {
+        if (source !== 'template' && source !== 'ai') {
+            Logger.error('Shadow:StateManager', `Invalid source: ${source}`);
+            return;
+        }
 
-/**
- * Switch the active source
- * @param {string} source - 'template' | 'ai'
- */
-function setActiveSource(source) {
-    if (source !== 'template' && source !== 'ai') {
-        console.error(`[ShadowStateManager] Invalid source: ${source}`);
-        return;
+        shadowState.activeSource = source;
+        currentShadows = source === 'template'
+            ? shadowState.templateShadows
+            : shadowState.aiShadows;
     }
 
-    shadowState.activeSource = source;
-    currentShadows = source === 'template'
-        ? shadowState.templateShadows
-        : shadowState.aiShadows;
-}
+    /**
+     * Get count of template shadows
+     * @returns {number}
+     */
+    function getTemplateCount() {
+        return shadowState.templateShadows.length;
+    }
 
-/**
- * Get count of template shadows
- * @returns {number}
- */
-function getTemplateCount() {
-    return shadowState.templateShadows.length;
-}
+    /**
+     * Get count of AI shadows
+     * @returns {number}
+     */
+    function getAICount() {
+        return shadowState.aiShadows.length;
+    }
 
-/**
- * Get count of AI shadows
- * @returns {number}
- */
-function getAICount() {
-    return shadowState.aiShadows.length;
-}
-
-/**
- * Reset all shadow state to defaults
- */
-function resetState() {
-    shadowState.templateShadows = [];
-    shadowState.aiShadows = [];
-    shadowState.activeSource = 'template';
-    shadowState.aiGenerationStatus = 'idle';
-    currentShadows = [];
-}
+    /**
+     * Reset all shadow state to defaults
+     */
+    function resetState() {
+        shadowState.templateShadows = [];
+        shadowState.aiShadows = [];
+        shadowState.activeSource = 'template';
+        shadowState.aiGenerationStatus = 'idle';
+        currentShadows = [];
+    }
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // EXPORTS
@@ -273,6 +273,6 @@ function resetState() {
         resetState
     };
 
-    console.log('[ShadowStateManager] Module loaded');
+    Logger.debug('Shadow:StateManager', 'Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

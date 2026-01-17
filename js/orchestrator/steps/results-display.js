@@ -87,7 +87,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -188,14 +188,14 @@
 
             sessionStorage.setItem('customCompanyData', JSON.stringify(customCompanyData));
             sessionStorage.setItem('selectedCompanyId', 'custom');
-            console.log('💾 Updated sessionStorage with latest data (timestamp:', customCompanyData.timestamp, ')');
+            Logger.info('OrchestratorSteps', '💾 Updated sessionStorage with latest data (timestamp:', customCompanyData.timestamp, ')');
 
             // Dispatch shadows-updated event for Shadow Overlay Controller
             if (customCompanyData.shadowPatterns) {
                 window.dispatchEvent(new CustomEvent('shadows-updated', {
                     detail: { shadows: customCompanyData.shadowPatterns }
                 }));
-                console.log('[results-display] shadows-updated event dispatched');
+                Logger.debug('OrchestratorSteps', '[results-display] shadows-updated event dispatched');
             }
 
             // Ensure session monitoring is active
@@ -304,6 +304,6 @@
     global.displayCalculationTransparency = displayCalculationTransparency;
     global.completeStep3 = completeStep3;
 
-    console.log('[results-display] Module loaded');
+    Logger.debug('OrchestratorSteps', '[results-display] Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

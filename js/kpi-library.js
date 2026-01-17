@@ -987,8 +987,8 @@ function getOctaveKPISuggestions(faceName, element, octave = 'O4') {
         ...suggestion,
         octaveRelevance: emphasis,
         octaveAdvice: emphasis > 1.2 ? `Critical at ${octaveInfo.name} stage` :
-                      emphasis < 0.8 ? `Less urgent at ${octaveInfo.name} stage` :
-                      `Standard priority at ${octaveInfo.name} stage`,
+            emphasis < 0.8 ? `Less urgent at ${octaveInfo.name} stage` :
+                `Standard priority at ${octaveInfo.name} stage`,
         recommendedMetricType: octaveInfo.kpiPriority,
         octaveContext: {
             name: octaveInfo.name,
@@ -1168,7 +1168,7 @@ if (typeof module !== 'undefined' && module.exports) {
 // ════════════════════════════════════════════════════════════════════════════
 // MODULE LOADED
 // ════════════════════════════════════════════════════════════════════════════
-console.log('📚 KPI Library loaded - Elemental wisdom and smart suggestions');
-console.log('   ELEMENTAL_WISDOM: 5 elements with archetypes');
-console.log('   KPI_SUGGESTIONS: Contextual suggestions by face & element');
-console.log('   Remember: This SUGGESTS, the CSV/JSON DEFINES');
+Logger.info('KPILibrary', '📚 KPI Library loaded - Elemental wisdom and smart suggestions');
+Logger.debug('KPILibrary', '   ELEMENTAL_WISDOM: 5 elements with archetypes');
+Logger.debug('KPILibrary', '   KPI_SUGGESTIONS: Contextual suggestions by face & element');
+Logger.debug('KPILibrary', '   Remember: This SUGGESTS, the CSV/JSON DEFINES');

@@ -74,7 +74,7 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -288,7 +288,7 @@
 
         // If still no container, skip silently
         if (!warningContainer) {
-            console.warn('[foundation-principle] Could not find/create warning container');
+            Logger.warn('OrchestratorDash', '[foundation-principle] Could not find/create warning container');
             return;
         }
 
@@ -316,11 +316,11 @@
         // ────────────────────────────────────────────────────────────────────
         if (integrityResult.spread > 0) {
             const spreadColor = integrityResult.spread > 4 ? WARNING_COLORS.CRITICAL :
-                               integrityResult.spread > 2 ? WARNING_COLORS.WARNING :
-                               WARNING_COLORS.HEALTHY;
+                integrityResult.spread > 2 ? WARNING_COLORS.WARNING :
+                    WARNING_COLORS.HEALTHY;
             const spreadIcon = integrityResult.spread > 4 ? WARNING_ICONS.TRIANGLE :
-                              integrityResult.spread > 2 ? WARNING_ICONS.CHART :
-                              WARNING_ICONS.CHECK;
+                integrityResult.spread > 2 ? WARNING_ICONS.CHART :
+                    WARNING_ICONS.CHECK;
 
             warningsHtml += `
                 <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: ${spreadColor}15; border-left: 3px solid ${spreadColor}; border-radius: 0 6px 6px 0; margin-bottom: 10px;">
@@ -331,8 +331,8 @@
                         </div>
                         <div style="font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px;">
                             ${integrityResult.spread <= 2 ? 'Healthy variance - well-aligned development' :
-                              integrityResult.spread <= 4 ? 'Some faces are developing faster than others' :
-                              'Critical misalignment detected - foundations need strengthening'}
+                    integrityResult.spread <= 4 ? 'Some faces are developing faster than others' :
+                        'Critical misalignment detected - foundations need strengthening'}
                         </div>
                     </div>
                 </div>
@@ -420,7 +420,7 @@
         warningContainer.innerHTML = warningsHtml;
 
         if (warnings.length > 0) {
-            console.log('[foundation-principle] Displayed', warnings.length, 'Foundation Principle warnings');
+            Logger.info('OrchestratorDash', '[foundation-principle] Displayed', warnings.length, 'Foundation Principle warnings');
         }
     }
 
@@ -462,6 +462,6 @@
         };
     }
 
-    console.log('[dashboard/foundation-principle] Module loaded - structural integrity warnings ready');
+    Logger.debug('OrchestratorDash', '[dashboard/foundation-principle] Module loaded - structural integrity warnings ready');
 
 })(typeof window !== 'undefined' ? window : this);

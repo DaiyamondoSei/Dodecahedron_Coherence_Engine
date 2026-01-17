@@ -475,4 +475,4 @@
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
-console.log('✅ Demo Orchestrator Logic loaded (Phase 3: thin facade, Phase 5: Gold documentation)');
+Logger.info('OrchestratorLogic', '✅ Demo Orchestrator Logic loaded (Phase 3: thin facade, Phase 5: Gold documentation)');

@@ -92,7 +92,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -122,9 +122,9 @@
         const demoState = global.demoState;
         const kpis = [];
 
-        console.log('📊 Collecting KPI data...');
-        console.log('   Mode:', demoState.kpiMode);
-        console.log('   Faces:', demoState.faceConfig.faces.length);
+        Logger.info('OrchestratorSteps', '📊 Collecting KPI data...');
+        Logger.debug('OrchestratorSteps', '   Mode:', demoState.kpiMode);
+        Logger.debug('OrchestratorSteps', '   Faces:', demoState.faceConfig.faces.length);
 
         if (demoState.kpiMode === 'quick') {
             // Collect 12 KPIs (one per face)
@@ -140,11 +140,11 @@
 
                     // Debug: Show what we're capturing
                     if (field === 'kpiName') {
-                        console.log(`      🔍 Input value: "${input.value}", data-current-value: "${input.getAttribute('data-current-value')}"`);
+                        Logger.debug('OrchestratorSteps', `      🔍 Input value: "${input.value}", data-current-value: "${input.getAttribute('data-current-value')}"`);
                     }
                 });
 
-                console.log(`   Face ${face.id} (${face.name}):`, kpiData);
+                Logger.debug('OrchestratorSteps', `   Face ${face.id} (${face.name}):`, kpiData);
 
                 // Only require kpiName - value defaults to 0 if empty
                 if (kpiData.kpiName && kpiData.kpiName.length > 0) {
@@ -161,9 +161,9 @@
                         element: 'Earth' // Default for quick mode
                     };
                     kpis.push(kpiEntry);
-                    console.log(`      ✅ Added KPI:`, kpiEntry);
+                    Logger.info('OrchestratorSteps', `      ✅ Added KPI:`, kpiEntry);
                 } else {
-                    console.log(`      ⚠️ Skipped (no KPI name entered for this face)`);
+                    Logger.warn('OrchestratorSteps', `      ⚠️ Skipped (no KPI name entered for this face)`);
                 }
             });
         } else {
@@ -195,17 +195,17 @@
                             element: element
                         };
                         kpis.push(kpiEntry);
-                        console.log(`      ✅ Added ${element} KPI:`, kpiEntry);
+                        Logger.info('OrchestratorSteps', `      ✅ Added ${element} KPI:`, kpiEntry);
                     }
                 });
             });
         }
 
-        console.log(`📊 Total KPIs collected: ${kpis.length}`);
+        Logger.info('OrchestratorSteps', `📊 Total KPIs collected: ${kpis.length}`);
 
         // Validation feedback: warn if no KPIs collected
         if (kpis.length === 0) {
-            console.warn('[collectKPIData] No KPIs collected - check if form was rendered');
+            Logger.warn('OrchestratorSteps', '[collectKPIData] No KPIs collected - check if form was rendered');
             alert('Please enter at least one KPI with a name before proceeding.');
         }
 
@@ -241,7 +241,7 @@
         await new Promise(resolve => setTimeout(resolve, 1500));
 
         try {
-            console.log('🔬 Running calculation...');
+            Logger.info('OrchestratorSteps', '🔬 Running calculation...');
 
             // ========================================
             // 🔄 TRANSFORMATION LAYER
@@ -249,7 +249,7 @@
             let companyData;
 
             if (typeof window.DataTransformer !== 'undefined') {
-                console.log('   🔄 Using Data Transformation Layer');
+                Logger.info('OrchestratorSteps', '   🔄 Using Data Transformation Layer');
 
                 // Prepare data for transformation
                 const demoData = {
@@ -260,21 +260,21 @@
 
                 // Validate before transforming
                 const validation = window.DataTransformer.validate(demoData);
-                console.log('   📋 Validation:', validation);
+                Logger.debug('OrchestratorSteps', '   📋 Validation:', validation);
 
                 if (!validation.valid) {
                     throw new Error(`Data validation failed: ${validation.errors.join(', ')}`);
                 }
 
                 if (validation.warnings.length > 0) {
-                    console.warn('   ⚠️ Warnings:', validation.warnings);
+                    Logger.warn('OrchestratorSteps', '   ⚠️ Warnings:', validation.warnings);
                 }
 
                 // Transform to engine format
                 companyData = window.DataTransformer.transform(demoData);
-                console.log('   ✅ Data transformed successfully');
+                Logger.info('OrchestratorSteps', '   ✅ Data transformed successfully');
             } else {
-                console.warn('   ⚠️ DataTransformer not loaded - using raw format');
+                Logger.warn('OrchestratorSteps', '   ⚠️ DataTransformer not loaded - using raw format');
 
                 // Fallback: Use raw format (may cause issues)
                 companyData = {
@@ -283,21 +283,21 @@
                 };
             }
 
-            console.log('   Company name:', companyData.name);
-            console.log('   KPIs count:', companyData.kpis.length);
-            console.log('   Sample KPI:', companyData.kpis[0]);
+            Logger.debug('OrchestratorSteps', '   Company name:', companyData.name);
+            Logger.debug('OrchestratorSteps', '   KPIs count:', companyData.kpis.length);
+            Logger.debug('OrchestratorSteps', '   Sample KPI:', companyData.kpis[0]);
 
             // ========================================
             // 🧮 CALCULATION ENGINE
             // ========================================
             if (typeof window.quannexEngine !== 'undefined') {
-                console.log('   ✅ Using Quannex Engine');
+                Logger.info('OrchestratorSteps', '   ✅ Using Quannex Engine');
 
                 // Use real engine
                 await window.quannexEngine.initializeWithCompany(companyData);
                 const engineState = window.quannexEngine.getState();
 
-                console.log('   ✅ Engine calculation complete');
+                Logger.info('OrchestratorSteps', '   ✅ Engine calculation complete');
 
                 // Transform results back to UI format
                 if (typeof window.DataTransformer !== 'undefined') {
@@ -306,14 +306,14 @@
                     demoState.coherenceResults = engineState;
                 }
 
-                console.log('   ✅ Results ready for display:', demoState.coherenceResults);
+                Logger.info('OrchestratorSteps', '   ✅ Results ready for display:', demoState.coherenceResults);
             } else {
-                console.log('   ⚠️ Quannex Engine not loaded - using fallback calculation');
+                Logger.warn('OrchestratorSteps', '   ⚠️ Quannex Engine not loaded - using fallback calculation');
 
                 // Fallback: Simple calculation (works with UI format)
                 demoState.coherenceResults = calculateSimpleCoherence(demoState.kpiData);
 
-                console.log('   ✅ Fallback calculation completed:', demoState.coherenceResults);
+                Logger.info('OrchestratorSteps', '   ✅ Fallback calculation completed:', demoState.coherenceResults);
             }
 
             // ========================================
@@ -321,7 +321,7 @@
             // ========================================
             if (!demoState.loadedMappingContext?.shadowPatterns?.length) {
                 if (typeof window.ShadowDetector !== 'undefined' && demoState.coherenceResults?.faces) {
-                    console.log('   👁️ Running shadow detection for custom data...');
+                    Logger.info('OrchestratorSteps', '   👁️ Running shadow detection for custom data...');
                     try {
                         const detector = new window.ShadowDetector();
 
@@ -337,22 +337,22 @@
 
                         if (shadowAnalysis.detectedPatterns?.length > 0) {
                             demoState.shadowPatterns = shadowAnalysis.detectedPatterns;
-                            console.log(`   ✅ Detected ${shadowAnalysis.detectedPatterns.length} shadow patterns:`,
+                            Logger.info('OrchestratorSteps', `   ✅ Detected ${shadowAnalysis.detectedPatterns.length} shadow patterns:`,
                                 shadowAnalysis.detectedPatterns.map(p => p.name));
                         } else {
-                            console.log('   ℹ️ No shadow patterns detected in custom data');
+                            Logger.info('OrchestratorSteps', '   ℹ️ No shadow patterns detected in custom data');
                             demoState.shadowPatterns = [];
                         }
                     } catch (e) {
-                        console.warn('   ⚠️ Shadow detection failed:', e);
+                        Logger.warn('OrchestratorSteps', '   ⚠️ Shadow detection failed:', e);
                         demoState.shadowPatterns = [];
                     }
                 } else {
-                    console.log('   ℹ️ ShadowDetector not available or no face data');
+                    Logger.debug('OrchestratorSteps', '   ℹ️ ShadowDetector not available or no face data');
                     demoState.shadowPatterns = [];
                 }
             } else {
-                console.log('   ✅ Using template shadow patterns');
+                Logger.info('OrchestratorSteps', '   ✅ Using template shadow patterns');
             }
 
             // Display results
@@ -360,9 +360,9 @@
 
             hideLoading();
         } catch (error) {
-            console.error('❌ Calculation failed:', error);
-            console.error('   Error details:', error.message);
-            console.error('   Stack:', error.stack);
+            Logger.error('OrchestratorSteps', '❌ Calculation failed:', error);
+            Logger.debug('OrchestratorSteps', '   Error details:', error.message);
+            Logger.debug('OrchestratorSteps', '   Stack:', error.stack);
             hideLoading();
             alert(`Calculation failed: ${error.message}\n\nPlease check console for details.`);
         }
@@ -386,8 +386,8 @@
      *   - faces: Array of face objects with energy values
      */
     function calculateSimpleCoherence(kpis) {
-        console.log('🧮 Starting simple coherence calculation...');
-        console.log('   Input KPIs:', kpis.length);
+        Logger.info('OrchestratorSteps', '🧮 Starting simple coherence calculation...');
+        Logger.debug('OrchestratorSteps', '   Input KPIs:', kpis.length);
 
         const faceEnergies = {};
 
@@ -421,7 +421,7 @@
 
             const score = Math.max(0, Math.min(1, normalized));
 
-            console.log(`   KPI: ${kpi.name} = ${kpi.value} → ${(score * 100).toFixed(1)}%`);
+            Logger.debug('OrchestratorSteps', `   KPI: ${kpi.name} = ${kpi.value} → ${(score * 100).toFixed(1)}%`);
 
             faceEnergies[kpi.faceId].kpis.push({
                 ...kpi,
@@ -434,10 +434,10 @@
             if (face.kpis.length > 0) {
                 const avgScore = face.kpis.reduce((sum, kpi) => sum + kpi.normalizedScore, 0) / face.kpis.length;
                 face.energy = avgScore;
-                console.log(`   Face ${face.id} (${face.name}): ${face.kpis.length} KPIs → ${(face.energy * 100).toFixed(1)}%`);
+                Logger.debug('OrchestratorSteps', `   Face ${face.id} (${face.name}): ${face.kpis.length} KPIs → ${(face.energy * 100).toFixed(1)}%`);
             } else {
                 face.energy = 0;
-                console.log(`   Face ${face.id} (${face.name}): No KPIs → 0%`);
+                Logger.debug('OrchestratorSteps', `   Face ${face.id} (${face.name}): No KPIs → 0%`);
             }
         });
 
@@ -447,9 +447,9 @@
             ? faces.reduce((sum, face) => sum + face.energy, 0) / faces.length
             : 0;
 
-        console.log(`🧮 Calculation complete:`);
-        console.log(`   Global Coherence: ${(globalCoherence * 100).toFixed(1)}%`);
-        console.log(`   Status: ${getCoherenceStatus(globalCoherence)}`);
+        Logger.info('OrchestratorSteps', `🧮 Calculation complete:`);
+        Logger.info('OrchestratorSteps', `   Global Coherence: ${(globalCoherence * 100).toFixed(1)}%`);
+        Logger.info('OrchestratorSteps', `   Status: ${getCoherenceStatus(globalCoherence)}`);
 
         return {
             globalCoherence: globalCoherence,
@@ -490,6 +490,6 @@
     global.runCalculation = runCalculation;
     global.getCoherenceStatus = getCoherenceStatus;
 
-    console.log('[calculation-engine] Module loaded');
+    Logger.debug('OrchestratorSteps', '[calculation-engine] Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

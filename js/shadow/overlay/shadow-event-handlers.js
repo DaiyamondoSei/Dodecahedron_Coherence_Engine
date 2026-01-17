@@ -58,7 +58,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // MODULE WRAPPER (IIFE to avoid global scope pollution)
 // ═══════════════════════════════════════════════════════════════════════════════
-(function(global) {
+(function (global) {
     'use strict';
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -70,193 +70,193 @@
      * @returns {Object} ShadowOverlayController API
      */
     const getController = () => global.ShadowOverlayController || {
-        open: () => {},
-        close: () => {},
-        toggle: () => {},
+        open: () => { },
+        close: () => { },
+        toggle: () => { },
         isOpen: () => false
     };
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // STATE
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-/**
- * Track bound event listeners for cleanup
- * @type {Array<{element: Element, type: string, handler: Function}>}
- */
-let boundListeners = [];
+    /**
+     * Track bound event listeners for cleanup
+     * @type {Array<{element: Element, type: string, handler: Function}>}
+     */
+    let boundListeners = [];
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// KEYBOARD HANDLERS
-// ═══════════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // KEYBOARD HANDLERS
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-/**
- * Handle global keyboard events
- *
- * @param {KeyboardEvent} e - The keyboard event
- */
-function handleKeyDown(e) {
-    const controller = getController();
+    /**
+     * Handle global keyboard events
+     *
+     * @param {KeyboardEvent} e - The keyboard event
+     */
+    function handleKeyDown(e) {
+        const controller = getController();
 
-    // ESC to close overlay (when open)
-    if (e.key === 'Escape' && controller.isOpen()) {
+        // ESC to close overlay (when open)
+        if (e.key === 'Escape' && controller.isOpen()) {
+            controller.close();
+            return;
+        }
+
+        // 'S' to toggle shadow overlay (when not typing)
+        if (e.key === 's' || e.key === 'S') {
+            const activeElement = document.activeElement;
+            const isTyping = activeElement && (
+                activeElement.tagName === 'INPUT' ||
+                activeElement.tagName === 'TEXTAREA' ||
+                activeElement.contentEditable === 'true'
+            );
+
+            if (!isTyping) {
+                e.preventDefault();
+                controller.toggle();
+            }
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // BUTTON HANDLERS
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    /**
+     * Handle open button click
+     *
+     * @param {MouseEvent} e - The click event
+     */
+    function handleOpenClick(e) {
+        e.stopPropagation();
+        const controller = getController();
+        controller.open();
+    }
+
+    /**
+     * Handle close button click
+     */
+    function handleCloseClick() {
+        const controller = getController();
         controller.close();
-        return;
     }
 
-    // 'S' to toggle shadow overlay (when not typing)
-    if (e.key === 's' || e.key === 'S') {
-        const activeElement = document.activeElement;
-        const isTyping = activeElement && (
-            activeElement.tagName === 'INPUT' ||
-            activeElement.tagName === 'TEXTAREA' ||
-            activeElement.contentEditable === 'true'
-        );
+    /**
+     * Handle backdrop click (close overlay)
+     */
+    function handleBackdropClick() {
+        const controller = getController();
+        controller.close();
+    }
 
-        if (!isTyping) {
-            e.preventDefault();
-            controller.toggle();
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // DEPRECATED HANDLERS (maintained for backward compatibility)
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    /**
+     * Handle source dropdown change (DEPRECATED)
+     * Now handled by ShadowSourceToggle, but kept for legacy HTML support
+     *
+     * @param {Event} e - The change event
+     * @deprecated Use ShadowSourceToggle instead
+     */
+    function handleSourceChange(e) {
+        const newSource = e.target.value;
+        const toggle = window.ShadowSourceToggle;
+
+        if (toggle && typeof toggle.switchSource === 'function') {
+            // Delegate to new toggle component
+            const instance = window.shadowSourceToggle;
+            if (instance) {
+                instance.switchSource(newSource);
+            }
         }
+
+        console.log('[ShadowEventHandlers] Legacy source dropdown used - consider using toggle');
     }
-}
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// BUTTON HANDLERS
-// ═══════════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // EVENT BINDING
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-/**
- * Handle open button click
- *
- * @param {MouseEvent} e - The click event
- */
-function handleOpenClick(e) {
-    e.stopPropagation();
-    const controller = getController();
-    controller.open();
-}
+    /**
+     * Bind a single event listener and track it for cleanup
+     *
+     * @param {Element|Document} element - Element to bind to
+     * @param {string} type - Event type
+     * @param {Function} handler - Event handler function
+     */
+    function bindEvent(element, type, handler) {
+        if (!element) return;
 
-/**
- * Handle close button click
- */
-function handleCloseClick() {
-    const controller = getController();
-    controller.close();
-}
+        element.addEventListener(type, handler);
+        boundListeners.push({ element, type, handler });
+    }
 
-/**
- * Handle backdrop click (close overlay)
- */
-function handleBackdropClick() {
-    const controller = getController();
-    controller.close();
-}
+    /**
+     * Initialize all event listeners
+     *
+     * @param {Object} options - Element references
+     * @param {HTMLElement} [options.openButton] - Open overlay button
+     * @param {HTMLElement} [options.closeButton] - Close overlay button
+     * @param {HTMLElement} [options.backdrop] - Overlay backdrop
+     * @param {HTMLElement} [options.sourceDropdown] - Legacy source dropdown
+     */
+    function init(options = {}) {
+        // Get elements with fallbacks
+        const openButton = options.openButton || document.getElementById('openShadowOverlay');
+        const closeButton = options.closeButton || document.getElementById('closeShadowOverlay');
+        const overlay = document.getElementById('shadowOverlay');
+        const backdrop = options.backdrop || overlay?.querySelector('.shadow-overlay-backdrop');
+        const sourceDropdown = options.sourceDropdown || document.getElementById('shadowSourceSelect');
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// DEPRECATED HANDLERS (maintained for backward compatibility)
-// ═══════════════════════════════════════════════════════════════════════════════
-
-/**
- * Handle source dropdown change (DEPRECATED)
- * Now handled by ShadowSourceToggle, but kept for legacy HTML support
- *
- * @param {Event} e - The change event
- * @deprecated Use ShadowSourceToggle instead
- */
-function handleSourceChange(e) {
-    const newSource = e.target.value;
-    const toggle = window.ShadowSourceToggle;
-
-    if (toggle && typeof toggle.switchSource === 'function') {
-        // Delegate to new toggle component
-        const instance = window.shadowSourceToggle;
-        if (instance) {
-            instance.switchSource(newSource);
+        // Open button click
+        if (openButton) {
+            bindEvent(openButton, 'click', handleOpenClick);
         }
+
+        // Close button click
+        if (closeButton) {
+            bindEvent(closeButton, 'click', handleCloseClick);
+        }
+
+        // Backdrop click to close
+        if (backdrop) {
+            bindEvent(backdrop, 'click', handleBackdropClick);
+        }
+
+        // Global keyboard shortcuts
+        bindEvent(document, 'keydown', handleKeyDown);
+
+        // Legacy: Source dropdown change (deprecated)
+        if (sourceDropdown) {
+            bindEvent(sourceDropdown, 'change', handleSourceChange);
+            console.log('[ShadowEventHandlers] Legacy dropdown bound - prefer using toggle');
+        }
+
+        console.log('[ShadowEventHandlers] Event listeners initialized');
+        console.log('[ShadowEventHandlers] Press "S" to toggle shadow overlay');
     }
 
-    console.log('[ShadowEventHandlers] Legacy source dropdown used - consider using toggle');
-}
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // CLEANUP
+    // ═══════════════════════════════════════════════════════════════════════════════
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// EVENT BINDING
-// ═══════════════════════════════════════════════════════════════════════════════
+    /**
+     * Remove all bound event listeners
+     * Call this on destroy to prevent memory leaks
+     */
+    function cleanup() {
+        boundListeners.forEach(({ element, type, handler }) => {
+            element.removeEventListener(type, handler);
+        });
 
-/**
- * Bind a single event listener and track it for cleanup
- *
- * @param {Element|Document} element - Element to bind to
- * @param {string} type - Event type
- * @param {Function} handler - Event handler function
- */
-function bindEvent(element, type, handler) {
-    if (!element) return;
+        boundListeners = [];
 
-    element.addEventListener(type, handler);
-    boundListeners.push({ element, type, handler });
-}
-
-/**
- * Initialize all event listeners
- *
- * @param {Object} options - Element references
- * @param {HTMLElement} [options.openButton] - Open overlay button
- * @param {HTMLElement} [options.closeButton] - Close overlay button
- * @param {HTMLElement} [options.backdrop] - Overlay backdrop
- * @param {HTMLElement} [options.sourceDropdown] - Legacy source dropdown
- */
-function init(options = {}) {
-    // Get elements with fallbacks
-    const openButton = options.openButton || document.getElementById('openShadowOverlay');
-    const closeButton = options.closeButton || document.getElementById('closeShadowOverlay');
-    const overlay = document.getElementById('shadowOverlay');
-    const backdrop = options.backdrop || overlay?.querySelector('.shadow-overlay-backdrop');
-    const sourceDropdown = options.sourceDropdown || document.getElementById('shadowSourceSelect');
-
-    // Open button click
-    if (openButton) {
-        bindEvent(openButton, 'click', handleOpenClick);
+        console.log('[ShadowEventHandlers] Cleaned up event listeners');
     }
-
-    // Close button click
-    if (closeButton) {
-        bindEvent(closeButton, 'click', handleCloseClick);
-    }
-
-    // Backdrop click to close
-    if (backdrop) {
-        bindEvent(backdrop, 'click', handleBackdropClick);
-    }
-
-    // Global keyboard shortcuts
-    bindEvent(document, 'keydown', handleKeyDown);
-
-    // Legacy: Source dropdown change (deprecated)
-    if (sourceDropdown) {
-        bindEvent(sourceDropdown, 'change', handleSourceChange);
-        console.log('[ShadowEventHandlers] Legacy dropdown bound - prefer using toggle');
-    }
-
-    console.log('[ShadowEventHandlers] Event listeners initialized');
-    console.log('[ShadowEventHandlers] Press "S" to toggle shadow overlay');
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// CLEANUP
-// ═══════════════════════════════════════════════════════════════════════════════
-
-/**
- * Remove all bound event listeners
- * Call this on destroy to prevent memory leaks
- */
-function cleanup() {
-    boundListeners.forEach(({ element, type, handler }) => {
-        element.removeEventListener(type, handler);
-    });
-
-    boundListeners = [];
-
-    console.log('[ShadowEventHandlers] Cleaned up event listeners');
-}
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // EXPORTS

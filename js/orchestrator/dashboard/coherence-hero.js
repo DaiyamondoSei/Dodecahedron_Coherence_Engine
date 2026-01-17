@@ -75,7 +75,7 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -287,7 +287,7 @@
         const state = global.demoState;
 
         if (!state || !state.coherenceResults) {
-            console.warn('[coherence-hero] No coherence results available for hero');
+            Logger.warn('OrchestratorDash', '[coherence-hero] No coherence results available for hero');
             return;
         }
 
@@ -349,7 +349,7 @@
             heroEl.style.borderColor = tier.borderColor;
         }
 
-        console.log('[coherence-hero] Hero initialized:', coherencePercent + '%', '-', tier.name);
+        Logger.info('OrchestratorDash', '[coherence-hero] Hero initialized:', coherencePercent + '%', '-', tier.name);
     }
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -387,6 +387,6 @@
         };
     }
 
-    console.log('[dashboard/coherence-hero] Module loaded - hero section ready');
+    Logger.debug('OrchestratorDash', '[dashboard/coherence-hero] Module loaded - hero section ready');
 
 })(typeof window !== 'undefined' ? window : this);

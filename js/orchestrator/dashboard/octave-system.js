@@ -68,7 +68,7 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -398,7 +398,7 @@
         // if something goes wrong, we fall back to known PHI values.
         // ────────────────────────────────────────────────────────────────────
         if (!thresholds) {
-            console.warn('[octave-system] OCTAVE_COHERENCE_THRESHOLDS not found, using defaults');
+            Logger.warn('OrchestratorDash', '[octave-system] OCTAVE_COHERENCE_THRESHOLDS not found, using defaults');
             // PHI^-2 = 0.381966..., PHI^-1 = 0.618033..., etc.
             if (coherence >= 0.95) return 7;   // Radiance
             if (coherence >= 0.854) return 6;  // Vision (PSI^4)
@@ -542,6 +542,6 @@
         };
     }
 
-    console.log('[dashboard/octave-system] Module loaded - 7 octaves ready (O1-O7)');
+    Logger.debug('OrchestratorDash', '[dashboard/octave-system] Module loaded - 7 octaves ready (O1-O7)');
 
 })(typeof window !== 'undefined' ? window : this);

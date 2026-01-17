@@ -75,7 +75,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -111,12 +111,12 @@
 
         // Re-entrancy guard: prevent duplicate calls from rapid clicks or event bubbling
         if (isSelectingCompanyTemplate()) {
-            console.log(`[selectCompanyTemplate] Ignoring duplicate call for: ${companyId}`);
+            Logger.debug('OrchestratorSteps', `[selectCompanyTemplate] Ignoring duplicate call for: ${companyId}`);
             return;
         }
         setSelectingCompanyTemplate(true);
 
-        console.log(`🏢 Selecting company template: ${companyId}`);
+        Logger.info('OrchestratorSteps', `🏢 Selecting company template: ${companyId}`);
         showLoading('Loading organizational DNA...');
 
         try {
@@ -129,14 +129,14 @@
                     throw new Error(`HTTP ${response.status}`);
                 }
                 mappingContext = await response.json();
-                console.log(`✅ Loaded mapping context from server for ${mappingContext.displayName}`);
+                Logger.info('OrchestratorSteps', `✅ Loaded mapping context from server for ${mappingContext.displayName}`);
             } catch (fetchError) {
                 // Fallback to bundled templates for offline/file:// protocol support
-                console.warn(`⚠️ Fetch failed (${fetchError.message}), trying offline bundle...`);
+                Logger.warn('OrchestratorSteps', `⚠️ Fetch failed (${fetchError.message}), trying offline bundle...`);
 
                 if (window.CompanyTemplatesBundle && window.CompanyTemplatesBundle.has(companyId)) {
                     mappingContext = window.CompanyTemplatesBundle.get(companyId);
-                    console.log(`✅ Loaded mapping context from offline bundle for ${mappingContext.displayName}`);
+                    Logger.info('OrchestratorSteps', `✅ Loaded mapping context from offline bundle for ${mappingContext.displayName}`);
                 } else {
                     throw new Error(`Template not found: ${companyId} (offline bundle not available)`);
                 }
@@ -218,9 +218,9 @@
                         source: 'template'
                     }));
                     window.Sprint2.mappingContext.setAllFaces(facesConfig);
-                    console.log('✅ Synced to Sprint2 MappingContext');
+                    Logger.debug('OrchestratorSteps', '✅ Synced to Sprint2 MappingContext');
                 } catch (err) {
-                    console.warn('⚠️ Sprint2 sync failed:', err.message);
+                    Logger.warn('OrchestratorSteps', '⚠️ Sprint2 sync failed:', err.message);
                 }
             }
 
@@ -238,7 +238,7 @@
                     // Add shadowPatterns from mappingContext to engineData
                     if (mappingContext.shadowPatterns && mappingContext.shadowPatterns.length > 0) {
                         engineData.shadowPatterns = mappingContext.shadowPatterns;
-                        console.log(`[DataBridge] Added ${mappingContext.shadowPatterns.length} shadow patterns to engine data`);
+                        Logger.debug('OrchestratorSteps', `[DataBridge] Added ${mappingContext.shadowPatterns.length} shadow patterns to engine data`);
                     }
 
                     if (typeof window.Quannex !== 'undefined') {
@@ -246,12 +246,12 @@
                         // This ensures coherence calculations match the stored perspective
                         if (mappingContext.diagnostics?.tuning) {
                             const tuning = mappingContext.diagnostics.tuning;
-                            console.log(`[Tuning] Applying ${tuning.perspective} perspective from template`);
+                            Logger.debug('OrchestratorSteps', `[Tuning] Applying ${tuning.perspective} perspective from template`);
                             window.Quannex.importTuning(tuning);
                         }
 
                         await window.Quannex.initWithCompany(engineData);
-                        console.log('[DataBridge] Engine initialized with template data');
+                        Logger.info('OrchestratorSteps', '[DataBridge] Engine initialized with template data');
 
                         const engineState = window.Quannex.getState();
                         if (engineState && engineState.globalCoherence !== undefined) {
@@ -260,7 +260,7 @@
                     }
                 }
             } catch (bridgeError) {
-                console.warn('[DataBridge] Engine initialization skipped:', bridgeError.message);
+                Logger.warn('OrchestratorSteps', '[DataBridge] Engine initialization skipped:', bridgeError.message);
                 // Continue with fallback data - visualization will use pre-calculated sentiments
             }
 
@@ -276,7 +276,7 @@
             // Ensure sessionStorage is populated immediately for 3D view
             // (Risk Manager: prevents race condition if user opens 3D before clicking launchView)
             updateSessionStorage();
-            console.log('[Template] ✅ SessionStorage populated with edges/vertices for 3D view');
+            Logger.info('OrchestratorSteps', '[Template] ✅ SessionStorage populated with edges/vertices for 3D view');
 
             hideLoading();
 
@@ -294,7 +294,7 @@
             hideTemplateGridForPreloadedCompany(mappingContext);
 
         } catch (error) {
-            console.error('❌ Failed to load company template:', error);
+            Logger.error('OrchestratorSteps', '❌ Failed to load company template:', error);
             hideLoading();
             alert(`Failed to load ${companyId} template: ${error.message}`);
         } finally {
@@ -309,6 +309,6 @@
 
     global.selectCompanyTemplate = selectCompanyTemplate;
 
-    console.log('[template-selection] Module loaded');
+    Logger.info('OrchestratorSteps', '[template-selection] Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

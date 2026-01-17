@@ -79,7 +79,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -117,9 +117,9 @@
         if (window.Sprint2 && window.Sprint2.mappingContext) {
             try {
                 window.Sprint2.mappingContext.setMode(mode);
-                console.log('✅ Synced mode to MappingContext:', mode);
+                Logger.info('OrchestratorSteps', '✅ Synced mode to MappingContext:', mode);
             } catch (err) {
-                console.warn('⚠️ Mode sync failed:', err.message);
+                Logger.warn('OrchestratorSteps', '⚠️ Mode sync failed:', err.message);
             }
         }
 
@@ -129,7 +129,7 @@
         // Enable next button
         document.getElementById('step2NextBtn').disabled = false;
 
-        console.log(`✅ KPI mode selected: ${mode}`);
+        Logger.info('OrchestratorSteps', `✅ KPI mode selected: ${mode}`);
     }
 
     // ========================================
@@ -249,7 +249,7 @@
 
         // Defensive check: ensure face configuration exists
         if (!demoState.faceConfig || !demoState.faceConfig.faces) {
-            console.error('[KPIMapper] No face configuration available');
+            Logger.error('OrchestratorSteps', '[KPIMapper] No face configuration available');
             return '<p style="color: #ff6b6b; text-align: center; padding: 40px;">Please complete Step 1 (Define Faces) first.</p>';
         }
 
@@ -261,7 +261,7 @@
             demoState.kpiData.forEach(kpi => {
                 kpiByFaceId[kpi.faceId] = kpi;
             });
-            console.log('[KPIMapper] Pre-filling with template KPIs:', Object.keys(kpiByFaceId).length);
+            Logger.info('OrchestratorSteps', '[KPIMapper] Pre-filling with template KPIs:', Object.keys(kpiByFaceId).length);
         }
 
         let html = '<div style="margin: 30px 0;">';
@@ -547,7 +547,7 @@
         // NEW: Generate edges/vertices for custom flow using Context Synthesizer
         // This ensures the 3D visualization has complete data for non-template flows
         if (!demoState.loadedMappingContext && demoState.faceConfig) {
-            console.log('🔮 Custom flow detected - synthesizing edges and vertices...');
+            Logger.info('OrchestratorSteps', '🔮 Custom flow detected - synthesizing edges and vertices...');
 
             // Check if Context Synthesizer is available
             if (window.ContextSynthesizer && typeof window.ContextSynthesizer.synthesizeCustomContext === 'function') {
@@ -559,23 +559,23 @@
 
                     if (synthesizedContext) {
                         demoState.loadedMappingContext = synthesizedContext;
-                        console.log('✅ Context Synthesizer generated:',
+                        Logger.info('OrchestratorSteps', '✅ Context Synthesizer generated:',
                             synthesizedContext.edges?.length || 0, 'edges,',
                             synthesizedContext.vertices?.length || 0, 'vertices');
                     }
                 } catch (error) {
-                    console.error('⚠️ Context Synthesizer failed:', error);
+                    Logger.error('OrchestratorSteps', '⚠️ Context Synthesizer failed:', error);
                     // Continue anyway - visualization will work without edges
                 }
             } else {
-                console.warn('⚠️ Context Synthesizer not loaded - 3D view may lack edge data');
+                Logger.warn('OrchestratorSteps', '⚠️ Context Synthesizer not loaded - 3D view may lack edge data');
             }
         }
 
         // Mark completed
         markStepCompleted(2);
 
-        console.log('✅ Step 2 completed:', demoState.kpiData);
+        Logger.info('OrchestratorSteps', '✅ Step 2 completed:', demoState.kpiData);
 
         // Go to calculation
         goToStep(3);
@@ -595,6 +595,6 @@
     global.setKPIFieldValue = setKPIFieldValue;
     global.showAutoFillNotification = showAutoFillNotification;
 
-    console.log('[kpi-entry] Module loaded');
+    Logger.debug('OrchestratorSteps', '[kpi-entry] Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

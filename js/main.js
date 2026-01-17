@@ -280,15 +280,15 @@ function parseCSV(csvText) {
  */
 
 // Check for single-source module (phi-harmonics.js)
-const PHI_HARMONICS = (function() {
+const PHI_HARMONICS = (function () {
   // If phi-harmonics.js has loaded, use it as the single source
   if (typeof window !== 'undefined' && window.PhiHarmonics) {
-    console.log('📐 main.js: Using PhiHarmonics from single-source module');
+    Logger.debug('Main3D', '📐 Using PhiHarmonics from single-source module');
     return window.PhiHarmonics;
   }
 
   // Fallback: Define locally for standalone use or testing
-  console.log('📐 main.js: PhiHarmonics not found, using local definition');
+  Logger.debug('Main3D', '📐 PhiHarmonics not found, using local definition');
 
   const PHI = (1 + Math.sqrt(5)) / 2;
 
@@ -409,7 +409,7 @@ export class DodecahedronEngine {
         : null;
 
     if (!this.spectralAnalyzer) {
-      console.warn('SpectralAnalyzer not available - spectral analysis will be skipped');
+      Logger.warn('Main3D', 'SpectralAnalyzer not available - spectral analysis will be skipped');
     }
     this.breathAnalysis = null; // Cached breath analysis
     this.spectralAnalysis = null; // Cached spectral analysis
@@ -432,7 +432,7 @@ export class DodecahedronEngine {
       const text = await response.text();
       return parseCSV(text);
     } catch (error) {
-      console.error(`Error loading ${filename}:`, error);
+      Logger.error('Main3D', `Error loading ${filename}:`, error);
       return [];
     }
   }
@@ -459,7 +459,7 @@ export class DodecahedronEngine {
     // Check if JSONDataLoader is available
     if (window.JSONDataLoader) {
       try {
-        console.log(`📦 Attempting JSON-first load for: ${type}`);
+        Logger.debug('Main3D', `📦 Attempting JSON-first load for: ${type}`);
         const jsonData = await window.JSONDataLoader.load(type);
 
         if (jsonData) {
@@ -470,23 +470,23 @@ export class DodecahedronEngine {
           if (jsonData.$integrityReport) {
             const report = jsonData.$integrityReport;
             if (report.substitutionCount > 0) {
-              console.log(`📊 ${type}: ${report.substitutionCount} pre-computed substitutions applied`);
+              Logger.info('Main3D', `📊 ${type}: ${report.substitutionCount} pre-computed substitutions applied`);
             }
             if (!report.topologyValid) {
-              console.warn(`⚠️ ${type}: Topology validation failed`);
+              Logger.warn('Main3D', `⚠️ ${type}: Topology validation failed`);
             }
           }
 
-          console.log(`✅ Loaded ${type} from JSON (${dataArray.length} records)`);
+          Logger.info('Main3D', `✅ Loaded ${type} from JSON (${dataArray.length} records)`);
           return this.transformJSONToInternal(dataArray, type);
         }
       } catch (error) {
-        console.log(`📦 JSON load failed for ${type}, falling back to CSV:`, error.message);
+        Logger.warn('Main3D', `📦 JSON load failed for ${type}, falling back to CSV:`, error.message);
       }
     }
 
     // Fallback to CSV
-    console.log(`📄 Loading ${type} from CSV: ${csvFilename}`);
+    Logger.debug('Main3D', `📄 Loading ${type} from CSV: ${csvFilename}`);
     return this.loadCSV(csvFilename);
   }
 
@@ -559,11 +559,11 @@ export class DodecahedronEngine {
    * CSV files location: /data/CSV_{type}.csv
    */
   async initialize() {
-    console.log('🌟 Initializing Quannex Coherence Engine...');
+    Logger.info('Main3D', '🌟 Initializing Quannex Coherence Engine...');
 
     // Detect loading mode
     const loadingMode = window.JSONDataLoader ? 'JSON-first' : 'CSV-only';
-    console.log(`📦 Loading mode: ${loadingMode}`);
+    Logger.debug('Main3D', `📦 Loading mode: ${loadingMode}`);
 
     // Load data using JSON-first strategy with CSV fallback
     const kpiData = await this.loadWithJSONFirst('kpi-database', 'CSV_KPI_DATABASE.csv');
@@ -589,17 +589,17 @@ export class DodecahedronEngine {
     // Calculate initial state
     this.recalculate();
 
-    console.log('✅ System initialized');
-    console.log(`📊 Loaded ${this.faces.length} faces, ${this.kpis.size} KPIs`);
-    console.log(`🔷 Loaded ${this.edges.length} edges, ${this.vertices.length} vertices`);
-    console.log(`🎯 Global Coherence: ${(this.getGlobalCoherence() * 100).toFixed(1)}%`);
+    Logger.info('Main3D', '✅ System initialized');
+    Logger.debug('Main3D', `📊 Loaded ${this.faces.length} faces, ${this.kpis.size} KPIs`);
+    Logger.debug('Main3D', `🔷 Loaded ${this.edges.length} edges, ${this.vertices.length} vertices`);
+    Logger.info('Main3D', `🎯 Global Coherence: ${(this.getGlobalCoherence() * 100).toFixed(1)}%`);
   }
 
   /**
    * Initialize system with company-specific data
    */
   async initializeWithCompany(company) {
-    console.log(`🌟 Initializing with company: ${company.name}`);
+    Logger.info('Main3D', `🌟 Initializing with company: ${company.name}`);
 
     // Clear existing data
     this.faces = [];
@@ -616,16 +616,16 @@ export class DodecahedronEngine {
 
     // Check if pre-calculated coherence results are available
     if (company.coherenceResults && company.coherenceResults.faces) {
-      console.log('📊 Using pre-calculated coherence results from orchestrator');
+      Logger.debug('Main3D', '📊 Using pre-calculated coherence results from orchestrator');
       this.applyPreCalculatedResults(company.coherenceResults);
     } else {
       // Calculate initial state (fallback)
       this.recalculate();
     }
 
-    console.log('✅ Company loaded');
-    console.log(`📊 ${company.name}: ${this.faces.length} faces, ${this.kpis.size} KPIs`);
-    console.log(`🎯 Global Coherence: ${(this.getGlobalCoherence() * 100).toFixed(1)}%`);
+    Logger.info('Main3D', '✅ Company loaded');
+    Logger.debug('Main3D', `📊 ${company.name}: ${this.faces.length} faces, ${this.kpis.size} KPIs`);
+    Logger.info('Main3D', `🎯 Global Coherence: ${(this.getGlobalCoherence() * 100).toFixed(1)}%`);
   }
 
   /**
@@ -692,7 +692,7 @@ export class DodecahedronEngine {
     // face energies and global coherence. Analysis happens at visualization level.
     // ════════════════════════════════════════════════════════════════════════════
 
-    console.log('✅ Pre-calculated results applied successfully');
+    Logger.debug('Main3D', '✅ Pre-calculated results applied successfully');
   }
 
   /**
@@ -800,7 +800,7 @@ export class DodecahedronEngine {
       }
     });
 
-    console.log(`🔗 Generated ${this.edges.length} edges from topology`);
+    Logger.debug('Main3D', `🔗 Generated ${this.edges.length} edges from topology`);
   }
 
   /**
@@ -933,14 +933,14 @@ export class DodecahedronEngine {
       }
     });
 
-    console.log(`🌀 Generated ${this.vertices.length} vertices from topology`);
+    Logger.debug('Main3D', `🌀 Generated ${this.vertices.length} vertices from topology`);
   }
 
   /**
    * Create KPI objects from data (supports both CSV format and UI format)
    */
   createKPIs(data) {
-    console.log(`📊 Creating ${data.length} KPIs...`);
+    Logger.debug('Main3D', `📊 Creating ${data.length} KPIs...`);
     let csvFormat = 0;
     let uiFormat = 0;
 
@@ -981,7 +981,7 @@ export class DodecahedronEngine {
       this.kpis.set(kpi.id, kpi);
     });
 
-    console.log(`✅ Created ${this.kpis.size} KPIs (CSV format: ${csvFormat}, UI format: ${uiFormat})`);
+    Logger.info('Main3D', `✅ Created ${this.kpis.size} KPIs (CSV format: ${csvFormat}, UI format: ${uiFormat})`);
   }
 
   /**
@@ -992,14 +992,14 @@ export class DodecahedronEngine {
 
     if (faceConfig && faceConfig.faces && Array.isArray(faceConfig.faces) && faceConfig.faces.length === 12) {
       faceNames = faceConfig.faces.map(f => f.name);
-      console.log('✅ Using custom face configuration:', faceConfig.templateName || 'Custom');
+      Logger.info('Main3D', '✅ Using custom face configuration:', faceConfig.templateName || 'Custom');
     } else {
       faceNames = [
         'Financial Capital', 'Intellectual Capital', 'Human Capital', 'Structural Capital',
         'Market Resonance', 'Community & Partners', 'Brand & Reputation', 'Core Operations',
         'Regenerative Flow', 'Foundational Values', 'Funding Pipeline', 'Risk & Resilience'
       ];
-      console.log('ℹ️ Using default face names');
+      Logger.info('Main3D', 'ℹ️ Using default face names');
     }
 
     faceNames.forEach((name, index) => {
@@ -1024,7 +1024,7 @@ export class DodecahedronEngine {
    */
   createEdges(edgeData) {
     if (!edgeData) return;
-    console.log(`🔗 Creating Edges from ${edgeData.length} rows...`);
+    Logger.debug('Main3D', `🔗 Creating Edges from ${edgeData.length} rows...`);
 
     edgeData.forEach(row => {
       // CSV columns: Edge_ID, Face_A_ID, Face_B_ID, Edge Archytype, Description
@@ -1056,7 +1056,7 @@ export class DodecahedronEngine {
    */
   createVertices(vertexData) {
     if (!vertexData) return;
-    console.log(`🌀 Creating Vertices from ${vertexData.length} rows...`);
+    Logger.debug('Main3D', `🌀 Creating Vertices from ${vertexData.length} rows...`);
 
     vertexData.forEach(row => {
       // CSV columns: Vertex_ID, Face_1_ID, Face_2_ID, Face_3_ID
@@ -1180,8 +1180,8 @@ export class DodecahedronEngine {
 
     if (!qualityAudit.canProceed) {
       // CRITICAL: More than 50% data corrupted - HALT
-      console.error('🛑 CALCULATION HALTED - Critical data quality failure');
-      console.error('   ' + qualityAudit.recommendation);
+      Logger.error('Main3D', '🛑 CALCULATION HALTED - Critical data quality failure');
+      Logger.error('Main3D', '   ' + qualityAudit.recommendation);
 
       // Set system to failed state
       this._calculationState = 'FAILED';
@@ -1199,8 +1199,8 @@ export class DodecahedronEngine {
 
     if (qualityAudit.warningCount > 0) {
       // WARNING: 20-50% data corrupted - proceed with caution
-      console.warn('⚠️ CALCULATION PROCEEDING WITH LOW CONFIDENCE');
-      console.warn('   ' + qualityAudit.recommendation);
+      Logger.warn('Main3D', '⚠️ CALCULATION PROCEEDING WITH LOW CONFIDENCE');
+      Logger.warn('Main3D', '   ' + qualityAudit.recommendation);
       this._calculationState = 'LOW_CONFIDENCE';
     } else {
       this._calculationState = 'HEALTHY';
@@ -1268,9 +1268,9 @@ export class DodecahedronEngine {
     //
     const axisMap = {
       1: 11, 11: 1,   // Financial ↔ Funding
-      2: 7,  7: 2,    // Intellectual ↔ Brand
-      3: 8,  8: 3,    // Human ↔ Operations
-      4: 9,  9: 4,    // Structural ↔ Regenerative
+      2: 7, 7: 2,    // Intellectual ↔ Brand
+      3: 8, 8: 3,    // Human ↔ Operations
+      4: 9, 9: 4,    // Structural ↔ Regenerative
       5: 10, 10: 5,   // Market ↔ Values
       6: 12, 12: 6    // Community ↔ Risk
     };
@@ -1323,7 +1323,7 @@ export class DodecahedronEngine {
           // Store shadow analysis for UI access
           this.shadowAnalysis = shadowAnalysis;
         } catch (err) {
-          console.warn('Shadow analysis failed:', err);
+          Logger.warn('Main3D', 'Shadow analysis failed:', err);
           this.shadowAnalysis = null;
         }
       }
@@ -1346,8 +1346,8 @@ export class DodecahedronEngine {
     if (window.DataValidator) {
       const report = window.DataValidator.getCorruptionReport();
       if (!report.healthy) {
-        console.warn(`⚠️ DATA INTEGRITY: ${report.issueCount} issues detected during calculation`);
-        console.warn('   Run DataValidator.getCorruptionReport() for details');
+        Logger.warn('Main3D', `⚠️ DATA INTEGRITY: ${report.issueCount} issues detected during calculation`);
+        Logger.warn('Main3D', '   Run DataValidator.getCorruptionReport() for details');
       }
 
       // 8. Emit data integrity update event for UI components (Sprint 6)
@@ -1547,15 +1547,15 @@ export class DodecahedronEngine {
   updateKPI(kpiId, newValue) {
     const kpi = this.kpis.get(kpiId);
     if (!kpi) {
-      console.error(`KPI ${kpiId} not found`);
+      Logger.error('Main3D', `KPI ${kpiId} not found`);
       return false;
     }
 
     kpi.value = newValue;
     this.recalculate();
 
-    console.log(`✅ Updated ${kpi.name} to ${newValue}`);
-    console.log(`🎯 New Global Coherence: ${(this.getGlobalCoherence() * 100).toFixed(1)}%`);
+    Logger.debug('Main3D', `✅ Updated ${kpi.name} to ${newValue}`);
+    Logger.info('Main3D', `🎯 New Global Coherence: ${(this.getGlobalCoherence() * 100).toFixed(1)}%`);
 
     return true;
   }
@@ -1566,7 +1566,7 @@ export class DodecahedronEngine {
   updateTuning(key, value) {
     if (this.tuning.hasOwnProperty(key)) {
       this.tuning[key] = parseFloat(value);
-      console.log(`🎛️ Tuning Updated: ${key} = ${value}`);
+      Logger.info('Main3D', `🎛️ Tuning Updated: ${key} = ${value}`);
       this.recalculate();
       return true;
     }
