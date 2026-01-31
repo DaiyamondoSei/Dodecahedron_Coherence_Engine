@@ -11,7 +11,7 @@ POC/
 ├── 🏢 Companies (Multi-company support + mapping-context)
 ├── 🔧 Backend Fallback (Calculation engine)
 ├── 📐 Math Documentation (Rigorous formulas)
-├── 🧠 .claude/ (Development Council - 9 agents)
+├── 🧠 .claude/ (Development context - 4 agent perspectives)
 └── 📄 Documentation
 ```
 
@@ -587,41 +587,34 @@ backend-fallback/
 
 ---
 
-## 🧠 Development Council (.claude/)
+## 🧠 Claude Development Context (.claude/)
 
-**Purpose:** Intelligent development council - 9 AI agents working in harmonious coherence
+**Purpose:** Focused agent perspectives and documentation templates
 
 ```
 .claude/
 ├── agents/
-│   ├── witness-point.md          (White - Awareness)
-│   ├── chief-consciousness-officer.md (Purple - Strategy)
-│   ├── chief-creativity-officer.md    (Orange - Innovation)
-│   ├── chief-risk-manager.md          (Red - Risk wisdom)
-│   ├── root-foundation-guardian.md    (Brown - Grounding)
-│   ├── dodecahedron-consciousness-architect.md (Pink - Geometry)
-│   ├── heartmath-universal-bridge.md  (Green - Translation)
-│   ├── sacred-tech-architect.md       (Blue - Architecture)
-│   └── solar-chakra-master.md         (Yellow - Integrity)
-├── council-covenant.md           (Principles & protocols)
+│   ├── chief-risk-manager.md          (Risk analysis & resilience)
+│   ├── dodecahedron-consciousness-architect.md (Sacred geometry & harmonics)
+│   ├── heartmath-universal-bridge.md  (Translation & accessibility)
+│   └── sacred-tech-architect.md       (Architecture & technical vision)
+├── DOCUMENTATION_TEMPLATE.md     (Templates for consistent docs)
 ├── mcp.json                      (MCP server configuration)
 └── settings.local.json           (Local project settings)
 ```
 
 **What it is:**
-- Framework for conscious, multi-perspective development
-- 9 agent archetypes representing different wisdom domains
-- Council protocols: Dyad (2 voices), Triad (3), Full Council (all 9)
-- Used for strategic decisions, creative blocks, risk analysis
+- 4 focused agent perspectives for specialized guidance
+- Documentation templates for code consistency
+- Development workflow support
 
 **When to use:**
-- Major architectural decisions → Sacred Tech Architect
-- Creative problem-solving → Chief Creativity Officer
-- Risk assessment → Chief Risk Manager
-- Grounding ambitious ideas → Root Foundation Guardian
-- Pure observation → Witness Point
+- Risk assessment & mitigation → Chief Risk Manager
+- Sacred geometry & PHI mathematics → Dodecahedron Consciousness Architect
+- Making complex ideas accessible → HeartMath Universal Bridge
+- Architecture & system design → Sacred Tech Architect
 
-**Note:** Council docs are for development process, not end-user features.
+**Note:** Agent docs are for development process, not end-user features.
 
 ---
 
