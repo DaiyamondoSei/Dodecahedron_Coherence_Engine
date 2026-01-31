@@ -130,7 +130,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -139,7 +139,7 @@
 
     const S = global.DodecState;
     if (!S) {
-        console.error('[dodec-geometry] DodecState not loaded!');
+        Logger.error('Geometry', 'DodecState not loaded!');
         return;
     }
 
@@ -230,7 +230,7 @@
                 }
             }
         } catch (e) {
-            console.warn('[dodec-geometry] Could not load edge data from sessionStorage:', e);
+            Logger.warn('Geometry', 'Could not load edge data from sessionStorage:', e);
         }
 
         // Also check company templates bundle
@@ -257,14 +257,12 @@
 
         if (!topologyAvailable) {
             // Log prominent warning - topology should always be available
-            console.warn('='.repeat(60));
-            console.warn('[dodec-geometry] ⚠️  WARNING: DodecahedronTopology.EDGES not available!');
-            console.warn('[dodec-geometry] ⚠️  Ensure js/geometry/dodecahedron-topology.js is loaded');
-            console.warn('[dodec-geometry] ⚠️  before js/dodec/dodec-geometry.js in HTML script order.');
-            console.warn('[dodec-geometry] ⚠️  Using LEGACY proximity-based edge detection (may be incorrect).');
-            console.warn('='.repeat(60));
+            Logger.warn('Geometry', 'WARNING: DodecahedronTopology.EDGES not available!');
+            Logger.warn('Geometry', 'Ensure js/geometry/dodecahedron-topology.js is loaded');
+            Logger.warn('Geometry', 'before js/dodec/dodec-geometry.js in HTML script order.');
+            Logger.warn('Geometry', 'Using LEGACY proximity-based edge detection (may be incorrect).');
         } else {
-            console.log(`[dodec-geometry] ✓ Found ${topologyEdges.length} edge definitions from DodecahedronTopology`);
+            Logger.info('Geometry', `Found ${topologyEdges.length} edge definitions from DodecahedronTopology`);
         }
 
         // ========================================
@@ -274,7 +272,7 @@
         // using topology-verified vertex positions
 
         if (topologyAvailable) {
-            console.log('[dodec-geometry] Creating edges using TOPOLOGY-BASED approach...');
+            Logger.info('Geometry', 'Creating edges using TOPOLOGY-BASED approach...');
 
             let successCount = 0;
             let failedEdges = [];
@@ -293,8 +291,8 @@
                     : null;
 
                 if (!sharedVertices || sharedVertices.length !== 2) {
-                    console.warn(
-                        `[dodec-geometry] Edge ${edgeDef.id} (faces ${face1Id}-${face2Id}): ` +
+                    Logger.warn('Geometry',
+                        `Edge ${edgeDef.id} (faces ${face1Id}-${face2Id}): ` +
                         `findSharedEdgeVertices returned ${sharedVertices?.length || 0} vertices. Skipping.`
                     );
                     failedEdges.push(edgeDef.id);
@@ -342,7 +340,7 @@
                     tension: mappedEdgeData?.tension || 0,
                     healthStatus: mappedEdgeData
                         ? (mappedEdgeData.tension < 0.1 ? 'Healthy' :
-                           mappedEdgeData.tension < 0.2 ? 'Moderate' : 'Tense')
+                            mappedEdgeData.tension < 0.2 ? 'Moderate' : 'Tense')
                         : 'Unknown',
 
                     // Visual styling
@@ -369,18 +367,18 @@
             // VALIDATION CHECKPOINT
             // ========================================
 
-            console.log(`[dodec-geometry] Created ${successCount}/${topologyEdges.length} edges using topology`);
+            Logger.info('Geometry', `Created ${successCount}/${topologyEdges.length} edges using topology`);
 
             if (failedEdges.length > 0) {
-                console.error(`[dodec-geometry] FAILED EDGES: ${failedEdges.join(', ')}`);
+                Logger.error('Geometry', `FAILED EDGES: ${failedEdges.join(', ')}`);
             }
 
             // Validate Euler's formula: V - E + F = 2
             const eulerCheck = 20 - successCount + 12;
             if (eulerCheck !== 2) {
-                console.error(`[dodec-geometry] ❌ EULER VALIDATION FAILED: 20 - ${successCount} + 12 = ${eulerCheck} (expected 2)`);
+                Logger.error('Geometry', `EULER VALIDATION FAILED: 20 - ${successCount} + 12 = ${eulerCheck} (expected 2)`);
             } else {
-                console.log(`[dodec-geometry] ✓ Euler validation passed: 20 - ${successCount} + 12 = 2`);
+                Logger.info('Geometry', `Euler validation passed: 20 - ${successCount} + 12 = 2`);
             }
 
             // Check for duplicates
@@ -392,14 +390,14 @@
                     const key = faceIds.slice().sort().join('-');
                     if (edgeKeySet.has(key)) {
                         duplicateCount++;
-                        console.warn(`[dodec-geometry] Duplicate edge detected: ${key}`);
+                        Logger.warn('Geometry', `Duplicate edge detected: ${key}`);
                     }
                     edgeKeySet.add(key);
                 }
             });
 
             if (duplicateCount > 0) {
-                console.error(`[dodec-geometry] ❌ Found ${duplicateCount} duplicate edges`);
+                Logger.error('Geometry', `Found ${duplicateCount} duplicate edges`);
             }
 
             // Count edges per face (each face should have exactly 5)
@@ -416,18 +414,18 @@
             let faceCountErrors = 0;
             Object.entries(faceEdgeCounts).forEach(([faceId, count]) => {
                 if (count !== 5) {
-                    console.warn(`[dodec-geometry] Face ${faceId} has ${count} edges (expected 5)`);
+                    Logger.warn('Geometry', `Face ${faceId} has ${count} edges (expected 5)`);
                     faceCountErrors++;
                 }
             });
 
             if (faceCountErrors === 0 && Object.keys(faceEdgeCounts).length === 12) {
-                console.log('[dodec-geometry] ✓ All 12 faces have exactly 5 edges');
+                Logger.info('Geometry', 'All 12 faces have exactly 5 edges');
             }
 
             // Final success message
             if (successCount === 30 && failedEdges.length === 0 && duplicateCount === 0) {
-                console.log('[dodec-geometry] ✓✓✓ SUCCESS: All 30 edges created correctly using topology!');
+                Logger.info('Geometry', 'SUCCESS: All 30 edges created correctly using topology!');
             }
 
             return; // Exit - topology-based creation complete
@@ -439,7 +437,7 @@
         // This code path should only execute if topology data is missing.
         // It uses geometric proximity which is less reliable.
 
-        console.warn('[dodec-geometry] Using LEGACY proximity-based edge detection...');
+        Logger.warn('Geometry', 'Using LEGACY proximity-based edge detection...');
 
         // Build face centroids for proximity detection
         const faceCentroids = [];
@@ -460,7 +458,7 @@
         const positions = edgesGeometry.attributes.position.array;
         const edgeCount = positions.length / 6;
 
-        console.log(`[dodec-geometry] [LEGACY] Creating ${edgeCount} edges using proximity detection`);
+        Logger.info('Geometry', `[LEGACY] Creating ${edgeCount} edges using proximity detection`);
 
         for (let i = 0; i < edgeCount; i++) {
             const start = new THREE.Vector3(
@@ -497,7 +495,7 @@
                 faceIds: mappedEdgeData.faceIds,
                 tension: mappedEdgeData.tension || 0,
                 healthStatus: mappedEdgeData.tension < 0.1 ? 'Healthy' :
-                              mappedEdgeData.tension < 0.2 ? 'Moderate' : 'Tense',
+                    mappedEdgeData.tension < 0.2 ? 'Moderate' : 'Tense',
                 element: mappedEdgeData.elementalNature || 'Unknown',
                 color: ELEMENT_COLORS[mappedEdgeData.elementalNature] || '#00ffcc',
                 theQuestion: mappedEdgeData.theQuestion || null
@@ -521,7 +519,7 @@
             S.edgeLines.push(tubeMesh);
         }
 
-        console.log(`[dodec-geometry] [LEGACY] Created ${S.edgeLines.length} edges (proximity-based - may be incorrect)`);
+        Logger.info('Geometry', `[LEGACY] Created ${S.edgeLines.length} edges (proximity-based - may be incorrect)`);
     }
 
     // ========================================
@@ -542,7 +540,7 @@
      * Clears existing geometry, creates new mesh, and sets up edges.
      */
     function createDodecahedron() {
-        console.log('[dodec-geometry] Creating dodecahedron...');
+        Logger.info('Geometry', 'Creating dodecahedron...');
 
         // Clear existing geometry
         S.faceMeshes.forEach(mesh => S.scene.remove(mesh));
@@ -669,7 +667,7 @@
 
         // Build topology-aware face mapping and update face IDs
         if (typeof global.buildFaceIndexMapping === 'function') {
-            console.log('[dodec-geometry] Building topology-aware face mapping...');
+            Logger.info('Geometry', 'Building topology-aware face mapping...');
             const faceMapping = global.buildFaceIndexMapping();
 
             if (faceMapping) {
@@ -678,18 +676,18 @@
                     const analyticalFaceId = faceMapping[faceIndex];
                     if (analyticalFaceId) {
                         mesh.userData.faceId = analyticalFaceId;
-                        console.log(`[dodec-geometry] Geometry Face ${faceIndex + 1} → Analytical Face ${analyticalFaceId}`);
+                        Logger.debug('Geometry', `Geometry Face ${faceIndex + 1} → Analytical Face ${analyticalFaceId}`);
                     } else {
-                        console.warn(`[dodec-geometry] No mapping found for geometry face ${faceIndex + 1}, using default Face ${faceIndex + 1}`);
+                        Logger.warn('Geometry', `No mapping found for geometry face ${faceIndex + 1}, using default Face ${faceIndex + 1}`);
                         mesh.userData.faceId = faceIndex + 1;
                     }
                 });
-                console.log('[dodec-geometry] Face IDs updated with topology mapping');
+                Logger.info('Geometry', 'Face IDs updated with topology mapping');
             } else {
-                console.warn('[dodec-geometry] Face mapping failed, using default Face IDs (1-12)');
+                Logger.warn('Geometry', 'Face mapping failed, using default Face IDs (1-12)');
             }
         } else {
-            console.log('[dodec-geometry] buildFaceIndexMapping not available, using default face IDs');
+            Logger.info('Geometry', 'buildFaceIndexMapping not available, using default face IDs');
         }
 
         // ========================================
@@ -698,7 +696,7 @@
 
         createInteractiveEdges(baseGeometry, dodecahedron, S.faceMeshes);
 
-        console.log(`[dodec-geometry] Created dodecahedron with ${materials.length} materials and ${S.faceMeshes.length} clickable faces`);
+        Logger.info('Geometry', `Created dodecahedron with ${materials.length} materials and ${S.faceMeshes.length} clickable faces`);
     }
 
     // ========================================
@@ -708,6 +706,6 @@
     global.createDodecahedron = createDodecahedron;
     global.createInteractiveEdges = createInteractiveEdges;
 
-    console.log('[dodec-geometry] Module loaded - Geometry creation ready');
+    Logger.info('Geometry', 'Module loaded - Geometry creation ready');
 
 })(typeof window !== 'undefined' ? window : this);

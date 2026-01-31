@@ -42,7 +42,7 @@
  * ════════════════════════════════════════════════════════════════════════════
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================================================
@@ -149,7 +149,7 @@
         recalculate() {
             // Skip if Sacred Inquiry is not available
             if (!global.SacredInquiry) {
-                console.warn(`[UnifiedEdge ${this.id}] SacredInquiry not available`);
+                Logger.warn('UnifiedEdge', `Edge ${this.id}: SacredInquiry not available`);
                 return;
             }
 
@@ -220,7 +220,7 @@
          */
         setMode(mode) {
             if (!Object.values(EDGE_MODES).includes(mode)) {
-                console.warn(`[UnifiedEdge ${this.id}] Invalid mode: ${mode}`);
+                Logger.warn('UnifiedEdge', `Edge ${this.id}: Invalid mode: ${mode}`);
                 return;
             }
 
@@ -352,7 +352,7 @@
          */
         createMesh(scene) {
             if (!global.THREE) {
-                console.error('[UnifiedEdge] THREE.js not available');
+                Logger.error('UnifiedEdge', 'THREE.js not available');
                 return null;
             }
 
@@ -464,6 +464,6 @@
     global.EDGE_HEALTH_COLORS = HEALTH_COLORS;
     global.EDGE_ELEMENT_COLORS = ELEMENT_COLORS;
 
-    console.log('🔗 UnifiedEdge module loaded - Pure Membrane Architecture ready');
+    Logger.info('UnifiedEdge', 'UnifiedEdge module loaded - Pure Membrane Architecture ready');
 
 })(typeof window !== 'undefined' ? window : this);

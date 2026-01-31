@@ -49,7 +49,7 @@ const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {
 };
 // Use _PH.PHI, _PH.PHI_1 etc. instead of bare PHI, PHI_1 to avoid conflicts
 const SQRT_2 = Math.SQRT2 || 1.4142135623730951;        // √2
-const PHI_CUBE_ROOT = Math.pow(_PH.PHI, 1/3);           // φ^(1/3) ≈ 1.175
+const PHI_CUBE_ROOT = Math.pow(_PH.PHI, 1 / 3);           // φ^(1/3) ≈ 1.175
 
 /**
  * Elemental colors - use from OctaveColors SSOT
@@ -237,13 +237,13 @@ function calculateEdgeTension(sentiment1, sentiment2, element1 = null, element2 
 function safeParseNumeric(value, defaultValue = 0.5, context = '') {
     // Handle "Not Found" string from CSV
     if (value === 'Not Found' || value === 'not found' || value === 'N/A') {
-        console.warn(`⚠️ Missing data${context ? ` (${context})` : ''}: using default ${defaultValue}`);
+        Logger.warn('ContextSynthesizer', `Missing data${context ? ` (${context})` : ''}: using default ${defaultValue}`);
         return defaultValue;
     }
 
     const parsed = parseFloat(value);
     if (isNaN(parsed)) {
-        console.warn(`⚠️ Invalid numeric value${context ? ` (${context})` : ''}: "${value}" → using default ${defaultValue}`);
+        Logger.warn('ContextSynthesizer', `Invalid numeric value${context ? ` (${context})` : ''}: "${value}" → using default ${defaultValue}`);
         return defaultValue;
     }
 
@@ -337,10 +337,10 @@ function classifyHealth(value) {
  * @returns {Object} Complete mapping context with faces, edges, vertices, breathAxes
  */
 function synthesizeCustomContext(faceConfig, kpiData = null) {
-    console.log('🔮 Context Synthesizer: Generating complete mapping context...');
+    Logger.info('ContextSynthesizer', 'Generating complete mapping context...');
 
     if (!faceConfig || !faceConfig.faces || faceConfig.faces.length !== 12) {
-        console.error('❌ Invalid face config: must have exactly 12 faces');
+        Logger.error('ContextSynthesizer', 'Invalid face config: must have exactly 12 faces');
         return null;
     }
 
@@ -366,7 +366,7 @@ function synthesizeCustomContext(faceConfig, kpiData = null) {
         };
     });
 
-    console.log(`   📊 Enhanced ${enhancedFaces.length} faces with sentiment data`);
+    Logger.debug('ContextSynthesizer', `Enhanced ${enhancedFaces.length} faces with sentiment data`);
 
     // 2. Generate edges with calculated tensions
     const edges = BASE_EDGE_DEFINITIONS.map(edgeDef => {
@@ -374,7 +374,7 @@ function synthesizeCustomContext(faceConfig, kpiData = null) {
         const face2 = enhancedFaces.find(f => f.id === edgeDef.face2Id);
 
         if (!face1 || !face2) {
-            console.warn(`   ⚠️ Edge ${edgeDef.id}: Missing face ${edgeDef.face1Id} or ${edgeDef.face2Id}`);
+            Logger.warn('ContextSynthesizer', `Edge ${edgeDef.id}: Missing face ${edgeDef.face1Id} or ${edgeDef.face2Id}`);
             return null;
         }
 
@@ -388,7 +388,7 @@ function synthesizeCustomContext(faceConfig, kpiData = null) {
 
         // Calculate breath ratio (smaller/larger sentiment)
         const breathRatio = Math.min(face1.sentiment, face2.sentiment) /
-                           Math.max(face1.sentiment, face2.sentiment) || 0;
+            Math.max(face1.sentiment, face2.sentiment) || 0;
 
         // Calculate coherence (inverse of tension, normalized)
         const coherence = Math.max(0, 1 - tension);
@@ -412,14 +412,14 @@ function synthesizeCustomContext(faceConfig, kpiData = null) {
         };
     }).filter(e => e !== null);
 
-    console.log(`   🔗 Generated ${edges.length} edges with tensions`);
+    Logger.debug('ContextSynthesizer', `Generated ${edges.length} edges with tensions`);
 
     // 3. Generate vertices with vortex strengths
     const vertices = BASE_VERTEX_DEFINITIONS.map(vertexDef => {
         const faces = vertexDef.faceIds.map(fid => enhancedFaces.find(f => f.id === fid));
 
         if (faces.some(f => !f)) {
-            console.warn(`   ⚠️ Vertex ${vertexDef.id}: Missing face`);
+            Logger.warn('ContextSynthesizer', `Vertex ${vertexDef.id}: Missing face`);
             return null;
         }
 
@@ -441,7 +441,7 @@ function synthesizeCustomContext(faceConfig, kpiData = null) {
         };
     }).filter(v => v !== null);
 
-    console.log(`   🌀 Generated ${vertices.length} vertices with vortex data`);
+    Logger.debug('ContextSynthesizer', `Generated ${vertices.length} vertices with vortex data`);
 
     // 4. Generate breath axes
     const breathAxes = BREATH_AXIS_DEFINITIONS.map(axisDef => {
@@ -465,7 +465,7 @@ function synthesizeCustomContext(faceConfig, kpiData = null) {
         };
     }).filter(a => a !== null);
 
-    console.log(`   🌬️ Generated ${breathAxes.length} breath axes`);
+    Logger.debug('ContextSynthesizer', `Generated ${breathAxes.length} breath axes`);
 
     // 5. Calculate global coherence
     const avgTension = edges.reduce((sum, e) => sum + e.tension, 0) / edges.length;
@@ -491,11 +491,11 @@ function synthesizeCustomContext(faceConfig, kpiData = null) {
         source: 'context-synthesizer'
     };
 
-    console.log(`✅ Context Synthesizer: Complete!`);
-    console.log(`   - Faces: ${context.faces.length}`);
-    console.log(`   - Edges: ${context.edges.length}`);
-    console.log(`   - Vertices: ${context.vertices.length}`);
-    console.log(`   - Global Coherence: ${(context.globalCoherence * 100).toFixed(1)}%`);
+    Logger.info('ContextSynthesizer', 'Synthesis complete');
+    Logger.debug('ContextSynthesizer', `   - Faces: ${context.faces.length}`);
+    Logger.debug('ContextSynthesizer', `   - Edges: ${context.edges.length}`);
+    Logger.debug('ContextSynthesizer', `   - Vertices: ${context.vertices.length}`);
+    Logger.debug('ContextSynthesizer', `   - Global Coherence: ${(context.globalCoherence * 100).toFixed(1)}%`);
 
     return context;
 }
@@ -522,7 +522,7 @@ if (typeof window !== 'undefined') {
         BREATH_AXIS_DEFINITIONS
     };
 
-    console.log('🔮 Context Synthesizer loaded and ready');
+    Logger.info('ContextSynthesizer', 'Context Synthesizer loaded and ready');
 }
 
 // CommonJS export (for Node.js environments)

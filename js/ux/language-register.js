@@ -268,7 +268,7 @@ const RegisterState = {
     init() {
         const stored = localStorage.getItem(USER_PREFERENCES.languageRegister.key);
         this._currentRegister = stored || USER_PREFERENCES.languageRegister.default;
-        console.log(`🎭 Language Register initialized: ${this._currentRegister}`);
+        Logger.info('UX:LanguageRegister', `Language Register initialized: ${this._currentRegister}`);
     },
 
     /**
@@ -307,7 +307,7 @@ const RegisterState = {
             const validation = window.UXDataIntegrity.RegisterChangeValidation.validateChange(registerId);
             if (validation.requiresConfirmation) {
                 // For now, log warnings but proceed
-                validation.warnings.forEach(w => console.warn(`⚠️ ${w.message}`));
+                validation.warnings.forEach(w => Logger.warn('UX:LanguageRegister', w.message));
             }
         }
 
@@ -325,7 +325,7 @@ const RegisterState = {
             detail: { previous, current: registerId, timestamp: Date.now() }
         }));
 
-        console.log(`🎭 Register changed: ${previous} → ${registerId}`);
+        Logger.info('UX:LanguageRegister', `Register changed: ${previous} → ${registerId}`);
 
         return { success: true, errors: [] };
     },
@@ -347,7 +347,7 @@ const RegisterState = {
             try {
                 callback(previous, current);
             } catch (e) {
-                console.error('Register listener error:', e);
+                Logger.error('UX:LanguageRegister', 'Register listener error:', e);
             }
         });
     }
@@ -404,7 +404,7 @@ const ContentTransformer = {
             if (safeResult.success) {
                 result = safeResult.result;
             } else {
-                console.warn('Transform failed:', safeResult.errors);
+                Logger.warn('UX:LanguageRegister', 'Transform failed:', safeResult.errors);
                 return content; // Return original on failure
             }
         } else {
@@ -665,7 +665,7 @@ window.LanguageRegister = {
     init() {
         RegisterState.init();
         RegisterUI.injectStyles();
-        console.log('🎭 Language Register System initialized');
+        Logger.info('UX:LanguageRegister', 'Language Register System initialized');
     }
 };
 
@@ -682,7 +682,7 @@ if (typeof module !== 'undefined' && module.exports) {
 // ════════════════════════════════════════════════════════════════════════════
 // MODULE LOADED
 // ════════════════════════════════════════════════════════════════════════════
-console.log('🎭 Language Register System v1.0.0 loaded');
-console.log('   REGISTERS: analytical | balanced | contemplative');
-console.log('   Same math. Same geometry. Multiple voices.');
-console.log('   Use LanguageRegister.set("contemplative") to change');
+Logger.debug('UX:LanguageRegister', 'Language Register System v1.0.0 loaded');
+Logger.debug('UX:LanguageRegister', '   REGISTERS: analytical | balanced | contemplative');
+Logger.debug('UX:LanguageRegister', '   Same math. Same geometry. Multiple voices.');
+Logger.debug('UX:LanguageRegister', '   Use LanguageRegister.set("contemplative") to change');

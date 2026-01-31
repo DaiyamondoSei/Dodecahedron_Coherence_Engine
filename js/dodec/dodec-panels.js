@@ -59,7 +59,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -68,7 +68,7 @@
 
     const S = global.DodecState;
     if (!S) {
-        console.error('[dodec-panels] DodecState not loaded!');
+        Logger.error('Panels', 'DodecState not loaded!');
         return;
     }
 
@@ -137,15 +137,15 @@
             const companyData = S.companyData || global.Quannex?.getState?.();
             face = companyData?.faces?.find(f => f.id === faceOrId);
             if (!face) {
-                console.warn(`[dodec-panels] Face ID ${faceOrId} not found in company data`);
+                Logger.warn('Panels', `Face ID ${faceOrId} not found in company data`);
                 return;
             }
-            console.log(`[dodec-panels] Resolved face ID ${faceOrId} to:`, face.name);
+            Logger.info('Panels', `Resolved face ID ${faceOrId} to: ${face.name}`);
         }
 
         // Validate face object
         if (!face || typeof face !== 'object') {
-            console.warn('[dodec-panels] Invalid face data provided:', faceOrId);
+            Logger.warn('Panels', 'Invalid face data provided:', faceOrId);
             return;
         }
 
@@ -785,7 +785,7 @@
      * @param {string} edgeName - Display name for the edge
      */
     function showEdgeDetail(edgeData, edgeName) {
-        console.log('🔗 Showing edge detail:', edgeData);
+        Logger.info('Panels', '🔗 Showing edge detail:', edgeData);
 
         // For now, use the face detail panel but customize it for edges
         const panel = document.getElementById('faceDetailPanel');
@@ -822,7 +822,7 @@
             healthState = sacredInquiry.healthState;
             dominantElement = sacredInquiry.dominantElement;
 
-            console.log('🙏 Sacred Inquiry calculated:', sacredInquiry.summary);
+            Logger.info('Panels', '🙏 Sacred Inquiry calculated:', sacredInquiry.summary);
         }
 
         // ========================================
@@ -1080,7 +1080,7 @@
     global.showEdgeDetail = showEdgeDetail;
     global.closeFaceDetail = closeFaceDetail;
 
-    console.log('[dodec-panels] Module loaded - Panel display ready');
-    console.log('[dodec-panels] Exports: showFaceDetail, showEdgeDetail, closeFaceDetail, getBusinessDimensionName');
+    Logger.info('Panels', 'Module loaded - Panel display ready');
+    Logger.debug('Panels', 'Exports: showFaceDetail, showEdgeDetail, closeFaceDetail, getBusinessDimensionName');
 
 })(typeof window !== 'undefined' ? window : this);

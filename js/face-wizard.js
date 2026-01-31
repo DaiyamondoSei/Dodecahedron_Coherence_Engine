@@ -261,13 +261,13 @@ function selectTemplate(templateKey) {
             source: 'template'
         }));
         window.Sprint2.mappingContext.setAllFaces(facesConfig);
-        console.log('✅ Sprint 2: Synced faces to MappingContext');
+        Logger.debug('FaceWizard', 'Synced faces to MappingContext for Sprint 2');
     }
 
     // Enable next button
     document.getElementById('step1NextBtn').disabled = false;
 
-    console.log(`✅ Template selected: ${FACE_TEMPLATES[templateKey].name}`);
+    Logger.info('FaceWizard', `Template selected: ${FACE_TEMPLATES[templateKey].name}`);
 }
 
 /**
@@ -299,7 +299,7 @@ function selectProvider(provider) {
         openaiSection.style.display = 'block';
     }
 
-    console.log(`🤖 Provider selected: ${provider}`);
+    Logger.info('FaceWizard', `Provider selected: ${provider}`);
 }
 
 /**
@@ -366,21 +366,21 @@ async function analyzeStory() {
     if (window.lensPreSelector) {
         selectedLens = window.lensPreSelector.getSelectedLens();
         lensPromptModifier = window.lensPreSelector.getPromptModifier();
-        console.log(`🔮 Using Strategic Lens: ${selectedLens}`);
+        Logger.debug('FaceWizard', `Using Strategic Lens: ${selectedLens}`);
     } else {
         // Fallback: read from localStorage
         selectedLens = localStorage.getItem('quannex_selected_lens') || 'growth';
-        console.log(`🔮 Using Lens from storage: ${selectedLens}`);
+        Logger.debug('FaceWizard', `Using Lens from storage: ${selectedLens}`);
     }
 
     // Get vocabulary style (if initialized)
     if (window.vocabularyStyleSelector) {
         vocabularyStyle = window.vocabularyStyleSelector.getSelectedStyle();
         vocabularyPromptModifier = window.vocabularyStyleSelector.getPromptModifier();
-        console.log(`🎨 Using Vocabulary Style: ${vocabularyStyle}`);
+        Logger.debug('FaceWizard', `Using Vocabulary Style: ${vocabularyStyle}`);
     } else {
         vocabularyStyle = localStorage.getItem('quannex_vocabulary_style') || 'professional';
-        console.log(`🎨 Using Vocabulary from storage: ${vocabularyStyle}`);
+        Logger.debug('FaceWizard', `Using Vocabulary from storage: ${vocabularyStyle}`);
     }
 
     try {
@@ -425,9 +425,9 @@ async function analyzeStory() {
         const usedProvider = storyResult._meta?.provider || 'unknown';
         const fallbackUsed = storyResult._meta?.fallbackUsed || false;
 
-        console.log(`✅ Story analysis complete via ${usedProvider}${fallbackUsed ? ' (fallback)' : ''}`);
-        console.log(`   Lens: ${selectedLens}, Vocabulary: ${vocabularyStyle}`);
-        console.log(`   Detected Stage: ${storyResult.detectedStage || 'unknown'}, Max Octave: ${storyResult.maxOctave || 'O7'}`);
+        Logger.info('FaceWizard', `Story analysis complete via ${usedProvider}${fallbackUsed ? ' (fallback)' : ''}`);
+        Logger.debug('FaceWizard', `   Lens: ${selectedLens}, Vocabulary: ${vocabularyStyle}`);
+        Logger.debug('FaceWizard', `   Detected Stage: ${storyResult.detectedStage || 'unknown'}, Max Octave: ${storyResult.maxOctave || 'O7'}`);
 
         // =====================================================
         // CONSOLIDATED RESPONSE: Extract octaves from single call
@@ -449,7 +449,7 @@ async function analyzeStory() {
                 }
             });
         }
-        console.log(`🎵 Overall Octave: ${overallOctave}, Face assignments:`, faceOctaves.size);
+        Logger.info('FaceWizard', `Overall Octave: ${overallOctave}, Face assignments: ${faceOctaves.size}`);
 
         // Update octave display
         updateOctaveDisplay(overallOctave);
@@ -459,7 +459,7 @@ async function analyzeStory() {
         // =====================================================
         if (storyResult.extractedMetrics) {
             extractedFinancials = storyResult.extractedMetrics;
-            console.log(`📊 Extracted metrics from consolidated call:`, extractedFinancials);
+            Logger.debug('FaceWizard', 'Extracted metrics from consolidated call:', extractedFinancials);
         } else {
             // Fallback: use pattern-based extraction
             extractedFinancials = extractFinancialsFromText(text);
@@ -469,7 +469,7 @@ async function analyzeStory() {
         // CONSOLIDATED RESPONSE: Extract archetype from single call
         // =====================================================
         if (storyResult.archetype) {
-            console.log(`🎭 Detected Archetype: ${storyResult.archetype.primary} / ${storyResult.archetype.secondary}`);
+            Logger.info('FaceWizard', `Detected Archetype: ${storyResult.archetype.primary} / ${storyResult.archetype.secondary}`);
             // Store for later use
             window.detectedArchetype = storyResult.archetype;
         }
@@ -503,8 +503,8 @@ async function analyzeStory() {
                     extractedFinancials = { ...extractedFinancials, ...kpiResult.financials };
                 }
 
-                console.log(`📊 KPI Extraction Complete: ${extractedKPIs.length} KPIs extracted`);
-                console.log('   Sample KPIs:', extractedKPIs.slice(0, 3));
+                Logger.info('FaceWizard', `KPI Extraction Complete: ${extractedKPIs.length} KPIs extracted`);
+                Logger.debug('FaceWizard', '   Sample KPIs:', extractedKPIs.slice(0, 3));
             } else {
                 console.warn('⚠️ KPI extraction returned no results, using financials only');
                 // Create minimal KPIs from financials as fallback
@@ -517,7 +517,7 @@ async function analyzeStory() {
                 }));
             }
         } catch (kpiError) {
-            console.warn('⚠️ KPI extraction failed, continuing with financials:', kpiError.message);
+            Logger.warn('FaceWizard', `KPI extraction failed, continuing with financials: ${kpiError.message}`);
             // Fallback: create KPIs from extracted financials
             extractedKPIs = Object.entries(extractedFinancials).map(([key, data], index) => ({
                 faceId: index + 1,
@@ -535,12 +535,12 @@ async function analyzeStory() {
 
         // Show notification about provider used
         if (fallbackUsed) {
-            console.log(`📢 Analysis completed using fallback: ${usedProvider}`);
+            Logger.info('FaceWizard', `Analysis completed using fallback: ${usedProvider}`);
             // Could show a subtle notification to user here
         }
 
     } catch (error) {
-        console.error("❌ All providers failed:", error);
+        Logger.error('FaceWizard', 'All providers failed:', error);
         alert(`⚠️ Analysis Error: ${error.message}\n\nUsing emergency fallback.`);
         runLocalFallback(text);
     }
@@ -671,7 +671,7 @@ function populateLensSelector(lenses) {
 
     // Show the section
     section.style.display = 'block';
-    console.log('📐 Lens selector populated');
+    Logger.debug('FaceWizard', 'Lens selector populated');
 }
 
 /**
@@ -717,7 +717,7 @@ function selectLens(lensType) {
         renderFaceEditor();
     }
 
-    console.log(`📐 Lens selected: ${lensType} - ${lensData.name}`);
+    Logger.info('FaceWizard', `Lens selected: ${lensType} - ${lensData.name}`);
 }
 
 /**
@@ -755,7 +755,7 @@ function extractFinancialsFromText(text) {
         }
     }
 
-    console.log('📊 Fallback financial extraction:', financials);
+    Logger.debug('FaceWizard', 'Fallback financial extraction result:', financials);
     return financials;
 }
 
@@ -777,7 +777,7 @@ function updateOctaveDisplay(octave) {
     if (descEl) descEl.textContent = info.desc;
 
     section.style.display = 'block';
-    console.log(`🎵 Octave display updated: ${octave}`);
+    Logger.info('FaceWizard', `Octave display updated: ${octave}`);
 }
 
 /**
@@ -811,7 +811,7 @@ function renderFaceEditor() {
         let emphasisHtml = '';
         if (face.emphasis) {
             const emphasisColor = face.emphasis === 'high' ? '#00ffcc' :
-                                  face.emphasis === 'medium' ? '#ffcc00' : '#ff6666';
+                face.emphasis === 'medium' ? '#ffcc00' : '#ff6666';
             emphasisHtml = `
                 <div style="width: 4px; height: 100%; background: ${emphasisColor};
                             position: absolute; left: 0; top: 0; border-radius: 4px 0 0 4px;"></div>

@@ -63,7 +63,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
@@ -246,7 +246,7 @@
             createBreathRungs
         };
 
-        console.log('🔗 [OctaveDNA Rungs] Breath rung module loaded');
+        Logger.debug('OctaveDNA', 'Breath rung module loaded');
     }
 
 })();

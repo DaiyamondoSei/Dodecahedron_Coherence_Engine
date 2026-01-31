@@ -52,7 +52,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
@@ -69,7 +69,7 @@
         const Helpers = window.OctaveDNAHelpers;
 
         if (!breathTab || !Helpers) {
-            console.warn('⚠️ [Breath Tab] Missing elements or helpers');
+            Logger.warn('OctaveDNA', 'Missing elements or helpers for breath tab');
             return;
         }
 
@@ -122,7 +122,7 @@
             colorHex
         });
 
-        console.log(`🌬️ [Breath Tab] Updated for ${helix.name} (BR: ${breathRatio.toFixed(3)})`);
+        Logger.debug('OctaveDNA', `Breath tab updated for ${helix.name} (BR: ${breathRatio.toFixed(3)})`);
     }
 
     /**
@@ -158,27 +158,27 @@
             <div class="strands-container">
                 <!-- Strand 1 (Projection) -->
                 ${buildStrandCard({
-                    label: '↗ Projection (Exhale)',
-                    name: helix.names[0],
-                    faceId: helix.faces[0],
-                    energy: energy1,
-                    octave: face1Octave,
-                    octaveInfo: face1Info,
-                    nextThreshold: face1NextThreshold,
-                    colorHex
-                })}
+            label: '↗ Projection (Exhale)',
+            name: helix.names[0],
+            faceId: helix.faces[0],
+            energy: energy1,
+            octave: face1Octave,
+            octaveInfo: face1Info,
+            nextThreshold: face1NextThreshold,
+            colorHex
+        })}
 
                 <!-- Strand 2 (Reception) -->
                 ${buildStrandCard({
-                    label: '↙ Reception (Inhale)',
-                    name: helix.names[1],
-                    faceId: helix.faces[1],
-                    energy: energy2,
-                    octave: face2Octave,
-                    octaveInfo: face2Info,
-                    nextThreshold: face2NextThreshold,
-                    colorHex
-                })}
+            label: '↙ Reception (Inhale)',
+            name: helix.names[1],
+            faceId: helix.faces[1],
+            energy: energy2,
+            octave: face2Octave,
+            octaveInfo: face2Info,
+            nextThreshold: face2NextThreshold,
+            colorHex
+        })}
             </div>
 
             <!-- Enhanced Dimensional Progression -->
@@ -332,7 +332,7 @@
             generateInsight
         };
 
-        console.log('🌬️ [OctaveDNA Breath Tab] Module loaded');
+        Logger.debug('OctaveDNA', 'Breath tab module loaded');
     }
 
 })();

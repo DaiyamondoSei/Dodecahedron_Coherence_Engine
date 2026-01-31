@@ -51,7 +51,7 @@
  * ============================================================================
  */
 
-(function() {
+(function () {
   'use strict';
 
   // ══════════════════════════════════════════════════════════════════════════
@@ -215,8 +215,8 @@
   function validateNumber(value, context, defaultValue = DEFAULTS.kpiNormalized) {
     // Check for corruption
     if (isCorrupted(value)) {
-      console.warn(`⚠️ DATA CORRUPTION: ${context}`);
-      console.warn(`   Raw value: "${value}" → Using default: ${defaultValue.toFixed(6)}`);
+      Logger.warn('DataValidator', `DATA CORRUPTION: ${context}`);
+      Logger.debug('DataValidator', `   Raw value: "${value}" → Using default: ${defaultValue.toFixed(6)}`);
       logCorruption(context, value, defaultValue);
       return defaultValue;
     }
@@ -224,8 +224,8 @@
     // Parse as number
     const parsed = parseFloat(value);
     if (isNaN(parsed)) {
-      console.warn(`⚠️ PARSE FAILURE: ${context}`);
-      console.warn(`   Cannot parse: "${value}" → Using default: ${defaultValue.toFixed(6)}`);
+      Logger.warn('DataValidator', `PARSE FAILURE: ${context}`);
+      Logger.debug('DataValidator', `   Cannot parse: "${value}" → Using default: ${defaultValue.toFixed(6)}`);
       logCorruption(context, value, defaultValue);
       return defaultValue;
     }
@@ -247,7 +247,7 @@
 
     // Clamp to valid range
     if (cleaned < 0 || cleaned > 1) {
-      console.warn(`⚠️ OUT OF RANGE: ${context} = ${cleaned}, clamping to [0,1]`);
+      Logger.warn('DataValidator', `OUT OF RANGE: ${context} = ${cleaned}, clamping to [0,1]`);
       return Math.max(0, Math.min(1, cleaned));
     }
 
@@ -285,8 +285,8 @@
 
     // Special handling for "Not Found" string
     if (typeof value === 'string' && value.includes('Not Found')) {
-      console.warn(`⚠️ MISSING DATA: ${context}`);
-      console.warn(`   Using PHI_MIDPOINT (0.5) as neutral default`);
+      Logger.warn('DataValidator', `MISSING DATA: ${context}`);
+      Logger.debug('DataValidator', '   Using PHI_MIDPOINT (0.5) as neutral default');
       logCorruption(context, value, DEFAULTS.elementalCoherence);
       return DEFAULTS.elementalCoherence;
     }
@@ -328,9 +328,9 @@
     const defensiveGamma = 0.3; // Weight pillars more heavily
     const coherence = (defensiveGamma * ballScore) + ((1 - defensiveGamma) * pillarAvg);
 
-    console.warn(`⚠️ DEFENSIVE COHERENCE: Ball=0 but Pillars=${pillarAvg.toFixed(4)}`);
-    console.warn(`   Using gamma=${defensiveGamma} instead of ${gamma}`);
-    console.warn(`   Result: ${coherence.toFixed(6)} (would have been 0)`);
+    Logger.warn('DataValidator', `DEFENSIVE COHERENCE: Ball=0 but Pillars=${pillarAvg.toFixed(4)}`);
+    Logger.debug('DataValidator', `   Using gamma=${defensiveGamma} instead of ${gamma}`);
+    Logger.debug('DataValidator', `   Result: ${coherence.toFixed(6)} (would have been 0)`);
 
     return {
       coherence,
@@ -379,7 +379,7 @@
       window.DataSystem.Validator = DataValidator;
     }
 
-    console.log('🛡️ DataValidator v1.0.0 loaded - Corruption detection active');
+    Logger.info('DataValidator', 'DataValidator loaded - Corruption detection active');
   }
 
   // CommonJS export (for testing)

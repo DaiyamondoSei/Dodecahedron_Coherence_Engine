@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quannex Dodecahedron Engine Demo</title>
+    <link rel="icon" href="data:,"><!-- Suppress favicon 404 -->
     <link rel="stylesheet" href="css/demo.css">
 </head>
 
@@ -14,12 +15,15 @@
 
     <!-- Hidden Frames for Preloading (Performance Optimization) -->
     <div style="display:none;">
-        <iframe id="dodecahedron" src="dodecahedron-3d.html"></iframe>
+        <iframe id="dodecahedron" src="pages/dodecahedron-3d.html"></iframe>
         <iframe id="calculations" src="index.html"></iframe>
-        <iframe id="breath" src="breath-analysis.html"></iframe>
-        <iframe id="dna" src="octave-dna.html"></iframe>
-        <iframe id="simulator" src="simulator.html"></iframe>
+        <iframe id="breath" src="pages/breath-analysis.html"></iframe>
+        <iframe id="dna" src="pages/octave-dna.html"></iframe>
+        <iframe id="simulator" src="pages/simulator.html"></iframe>
     </div>
+
+    <!-- Load Logger Utility -->
+    <script src="js/utils/logger.js"></script>
 
     <script>
         const mainFrame = document.getElementById('main-frame');
@@ -36,7 +40,7 @@
             const { type, view, companyId, faceConfig } = event.data;
 
             if (type === 'SWITCH_VIEW') {
-                console.log(`🔄 Switching to view: ${view}`);
+                Logger.info('Demo', `🔄 Switching to view: ${view}`);
 
                 // 1. Update source of main frame
                 if (view === 'orchestrator') {
@@ -44,11 +48,11 @@
                 } else {
                     // Map view names to filenames
                     const viewMap = {
-                        'dodecahedron': 'dodecahedron-3d.html',
+                        'dodecahedron': 'pages/dodecahedron-3d.html',
                         'calculations': 'index.html',
-                        'breath': 'breath-analysis.html',
-                        'dna': 'octave-dna.html',
-                        'simulator': 'simulator.html'
+                        'breath': 'pages/breath-analysis.html',
+                        'dna': 'pages/octave-dna.html',
+                        'simulator': 'pages/simulator.html'
                     };
 
                     if (viewMap[view]) {
@@ -67,7 +71,7 @@
 
         // Handle "Return to Welcome" logic
         function returnToWelcome() {
-            console.log('🏠 Returning to orchestrator...');
+            Logger.info('Demo', '🏠 Returning to orchestrator...');
             mainFrame.src = 'demo-orchestrator.html';
 
             // Reload hidden frames to clear state
@@ -82,18 +86,3 @@
 </body>
 
 </html>
-
-1209| const dashboardFrame = document.getElementById('calculations');
-1210| const geometryFrame = document.getElementById('dodecahedron');
-1211| const dnaFrame = document.getElementById('dna');
-1212| const simulatorFrame = document.getElementById('simulator');
-1213| const breathFrame = document.getElementById('breath');
-1214|
-1215| if (dashboardFrame) dashboardFrame.src = dashboardFrame.src; // Reload to clear state
-1216| if (geometryFrame) geometryFrame.src = geometryFrame.src;
-1217| if (dnaFrame) dnaFrame.src = dnaFrame.src;
-1218| if (simulatorFrame) simulatorFrame.src = simulatorFrame.src;
-1219| if (breathFrame) breathFrame.src = breathFrame.src;
-1220|
-1221| console.log('✅ Returned to welcome screen');
-1222| }

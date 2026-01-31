@@ -2,6 +2,12 @@
 
 > The consciousness layer of edge exploration
 > Created: January 2026
+> **Status: COMPLETE** - Tested and verified January 8, 2026
+
+**Related Documentation:**
+- [EDGE_ARCHITECTURE.md](EDGE_ARCHITECTURE.md) - Parent architecture document
+- [../EDGE_DYNAMICS_REFERENCE.md](../EDGE_DYNAMICS_REFERENCE.md) - Edge mathematical foundations
+- [../DOCUMENTATION_INDEX.md](../DOCUMENTATION_INDEX.md) - Navigation hub
 
 ## The Soul of Sacred Inquiry
 
@@ -17,12 +23,12 @@ Sacred Inquiry is not about finding answers. It is about finding the **right que
 
 Sacred Inquiry operates on two dimensions:
 
-1. **Health State** (tension-based)
-   - Wall (>0.8 tension) - blocked, rigid
-   - Gate (0.6-0.8) - controlled, selective
-   - Membrane (0.3-0.6) - healthy, breathing
-   - Hemorrhage (0.1-0.3) - leaking, diffuse
-   - Vortex (<0.1) - consuming, collapsing
+1. **Health State** (tension-based, verified January 8, 2026)
+   - Wall (0-15% tension) - blocked, impermeable, no exchange
+   - Gate (15-35%) - controlled, selective, intentional
+   - Membrane (35-65%) - healthy, balanced, semi-permeable
+   - Hemorrhage (65-85%) - too open, leaking, boundary dissolution
+   - Vortex (85-100%) - amplifying, transforming, emergence
 
 2. **Synergy Element** (face-based)
    - Earth - stability, structure, grounding
@@ -111,10 +117,10 @@ const dominant = SacredInquiry.getDominantSynergy(faceA, faceB);
 
 ## The Five Health States
 
-### Wall (>80% tension)
+### Wall (0-15% tension)
 **Symbol:** 🧱
 
-The boundary has become a barrier. Energy cannot flow. The system protects itself through rigidity.
+The boundary has become a barrier. Energy cannot flow. The system protects itself through rigidity. Very low tension indicates no exchange is happening - the edge is blocked.
 
 **Indicators:**
 - Complete blocking of exchange
@@ -125,10 +131,10 @@ The boundary has become a barrier. Energy cannot flow. The system protects itsel
 **Core Inquiry Pattern:**
 "What has become so protected it can no longer breathe?"
 
-### Gate (60-80% tension)
+### Gate (15-35% tension)
 **Symbol:** 🚪
 
-The boundary is controlled. Energy flows selectively. The system chooses what enters and exits.
+The boundary is controlled. Energy flows selectively. The system chooses what enters and exits. Low-moderate tension indicates intentional, managed exchange.
 
 **Indicators:**
 - Controlled exchange
@@ -139,10 +145,10 @@ The boundary is controlled. Energy flows selectively. The system chooses what en
 **Core Inquiry Pattern:**
 "What is being protected, and is that protection still serving?"
 
-### Membrane (30-60% tension)
+### Membrane (35-65% tension)
 **Symbol:** 🫧
 
-The boundary is healthy. Energy flows appropriately. The system breathes naturally.
+The boundary is healthy. Energy flows appropriately. The system breathes naturally. Moderate tension indicates balanced, reciprocal exchange - the optimal state.
 
 **Indicators:**
 - Balanced exchange
@@ -153,10 +159,10 @@ The boundary is healthy. Energy flows appropriately. The system breathes natural
 **Core Inquiry Pattern:**
 "How does this exchange serve the whole?"
 
-### Hemorrhage (10-30% tension)
-**Symbol:** 💨
+### Hemorrhage (65-85% tension)
+**Symbol:** 💧
 
-The boundary is too porous. Energy leaks out. The system loses definition.
+The boundary is too porous. Energy leaks out. The system loses definition. High tension indicates over-flow - boundaries dissolving, resources leaking.
 
 **Indicators:**
 - Excessive outflow
@@ -167,10 +173,10 @@ The boundary is too porous. Energy leaks out. The system loses definition.
 **Core Inquiry Pattern:**
 "What precious thing is leaking away unnoticed?"
 
-### Vortex (<10% tension)
+### Vortex (85-100% tension)
 **Symbol:** 🌀
 
-The boundary has collapsed. Energy is being consumed. The system is in crisis.
+The boundary has become an amplifier. Energy is intensely active. The system is in rapid transformation - creative chaos where emergence happens.
 
 **Indicators:**
 - Boundary collapse

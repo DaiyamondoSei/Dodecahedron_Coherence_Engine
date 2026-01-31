@@ -1629,7 +1629,7 @@ window.Quannex = {
   updateFaceEnergy(faceIndex, targetEnergy) {
     const face = quannexEngine.faces[faceIndex];
     if (!face) {
-      console.warn(`[Quannex] Face ${faceIndex} not found`);
+      Logger.warn('Quannex', `[Quannex] Face ${faceIndex} not found`);
       return null;
     }
 
@@ -1647,7 +1647,7 @@ window.Quannex = {
     // Invalidate face cache so faceEnergy recalculates
     face.invalidateCache();
 
-    console.log(`[Quannex] Face ${faceIndex} (${face.name}) energy → ${(clampedTarget * 100).toFixed(0)}%`);
+    Logger.info('Quannex', `[Quannex] Face ${faceIndex} (${face.name}) energy → ${(clampedTarget * 100).toFixed(0)}%`);
     return quannexEngine.getState();
   },
 
@@ -1769,7 +1769,7 @@ window.Quannex = {
 
     const factory = templates[templateId];
     if (!factory) {
-      console.warn(`Unknown template: ${templateId}. Available: ${Object.keys(templates).join(', ')}`);
+      Logger.warn('Quannex', `Unknown template: ${templateId}. Available: ${Object.keys(templates).join(', ')}`);
       return null;
     }
 
@@ -1779,8 +1779,8 @@ window.Quannex = {
     // Recalculate all coherence values
     quannexEngine.recalculate();
 
-    console.log(`✨ Applied "${templateId}" tuning template`);
-    console.log(`   Philosophy: ${newConfig.getPhilosophy().alpha.meaning}`);
+    Logger.info('Quannex', `✨ Applied "${templateId}" tuning template`);
+    Logger.info('Quannex', `   Philosophy: ${newConfig.getPhilosophy().alpha.meaning}`);
 
     return newConfig.toJSON();
   },
@@ -1809,7 +1809,7 @@ window.Quannex = {
   importTuning(json) {
     quannexEngine.tuning = TuningConfig.fromJSON(json);
     quannexEngine.recalculate();
-    console.log('📥 Imported custom tuning configuration');
+    Logger.info('Quannex', '📥 Imported custom tuning configuration');
     return quannexEngine.tuning.toJSON();
   }
 };
@@ -1817,8 +1817,8 @@ window.Quannex = {
 // Also expose quannexEngine directly for advanced integrations (like 3D viz)
 window.quannexEngine = quannexEngine;
 
-console.log('🌟 Quannex Serverless Engine Loaded');
-console.log('💡 Use window.Quannex API to interact with the system');
+Logger.info('Quannex', '🌟 Quannex Serverless Engine Loaded');
+Logger.info('Quannex', '💡 Use window.Quannex API to interact with the system');
 // Export for global access (backward compatibility)
 if (typeof window !== 'undefined') {
   window.DodecahedronEngine = DodecahedronEngine;

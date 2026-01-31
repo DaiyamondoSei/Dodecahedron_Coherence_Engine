@@ -174,7 +174,7 @@
             }
         }
 
-        console.log('[ShadowEventHandlers] Legacy source dropdown used - consider using toggle');
+        Logger.info('Shadow:EventHandlers', 'Legacy source dropdown used - consider using toggle');
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -233,11 +233,11 @@
         // Legacy: Source dropdown change (deprecated)
         if (sourceDropdown) {
             bindEvent(sourceDropdown, 'change', handleSourceChange);
-            console.log('[ShadowEventHandlers] Legacy dropdown bound - prefer using toggle');
+            Logger.info('Shadow:EventHandlers', 'Legacy dropdown bound - prefer using toggle');
         }
 
-        console.log('[ShadowEventHandlers] Event listeners initialized');
-        console.log('[ShadowEventHandlers] Press "S" to toggle shadow overlay');
+        Logger.info('Shadow:EventHandlers', 'Event listeners initialized');
+        Logger.info('Shadow:EventHandlers', 'Press "S" to toggle shadow overlay');
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -255,7 +255,7 @@
 
         boundListeners = [];
 
-        console.log('[ShadowEventHandlers] Cleaned up event listeners');
+        Logger.info('Shadow:EventHandlers', 'Cleaned up event listeners');
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -277,6 +277,6 @@
         cleanup
     };
 
-    console.log('[ShadowEventHandlers] Module loaded');
+    Logger.debug('Shadow:EventHandlers', 'Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

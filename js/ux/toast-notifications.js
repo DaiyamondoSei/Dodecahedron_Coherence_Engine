@@ -32,7 +32,7 @@
  * @version 1.0.0
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
@@ -192,7 +192,7 @@
         }, duration);
 
         // Log for debugging
-        console.log(`[Toast] ${type.toUpperCase()}: ${message}`);
+        Logger.debug('UX:Toast', `${type.toUpperCase()}: ${message}`);
 
         return toast;
     }
@@ -381,7 +381,7 @@
     function init() {
         injectStyles();
         initEventListener();
-        console.log('[Quannex] Toast Notification System initialized');
+        Logger.info('UX:Toast', 'Toast Notification System initialized');
     }
 
     // Auto-init when DOM ready

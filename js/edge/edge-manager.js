@@ -42,7 +42,7 @@
  * ════════════════════════════════════════════════════════════════════════════
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================================================
@@ -108,7 +108,7 @@
          */
         initialize(options = {}) {
             if (this._initialized) {
-                console.warn('[EdgeManager] Already initialized. Call reset() first.');
+                Logger.warn('EdgeManager', 'Already initialized. Call reset() first.');
                 return this;
             }
 
@@ -167,7 +167,7 @@
             });
 
             this._initialized = true;
-            console.log(`🔗 [EdgeManager] Initialized with ${this._edges.size} edges`);
+            Logger.info('EdgeManager', `Initialized with ${this._edges.size} edges`);
 
             return this;
         }
@@ -294,7 +294,7 @@
                 edge.setMode(mode);
             });
 
-            console.log(`🔗 [EdgeManager] Mode changed to: ${mode}`);
+            Logger.debug('EdgeManager', `Mode changed to: ${mode}`);
         }
 
         /**
@@ -382,7 +382,7 @@
             this._scene = scene || this._scene;
 
             if (!this._scene) {
-                console.error('[EdgeManager] No scene provided for mesh creation');
+                Logger.error('EdgeManager', 'No scene provided for mesh creation');
                 return;
             }
 
@@ -496,7 +496,7 @@
             this._currentMode = 'standard';
             this._initialized = false;
 
-            console.log('[EdgeManager] Reset complete');
+            Logger.info('EdgeManager', 'Reset complete');
         }
 
         /**
@@ -517,6 +517,6 @@
 
     global.EdgeManager = EdgeManager;
 
-    console.log('🔗 EdgeManager module loaded - Orchestrating 30 pure membranes');
+    Logger.info('EdgeManager', 'EdgeManager module loaded - Orchestrating 30 pure membranes');
 
 })(typeof window !== 'undefined' ? window : this);

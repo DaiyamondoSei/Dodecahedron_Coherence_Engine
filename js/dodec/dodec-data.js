@@ -59,7 +59,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -68,7 +68,7 @@
 
     const S = global.DodecState;
     if (!S) {
-        console.error('[dodec-data] DodecState not loaded!');
+        Logger.error('DodecData', 'DodecState not loaded!');
         return;
     }
 
@@ -125,15 +125,15 @@
             // If CompanyLoader available, load company from sessionStorage or default
             if (global.CompanyLoader) {
                 const selectedCompanyId = sessionStorage.getItem('selectedCompanyId') || 'quannex';
-                console.log(`[dodec-data] 🔄 Loading company from session: ${selectedCompanyId}`);
+                Logger.info('DodecData', `🔄 Loading company from session: ${selectedCompanyId}`);
                 await global.CompanyLoader.loadCompany(selectedCompanyId);
             }
 
             S.companyData = engine.getState();
-            console.log('[dodec-data] ✅ Quannex Engine loaded:', S.companyData);
+            Logger.info('DodecData', `✅ Quannex Engine loaded: ${S.companyData?.faces?.length || 0} faces`);
             return true;
         } catch (error) {
-            console.error('[dodec-data] ❌ Error loading Quannex engine:', error);
+            Logger.error('DodecData', `❌ Error loading Quannex engine: ${error.message}`);
             return false;
         }
     }
@@ -161,7 +161,7 @@
                 throw new Error('Company loader not available');
             }
 
-            console.log(`[dodec-data] 🔄 Switching to company: ${companyId}`);
+            Logger.info('DodecData', `🔄 Switching to company: ${companyId}`);
 
             // Update current company tracking for octave layers
             S.currentCompany = companyId;
@@ -186,9 +186,9 @@
                 global.updateOctaveLayers();
             }
 
-            console.log(`[dodec-data] ✅ Switched to ${companyId} - ${S.companyData?.faces?.length || 0} faces loaded`);
+            Logger.info('DodecData', `✅ Switched to ${companyId} - ${S.companyData?.faces?.length || 0} faces loaded`);
         } catch (error) {
-            console.error(`[dodec-data] ❌ Error switching to ${companyId}:`, error);
+            Logger.error('DodecData', `❌ Error switching to ${companyId}: ${error.message}`);
         }
     }
 
@@ -217,26 +217,26 @@
         const engine = global.Quannex || global.quannexEngine;
         if (engine) {
             S.companyData = engine.getState();
-            console.log('[dodec-data] 🔄 Refreshed company data from engine:',
-                S.companyData?.faces?.length || 0, 'faces');
+            Logger.info('DodecData', `🔄 Refreshed company data from engine: ${S.companyData?.faces?.length || 0} faces`);
+
         }
 
         if (!S.companyData || !S.companyData.faces) {
-            console.warn('[dodec-data] ⚠️ No company data available');
+            Logger.warn('DodecData', '⚠️ No company data available');
             return;
         }
 
         // Get the materials array
         const materials = global.dodecahedronMaterials || S.materials;
         if (!materials || materials.length === 0) {
-            console.warn('[dodec-data] ⚠️ Materials not available yet');
+            Logger.warn('DodecData', '⚠️ Materials not available yet');
             return;
         }
 
         // Get getEnergyColor function
         const getEnergyColor = global.getEnergyColor;
         if (!getEnergyColor) {
-            console.warn('[dodec-data] ⚠️ getEnergyColor not available');
+            Logger.warn('DodecData', '⚠️ getEnergyColor not available');
             return;
         }
 
@@ -265,8 +265,8 @@
                 // Store face data in the clickable mesh
                 if (S.faceMeshes[index]) {
                     S.faceMeshes[index].userData.faceData = face;
-                    console.log(`[dodec-data]    ✅ Face ${index + 1} data stored:`,
-                        face.name, `(${face.elementalKPIs?.length || 0} KPIs)`);
+                    Logger.info('DodecData', `   ✅ Face ${index + 1} data stored: ${face.name} (${face.elementalKPIs?.length || 0} KPIs)`);
+
                 }
             }
         });
@@ -274,8 +274,8 @@
         // Force material updates
         materials.forEach(mat => mat.needsUpdate = true);
 
-        console.log('[dodec-data] ✅ Visualization updated with',
-            S.companyData.faces.length, 'face colors');
+        Logger.info('DodecData', `✅ Visualization updated with ${S.companyData.faces.length} face colors`);
+
     }
 
     // ========================================
@@ -298,7 +298,7 @@
      */
     function updateEdgeData() {
         if (!S.edgeLines || S.edgeLines.length === 0) {
-            console.log('[dodec-data] ℹ️ No edge lines to update');
+            Logger.info('DodecData', 'ℹ️ No edge lines to update');
             return;
         }
 
@@ -313,11 +313,11 @@
                         const key = edge.faceIds.slice().sort().join('-');
                         edgeDataMap[key] = edge;
                     });
-                    console.log(`[dodec-data] 📊 Loaded ${customData.edges.length} edges from sessionStorage`);
+                    Logger.info('DodecData', `📊 Loaded ${customData.edges.length} edges from sessionStorage`);
                 }
             }
         } catch (e) {
-            console.warn('[dodec-data] Could not load edge data from sessionStorage:', e);
+            Logger.warn('DodecData', `Could not load edge data from sessionStorage: ${e.message}`);
         }
 
         // Fallback to CompanyTemplatesBundle
@@ -329,12 +329,12 @@
                     const key = edge.faceIds.slice().sort().join('-');
                     edgeDataMap[key] = edge;
                 });
-                console.log(`[dodec-data] 📊 Loaded ${edges.length} edges from CompanyTemplatesBundle`);
+                Logger.info('DodecData', `📊 Loaded ${edges.length} edges from CompanyTemplatesBundle`);
             }
         }
 
         if (Object.keys(edgeDataMap).length === 0) {
-            console.log('[dodec-data] ℹ️ No edge data available to update');
+            Logger.info('DodecData', 'ℹ️ No edge data available to update');
             return;
         }
 
@@ -356,7 +356,7 @@
                     faceIds: mappedEdgeData.faceIds,
                     tension: mappedEdgeData.tension || 0,
                     healthStatus: mappedEdgeData.tension < 0.1 ? 'Healthy' :
-                                  mappedEdgeData.tension < 0.2 ? 'Moderate' : 'Tense',
+                        mappedEdgeData.tension < 0.2 ? 'Moderate' : 'Tense',
                     element: mappedEdgeData.elementalNature || 'Unknown',
                     color: ELEMENT_COLORS[mappedEdgeData.elementalNature] || '#00ffcc',
                     theQuestion: mappedEdgeData.theQuestion || null
@@ -366,7 +366,7 @@
             }
         });
 
-        console.log(`[dodec-data] ✅ Updated ${updatedCount}/${S.edgeLines.length} edges with mapped data`);
+        Logger.info('DodecData', `✅ Updated ${updatedCount}/${S.edgeLines.length} edges with mapped data`);
     }
 
     // ========================================
@@ -521,7 +521,7 @@
     global.clearShadowHighlights = clearShadowHighlights;
 
     // Convenience alias for cross-window refresh
-    global.refreshVisualization = function() {
+    global.refreshVisualization = function () {
         updateVisualization();
         updateEdgeData();
         if (typeof global.updateStats === 'function') {
@@ -529,7 +529,7 @@
         }
     };
 
-    console.log('[dodec-data] Module loaded - Data layer ready');
-    console.log('[dodec-data] Exports: loadQuannexEngine, switchCompany, updateVisualization, updateEdgeData');
+    Logger.info('DodecData', 'Module loaded - Data layer ready');
+    Logger.info('DodecData', 'Exports: loadQuannexEngine, switchCompany, updateVisualization, updateEdgeData');
 
 })(typeof window !== 'undefined' ? window : this);

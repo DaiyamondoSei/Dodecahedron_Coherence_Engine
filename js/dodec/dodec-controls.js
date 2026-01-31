@@ -62,7 +62,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -71,7 +71,7 @@
 
     const S = global.DodecState;
     if (!S) {
-        console.error('[dodec-controls] DodecState not loaded!');
+        Logger.error('Controls', 'DodecState not loaded!');
         return;
     }
 
@@ -94,7 +94,7 @@
      */
     function updateStats() {
         if (!S.companyData) {
-            console.warn('[dodec-controls] No company data for stats');
+            Logger.warn('Controls', 'No company data for stats');
             return;
         }
 
@@ -210,7 +210,7 @@
      * - Outside-click panel closing
      */
     function setupUIControls() {
-        console.log('[dodec-controls] Setting up UI controls...');
+        Logger.info('Controls', 'Setting up UI controls...');
 
         // ========================================
         // Toggle rotation button
@@ -286,7 +286,7 @@
                     }
                 });
 
-                console.log(`[dodec-controls] Face panel tab switched to: ${sectionName}`);
+                Logger.debug('Controls', `Face panel tab switched to: ${sectionName}`);
             });
         });
 
@@ -328,7 +328,7 @@
                 const isClickOnCanvas = event.target === S.canvas || event.target.tagName === 'CANVAS';
 
                 if (!panel.contains(event.target) && event.target !== closeButton && !isClickOnCanvas) {
-                    console.log('[dodec-controls] Click outside panel detected - closing face detail');
+                    Logger.debug('Controls', 'Click outside panel detected - closing face detail');
                     if (typeof global.closeFaceDetail === 'function') {
                         global.closeFaceDetail();
                     }
@@ -336,7 +336,7 @@
             }
         });
 
-        console.log('[dodec-controls] UI controls initialized');
+        Logger.info('Controls', 'UI controls initialized');
     }
 
     // ========================================
@@ -368,7 +368,7 @@
      * - Shift+R: Open results summary
      */
     function setupKeyboardShortcuts() {
-        console.log('[dodec-controls] Setting up keyboard shortcuts...');
+        Logger.info('Controls', 'Setting up keyboard shortcuts...');
 
         document.addEventListener('keydown', (e) => {
             // ========================================
@@ -425,7 +425,7 @@
                 }
 
                 if (closedSomething) {
-                    console.log('[dodec-controls] ESC: Closed overlays/panels');
+                    Logger.debug('Controls', 'ESC: Closed overlays/panels');
                 }
             }
 
@@ -466,7 +466,7 @@
                     }
                 }
 
-                console.log(`[dodec-controls] All animations: ${S.animationsPaused ? 'PAUSED' : 'PLAYING'}`);
+                Logger.debug('Controls', `All animations: ${S.animationsPaused ? 'PAUSED' : 'PLAYING'}`);
             }
 
             // ========================================
@@ -480,7 +480,7 @@
                         toggleBtn.textContent = `Auto-Rotate: ${S.autoRotate ? 'ON' : 'OFF'}`;
                         toggleBtn.classList.toggle('active', S.autoRotate);
                     }
-                    console.log(`[dodec-controls] Auto-rotate: ${S.autoRotate ? 'ON' : 'OFF'}`);
+                    Logger.debug('Controls', `Auto-rotate: ${S.autoRotate ? 'ON' : 'OFF'}`);
                 }
             }
 
@@ -509,7 +509,7 @@
             if (e.key === 'p' || e.key === 'P') {
                 document.body.classList.toggle('presentation-mode');
                 const isPresentation = document.body.classList.contains('presentation-mode');
-                console.log(`[dodec-controls] Presentation mode: ${isPresentation ? 'ON' : 'OFF'}`);
+                Logger.debug('Controls', `Presentation mode: ${isPresentation ? 'ON' : 'OFF'}`);
             }
 
             // ========================================
@@ -554,7 +554,7 @@
                     }, 2000);
                 }
 
-                console.log(`[dodec-controls] Font scale: ${nextScale.toUpperCase()}`);
+                Logger.debug('Controls', `Font scale: ${nextScale.toUpperCase()}`);
             }
 
             // ========================================
@@ -581,7 +581,7 @@
                     }, 2000);
                 }
 
-                console.log(`[dodec-controls] High contrast: ${isHighContrast ? 'ON' : 'OFF'}`);
+                Logger.debug('Controls', `High contrast: ${isHighContrast ? 'ON' : 'OFF'}`);
             }
 
             // ========================================
@@ -591,7 +591,7 @@
                 const hints = document.getElementById('keyboardHints');
                 if (hints) {
                     hints.classList.toggle('visible');
-                    console.log(`[dodec-controls] Keyboard hints: ${hints.classList.contains('visible') ? 'SHOWN' : 'HIDDEN'}`);
+                    Logger.debug('Controls', `Keyboard hints: ${hints.classList.contains('visible') ? 'SHOWN' : 'HIDDEN'}`);
                 }
             }
 
@@ -604,11 +604,11 @@
 
                 if (global.IntegrityOrchestrator?.toggleOverlay) {
                     global.IntegrityOrchestrator.toggleOverlay();
-                    console.log('[dodec-controls] Data integrity overlay toggled');
+                    Logger.debug('Controls', 'Data integrity overlay toggled');
                 } else if (global.IntegrityOverlay?.toggle) {
                     // Fallback if orchestrator not available
                     global.IntegrityOverlay.toggle();
-                    console.log('[dodec-controls] Data integrity overlay toggled (direct)');
+                    Logger.debug('Controls', 'Data integrity overlay toggled (direct)');
                 }
             }
 
@@ -622,16 +622,16 @@
                 if (!document.fullscreenElement) {
                     // Enter fullscreen
                     document.documentElement.requestFullscreen().then(() => {
-                        console.log('[dodec-controls] Fullscreen: ENTERED');
+                        Logger.debug('Controls', 'Fullscreen: ENTERED');
                     }).catch(err => {
-                        console.warn('[dodec-controls] Fullscreen not supported:', err.message);
+                        Logger.warn('Controls', 'Fullscreen not supported:', err.message);
                     });
                 } else {
                     // Exit fullscreen
                     document.exitFullscreen().then(() => {
-                        console.log('[dodec-controls] Fullscreen: EXITED');
+                        Logger.debug('Controls', 'Fullscreen: EXITED');
                     }).catch(err => {
-                        console.warn('[dodec-controls] Exit fullscreen failed:', err.message);
+                        Logger.warn('Controls', 'Exit fullscreen failed:', err.message);
                     });
                 }
             }
@@ -646,11 +646,11 @@
 
                 // Open results summary in new tab
                 global.open('results-summary.html', '_blank');
-                console.log('[dodec-controls] Opening Results Summary Report');
+                Logger.info('Controls', 'Opening Results Summary Report');
             }
         });
 
-        console.log('[dodec-controls] Keyboard shortcuts registered (15 shortcuts)');
+        Logger.info('Controls', 'Keyboard shortcuts registered (15 shortcuts)');
     }
 
     // ========================================
@@ -661,6 +661,6 @@
     global.setupUIControls = setupUIControls;
     global.setupKeyboardShortcuts = setupKeyboardShortcuts;
 
-    console.log('[dodec-controls] Module loaded - UI controls and keyboard shortcuts ready');
+    Logger.info('Controls', 'Module loaded - UI controls and keyboard shortcuts ready');
 
 })(typeof window !== 'undefined' ? window : this);

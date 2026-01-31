@@ -47,7 +47,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // Reference to pentagram overlay instance
@@ -71,7 +71,7 @@
         const face2 = facesData.find(f => f.id === helix.faces[1]);
 
         if (!face1 || !face2) {
-            console.warn('⚠️ [Pentagram] Face data not found for helix', helix);
+            Logger.warn('OctaveDNA', `Face data not found for helix: ${helix.name}`);
             return;
         }
 
@@ -103,7 +103,7 @@
         // Display insights
         displayPentagramInsights(analysis, helix);
 
-        console.log(`⭐ [Pentagram] Analysis calculated for ${helix.name}`);
+        Logger.debug('OctaveDNA', `Pentagram analysis calculated for ${helix.name}`);
     }
 
     /**
@@ -185,7 +185,7 @@
     function renderPentagram(analysis, helix) {
         // Use external PentagramOverlay if available
         if (!window.PentagramOverlay) {
-            console.log('⭐ [Pentagram] PentagramOverlay not loaded, skipping render');
+            Logger.debug('OctaveDNA', 'PentagramOverlay not loaded, skipping render');
             return;
         }
 
@@ -272,7 +272,7 @@
             displayPentagramInsights
         };
 
-        console.log('⭐ [OctaveDNA Pentagram Tab] Module loaded');
+        Logger.debug('OctaveDNA', 'Pentagram tab module loaded');
     }
 
 })();

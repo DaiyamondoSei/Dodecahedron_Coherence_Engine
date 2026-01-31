@@ -40,7 +40,7 @@
  * @version 1.0.0
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================================================
@@ -661,8 +661,8 @@
 
             for (const shortcut of cat.shortcuts) {
                 const keyDisplay = shortcut.key === ' ' ? 'Space' :
-                                   shortcut.key === 'Escape' ? 'Esc' :
-                                   shortcut.key;
+                    shortcut.key === 'Escape' ? 'Esc' :
+                        shortcut.key;
                 html += `
                     <div class="shortcut-row">
                         <span class="shortcut-key">${keyDisplay}</span>
@@ -742,9 +742,9 @@
 
         // Log with page awareness info
         if (isOn3DPage()) {
-            console.log('[Quannex] Keyboard shortcuts initialized (3D page mode - deferring R/P/Space to dodec-controls). Press ? for help.');
+            Logger.info('UX:KeyboardShortcuts', 'Keyboard shortcuts initialized (3D page mode - deferring R/P/Space to dodec-controls). Press ? for help.');
         } else {
-            console.log('[Quannex] Keyboard shortcuts initialized. Press ? for help.');
+            Logger.info('UX:KeyboardShortcuts', 'Keyboard shortcuts initialized. Press ? for help.');
         }
     }
 

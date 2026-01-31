@@ -180,7 +180,7 @@ export class Vertex {
    */
   calculateVortexEnergy(faces) {
     if (!faces || faces.length !== 3) {
-      console.warn(`Vertex ${this.id} doesn't have exactly 3 faces`);
+      Logger.warn('Vertex', `Vertex ${this.id} does not have exactly 3 faces`);
       this._vortexStrength = 0;
       this._vortexDirection = 0;
       this._coherence = 0;
@@ -298,4 +298,4 @@ if (typeof window !== 'undefined') {
   window.Vertex = Vertex;
 }
 
-console.log('   Vertex module loaded');
+Logger.info('Vertex', 'Vertex module loaded');

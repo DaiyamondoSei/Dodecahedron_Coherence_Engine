@@ -614,4 +614,4 @@ if (typeof window !== 'undefined') {
     };
 }
 
-console.log('✅ OctaveReferenceLibrary loaded with 6 breath axes, 7 octaves, 12 faces');
+Logger.info('OctaveReferenceLibrary', 'OctaveReferenceLibrary loaded with 6 breath axes, 7 octaves, 12 faces');

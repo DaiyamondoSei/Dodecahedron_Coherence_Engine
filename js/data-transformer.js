@@ -275,8 +275,8 @@ class DataTransformer {
      * @see {@link transformKPIs} - Transforms individual KPIs
      */
     transformDemoToEngine(demoData) {
-        console.log('🔄 DATA TRANSFORMER: Starting transformation...');
-        console.log('   Input:', {
+        Logger.info('DataTransformer', 'Starting transformation...');
+        Logger.debug('DataTransformer', '   Input:', {
             faceConfig: demoData.faceConfig?.templateName,
             kpiMode: demoData.kpiMode,
             kpiCount: demoData.kpiData?.length
@@ -286,7 +286,7 @@ class DataTransformer {
 
         // Validate input
         if (!this.validateInput(demoData)) {
-            console.error('❌ Validation failed:', this.validationErrors);
+            Logger.error('DataTransformer', 'Validation failed:', this.validationErrors);
             throw new Error(`Validation failed: ${this.validationErrors.join(', ')}`);
         }
 
@@ -302,9 +302,9 @@ class DataTransformer {
             timestamp: new Date().toISOString()
         };
 
-        console.log('✅ DATA TRANSFORMER: Transformation complete');
-        console.log('   Output KPIs:', transformedKPIs.length);
-        console.log('   Sample:', transformedKPIs[0]);
+        Logger.info('DataTransformer', 'Transformation complete');
+        Logger.debug('DataTransformer', `Output KPIs: ${transformedKPIs.length}`);
+        Logger.debug('DataTransformer', '   Sample:', transformedKPIs[0]);
 
         return companyData;
     }
@@ -438,7 +438,7 @@ class DataTransformer {
             const defaultMax = unitScale ? unitScale.max : 100;
 
             if (unitScale) {
-                console.log(`   📏 KPI ${uiKPI.name}: Detected ${unitScale.source} → range [${unitScale.min}-${unitScale.max}]`);
+                Logger.debug('DataTransformer', `KPI ${uiKPI.name}: Detected ${unitScale.source} → range [${unitScale.min}-${unitScale.max}]`);
             }
 
             // Use explicit values or derive from targets, falling back to unit-derived or default 0-100
@@ -462,7 +462,7 @@ class DataTransformer {
 
             // Safety: ensure max > min to prevent division by zero
             if (healthyMax <= healthyMin) {
-                console.warn(`   ⚠️ KPI ${uiKPI.name}: Invalid range (max ${healthyMax} <= min ${healthyMin}). Using scale-derived or default range.`);
+                Logger.warn('DataTransformer', `KPI ${uiKPI.name}: Invalid range (max ${healthyMax} <= min ${healthyMin}). Using scale-derived or default range.`);
                 healthyMin = defaultMin;
                 healthyMax = defaultMax;
             }
@@ -495,7 +495,7 @@ class DataTransformer {
             };
 
             // Log transformation for debugging
-            console.log(`   📋 KPI ${index + 1}:`, {
+            Logger.debug('DataTransformer', `KPI ${index + 1}:`, {
                 from: `${uiKPI.name} = ${uiKPI.value}`,
                 to: `${engineKPI.KPI_Name} = ${engineKPI.Value}`,
                 face: engineKPI.Face_ID,
@@ -534,7 +534,7 @@ class DataTransformer {
      * updateDashboard(uiResults);
      */
     transformEngineToUI(engineState) {
-        console.log('🔄 DATA TRANSFORMER: Transforming results to UI format...');
+        Logger.debug('DataTransformer', 'Transforming results to UI format...');
 
         return {
             globalCoherence: engineState.globalCoherence,
@@ -715,5 +715,5 @@ window.DataTransformer = {
 // MODULE INITIALIZATION LOG
 // ========================================
 
-console.log('✅ Data Transformation Layer loaded');
-console.log('💡 Use window.DataTransformer.transform(demoData) to convert UI data to Engine format');
+Logger.info('DataTransformer', 'Data Transformation Layer loaded');
+Logger.debug('DataTransformer', 'Use window.DataTransformer.transform(demoData) to convert UI data to Engine format');

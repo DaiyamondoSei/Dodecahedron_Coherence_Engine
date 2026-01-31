@@ -134,7 +134,7 @@ const GOLD_HEADER_TEMPLATE = {
         }
     },
 
-    generate: function(options) {
+    generate: function (options) {
         return this.template
             .replace('{FILENAME}', options.filename || 'filename.js')
             .replace('{ONE_LINE_PURPOSE}', options.purpose || 'Description')
@@ -174,15 +174,15 @@ const CONSOLE_STANDARDS = {
             '🧭 navigation.js loaded - Quick jump ready (Cmd+K)'
         ],
 
-        log: function(filename, context, emoji = '📦') {
+        log: function (filename, context, emoji = '📦') {
             if (this.isDevMode()) {
-                console.log(`${emoji} ${filename} loaded - ${context}`);
+                Logger.info('DX', `${emoji} ${filename} loaded - ${context}`);
             }
         },
 
-        isDevMode: function() {
+        isDevMode: function () {
             return typeof localStorage !== 'undefined' &&
-                   localStorage.getItem('quannexDev') === 'true';
+                localStorage.getItem('quannexDev') === 'true';
         }
     },
 
@@ -199,8 +199,8 @@ const CONSOLE_STANDARDS = {
             '❌ VertexVortex: Missing triadic faces | See: docs/VERTEX_DYNAMICS_REFERENCE.md'
         ],
 
-        log: function(module, error, docLink) {
-            console.error(`❌ ${module}: ${error} | See: ${docLink}`);
+        log: function (module, error, docLink) {
+            Logger.error(module, `${error} | See: ${docLink}`);
         }
     },
 
@@ -217,8 +217,8 @@ const CONSOLE_STANDARDS = {
             '⚠️ NavigationManager: Scroll position not found, using top'
         ],
 
-        log: function(module, warning) {
-            console.warn(`⚠️ ${module}: ${warning}`);
+        log: function (module, warning) {
+            Logger.warn(module, warning);
         }
     },
 
@@ -235,16 +235,16 @@ const CONSOLE_STANDARDS = {
             '✅ Register switch complete (balanced → analytical)'
         ],
 
-        log: function(action, details) {
+        log: function (action, details) {
             if (this.isDevMode()) {
                 const detailStr = details ? ` (${details})` : '';
-                console.log(`✅ ${action} complete${detailStr}`);
+                Logger.info('DX', `✅ ${action} complete${detailStr}`);
             }
         },
 
-        isDevMode: function() {
+        isDevMode: function () {
             return typeof localStorage !== 'undefined' &&
-                   localStorage.getItem('quannexDev') === 'true';
+                localStorage.getItem('quannexDev') === 'true';
         }
     },
 
@@ -256,23 +256,22 @@ const CONSOLE_STANDARDS = {
         pattern: '🔍 {module}.{function}: {detail}',
         enabledBy: "localStorage.quannexDebug = true",
 
-        log: function(module, func, detail) {
+        log: function (module, func, detail) {
             if (this.isDebugMode()) {
-                console.log(`🔍 ${module}.${func}: ${detail}`);
+                Logger.debug(module, `${func}: ${detail}`);
             }
         },
 
-        table: function(module, data) {
+        table: function (module, data) {
             if (this.isDebugMode()) {
-                console.group(`🔍 ${module}`);
+                Logger.debug(module, 'Data breakdown:');
                 console.table(data);
-                console.groupEnd();
             }
         },
 
-        isDebugMode: function() {
+        isDebugMode: function () {
             return typeof localStorage !== 'undefined' &&
-                   localStorage.getItem('quannexDebug') === 'true';
+                localStorage.getItem('quannexDebug') === 'true';
         }
     }
 };
@@ -329,7 +328,7 @@ const ERROR_MESSAGE_STANDARDS = {
             }
         },
 
-        getMessage: function(errorType, register, params = {}) {
+        getMessage: function (errorType, register, params = {}) {
             const template = this.templates[errorType];
             if (!template) return 'An error occurred.';
 
@@ -359,7 +358,7 @@ const ERROR_MESSAGE_STANDARDS = {
             'Suggested fix'
         ],
 
-        create: function(options) {
+        create: function (options) {
             const {
                 type = 'QuannexError',
                 message,
@@ -417,7 +416,7 @@ QuannexValidationError: Face energy out of bounds (1.5, expected 0-1)
             }
         },
 
-        getRecoveryLevel: function(error) {
+        getRecoveryLevel: function (error) {
             // Network errors are typically retryable
             if (error.name === 'NetworkError' || error.message?.includes('network')) {
                 return 'retry';
@@ -575,14 +574,14 @@ const DEV_TOOLS = {
         marks: {},
         measures: {},
 
-        mark: function(name) {
+        mark: function (name) {
             if (typeof performance !== 'undefined') {
                 performance.mark(name);
                 this.marks[name] = performance.now();
             }
         },
 
-        measure: function(name, startMark, endMark) {
+        measure: function (name, startMark, endMark) {
             if (typeof performance !== 'undefined') {
                 performance.measure(name, startMark, endMark);
                 const entries = performance.getEntriesByName(name, 'measure');
@@ -592,7 +591,7 @@ const DEV_TOOLS = {
             }
         },
 
-        report: function() {
+        report: function () {
             console.group('🕐 Performance Report');
             Object.entries(this.measures).forEach(([name, duration]) => {
                 const color = duration < 100 ? 'green' : duration < 500 ? 'orange' : 'red';
@@ -601,7 +600,7 @@ const DEV_TOOLS = {
             console.groupEnd();
         },
 
-        clear: function() {
+        clear: function () {
             if (typeof performance !== 'undefined') {
                 performance.clearMarks();
                 performance.clearMeasures();
@@ -648,7 +647,7 @@ const HOT_RELOAD = {
     ],
 
     // State preservation implementation
-    saveState: function() {
+    saveState: function () {
         if (typeof localStorage === 'undefined') return;
 
         const state = {
@@ -661,7 +660,7 @@ const HOT_RELOAD = {
         localStorage.setItem('quannex.hotReload.state', JSON.stringify(state));
     },
 
-    restoreState: function() {
+    restoreState: function () {
         if (typeof localStorage === 'undefined') return;
 
         const saved = localStorage.getItem('quannex.hotReload.state');
@@ -688,7 +687,7 @@ const HOT_RELOAD = {
         localStorage.removeItem('quannex.hotReload.state');
     },
 
-    getExpandedSections: function() {
+    getExpandedSections: function () {
         const expanded = [];
         document.querySelectorAll('[data-expanded="true"]').forEach(el => {
             if (el.id) expanded.push(el.id);
@@ -696,7 +695,7 @@ const HOT_RELOAD = {
         return expanded;
     },
 
-    restoreExpandedSections: function(expanded) {
+    restoreExpandedSections: function (expanded) {
         expanded.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.setAttribute('data-expanded', 'true');
@@ -717,7 +716,7 @@ const QuannexDev = {
     // 7.1: Initialization
     // ─────────────────────────────────────────────────────────────────────────
 
-    init: function() {
+    init: function () {
         if (typeof window === 'undefined') return this;
 
         // Check if dev mode is enabled
@@ -732,7 +731,7 @@ const QuannexDev = {
         return this;
     },
 
-    isEnabled: function() {
+    isEnabled: function () {
         if (typeof localStorage === 'undefined') return false;
 
         const devMode = localStorage.getItem('quannexDev') === 'true';
@@ -741,7 +740,7 @@ const QuannexDev = {
         return devMode || urlParam;
     },
 
-    attachToWindow: function() {
+    attachToWindow: function () {
         window.quannex = {
             inspect: (id) => this.inspect('face', id),
             validate: () => this.validate(),
@@ -771,7 +770,7 @@ const QuannexDev = {
         };
     },
 
-    logWelcome: function() {
+    logWelcome: function () {
         console.log(`
 %c🔮 Quannex Developer Mode Enabled %c
 
@@ -797,7 +796,7 @@ Type %cquannex.help()%c for full documentation.
     // 7.2: Inspection Commands
     // ─────────────────────────────────────────────────────────────────────────
 
-    inspect: function(type, id) {
+    inspect: function (type, id) {
         console.group(`🔍 Inspecting ${type} ${id}`);
 
         // Get data from appropriate source
@@ -816,7 +815,7 @@ Type %cquannex.help()%c for full documentation.
         return data;
     },
 
-    getDataFor: function(type, id) {
+    getDataFor: function (type, id) {
         // Placeholder - would integrate with actual data sources
         // This demonstrates the structure
         if (type === 'face') {
@@ -840,7 +839,7 @@ Type %cquannex.help()%c for full documentation.
     // 7.3: Register Preview
     // ─────────────────────────────────────────────────────────────────────────
 
-    previewRegister: function(register) {
+    previewRegister: function (register) {
         console.group(`🎨 Preview: ${register} register`);
 
         const samples = {
@@ -869,7 +868,7 @@ Type %cquannex.help()%c for full documentation.
         console.groupEnd();
     },
 
-    compareRegisters: function() {
+    compareRegisters: function () {
         console.group('🎨 Register Comparison');
 
         const sampleContent = 'This face has a shadow in productivity with coherence at 0.78';
@@ -885,7 +884,7 @@ Type %cquannex.help()%c for full documentation.
         console.groupEnd();
     },
 
-    transformSample: function(content, register) {
+    transformSample: function (content, register) {
         // Simplified transformation for demo
         const transforms = {
             analytical: {
@@ -915,7 +914,7 @@ Type %cquannex.help()%c for full documentation.
     // 7.4: Validation
     // ─────────────────────────────────────────────────────────────────────────
 
-    validate: function() {
+    validate: function () {
         console.group('🛡️ Running Validation Checks');
 
         const checks = [
@@ -954,7 +953,7 @@ Type %cquannex.help()%c for full documentation.
     // 7.5: State Dump
     // ─────────────────────────────────────────────────────────────────────────
 
-    dumpState: function() {
+    dumpState: function () {
         console.group('📦 Application State');
 
         const state = {
@@ -972,7 +971,7 @@ Type %cquannex.help()%c for full documentation.
         return state;
     },
 
-    getPreferences: function() {
+    getPreferences: function () {
         const prefs = {};
         const prefix = 'quannex.';
 
@@ -990,7 +989,7 @@ Type %cquannex.help()%c for full documentation.
     // 7.6: Reset
     // ─────────────────────────────────────────────────────────────────────────
 
-    reset: function() {
+    reset: function () {
         console.log('🔄 Resetting to defaults...');
 
         // Clear Quannex-specific storage
@@ -1012,7 +1011,7 @@ Type %cquannex.help()%c for full documentation.
     // 7.7: Help
     // ─────────────────────────────────────────────────────────────────────────
 
-    help: function() {
+    help: function () {
         console.log(`
 %c🔮 Quannex Developer Commands %c
 
@@ -1063,17 +1062,17 @@ Type %cquannex.help()%c for full documentation.
     // 7.8: Debug Mode Toggle
     // ─────────────────────────────────────────────────────────────────────────
 
-    enableDebug: function() {
+    enableDebug: function () {
         localStorage.setItem('quannexDebug', 'true');
         console.log('🔍 Debug mode enabled. Verbose logging is now active.');
     },
 
-    disableDebug: function() {
+    disableDebug: function () {
         localStorage.removeItem('quannexDebug');
         console.log('🔇 Debug mode disabled.');
     },
 
-    toggleVisualDebug: function(overlay) {
+    toggleVisualDebug: function (overlay) {
         const body = document.body;
         const className = `debug-${overlay}`;
 
@@ -1126,7 +1125,7 @@ if (typeof window !== 'undefined') {
     }
 
     // Log module loaded (in dev mode only)
-    CONSOLE_STANDARDS.onLoad.log('developer-experience.js', 'Dev tools ready (quannex.help())', '🛠️');
+    Logger.debug('DX', 'developer-experience.js loaded - Dev tools ready (quannex.help())');
 }
 
 // ════════════════════════════════════════════════════════════════════════════

@@ -187,13 +187,4 @@
 // This file is documentation-only. No exports needed.
 // All module loading is handled by script tags in octave-dna.html.
 
-console.log(`
-╔═══════════════════════════════════════════════════════════════╗
-║  🧬 OCTAVE DNA NAVIGATION MAP LOADED                          ║
-║  ─────────────────────────────────────────────────────────    ║
-║  Modules: state/ scene/ visualization/ interaction/           ║
-║           panels/ company/ animation/                          ║
-║  Entry:   octave-dna-main.js                                  ║
-║  Config:  See state/octave-dna-state.js                       ║
-╚═══════════════════════════════════════════════════════════════╝
-`);
+Logger.info('OctaveDNA', 'Octave DNA Navigation Map loaded - See state/, scene/, visualization/, interaction/, panels/, company/, animation/');

@@ -89,7 +89,7 @@
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════════
@@ -144,7 +144,7 @@
      */
     function init(options = {}) {
         if (isInitialized) {
-            console.log('[IntegrityOrchestrator] Already initialized');
+            Logger.debug('IntegrityOrch', 'Already initialized');
             return;
         }
 
@@ -160,16 +160,16 @@
             initializationAttempts++;
 
             if (initializationAttempts < MAX_INIT_ATTEMPTS) {
-                console.log(`[IntegrityOrchestrator] Waiting for dependencies (attempt ${initializationAttempts}/${MAX_INIT_ATTEMPTS})...`);
-                console.log(`  - DataValidator: ${deps.dataValidator ? '✓' : '✗'}`);
-                console.log(`  - IntegrityIndicator: ${deps.indicator ? '✓' : '✗'}`);
-                console.log(`  - IntegrityOverlay: ${deps.overlay ? '✓' : '✗'}`);
+                Logger.debug('IntegrityOrch', `Waiting for dependencies (attempt ${initializationAttempts}/${MAX_INIT_ATTEMPTS})...`);
+                Logger.debug('IntegrityOrch', `  - DataValidator: ${deps.dataValidator ? '✓' : '✗'}`);
+                Logger.debug('IntegrityOrch', `  - IntegrityIndicator: ${deps.indicator ? '✓' : '✗'}`);
+                Logger.debug('IntegrityOrch', `  - IntegrityOverlay: ${deps.overlay ? '✓' : '✗'}`);
 
                 setTimeout(() => init(options), INIT_RETRY_DELAY);
                 return;
             } else {
-                console.error('[IntegrityOrchestrator] Failed to initialize - missing dependencies after retries');
-                console.error('  Missing:', Object.entries(deps)
+                Logger.error('IntegrityOrch', 'Failed to initialize - missing dependencies after retries');
+                Logger.error('IntegrityOrch', '  Missing:', Object.entries(deps)
                     .filter(([, loaded]) => !loaded)
                     .map(([name]) => name)
                     .join(', '));
@@ -178,7 +178,7 @@
         }
 
         // All dependencies ready - initialize components
-        console.log('[IntegrityOrchestrator] All dependencies ready, initializing...');
+        Logger.info('IntegrityOrch', 'All dependencies ready, initializing...');
 
         // Initialize indicator
         if (global.IntegrityIndicator?.init) {
@@ -202,7 +202,7 @@
         // Emit ready event
         document.dispatchEvent(new CustomEvent('quannex:integrity-system-ready'));
 
-        console.log('🛡️ [IntegrityOrchestrator] Data integrity visibility system READY');
+        Logger.info('IntegrityOrch', 'Data integrity visibility system READY');
     }
 
     // ════════════════════════════════════════════════════════════════════════════
@@ -218,11 +218,11 @@
         const report = event.detail;
 
         if (!report) {
-            console.warn('[IntegrityOrchestrator] Received update event without report');
+            Logger.warn('IntegrityOrch', 'Received update event without report');
             return;
         }
 
-        console.log(`[IntegrityOrchestrator] Processing integrity update: ${report.issueCount || 0} issues`);
+        Logger.debug('IntegrityOrch', `Processing integrity update: ${report.issueCount || 0} issues`);
 
         // Update indicator (it also listens, but explicit call ensures sync)
         if (global.IntegrityIndicator?.updateFromReport) {
@@ -246,7 +246,7 @@
      */
     function triggerUpdate() {
         if (!global.DataValidator) {
-            console.warn('[IntegrityOrchestrator] Cannot trigger update - DataValidator not available');
+            Logger.warn('IntegrityOrch', 'Cannot trigger update - DataValidator not available');
             return;
         }
 
@@ -265,7 +265,7 @@
      */
     function toggleOverlay() {
         if (!isInitialized) {
-            console.warn('[IntegrityOrchestrator] Cannot toggle overlay - not initialized');
+            Logger.warn('IntegrityOrch', 'Cannot toggle overlay - not initialized');
             return;
         }
 
@@ -336,7 +336,7 @@
         }
 
         isInitialized = false;
-        console.log('[IntegrityOrchestrator] Cleaned up');
+        Logger.info('IntegrityOrch', 'Cleaned up');
     }
 
     // ════════════════════════════════════════════════════════════════════════════
@@ -365,6 +365,6 @@
     // Export to window
     global.IntegrityOrchestrator = IntegrityOrchestrator;
 
-    console.log('🛡️ IntegrityOrchestrator v1.0.0 loaded');
+    Logger.info('IntegrityOrch', 'v1.0.0 loaded');
 
 })(typeof window !== 'undefined' ? window : this);

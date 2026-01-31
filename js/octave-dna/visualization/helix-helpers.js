@@ -76,7 +76,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
@@ -334,9 +334,9 @@
             colorToHex
         };
 
-        console.log('🔧 [OctaveDNA Helpers] Helper functions loaded');
-        console.log('   PHI = ' + PHI.toFixed(6));
-        console.log('   Balanced threshold = ' + PHI_INV_2.toFixed(6));
+        Logger.debug('OctaveDNA', 'Helper functions loaded');
+        Logger.debug('OctaveDNA', '   PHI = ' + PHI.toFixed(6));
+        Logger.debug('OctaveDNA', '   Balanced threshold = ' + PHI_INV_2.toFixed(6));
     }
 
 })();

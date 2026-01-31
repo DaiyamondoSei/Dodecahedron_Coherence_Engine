@@ -52,7 +52,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -61,7 +61,7 @@
 
     const S = global.DodecState;
     if (!S) {
-        console.error('[dodec-interaction] DodecState not loaded!');
+        Logger.error('DodecInteraction', 'DodecState not loaded!');
         return;
     }
 
@@ -80,7 +80,7 @@
      * Should be called after scene and geometry are ready.
      */
     function setupInteraction() {
-        console.log('[dodec-interaction] Setting up interaction system...');
+        Logger.info('DodecInteraction', 'Setting up interaction system...');
 
         // Create raycaster and mouse vector
         S.raycaster = new THREE.Raycaster();
@@ -89,7 +89,7 @@
         // Get canvas for event listeners
         const canvas = S.canvas;
         if (!canvas) {
-            console.error('[dodec-interaction] Canvas not available for event listeners!');
+            Logger.error('DodecInteraction', 'Canvas not available for event listeners!');
             return;
         }
 
@@ -97,7 +97,7 @@
         document.addEventListener('mousemove', onMouseMove, false);
         canvas.addEventListener('click', onMouseClick, false);
 
-        console.log('[dodec-interaction] Event listeners attached');
+        Logger.info('DodecInteraction', 'Event listeners attached');
     }
 
     // ========================================
@@ -122,7 +122,7 @@
         const controls = S.controls;
 
         if (!camera || !controls) {
-            console.warn('[dodec-interaction] Camera or controls not available');
+            Logger.warn('DodecInteraction', 'Camera or controls not available');
             return;
         }
 
@@ -406,23 +406,23 @@
      * @param {MouseEvent} event - Click event
      */
     function onMouseClick(event) {
-        console.log(`[dodec-interaction] 🖱️ Canvas click at (${event.clientX}, ${event.clientY})`);
+        Logger.debug('DodecInteraction', `🖱️ Canvas click at (${event.clientX}, ${event.clientY})`);
 
         // Calculate movement from where OrbitControls drag started
         const deltaX = Math.abs(event.clientX - S.mouseStartPosition.x);
         const deltaY = Math.abs(event.clientY - S.mouseStartPosition.y);
         const totalMovement = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-        console.log(`[dodec-interaction]    📏 Movement from drag start: ${totalMovement.toFixed(1)}px (threshold: ${S.DRAG_THRESHOLD}px)`);
-        console.log(`[dodec-interaction]    🎮 isDraggingWithOrbit: ${S.isDraggingWithOrbit}`);
+        Logger.debug('DodecInteraction', `   📏 Movement from drag start: ${totalMovement.toFixed(1)}px (threshold: ${S.DRAG_THRESHOLD}px)`);
+        Logger.debug('DodecInteraction', `   🎮 isDraggingWithOrbit: ${S.isDraggingWithOrbit}`);
 
         // If user moved more than threshold, ignore the click (it was a drag)
         if (totalMovement > S.DRAG_THRESHOLD) {
-            console.log(`[dodec-interaction]    🚫 Ignoring click - user was dragging (${totalMovement.toFixed(1)}px movement)`);
+            Logger.debug('DodecInteraction', `   🚫 Ignoring click - user was dragging (${totalMovement.toFixed(1)}px movement)`);
             return;
         }
 
-        console.log(`[dodec-interaction]    ✅ Valid click - processing...`);
+        Logger.debug('DodecInteraction', `   ✅ Valid click - processing...`);
 
         // Get canvas
         const canvas = S.canvas;
@@ -439,14 +439,14 @@
         const edgeIntersects = S.raycaster.intersectObjects(S.edgeLines);
         const faceIntersects = S.raycaster.intersectObjects(S.faceMeshes);
 
-        console.log(`[dodec-interaction]    🔍 Found ${edgeIntersects.length} edge, ${faceIntersects.length} face intersections`);
+        Logger.debug('DodecInteraction', `   🔍 Found ${edgeIntersects.length} edge, ${faceIntersects.length} face intersections`);
 
         // PRIORITY 1: Check if edge was clicked
         if (edgeIntersects.length > 0) {
             const clickedEdge = edgeIntersects[0].object;
             const edgeData = clickedEdge.userData.edgeData;
 
-            console.log(`[dodec-interaction]    🔗 Hit edge: ${clickedEdge.userData.edgeName}`);
+            Logger.debug('DodecInteraction', `   🔗 Hit edge: ${clickedEdge.userData.edgeName}`);
 
             if (edgeData && typeof global.showEdgeDetail === 'function') {
                 global.showEdgeDetail(edgeData, clickedEdge.userData.edgeName);
@@ -460,7 +460,7 @@
             S.selectedFace = clickedMesh.userData.faceData;
             const faceIndex = clickedMesh.userData.faceIndex;
 
-            console.log(`[dodec-interaction]    ✅ Hit face ${faceIndex + 1}: ${S.selectedFace?.name || 'Unknown'}`);
+            Logger.debug('DodecInteraction', `   ✅ Hit face ${faceIndex + 1}: ${S.selectedFace?.name || 'Unknown'}`);
 
             if (S.selectedFace) {
                 // Animate camera to focus on this face
@@ -485,10 +485,10 @@
             }
         } else {
             // Clicked on canvas but didn't hit any face - close the panel if open
-            console.log(`[dodec-interaction]    ⚠️ No face hit - clicked empty space`);
+            Logger.debug('DodecInteraction', `   ⚠️ No face hit - clicked empty space`);
             const panel = document.getElementById('faceDetailPanel');
             if (panel && panel.classList.contains('visible')) {
-                console.log(`[dodec-interaction]    🔒 Closing face detail panel`);
+                Logger.debug('DodecInteraction', `   🔒 Closing face detail panel`);
                 if (typeof global.closeFaceDetail === 'function') {
                     global.closeFaceDetail();
                 }
@@ -512,6 +512,6 @@
     global.onMouseMove = onMouseMove;
     global.onMouseClick = onMouseClick;
 
-    console.log('[dodec-interaction] Module loaded - Interaction system ready');
+    Logger.info('DodecInteraction', 'Module loaded - Interaction system ready');
 
 })(typeof window !== 'undefined' ? window : this);

@@ -48,7 +48,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -192,7 +192,7 @@
 
         const S = global.DodecState;
         if (!S || !S.faceMeshes || S.faceMeshes.length < 12) {
-            console.warn('[dodec-topology] findSharedEdgeVertices: faceMeshes not available');
+            Logger.warn('Topology', 'findSharedEdgeVertices: faceMeshes not available');
             return null;
         }
 
@@ -201,7 +201,7 @@
         const faceMesh2 = S.faceMeshes.find(m => m.userData.faceId === face2Id);
 
         if (!faceMesh1 || !faceMesh2) {
-            console.warn(`[dodec-topology] findSharedEdgeVertices: Could not find face meshes for ${face1Id} and/or ${face2Id}`);
+            Logger.warn('Topology', `findSharedEdgeVertices: Could not find face meshes for ${face1Id} and/or ${face2Id}`);
             return null;
         }
 
@@ -245,8 +245,8 @@
 
         if (sharedVertices.length !== 2) {
             // Additional debug info
-            console.warn(
-                `[dodec-topology] findSharedEdgeVertices(${face1Id}, ${face2Id}): ` +
+            Logger.warn('Topology',
+                `findSharedEdgeVertices(${face1Id}, ${face2Id}): ` +
                 `Found ${sharedVertices.length} shared vertices. ` +
                 `Face1 has ${vertices1.size} unique vertices, Face2 has ${vertices2.size}. ` +
                 `Faces may not be adjacent in the geometry.`
@@ -307,7 +307,7 @@
             // Convert map to array
             uniqueVertices.forEach(vertex => vertices.push(vertex));
 
-            console.log(`[dodec-topology] Extracted ${vertices.length} unique vertices from Three.js geometry`);
+            Logger.info('Topology', `Extracted ${vertices.length} unique vertices from Three.js geometry`);
 
             // Cache for future calls
             global.cachedGeometricVertices = vertices;
@@ -315,7 +315,7 @@
         }
 
         // Fallback to theoretical positions if geometry not available
-        console.warn('[dodec-topology] Using fallback theoretical vertex positions');
+        Logger.warn('Topology', 'Using fallback theoretical vertex positions');
         const radius = 2;
 
         const fallbackVertices = [
@@ -368,13 +368,12 @@
      *                          value = analytical Face ID (1-12), or null on error
      */
     function buildFaceIndexMapping() {
-        console.log('\n[dodec-topology] BUILDING TOPOLOGY-AWARE FACE MAPPING:');
-        console.log('='.repeat(60));
+        Logger.info('Topology', '\nBUILDING TOPOLOGY-AWARE FACE MAPPING:');
 
         // Get the actual dodecahedron geometry
         const dodecahedron = global.mainDodecahedron;
         if (!dodecahedron || !dodecahedron.geometry) {
-            console.error('[dodec-topology] Cannot build face mapping - dodecahedron not available');
+            Logger.error('Topology', 'Cannot build face mapping - dodecahedron not available');
             return null;
         }
 
@@ -384,7 +383,7 @@
         // Get topology map (analytical vertex index → Set of face IDs)
         const vertexToFacesMap = buildVertexToFacesMap();
         if (!vertexToFacesMap) {
-            console.error('[dodec-topology] Cannot build face mapping - vertex topology not available');
+            Logger.error('Topology', 'Cannot build face mapping - vertex topology not available');
             return null;
         }
 
@@ -411,7 +410,7 @@
             }
         }
 
-        console.log(`[dodec-topology] Found ${uniquePositions.length} unique vertex positions`);
+        Logger.info('Topology', `Found ${uniquePositions.length} unique vertex positions`);
 
         // Build: for each position, which geometry faces contain it?
         const positionToGeoFaces = new Map(); // key -> Set of geometry face indices
@@ -545,8 +544,8 @@
             analyticalSignatures.push({ id: i, sig: getAnalyticalFaceAdjacency(i) });
         }
 
-        console.log('[dodec-topology] Geometry face signatures:');
-        geoSignatures.forEach(s => console.log(`  Geo ${s.idx}: ${s.vertices} vertices, adjacency: ${s.sig}`));
+        Logger.debug('Topology', 'Geometry face signatures:');
+        geoSignatures.forEach(s => Logger.debug('Topology', `  Geo ${s.idx}: ${s.vertices} vertices, adjacency: ${s.sig}`));
 
         // All faces in a dodecahedron have the same signature (5 adjacent faces, each sharing 2 vertices)
         // So signatures alone won't distinguish. We need a different approach.
@@ -579,7 +578,7 @@
             const analyticalVertsForFace = analyticalVertexDefs.filter(def => def.faces.has(analyticalFaceId));
 
             if (analyticalVertsForFace.length !== 5) {
-                console.warn(`[dodec-topology] Analytical face ${analyticalFaceId} has ${analyticalVertsForFace.length} vertices, expected 5`);
+                Logger.warn('Topology', `Analytical face ${analyticalFaceId} has ${analyticalVertsForFace.length} vertices, expected 5`);
                 return false;
             }
 
@@ -598,7 +597,7 @@
                 if (!usedAnalyticalFaces.has(analyticalId)) {
                     mapping[geoIdx] = analyticalId;
                     usedAnalyticalFaces.add(analyticalId);
-                    console.log(`✓ Geometry Face ${geoIdx} (${geoFaceVertices[geoIdx].size} vertices) → Analytical Face ${analyticalId}`);
+                    Logger.debug('Topology', `✓ Geometry Face ${geoIdx} (${geoFaceVertices[geoIdx].size} vertices) → Analytical Face ${analyticalId}`);
                     break;
                 }
             }
@@ -606,9 +605,8 @@
 
         // Validate mapping
         const successCount = mapping.filter(m => m !== null && m !== undefined).length;
-        console.log('='.repeat(60));
-        console.log(`[dodec-topology] Built face mapping: ${successCount}/12 faces mapped\n`);
-        console.log(`[dodec-topology] NOTE: This is a 1:1 sequential mapping. Vertex positions are derived from geometry.`);
+        Logger.info('Topology', `Built face mapping: ${successCount}/12 faces mapped`);
+        Logger.info('Topology', `NOTE: This is a 1:1 sequential mapping. Vertex positions are derived from geometry.`);
 
         return mapping;
     }
@@ -624,6 +622,6 @@
     global.getDodecahedronVertices = getDodecahedronVertices;
     global.buildFaceIndexMapping = buildFaceIndexMapping;
 
-    console.log('[dodec-topology] Module loaded - Topology helpers ready');
+    Logger.info('Topology', 'Module loaded - Topology helpers ready');
 
 })(typeof window !== 'undefined' ? window : this);

@@ -52,7 +52,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     /**
@@ -64,13 +64,13 @@
     function initLighting() {
         const State = window.OctaveDNAState;
         if (!State) {
-            console.error('❌ [Lighting] OctaveDNAState not loaded!');
+            Logger.error('OctaveDNA', 'OctaveDNAState not loaded!');
             return null;
         }
 
         const scene = State.getState('scene');
         if (!scene) {
-            console.error('❌ [Lighting] Scene not initialized!');
+            Logger.error('OctaveDNA', 'Scene not initialized!');
             return null;
         }
 
@@ -122,11 +122,11 @@
 
         scene.add(ambientLight, pointLight1, pointLight2, topLight);
 
-        console.log('💡 [Lighting] Scene lighting initialized');
-        console.log('   Ambient: white @ 0.4');
-        console.log('   Point 1: cyan-green @ 1.0 (25, 20, 25)');
-        console.log('   Point 2: magenta @ 0.6 (-25, 15, -25)');
-        console.log('   Top: white @ 0.8 (0, 40, 0)');
+        Logger.info('OctaveDNA', 'Scene lighting initialized');
+        Logger.debug('OctaveDNA', '   Ambient: white @ 0.4');
+        Logger.debug('OctaveDNA', '   Point 1: cyan-green @ 1.0 (25, 20, 25)');
+        Logger.debug('OctaveDNA', '   Point 2: magenta @ 0.6 (-25, 15, -25)');
+        Logger.debug('OctaveDNA', '   Top: white @ 0.8 (0, 40, 0)');
 
         return {
             ambientLight,
@@ -145,7 +145,7 @@
             initLighting
         };
 
-        console.log('💡 [OctaveDNA Lighting] Module loaded');
+        Logger.debug('OctaveDNA', 'Module loaded');
     }
 
 })();

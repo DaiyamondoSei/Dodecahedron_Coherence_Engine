@@ -52,7 +52,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // Animation frame ID for cleanup
@@ -97,7 +97,7 @@
      */
     function startAnimation() {
         if (animationFrameId === null) {
-            console.log('▶️ [Animation] Starting render loop');
+            Logger.debug('OctaveDNA', 'Starting render loop');
             animate();
         }
     }
@@ -109,7 +109,7 @@
         if (animationFrameId !== null) {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
-            console.log('⏹️ [Animation] Render loop stopped');
+            Logger.debug('OctaveDNA', 'Render loop stopped');
         }
     }
 
@@ -123,7 +123,7 @@
         const current = State.getState('animationRunning');
         State.setState('animationRunning', !current);
 
-        console.log(`${current ? '⏸️' : '▶️'} [Animation] ${current ? 'Paused' : 'Resumed'}`);
+        Logger.info('OctaveDNA', `${current ? 'Paused' : 'Resumed'} animation loop`);
     }
 
     /**
@@ -165,7 +165,7 @@
      */
     function initResizeHandler() {
         window.addEventListener('resize', handleResize);
-        console.log('📐 [Animation] Resize handler attached');
+        Logger.debug('OctaveDNA', 'Resize handler attached');
     }
 
     /**
@@ -189,7 +189,7 @@
         const controls = State.getState('controls');
         if (controls) {
             controls.autoRotate = !controls.autoRotate;
-            console.log(`🔄 [Animation] Auto-rotate: ${controls.autoRotate ? 'ON' : 'OFF'}`);
+            Logger.info('OctaveDNA', `Auto-rotate: ${controls.autoRotate ? 'ON' : 'OFF'}`);
         }
     }
 
@@ -230,7 +230,7 @@
             setAutoRotateSpeed
         };
 
-        console.log('🎬 [OctaveDNA Animation] Loop module loaded');
+        Logger.debug('OctaveDNA', 'Animation loop module loaded');
     }
 
 })();

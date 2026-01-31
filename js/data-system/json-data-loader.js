@@ -57,7 +57,7 @@
  * ============================================================================
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================================================
@@ -143,7 +143,7 @@
     function invalidateCache(type) {
         cache.delete(type);
         cacheMeta.delete(type);
-        console.log(`[JSONDataLoader] Cache invalidated for: ${type}`);
+        Logger.info('JSONDataLoader', `Cache invalidated for: ${type}`);
     }
 
     /**
@@ -152,7 +152,7 @@
     function clearAllCache() {
         cache.clear();
         cacheMeta.clear();
-        console.log('[JSONDataLoader] All cache cleared');
+        Logger.info('JSONDataLoader', 'All cache cleared');
     }
 
     /**
@@ -206,13 +206,13 @@
      */
     function validateSchema(data, type) {
         if (!data || typeof data !== 'object') {
-            console.warn(`[JSONDataLoader] Invalid data structure for ${type}`);
+            Logger.warn('JSONDataLoader', `Invalid data structure for ${type}`);
             return false;
         }
 
         // Check for required metadata fields
         if (!data.$version) {
-            console.warn(`[JSONDataLoader] Missing $version in ${type}`);
+            Logger.warn('JSONDataLoader', `Missing $version in ${type}`);
             return false;
         }
 
@@ -220,28 +220,28 @@
         switch (type) {
             case 'kpi-database':
                 if (!Array.isArray(data.kpis) || data.kpis.length !== 12) {
-                    console.warn(`[JSONDataLoader] Expected 12 KPIs, got ${data.kpis?.length}`);
+                    Logger.warn('JSONDataLoader', `Expected 12 KPIs, got ${data.kpis?.length}`);
                     return false;
                 }
                 break;
 
             case 'edge-tension':
                 if (!Array.isArray(data.edges) || data.edges.length !== 30) {
-                    console.warn(`[JSONDataLoader] Expected 30 edges, got ${data.edges?.length}`);
+                    Logger.warn('JSONDataLoader', `Expected 30 edges, got ${data.edges?.length}`);
                     return false;
                 }
                 break;
 
             case 'vortex-map':
                 if (!Array.isArray(data.vertices) || data.vertices.length !== 20) {
-                    console.warn(`[JSONDataLoader] Expected 20 vertices, got ${data.vertices?.length}`);
+                    Logger.warn('JSONDataLoader', `Expected 20 vertices, got ${data.vertices?.length}`);
                     return false;
                 }
                 break;
 
             case 'breath-ratios':
                 if (!Array.isArray(data.axes) || data.axes.length !== 6) {
-                    console.warn(`[JSONDataLoader] Expected 6 axes, got ${data.axes?.length}`);
+                    Logger.warn('JSONDataLoader', `Expected 6 axes, got ${data.axes?.length}`);
                     return false;
                 }
                 break;
@@ -295,7 +295,7 @@
             const response = await fetch(jsonPath);
 
             if (!response.ok) {
-                console.log(`[JSONDataLoader] JSON not found: ${jsonPath}`);
+                Logger.debug('JSONDataLoader', `JSON not found: ${jsonPath}`);
                 return null;
             }
 
@@ -303,20 +303,20 @@
 
             // Validate schema
             if (!validateSchema(data, type)) {
-                console.warn(`[JSONDataLoader] Schema validation failed for ${type}`);
+                Logger.warn('JSONDataLoader', `Schema validation failed for ${type}`);
                 return null;
             }
 
             // Check integrity
             const integrity = checkIntegrity(data);
             if (integrity.hasReport && integrity.substitutionCount > 0) {
-                console.log(`[JSONDataLoader] ${type}: ${integrity.substitutionCount} pre-computed substitutions`);
+                Logger.info('JSONDataLoader', `${type}: ${integrity.substitutionCount} pre-computed substitutions`);
             }
 
             return data;
 
         } catch (e) {
-            console.log(`[JSONDataLoader] Could not load JSON for ${type}:`, e.message);
+            Logger.debug('JSONDataLoader', `Could not load JSON for ${type}: ${e.message}`);
             return null;
         }
     }
@@ -339,7 +339,7 @@
             const response = await fetch(csvPath);
 
             if (!response.ok) {
-                console.error(`[JSONDataLoader] CSV not found: ${csvPath}`);
+                Logger.error('JSONDataLoader', `CSV not found: ${csvPath}`);
                 return null;
             }
 
@@ -347,12 +347,12 @@
 
             // Try to convert using CSVToJSONConverter if available
             if (global.CSVToJSONConverter?.convert) {
-                console.log(`[JSONDataLoader] Converting CSV on-the-fly: ${type}`);
+                Logger.info('JSONDataLoader', `Converting CSV on-the-fly: ${type}`);
                 return global.CSVToJSONConverter.convert(type, csvContent);
             }
 
             // If converter not available, return raw CSV content wrapped
-            console.warn(`[JSONDataLoader] CSVToJSONConverter not available, returning raw CSV`);
+            Logger.warn('JSONDataLoader', 'CSVToJSONConverter not available, returning raw CSV');
             return {
                 $version: '1.0.0',
                 $source: fileInfo.csv,
@@ -361,7 +361,7 @@
             };
 
         } catch (e) {
-            console.error(`[JSONDataLoader] CSV fallback failed for ${type}:`, e.message);
+            Logger.error('JSONDataLoader', `CSV fallback failed for ${type}: ${e.message}`);
             return null;
         }
     }
@@ -379,11 +379,11 @@
 
         // Check cache first
         if (!forceRefresh && cache.has(type)) {
-            console.log(`[JSONDataLoader] Cache hit for: ${type}`);
+            Logger.debug('JSONDataLoader', `Cache hit for: ${type}`);
             return cache.get(type);
         }
 
-        console.log(`[JSONDataLoader] Loading: ${type}`);
+        Logger.info('JSONDataLoader', `Loading: ${type}`);
 
         // Try JSON first
         let data = await loadJSON(type);
@@ -393,7 +393,7 @@
             emit('json-data:loaded', { type, source: 'json' });
         } else {
             // Fall back to CSV
-            console.log(`[JSONDataLoader] Falling back to CSV for: ${type}`);
+            Logger.info('JSONDataLoader', `Falling back to CSV for: ${type}`);
             emit('json-data:fallback', { type });
 
             data = await loadCSVFallback(type);
@@ -413,7 +413,7 @@
             recordCount: getRecordCount(data, type)
         });
 
-        console.log(`[JSONDataLoader] Loaded ${type} from ${source}`);
+        Logger.info('JSONDataLoader', `Loaded ${type} from ${source}`);
         return data;
     }
 
@@ -583,6 +583,6 @@
     // Export to window
     global.JSONDataLoader = JSONDataLoader;
 
-    console.log('📦 JSONDataLoader v2.0.0 loaded - JSON-first with CSV fallback');
+    Logger.info('JSONDataLoader', 'JSONDataLoader v2.0.0 loaded - JSON-first with CSV fallback');
 
 })(typeof window !== 'undefined' ? window : this);

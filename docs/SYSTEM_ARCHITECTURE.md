@@ -170,6 +170,7 @@ O7: [0.910, 1.000]  Radiance
 | **Face.js** | ~300 | Pentagonal domain (5 elements, star pairs) |
 | **Edge.js** | ~100 | Connection between 2 adjacent faces |
 | **Vertex.js** | ~100 | Convergence point where 3 faces meet |
+| **Logger.js** | ~250 | Centralized logging with levels & namespaces |
 | index.js | ~30 | Barrel export for clean imports |
 
 **Import Pattern:**

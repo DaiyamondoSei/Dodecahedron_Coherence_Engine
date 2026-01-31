@@ -145,7 +145,7 @@
      */
     function renderShadowCards(containerElement, onCardClick) {
         if (!containerElement) {
-            console.warn('[ShadowCardRenderer] No container element provided');
+            Logger.warn('Shadow:CardRenderer', 'No container element provided');
             return;
         }
 
@@ -314,7 +314,7 @@
 
             const faceIds = shadow.involvedFaces || shadow.affectedFaces || [];
             if (faceIds.length === 0) {
-                console.warn('[ShadowCardRenderer] No faces to navigate to');
+                Logger.warn('Shadow:CardRenderer', 'No faces to navigate to');
                 return;
             }
 
@@ -409,6 +409,6 @@
         setupNavigateButton
     };
 
-    console.log('[ShadowCardRenderer] Module loaded (v2.0 - using templates)');
+    Logger.debug('Shadow:CardRenderer', 'Module loaded (v2.0 - using templates)');
 
 })(typeof window !== 'undefined' ? window : this);

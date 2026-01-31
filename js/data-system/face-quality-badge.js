@@ -89,7 +89,7 @@
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════════
@@ -370,7 +370,7 @@
      */
     function init() {
         if (isInitialized) {
-            console.log('[FaceQualityBadge] Already initialized');
+            Logger.debug('FaceQualityBadge', 'Already initialized');
             return;
         }
 
@@ -388,7 +388,7 @@
         }
 
         isInitialized = true;
-        console.log('[FaceQualityBadge] Initialized with 12 faces');
+        Logger.info('FaceQualityBadge', 'Initialized with 12 faces');
     }
 
     /**
@@ -407,7 +407,7 @@
             }
         }));
 
-        console.log('[FaceQualityBadge] Updated from report');
+        Logger.debug('FaceQualityBadge', 'Updated from report');
     }
 
     /**
@@ -508,7 +508,7 @@
         document.removeEventListener('quannex:data-integrity-updated', handleIntegrityUpdate);
         faceQualityMap.clear();
         isInitialized = false;
-        console.log('[FaceQualityBadge] Cleaned up');
+        Logger.info('FaceQualityBadge', 'Cleaned up');
     }
 
     // ════════════════════════════════════════════════════════════════════════════
@@ -544,6 +544,6 @@
     // Export to window
     global.FaceQualityBadge = FaceQualityBadge;
 
-    console.log('🏷️ FaceQualityBadge v1.0.0 loaded');
+    Logger.info('FaceQualityBadge', 'v1.0.0 loaded');
 
 })(typeof window !== 'undefined' ? window : this);

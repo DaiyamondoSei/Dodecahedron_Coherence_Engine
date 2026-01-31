@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔷 3D Dodecahedron - Unified Visualization</title>
+    <link rel="icon" href="data:,"><!-- Suppress favicon 404 -->
     <!-- ════════════════════════════════════════════════════════════════════════════
          MODULAR CSS - Extracted 2025-12-17
          All styles are now in css/dodec/*.css files
@@ -27,7 +28,8 @@
             <div class="tour-step-indicator" id="tourStepIndicator"></div>
             <div class="tour-title" id="tourTitle">Welcome to the Quannex Coherence Engine</div>
             <div class="tour-content" id="tourContent">
-                This guided tour will walk you through the key features of the 3D Organizational Coherence Visualization.
+                This guided tour will walk you through the key features of the 3D Organizational Coherence
+                Visualization.
             </div>
             <div class="tour-nav">
                 <button class="tour-nav-btn" id="tourPrev">← Previous</button>
@@ -103,8 +105,8 @@
                 <div class="shadow-toggle-wrapper" id="shadowSourceToggleContainer">
                     <span class="shadow-toggle-label">Viewing:</span>
                     <div class="shadow-source-toggle shadow-source-toggle--compact" id="shadowSourceToggle"
-                         role="switch" aria-checked="false" tabindex="0"
-                         aria-label="Switch between template and AI shadow analysis">
+                        role="switch" aria-checked="false" tabindex="0"
+                        aria-label="Switch between template and AI shadow analysis">
                         <span class="toggle-option toggle-option--template active" data-tooltip="template">
                             <span class="toggle-icon">📋</span>
                         </span>
@@ -120,7 +122,8 @@
                     <!-- Smart tooltip - shows on hover after phi-delay -->
                     <div class="shadow-toggle-tooltip" id="shadowToggleTooltip" role="tooltip" aria-hidden="true">
                         <div class="tooltip-title" id="tooltipTitle">📋 Template Analysis</div>
-                        <div class="tooltip-description" id="tooltipDescription">Pre-computed shadow patterns based on your KPI data</div>
+                        <div class="tooltip-description" id="tooltipDescription">Pre-computed shadow patterns based on
+                            your KPI data</div>
                         <div class="tooltip-hint" id="tooltipHint">Fast • Consistent • Universal patterns</div>
                     </div>
                     <!-- Loading text during AI generation -->
@@ -363,12 +366,11 @@
                 <svg id="pentagramSvg" width="160" height="160" viewBox="0 0 160 160" style="opacity: 0.9;">
                     <!-- Background pentagram outline -->
                     <polygon id="pentagramOutline"
-                        points="80,15 95,55 140,55 105,85 120,130 80,105 40,130 55,85 20,55 65,55"
-                        fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                        points="80,15 95,55 140,55 105,85 120,130 80,105 40,130 55,85 20,55 65,55" fill="none"
+                        stroke="rgba(255,255,255,0.2)" stroke-width="1" />
                     <!-- Element data polygon (filled by JS) -->
-                    <polygon id="pentagramData"
-                        points="80,80 80,80 80,80 80,80 80,80"
-                        fill="rgba(0, 255, 204, 0.3)" stroke="#00ffcc" stroke-width="2"/>
+                    <polygon id="pentagramData" points="80,80 80,80 80,80 80,80 80,80" fill="rgba(0, 255, 204, 0.3)"
+                        stroke="#00ffcc" stroke-width="2" />
                     <!-- Element labels -->
                     <text x="80" y="10" text-anchor="middle" fill="#ffd700" font-size="8">🔥 Fire</text>
                     <text x="145" y="60" text-anchor="start" fill="#00bfff" font-size="8">💨 Air</text>
@@ -454,10 +456,15 @@
                         <div class="octave-progress-fill" id="octaveProgressFill"></div>
                         <div class="octave-threshold-marker" id="octaveThresholdMarker"></div>
                         <!-- φ-based threshold lines -->
-                        <div class="phi-threshold" style="position: absolute; left: 38.2%; top: 0; bottom: 0; width: 1px; background: rgba(255, 215, 0, 0.5);" title="φ⁻² = 0.382"></div>
-                        <div class="phi-threshold" style="position: absolute; left: 61.8%; top: 0; bottom: 0; width: 2px; background: rgba(255, 215, 0, 0.8);" title="φ⁻¹ = 0.618 (Golden)"></div>
+                        <div class="phi-threshold"
+                            style="position: absolute; left: 38.2%; top: 0; bottom: 0; width: 1px; background: rgba(255, 215, 0, 0.5);"
+                            title="φ⁻² = 0.382"></div>
+                        <div class="phi-threshold"
+                            style="position: absolute; left: 61.8%; top: 0; bottom: 0; width: 2px; background: rgba(255, 215, 0, 0.8);"
+                            title="φ⁻¹ = 0.618 (Golden)"></div>
                     </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 9px; color: rgba(255, 215, 0, 0.6); margin-top: 4px;">
+                    <div
+                        style="display: flex; justify-content: space-between; font-size: 9px; color: rgba(255, 215, 0, 0.6); margin-top: 4px;">
                         <span>0%</span>
                         <span style="margin-left: 28%;">φ⁻²</span>
                         <span style="margin-left: 15%;">φ⁻¹</span>
@@ -575,6 +582,18 @@
 
     <!-- DNA Preview Mini - Phase 2 Enhancement -->
     <script src="../js/dna-preview-mini.js?v=20251208"></script>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         EDGE MODULE - Pure Membrane Architecture (January 2026)
+         ════════════════════════════════════════════════════════════════════════
+         Part of Twinkling Floating Aurora v2 Architecture
+         Provides UnifiedEdge class and EdgeManager singleton
+         MUST load after: sacred-inquiry.js, organizational-voice.js
+         MUST load before: dodec-panels.js (uses EdgeModule for enhanced display)
+         ════════════════════════════════════════════════════════════════════════ -->
+    <script src="../js/edge/unified-edge.js?v=20260108"></script>
+    <script src="../js/edge/edge-manager.js?v=20260108"></script>
+    <script src="../js/edge/index.js?v=20260108"></script>
 
     <!-- ========================================
          Dodecahedron Visualization Modules
@@ -710,12 +729,12 @@
             const checkForScene = setInterval(() => {
                 if (window.scene && window.camera && window.renderer) {
                     clearInterval(checkForScene);
-                    console.log('✨ Scene detected. Initializing Nervous System...');
+                    Logger.info('3D View', '✨ Scene detected. Initializing Nervous System...');
 
                     // Only create if not already created by DOMContentLoaded
                     if (!window.vizManager) {
                         window.vizManager = new VisualizationManager(window.scene, window.camera, window.renderer);
-                        console.log('✅ VisualizationManager initialized (from load event)');
+                        Logger.info('3D View', '✅ VisualizationManager initialized (from load event)');
                     }
                     window.shadowPanel = new ShadowPanel('shadow-panel-container');
                     window.voiceModule = new VoiceModule();
@@ -871,17 +890,17 @@
                             const data = object.userData;
 
                             if (data.isEdge) {
-                                console.log('🔗 Edge clicked:', data.edgeName);
+                                Logger.info('3D View', `🔗 Edge clicked: ${data.edgeName}`);
                                 TT.showEdgeDetailPanel(data);
                             } else if (data.isVertex) {
-                                console.log('🌀 Vertex clicked:', data.emergentName);
+                                Logger.info('3D View', `🌀 Vertex clicked: ${data.emergentName}`);
                                 TT.showVertexDetailPanel(data);
                             }
                         }
                     });
 
-                    console.log('✨ Interactive tooltip system initialized (via DodecTooltips module)');
-                    console.log('🖱️ Click handlers for detail panels initialized');
+                    Logger.info('3D View', '✨ Interactive tooltip system initialized (via DodecTooltips module)');
+                    Logger.info('3D View', '🖱️ Click handlers for detail panels initialized');
                     // ===== END INTERACTIVE TOOLTIP SYSTEM =====
 
                     // Wire up data updates
@@ -889,7 +908,7 @@
                         // Check that engine exists AND has the getState method (Quannex API)
                         if (window.Quannex && typeof window.Quannex.getState === 'function') {
                             clearInterval(checkForEngine);
-                            console.log('🧠 Engine detected. Wiring Nervous System...');
+                            Logger.info('3D View', '🧠 Engine detected. Wiring Nervous System...');
 
                             try {
                                 // Try to hook into recalculate (only works if actual engine exposed)
@@ -924,9 +943,9 @@
                                             window.shadowPanel.update(shadowsToShow);
                                         }
                                     };
-                                    console.log('🔗 Hooked into recalculate for live updates');
+                                    Logger.info('3D View', '🔗 Hooked into recalculate for live updates');
                                 } else {
-                                    console.log('ℹ️ Recalculate hook not available - using initial load only');
+                                    Logger.info('3D View', 'ℹ️ Recalculate hook not available - using initial load only');
                                 }
 
                                 // Initial update with retry - shadowPatterns may load async
@@ -941,24 +960,24 @@
                                         window.dispatchEvent(new CustomEvent('shadows-updated', {
                                             detail: { shadows: companyData.shadowPatterns }
                                         }));
-                                        console.log(`✅ Shadow Panel initialized with ${companyData.shadowPatterns.length} patterns`);
+                                        Logger.info('3D View', `✅ Shadow Panel initialized with ${companyData.shadowPatterns.length} patterns`);
                                         return true;
                                     }
 
                                     // Retry if shadowPatterns not yet loaded
                                     if (retries > 0) {
-                                        console.log(`⏳ Shadow patterns not ready, retrying... (${retries} attempts left)`);
+                                        Logger.info('3D View', `⏳ Shadow patterns not ready, retrying... (${retries} attempts left)`);
                                         setTimeout(() => tryUpdateShadowPanel(retries - 1), 500);
                                     } else {
-                                        console.log('⚠️ Shadow Panel: No patterns available after retries');
+                                        Logger.warn('3D View', '⚠️ Shadow Panel: No patterns available after retries');
                                     }
                                     return false;
                                 };
 
                                 tryUpdateShadowPanel();
-                                console.log('✅ Nervous System wired successfully');
+                                Logger.info('3D View', '✅ Nervous System wired successfully');
                             } catch (error) {
-                                console.warn('⚠️ Error wiring Nervous System:', error.message);
+                                Logger.warn('3D View', `⚠️ Error wiring Nervous System: ${error.message}`);
                             }
                         }
                     }, 500);
@@ -1000,9 +1019,9 @@
                 AIEdgeInterpreter = window.AIEdgeInterpreter;
 
                 analyzersLoaded = true;
-                console.log('✅ Advanced analyzers loaded (including AI Edge Interpreter)');
+                Logger.info('3D View', '✅ Advanced analyzers loaded (including AI Edge Interpreter)');
             } catch (error) {
-                console.error('❌ Failed to load analyzers:', error);
+                Logger.error('3D View', '❌ Failed to load analyzers:', error);
             }
         }
 
@@ -1013,9 +1032,9 @@
                 const module = await import('../js/advanced/dynamics-analyzer.js');
                 window.DynamicsAnalyzer = module.DynamicsAnalyzer;
                 DynamicsAnalyzer = window.DynamicsAnalyzer;
-                console.log('✅ Dynamics analyzer loaded');
+                Logger.info('3D View', '✅ Dynamics analyzer loaded');
             } catch (error) {
-                console.error('❌ Failed to load dynamics analyzer:', error);
+                Logger.error('3D View', '❌ Failed to load dynamics analyzer:', error);
             }
         }
 
@@ -1032,7 +1051,7 @@
 
         // Mode switching
         window.switchMode = async function (mode) {
-            console.log(`🔄 Switching to ${mode} mode`);
+            Logger.info('3D View', `🔄 Switching to ${mode} mode`);
             currentMode = mode;
 
             // Update UI
@@ -1054,7 +1073,7 @@
         async function updateVisualizationForMode(mode) {
             const scene = window.scene;
             if (!scene) {
-                console.warn('⚠️ Scene not ready yet');
+                Logger.warn('3D View', '⚠️ Scene not ready yet');
                 return;
             }
 
@@ -1065,14 +1084,14 @@
                 // Base visualization only
                 advancedAnalysisResults = null;
                 window.advancedAnalysisResults = null;
-                console.log('✅ Standard/Minimal mode - base visualization active');
+                Logger.info('3D View', '✅ Standard/Minimal mode - base visualization active');
                 return;
             }
 
             // Get company data
             const companyData = window.Quannex ? window.Quannex.getState() : null;
             if (!companyData || !companyData.faces) {
-                console.warn('⚠️ No company data available');
+                Logger.warn('3D View', '⚠️ No company data available');
                 return;
             }
 
@@ -1129,10 +1148,10 @@
                 const syncChannel = new BroadcastChannel('quannex-sync');
                 syncChannel.onmessage = (event) => {
                     const message = event.data;
-                    console.log(`[3D View] 📥 Received sync: ${message.type}`);
+                    Logger.info('3D View', `📥 Received sync: ${message.type}`);
 
                     if (message.type === 'STATE_UPDATE' || message.type === 'STATE_SYNC') {
-                        console.log('[3D View] 🔄 Orchestrator state changed, refreshing data...');
+                        Logger.info('3D View', '🔄 Orchestrator state changed, refreshing data...');
                         // Reload data from sessionStorage (which was just updated)
                         // NOTE: Do NOT use location.reload() here - it causes an infinite loop!
                         // Instead, reinitialize engine from sessionStorage and refresh visualization
@@ -1140,7 +1159,7 @@
                             const customDataJson = sessionStorage.getItem('customCompanyData');
                             if (customDataJson) {
                                 const newData = JSON.parse(customDataJson);
-                                console.log('[3D View] 📦 Reinitializing engine with updated data:', {
+                                Logger.info('3D View', '📦 Reinitializing engine with updated data:', {
                                     kpis: newData.kpis?.length,
                                     faces: newData.faceConfig?.faces?.length
                                 });
@@ -1148,13 +1167,13 @@
                                 // This ensures face data (elementalKPIs, etc.) is properly populated
                                 if (window.CompanyLoader?.switchCompany) {
                                     await window.CompanyLoader.switchCompany('custom');
-                                    console.log('[3D View] ✅ Engine reinitialized from sessionStorage');
+                                    Logger.info('3D View', '✅ Engine reinitialized from sessionStorage');
                                 }
                                 // Now refresh visualization with the updated engine state
                                 if (window.refreshVisualization) {
                                     window.refreshVisualization();
                                 } else {
-                                    console.log('[3D View] ℹ️ refreshVisualization not yet available, skipping update');
+                                    Logger.info('3D View', 'ℹ️ refreshVisualization not yet available, skipping update');
                                 }
                             }
                         }, 100); // Small delay to ensure sessionStorage is updated
@@ -1168,7 +1187,7 @@
                     timestamp: Date.now(),
                     source: window.location.pathname
                 });
-                console.log('[3D View] ✅ CrossWindowSync listener active');
+                Logger.info('3D View', '✅ CrossWindowSync listener active');
             }
 
             // ────────────────────────────────────────────────────────────────────────
@@ -1177,7 +1196,7 @@
             // ────────────────────────────────────────────────────────────────────────
             if (window.IntegrityOrchestrator) {
                 window.IntegrityOrchestrator.init();
-                console.log('[3D View] ✅ IntegrityOrchestrator initialized');
+                Logger.info('3D View', '✅ IntegrityOrchestrator initialized');
             }
 
             // Use window.vizManager to ensure single instance across all code
@@ -1187,7 +1206,7 @@
 
                 if (window.scene && window.camera && window.renderer) {
                     window.vizManager = new VisualizationManager(window.scene, window.camera, window.renderer);
-                    console.log('✅ VisualizationManager initialized (from DOMContentLoaded)');
+                    Logger.info('3D View', '✅ VisualizationManager initialized (from DOMContentLoaded)');
                     return window.vizManager;
                 }
                 return null;
@@ -1200,11 +1219,11 @@
             // Run advanced analysis using the loaded analyzers
             async function runAdvancedAnalysis(companyData, faceEnergies) {
                 if (!analyzersLoaded) {
-                    console.warn('⚠️ Analyzers not loaded yet');
+                    Logger.warn('3D View', '⚠️ Analyzers not loaded yet');
                     return;
                 }
 
-                console.log('🔬 Running advanced analysis...');
+                Logger.info('3D View', '🔬 Running advanced analysis...');
 
                 // Run spectral analysis
                 const spectral = new window.SpectralAnalyzer();
@@ -1223,7 +1242,7 @@
                         narrative: narrative
                     };
                 });
-                console.log('📖 Edge narratives generated');
+                Logger.info('3D View', '📖 Edge narratives generated');
 
                 // Run vertex analysis (already includes narrative via generateVertexNarrative)
                 const vertexAnalyzer = new window.VertexAnalyzer();
@@ -1240,7 +1259,7 @@
                 // Update window reference
                 window.advancedAnalysisResults = advancedAnalysisResults;
 
-                console.log('✅ Advanced analysis complete:', advancedAnalysisResults);
+                Logger.info('3D View', '✅ Advanced analysis complete:', advancedAnalysisResults);
             }
 
             // Run complete analysis (advanced + dynamics)
@@ -1248,7 +1267,7 @@
                 await runAdvancedAnalysis(companyData, faceEnergies);
 
                 if (!DynamicsAnalyzer) {
-                    console.warn('⚠️ Dynamics analyzer not loaded');
+                    Logger.warn('3D View', '⚠️ Dynamics analyzer not loaded');
                     return;
                 }
 
@@ -1269,13 +1288,13 @@
                     window.vizManager.currentAnalysis.dynamics = dynamicsAnalysis;
                 }
 
-                console.log('✅ Complete dynamics analysis done');
+                Logger.info('3D View', '✅ Complete dynamics analysis done');
             }
 
             // Render edge tensions using VisualizationManager
             function renderEdgeTensions() {
                 if (!advancedAnalysisResults || !advancedAnalysisResults.edges) {
-                    console.warn('⚠️ No edge analysis results to render');
+                    Logger.warn('3D View', '⚠️ No edge analysis results to render');
                     return;
                 }
                 if (window.vizManager || initVizManager()) {
@@ -1283,14 +1302,14 @@
                     const companyData = window.Quannex?.getState() || window.currentCompanyData;
                     const faceNames = companyData?.faces?.map(f => f.name) || [];
                     window.vizManager.updateNeonEdges(advancedAnalysisResults.edges, companyData, faceNames);
-                    console.log('✅ Edge tensions rendered');
+                    Logger.info('3D View', '✅ Edge tensions rendered');
                 }
             }
 
             // Render vertex vortices using VisualizationManager
             function renderVertexVortices() {
                 if (!advancedAnalysisResults || !advancedAnalysisResults.vertices) {
-                    console.warn('⚠️ No vertex analysis results to render');
+                    Logger.warn('3D View', '⚠️ No vertex analysis results to render');
                     return;
                 }
                 if (window.vizManager || initVizManager()) {
@@ -1298,26 +1317,26 @@
                     const companyData = window.Quannex?.getState() || window.currentCompanyData;
                     const faceNames = companyData?.faces?.map(f => f.name) || [];
                     window.vizManager.updateVertexSpheres(advancedAnalysisResults.vertices, companyData, faceNames);
-                    console.log('✅ Vertex vortices rendered');
+                    Logger.info('3D View', '✅ Vertex vortices rendered');
                 }
             }
 
             // Render feedback loops using VisualizationManager
             function renderFeedbackLoops() {
                 if (!advancedAnalysisResults || !advancedAnalysisResults.dynamics) {
-                    console.warn('⚠️ No dynamics analysis results to render');
+                    Logger.warn('3D View', '⚠️ No dynamics analysis results to render');
                     return;
                 }
                 if (window.vizManager || initVizManager()) {
                     window.vizManager.updateFeedbackLoops(advancedAnalysisResults.dynamics);
-                    console.log('✅ Feedback loops rendered');
+                    Logger.info('3D View', '✅ Feedback loops rendered');
                 }
             }
 
             // Clear visualizations - actually remove objects from scene
             // Phase 0.1 Fix: Use vizManager.clearAll() as single source of truth
             function clearAdvancedVisualizations() {
-                console.log('🧹 Clearing advanced visualizations');
+                Logger.info('3D View', '🧹 Clearing advanced visualizations');
 
                 // PRIMARY: Use VisualizationManager's clearAll() method
                 // This properly clears the THREE.Group children that vizManager manages
@@ -1327,13 +1346,13 @@
                     edgeLines = [];
                     vertexSpheres = [];
                     feedbackLoopLines = [];
-                    console.log('✅ Advanced visualizations cleared via vizManager');
+                    Logger.info('3D View', '✅ Advanced visualizations cleared via vizManager');
                     return;
                 }
 
                 // FALLBACK: If vizManager not initialized, clear local arrays manually
                 // (This path should rarely be hit after proper initialization)
-                console.warn('⚠️ vizManager not available, using fallback cleanup');
+                Logger.warn('3D View', '⚠️ vizManager not available, using fallback cleanup');
                 const scene = window.scene;
                 if (!scene) return;
 
@@ -1361,7 +1380,7 @@
                 });
                 feedbackLoopLines = [];
 
-                console.log('✅ Advanced visualizations cleared (fallback)');
+                Logger.info('3D View', '✅ Advanced visualizations cleared (fallback)');
             }
 
             // Expose functions to window for external access (dodecahedron-viz.js and switchMode)
@@ -1379,7 +1398,7 @@
             const originalRefreshVisualization = window.refreshVisualization;
 
             window.refreshVisualization = async function () {
-                console.log('🔄 Refreshing visualization from Tuner...');
+                Logger.info('3D View', '🔄 Refreshing visualization from Tuner...');
 
                 // Call the original refresh from dodecahedron-viz.js (updates faces, edges, stats)
                 if (originalRefreshVisualization) {
@@ -1404,7 +1423,7 @@
                     if (statCoherence) statCoherence.textContent = coherencePercent + '%';
                     if (statStatus) {
                         const status = state.globalCoherence >= 0.7 ? 'Healthy 🟢' :
-                                       state.globalCoherence >= 0.5 ? 'Moderate 🟡' : 'Concerning 🔴';
+                            state.globalCoherence >= 0.5 ? 'Moderate 🟡' : 'Concerning 🔴';
                         statStatus.textContent = status;
                     }
                 }
@@ -1442,40 +1461,40 @@
                 const vertexToFacesMap = buildVertexToFacesMap();
 
                 if (!vertexToFacesMap || vertexToFacesMap.size === 0) {
-                    console.error('❌ Could not extract topology from geometry - no face meshes available');
+                    Logger.error('3D View', '❌ Could not extract topology from geometry - no face meshes available');
                     return null;
                 }
 
-                console.log('\n🔍 EXTRACTED ACTUAL TOPOLOGY FROM THREE.JS GEOMETRY:');
+                Logger.info('3D View', '\n🔍 EXTRACTED ACTUAL TOPOLOGY FROM THREE.JS GEOMETRY:');
                 console.log('='.repeat(60));
 
                 const topology = {};
                 vertexToFacesMap.forEach((faceSet, geoIdx) => {
                     const faces = Array.from(faceSet).sort((a, b) => a - b);
                     topology[geoIdx] = faces;
-                    console.log(`Vertex ${geoIdx + 1}: faces [${faces.join(', ')}] (${faces.length} faces)`);
+                    Logger.info('3D View', `Vertex ${geoIdx + 1}: faces [${faces.join(', ')}] (${faces.length} faces)`);
                 });
 
                 console.log('='.repeat(60));
-                console.log(`✅ Extracted ${Object.keys(topology).length} vertices from actual geometry\n`);
+                Logger.info('3D View', `✅ Extracted ${Object.keys(topology).length} vertices from actual geometry\n`);
 
                 // Validate topology
                 const vertexCount = Object.keys(topology).length;
                 const invalidVertices = Object.entries(topology).filter(([, faces]) => faces.length !== 3);
 
                 if (vertexCount !== 20) {
-                    console.error(`❌ ERROR: Expected 20 vertices, got ${vertexCount}`);
+                    Logger.error('3D View', `❌ ERROR: Expected 20 vertices, got ${vertexCount}`);
                 }
 
                 if (invalidVertices.length > 0) {
-                    console.error(`❌ ERROR: ${invalidVertices.length} vertices don't have exactly 3 faces:`);
+                    Logger.error('3D View', `❌ ERROR: ${invalidVertices.length} vertices don't have exactly 3 faces:`);
                     invalidVertices.forEach(([idx, faces]) => {
-                        console.error(` Vertex ${parseInt(idx) + 1}: ${faces.length} faces - [${faces.join(', ')}]`);
+                        Logger.error('3D View', ` Vertex ${parseInt(idx) + 1}: ${faces.length} faces - [${faces.join(', ')}]`);
                     });
                 }
 
                 if (vertexCount === 20 && invalidVertices.length === 0) {
-                    console.log('✅ VALIDATION PASSED: All 20 vertices have exactly 3 faces');
+                    Logger.info('3D View', '✅ VALIDATION PASSED: All 20 vertices have exactly 3 faces');
                 }
 
                 return topology;
@@ -1490,7 +1509,7 @@
                 const geometricTopology = extractActualTopologyFromGeometry();
 
                 if (!geometricTopology) {
-                    console.warn('⚠️ Geometry extraction failed, using CSV fallback topology');
+                    Logger.warn('3D View', '⚠️ Geometry extraction failed, using CSV fallback topology');
                     // Return CSV topology as fallback
                     return {
                         1: [1, 2, 6], // V1: Foundation Nexus
@@ -1524,7 +1543,7 @@
                     topology[analyticalId] = faces;
                 });
 
-                console.log('📊 Using EXTRACTED topology as authoritative source');
+                Logger.info('3D View', '📊 Using EXTRACTED topology as authoritative source');
                 return topology;
             }
 
@@ -1562,7 +1581,7 @@
 
                 // Two adjacent faces should share exactly 2 vertices
                 if (sharedVertexIds.length !== 2) {
-                    console.warn(`⚠️ Faces ${face1Id} and ${face2Id} share ${sharedVertexIds.length} vertices (expected 2)`);
+                    Logger.warn('3D View', `⚠️ Faces ${face1Id} and ${face2Id} share ${sharedVertexIds.length} vertices (expected 2)`);
                     return null;
                 }
 
@@ -1575,7 +1594,7 @@
 
                 // Verify we got valid positions
                 if (!sharedPositions[0] || !sharedPositions[1]) {
-                    console.warn(`⚠️ Could not map vertex IDs ${sharedVertexIds} to positions for edge
+                    Logger.warn('3D View', `⚠️ Could not map vertex IDs ${sharedVertexIds} to positions for edge
                 ${face1Id}-${face2Id}`);
                     return null;
                 }
@@ -1593,7 +1612,7 @@
                 const geometricVertices = getDodecahedronVertices();
 
                 if (!faceMeshes || faceMeshes.length === 0) {
-                    console.warn('⚠️ No face meshes available for topology mapping');
+                    Logger.warn('3D View', '⚠️ No face meshes available for topology mapping');
                     return null;
                 }
 
@@ -1629,7 +1648,7 @@
                     }
                 });
 
-                console.log(`✅ Built vertex-to-faces topology map for ${vertexToFaces.size} vertices`);
+                Logger.info('3D View', `✅ Built vertex-to-faces topology map for ${vertexToFaces.size} vertices`);
 
                 cachedVertexToFacesMap = vertexToFaces;
                 return vertexToFaces;
@@ -1651,7 +1670,7 @@
                 const authoritativeFaces = topology[vertexId];
 
                 if (!authoritativeFaces) {
-                    console.warn(`⚠️ No authoritative topology data for vertex ${vertexId}`);
+                    Logger.warn('3D View', `⚠️ No authoritative topology data for vertex ${vertexId}`);
                     return 0;
                 }
 
@@ -1659,7 +1678,7 @@
                 const vertexToFaces = buildVertexToFacesMap();
 
                 if (!vertexToFaces) {
-                    console.warn('⚠️ Topology mapping failed, using fallback');
+                    Logger.warn('3D View', '⚠️ Topology mapping failed, using fallback');
                     // Fallback to proximity-based method
                     if (advancedAnalysisResults && advancedAnalysisResults.vertices) {
                         const vertex = advancedAnalysisResults.vertices.find(v => v.id === vertexId);
@@ -1704,7 +1723,7 @@
                 const finalIndex = bestMatch !== null ? bestMatch : 0;
                 cachedAnalyticalToGeometricMap.set(vertexId, finalIndex);
 
-                console.log(`📍 Vertex ${vertexId}: authoritative faces ${JSON.stringify(authoritativeFaces)} →
+                Logger.info('3D View', `📍 Vertex ${vertexId}: authoritative faces ${JSON.stringify(authoritativeFaces)} →
                     geometric index ${finalIndex} (match score: ${bestMatchScore})`);
 
                 return finalIndex;
@@ -2020,10 +2039,10 @@
                 const { type, companyId } = event.data;
 
                 if (type === 'LOAD_COMPANY') {
-                    console.log(`[3D View] 📨 Received company load request from parent: ${companyId} `);
+                    Logger.info('3D View', `📨 Received company load request from parent: ${companyId}`);
 
                     if (currentLoadedCompanyId === companyId) {
-                        console.log(`[3D View] ℹ️ Company "${companyId}" is already loaded, skipping duplicate load`);
+                        Logger.info('3D View', `ℹ️ Company "${companyId}" is already loaded, skipping duplicate load`);
                         return;
                     }
 
@@ -2032,7 +2051,7 @@
                         if (loading) loading.classList.remove('hidden');
 
                         if (companyId && window.CompanyLoader) {
-                            console.log(`[3D View] 🔄 Loading company: ${companyId} `);
+                            Logger.info('3D View', `🔄 Loading company: ${companyId}`);
                             const company = await window.CompanyLoader.loadCompany(companyId);
 
                             if (window.Quannex) {
@@ -2057,7 +2076,7 @@
 
                             if (loading) loading.classList.add('hidden');
 
-                            console.log(`[3D View] ✅ Loaded company from parent: ${company.name} `);
+                            Logger.info('3D View', `✅ Loaded company from parent: ${company.name}`);
 
                             // Phase 1 Fix: Explicitly trigger shadow panel update after company load
                             const shadowPatterns = company.shadowPatterns || [];
@@ -2068,13 +2087,13 @@
                                 window.dispatchEvent(new CustomEvent('shadows-updated', {
                                     detail: { shadows: shadowPatterns }
                                 }));
-                                console.log(`[3D View] 👁️ Initialized ${shadowPatterns.length} shadow patterns`);
+                                Logger.info('3D View', `👁️ Initialized ${shadowPatterns.length} shadow patterns`);
                             }
                         } else {
-                            console.warn('[3D View] ⚠️ CompanyLoader not available');
+                            Logger.warn('3D View', '⚠️ CompanyLoader not available');
                         }
                     } catch (error) {
-                        console.error('[3D View] ❌ Failed to load company from parent:', error);
+                        Logger.error('3D View', '❌ Failed to load company from parent:', error);
                         const loading = document.getElementById('loading');
                         if (loading) loading.classList.add('hidden');
                     }
@@ -2088,7 +2107,7 @@
 
                 if (selectedCompanyId === 'custom' && customDataJson) {
                     try {
-                        console.log(`[3D View] 🎨 Loading CUSTOM data from orchestrator`);
+                        Logger.info('3D View', '🎨 Loading CUSTOM data from orchestrator');
                         const customData = JSON.parse(customDataJson);
 
                         const loading = document.getElementById('loading');
@@ -2144,7 +2163,7 @@
 
                         if (loading) loading.classList.add('hidden');
 
-                        console.log(`[3D View] ✅ Successfully loaded custom data`);
+                        Logger.info('3D View', '✅ Successfully loaded custom data');
 
                         // Phase 1 Fix: Trigger shadow panel update for custom data
                         const customShadows = customData.shadowPatterns || [];
@@ -2155,27 +2174,27 @@
                             window.dispatchEvent(new CustomEvent('shadows-updated', {
                                 detail: { shadows: customShadows }
                             }));
-                            console.log(`[3D View] 👁️ Initialized ${customShadows.length} custom shadow patterns`);
+                            Logger.info('3D View', `👁️ Initialized ${customShadows.length} custom shadow patterns`);
                         }
 
                         return true;
                     } catch (error) {
-                        console.error('[3D View] ❌ Failed to load custom data:', error);
+                        Logger.error('3D View', '❌ Failed to load custom data:', error);
 
                         // Even if there was an error, try to refresh visualization
                         // The engine might have valid data despite the error
                         try {
                             if (window.refreshVisualization) {
-                                console.log('[3D View] 🔄 Attempting refresh despite error...');
+                                Logger.info('3D View', '🔄 Attempting refresh despite error...');
                                 window.refreshVisualization();
                             }
                         } catch (refreshError) {
-                            console.warn('[3D View] ⚠️ Refresh also failed:', refreshError.message);
+                            Logger.warn('3D View', `⚠️ Refresh also failed: ${refreshError.message}`);
                         }
                     }
                 } else if (window.self !== window.top && selectedCompanyId) {
                     if (selectedCompanyId && !currentLoadedCompanyId) {
-                        console.log(`[3D View] 💾 Found company ID in sessionStorage: ${selectedCompanyId} `);
+                        Logger.info('3D View', `💾 Found company ID in sessionStorage: ${selectedCompanyId}`);
                         window.postMessage({ type: 'LOAD_COMPANY', companyId: selectedCompanyId }, '*');
                     }
                 }
@@ -2193,19 +2212,19 @@
                     const newTimestamp = customData.timestamp;
 
                     if (lastKnownTimestamp && newTimestamp !== lastKnownTimestamp) {
-                        console.log('[3D View] 🔄 Detected data update! Reloading...');
+                        Logger.info('3D View', '🔄 Detected data update! Reloading...');
                         checkSessionStorage();
                     }
 
                     lastKnownTimestamp = newTimestamp;
                 } catch (error) {
-                    console.error('[3D View] ❌ Error checking for updates:', error);
+                    Logger.error('3D View', '❌ Error checking for updates:', error);
                 }
             }
 
             document.addEventListener('visibilitychange', () => {
                 if (!document.hidden) {
-                    console.log('[3D View] 👀 Tab became visible - checking for updates...');
+                    Logger.info('3D View', '👀 Tab became visible - checking for updates...');
                     checkForUpdates();
                 }
             });
@@ -2286,9 +2305,9 @@
                 });
             }
 
-            console.log('[3D View] 📡 Unified visualization initialized');
-            console.log('[3D View] 🎨 Mode system ready - Standard/Advanced/Complete/Minimal');
-            console.log('[3D View] ✨ Enhanced with Feedback Loops, Phase Transitions & Frozen Face highlighting');
+            Logger.info('3D View', '📡 Unified visualization initialized');
+            Logger.info('3D View', '🎨 Mode system ready - Standard/Advanced/Complete/Minimal');
+            Logger.info('3D View', '✨ Enhanced with Feedback Loops, Phase Transitions & Frozen Face highlighting');
         });
     </script>
 
@@ -2321,7 +2340,8 @@
                     <!-- Alpha -->
                     <div class="tuner__knob">
                         <div class="tuner__knob-label">α</div>
-                        <div class="tuner__knob-control" id="knobAlpha" data-param="ALPHA" data-min="0" data-max="1" data-step="0.1" data-value="0.6">
+                        <div class="tuner__knob-control" id="knobAlpha" data-param="ALPHA" data-min="0" data-max="1"
+                            data-step="0.1" data-value="0.6">
                             <svg class="tuner__knob-ring" viewBox="0 0 62 62">
                                 <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
                                 <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
@@ -2332,7 +2352,8 @@
                     <!-- Beta -->
                     <div class="tuner__knob">
                         <div class="tuner__knob-label">β</div>
-                        <div class="tuner__knob-control" id="knobBeta" data-param="BETA" data-min="0" data-max="1" data-step="0.1" data-value="0.5">
+                        <div class="tuner__knob-control" id="knobBeta" data-param="BETA" data-min="0" data-max="1"
+                            data-step="0.1" data-value="0.5">
                             <svg class="tuner__knob-ring" viewBox="0 0 62 62">
                                 <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
                                 <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
@@ -2343,7 +2364,8 @@
                     <!-- Gamma -->
                     <div class="tuner__knob">
                         <div class="tuner__knob-label">γ</div>
-                        <div class="tuner__knob-control" id="knobGamma" data-param="GAMMA" data-min="0" data-max="1" data-step="0.1" data-value="0.7">
+                        <div class="tuner__knob-control" id="knobGamma" data-param="GAMMA" data-min="0" data-max="1"
+                            data-step="0.1" data-value="0.7">
                             <svg class="tuner__knob-ring" viewBox="0 0 62 62">
                                 <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
                                 <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
@@ -2356,7 +2378,8 @@
                     <!-- Delta -->
                     <div class="tuner__knob">
                         <div class="tuner__knob-label">δ</div>
-                        <div class="tuner__knob-control" id="knobDelta" data-param="DELTA" data-min="0" data-max="1" data-step="0.1" data-value="0.9">
+                        <div class="tuner__knob-control" id="knobDelta" data-param="DELTA" data-min="0" data-max="1"
+                            data-step="0.1" data-value="0.9">
                             <svg class="tuner__knob-ring" viewBox="0 0 62 62">
                                 <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
                                 <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
@@ -2367,7 +2390,8 @@
                     <!-- Kappa -->
                     <div class="tuner__knob">
                         <div class="tuner__knob-label">κ</div>
-                        <div class="tuner__knob-control" id="knobKappa" data-param="KAPPA" data-min="1" data-max="10" data-step="0.5" data-value="2.0">
+                        <div class="tuner__knob-control" id="knobKappa" data-param="KAPPA" data-min="1" data-max="10"
+                            data-step="0.5" data-value="2.0">
                             <svg class="tuner__knob-ring" viewBox="0 0 62 62">
                                 <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
                                 <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
@@ -2409,7 +2433,8 @@
                     <!-- Eta -->
                     <div class="tuner__knob">
                         <div class="tuner__knob-label">η</div>
-                        <div class="tuner__knob-control" id="knobEta" data-param="ETA" data-min="0" data-max="1" data-step="0.05" data-value="0.382">
+                        <div class="tuner__knob-control" id="knobEta" data-param="ETA" data-min="0" data-max="1"
+                            data-step="0.05" data-value="0.382">
                             <svg class="tuner__knob-ring" viewBox="0 0 62 62">
                                 <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
                                 <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
@@ -2420,7 +2445,8 @@
                     <!-- Zeta -->
                     <div class="tuner__knob">
                         <div class="tuner__knob-label">ζ</div>
-                        <div class="tuner__knob-control" id="knobZeta" data-param="ZETA" data-min="0" data-max="0.15" data-step="0.01" data-value="0.064">
+                        <div class="tuner__knob-control" id="knobZeta" data-param="ZETA" data-min="0" data-max="0.15"
+                            data-step="0.01" data-value="0.064">
                             <svg class="tuner__knob-ring" viewBox="0 0 62 62">
                                 <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
                                 <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>
@@ -2431,7 +2457,8 @@
                     <!-- Theta -->
                     <div class="tuner__knob">
                         <div class="tuner__knob-label">θ</div>
-                        <div class="tuner__knob-control" id="knobTheta" data-param="THETA" data-min="0.5" data-max="0.9" data-step="0.05" data-value="0.618">
+                        <div class="tuner__knob-control" id="knobTheta" data-param="THETA" data-min="0.5" data-max="0.9"
+                            data-step="0.05" data-value="0.618">
                             <svg class="tuner__knob-ring" viewBox="0 0 62 62">
                                 <circle class="tuner__ring-bg" cx="31" cy="31" r="26"></circle>
                                 <circle class="tuner__ring-value" cx="31" cy="31" r="26"></circle>

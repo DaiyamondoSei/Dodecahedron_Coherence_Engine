@@ -663,8 +663,8 @@ function getVertexForFaces(face1, face2, face3) {
     return Object.values(VERTEX_TOPOLOGY).find(vertex => {
         const sortedFaces = [...vertex.faces].sort((a, b) => a - b);
         return sortedFaces[0] === targetFaces[0] &&
-               sortedFaces[1] === targetFaces[1] &&
-               sortedFaces[2] === targetFaces[2];
+            sortedFaces[1] === targetFaces[1] &&
+            sortedFaces[2] === targetFaces[2];
     }) || null;
 }
 
@@ -736,8 +736,8 @@ if (typeof window !== 'undefined') {
         calculateVMean
     };
 
-    console.log('🔮 Vertex Constants loaded - 20 triadic convergence points defined');
-    console.log('   Classifications: HarmonyHub | BermudaTriangle | LeveragePoint | Dormant');
+    Logger.info('VertexConstants', '20 triadic convergence points defined');
+    Logger.debug('VertexConstants', 'Classifications: HarmonyHub | BermudaTriangle | LeveragePoint | Dormant');
 }
 
 // CommonJS export (for Node.js testing)

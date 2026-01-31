@@ -81,7 +81,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
@@ -100,21 +100,14 @@
      * Coordinates all modules in the correct sequence
      */
     async function init() {
-        console.log(`
-╔═══════════════════════════════════════════════════════════════╗
-║  🧬 OCTAVE DNA VISUALIZATION                                  ║
-║  ─────────────────────────────────────────────────────────    ║
-║  Organizational DNA through Sacred Geometry                   ║
-║  φ-normalized coherence analysis                              ║
-╚═══════════════════════════════════════════════════════════════╝
-        `);
+        Logger.info('OctaveDNA', 'DNA Visualization: Organizational DNA through Sacred Geometry (φ-normalized coherence analysis)');
 
         // Gather module references
         gatherModuleReferences();
 
         // Check required modules
         if (!validateModules()) {
-            console.error('❌ [Main] Required modules not loaded. Aborting initialization.');
+            Logger.error('OctaveDNA', 'Required modules not loaded. Aborting initialization.');
             showLoadingError('Required modules failed to load');
             return;
         }
@@ -126,13 +119,13 @@
             // Step 1: Initialize Scene (camera, renderer, controls)
             if (Scene?.initScene) {
                 Scene.initScene();
-                console.log('✅ [Main] Scene initialized');
+                Logger.info('OctaveDNA', 'Scene initialized');
             }
 
             // Step 2: Initialize Lighting
             if (Lighting?.initLighting) {
                 Lighting.initLighting();
-                console.log('✅ [Main] Lighting initialized');
+                Logger.info('OctaveDNA', 'Lighting initialized');
             }
 
             // Step 3: Check for iframe embedding
@@ -144,48 +137,48 @@
             // Step 5: Render DNA visualization
             if (Geometry?.renderDNA) {
                 Geometry.renderDNA();
-                console.log('✅ [Main] DNA helixes rendered');
+                Logger.info('OctaveDNA', 'DNA helixes rendered');
             }
 
             // Step 6: Initialize interaction handlers
             if (Mouse?.initMouseHandlers) {
                 Mouse.initMouseHandlers();
-                console.log('✅ [Main] Mouse handlers initialized');
+                Logger.info('OctaveDNA', 'Mouse handlers initialized');
             }
 
             if (Legend?.attachLegendHandlers) {
                 Legend.attachLegendHandlers();
-                console.log('✅ [Main] Legend handlers initialized');
+                Logger.info('OctaveDNA', 'Legend handlers initialized');
             }
 
             // Step 7: Initialize panels
             if (Panels?.initPanels) {
                 Panels.initPanels();
-                console.log('✅ [Main] Diagnostic panels initialized');
+                Logger.info('OctaveDNA', 'Diagnostic panels initialized');
             }
 
             // Step 8: Initialize company dropdown
             if (CompanyDropdown?.initCompanyDropdown) {
                 CompanyDropdown.initCompanyDropdown();
-                console.log('✅ [Main] Company dropdown initialized');
+                Logger.info('OctaveDNA', 'Company dropdown initialized');
             }
 
             // Step 9: Initialize iframe communication
             if (CompanyLoader?.initIframeCommunication) {
                 CompanyLoader.initIframeCommunication();
-                console.log('✅ [Main] Iframe communication initialized');
+                Logger.info('OctaveDNA', 'Iframe communication initialized');
             }
 
             // Step 10: Initialize resize handler
             if (Animation?.initResizeHandler) {
                 Animation.initResizeHandler();
-                console.log('✅ [Main] Resize handler initialized');
+                Logger.info('OctaveDNA', 'Resize handler initialized');
             }
 
             // Step 11: Start animation loop
             if (Animation?.startAnimation) {
                 Animation.startAnimation();
-                console.log('✅ [Main] Animation loop started');
+                Logger.info('OctaveDNA', 'Animation loop started');
             }
 
             // Step 12: Start auto-refresh (optional - for live data updates)
@@ -195,19 +188,14 @@
             showLoading(false);
 
             // Log completion
-            console.log(`
-🧬 ═══════════════════════════════════════════════════════════════
-🧬 OCTAVE DNA VISUALIZATION READY
-🧬 ═══════════════════════════════════════════════════════════════
-🧬 ✨ Simplicity is the ultimate sophistication
-🧬 ═══════════════════════════════════════════════════════════════
-            `);
+            Logger.info('OctaveDNA', 'Octave DNA Visualization ready - Simplicity is the ultimate sophistication');
+            Logger.info('OctaveDNA', '✨ Initialization complete');
 
             // Emit ready event
             document.dispatchEvent(new CustomEvent('octave-dna:ready'));
 
         } catch (error) {
-            console.error('❌ [Main] Initialization failed:', error);
+            Logger.error('OctaveDNA', 'Initialization failed:', error);
             showLoadingError('Initialization failed: ' + error.message);
         }
     }
@@ -243,7 +231,7 @@
         let allPresent = true;
         required.forEach(({ name, module }) => {
             if (!module) {
-                console.error(`❌ [Main] Missing required module: ${name}`);
+                Logger.error('OctaveDNA', `Missing required module: ${name}`);
                 allPresent = false;
             }
         });
@@ -266,7 +254,7 @@
             const header = document.querySelector('.header');
             if (header) {
                 header.style.display = 'none';
-                console.log('📱 [Main] Running in iframe - header hidden');
+                Logger.info('OctaveDNA', 'Running in iframe - header hidden');
             }
         }
     }
@@ -291,7 +279,7 @@
             const customDataJson = sessionStorage.getItem('customCompanyData');
             if (customDataJson) {
                 const customData = JSON.parse(customDataJson);
-                console.log('📦 [Main] Found customCompanyData in sessionStorage');
+                Logger.info('OctaveDNA', 'Found customCompanyData in sessionStorage');
 
                 if (window.Quannex && customData.kpis && customData.kpis.length > 0) {
                     // Initialize Quannex with custom data
@@ -314,13 +302,13 @@
                         );
                     }
 
-                    console.log(`✅ [Main] Loaded ${facesData.length} faces from custom data`);
-                    console.log(`📊 [Main] Custom coherence: ${(customData.coherenceResults?.global || 0) * 100}%`);
+                    Logger.info('OctaveDNA', `Loaded ${facesData.length} faces from custom data`);
+                    Logger.info('OctaveDNA', `Custom coherence: ${(customData.coherenceResults?.global || 0) * 100}%`);
                     return; // Custom data loaded successfully
                 }
             }
         } catch (error) {
-            console.warn('⚠️ [Main] Failed to load custom data:', error);
+            Logger.warn('OctaveDNA', 'Failed to load custom data:', error);
         }
 
         // ═══════════════════════════════════════════════════════════════════
@@ -342,11 +330,11 @@
                 if (window.Quannex && company) {
                     const facesData = window.Quannex.getFaces();
                     State?.setState('facesData', facesData);
-                    console.log(`✅ [Main] Loaded ${facesData.length} faces for ${company.name}`);
+                    Logger.info('OctaveDNA', `Loaded ${facesData.length} faces for ${company.name}`);
                     return;
                 }
             } catch (error) {
-                console.warn('⚠️ [Main] Company data loading failed:', error);
+                Logger.warn('OctaveDNA', 'Company data loading failed:', error);
             }
         }
 
@@ -369,7 +357,7 @@
             });
         }
         State?.setState('facesData', mockFaces);
-        console.log('📊 [Main] Using mock faces data (12 faces)');
+        Logger.info('OctaveDNA', 'Using mock faces data (12 faces)');
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -496,7 +484,7 @@
             }
         };
 
-        console.log('🎯 [OctaveDNA Main] Orchestrator loaded');
+        Logger.debug('OctaveDNA', 'Orchestrator loaded');
 
         // Auto-initialize on DOMContentLoaded
         if (document.readyState === 'loading') {

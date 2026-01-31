@@ -83,7 +83,7 @@
  * @author Deimantas Murauskas & Claude
  * @version 1.0.0
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     const IntegrityChecksum = {
@@ -216,13 +216,13 @@
             }
 
             // Log results
-            console.log('[IntegrityChecksum] Full check results:', results);
+            Logger.info('IntegrityChecksum', 'Full check results:', results);
 
             // Visual summary
             if (results.failed === 0) {
-                console.log('%c[IntegrityChecksum] ALL CHECKS PASSED', 'color: #00ff88; font-weight: bold;');
+                Logger.info('IntegrityChecksum', 'ALL CHECKS PASSED');
             } else {
-                console.log('%c[IntegrityChecksum] CHECKS FAILED: ' + results.failed, 'color: #ff4444; font-weight: bold;');
+                Logger.error('IntegrityChecksum', 'CHECKS FAILED:', results.failed);
             }
 
             return results;
@@ -241,7 +241,7 @@
 
             const allExist = Object.values(exists).every(v => v);
 
-            console.log('[IntegrityChecksum] Quick check:', exists, '| All exist:', allExist);
+            Logger.debug('IntegrityChecksum', 'Quick check:', exists, '| All exist:', allExist);
             return allExist;
         }
     };
@@ -249,6 +249,6 @@
     // Export to global scope
     global.IntegrityChecksum = IntegrityChecksum;
 
-    console.log('[integrity-checksum] Module loaded');
+    Logger.info('IntegrityChecksum', 'Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

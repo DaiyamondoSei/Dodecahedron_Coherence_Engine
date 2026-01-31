@@ -46,7 +46,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -208,7 +208,7 @@
         S.ELEMENT_COLORS = ELEMENT_COLORS;
     }
 
-    console.log('[dodec-materials] Module loaded - Color mapping ready');
-    console.log('[dodec-materials] Element colors:', Object.keys(ELEMENT_COLORS).join(', '));
+    Logger.info('Materials', 'Module loaded - Color mapping ready');
+    Logger.debug('Materials', 'Element colors:', Object.keys(ELEMENT_COLORS).join(', '));
 
 })(typeof window !== 'undefined' ? window : this);

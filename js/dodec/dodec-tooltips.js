@@ -74,7 +74,7 @@
  *
  * ════════════════════════════════════════════════════════════════════════════
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
@@ -151,7 +151,7 @@
                 dominantSynergy
             };
         } catch (e) {
-            console.warn('[DodecTooltips] Sacred Inquiry error:', e.message);
+            Logger.warn('Tooltips', 'Sacred Inquiry error:', e.message);
             return null;
         }
     }
@@ -265,7 +265,7 @@
     const LOOP_TEMPLATES = {
         analytical: (data) => {
             const colorClass = data.direction?.includes('Virtuous') ? '#00ff88' :
-                              data.direction?.includes('Vicious') ? '#ff4444' : '#ffaa00';
+                data.direction?.includes('Vicious') ? '#ff4444' : '#ffaa00';
             return `
                 <div style="font-weight: bold; color: ${colorClass}; margin-bottom: 4px;">${data.type} Loop</div>
                 <div style="display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 11px;">
@@ -339,8 +339,8 @@
                     <div style="font-size: 10px; color: rgba(255,255,255,0.6); margin-bottom: 6px;">The Journey:</div>
                     <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
                         ${(data.faceNames || []).map((name, i, arr) =>
-                            `<span style="background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 4px; font-size: 11px;">${name}</span>${i < arr.length - 1 ? '<span style="color: ${colorClass};">→</span>' : ''}`
-                        ).join('')}
+                `<span style="background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 4px; font-size: 11px;">${name}</span>${i < arr.length - 1 ? '<span style="color: ${colorClass};">→</span>' : ''}`
+            ).join('')}
                     </div>
                 </div>
                 <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; margin-bottom: 10px;">
@@ -811,7 +811,7 @@
      */
     function init() {
         cacheElements();
-        console.log('[Tooltips] Initialized with 8 parameters');
+        Logger.info('Tooltips', 'Initialized with 8 parameters');
     }
 
     // Initialize when DOM is ready

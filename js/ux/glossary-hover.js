@@ -34,7 +34,7 @@
  * @version 1.0.0
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================================================
@@ -484,7 +484,7 @@
             }
         });
 
-        console.log('[Quannex] Glossary Hover system initialized');
+        Logger.info('UX:GlossaryHover', 'Glossary Hover system initialized');
     }
 
     // Auto-init when DOM ready

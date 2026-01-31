@@ -43,7 +43,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
@@ -164,7 +164,7 @@
         if (key in state) {
             state[key] = value;
         } else {
-            console.warn(`[OctaveDNAState] Unknown state key: ${key}`);
+            Logger.warn('OctaveDNA', `Unknown state key: ${key}`);
         }
     }
 
@@ -197,8 +197,8 @@
             _state: state
         };
 
-        console.log('🧬 [OctaveDNA State] Centralized state registry loaded');
-        console.log('   CONFIG: helixHeight=' + CONFIG.helixHeight + ', maxOctaves=' + CONFIG.maxOctaves);
+        Logger.debug('OctaveDNA', 'Centralized state registry loaded');
+        Logger.debug('OctaveDNA', '   CONFIG: helixHeight=' + CONFIG.helixHeight + ', maxOctaves=' + CONFIG.maxOctaves);
     }
 
 })();

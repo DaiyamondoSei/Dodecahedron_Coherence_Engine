@@ -504,17 +504,17 @@ const RegisterChangeValidation = {
             }
         }));
 
-        console.log(`🎭 Register changed: ${previousRegister} → ${newRegister}`);
+        Logger.info('UX:DataIntegrity', `🎭 Register changed: ${previousRegister} → ${newRegister}`);
     },
 
     // Private helpers
     _saveReflections() {
-        console.log('💾 Saving reflections...');
+        Logger.debug('UX:DataIntegrity', '💾 Saving reflections...');
         this._state.hasUnsavedReflections = false;
     },
 
     _completeRitual() {
-        console.log('🙏 Completing ritual...');
+        Logger.debug('UX:DataIntegrity', '🙏 Completing ritual...');
         this._state.inProgressRitual = null;
     }
 };
@@ -535,7 +535,7 @@ const DataIntegrityBridge = {
     shouldBlockTransformations() {
         // Check circuit breaker state
         if (window.DataValidator?.isCorrupted?.()) {
-            console.warn('⚠️ Data integrity compromised. Transformations blocked.');
+            Logger.warn('UX:DataIntegrity', '⚠️ Data integrity compromised. Transformations blocked.');
             return true;
         }
         return false;
@@ -547,7 +547,7 @@ const DataIntegrityBridge = {
      * @param {Object} details - Violation details
      */
     reportViolation(type, details) {
-        console.error(`🚨 UX Data Integrity Violation: ${type}`, details);
+        Logger.error('UX:DataIntegrity', `🚨 UX Data Integrity Violation: ${type}`, details);
 
         // Dispatch event for monitoring
         window.dispatchEvent(new CustomEvent('quannex:integrity-violation', {
@@ -684,8 +684,8 @@ window.UXDataIntegrity = {
     // Initialization
     init() {
         RollbackCapability.initializeAltClickHandlers();
-        console.log('🛡️ UX Data Integrity initialized');
-        console.log('   Alt+Click any transformed value to see raw data');
+        Logger.info('UX:DataIntegrity', '🛡️ UX Data Integrity initialized');
+        Logger.info('UX:DataIntegrity', '   Alt+Click any transformed value to see raw data');
     }
 };
 
@@ -707,8 +707,8 @@ if (typeof module !== 'undefined' && module.exports) {
 // ════════════════════════════════════════════════════════════════════════════
 // MODULE LOADED
 // ════════════════════════════════════════════════════════════════════════════
-console.log('🛡️ UX Data Integrity v1.0.0 loaded');
-console.log('   TRANSFORMATION_SAFETY: View-layer only transformations');
-console.log('   PHI_PROTECTION: Sacred constants preserved');
-console.log('   VALIDATION_GATES: Before/after transformation checks');
-console.log('   ROLLBACK: Alt+Click for raw values');
+Logger.debug('UX:DataIntegrity', '🛡️ UX Data Integrity v1.0.0 loaded');
+Logger.debug('UX:DataIntegrity', '   TRANSFORMATION_SAFETY: View-layer only transformations');
+Logger.debug('UX:DataIntegrity', '   PHI_PROTECTION: Sacred constants preserved');
+Logger.debug('UX:DataIntegrity', '   VALIDATION_GATES: Before/after transformation checks');
+Logger.debug('UX:DataIntegrity', '   ROLLBACK: Alt+Click for raw values');

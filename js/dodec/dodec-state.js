@@ -49,7 +49,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -244,7 +244,7 @@
      */
     function getScene() {
         if (!DodecState.scene) {
-            console.warn('[dodec-state] Scene not yet initialized');
+            Logger.warn('State', 'Scene not yet initialized');
         }
         return DodecState.scene;
     }
@@ -255,7 +255,7 @@
      */
     function getCamera() {
         if (!DodecState.camera) {
-            console.warn('[dodec-state] Camera not yet initialized');
+            Logger.warn('State', 'Camera not yet initialized');
         }
         return DodecState.camera;
     }
@@ -266,7 +266,7 @@
      */
     function getRenderer() {
         if (!DodecState.renderer) {
-            console.warn('[dodec-state] Renderer not yet initialized');
+            Logger.warn('State', 'Renderer not yet initialized');
         }
         return DodecState.renderer;
     }
@@ -314,7 +314,7 @@
         DodecState.animationsPaused = false;
         DodecState.showOctaveLayers = false;
         DodecState.octaveLayerGroup = null;
-        console.log('[dodec-state] State reset complete');
+        Logger.info('State', 'State reset complete');
     }
 
     // ========================================
@@ -333,7 +333,7 @@
         resetState
     };
 
-    console.log('[dodec-state] Module loaded - Central state registry ready');
-    console.log('[dodec-state] PHI constant:', DodecState.PHI);
+    Logger.info('State', 'Module loaded - Central state registry ready');
+    Logger.debug('State', 'PHI constant:', DodecState.PHI);
 
 })(typeof window !== 'undefined' ? window : this);

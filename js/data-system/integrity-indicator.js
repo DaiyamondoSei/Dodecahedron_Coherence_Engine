@@ -53,7 +53,7 @@
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════════
@@ -122,7 +122,7 @@
      */
     function updateFromReport(report) {
         if (!isInitialized) {
-            console.warn('[IntegrityIndicator] Not initialized, cannot update');
+            Logger.warn('IntegrityIndicator', 'Not initialized, cannot update');
             return;
         }
 
@@ -165,7 +165,7 @@
                 : 'View Report →';
         }
 
-        console.log(`[IntegrityIndicator] Updated: ${issueCount} issues (${severity})`);
+        Logger.debug('IntegrityIndicator', `Updated: ${issueCount} issues (${severity})`);
     }
 
     /**
@@ -174,7 +174,7 @@
     function handleInspectClick() {
         // Emit event for overlay to listen to
         document.dispatchEvent(new CustomEvent('integrity:open-overlay'));
-        console.log('[IntegrityIndicator] Opening overlay...');
+        Logger.debug('IntegrityIndicator', 'Opening overlay...');
     }
 
     // ════════════════════════════════════════════════════════════════════════════
@@ -190,7 +190,7 @@
         containerElement = document.getElementById(containerId);
 
         if (!containerElement) {
-            console.warn(`[IntegrityIndicator] Container #${containerId} not found`);
+            Logger.warn('IntegrityIndicator', `Container #${containerId} not found`);
             return;
         }
 
@@ -212,7 +212,7 @@
         });
 
         isInitialized = true;
-        console.log('[IntegrityIndicator] Initialized');
+        Logger.info('IntegrityIndicator', 'Initialized');
 
         // Initial update from DataValidator if available
         if (global.DataValidator) {
@@ -229,7 +229,7 @@
             buttonElement.removeEventListener('click', handleInspectClick);
         }
         isInitialized = false;
-        console.log('[IntegrityIndicator] Cleaned up');
+        Logger.info('IntegrityIndicator', 'Cleaned up');
     }
 
     // ════════════════════════════════════════════════════════════════════════════
@@ -255,6 +255,6 @@
     // Export to window
     global.IntegrityIndicator = IntegrityIndicator;
 
-    console.log('🛡️ IntegrityIndicator v1.0.0 loaded');
+    Logger.info('IntegrityIndicator', 'v1.0.0 loaded');
 
 })(typeof window !== 'undefined' ? window : this);

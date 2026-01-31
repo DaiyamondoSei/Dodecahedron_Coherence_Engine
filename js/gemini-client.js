@@ -219,16 +219,16 @@ export class GeminiClient {
 
         // Tier 1: Primary (Gemini 2.5 Flash - Official Quickstart Model)
         try {
-            console.log(`🚀 Attempting ${this.model}...`);
+            Logger.info('GeminiClient', `Attempting ${this.model}...`);
             return await this.callApi(this.model, storyText, context);
         } catch (error) {
-            console.warn(`⚠️ ${this.model} failed, attempting fallback (Gemini 1.5 Flash)...`);
+            Logger.warn('GeminiClient', `${this.model} failed, attempting fallback (Gemini 1.5 Flash)...`);
 
             // Tier 2: Fallback (Gemini 1.5 Flash)
             try {
                 return await this.callApi("gemini-1.5-flash", storyText, context);
             } catch (tier2Error) {
-                console.error("❌ All Gemini models failed:", tier2Error);
+                Logger.error('GeminiClient', 'All Gemini models failed:', tier2Error);
                 throw tier2Error;
             }
         }
@@ -559,7 +559,7 @@ ${this._getKPIExamplesForStage(stage)}
         const kpiCount = mode === 'quick' ? 12 : 60;
         const prompt = this._buildKPIExtractionPrompt(storyText, kpiCount, octave);
 
-        console.log(`[GeminiClient] extractKPIs called: mode=${mode}, octave=${octave}, kpiCount=${kpiCount}`);
+        Logger.debug('GeminiClient', `extractKPIs called: mode=${mode}, octave=${octave}, kpiCount=${kpiCount}`);
 
         try {
             // Use same tiered fallback as analyzeStory
@@ -567,13 +567,13 @@ ${this._getKPIExamplesForStage(stage)}
             try {
                 response = await this._callGeminiForKPIs(this.model, prompt);
             } catch (error) {
-                console.warn(`⚠️ ${this.model} failed for KPIs, trying fallback...`);
+                Logger.warn('GeminiClient', `${this.model} failed for KPIs, trying fallback...`);
                 response = await this._callGeminiForKPIs("gemini-1.5-flash", prompt);
             }
 
             return this.parseJSONResponse(response);
         } catch (error) {
-            console.error('[GeminiClient] extractKPIs error:', error);
+            Logger.error('GeminiClient', 'extractKPIs error:', error);
             throw error;
         }
     }
@@ -772,7 +772,7 @@ Each face should have exactly 5 KPIs, one for each element:
 
             return json;
         } catch (e) {
-            console.error("Failed to parse AI JSON:", text);
+            Logger.error('GeminiClient', 'Failed to parse AI JSON:', text);
             throw new Error("Failed to parse AI response structure");
         }
     }

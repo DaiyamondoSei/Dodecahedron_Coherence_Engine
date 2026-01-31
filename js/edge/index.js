@@ -36,7 +36,7 @@
  * ════════════════════════════════════════════════════════════════════════════
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================================================
@@ -45,11 +45,11 @@
 
     // Verify dependencies are loaded
     if (!global.UnifiedEdge) {
-        console.error('[Edge Module] UnifiedEdge not loaded. Load unified-edge.js first.');
+        Logger.error('EdgeModule', 'UnifiedEdge not loaded. Load unified-edge.js first.');
     }
 
     if (!global.EdgeManager) {
-        console.error('[Edge Module] EdgeManager not loaded. Load edge-manager.js first.');
+        Logger.error('EdgeModule', 'EdgeManager not loaded. Load edge-manager.js first.');
     }
 
     // ========================================================================
@@ -75,7 +75,7 @@
          * Get the EdgeManager singleton
          * @returns {EdgeManager}
          */
-        getManager: function() {
+        getManager: function () {
             return global.EdgeManager.getInstance();
         },
 
@@ -84,7 +84,7 @@
          * @param {Object} config - Edge configuration
          * @returns {UnifiedEdge}
          */
-        createEdge: function(config) {
+        createEdge: function (config) {
             return new global.UnifiedEdge(config);
         },
 
@@ -113,17 +113,17 @@
      * @param {THREE.Scene} options.scene - Three.js scene
      * @returns {EdgeManager}
      */
-    EdgeModule.initializeWithQuannex = function(options = {}) {
+    EdgeModule.initializeWithQuannex = function (options = {}) {
         const manager = EdgeModule.getManager();
 
         // Get data from global state
         const faces = global.Quannex?.state?.faces ||
-                      global.advancedAnalysisResults?.faces ||
-                      [];
+            global.advancedAnalysisResults?.faces ||
+            [];
 
         const edgeTensionData = global.Quannex?.edgeTensionData ||
-                                global.advancedAnalysisResults?.edgeTension ||
-                                {};
+            global.advancedAnalysisResults?.edgeTension ||
+            {};
 
         const edgeKPILibrary = global.EdgeConstants?.EDGE_KPI_LIBRARY || {};
 
@@ -145,7 +145,7 @@
      * @param {string} edgeId - Edge ID (e.g., 'E1-2')
      * @returns {Object|null} Edge display data or null
      */
-    EdgeModule.getEdgeData = function(edgeId) {
+    EdgeModule.getEdgeData = function (edgeId) {
         const manager = EdgeModule.getManager();
         const edge = manager.getEdge(edgeId);
         return edge ? edge.toDisplayData() : null;
@@ -157,7 +157,7 @@
      * @param {string} edgeId - Edge ID
      * @returns {Object|null} Sacred Inquiry data or null
      */
-    EdgeModule.getEdgeInquiry = function(edgeId) {
+    EdgeModule.getEdgeInquiry = function (edgeId) {
         const manager = EdgeModule.getManager();
         const edge = manager.getEdge(edgeId);
         return edge ? edge.getSacredInquiry() : null;
@@ -171,8 +171,8 @@
     global.EdgeModule = EdgeModule;
 
     // Log successful load
-    console.log('🔗 Edge Module loaded - Pure Membrane Architecture complete');
-    console.log('   Exports: EdgeModule, UnifiedEdge, EdgeManager');
-    console.log('   Usage: EdgeModule.getManager().initialize({ scene, ... })');
+    Logger.info('EdgeModule', 'Edge Module loaded - Pure Membrane Architecture complete');
+    Logger.debug('EdgeModule', '   Exports: EdgeModule, UnifiedEdge, EdgeManager');
+    Logger.debug('EdgeModule', '   Usage: EdgeModule.getManager().initialize({ scene, ... })');
 
 })(typeof window !== 'undefined' ? window : this);

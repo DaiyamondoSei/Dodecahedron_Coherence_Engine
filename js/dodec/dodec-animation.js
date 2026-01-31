@@ -63,7 +63,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -72,7 +72,7 @@
 
     const S = global.DodecState;
     if (!S) {
-        console.error('[dodec-animation] DodecState not loaded!');
+        Logger.error('Animation', 'DodecState not loaded!');
         return;
     }
 
@@ -250,7 +250,7 @@
      */
     function startAnimation() {
         if (animationFrameId === null) {
-            console.log('[dodec-animation] Starting animation loop');
+            Logger.info('Animation', 'Starting animation loop');
             animate();
         }
     }
@@ -264,7 +264,7 @@
         if (animationFrameId !== null) {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
-            console.log('[dodec-animation] Animation loop stopped');
+            Logger.info('Animation', 'Animation loop stopped');
         }
     }
 
@@ -276,7 +276,7 @@
     global.startAnimation = startAnimation;
     global.stopAnimation = stopAnimation;
 
-    console.log('[dodec-animation] Module loaded - Animation loop ready');
-    console.log('[dodec-animation] PHI-tuned pulsing: Urgent (<10%), Warning (10-40%), Transcendence (>=theta)');
+    Logger.info('Animation', 'Module loaded - Animation loop ready');
+    Logger.debug('Animation', 'PHI-tuned pulsing: Urgent (<10%), Warning (10-40%), Transcendence (>=theta)');
 
 })(typeof window !== 'undefined' ? window : this);

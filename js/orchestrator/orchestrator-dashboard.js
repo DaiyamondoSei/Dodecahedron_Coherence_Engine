@@ -215,14 +215,13 @@
                 warnings: integrityResult.warnings?.length || 0
             });
         }
-    }
         // ────────────────────────────────────────────────────────────────────
         // FALLBACK: If no face data, detect from global coherence
         // ────────────────────────────────────────────────────────────────────
         else if (!state.loadedMappingContext && state.coherenceResults) {
-        const avgCoherence = state.coherenceResults.globalCoherence || 0.5;
-        dominantOctave = detectOctaveFromCoherence ? detectOctaveFromCoherence(avgCoherence) : 3;
-    }
+            const avgCoherence = state.coherenceResults.globalCoherence || 0.5;
+            dominantOctave = detectOctaveFromCoherence ? detectOctaveFromCoherence(avgCoherence) : 3;
+        }
 
     // ────────────────────────────────────────────────────────────────────
     // STEP 3: Get reference data for current and next octave

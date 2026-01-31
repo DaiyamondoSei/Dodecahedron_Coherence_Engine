@@ -534,10 +534,10 @@ if (typeof window !== 'undefined') {
         getInquiriesByElement
     };
 
-    console.log('🙏 Sacred Inquiry Architecture loaded - 25 state-based inquiries');
-    console.log('   5 Health States: wall | gate | membrane | hemorrhage | vortex');
-    console.log('   5 Synergy Elements: earth | water | fire | air | ether');
-    console.log('   Use SacredInquiry.getInquiry(tension, faceA, faceB)');
+    Logger.info('SacredInquiry', '25 state-based inquiries loaded');
+    Logger.debug('SacredInquiry', '5 Health States: wall | gate | membrane | hemorrhage | vortex');
+    Logger.debug('SacredInquiry', '5 Synergy Elements: earth | water | fire | air | ether');
+    Logger.debug('SacredInquiry', 'Use SacredInquiry.getInquiry(tension, faceA, faceB)');
 }
 
 // CommonJS export

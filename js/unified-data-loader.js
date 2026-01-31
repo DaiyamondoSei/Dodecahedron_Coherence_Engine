@@ -167,7 +167,7 @@ export class UnifiedDataLoader {
      * @param {Object} customConfig - Optional config for custom/AI modes
      */
     async loadContext(companyId, customConfig = null) {
-        console.log(`🔄 UnifiedLoader: Loading context for '${companyId}'...`);
+        Logger.info('UnifiedLoader', `Loading context for '${companyId}'...`);
 
         // 1. Load Base CSV Models (The Geometry)
         const baseData = await this.loadBaseModels();
@@ -180,7 +180,7 @@ export class UnifiedDataLoader {
             } else {
                 // Custom company without config - create minimal default
                 // This happens when navigating directly to a view without going through orchestrator
-                console.warn('⚠️ Custom company requested but no config provided. Using default.');
+                Logger.warn('UnifiedLoader', 'Custom company requested but no config provided. Using default.');
                 companyData = {
                     id: 'custom',
                     name: 'Custom Analysis',
@@ -194,14 +194,15 @@ export class UnifiedDataLoader {
         }
 
         if (!companyData) {
-            console.error('❌ Failed to load company data');
+            Logger.error('UnifiedLoader', 'Failed to load company data');
             return null;
         }
 
         // 3. Merge & Synthesize
         const context = this.synthesizeContext(baseData, companyData);
 
-        console.log('✅ Context Loaded:', context);
+        Logger.info('UnifiedLoader', 'Context loaded successfully');
+        Logger.debug('UnifiedLoader', 'Context details:', context);
         return context;
     }
 
@@ -223,7 +224,7 @@ export class UnifiedDataLoader {
 
         if (jsonLoader) {
             // JSON-FIRST STRATEGY: Try pre-validated JSON files
-            console.log('   📂 Loading base models (JSON-first)...');
+            Logger.debug('UnifiedLoader', 'Loading base models (JSON-first)...');
             try {
                 const [edgeData, vertexData] = await Promise.all([
                     jsonLoader.load('edge-tension'),
@@ -234,9 +235,9 @@ export class UnifiedDataLoader {
                 edgeDefinitions = this.transformJSONEdges(edgeData);
                 vertexDefinitions = this.transformJSONVertices(vertexData);
 
-                console.log(`   ✅ Loaded ${edgeDefinitions.length} edges, ${vertexDefinitions.length} vertices from JSON`);
+                Logger.debug('UnifiedLoader', `Loaded ${edgeDefinitions.length} edges, ${vertexDefinitions.length} vertices from JSON`);
             } catch (jsonError) {
-                console.log('   ⚠️ JSON loading failed, falling back to CSV:', jsonError.message);
+                Logger.warn('UnifiedLoader', `JSON loading failed, falling back to CSV: ${jsonError.message}`);
                 // Fall through to CSV loading
                 edgeDefinitions = null;
             }
@@ -244,7 +245,7 @@ export class UnifiedDataLoader {
 
         // CSV FALLBACK: If JSONDataLoader not available or JSON loading failed
         if (!edgeDefinitions) {
-            console.log('   📂 Loading base CSV models...');
+            Logger.debug('UnifiedLoader', 'Loading base CSV models...');
             const basePath = this.getBasePath();
             const [edgesCSV, verticesCSV] = await Promise.all([
                 this.fetchCSV(`${basePath}data/CSV_Edge_tension_Map.csv`),
@@ -253,7 +254,7 @@ export class UnifiedDataLoader {
 
             edgeDefinitions = this.parseEdgeCSV(edgesCSV);
             vertexDefinitions = this.parseVertexCSV(verticesCSV);
-            console.log(`   ✅ Loaded ${edgeDefinitions.length} edges, ${vertexDefinitions.length} vertices from CSV`);
+            Logger.debug('UnifiedLoader', `Loaded ${edgeDefinitions.length} edges, ${vertexDefinitions.length} vertices from CSV`);
         }
 
         const models = { edgeDefinitions, vertexDefinitions };
@@ -367,9 +368,9 @@ export class UnifiedDataLoader {
                     // Try JSON-first for KPIs
                     const kpiData = await jsonLoader.load('kpi-database');
                     kpis = this.transformJSONKPIs(kpiData);
-                    console.log(`   ✅ Loaded ${kpis.length} KPIs from JSON`);
+                    Logger.debug('UnifiedLoader', `Loaded ${kpis.length} KPIs from JSON`);
                 } catch (jsonErr) {
-                    console.log('   ⚠️ KPI JSON not available, falling back to CSV');
+                    Logger.debug('UnifiedLoader', 'KPI JSON not available, falling back to CSV');
                     kpis = null;
                 }
             }
@@ -393,18 +394,18 @@ export class UnifiedDataLoader {
                         // Check if it's proper object format (has 'name' property)
                         if (typeof mappingContext.shadowPatterns[0] === 'object' && mappingContext.shadowPatterns[0].name) {
                             shadowPatterns = mappingContext.shadowPatterns;
-                            console.log(`   ✅ Loaded ${shadowPatterns.length} rich shadow patterns from mapping-context.json`);
+                            Logger.debug('UnifiedLoader', `Loaded ${shadowPatterns.length} rich shadow patterns from mapping-context.json`);
                         }
                     }
                     // Extract tuning parameters for consistent coherence calculation
                     if (mappingContext.diagnostics?.tuning) {
                         tuning = mappingContext.diagnostics.tuning;
-                        console.log(`   ✅ Loaded tuning (${tuning.perspective}) from mapping-context.json`);
+                        Logger.debug('UnifiedLoader', `Loaded tuning (${tuning.perspective}) from mapping-context.json`);
                     }
                 }
             } catch (mappingError) {
                 // mapping-context.json not available, use company.json shadowPatterns
-                console.log(`   ℹ️ Using basic shadow patterns from company.json`);
+                Logger.debug('UnifiedLoader', 'Using basic shadow patterns from company.json (mapping-context.json not found)');
             }
 
             return {
@@ -414,7 +415,7 @@ export class UnifiedDataLoader {
                 tuning: tuning
             };
         } catch (error) {
-            console.warn(`   ⚠️ Could not load profile for '${companyId}':`, error);
+            Logger.warn('UnifiedLoader', `Could not load profile for '${companyId}':`, error);
             return null;
         }
     }

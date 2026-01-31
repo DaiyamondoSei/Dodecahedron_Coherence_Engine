@@ -75,7 +75,7 @@
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════════
@@ -191,7 +191,7 @@
         const faceCorruptionRatio = affectedFaces.size / 12;
 
         return corruptionRatio >= CIRCUIT_BREAKER_THRESHOLD ||
-               faceCorruptionRatio >= CIRCUIT_BREAKER_THRESHOLD;
+            faceCorruptionRatio >= CIRCUIT_BREAKER_THRESHOLD;
     }
 
     // ════════════════════════════════════════════════════════════════════════════
@@ -535,14 +535,14 @@
         overlayElement = document.getElementById(overlayId);
 
         if (!overlayElement) {
-            console.warn(`[IntegrityOverlay] Overlay #${overlayId} not found`);
+            Logger.warn('IntegrityOverlay', `Overlay #${overlayId} not found`);
             return;
         }
 
         // Get the container element inside the overlay (where content goes)
         containerElement = overlayElement.querySelector('.integrity-overlay-container');
         if (!containerElement) {
-            console.warn('[IntegrityOverlay] Container element not found inside overlay');
+            Logger.warn('IntegrityOverlay', 'Container element not found inside overlay');
             return;
         }
 
@@ -556,7 +556,7 @@
         });
 
         isInitialized = true;
-        console.log('[IntegrityOverlay] Initialized');
+        Logger.info('IntegrityOverlay', 'Initialized');
     }
 
     /**
@@ -564,7 +564,7 @@
      */
     function open() {
         if (!isInitialized || !overlayElement || !containerElement) {
-            console.warn('[IntegrityOverlay] Cannot open - not initialized');
+            Logger.warn('IntegrityOverlay', 'Cannot open - not initialized');
             return;
         }
 
@@ -586,7 +586,7 @@
 
         // Emit event
         document.dispatchEvent(new CustomEvent('quannex:integrity-overlay-opened'));
-        console.log('[IntegrityOverlay] Opened');
+        Logger.info('IntegrityOverlay', 'Opened');
 
         // Focus first interactive element for accessibility
         const firstButton = containerElement.querySelector('button');
@@ -607,7 +607,7 @@
 
         // Emit event
         document.dispatchEvent(new CustomEvent('quannex:integrity-overlay-closed'));
-        console.log('[IntegrityOverlay] Closed');
+        Logger.info('IntegrityOverlay', 'Closed');
     }
 
     /**
@@ -655,7 +655,7 @@
         containerElement = null;
         isInitialized = false;
         isVisible = false;
-        console.log('[IntegrityOverlay] Cleaned up');
+        Logger.info('IntegrityOverlay', 'Cleaned up');
     }
 
     // ════════════════════════════════════════════════════════════════════════════
@@ -690,6 +690,6 @@
     // Export to window
     global.IntegrityOverlay = IntegrityOverlay;
 
-    console.log('🛡️ IntegrityOverlay v1.0.0 loaded');
+    Logger.info('IntegrityOverlay', 'v1.0.0 loaded');
 
 })(typeof window !== 'undefined' ? window : this);

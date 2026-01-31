@@ -82,7 +82,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // Track clickable meshes for raycasting
@@ -262,7 +262,7 @@
 
         const scene = State.getState('scene');
         if (!scene) {
-            console.error('❌ [Helix Geometry] Scene not available!');
+            Logger.error('OctaveDNA', 'Scene not available!');
             return;
         }
 
@@ -291,7 +291,7 @@
         State.setState('dnaGroup', dnaGroup);
         scene.add(dnaGroup);
 
-        console.log('🧬 [Helix Geometry] Rendered', dnaHelices.length, 'DNA helixes');
+        Logger.info('OctaveDNA', `Rendered ${dnaHelices.length} DNA helixes`);
 
         return dnaGroup;
     }
@@ -384,7 +384,7 @@
             getClickableMeshes
         };
 
-        console.log('🧬 [OctaveDNA Geometry] Helix creation module loaded');
+        Logger.debug('OctaveDNA', 'Helix creation module loaded');
     }
 
 })();

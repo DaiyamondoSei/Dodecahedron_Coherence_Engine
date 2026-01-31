@@ -34,7 +34,7 @@
  * @version 1.0.0
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
@@ -162,7 +162,7 @@
             showToast('JSON exported successfully', 'success');
 
         } catch (error) {
-            console.error('[Export] JSON export failed:', error);
+            Logger.error('UX:ExportManager', 'JSON export failed:', error);
             showToast('JSON export failed: ' + error.message, 'error');
         }
     }
@@ -222,7 +222,7 @@
             showToast('CSV exported successfully', 'success');
 
         } catch (error) {
-            console.error('[Export] CSV export failed:', error);
+            Logger.error('UX:ExportManager', 'CSV export failed:', error);
             showToast('CSV export failed: ' + error.message, 'error');
         }
     }
@@ -295,7 +295,7 @@
      * @param {Object} options - Export options
      */
     function exportReport(format = 'pdf', options = {}) {
-        console.log(`[Export] Exporting as ${format}...`);
+        Logger.info('UX:ExportManager', `Exporting as ${format}...`);
 
         switch (format.toLowerCase()) {
             case 'pdf':
@@ -350,7 +350,7 @@
     function init() {
         initEventListener();
         checkAutoPrint();
-        console.log('[Quannex] Export Manager initialized');
+        Logger.info('UX:ExportManager', 'Export Manager initialized');
     }
 
     // Auto-init when DOM ready

@@ -521,9 +521,9 @@ if (typeof window !== 'undefined') {
         getAISeverityGuidance
     };
 
-    console.log('🌑 Shadow Harmonics loaded - PHI-derived shadow constants (Single Source of Truth)');
-    console.log('   Three-Tier System: Tier 1 (φ⁻²) Tier 2 (φ⁻³) Tier 3 (φ⁻⁴)');
-    console.log('   Penalties:         0.382      0.236      0.146');
+    Logger.info('ShadowHarmonics', 'PHI-derived shadow constants loaded (Single Source of Truth)');
+    Logger.debug('ShadowHarmonics', 'Three-Tier System: Tier 1 (φ⁻²) Tier 2 (φ⁻³) Tier 3 (φ⁻⁴)');
+    Logger.debug('ShadowHarmonics', 'Penalties: 0.382, 0.236, 0.146');
 }
 
 // ES Module export

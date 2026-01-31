@@ -50,7 +50,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // Track currently loaded company to prevent double-loading
@@ -101,8 +101,8 @@
                 const facesData = window.Quannex.getFaces();
                 State?.setState('facesData', facesData);
 
-                console.log('✅ Using Quannex engine for', company.name);
-                console.log('📊 Loaded', facesData.length, 'faces');
+                Logger.info('OctaveDNA', `Using Quannex engine for ${company.name}`);
+                Logger.debug('OctaveDNA', `Loaded ${facesData.length} faces`);
 
                 // Try to load breath axes from various sources
                 let breathAxes = null;
@@ -112,7 +112,7 @@
                     const companyData = window.CompanyTemplatesBundle.templates[company.id];
                     if (companyData?.breathAxes) {
                         breathAxes = companyData.breathAxes;
-                        console.log('🌬️ Loaded breath axes from template bundle');
+                        Logger.debug('OctaveDNA', 'Loaded breath axes from template bundle');
                     }
                 }
 
@@ -132,11 +132,10 @@
                 loadingEl.style.display = 'none';
             }
 
-            console.log('🧬 DNA Visualization Complete!');
-            console.log('✨ Simplicity is the ultimate sophistication');
+            Logger.info('OctaveDNA', 'DNA Visualization complete - Simplicity is the ultimate sophistication');
 
         } catch (error) {
-            console.error('Failed to initialize:', error);
+            Logger.error('OctaveDNA', 'Failed to initialize visualization:', error);
             const loadingEl = document.getElementById('loading');
             if (loadingEl) {
                 loadingEl.innerHTML = '<div class="spinner"></div><div class="loading-text">Error loading DNA</div>';
@@ -168,7 +167,7 @@
                     }
                 }
             });
-            console.log('🧬 Updated helix config from breath axes');
+            Logger.debug('OctaveDNA', 'Updated helix config from breath axes');
         }
 
         // Try session storage fallback
@@ -184,11 +183,11 @@
                                 dnaHelices[index].names = axis.names || dnaHelices[index].names;
                             }
                         });
-                        console.log('🧬 Updated helix config from sessionStorage');
+                        Logger.debug('OctaveDNA', 'Updated helix config from sessionStorage');
                     }
                 }
             } catch (e) {
-                console.warn('Failed to load sessionStorage breath axes:', e);
+                Logger.warn('OctaveDNA', 'Failed to load sessionStorage breath axes:', e);
             }
         }
     }
@@ -202,7 +201,7 @@
      * Called when sessionStorage data changes
      */
     function reloadCustomData() {
-        console.log('🔄 [Company Loader] Reloading custom data...');
+        Logger.info('OctaveDNA', 'Reloading custom data...');
 
         try {
             const customDataJson = sessionStorage.getItem('customCompanyData');
@@ -225,10 +224,10 @@
                     window.OctaveDNAGeometry.refreshDNA();
                 }
 
-                console.log('✅ Custom data reloaded');
+                Logger.info('OctaveDNA', 'Custom data reloaded');
             }
         } catch (e) {
-            console.warn('Failed to reload custom data:', e);
+            Logger.warn('OctaveDNA', 'Failed to reload custom data:', e);
         }
     }
 
@@ -244,11 +243,11 @@
             const { type, companyId } = event.data;
 
             if (type === 'LOAD_COMPANY') {
-                console.log(`[DNA View] 📨 Received company load request: ${companyId}`);
+                Logger.info('OctaveDNA', `Received company load request: ${companyId}`);
 
                 // Check if already loaded
                 if (currentLoadedCompanyId === companyId) {
-                    console.log(`[DNA View] Company "${companyId}" already loaded`);
+                    Logger.debug('OctaveDNA', `Company "${companyId}" already loaded`);
                     return;
                 }
 
@@ -258,12 +257,12 @@
                         await initVisualization();
                     }
                 } catch (error) {
-                    console.error('[DNA View] Failed to load company:', error);
+                    Logger.error('OctaveDNA', 'Failed to load company from iframe:', error);
                 }
             }
         });
 
-        console.log('📨 [Company Loader] Iframe communication initialized');
+        Logger.debug('OctaveDNA', 'Iframe communication initialized');
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -294,7 +293,7 @@
             }
         });
 
-        console.log(`🔄 [Company Loader] Auto-refresh started (${intervalMs}ms)`);
+        Logger.debug('OctaveDNA', `Auto-refresh started (${intervalMs}ms)`);
     }
 
     /**
@@ -304,7 +303,7 @@
         if (refreshInterval) {
             clearInterval(refreshInterval);
             refreshInterval = null;
-            console.log('🔄 [Company Loader] Auto-refresh stopped');
+            Logger.debug('OctaveDNA', 'Auto-refresh stopped');
         }
     }
 
@@ -333,7 +332,7 @@
             getCurrentLoadedCompanyId: () => currentLoadedCompanyId
         };
 
-        console.log('🏢 [OctaveDNA Company Loader] Module loaded');
+        Logger.debug('OctaveDNA', 'Company loader module loaded');
     }
 
 })();

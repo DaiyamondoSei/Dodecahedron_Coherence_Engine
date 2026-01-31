@@ -29,4 +29,4 @@ export { Face } from './Face.js';
 export { Edge } from './Edge.js';
 export { Vertex } from './Vertex.js';
 
-console.log('   Core models barrel export loaded');
+Logger.info('Core', 'models barrel export loaded');

@@ -211,8 +211,7 @@ export class ShadowPanel {
     constructor(containerId) {
         this.container = document.getElementById(containerId);
         if (!this.container) {
-            if (window.Logger) window.Logger.warn('ShadowPanel', `Container '${containerId}' not found. Creating one.`);
-            else console.warn(`[ShadowPanel] Container '${containerId}' not found. Creating one.`);
+            Logger.warn('Shadow:Panel', `Container '${containerId}' not found. Creating one.`);
             this.container = document.createElement('div');
             this.container.id = containerId;
             this.container.className = 'shadow-panel-container';
@@ -235,8 +234,7 @@ export class ShadowPanel {
         // Enable: localStorage.setItem('quannexDemoMode', 'true')
         this.demoMode = localStorage.getItem('quannexDemoMode') === 'true';
 
-        if (window.Logger) window.Logger.info('ShadowPanel', '🌑 Initialized (v3.0 - Unified Shadow Module)');
-        else console.log('[ShadowPanel] 🌑 Initialized (v3.0 - Unified Shadow Module)');
+        Logger.info('Shadow:Panel', '🌑 Initialized (v3.0 - Unified Shadow Module)');
     }
 
     /**
@@ -440,8 +438,7 @@ export class ShadowPanel {
         this.currentToast = null;
         this.activeShadows.clear();
         this.container.innerHTML = '';
-        if (window.Logger) window.Logger.info('ShadowPanel', '🌙 Destroyed - resources cleaned up');
-        else console.log('[ShadowPanel] 🌙 Destroyed - resources cleaned up');
+        Logger.info('Shadow:Panel', '🌙 Destroyed - resources cleaned up');
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -462,8 +459,7 @@ export class ShadowPanel {
      */
     renderAIEnhanceOption() {
         // No-op: AI enhancement now handled by shadow overlay toggle
-        if (window.Logger) window.Logger.info('ShadowPanel', 'AI enhancement now available via shadow overlay toggle');
-        else console.log('[ShadowPanel] AI enhancement now available via shadow overlay toggle');
+        Logger.info('Shadow:Panel', 'AI enhancement now available via shadow overlay toggle');
     }
 
     /**
@@ -681,8 +677,7 @@ export class ShadowPanel {
                 if (faceId) {
                     const event = new CustomEvent('focus-face', { detail: { faceId } });
                     window.dispatchEvent(event);
-                    if (window.Logger) window.Logger.debug('ShadowPanel', `🎯 Focusing on Face ${faceId}`);
-                    else console.log(`[ShadowPanel] 🎯 Focusing on Face ${faceId}`);
+                    Logger.debug('Shadow:Panel', `🎯 Focusing on Face ${faceId}`);
                 }
             };
 
@@ -721,8 +716,7 @@ export class ShadowPanel {
      * @param {Object} shadow - Shadow pattern object
      */
     focusOnShadow(shadow) {
-        if (window.Logger) window.Logger.debug('ShadowPanel', `🎯 Focusing on shadow: ${shadow.name} at Face ${shadow.faceId}`);
-        else console.log(`[ShadowPanel] 🎯 Focusing on shadow: ${shadow.name} at Face ${shadow.faceId}`);
+        Logger.debug('Shadow:Panel', `🎯 Focusing on shadow: ${shadow.name} at Face ${shadow.faceId}`);
 
         // Dispatch event for the main viz to handle
         const event = new CustomEvent('focus-face', { detail: { faceId: shadow.faceId } });

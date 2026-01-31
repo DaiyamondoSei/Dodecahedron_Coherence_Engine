@@ -45,7 +45,7 @@
  *
  * ═══════════════════════════════════════════════════════════════════════════════
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -73,7 +73,7 @@
 
         // Verify modules loaded
         if (!StateManager || !Controller) {
-            console.error('[ShadowOverlay] Critical modules missing - check script load order');
+            Logger.error('ShadowOverlay', 'Critical modules missing - check script load order');
             return;
         }
 
@@ -90,7 +90,7 @@
         if (toggleContainer && SourceToggle) {
             shadowSourceToggle = new SourceToggle(toggleContainer);
             Controller.setSourceToggle(shadowSourceToggle);
-            console.log('[ShadowOverlay] 🔄 Source toggle initialized');
+            Logger.info('ShadowOverlay', 'Source toggle initialized');
         }
 
         // Initialize event handlers
@@ -109,8 +109,8 @@
             });
         }
 
-        console.log('[ShadowOverlay] 👁️ Shadow overlay system initialized (modular)');
-        console.log('[ShadowOverlay] Press "S" to toggle shadow analysis overlay');
+        Logger.info('ShadowOverlay', 'Shadow overlay system initialized (modular)');
+        Logger.info('ShadowOverlay', 'Press "S" to toggle shadow analysis overlay');
     }
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -135,7 +135,7 @@
 
         shadowSourceToggle = null;
 
-        console.log('[ShadowOverlay] Destroyed - all resources cleaned up');
+        Logger.info('ShadowOverlay', 'Destroyed - all resources cleaned up');
     }
 
     // ═══════════════════════════════════════════════════════════════════════

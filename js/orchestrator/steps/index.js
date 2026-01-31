@@ -239,5 +239,5 @@
 // This file is documentation-only.
 // All exports are handled by individual modules.
 
-console.log('[orchestrator/steps/index] Navigation map loaded');
-console.log('[orchestrator/steps/index] Modules: template-display, template-selection, face-configuration, kpi-autofill, kpi-entry, calculation-engine, results-display');
+Logger.info('OrchestratorSteps', 'Navigation map loaded');
+Logger.info('OrchestratorSteps', 'Modules: template-display, template-selection, face-configuration, kpi-autofill, kpi-entry, calculation-engine, results-display');

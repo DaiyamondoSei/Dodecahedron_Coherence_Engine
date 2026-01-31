@@ -714,9 +714,9 @@ if (typeof window !== 'undefined') {
         getThresholdArray
     };
 
-    console.log('🌀 PHI Harmonics loaded - Fully φ-derived constants (Single Source of Truth)');
-    console.log('   Thresholds: O1(0) O2(φ⁻²) O3(½) O4(φ⁻¹) O5(ψ₃) O6(ψ₄) O7(ψ₅)');
-    console.log('   Values:     0    0.382   0.5  0.618  0.764  0.854  0.910');
+    Logger.info('PhiHarmonics', 'Fully φ-derived constants loaded (Single Source of Truth)');
+    Logger.debug('PhiHarmonics', 'Thresholds: O1(0) O2(φ⁻²) O3(½) O4(φ⁻¹) O5(ψ₃) O6(ψ₄) O7(ψ₅)');
+    Logger.debug('PhiHarmonics', 'Values:     0    0.382   0.5  0.618  0.764  0.854  0.910');
 }
 
 // CommonJS export (for Node.js testing)

@@ -129,7 +129,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // MODULE WRAPPER (IIFE to avoid global scope pollution)
 // ═══════════════════════════════════════════════════════════════════════════════
-(function(global) {
+(function (global) {
     'use strict';
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -622,6 +622,6 @@
         extractTextContent
     };
 
-    console.log('[ShadowCardTemplates] Module loaded');
+    Logger.info('ShadowCardTemplates', 'Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

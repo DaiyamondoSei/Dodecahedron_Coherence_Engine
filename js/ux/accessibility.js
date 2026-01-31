@@ -68,8 +68,8 @@ const ACCESSIBILITY_CONFIG = {
     // The sacred geometry connection
     insight: {
         statement: 'The dodecahedron has 12 faces—12 ways of seeing. ' +
-                   'Accessibility adds more ways: screen readers, keyboard navigation, ' +
-                   'reduced motion. Every way of seeing is valid and honored.',
+            'Accessibility adds more ways: screen readers, keyboard navigation, ' +
+            'reduced motion. Every way of seeing is valid and honored.',
         application: 'Every visual representation has an accessible alternative'
     }
 };
@@ -110,8 +110,8 @@ const WCAG_PERCEIVABLE = {
             requirement: 'Dodecahedron has comprehensive aria description',
             implementation: 'role="img" with aria-label describing the visualization',
             description: 'Interactive dodecahedron visualization showing 12 organizational ' +
-                        'domains. Use Tab to navigate between faces, Enter to select, ' +
-                        'Arrow keys to rotate view, Escape to return to overview.'
+                'domains. Use Tab to navigate between faces, Enter to select, ' +
+                'Arrow keys to rotate view, Escape to return to overview.'
         }
     },
 
@@ -152,7 +152,7 @@ const WCAG_PERCEIVABLE = {
         },
 
         // Utility function to check contrast
-        checkContrast: function(foreground, background) {
+        checkContrast: function (foreground, background) {
             // Luminance calculation following WCAG formula
             const getLuminance = (hex) => {
                 const rgb = parseInt(hex.slice(1), 16);
@@ -507,7 +507,7 @@ const SCREEN_READER_SUPPORT = {
     },
 
     // Template interpolation helper
-    formatAnnouncement: function(template, data) {
+    formatAnnouncement: function (template, data) {
         return template.replace(/{(\w+)}/g, (match, key) => {
             return data[key] !== undefined ? data[key] : match;
         });
@@ -658,7 +658,7 @@ const AccessibilityManager = {
     /**
      * Initialize accessibility state detection.
      */
-    init: function() {
+    init: function () {
         // Detect reduced motion preference
         if (typeof window !== 'undefined' && window.matchMedia) {
             const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -697,7 +697,7 @@ const AccessibilityManager = {
     /**
      * Callback when reduced motion preference changes.
      */
-    onReducedMotionChange: function(prefersReduced) {
+    onReducedMotionChange: function (prefersReduced) {
         if (typeof document !== 'undefined') {
             document.body.classList.toggle('reduced-motion', prefersReduced);
             this.announce(
@@ -717,7 +717,7 @@ const AccessibilityManager = {
     /**
      * Create or get the live region element for announcements.
      */
-    getLiveRegion: function() {
+    getLiveRegion: function () {
         if (typeof document === 'undefined') return null;
 
         if (!this.liveRegionElement) {
@@ -741,7 +741,7 @@ const AccessibilityManager = {
      * @param {string} message - The message to announce
      * @param {string} priority - 'polite' or 'assertive'
      */
-    announce: function(message, priority = 'polite') {
+    announce: function (message, priority = 'polite') {
         const region = this.getLiveRegion();
         if (!region) return;
 
@@ -760,10 +760,10 @@ const AccessibilityManager = {
      * @param {string} templateKey - Key in SCREEN_READER_SUPPORT.announcements
      * @param {Object} data - Data to interpolate
      */
-    announceComponent: function(templateKey, data) {
+    announceComponent: function (templateKey, data) {
         const template = SCREEN_READER_SUPPORT.announcements[templateKey];
         if (!template) {
-            console.warn(`Unknown announcement template: ${templateKey}`);
+            Logger.warn('UX:Accessibility', `Unknown announcement template: ${templateKey}`);
             return;
         }
 
@@ -781,8 +781,8 @@ const AccessibilityManager = {
      * @param {HTMLElement} container - The container to trap focus within
      * @returns {Function} Cleanup function to remove the trap
      */
-    trapFocus: function(container) {
-        if (typeof document === 'undefined' || !container) return () => {};
+    trapFocus: function (container) {
+        if (typeof document === 'undefined' || !container) return () => { };
 
         const focusable = container.querySelectorAll(
             'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -813,7 +813,7 @@ const AccessibilityManager = {
     /**
      * Skip link functionality.
      */
-    setupSkipLink: function() {
+    setupSkipLink: function () {
         if (typeof document === 'undefined') return;
 
         const skipLink = document.createElement('a');
@@ -855,7 +855,7 @@ const AccessibilityManager = {
      * @param {Object} face - Face data object
      * @returns {string} Screen reader friendly description
      */
-    describeFace: function(face) {
+    describeFace: function (face) {
         const template = SCREEN_READER_SUPPORT.threeDModel.faceDescriptionTemplate;
         return SCREEN_READER_SUPPORT.formatAnnouncement(template, {
             number: face.id || face.number,
@@ -873,7 +873,7 @@ const AccessibilityManager = {
     /**
      * Generate keyboard navigation instructions.
      */
-    getKeyboardInstructions: function() {
+    getKeyboardInstructions: function () {
         return Object.entries(WCAG_OPERABLE.keyboard.dodecahedronShortcuts)
             .map(([key, action]) => `${key}: ${action}`)
             .join('. ');

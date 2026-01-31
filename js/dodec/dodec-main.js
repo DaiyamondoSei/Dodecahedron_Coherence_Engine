@@ -97,7 +97,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -106,7 +106,7 @@
 
     const S = global.DodecState;
     if (!S) {
-        console.error('[dodec-main] DodecState not loaded!');
+        Logger.error('DodecMain', 'DodecState not loaded!');
         return;
     }
 
@@ -126,28 +126,28 @@
      * This is the async entry point for the visualization.
      */
     async function initDodecahedron() {
-        console.log('🔷 Initializing 3D Dodecahedron Visualization (Modular)...');
+        Logger.info('DodecMain', 'Initialising 3D Dodecahedron Visualization (Modular)...');
 
         // ========================================
         // PHASE 1: Prerequisites Check
         // ========================================
 
         if (typeof THREE === 'undefined') {
-            console.error('❌ THREE.js not loaded! Aborting initialization.');
+            Logger.error('DodecMain', 'THREE.js not loaded! Aborting initialization.');
             return;
         }
 
         if (typeof THREE.OrbitControls === 'undefined') {
-            console.error('❌ THREE.OrbitControls not loaded! Aborting initialization.');
+            Logger.error('DodecMain', 'THREE.OrbitControls not loaded! Aborting initialization.');
             return;
         }
 
-        console.log('✅ THREE.js and OrbitControls detected');
+        Logger.info('DodecMain', 'THREE.js and OrbitControls detected');
 
         // Check for iframe mode (affects some features)
         const isInIframe = global.self !== global.top;
         if (isInIframe) {
-            console.log('📌 Running in iframe mode');
+            Logger.info('DodecMain', 'Running in iframe mode');
         }
 
         // ========================================
@@ -156,9 +156,9 @@
 
         if (typeof global.initScene === 'function') {
             global.initScene();
-            console.log('✅ Scene initialized');
+            Logger.info('DodecMain', 'Scene initialized');
         } else {
-            console.error('❌ initScene not found! Is dodec-scene.js loaded?');
+            Logger.error('DodecMain', 'initScene not found! Is dodec-scene.js loaded?');
             return;
         }
 
@@ -170,12 +170,12 @@
         if (typeof global.loadQuannexEngine === 'function') {
             engineLoaded = await global.loadQuannexEngine();
             if (engineLoaded) {
-                console.log('✅ Quannex engine loaded');
+                Logger.info('DodecMain', 'Quannex engine loaded');
             } else {
-                console.warn('⚠️ Quannex engine not available - visualization will use defaults');
+                Logger.warn('DodecMain', 'Quannex engine not available - visualization will use defaults');
             }
         } else {
-            console.warn('⚠️ loadQuannexEngine not found! Is dodec-data.js loaded?');
+            Logger.warn('DodecMain', 'loadQuannexEngine not found! Is dodec-data.js loaded?');
         }
 
         // ========================================
@@ -184,9 +184,9 @@
 
         if (typeof global.createDodecahedron === 'function') {
             global.createDodecahedron();
-            console.log('✅ Dodecahedron geometry created');
+            Logger.info('DodecMain', 'Dodecahedron geometry created');
         } else {
-            console.error('❌ createDodecahedron not found! Is dodec-geometry.js loaded?');
+            Logger.error('DodecMain', 'createDodecahedron not found! Is dodec-geometry.js loaded?');
             return;
         }
 
@@ -196,9 +196,9 @@
 
         if (typeof global.setupInteraction === 'function') {
             global.setupInteraction();
-            console.log('✅ Interaction handlers registered');
+            Logger.info('DodecMain', 'Interaction handlers registered');
         } else {
-            console.warn('⚠️ setupInteraction not found! Is dodec-interaction.js loaded?');
+            Logger.warn('DodecMain', 'setupInteraction not found! Is dodec-interaction.js loaded?');
         }
 
         // ========================================
@@ -207,16 +207,16 @@
 
         if (typeof global.setupUIControls === 'function') {
             global.setupUIControls();
-            console.log('✅ UI controls initialized');
+            Logger.info('DodecMain', 'UI controls initialized');
         } else {
-            console.warn('⚠️ setupUIControls not found! Is dodec-controls.js loaded?');
+            Logger.warn('DodecMain', 'setupUIControls not found! Is dodec-controls.js loaded?');
         }
 
         if (typeof global.setupKeyboardShortcuts === 'function') {
             global.setupKeyboardShortcuts();
-            console.log('✅ Keyboard shortcuts registered');
+            Logger.info('DodecMain', 'Keyboard shortcuts registered');
         } else {
-            console.warn('⚠️ setupKeyboardShortcuts not found! Is dodec-controls.js loaded?');
+            Logger.warn('DodecMain', 'setupKeyboardShortcuts not found! Is dodec-controls.js loaded?');
         }
 
         // ========================================
@@ -225,17 +225,17 @@
 
         if (typeof global.updateVisualization === 'function') {
             global.updateVisualization();
-            console.log('✅ Initial visualization updated');
+            Logger.info('DodecMain', 'Initial visualization updated');
         }
 
         if (typeof global.updateEdgeData === 'function') {
             global.updateEdgeData();
-            console.log('✅ Edge data updated');
+            Logger.info('DodecMain', 'Edge data updated');
         }
 
         if (typeof global.updateStats === 'function') {
             global.updateStats();
-            console.log('✅ Stats HUD updated');
+            Logger.info('DodecMain', 'Stats HUD updated');
         }
 
         // ========================================
@@ -244,9 +244,9 @@
 
         if (typeof global.startAnimation === 'function') {
             global.startAnimation();
-            console.log('✅ Animation loop started');
+            Logger.info('DodecMain', 'Animation loop started');
         } else {
-            console.warn('⚠️ startAnimation not found! Is dodec-animation.js loaded?');
+            Logger.warn('DodecMain', 'startAnimation not found! Is dodec-animation.js loaded?');
         }
 
         // ========================================
@@ -266,7 +266,7 @@
         setupWindowEventListeners();
         verifyExports();
 
-        console.log('✅ 3D Dodecahedron initialized successfully!');
+        Logger.info('DodecMain', '3D Dodecahedron initialized successfully!');
     }
 
     // ========================================
@@ -315,13 +315,13 @@
             clearShadowHighlights: global.clearShadowHighlights,
 
             // Shadow data access
-            getShadowPatterns: function() {
+            getShadowPatterns: function () {
                 const state = global.Quannex?.getState?.() || global.quannexEngine?.getState?.();
                 return state?.shadowPatterns || [];
             },
 
             // Programmatic face focus
-            focusOnFace: function(faceId) {
+            focusOnFace: function (faceId) {
                 global.dispatchEvent(new CustomEvent('focus-face', { detail: { faceId } }));
             }
         };
@@ -334,14 +334,14 @@
          * Refresh all visualization data
          * Used by parent window communication (BroadcastChannel)
          */
-        global.refreshVisualization = function() {
+        global.refreshVisualization = function () {
             if (global.updateVisualization) global.updateVisualization();
             if (global.updateEdgeData) global.updateEdgeData();
             if (global.updateStats) global.updateStats();
-            console.log('✅ Visualization refreshed (faces + edges)');
+            Logger.info('DodecMain', 'Visualization refreshed (faces + edges)');
         };
 
-        console.log('[dodec-main] Window exports configured');
+        Logger.info('DodecMain', 'Window exports configured');
     }
 
     // ========================================
@@ -363,7 +363,7 @@
         // RESIZE HANDLER
         // ========================================
 
-        global.addEventListener('resize', function() {
+        global.addEventListener('resize', function () {
             if (S.camera && S.renderer) {
                 S.camera.aspect = global.innerWidth / global.innerHeight;
                 S.camera.updateProjectionMatrix();
@@ -376,14 +376,14 @@
         // ========================================
         // Allows orchestrator to trigger face focus programmatically
 
-        global.addEventListener('focus-face', function(event) {
+        global.addEventListener('focus-face', function (event) {
             const faceId = event.detail?.faceId;
             if (!faceId) {
-                console.warn('[dodec-main] focus-face event missing faceId');
+                Logger.warn('DodecMain', 'focus-face event missing faceId');
                 return;
             }
 
-            console.log(`[dodec-main] Focus-face event received for Face ${faceId}`);
+            Logger.info('DodecMain', `Focus-face event received for Face ${faceId}`);
 
             // Find the target face mesh
             const targetFaceIndex = S.faceMeshes.findIndex(
@@ -391,7 +391,7 @@
             );
 
             if (targetFaceIndex === -1) {
-                console.warn(`[dodec-main] Face ${faceId} not found in faceMeshes`);
+                Logger.warn('DodecMain', `Face ${faceId} not found in faceMeshes`);
                 return;
             }
 
@@ -409,7 +409,7 @@
             }
         });
 
-        console.log('[dodec-main] Window event listeners registered');
+        Logger.info('DodecMain', 'Window event listeners registered');
     }
 
     // ========================================
@@ -445,9 +445,9 @@
         });
 
         if (missing.length > 0) {
-            console.warn('[dodec-main] Missing exports:', missing.join(', '));
+            Logger.warn('DodecMain', `Missing exports: ${missing.join(', ')}`);
         } else {
-            console.log('[dodec-main] All required exports verified ✓');
+            Logger.info('DodecMain', 'All required exports verified');
         }
     }
 
@@ -462,11 +462,11 @@
     // ========================================
     // Register DOMContentLoaded listener for automatic startup
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         initDodecahedron();
     });
 
-    console.log('[dodec-main] Module loaded - Initialization orchestrator ready');
-    console.log('[dodec-main] Will auto-initialize on DOMContentLoaded');
+    Logger.info('DodecMain', 'Module loaded - Initialization orchestrator ready');
+    Logger.info('DodecMain', 'Will auto-initialize on DOMContentLoaded');
 
 })(typeof window !== 'undefined' ? window : this);

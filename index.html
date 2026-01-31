@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌟 Quannex Coherence Engine - University Demo</title>
+    <link rel="icon" href="data:,"><!-- Suppress favicon 404 -->
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/data-integrity.css">
 </head>
@@ -84,6 +85,9 @@
         </div>
     </div>
 
+    <!-- Load Logger Utility -->
+    <script src="./js/utils/logger.js"></script>
+
     <!-- Load company loader first -->
     <script type="module" src="./js/company-loader.js"></script>
 
@@ -113,7 +117,7 @@
                 const companySelector = document.querySelector('.company-selector');
                 if (header) {
                     header.style.display = 'none';
-                    console.log('📐 Iframe mode: Header hidden to prevent overlap');
+                    Logger.info('Index', '📐 Iframe mode: Header hidden to prevent overlap');
                 }
                 if (companySelector) {
                     companySelector.style.display = 'none';
@@ -163,7 +167,7 @@
          */
         async function selectCompany(companyId) {
             try {
-                console.log(`🏢 Switching to company: ${companyId}`);
+                Logger.info('Index', `🏢 Switching to company: ${companyId}`);
 
                 // ✅ Store selected company in sessionStorage for navigation to other pages
                 sessionStorage.setItem('selectedCompanyId', companyId);
@@ -194,13 +198,13 @@
 
                     displayState(state);
 
-                    console.log(`✅ Switched to ${company.name}`);
+                    Logger.info('Index', `✅ Switched to ${company.name}`);
                 } else {
                     throw new Error('Failed to load company data');
                 }
 
             } catch (error) {
-                console.error('❌ Failed to switch company:', error);
+                Logger.error('Index', '❌ Failed to switch company:', error);
                 alert(`Failed to load company: ${error.message}`);
             }
         }
@@ -210,7 +214,7 @@
          */
         async function initDashboard() {
             try {
-                console.log('🚀 Initializing Quannex Dashboard...');
+                Logger.info('Index', '🚀 Initializing Quannex Dashboard...');
 
                 // Populate company selector
                 populateCompanySelector();
@@ -222,13 +226,13 @@
                 // ✅ Store in sessionStorage for navigation to other pages
                 sessionStorage.setItem('selectedCompanyId', firstCompany.id);
 
-                console.log(`📦 Loading default company: ${firstCompany.name}`);
+                Logger.info('Index', `📦 Loading default company: ${firstCompany.name}`);
                 const company = await window.CompanyLoader.loadCompany(firstCompany.id);
 
                 // Initialize the engine with company data
                 const state = await window.Quannex.initWithCompany(company);
 
-                console.log('✅ Engine initialized:', state);
+                Logger.info('Index', '✅ Engine initialized:', state);
 
                 // Hide loading, show dashboard
                 document.getElementById('loading').style.display = 'none';
@@ -239,7 +243,7 @@
                 displayState(state);
 
             } catch (error) {
-                console.error('❌ Failed to initialize:', error);
+                Logger.error('Index', '❌ Failed to initialize:', error);
                 document.getElementById('loading').innerHTML = `
                     <div class="spinner"></div>
                     <div>Error: ${error.message}</div>
@@ -388,7 +392,7 @@
         function refreshData() {
             const state = window.Quannex.getState();
             displayState(state);
-            console.log('🔄 Data refreshed');
+            Logger.info('Index', '🔄 Data refreshed');
         }
 
         /**
@@ -398,13 +402,13 @@
             const breathAnalysis = window.Quannex.getBreathAnalysis();
 
             if (!breathAnalysis) {
-                console.warn('⚠️ No breath analysis available - breath analyzer may not be loaded');
+                Logger.warn('Index', '⚠️ No breath analysis available - breath analyzer may not be loaded');
                 // Hide breath section if no data
                 document.getElementById('breathSection').style.display = 'none';
                 return;
             }
 
-            console.log('🌊 Displaying breath analysis:', breathAnalysis);
+            Logger.info('Index', '🌊 Displaying breath analysis:', breathAnalysis);
 
             // Show breath section
             document.getElementById('breathSection').style.display = 'block';
@@ -569,7 +573,7 @@
                 </div>
             `;
 
-            console.log('🎵 Displayed spectral analysis');
+            Logger.info('Index', '🎵 Displayed spectral analysis');
         }
 
         // Track currently loaded company to prevent double-loading
@@ -585,11 +589,11 @@
             const { type, companyId, companyData } = event.data;
 
             if (type === 'LOAD_COMPANY') {
-                console.log(`📨 Received company load request from parent: ${companyId}`);
+                Logger.info('Index', `📨 Received company load request from parent: ${companyId}`);
 
                 // Check if this company is already loaded
                 if (currentLoadedCompanyId === companyId) {
-                    console.log(`ℹ️ Company "${companyId}" is already loaded, skipping duplicate load`);
+                    Logger.info('Index', `ℹ️ Company "${companyId}" is already loaded, skipping duplicate load`);
                     return;
                 }
 
@@ -615,7 +619,7 @@
                         // Mark as loaded
                         currentLoadedCompanyId = companyId;
 
-                        console.log(`✅ Loaded company from parent: ${company.name}`);
+                        Logger.info('Index', `✅ Loaded company from parent: ${company.name}`);
                     } else if (companyData) {
                         // Use provided company data directly
                         const state = await window.Quannex.initWithCompany(companyData);
@@ -629,12 +633,12 @@
                         // Mark as loaded (use ID from data if available)
                         currentLoadedCompanyId = companyData.id || 'custom';
 
-                        console.log(`✅ Loaded company data from parent`);
+                        Logger.info('Index', `✅ Loaded company data from parent`);
                     } else {
-                        console.warn('⚠️ CompanyLoader not available');
+                        Logger.warn('Index', '⚠️ CompanyLoader not available');
                     }
                 } catch (error) {
-                    console.error('❌ Failed to load company from parent:', error);
+                    Logger.error('Index', '❌ Failed to load company from parent:', error);
                 }
             }
         });
@@ -655,19 +659,19 @@
          */
         async function init() {
             if (isInIframe()) {
-                console.log('📺 Running in iframe - checking for company selection...');
+                Logger.info('Index', '📺 Running in iframe - checking for company selection...');
 
                 // Check sessionStorage for company ID (fallback mechanism)
                 const selectedCompanyId = sessionStorage.getItem('selectedCompanyId');
 
                 if (selectedCompanyId) {
-                    console.log(`💾 Found company ID in sessionStorage: ${selectedCompanyId}`);
+                    Logger.info('Index', `💾 Found company ID in sessionStorage: ${selectedCompanyId}`);
 
                     // Check if this is custom data from the orchestrator
                     const customDataJson = sessionStorage.getItem('customCompanyData');
                     if (selectedCompanyId === 'custom' && customDataJson) {
                         try {
-                            console.log(`🎨 Loading CUSTOM data from orchestrator`);
+                            Logger.info('Index', `🎨 Loading CUSTOM data from orchestrator`);
                             const customData = JSON.parse(customDataJson);
 
                             // Transform custom data to company format
@@ -678,7 +682,7 @@
                                 kpis: customData.kpis || []
                             };
 
-                            console.log(`📊 Custom company has ${company.kpis.length} KPIs`);
+                            Logger.info('Index', `📊 Custom company has ${company.kpis.length} KPIs`);
 
                             // Initialize Quannex with custom data
                             const state = await window.Quannex.initWithCompany(company);
@@ -693,16 +697,16 @@
 
                             // Force breath analysis refresh after a brief delay (ensure breath analyzer is loaded)
                             setTimeout(() => {
-                                console.log('🔄 Force refreshing breath analysis for custom data...');
+                                Logger.info('Index', '🔄 Force refreshing breath analysis for custom data...');
                                 displayBreathAnalysis();
                             }, 300);
 
                             // Mark as loaded
                             currentLoadedCompanyId = 'custom';
 
-                            console.log(`✅ Successfully loaded custom data with ${company.kpis.length} KPIs`);
+                            Logger.info('Index', `✅ Successfully loaded custom data with ${company.kpis.length} KPIs`);
                         } catch (error) {
-                            console.error('❌ Failed to load custom data:', error);
+                            Logger.error('Index', '❌ Failed to load custom data:', error);
                             showWaitingMessage();
                         }
                     } else {
@@ -711,14 +715,14 @@
                         const maxAttempts = 10;
 
                         while (!window.CompanyLoader && attempts < maxAttempts) {
-                            console.log(`⏳ Waiting for CompanyLoader... (attempt ${attempts + 1}/${maxAttempts})`);
+                            Logger.info('Index', `⏳ Waiting for CompanyLoader... (attempt ${attempts + 1}/${maxAttempts})`);
                             await new Promise(resolve => setTimeout(resolve, 200));
                             attempts++;
                         }
 
                         if (window.CompanyLoader) {
                             try {
-                                console.log(`🔄 Loading company from sessionStorage: ${selectedCompanyId}`);
+                                Logger.info('Index', `🔄 Loading company from sessionStorage: ${selectedCompanyId}`);
                                 const company = await window.CompanyLoader.loadCompany(selectedCompanyId);
                                 const state = await window.Quannex.initWithCompany(company);
 
@@ -733,18 +737,18 @@
                                 // Mark as loaded to prevent duplicate loading from postMessage
                                 currentLoadedCompanyId = selectedCompanyId;
 
-                                console.log(`✅ Successfully loaded ${company.name} from sessionStorage`);
+                                Logger.info('Index', `✅ Successfully loaded ${company.name} from sessionStorage`);
                             } catch (error) {
-                                console.error('❌ Failed to load from sessionStorage:', error);
+                                Logger.error('Index', '❌ Failed to load from sessionStorage:', error);
                                 showWaitingMessage();
                             }
                         } else {
-                            console.warn('⚠️ CompanyLoader not available after waiting');
+                            Logger.warn('Index', '⚠️ CompanyLoader not available after waiting');
                             showWaitingMessage();
                         }
                     }
                 } else {
-                    console.log('📭 No company ID in sessionStorage, waiting for postMessage...');
+                    Logger.info('Index', '📭 No company ID in sessionStorage, waiting for postMessage...');
                     showWaitingMessage();
                 }
             } else {
@@ -753,7 +757,7 @@
                 const customDataJson = sessionStorage.getItem('customCompanyData');
 
                 if (selectedCompanyId === 'custom' && customDataJson) {
-                    console.log('🎨 Standalone mode - found custom data in sessionStorage!');
+                    Logger.info('Index', '🎨 Standalone mode - found custom data in sessionStorage!');
 
                     try {
                         const customData = JSON.parse(customDataJson);
@@ -766,7 +770,7 @@
                             kpis: customData.kpis || []
                         };
 
-                        console.log(`📊 Loading custom company with ${company.kpis.length} KPIs`);
+                        Logger.info('Index', `📊 Loading custom company with ${company.kpis.length} KPIs`);
 
                         // Initialize Quannex with custom data
                         const state = await window.Quannex.initWithCompany(company);
@@ -784,18 +788,18 @@
 
                         // Force breath analysis refresh
                         setTimeout(() => {
-                            console.log('🔄 Force refreshing breath analysis for custom data...');
+                            Logger.info('Index', '🔄 Force refreshing breath analysis for custom data...');
                             displayBreathAnalysis();
                         }, 300);
 
-                        console.log(`✅ Successfully loaded custom data in standalone mode`);
+                        Logger.info('Index', `✅ Successfully loaded custom data in standalone mode`);
                     } catch (error) {
-                        console.error('❌ Failed to load custom data:', error);
+                        Logger.error('Index', '❌ Failed to load custom data:', error);
                         // Fall back to default
                         await initDashboard();
                     }
                 } else {
-                    console.log('🖥️ Running standalone - auto-loading default company...');
+                    Logger.info('Index', '🖥️ Running standalone - auto-loading default company...');
                     // Running standalone, load default company
                     await initDashboard();
                 }

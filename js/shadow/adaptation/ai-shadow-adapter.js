@@ -189,7 +189,7 @@ class AIShadowAdapter {
         // Toggle via: localStorage.setItem('quannexDemoMode', 'true')
         this.demoMode = localStorage.getItem('quannexDemoMode') === 'true';
         if (this.demoMode) {
-            console.log('[AIShadowAdapter] 🎭 Demo mode active - using cached insights');
+            Logger.info('Shadow:AIAdapter', '🎭 Demo mode active - using cached insights');
         }
     }
 
@@ -217,12 +217,12 @@ class AIShadowAdapter {
     async generateAIShadowPatterns(faces, organizationContext = {}) {
         // Demo mode: Return pre-cached shadows for reliable presentations
         if (this.demoMode) {
-            console.log('[AIShadowAdapter] 🎭 Demo mode - returning cached shadow patterns');
+            Logger.info('Shadow:AIAdapter', '🎭 Demo mode - returning cached shadow patterns');
             return DEMO_SHADOW_CACHE;
         }
 
         if (!this.aiProvider) {
-            console.warn('[AIShadowAdapter] No AI provider set, using fallback detection');
+            Logger.warn('Shadow:AIAdapter', 'No AI provider set, using fallback detection');
             return this.fallbackDetection(faces);
         }
 
@@ -230,7 +230,7 @@ class AIShadowAdapter {
         const cacheKey = this._generateCacheKey(faces, organizationContext);
         const cached = this._getFromCache(cacheKey);
         if (cached) {
-            console.log('[AIShadowAdapter] Returning cached shadow patterns');
+            Logger.debug('Shadow:AIAdapter', 'Returning cached shadow patterns');
             return cached;
         }
 
@@ -242,10 +242,10 @@ class AIShadowAdapter {
             // Cache the results
             this._setCache(cacheKey, shadows);
 
-            console.log(`[AIShadowAdapter] AI discovered ${shadows.length} unique shadow patterns`);
+            Logger.info('Shadow:AIAdapter', `AI discovered ${shadows.length} unique shadow patterns`);
             return shadows;
         } catch (error) {
-            console.error('[AIShadowAdapter] AI shadow generation failed:', error);
+            Logger.error('Shadow:AIAdapter', 'AI shadow generation failed:', error);
             return this.fallbackDetection(faces);
         }
     }
@@ -336,7 +336,7 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
             // Validate and normalize shadow objects
             return shadows.map(shadow => this._normalizeShadow(shadow)).filter(s => s !== null);
         } catch (error) {
-            console.error('[AIShadowAdapter] Failed to parse AI response:', error);
+            Logger.error('Shadow:AIAdapter', 'Failed to parse AI response:', error);
             return [];
         }
     }
@@ -540,7 +540,7 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
             });
         }
 
-        console.log(`[AIShadowAdapter] Fallback detected ${patterns.length} shadow patterns`);
+        Logger.info('Shadow:AIAdapter', `Fallback detected ${patterns.length} shadow patterns`);
         return patterns;
     }
 
@@ -572,7 +572,7 @@ OUTPUT FORMAT (Return ONLY valid JSON, no markdown):
                 enrichedNarrative: enriched
             };
         } catch (error) {
-            console.error('[AIShadowAdapter] Shadow enrichment failed:', error);
+            Logger.error('Shadow:AIAdapter', 'Shadow enrichment failed:', error);
             return shadow;
         }
     }
@@ -623,7 +623,7 @@ OUTPUT FORMAT (JSON only):
             jsonStr = jsonStr.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
             return JSON.parse(jsonStr);
         } catch (error) {
-            console.error('[AIShadowAdapter] Failed to parse enrichment:', error);
+            Logger.error('Shadow:AIAdapter', 'Failed to parse enrichment:', error);
             return null;
         }
     }
@@ -671,7 +671,7 @@ OUTPUT FORMAT (JSON only):
      */
     clearCache() {
         this.cache.clear();
-        console.log('[AIShadowAdapter] Cache cleared');
+        Logger.debug('Shadow:AIAdapter', 'Cache cleared');
     }
 }
 

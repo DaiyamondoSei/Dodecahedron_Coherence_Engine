@@ -39,7 +39,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     /**
@@ -50,7 +50,7 @@
     function initScene() {
         const State = window.OctaveDNAState;
         if (!State) {
-            console.error('❌ [Scene Setup] OctaveDNAState not loaded!');
+            Logger.error('OctaveDNA', 'OctaveDNAState not loaded!');
             return null;
         }
 
@@ -60,7 +60,7 @@
 
         const canvas = document.getElementById('canvas');
         if (!canvas) {
-            console.error('❌ [Scene Setup] Canvas element not found!');
+            Logger.error('OctaveDNA', 'Canvas element not found!');
             return null;
         }
 
@@ -127,10 +127,10 @@
         State.setState('renderer', renderer);
         State.setState('controls', controls);
 
-        console.log('🎬 [Scene Setup] THREE.js scene initialized');
-        console.log('   Camera position: (35, 28, 35)');
-        console.log('   Fog range: 50-120 units');
-        console.log('   Auto-rotate: 0.2 speed');
+        Logger.info('OctaveDNA', 'THREE.js scene initialized');
+        Logger.debug('OctaveDNA', '   Camera position: (35, 28, 35)');
+        Logger.debug('OctaveDNA', '   Fog range: 50-120 units');
+        Logger.debug('OctaveDNA', '   Auto-rotate: 0.2 speed');
 
         return { scene, camera, renderer, controls };
     }
@@ -163,7 +163,7 @@
             handleResize
         };
 
-        console.log('🎬 [OctaveDNA Scene] Setup module loaded');
+        Logger.debug('OctaveDNA', 'Setup module loaded');
     }
 
 })();

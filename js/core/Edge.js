@@ -195,4 +195,4 @@ if (typeof window !== 'undefined') {
   window.Edge = Edge;
 }
 
-console.log('   Edge module loaded');
+Logger.info('Edge', 'Edge module loaded');

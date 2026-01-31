@@ -73,7 +73,7 @@
  *
  * ════════════════════════════════════════════════════════════════════════════
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
@@ -193,7 +193,7 @@
 
         // Validate critical elements exist
         if (!elements.overlay || !elements.tooltip) {
-            console.warn('⚠️ Tour: Critical elements missing (tourOverlay or tourTooltip)');
+            Logger.warn('Tour', 'Critical elements missing (tourOverlay or tourTooltip)');
             return null;
         }
 
@@ -247,7 +247,7 @@
             // Position based on step.position
             let top, left;
 
-            switch(step.position) {
+            switch (step.position) {
                 case 'right':
                     top = rect.top + rect.height / 2 - tooltipHeight / 2;
                     left = rect.right + padding;
@@ -321,7 +321,7 @@
     function startTour() {
         const el = cacheElements();
         if (!el) {
-            console.error('❌ Tour: Cannot start - required elements not found');
+            Logger.error('Tour', 'Cannot start - required elements not found');
             return;
         }
 
@@ -330,7 +330,7 @@
             global.closeFaceDetail();
         }
 
-        console.log('🎯 Starting guided tour');
+        Logger.info('Tour', 'Starting guided tour');
         currentStep = 0;
         el.overlay.classList.add('active');
         showStep(0);
@@ -345,7 +345,7 @@
 
         el.overlay.classList.remove('active');
         el.highlight.style.display = 'none';
-        console.log('✅ Guided tour completed');
+        Logger.info('Tour', 'Guided tour completed');
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -408,7 +408,7 @@
      */
     function init() {
         initEventListeners();
-        console.log('🎯 Guided tour initialized');
+        Logger.info('Tour', 'Guided tour initialized');
     }
 
     // Initialize when DOM is ready

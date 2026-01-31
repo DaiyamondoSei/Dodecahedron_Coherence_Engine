@@ -315,14 +315,14 @@ class BreathAnalyzer {
       // Golden mode: balanced when linear ratio is between 1/φ (0.618) and φ (1.618)
       // In log_φ scale: [-1.0, +1.0]
       this.maxBalanced = 1.0;
-      console.log(`✨ Breath Analysis: Golden Ratio Mode (φ)`);
-      console.log(`   Balance zone: 0.618 to 1.618 (linear) = [-1, +1] (log_φ)`);
+      Logger.info('BreathAnalyzer', 'Golden Ratio Mode (φ) enabled');
+      Logger.debug('BreathAnalyzer', '   Balance zone: 0.618 to 1.618 (linear) = [-1, +1] (log_φ)');
     } else {
       this.mode = 'normal';
       // Normal mode: tighter tolerance (±φ⁻²)
       this.maxBalanced = this.PHI_INV_2; // 0.382
-      console.log(`📊 Breath Analysis: Normal Mode`);
-      console.log(`   Balance zone: ±${this.maxBalanced.toFixed(3)} (log_φ)`);
+      Logger.info('BreathAnalyzer', 'Normal Mode enabled');
+      Logger.debug('BreathAnalyzer', `   Balance zone: ±${this.maxBalanced.toFixed(3)} (log_φ)`);
     }
   }
 
@@ -379,8 +379,7 @@ class BreathAnalyzer {
         insights: insights
       };
     } catch (error) {
-      console.error('❌ Error in BreathAnalyzer.analyze:', error);
-      console.error(error.stack);
+      Logger.error('BreathAnalyzer', 'Error in BreathAnalyzer.analyze:', error);
       throw error;
     }
   }
@@ -610,4 +609,4 @@ class BreathAnalyzer {
 // Expose globally for use in index.html
 window.BreathAnalyzer = BreathAnalyzer;
 
-console.log('🫁 Breath Analyzer loaded');
+Logger.info('BreathAnalyzer', 'Breath Analyzer loaded');

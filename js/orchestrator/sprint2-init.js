@@ -203,7 +203,7 @@ export function hideSprint2Panel() {
  * Called automatically on DOMContentLoaded
  */
 export function initSprint2() {
-    console.log('🚀 Sprint 2: Initializing AI Integration modules...');
+    Logger.info('Sprint2', 'Initializing AI Integration modules...');
 
     // Get singleton MappingContext
     const mappingContext = MappingContext.getInstance();
@@ -211,7 +211,7 @@ export function initSprint2() {
     // Initialize Validation Gate with empowering messaging
     const validationGate = new ValidationGate({
         onValidationChange: (validation) => {
-            console.log('📋 Validation update:', validation.stage, validation.percentage + '%');
+            Logger.debug('Sprint2', 'Validation update:', validation.stage, validation.percentage + '%');
             updateValidationUI(validation);
         }
     });
@@ -219,10 +219,10 @@ export function initSprint2() {
     // Initialize API Key Manager with proper init() call
     const apiKeyManager = new APIKeyManager({
         onStatusChange: (status, message) => {
-            console.log('🔑 API Key status:', status, message);
+            Logger.debug('Sprint2', 'API Key status:', status, message);
         },
         onKeyValidated: (isValid) => {
-            console.log('🔑 API Key validated:', isValid);
+            Logger.debug('Sprint2', 'API Key validated:', isValid);
             // Provider is set via face-wizard.js selectProvider()
         }
     });
@@ -231,7 +231,7 @@ export function initSprint2() {
     // Initialize Mode Selector with proper init() call
     const modeSelector = new ModeSelector({
         onModeChange: (modeId, modeConfig) => {
-            console.log('⚡ Mode changed:', modeId, modeConfig);
+            Logger.debug('Sprint2', 'Mode changed:', modeId, modeConfig);
             mappingContext.setMode(modeId);
         }
     });
@@ -240,10 +240,10 @@ export function initSprint2() {
     // Initialize Archetype Selector with proper init() call
     const archetypeSelector = new ArchetypeSelector({
         onArchetypeChange: (archetypeId, archetype) => {
-            console.log('🎭 Archetype changed:', archetypeId, archetype);
+            Logger.debug('Sprint2', 'Archetype changed:', archetypeId, archetype);
         },
         onPresetsApplied: (archetypeId, constants, archetype) => {
-            console.log('🎭 Archetype presets applied:', archetypeId, constants);
+            Logger.debug('Sprint2', 'Archetype presets applied:', archetypeId, constants);
             mappingContext.setArchetype(archetypeId, constants);
         }
     });
@@ -252,7 +252,7 @@ export function initSprint2() {
     // Initialize Lens Pre-Selector (Sprint 2 Task 4)
     const lensPreSelector = new LensPreSelector({
         onLensChange: (lensId, lensConfig) => {
-            console.log('🔮 Strategic Lens changed:', lensId, lensConfig.name);
+            Logger.debug('Sprint2', 'Strategic Lens changed:', lensId, lensConfig.name);
             mappingContext.setLens(lensId);
         }
     });
@@ -262,7 +262,7 @@ export function initSprint2() {
     // Initialize Vocabulary Style Selector (Sprint 2 Task 5)
     const vocabularyStyleSelector = new VocabularyStyleSelector({
         onStyleChange: (styleId, styleConfig) => {
-            console.log('🎨 Vocabulary Style changed:', styleId, styleConfig.name);
+            Logger.debug('Sprint2', 'Vocabulary Style changed:', styleId, styleConfig.name);
             mappingContext.setVocabulary(styleId);
         }
     });
@@ -272,7 +272,7 @@ export function initSprint2() {
     // Initialize KPI Extraction Panel (Sprint 2 Task 10)
     const kpiExtractionPanel = new KPIExtractionPanel({
         onExtracted: (result) => {
-            console.log('📊 KPIs extracted:', result);
+            Logger.debug('Sprint2', 'KPIs extracted:', result);
             // Store for later use
             window.extractedKPIResult = result;
         }
@@ -310,8 +310,8 @@ export function initSprint2() {
         canProceed: () => validationGate.canProceed()
     };
 
-    console.log('✅ Sprint 2: AI Integration modules initialized');
-    console.log('   📦 Available via window.Sprint2');
+    Logger.info('Sprint2', 'AI Integration modules initialized');
+    Logger.debug('Sprint2', 'Available via window.Sprint2');
 }
 
 

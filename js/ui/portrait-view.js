@@ -40,6 +40,12 @@
  *    - Array format: [{ id: 1, ... }, ...]
  *    This flexibility is intentional - don't assume input structure!
  *
+ *    COHERENCE SOURCE PRIORITY (January 2026 fix):
+ *    1. globalCoherence - canonical value from calculation engine
+ *    2. overallCoherence - legacy format
+ *    3. Geometric mean - calculated as fallback
+ *    This ensures Portrait displays the same coherence as the Hero section.
+ *
  * 3. SVG RADIAL DIAGRAM:
  *    - 12 wedge segments, each representing a face
  *    - Inner radius = 40% of total (shows center coherence score)
@@ -162,7 +168,7 @@ class PortraitView {
     constructor(containerId, options = {}) {
         this.container = document.getElementById(containerId);
         if (!this.container) {
-            console.error(`[PortraitView] Container '${containerId}' not found`);
+            Logger.error('PortraitView', `Container '${containerId}' not found`);
             return;
         }
 
@@ -555,13 +561,34 @@ class PortraitView {
             }
         }
 
-        // Calculate overall coherence (geometric mean)
-        const scores = Object.values(normalized.faces).map(f => f.coherence || 0.5);
-        if (scores.length > 0 && scores.every(s => s > 0)) {
-            normalized.overallCoherence = Math.pow(
-                scores.reduce((a, b) => a * b, 1),
-                1 / scores.length
-            );
+        // ════════════════════════════════════════════════════════════════════
+        // OVERALL COHERENCE DETERMINATION
+        // ════════════════════════════════════════════════════════════════════
+        //
+        // Priority order (January 2026 fix for consistency with Hero display):
+        // 1. Use globalCoherence from input data (if provided by calculation engine)
+        // 2. Use overallCoherence from input data (legacy fallback)
+        // 3. Calculate geometric mean as last resort
+        //
+        // This ensures Portrait displays the same coherence as the Hero section.
+        //
+        // ════════════════════════════════════════════════════════════════════
+
+        if (data.globalCoherence !== undefined) {
+            // Use the canonical globalCoherence from calculation engine
+            normalized.overallCoherence = data.globalCoherence;
+        } else if (data.overallCoherence !== undefined) {
+            // Use provided overallCoherence (legacy format)
+            normalized.overallCoherence = data.overallCoherence;
+        } else {
+            // Fallback: Calculate geometric mean of face scores
+            const scores = Object.values(normalized.faces).map(f => f.coherence || 0.5);
+            if (scores.length > 0 && scores.every(s => s > 0)) {
+                normalized.overallCoherence = Math.pow(
+                    scores.reduce((a, b) => a * b, 1),
+                    1 / scores.length
+                );
+            }
         }
 
         return normalized;
@@ -739,26 +766,26 @@ class PortraitView {
                     <span>${exploredCount}/5 explored</span>
                 </div>
                 ${elements.map(elem => {
-                    const config = ELEMENT_CONFIG[elem];
-                    const elemData = face.elements?.[elem];
+            const config = ELEMENT_CONFIG[elem];
+            const elemData = face.elements?.[elem];
 
-                    // Determine if element is explored or unexplored
-                    const isExplored = elemData?.explored === true ||
-                                      (typeof elemData === 'number' && elemData !== 0.5) ||
-                                      (typeof elemData === 'object' && elemData?.value !== null && elemData?.value !== 0.5);
+            // Determine if element is explored or unexplored
+            const isExplored = elemData?.explored === true ||
+                (typeof elemData === 'number' && elemData !== 0.5) ||
+                (typeof elemData === 'object' && elemData?.value !== null && elemData?.value !== 0.5);
 
-                    // Get value - null/undefined means unexplored
-                    const rawValue = typeof elemData === 'object' ? elemData?.value : elemData;
-                    const value = isExplored ? (rawValue ?? 0.5) : null;
-                    const width = value !== null ? Math.max(0, Math.min(100, value * 100)) : 0;
+            // Get value - null/undefined means unexplored
+            const rawValue = typeof elemData === 'object' ? elemData?.value : elemData;
+            const value = isExplored ? (rawValue ?? 0.5) : null;
+            const width = value !== null ? Math.max(0, Math.min(100, value * 100)) : 0;
 
-                    // Get question and KPI name if available
-                    const question = elemData?.question || config.quality;
-                    const kpiName = elemData?.kpiName || elemData?.label || '';
+            // Get question and KPI name if available
+            const question = elemData?.question || config.quality;
+            const kpiName = elemData?.kpiName || elemData?.label || '';
 
-                    if (!isExplored) {
-                        // Unexplored element - show as question
-                        return `
+            if (!isExplored) {
+                // Unexplored element - show as question
+                return `
                             <div class="element-row unexplored" style="opacity: 0.5;">
                                 <div class="element-symbol" style="color: ${config.color}">?</div>
                                 <div class="element-name" style="color: ${config.color}">${config.name.toUpperCase()}</div>
@@ -770,9 +797,9 @@ class PortraitView {
                                 <div class="element-value" style="color: rgba(255,255,255,0.3);">—</div>
                             </div>
                         `;
-                    } else {
-                        // Explored element - show value with KPI info
-                        return `
+            } else {
+                // Explored element - show value with KPI info
+                return `
                             <div class="element-row explored">
                                 <div class="element-symbol" style="color: ${config.color}">${config.symbol}</div>
                                 <div class="element-name" style="color: ${config.color}">${config.name.toUpperCase()}</div>
@@ -783,8 +810,8 @@ class PortraitView {
                                 <div class="element-value" style="color: ${config.color}">${(value * 100).toFixed(0)}%</div>
                             </div>
                         `;
-                    }
-                }).join('')}
+            }
+        }).join('')}
             </div>
         `;
     }
@@ -805,17 +832,17 @@ class PortraitView {
                 <div class="detail-body">
                     <div class="octave-stack">
                         ${octaves.slice(0, targetIndex + 1).map((octave, idx) => {
-                            const isTarget = octave === targetOctave;
-                            const color = OCTAVE_COLORS[octave];
-                            const name = OCTAVE_NAMES[octave];
+            const isTarget = octave === targetOctave;
+            const color = OCTAVE_COLORS[octave];
+            const name = OCTAVE_NAMES[octave];
 
-                            // Estimate health for each octave (foundation vs target)
-                            const health = isTarget ? face.coherence :
-                                           (face.coherence * (0.8 + idx * 0.05)); // Foundation tends to be slightly stronger
+            // Estimate health for each octave (foundation vs target)
+            const health = isTarget ? face.coherence :
+                (face.coherence * (0.8 + idx * 0.05)); // Foundation tends to be slightly stronger
 
-                            const status = idx < targetIndex ? 'Foundation' : 'Target';
+            const status = idx < targetIndex ? 'Foundation' : 'Target';
 
-                            return `
+            return `
                                 <div class="octave-row ${isTarget ? 'target' : ''}" style="color: ${color};">
                                     <div class="octave-label">${octave}</div>
                                     <div class="octave-name">${name}</div>
@@ -825,7 +852,7 @@ class PortraitView {
                                     <div class="octave-status">${status}</div>
                                 </div>
                             `;
-                        }).join('')}
+        }).join('')}
                     </div>
                 </div>
             </div>
@@ -1032,4 +1059,4 @@ if (typeof window !== 'undefined') {
     window.PortraitView = PortraitView;
 }
 
-console.log('[PortraitView] Module loaded');
+Logger.info('PortraitView', 'Module loaded');

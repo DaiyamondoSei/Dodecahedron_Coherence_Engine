@@ -127,5 +127,5 @@ export const ShadowConstants = {
 };
 
 // Log module load
-console.log('[Shadow Module] 🌑 Unified shadow module loaded');
-console.log('[Shadow Module] Exports: ShadowDetector, ShadowAdapter, AIShadowAdapter, ShadowPanel');
+Logger.debug('Shadow:Module', '🌑 Unified shadow module loaded');
+Logger.debug('Shadow:Module', 'Exports: ShadowDetector, ShadowAdapter, AIShadowAdapter, ShadowPanel');

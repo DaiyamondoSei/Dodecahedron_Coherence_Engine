@@ -200,7 +200,7 @@ if (typeof window !== 'undefined') {
     const totalLines = Object.values(SHADOW_OVERLAY_MODULES)
         .reduce((sum, m) => sum + (m.lines || 0), 0);
 
-    console.log('[ShadowOverlay/index] ✅ All 7 modules complete (v2.0)');
-    console.log(`[ShadowOverlay/index] Total extraction: ${totalLines} lines`);
-    console.log('[ShadowOverlay/index] Location: js/shadow/overlay/');
+    Logger.info('ShadowOverlay', 'All 7 modules complete (v2.0)');
+    Logger.debug('ShadowOverlay', `Total extraction: ${totalLines} lines`);
+    Logger.debug('ShadowOverlay', 'Location: js/shadow/overlay/');
 }

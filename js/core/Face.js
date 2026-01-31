@@ -150,14 +150,14 @@ import { TuningConfig } from './TuningConfig.js';
 // ============================================================================
 // PHI_HARMONICS: Get from single-source module or use fallback
 // ============================================================================
-const PHI_HARMONICS = (function() {
+const PHI_HARMONICS = (function () {
   if (typeof window !== 'undefined' && window.PhiHarmonics) {
-    console.log('   Face: Using PhiHarmonics from single-source module');
+    Logger.debug('Face', 'Using PhiHarmonics from single-source module');
     return window.PhiHarmonics;
   }
 
   // Fallback for standalone use or testing
-  console.log('   Face: Using local PHI_HARMONICS fallback');
+  Logger.debug('Face', 'Using local PHI_HARMONICS fallback');
   const PHI = (1 + Math.sqrt(5)) / 2;
 
   return {
@@ -641,4 +641,4 @@ if (typeof window !== 'undefined') {
   window.Face = Face;
 }
 
-console.log('   Face module loaded');
+Logger.info('Face', 'Face module loaded');

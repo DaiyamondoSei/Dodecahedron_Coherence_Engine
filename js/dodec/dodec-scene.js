@@ -49,7 +49,7 @@
  *
  * ========================================
  */
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================
@@ -58,7 +58,7 @@
 
     const S = global.DodecState;
     if (!S) {
-        console.error('[dodec-scene] DodecState not loaded!');
+        Logger.error('DodecScene', 'DodecState not loaded!');
         return;
     }
 
@@ -82,7 +82,7 @@
      * All created objects are stored in DodecState for cross-module access.
      */
     function initScene() {
-        console.log('[dodec-scene] Initializing THREE.js scene...');
+        Logger.info('DodecScene', 'Initializing THREE.js scene...');
 
         // Check if running in iframe
         const isInIframe = global.self !== global.top;
@@ -97,7 +97,7 @@
 
         const canvas = document.getElementById('scene');
         if (!canvas) {
-            console.error('[dodec-scene] Canvas element #scene not found!');
+            Logger.error('DodecScene', 'Canvas element #scene not found!');
             return;
         }
 
@@ -158,7 +158,7 @@
             S.mouseStartPosition.x = S.currentMousePosition.x;
             S.mouseStartPosition.y = S.currentMousePosition.y;
 
-            console.log(`[dodec-scene] OrbitControls drag start at (${S.mouseStartPosition.x}, ${S.mouseStartPosition.y})`);
+            Logger.debug('DodecScene', `OrbitControls drag start at (${S.mouseStartPosition.x}, ${S.mouseStartPosition.y})`);
 
             if (S.interactionTimeout) clearTimeout(S.interactionTimeout);
         });
@@ -171,7 +171,7 @@
             const deltaY = Math.abs(S.currentMousePosition.y - S.mouseStartPosition.y);
             const totalMovement = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-            console.log(`[dodec-scene] OrbitControls drag end - Total movement: ${totalMovement.toFixed(1)}px`);
+            Logger.debug('DodecScene', `OrbitControls drag end - Total movement: ${totalMovement.toFixed(1)}px`);
 
             // Keep dragging flag for a brief moment to prevent click firing
             setTimeout(() => {
@@ -239,7 +239,7 @@
             S.renderer.setSize(global.innerWidth, global.innerHeight);
         });
 
-        console.log('[dodec-scene] Scene initialized with 5-light system');
+        Logger.info('DodecScene', 'Scene initialized with 5-light system');
     }
 
     // ========================================
@@ -311,7 +311,7 @@
         }
 
         S.scene.add(S.octaveLayerGroup);
-        console.log(`[dodec-scene] Created 7 octave layers, current company at O${currentOctave}`);
+        Logger.info('DodecScene', `Created 7 octave layers, current company at O${currentOctave}`);
     }
 
     /**
@@ -334,7 +334,7 @@
             }
         }
 
-        console.log(`[dodec-scene] Octave layers: ${S.showOctaveLayers ? 'ON' : 'OFF'}`);
+        Logger.info('DodecScene', `Octave layers: ${S.showOctaveLayers ? 'ON' : 'OFF'}`);
     }
 
     /**
@@ -361,6 +361,6 @@
     // Callback for company switch (used by dodec-data.js)
     global.updateOctaveLayers = updateOctaveLayersForCompany;
 
-    console.log('[dodec-scene] Module loaded - Scene infrastructure ready');
+    Logger.info('DodecScene', 'Module loaded - Scene infrastructure ready');
 
 })(typeof window !== 'undefined' ? window : this);

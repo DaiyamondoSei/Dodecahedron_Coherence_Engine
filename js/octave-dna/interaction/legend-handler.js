@@ -51,7 +51,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // Tooltip element reference
@@ -75,7 +75,7 @@
 
         const legendContainer = document.querySelector('.legend');
         if (!legendContainer) {
-            console.warn('⚠️ [Legend] Legend container not found');
+            Logger.warn('OctaveDNA', 'Legend container not found');
             return;
         }
 
@@ -86,20 +86,19 @@
         const legendHtml = `
             <div class="legend-title">Six Breath Axes</div>
             ${dnaHelices.map((helix, index) => {
-                const colorHex = Helpers?.colorToHex(helix.color) || '#' + helix.color.toString(16).padStart(6, '0');
+            const colorHex = Helpers?.colorToHex(helix.color) || '#' + helix.color.toString(16).padStart(6, '0');
 
-                // Confidence badge (●●● for high, ●●○ for medium, ●○○ for low)
-                const confidenceBadge = helix.confidence ?
-                    `<span style="font-size: 9px; opacity: 0.6;">${
-                        helix.confidence === 'high' ? '●●●' :
-                        helix.confidence === 'medium' ? '●●○' : '●○○'
-                    }</span>` : '';
+            // Confidence badge (●●● for high, ●●○ for medium, ●○○ for low)
+            const confidenceBadge = helix.confidence ?
+                `<span style="font-size: 9px; opacity: 0.6;">${helix.confidence === 'high' ? '●●●' :
+                    helix.confidence === 'medium' ? '●●○' : '●○○'
+                }</span>` : '';
 
-                // Breath name display (if available from mapping context)
-                const breathNameHtml = helix.breathName ?
-                    `<div class="breath-name">"${helix.breathName}"</div>` : '';
+            // Breath name display (if available from mapping context)
+            const breathNameHtml = helix.breathName ?
+                `<div class="breath-name">"${helix.breathName}"</div>` : '';
 
-                return `
+            return `
                     <div class="helix-item" style="border-color: ${colorHex};" data-helix="${helix.id}"
                          data-breath-name="${helix.breathName || ''}"
                          data-projection-q="${helix.projectionQuestion || ''}"
@@ -113,7 +112,7 @@
                         ${breathNameHtml}
                     </div>
                 `;
-            }).join('')}
+        }).join('')}
         `;
 
         legendContainer.innerHTML = legendHtml;
@@ -121,7 +120,7 @@
         // Attach event handlers
         attachLegendHandlers();
 
-        console.log('📜 [Legend] Updated with', dnaHelices.length, 'breath axes');
+        Logger.info('OctaveDNA', `Legend updated with ${dnaHelices.length} breath axes`);
     }
 
     /**
@@ -266,7 +265,7 @@
             destroyTooltip
         };
 
-        console.log('📜 [OctaveDNA Legend] Handler loaded');
+        Logger.debug('OctaveDNA', 'Legend handler loaded');
     }
 
 })();

@@ -162,12 +162,12 @@ export const SHADOW_SCHEMA = {
  */
 export function validateShadow(shadow) {
     if (!shadow || typeof shadow !== 'object') {
-        console.warn('[Shadow] Invalid shadow object:', shadow);
+        Logger.warn('Shadow:Detector', '[Shadow] Invalid shadow object:', shadow);
         return false;
     }
     const missing = SHADOW_SCHEMA.required.filter(field => !shadow[field]);
     if (missing.length > 0) {
-        console.warn(`[Shadow] Missing required fields: ${missing.join(', ')}`, shadow);
+        Logger.warn('Shadow:Detector', `[Shadow] Missing required fields: ${missing.join(', ')}`, shadow);
         return false;
     }
     return true;
@@ -600,5 +600,5 @@ if (typeof window !== 'undefined') {
     window.SHADOW_SCHEMA = SHADOW_SCHEMA;
     window.validateShadow = validateShadow;
 
-    console.log('🌑 Shadow Detector loaded - Using PHI-derived penalties from shadow-harmonics.js');
+    Logger.debug('Shadow:Detector', '🌑 Shadow Detector loaded - Using PHI-derived penalties from shadow-harmonics.js');
 }

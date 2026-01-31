@@ -21,5 +21,5 @@ if (typeof window !== 'undefined') {
   // Modules register themselves here
   // DataSystem.Validator = DataValidator (set by data-validator.js)
 
-  console.log('📦 DataSystem barrel loaded');
+  Logger.info('DataSystem', 'barrel loaded');
 }

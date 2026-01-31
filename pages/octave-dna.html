@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Organizational DNA - Dimensional Analysis</title>
+    <link rel="icon" href="data:,"><!-- Suppress favicon 404 -->
 
     <!--
     ════════════════════════════════════════════════════════════════════════════
@@ -168,6 +169,12 @@
     <!-- Three.js (pinned version) -->
     <script src="https://unpkg.com/three@0.128.0/build/three.js"></script>
     <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         LOGGER UTILITY - Centralized Logging Control (Jan 2026)
+         Must load early to capture initialization logs from other modules
+         ════════════════════════════════════════════════════════════════════════ -->
+    <script src="../js/utils/logger.js"></script>
 
     <!-- ════════════════════════════════════════════════════════════════════════
          CONSTANTS (Single Source of Truth)

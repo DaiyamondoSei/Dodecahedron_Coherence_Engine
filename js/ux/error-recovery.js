@@ -33,7 +33,7 @@
  * @version 1.0.0
  */
 
-(function(global) {
+(function (global) {
     'use strict';
 
     // ========================================================================
@@ -167,7 +167,7 @@
     function showInlineError(field, message, options = {}) {
         const element = typeof field === 'string' ? document.querySelector(field) : field;
         if (!element) {
-            console.warn('[ErrorRecovery] Field not found:', field);
+            Logger.warn('UX:ErrorRecovery', 'Field not found:', field);
             return;
         }
 
@@ -546,7 +546,7 @@
                     label: 'View Details',
                     primary: false,
                     action: () => {
-                        console.log('[ErrorRecovery] Circuit breaker details:', event.detail);
+                        Logger.debug('UX:ErrorRecovery', 'Circuit breaker details:', event.detail);
                         showToastError(`Critical issues: ${criticalIssues}`, 'info');
                     }
                 }
@@ -598,7 +598,7 @@
         }
 
         // Log for debugging
-        console.warn(`[ErrorRecovery] ${level}/${type}:`, message);
+        Logger.warn('UX:ErrorRecovery', `${level}/${type}:`, message);
     }
 
     // ========================================================================
@@ -614,7 +614,7 @@
             handleError(event.detail);
         });
 
-        console.log('[Quannex] Error Recovery UI initialized');
+        Logger.info('UX:ErrorRecovery', 'Error Recovery UI initialized');
     }
 
     // Auto-init when DOM ready

@@ -59,7 +59,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
@@ -79,7 +79,7 @@
         const title = document.getElementById('panelTitle');
 
         if (!panel) {
-            console.warn('⚠️ [Panel] Diagnostic panel element not found');
+            Logger.warn('OctaveDNA', 'Diagnostic panel element not found');
             return;
         }
 
@@ -102,7 +102,7 @@
         // Show panel with animation
         panel.classList.add('show');
 
-        console.log(`📊 [Panel] Showing diagnostic panel for ${helix.name}`);
+        Logger.info('OctaveDNA', `Showing diagnostic panel for ${helix.name}`);
 
         // Emit custom event
         document.dispatchEvent(new CustomEvent('octave-dna:panel-opened', {
@@ -134,7 +134,7 @@
             window.OctaveDNAPentagramTab.stopPentagram();
         }
 
-        console.log('📊 [Panel] Diagnostic panel closed');
+        Logger.info('OctaveDNA', 'Diagnostic panel closed');
 
         // Emit custom event
         document.dispatchEvent(new CustomEvent('octave-dna:panel-closed'));
@@ -163,7 +163,7 @@
         const tabContents = document.querySelectorAll('.tab-content');
 
         if (tabs.length === 0) {
-            console.log('📊 [Panel] No tabs found to initialize');
+            Logger.debug('OctaveDNA', 'No tabs found to initialize');
             return;
         }
 
@@ -188,7 +188,7 @@
             });
         });
 
-        console.log(`📊 [Panel] Tab switching initialized (${tabs.length} tabs)`);
+        Logger.debug('OctaveDNA', `Tab switching initialized (${tabs.length} tabs)`);
     }
 
     /**
@@ -239,7 +239,7 @@
             closeBtn.addEventListener('click', () => {
                 closePanel();
             });
-            console.log('📊 [Panel] Close button handler attached');
+            Logger.debug('OctaveDNA', 'Close button handler attached');
         }
     }
 
@@ -253,7 +253,7 @@
     function initPanels() {
         initCloseButton();
         initTabSwitching();
-        console.log('📊 [Panel] Diagnostic panel system initialized');
+        Logger.info('OctaveDNA', 'Diagnostic panel system initialized');
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -276,7 +276,7 @@
             initCloseButton
         };
 
-        console.log('📊 [OctaveDNA Panels] Controller module loaded');
+        Logger.debug('OctaveDNA', 'Panels controller module loaded');
     }
 
 })();

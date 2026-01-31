@@ -349,7 +349,7 @@ class SpectralAnalyzer {
       if (dominantMode) {
         deltaVector = this.calculateDeltaVector(dominantMode);
       } else {
-        console.warn('⚠️ No dominant mode found (System Empty/Balanced). Using dummy mode.');
+        Logger.warn('SpectralAnalyzer', 'No dominant mode found (System Empty/Balanced). Using dummy mode.');
         dominantMode = { mode: 0, eigenvalue: 0, amplitude: 0, interpretation: 'System Balanced / Empty' };
       }
 
@@ -377,8 +377,7 @@ class SpectralAnalyzer {
         summary: this.generateSummary(dominantMode, babScore, dissonanceIndex)
       };
     } catch (error) {
-      console.error('❌ Error in SpectralAnalyzer.analyze:', error);
-      console.error(error.stack);
+      Logger.error('SpectralAnalyzer', 'Error in SpectralAnalyzer.analyze:', error);
       throw error;
     }
   }
@@ -520,5 +519,5 @@ class SpectralAnalyzer {
 
 // Export for global use
 window.SpectralAnalyzer = SpectralAnalyzer;
-console.log('✨ Spectral Analyzer (Graph Laplacian) loaded');
+Logger.info('SpectralAnalyzer', 'Spectral Analyzer (Graph Laplacian) loaded');
 

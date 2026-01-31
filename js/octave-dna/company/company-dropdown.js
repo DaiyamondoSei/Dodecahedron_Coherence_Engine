@@ -43,7 +43,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
@@ -58,12 +58,12 @@
         const currentCompanyBtn = document.getElementById('currentCompany');
 
         if (!companyOptionsDiv || !currentCompanyBtn) {
-            console.log('🏢 [Company] Dropdown elements not found');
+            Logger.debug('OctaveDNA', 'Dropdown elements not found');
             return;
         }
 
         if (!window.CompanyLoader) {
-            console.log('🏢 [Company] CompanyLoader not available');
+            Logger.debug('OctaveDNA', 'CompanyLoader not available');
             return;
         }
 
@@ -92,7 +92,7 @@
             companyOptionsDiv.appendChild(option);
         });
 
-        console.log(`🏢 [Company] Dropdown populated with ${companies.length} companies`);
+        Logger.debug('OctaveDNA', `Dropdown populated with ${companies.length} companies`);
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -123,7 +123,7 @@
             }
         });
 
-        console.log('🏢 [Company] Dropdown toggle initialized');
+        Logger.debug('OctaveDNA', 'Dropdown toggle initialized');
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -140,7 +140,7 @@
         const currentCompanyBtn = document.getElementById('currentCompany');
 
         try {
-            console.log(`🏢 Switching to: ${company.name}`);
+            Logger.info('OctaveDNA', `Switching to: ${company.name}`);
 
             // Close dropdown
             if (companyDropdown) {
@@ -168,7 +168,7 @@
                     if (window.OctaveDNACompanyLoader?.initVisualization) {
                         await window.OctaveDNACompanyLoader.initVisualization();
                     }
-                    console.log(`✅ Switched to ${company.name}`);
+                    Logger.info('OctaveDNA', `Switched to ${company.name}`);
                 }
             }
 
@@ -178,7 +178,7 @@
             }));
 
         } catch (error) {
-            console.error('❌ Failed to switch company:', error);
+            Logger.error('OctaveDNA', 'Failed to switch company:', error);
             alert(`Failed to load company: ${error.message}`);
         }
     }
@@ -205,7 +205,7 @@
     function initCompanyDropdown() {
         initDropdownToggle();
         populateCompanyDropdown();
-        console.log('🏢 [Company] Dropdown system initialized');
+        Logger.info('OctaveDNA', 'Dropdown system initialized');
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -221,7 +221,7 @@
             getCurrentCompany
         };
 
-        console.log('🏢 [OctaveDNA Company Dropdown] Module loaded');
+        Logger.debug('OctaveDNA', 'Company dropdown module loaded');
     }
 
 })();

@@ -46,7 +46,7 @@
  * @created 2025-12-19
  */
 
-(function() {
+(function () {
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
@@ -138,7 +138,7 @@
                 // Smoothly animate camera target to clicked point
                 const targetY = Math.max(point.y, 5); // Keep target above ground
                 controls.target.set(point.x, targetY, point.z);
-                console.log(`🎯 Camera focused on helix at (${point.x.toFixed(1)}, ${targetY.toFixed(1)}, ${point.z.toFixed(1)})`);
+                Logger.info('OctaveDNA', `Camera focused on helix at (${point.x.toFixed(1)}, ${targetY.toFixed(1)}, ${point.z.toFixed(1)})`);
             }
         }
     }
@@ -159,7 +159,7 @@
         // Store selected helix in state
         State.setState('selectedHelix', helix);
 
-        console.log(`🧬 Selected helix: ${helix.name}`);
+        Logger.info('OctaveDNA', `Selected helix: ${helix.name}`);
 
         // Show diagnostic panel (if panels module is loaded)
         if (window.OctaveDNAPanels?.showDiagnosticPanel) {
@@ -217,7 +217,7 @@
     function initMouseHandlers() {
         const canvas = document.getElementById('canvas');
         if (!canvas) {
-            console.warn('⚠️ [Mouse Handler] Canvas not found');
+            Logger.warn('OctaveDNA', 'Canvas not found');
             return;
         }
 
@@ -227,7 +227,7 @@
         // Double click for camera focus
         canvas.addEventListener('dblclick', onCanvasDoubleClick);
 
-        console.log('🖱️ [Mouse Handler] Click handlers attached to canvas');
+        Logger.debug('OctaveDNA', 'Click handlers attached to canvas');
     }
 
     /**
@@ -256,7 +256,7 @@
             closePanel
         };
 
-        console.log('🖱️ [OctaveDNA Mouse] Interaction handler loaded');
+        Logger.debug('OctaveDNA', 'Interaction handler loaded');
     }
 
 })();

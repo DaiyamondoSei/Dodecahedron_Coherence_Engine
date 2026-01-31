@@ -693,4 +693,4 @@ if (typeof window !== 'undefined') {
 // MODULE LOADED
 // ════════════════════════════════════════════════════════════════════════════
 
-console.log('[Quannex] UX Full Vision module loaded (Phases 10-13, 17, 19-20, 22)');
+Logger.debug('UX:FullVision', 'UX Full Vision module loaded (Phases 10-13, 17, 19-20, 22)');

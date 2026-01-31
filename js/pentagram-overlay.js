@@ -35,7 +35,7 @@ class PentagramOverlay {
     initialize(containerId) {
         const container = document.getElementById(containerId);
         if (!container) {
-            console.error('Pentagram container not found:', containerId);
+            Logger.error('PentagramOverlay', 'Container not found:', containerId);
             return false;
         }
 
@@ -61,7 +61,7 @@ class PentagramOverlay {
      */
     render(analysis, helix) {
         if (!this.ctx) {
-            console.error('Canvas not initialized');
+            Logger.error('PentagramOverlay', 'Canvas not initialized');
             return;
         }
 
