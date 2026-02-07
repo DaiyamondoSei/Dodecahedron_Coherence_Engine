@@ -36,11 +36,11 @@
  *    - Catches updates that don't fire events
  *    - Early exit optimization if no changes
  *
- * ⚠️ MEMORY LEAK WARNING:
+ * ✅ MEMORY LEAK PREVENTION:
  * ────────────────────────
- * The sync interval MUST be cleared on destroy()!
- * If not cleared, the interval continues running even after
- * navigation, causing memory leaks and potential errors.
+ * The sync interval is automatically cleared on page unload via cleanup().
+ * The cleanup() function is registered in init() with window.beforeunload.
+ * This prevents memory leaks when navigating away from the page.
  *
  * SHADOW PANEL HOOK:
  * ──────────────────
@@ -104,8 +104,8 @@
     // ═══════════════════════════════════════════════════════════════════════════════
 
     /**
-     * Sync interval reference (for cleanup)
-     * ⚠️ MUST be cleared on destroy() to prevent memory leaks
+     * Sync interval reference (for automatic cleanup)
+     * ✅ Automatically cleared on page unload via cleanup()
      * @type {number|null}
      */
     let syncIntervalId = null;
@@ -307,7 +307,13 @@
         // Hook into shadow panel if available
         hookShadowPanel();
 
-        Logger.info('Shadow:SystemIntegration', 'Initialized');
+        // Register cleanup on page unload (prevent memory leaks)
+        if (typeof window !== 'undefined') {
+            window.addEventListener('beforeunload', cleanup);
+            Logger.debug('Shadow:SystemIntegration', 'Cleanup registered for page unload');
+        }
+
+        Logger.info('Shadow:SystemIntegration', 'Initialized (with lifecycle cleanup)');
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -326,7 +332,8 @@
     /**
      * Cleanup all integration resources
      *
-     * ⚠️ CRITICAL: Must be called on page unload to prevent memory leaks!
+     * ✅ Automatically called on page unload (registered in init())
+     * Can also be called manually if needed.
      *
      * Per Agent Council guidance: The shadow is not the enemy—
      * even cleanup can be done with consciousness.

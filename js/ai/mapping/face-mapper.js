@@ -12,11 +12,12 @@
  * 3. Innovation Lens (Vertex-centered): Emergent synergies focus
  *
  * @module FaceMapper
- * @version Sprint 2 - Task 13
+ * @version Sprint 2 - Task 13 + Face Refinement (Feb 2026)
  */
 
 import { MappingContext, DODECAHEDRON_TOPOLOGY } from '../core/mapping-context.js';
 import { getProvider } from '../providers/index.js';
+import { buildFaceRefinementPrompt, parseRefinementResponse } from '../prompts/face-refinement-prompt.js';
 
 // ========================================
 // PHI CONSTANTS - Single Source Reference
@@ -443,26 +444,148 @@ class FaceMapper {
     // ========================================
 
     /**
-     * Refine a single face name based on additional context
-     * @param {number} faceId - Face ID to refine
-     * @param {string} additionalContext - More context about this domain
+     * Refine a face name using AI by incorporating user feedback.
+     *
+     * This creates a collaborative refinement where:
+     * - AI's original mapping is the starting point
+     * - User's context/feedback is the refinement input
+     * - AI synthesizes both into an improved face name
+     *
+     * @param {number} faceId - Face ID (1-12)
+     * @param {string} additionalContext - User's feedback/refinement request
+     * @param {Object} [options] - Optional refinement settings
+     * @param {number} [options.temperature=0.7] - AI creativity (0-1)
+     * @param {boolean} [options.preserveOriginal=true] - Keep original mapping in audit trail
+     * @returns {Promise<Object>} Refinement result with refined and original data
+     * @throws {Error} If faceId invalid, context too short, or AI fails
+     *
+     * @see {@link ../../../docs/ai/FACE_REFINEMENT_SPECIFICATION.md} - Complete specification
+     *
+     * @example
+     * const result = await faceMapper.refineFaceName(5,
+     *   "We're B2B SaaS. 'Market Resonance' is too consumer-focused. We think 'Enterprise Alignment'."
+     * );
+     * // Returns: {
+     * //   faceId: 5,
+     * //   refined: { name: "Enterprise Alignment", reasoning: "...", confidence: 0.92 },
+     * //   original: { name: "Market Resonance", reasoning: "..." },
+     * //   userFeedback: "...",
+     * //   timestamp: "2026-01-31T10:30:00.000Z"
+     * // }
      */
-    async refineFaceName(faceId, additionalContext) {
+    async refineFaceName(faceId, additionalContext, options = {}) {
+        // Ensure AI provider is ready
         await this._ensureProvider();
 
+        // Get current face data
         const currentFace = this.context.getFace(faceId);
         if (!currentFace) {
             throw new Error(`Face ${faceId} not found`);
         }
 
-        // TODO: Implement refinement prompt
-        // For now, just update with additional context as reasoning
-        this.context.updateFace(faceId, {
-            reasoning: additionalContext,
-            source: 'manual-refined'
+        // ════════════════════════════════════════════════════════════════════
+        // INPUT VALIDATION
+        // ════════════════════════════════════════════════════════════════════
+
+        if (!additionalContext || typeof additionalContext !== 'string') {
+            throw new Error('additionalContext must be a non-empty string');
+        }
+
+        const trimmedContext = additionalContext.trim();
+        if (trimmedContext.length < 10) {
+            throw new Error('additionalContext too short (minimum 10 characters for meaningful refinement)');
+        }
+
+        // ════════════════════════════════════════════════════════════════════
+        // BUILD REFINEMENT PROMPT
+        // ════════════════════════════════════════════════════════════════════
+
+        const prompt = buildFaceRefinementPrompt({
+            faceId,
+            currentName: currentFace.name,
+            currentReasoning: currentFace.reasoning || 'No prior reasoning recorded',
+            userFeedback: trimmedContext
         });
 
-        return currentFace;
+        // ════════════════════════════════════════════════════════════════════
+        // SEND TO AI PROVIDER
+        // ════════════════════════════════════════════════════════════════════
+
+        console.log(`[FaceMapper] Refining Face ${faceId}: "${currentFace.name}"`);
+        console.log(`[FaceMapper] User feedback: "${trimmedContext.substring(0, 100)}${trimmedContext.length > 100 ? '...' : ''}"`);
+
+        let aiResponse;
+        try {
+            aiResponse = await this.provider.generateText(prompt, {
+                temperature: options.temperature ?? 0.7,
+                maxTokens: 500
+            });
+        } catch (err) {
+            console.error('[FaceMapper] AI call failed:', err);
+            throw new Error(`AI refinement request failed: ${err.message}`);
+        }
+
+        // ════════════════════════════════════════════════════════════════════
+        // PARSE AND VALIDATE RESPONSE
+        // ════════════════════════════════════════════════════════════════════
+
+        let refinement;
+        try {
+            refinement = parseRefinementResponse(aiResponse);
+        } catch (err) {
+            console.error('[FaceMapper] Refinement parsing failed:', err.message);
+            throw new Error(`AI refinement response invalid: ${err.message}`);
+        }
+
+        // ════════════════════════════════════════════════════════════════════
+        // UPDATE CONTEXT WITH REFINEMENT
+        // ════════════════════════════════════════════════════════════════════
+
+        const timestamp = new Date().toISOString();
+
+        const updateData = {
+            name: refinement.refinedName,
+            reasoning: refinement.reasoning,
+            source: 'ai-refined',
+            confidence: refinement.confidence,
+            refinementHistory: [
+                ...(currentFace.refinementHistory || []),
+                {
+                    timestamp,
+                    userFeedback: trimmedContext,
+                    originalName: currentFace.name,
+                    originalReasoning: currentFace.reasoning || null,
+                    refinedName: refinement.refinedName,
+                    refinedReasoning: refinement.reasoning,
+                    confidence: refinement.confidence,
+                    preservedConcept: refinement.preservedConcept
+                }
+            ]
+        };
+
+        this.context.updateFace(faceId, updateData);
+
+        console.log(`[FaceMapper] ✓ Face ${faceId} refined: "${currentFace.name}" → "${refinement.refinedName}" (${Math.round(refinement.confidence * 100)}% confidence)`);
+
+        // ════════════════════════════════════════════════════════════════════
+        // RETURN RESULT FOR UI
+        // ════════════════════════════════════════════════════════════════════
+
+        return {
+            faceId,
+            refined: {
+                name: refinement.refinedName,
+                reasoning: refinement.reasoning,
+                confidence: refinement.confidence,
+                preservedConcept: refinement.preservedConcept
+            },
+            original: {
+                name: currentFace.name,
+                reasoning: currentFace.reasoning || null
+            },
+            userFeedback: trimmedContext,
+            timestamp
+        };
     }
 
     /**

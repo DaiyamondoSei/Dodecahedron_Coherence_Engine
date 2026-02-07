@@ -632,21 +632,6 @@ function getEdgesForFace(faceNumber) {
 }
 
 /**
- * Get edges by exchange type
- *
- * @deprecated PURE MEMBRANE MODEL: Exchange type now emerges dynamically from synergy.
- *             Use SacredInquiry.getInquiry(tension, faceA, faceB).dominantElement instead.
- *             This function returns an empty array as exchangeType has been removed.
- *
- * @param {string} exchangeType - 'Grounding', 'Flow', 'Transformation', 'Communication', 'Purpose'
- * @returns {Array} Empty array (deprecated)
- */
-function getEdgesByExchangeType(exchangeType) {
-    console.warn('[EdgeConstants] getEdgesByExchangeType is DEPRECATED. Use SacredInquiry.getInquiry() instead.');
-    return [];
-}
-
-/**
  * Get the edge connecting two specific faces
  *
  * @param {number} faceA - First face number
@@ -659,18 +644,34 @@ function getEdgeBetweenFaces(faceA, faceB) {
     ) || null;
 }
 
-/**
- * Get count of edges by exchange type
- *
- * @deprecated PURE MEMBRANE MODEL: Exchange type now emerges dynamically from synergy.
- *             Use SacredInquiry to calculate dominant elements at runtime.
- *
- * @returns {Object} Object with all counts at 0 (deprecated)
- */
-function getEdgeExchangeTypeCounts() {
-    console.warn('[EdgeConstants] getEdgeExchangeTypeCounts is DEPRECATED. Exchange types emerge dynamically via SacredInquiry.');
-    return { Grounding: 0, Flow: 0, Transformation: 0, Communication: 0, Purpose: 0 };
-}
+// ════════════════════════════════════════════════════════════════════════════
+// REMOVED FUNCTIONS (January 31, 2026 - Thesis Cleanup)
+// ════════════════════════════════════════════════════════════════════════════
+//
+// The following functions were removed as part of the Pure Membrane Model:
+//
+// • getEdgesByExchangeType(exchangeType) → Use SacredInquiry.getInquiry()
+// • getEdgeExchangeTypeCounts() → Use dynamic synergy calculation
+//
+// MIGRATION GUIDE:
+// ─────────────────────────────────────────────────────────────────────────
+//
+// OLD (Static Exchange Types):
+//   const flowEdges = EdgeConstants.getEdgesByExchangeType('Flow');
+//   const counts = EdgeConstants.getEdgeExchangeTypeCounts();
+//
+// NEW (Dynamic Synergy):
+//   const inquiry = SacredInquiry.getInquiry(faceAId, faceBId, energyA, energyB);
+//   // inquiry.element reveals the dominant exchange character
+//   // inquiry.health shows edge state (Wall, Gate, Membrane, etc.)
+//
+// WHY:
+//   Exchange types are not static edge properties. They emerge dynamically
+//   from the synergy between connected faces. This models reality: an edge
+//   between two thriving faces behaves differently than between struggling ones.
+//
+// REFERENCE: docs/edge/TWINKLING_AURORA_COMPLETION.md
+// ════════════════════════════════════════════════════════════════════════════
 
 // ════════════════════════════════════════════════════════════════════════════
 // SECTION 6: EXPORTS
@@ -694,9 +695,9 @@ if (typeof window !== 'undefined') {
         // Helper Functions
         getEdgeById,
         getEdgesForFace,
-        getEdgesByExchangeType,
-        getEdgeBetweenFaces,
-        getEdgeExchangeTypeCounts
+        getEdgeBetweenFaces
+        // Removed (2026-01-31): getEdgesByExchangeType, getEdgeExchangeTypeCounts
+        // See migration note above
     };
 
     console.log('🔗 Edge Constants loaded - 30 pure membrane interfaces');
@@ -712,8 +713,7 @@ if (typeof module !== 'undefined' && module.exports) {
         EDGE_CONSTANT,
         getEdgeById,
         getEdgesForFace,
-        getEdgesByExchangeType,
-        getEdgeBetweenFaces,
-        getEdgeExchangeTypeCounts
+        getEdgeBetweenFaces
+        // Removed (2026-01-31): getEdgesByExchangeType, getEdgeExchangeTypeCounts
     };
 }
