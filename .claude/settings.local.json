@@ -50,7 +50,9 @@
       "Skill(brainstorming)",
       "mcp__playwright__*",
       "mcp__desktop-commander__*",
-      "mcp__memory__*"
+      "mcp__memory__*",
+      "Bash(where:*)",
+      "Bash(del \"_ul\")"
     ],
     "deny": [],
     "ask": [

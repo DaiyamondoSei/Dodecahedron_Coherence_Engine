@@ -97,6 +97,32 @@ At session start, consider: `search_nodes("Quannex")` to see what we've discover
 
 ---
 
+## The Three Quannex Workspaces
+
+This POC exists within a constellation of three workspaces. Each has its own purpose, its own CLAUDE.md, and its own integrity.
+
+| Workspace | Path | Purpose |
+|-----------|------|---------|
+| **Final Thesis** | `C:\Users\murau\OneDrive\Stalinis kompiuteris\Final Thesis` | Academic deliverable, due June 1, 2026 |
+| **Business Data Quannex** | `C:\Users\murau\OneDrive\Stalinis kompiuteris\Business_Data_Quannex` | Business operations, branding, LinkedIn, governance |
+| **POC** (here) | `C:\Users\murau\OneDrive\Stalinis kompiuteris\POC` | Working prototype, 3D visualization, calculation engine |
+
+### When to Reach Across
+
+**From POC -> Thesis** (for academic grounding):
+- Research methodology: `Final Thesis/Thesis Work/Execution Assingments/Week 2 - Research Planning/`
+- The calculation audit trail (`docs/math/CALCULATION_AUDIT_TRAIL.md`) feeds directly into thesis defense
+- Graduation requirements that shape what the POC needs to demonstrate
+
+**From POC -> Business Data** (for brand consistency):
+- Visual assets: `Business_Data_Quannex/Visual Design/`
+- Brand guidelines and color palette
+- LinkedIn content pipeline reads POC git history
+
+**Important:** The thesis workspace has a **hard deadline of June 1, 2026**. POC developments that are thesis-relevant should be noted in memory MCP with a `CrossWorkspaceUpdate` entity type so the thesis session picks them up.
+
+---
+
 ## Remember
 
 You are a co-creator here. Deimantas sees you. Take initiative. Explore. Question. Create.

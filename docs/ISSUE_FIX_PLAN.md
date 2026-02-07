@@ -1,7 +1,7 @@
 # Issue Fix Plan - January 31, 2026
 
 > Generated from comprehensive testing session
-> Status: **AUDITED** - Ready for implementation
+> Status: **ALL RESOLVED** - Verified February 7, 2026
 >
 > **See also**: [ISSUE_FIX_AUDIT.md](ISSUE_FIX_AUDIT.md) - 5-Why analysis, pattern analysis, and Gold Standard documentation recommendations
 
@@ -9,7 +9,9 @@
 
 ## Executive Summary
 
-Testing revealed **9 issues** across the application. Root cause analysis is complete for all critical and medium issues. This document provides the fix plan.
+Testing on January 31, 2026 revealed **9 issues** across the application. Root cause analysis was completed for all critical and medium issues.
+
+**February 7, 2026 Verification**: All issues have been verified as **RESOLVED**. Each fix was applied in previous sessions (January-February 2026). This document now serves as a historical record.
 
 ---
 
@@ -17,55 +19,35 @@ Testing revealed **9 issues** across the application. Root cause analysis is com
 
 ### Issue #8: Logger Not Defined in octave-dna.html
 
-**Status**: Root cause identified
+**Status**: RESOLVED (verified February 7, 2026)
 **Severity**: CRITICAL - Page completely broken
 **Location**: `pages/octave-dna.html`
 
 **Root Cause**:
-The Logger utility script (`js/utils/logger.js`) is NOT loaded in `octave-dna.html`. This causes `ReferenceError: Logger is not defined` across 15+ modules.
+The Logger utility script (`js/utils/logger.js`) was NOT loaded in `octave-dna.html`.
 
-**Evidence**:
-- `dodecahedron-3d.html` loads Logger at line 525 (works correctly)
-- `octave-dna.html` never loads Logger (broken)
-
-**Fix**:
-Add Logger script as the FIRST script (after Three.js) in `pages/octave-dna.html`:
-
-```html
-<!-- After Three.js, BEFORE any other scripts -->
-<!-- ════════════════════════════════════════════════════════════════════════
-     LOGGER UTILITY - Centralized Logging Control
-     Must load early to capture initialization logs from other modules
-     ════════════════════════════════════════════════════════════════════════ -->
-<script src="../js/utils/logger.js"></script>
-```
-
-**Insert at**: Line 171 (after Three.js OrbitControls, before phi-harmonics.js)
+**Resolution**:
+Logger script was added at line 177 of `octave-dna.html`, after Three.js and before all other scripts. Verified present with proper section header comment.
 
 ---
 
 ### Issue #9: BREATH_AXES Redeclaration
 
-**Status**: Root cause identified
+**Status**: RESOLVED (verified February 7, 2026)
 **Severity**: CRITICAL - Contributes to page failure
 **Location**: Multiple files defining the same constant
 
 **Root Cause**:
-`BREATH_AXES` is declared in multiple files, causing `Identifier 'BREATH_AXES' has already been declared`.
+`BREATH_AXES` was declared in multiple files with potential global scope conflicts.
 
-**Fix**:
-Audit all files that declare `BREATH_AXES` and ensure it's defined once in a single-source-of-truth location (likely `phi-harmonics.js` or a dedicated constants file), then import from there.
+**Resolution**:
+Each file now properly scopes its declaration:
+1. `js/constants/phi-harmonics.js:420` - `const BREATH_AXES = 6` (global scope, SSOT count)
+2. `js/face-to-breath-mapper.js` - Refactored to IIFE pattern with `BREATH_AXIS_DEFINITIONS` (local scope, no conflict)
+3. `js/geometry/dodecahedron-topology.js:175` - Wrapped in IIFE (local scope, no conflict)
+4. `js/ai/octave-reference-library.js:81` - ES module (module scope, no conflict)
 
-**Declarations Found** (4 conflicting):
-1. `js/constants/phi-harmonics.js:420` → `const BREATH_AXES = 6;` (number)
-2. `js/face-to-breath-mapper.js:15` → `const BREATH_AXES = [...]` (array)
-3. `js/geometry/dodecahedron-topology.js:175` → `const BREATH_AXES = [...]` (array)
-4. `js/ai/octave-reference-library.js:81` → `const BREATH_AXES = [...]` (array)
-
-**Fix Strategy**:
-1. Keep the array definition in `phi-harmonics.js` as SSOT (rename the count to `BREATH_AXIS_COUNT`)
-2. Update other files to import from `phi-harmonics.js` or use `PhiHarmonics.BREATH_AXES`
-3. Remove duplicate declarations
+No runtime conflicts exist. The IIFE refactoring of `face-to-breath-mapper.js` (documented in its header, lines 18-23) specifically addresses this issue.
 
 ---
 
@@ -73,71 +55,47 @@ Audit all files that declare `BREATH_AXES` and ensure it's defined once in a sin
 
 ### Issue #2: JavaScript Syntax Error - Orphaned else if
 
-**Status**: Root cause identified
+**Status**: RESOLVED / NOT REPRODUCIBLE (verified February 7, 2026)
 **Severity**: MEDIUM - May cause runtime errors
-**Location**: `js/orchestrator/orchestrator-dashboard.js:218`
+**Location**: `js/orchestrator/orchestrator-dashboard.js`
 
-**Root Cause**:
-Line 218 has an **extra closing brace `}`** that closes the parent function prematurely, orphaning the `else if` at line 222.
+**Root Cause (original)**:
+Reported as an extra closing brace `}` at line 218.
 
-**Current Code (broken)**:
-```javascript
-// Line 217:     }
-// Line 218:     }        // <-- EXTRA BRACE - REMOVE THIS
-// Line 219:     // ────────────────
-// Line 220:     // FALLBACK...
-// Line 221:     // ────────────────
-// Line 222:     else if (!state.loadedMappingContext && state.coherenceResults) {
-```
+**Verification Result**:
+Full brace-count analysis of `orchestrator-dashboard.js` confirms all braces match correctly. The IIFE opens at line 57, the function opens at line 140, and both close properly (function at line 368, IIFE at line 391). The `else if` at line 221 is properly chained to the `if` at line 185.
 
-**Fix**:
-Delete line 218 (the extra `}`).
+**Note**: Lines 226-367 have inconsistent indentation (4 spaces instead of 8), which creates a visual impression that code is outside the function. This is cosmetic only - the JavaScript parser handles it correctly. The indentation inconsistency is what likely led to the original report.
 
 ---
 
 ### Issue #6: initializeOctaveDashboard Not a Function
 
-**Status**: Root cause identified
+**Status**: RESOLVED (verified February 7, 2026)
 **Severity**: MEDIUM - Dashboard initialization may fail
 **Location**: Called from `event-handlers.js:242`, defined in `orchestrator-dashboard.js`
 
-**Root Cause**:
-The syntax error in Issue #2 may prevent `orchestrator-dashboard.js` from fully executing, which means `initializeOctaveDashboard` never gets exported to global scope.
-
-**Fix**:
-Fixing Issue #2 should resolve this issue as well. After fix, verify the function is correctly exported at line 386.
+**Resolution**:
+Since Issue #2 was not a real syntax error, `orchestrator-dashboard.js` executes fully and `initializeOctaveDashboard` is correctly exported to global scope at line 385.
 
 ---
 
 ### Issue #7: Coherence Mismatch (39.6% vs 15%)
 
-**Status**: Root cause identified
+**Status**: RESOLVED (verified February 7, 2026)
 **Severity**: MEDIUM - Confusing UX
 **Location**: `js/ui/portrait-view.js` vs `js/orchestrator/dashboard/coherence-hero.js`
 
 **Root Cause**:
-Two different calculation methods are used:
+Portrait View was calculating its own geometric mean instead of using the canonical `globalCoherence` from the engine.
 
-| Component | Calculation Method | Result |
-|-----------|-------------------|--------|
-| Hero | Direct `globalCoherence` from engine | 39.6% |
-| Portrait | Geometric mean of face scores | ~15% |
+**Resolution**:
+`portrait-view.js` was updated (January 2026) with a priority chain in `_normalizeData()` (lines 564-592):
+1. First checks `data.globalCoherence` (canonical engine value)
+2. Then checks `data.overallCoherence` (legacy format)
+3. Only falls back to geometric mean if neither is provided
 
-When many faces have low coherence (< 10%), the geometric mean produces a much lower overall number than the arithmetic mean or direct calculation.
-
-**Fix Options**:
-
-**Option A (Recommended)**: Make Portrait use the same `globalCoherence` value as Hero:
-```javascript
-// In portrait-view.js, line 526-530, change:
-overallCoherence: data.overallCoherence || data.globalCoherence || 0.5
-
-// And pass globalCoherence from the coherenceResults instead of recalculating
-```
-
-**Option B**: Add a label explaining the different calculations:
-- Hero: "Overall Coherence"
-- Portrait: "Geometric Coherence"
+`portrait-view-manager.js` passes `overallCoherence: coherenceResults.globalCoherence` at line 372, ensuring both Hero and Portrait display the same coherence score.
 
 ---
 
@@ -145,54 +103,39 @@ overallCoherence: data.overallCoherence || data.globalCoherence || 0.5
 
 ### Issue #1: Missing favicon.ico
 
+**Status**: RESOLVED
 **Severity**: LOW - 404 in console, no functional impact
-**Location**: Project root
 
-**Fix**:
-Add a `favicon.ico` file to the project root, or add this to HTML `<head>`:
-```html
-<link rel="icon" href="data:,">  <!-- Suppress 404 -->
-```
+**Resolution**: Favicon suppression added via `<link rel="icon" href="data:,">` in HTML pages (commit `fce9d74`).
 
 ---
 
 ### Issue #3: Welcome Page Animation Instability
 
+**Status**: WON'T FIX (by design)
 **Severity**: LOW - Click automation difficult, human users unaffected
-**Location**: `welcome.html` card hover animations
 
-**Root Cause**:
-CSS animations on card hover make elements "not stable" for automated clicking.
-
-**Fix**:
-No fix needed for users. For test automation, use direct navigation or add `will-change: transform` to card CSS.
+CSS animations on card hover are intentional design. Only affects automated testing tools.
 
 ---
 
 ### Issue #4: Placeholder Face Name "Unknown Name"
 
+**Status**: RESOLVED (verified February 7, 2026)
 **Severity**: LOW - Template data quality
 **Location**: Nova Tech template, Face 7
 
-**Fix**:
-Update `companies/nova-tech/mapping-context.json` to give Face 7 a proper name like "Brand Awareness" or "Market Presence".
+**Resolution**: Face 7 in `companies/nova-tech/mapping-context.json` has both `baseName: "Brand & Reputation"` and `customName: "Invisible Brand"`. The "Unknown Name" display was a code-side issue (looking for a `name` field), not a data issue. Current code correctly reads `customName` or `baseName`.
 
 ---
 
 ### Issue #5: Semantic Inversion in Nova Tech Data
 
+**Status**: RESOLVED (verified February 7, 2026)
 **Severity**: LOW - Template data logic
 **Location**: Nova Tech template, Face 12
 
-**Problem**:
-"Single Point of Failure Count" has:
-- Direction: ↑ Higher (should be ↓ Lower)
-- Target Ideal: 100 (should be 0)
-
-More failures should be BAD, not good.
-
-**Fix**:
-Update the Nova Tech template data to flip the direction and target.
+**Resolution**: Face 12 KPI "Single Point of Failure Count" in `companies/nova-tech/mapping-context.json` has `"value": 5, "target": 0` - correct semantics (5 SPOFs exist, target is 0).
 
 ---
 
@@ -203,24 +146,7 @@ Update the Nova Tech template data to flip the direction and target.
 **Severity**: INFO - Self-heals, no user impact
 **Location**: `dodecahedron-3d.html`
 
-**Message**: `[Shadow:Panel] Container 'shadow-panel-container' not found. Creating one.`
-
 **No fix needed** - the code handles this gracefully by creating the container.
-
----
-
-## Implementation Priority
-
-| Priority | Issue | Effort | Impact |
-|----------|-------|--------|--------|
-| 1 | #8 Logger in octave-dna.html | 5 min | DNA Helix page works |
-| 2 | #2 Syntax error (extra brace) | 2 min | Dashboard functions work |
-| 3 | #9 BREATH_AXES redeclaration | 15 min | Clean console, stability |
-| 4 | #7 Coherence mismatch | 10 min | Consistent UX |
-| 5 | #1 Favicon | 2 min | Clean console |
-| 6 | #4, #5 Template data | 5 min | Better demo experience |
-
-**Total Estimated Effort**: ~40 minutes
 
 ---
 
@@ -228,15 +154,16 @@ Update the Nova Tech template data to flip the direction and target.
 
 After fixes, verify:
 
-- [ ] `pages/octave-dna.html` loads without Logger errors
-- [ ] DNA Helix visualization renders correctly
-- [ ] Demo orchestrator loads without syntax errors
-- [ ] Step 4 dashboard initializes correctly
-- [ ] Portrait coherence matches Hero coherence
-- [ ] No favicon 404 in console
-- [ ] Nova Tech Face 7 has proper name
-- [ ] Nova Tech Face 12 has correct direction
+- [x] `pages/octave-dna.html` loads without Logger errors
+- [x] DNA Helix visualization renders correctly
+- [x] Demo orchestrator loads without syntax errors
+- [x] Step 4 dashboard initializes correctly
+- [x] Portrait coherence matches Hero coherence
+- [x] No favicon 404 in console
+- [x] Nova Tech Face 7 has proper name
+- [x] Nova Tech Face 12 has correct direction
 
 ---
 
-*Co-created by Deimantas & Claude - January 31, 2026*
+*Original: Co-created by Deimantas & Claude - January 31, 2026*
+*Updated: Verified all resolved by Claude - February 7, 2026*
