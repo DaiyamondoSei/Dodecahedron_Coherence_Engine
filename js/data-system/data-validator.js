@@ -107,7 +107,9 @@
     '#DIV/0!',          // Excel division by zero
     'undefined',        // JS undefined serialized
     'null',             // JS null serialized
-    'NaN'               // Not a number serialized
+    'NaN',              // Not a number serialized
+    'Infinity',         // STRESS_TEST_FIX [F2]: Infinity as string
+    '-Infinity'         // STRESS_TEST_FIX [F2]: Negative Infinity as string
   ];
 
   /**
@@ -120,8 +122,19 @@
     // Null or undefined
     if (value === undefined || value === null) return true;
 
-    // NaN (number type)
-    if (typeof value === 'number' && isNaN(value)) return true;
+    // STRESS_TEST_FIX [F1]: Type guards — objects, arrays, booleans, functions
+    // are structurally incompatible with numeric fields. parseFloat([3]) silently
+    // returns 3, losing the array context. parseFloat({}) returns NaN but the
+    // object's presence indicates a structural error, not a numeric value.
+    // Catch these BEFORE they reach parseFloat.
+    if (typeof value === 'object') return true;   // includes arrays, Date, etc.
+    if (typeof value === 'boolean') return true;   // true/false aren't numeric data
+    if (typeof value === 'function') return true;  // code isn't data
+
+    // STRESS_TEST_FIX [F2]: Infinity guard — Infinity is a valid JS number but
+    // poisons all downstream math (Infinity * 0 = NaN, Infinity + x = Infinity).
+    // isFinite() catches NaN, Infinity, and -Infinity in a single check.
+    if (typeof value === 'number') return !isFinite(value);
 
     // String patterns
     if (typeof value === 'string') {

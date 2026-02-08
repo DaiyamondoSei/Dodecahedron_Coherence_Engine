@@ -480,14 +480,30 @@ export class TuningConfig {
    */
   static fromJSON(json) {
     const config = new TuningConfig();
-    if (json.alpha !== undefined) config.ALPHA = json.alpha;
-    if (json.beta !== undefined) config.BETA = json.beta;
-    if (json.gamma !== undefined) config.GAMMA = json.gamma;
-    if (json.delta !== undefined) config.DELTA = json.delta;
-    if (json.kappa !== undefined) config.KAPPA = json.kappa;
-    if (json.eta !== undefined) config.ETA = json.eta;
-    if (json.zeta !== undefined) config.ZETA = json.zeta;
-    if (json.theta !== undefined) config.THETA = json.theta;
+
+    // STRESS_TEST_FIX [H3]: Validate parameter ranges to prevent
+    // alpha=100 (star pairs explosion) or kappa=-5 (inverted S-curve).
+    // Each parameter has a philosophically grounded valid range.
+    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+    const RANGES = {
+      alpha: [0, 1],      // Synergy Blend: pure synergy (0) to pure arithmetic (1)
+      beta:  [0, 1],      // Intersection Blend: backward (0) to forward (1)
+      gamma: [0, 1],      // Ball & Pillars: fully relational (0) to fully internal (1)
+      delta: [0, 1],      // Shadow Factor: full non-duality (0) to no shadow (1)
+      kappa: [0.1, 10],   // Sensitivity: near-linear (0.1) to extremely reactive (10)
+      eta:   [0, 1],      // Resonance: no boost (0) to 100% boost (1)
+      zeta:  [0, 0.5],    // Zenith Gradient: no penalty (0) to 50% per octave (0.5)
+      theta: [0, 1]       // Transcendence: instant (0) to impossible (1)
+    };
+
+    for (const [key, [min, max]] of Object.entries(RANGES)) {
+      if (json[key] !== undefined) {
+        const parsed = parseFloat(json[key]);
+        // Use parsed value if valid, otherwise keep phi-derived default
+        config[key.toUpperCase()] = isNaN(parsed) ? config[key.toUpperCase()] : clamp(parsed, min, max);
+      }
+    }
+
     return config;
   }
 }

@@ -516,6 +516,13 @@
         const result = { kpis };
         const topologyReport = validateTopology(result, 'kpi-database');
 
+        // STRESS_TEST_FIX [F6]: Topology validation is now blocking.
+        // A non-12-face dodecahedron cannot produce valid sacred geometry.
+        // Log violations prominently so they cannot be silently ignored.
+        if (!topologyReport.valid) {
+          Logger.error('CSVToJSON', `TOPOLOGY VIOLATION in kpi-database: ${topologyReport.violations.join(', ')}`);
+        }
+
         return {
             $schema: './schemas/kpi-database.schema.json',
             $version: VERSION,
@@ -676,6 +683,11 @@
         const result = { edges };
         const topologyReport = validateTopology(result, 'edge-tension');
 
+        // STRESS_TEST_FIX [F6]: Log topology violations prominently
+        if (!topologyReport.valid) {
+          Logger.error('CSVToJSON', `TOPOLOGY VIOLATION in edge-tension: ${topologyReport.violations.join(', ')}`);
+        }
+
         // Check for all-zero KPI coherence (known issue)
         const allZeroKPI = edges.every(e => e.computed.kpiCoherence === 0);
 
@@ -808,6 +820,11 @@
 
         const result = { vertices };
         const topologyReport = validateTopology(result, 'vortex-map');
+
+        // STRESS_TEST_FIX [F6]: Log topology violations prominently
+        if (!topologyReport.valid) {
+          Logger.error('CSVToJSON', `TOPOLOGY VIOLATION in vortex-map: ${topologyReport.violations.join(', ')}`);
+        }
 
         return {
             $schema: './schemas/vortex-map.schema.json',
@@ -946,6 +963,11 @@
 
         const result = { axes };
         const topologyReport = validateTopology(result, 'breath-ratios');
+
+        // STRESS_TEST_FIX [F6]: Log topology violations prominently
+        if (!topologyReport.valid) {
+          Logger.error('CSVToJSON', `TOPOLOGY VIOLATION in breath-ratios: ${topologyReport.violations.join(', ')}`);
+        }
 
         return {
             $schema: './schemas/breath-ratios.schema.json',
@@ -1246,7 +1268,12 @@
                     if (laplacianRowIndex < 12 && cells.length >= 12) {
                         const row = [];
                         for (let j = 0; j < 12; j++) {
-                            row.push(parseFloat(cells[j]) || 0);
+                            // STRESS_TEST_FIX [F15]: Use DataValidator instead of silent || 0
+                            // to maintain audit trail for spectral analysis data (thesis heart).
+                            const val = (typeof window !== 'undefined' && window.DataValidator)
+                              ? window.DataValidator.validateNumber(cells[j], `Laplacian[${laplacianRowIndex}][${j}]`, 0)
+                              : (parseFloat(cells[j]) || 0);
+                            row.push(val);
                         }
                         laplacianMatrix.push(row);
                         laplacianRowIndex++;
@@ -1260,7 +1287,11 @@
                     if (eigenvectorRowIndex < 12 && cells.length >= 12) {
                         const row = [];
                         for (let j = 0; j < 12; j++) {
-                            row.push(parseFloat(cells[j]) || 0);
+                            // STRESS_TEST_FIX [F15]: Use DataValidator for eigenvector data too
+                            const val = (typeof window !== 'undefined' && window.DataValidator)
+                              ? window.DataValidator.validateNumber(cells[j], `Eigenvector[${eigenvectorRowIndex}][${j}]`, 0)
+                              : (parseFloat(cells[j]) || 0);
+                            row.push(val);
                         }
                         eigenvectorMatrix.push(row);
                         eigenvectorRowIndex++;

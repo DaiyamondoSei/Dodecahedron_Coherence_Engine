@@ -1417,6 +1417,49 @@ export class DodecahedronEngine {
     return amplifiedCoherence;
   }
 
+  // STRESS_TEST_FIX [S-Curve]: Detailed coherence breakdown for UI transparency.
+  // The S-curve (kappa) compresses the operational range (e.g., 27%-73% at kappa=2.0).
+  // This method exposes raw, S-curved, and rescaled values so UIs can show intuitive
+  // 0-100% ranges while making the mathematical transformation visible.
+  getCoherenceDetail() {
+    if (this.faces.length === 0) {
+      return { raw: 0, sCurved: 0, rescaled: 0, kappa: this.tuning.KAPPA, floor: 0.5, ceiling: 0.5, operationalRange: 0 };
+    }
+
+    const energies = this.faces.map(face => face.faceEnergy || 0);
+    const mu = energies.reduce((sum, e) => sum + e, 0) / energies.length;
+
+    const epsilon = (typeof PHI_HARMONICS !== 'undefined') ? PHI_HARMONICS.EPSILON : 1e-10;
+    if (mu <= epsilon) {
+      const floor = this.tuning.applySensitivityAmplifier(0);
+      const ceiling = this.tuning.applySensitivityAmplifier(1);
+      return { raw: 0, sCurved: floor, rescaled: 0, kappa: this.tuning.KAPPA, floor, ceiling, operationalRange: ceiling - floor };
+    }
+
+    const variance = energies.reduce((sum, e) => sum + Math.pow(e - mu, 2), 0) / energies.length;
+    const sigma = Math.sqrt(variance);
+    const lambda = (typeof PHI_HARMONICS !== 'undefined') ? PHI_HARMONICS.CV_LAMBDA : 0.236;
+    const cv = sigma / mu;
+    const rawCoherence = mu * (1 - lambda * cv);
+    const clamped = Math.max(0, Math.min(1, rawCoherence));
+    const sCurved = this.tuning.applySensitivityAmplifier(clamped);
+
+    // Calculate floor/ceiling for current kappa to enable rescaling
+    const floor = this.tuning.applySensitivityAmplifier(0);
+    const ceiling = this.tuning.applySensitivityAmplifier(1);
+    const rescaled = (ceiling - floor > 0) ? (sCurved - floor) / (ceiling - floor) : sCurved;
+
+    return {
+      raw: clamped,
+      sCurved: sCurved,
+      rescaled: rescaled,
+      kappa: this.tuning.KAPPA,
+      floor: floor,
+      ceiling: ceiling,
+      operationalRange: ceiling - floor
+    };
+  }
+
   /**
    * Get coherence status description
    */
@@ -1435,9 +1478,14 @@ export class DodecahedronEngine {
    * Get system state (for UI)
    */
   getState() {
+    // STRESS_TEST_FIX [S-Curve]: Include coherenceDetail in state for UI transparency.
+    // state.globalCoherence remains the S-curved value for backward compatibility.
+    // state.coherenceDetail provides raw/sCurved/rescaled breakdown.
+    const coherenceDetail = this.getCoherenceDetail();
     return {
-      globalCoherence: this.getGlobalCoherence(),
-      coherenceStatus: this.getCoherenceStatus(this.getGlobalCoherence()),
+      globalCoherence: coherenceDetail.sCurved,
+      coherenceDetail: coherenceDetail,
+      coherenceStatus: this.getCoherenceStatus(coherenceDetail.sCurved),
       tuning: this.tuning, // Expose tuning to UI
       faces: this.faces.map(face => ({
         id: face.id,
@@ -1646,6 +1694,11 @@ window.Quannex = {
 
     // Invalidate face cache so faceEnergy recalculates
     face.invalidateCache();
+
+    // STRESS_TEST_FIX [Integration]: Must trigger full recalculate to update
+    // breath axes, spectral analysis, shadow detection, edges, vertices, and
+    // clear _cachedGlobalCoherence. Without this, getState() returns stale coherence.
+    quannexEngine.recalculate();
 
     Logger.info('Quannex', `[Quannex] Face ${faceIndex} (${face.name}) energy → ${(clampedTarget * 100).toFixed(0)}%`);
     return quannexEngine.getState();

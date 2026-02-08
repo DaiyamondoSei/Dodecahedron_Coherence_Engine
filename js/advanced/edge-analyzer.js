@@ -168,6 +168,13 @@ export class EdgeAnalyzer {
    * @param {Object} edgeKPI - Optional edge KPI (if it exists)
    * @returns {number} Tension value between 0 (harmonious) and 1 (highly tense)
    */
+  // STRESS_TEST_FIX [C2]: ALTERNATIVE PERSPECTIVE — normalized relative tension.
+  // This formula (T = |E_A - E_B| / (E_A + E_B + ε)) differs from the canonical
+  // threshold-based formula in Edge.js. Both are valid but measure different things:
+  //   - Edge.js (canonical): Phase detection — "what STATE is this relationship in?"
+  //   - This formula: Relative tension — "how PROPORTIONALLY imbalanced is the flow?"
+  // The canonical formula is used for system coherence. This one provides analytical
+  // depth for the advanced analysis views.
   calculateTension(face1, face2, element, edgeKPI = null) {
     const E_A = face1.faceEnergy || 0;
     const E_B = face2.faceEnergy || 0;

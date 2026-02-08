@@ -178,6 +178,10 @@ export class Vertex {
    * @param {Array<Face>} faces - The 3 faces meeting at this vertex
    * @returns {number} Vortex strength (0-1)
    */
+  // STRESS_TEST_FIX [C3]: This is the CANONICAL vortex strength formula (SSOT).
+  // Uses stdDev/0.577 normalization where 0.577 = sqrt(1/3) = max possible σ
+  // for 3 values in [0,1]. The vertex-analyzer.js had a different normalization
+  // (variance/0.1) which has been aligned to match this canonical formula.
   calculateVortexEnergy(faces) {
     if (!faces || faces.length !== 3) {
       Logger.warn('Vertex', `Vertex ${this.id} does not have exactly 3 faces`);

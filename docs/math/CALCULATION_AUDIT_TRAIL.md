@@ -370,59 +370,84 @@ At O7, the multiplier equals φ⁻¹ = 0.618 - the golden ratio inverse! This cr
 
 ## 7. Edge Tension
 
-### Mathematical Formula
+### Canonical Formula (SSOT: `js/core/Edge.js`)
 
 ```
-T = 1 - |E_A - E_B| × (1 - min(E_A, E_B))
+STRESS_TEST_FIX [C2]: Threshold-based phase detection (canonical)
+
+if E_A > 0.6 AND E_B > 0.6:  T = 0.9           (Synergetic)
+if E_A < 0.4 AND E_B < 0.4:  T = 0.2           (Depleted)
+else:                          T = (0.5 + δ/2) × m (Flowing/Stable)
 
 Where:
-  E_A = Energy of face A
-  E_B = Energy of face B
-  T   = Edge tension [0, 1]
+  E_A, E_B = Face energies [0, 1]
+  δ = |E_A - E_B|
+  m = elemental multiplier (Fire=1.3, Water=0.9, Earth=0.8, Air=1.1, Ether=1.0)
+  T = Edge tension [0, 1]
+
+Status: Synergetic (T=0.9), Depleted (T=0.2), Flowing (δ>0.4), Stable (δ≤0.4)
+```
+
+### Alternative Perspective (`js/advanced/edge-analyzer.js`)
+
+```
+T_relative = |E_A - E_B| / (E_A + E_B + ε)
+T_combined = 0.6 × T_relative + 0.4 × (1 - KPI_health)
+
+Normalized relative tension — measures PROPORTIONAL imbalance.
+Used for advanced analysis views, NOT for system coherence.
 ```
 
 ### Implementation Reference
 
-- **File:** `js/core/Edge.js`
-- **Method:** `Edge.calculateTension()`
-- **Also:** `js/advanced/edge-analyzer.js`
+- **Canonical SSOT:** `js/core/Edge.js` → `Edge.calculateTension()`
+- **Alternative:** `js/advanced/edge-analyzer.js` → `EdgeAnalyzer.calculateTension()`
 
 ### Edge Health Spectrum
 
 | Tension | Status | Meaning |
 |---------|--------|---------|
-| T > 0.9 | Flow | Smooth energy transfer |
-| T > 0.7 | Gate | Controlled exchange |
-| T > 0.5 | Friction | Some resistance |
-| T > 0.3 | Wall | Significant barrier |
-| T ≤ 0.3 | Critical | Near-breakdown |
+| T = 0.9 | Synergetic | Both faces strong, energy flows freely |
+| T > 0.7 | Flowing | Active energy exchange |
+| T > 0.5 | Stable | Moderate exchange |
+| T = 0.2 | Depleted | Both faces weak, low energy |
+| T < 0.2 | Critical | Near-breakdown |
 
 ---
 
 ## 8. Vertex Vortex Energy
 
-### Mathematical Formula
+### Canonical Formula (SSOT: `js/core/Vertex.js`)
 
 ```
-V = (E_A × E_B × E_C)^(1/3) × (1 + η × R_triadic)
+STRESS_TEST_FIX [C3]: Canonical vortex strength formula
+
+strength = 0.7 × (σ / 0.577) + 0.3 × μ
 
 Where:
   E_A, E_B, E_C = Energies of 3 converging faces
-  R_triadic = Triadic resonance (similarity of 3 faces)
-  η = 0.382 (PHI-derived boost)
+  μ = (E_A + E_B + E_C) / 3
+  σ = sqrt(Σ(E_i - μ)² / 3)
+  0.577 = sqrt(1/3) = max possible σ for 3 values in [0,1]
+
+Interpretation:
+  70% weight on VARIANCE (tension = potential for transformation)
+  30% weight on MEAN (fuel for the transformation)
+
+Direction = (μ - 0.5) × 2  → [-1, +1]  (downward/upward spiral)
+Coherence = 1 - (avg_pairwise_diff / 0.667)
+Leverage Point = strength > 0.7 AND coherence < 0.5
 ```
 
 ### Key Insight
 
-Each vertex is where exactly 3 faces meet - this is geometrically fixed. Vortex energy uses geometric mean (not arithmetic) because:
-- If any face is 0, the vertex collapses
-- All 3 must contribute for emergence
+Each vertex is where exactly 3 faces meet - this is geometrically fixed. High variance + reasonable mean = leverage point where small interventions cascade.
 
 ### Implementation Reference
 
-- **File:** `js/core/Vertex.js`
-- **Method:** `Vertex.calculateVortexEnergy()`
-- **Also:** `js/advanced/vertex-analyzer.js`
+- **Canonical SSOT:** `js/core/Vertex.js` → `Vertex.calculateVortexEnergy()`
+- **Aligned:** `js/advanced/vertex-analyzer.js` → `VertexAnalyzer.calculateVortexStrength()`
+  (aligned to use stdDev/0.577 per STRESS_TEST_FIX [C3])
 
 ---
 

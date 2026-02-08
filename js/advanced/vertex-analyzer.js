@@ -128,17 +128,22 @@ export class VertexAnalyzer {
    * Calculate vortex strength (intensity of the convergence)
    * Based on energy variance and mean energy of the 3 faces
    */
+  // STRESS_TEST_FIX [C3]: Aligned with canonical formula from Vertex.js.
+  // Uses stdDev/0.577 (not variance/0.1) for proper [0,1] normalization.
+  // 0.577 = sqrt(1/3) = max possible stdDev for 3 values in [0,1].
+  // Previous formula used variance/0.1 which produced different output ranges.
   calculateVortexStrength(faces) {
     if (faces.length !== 3) return 0;
 
     const energies = faces.map(f => f.faceEnergy);
     const mean = energies.reduce((a, b) => a + b, 0) / 3;
 
-    // Variance: sum((x - mean)^2) / N
+    // Variance and standard deviation
     const variance = energies.reduce((sum, e) => sum + Math.pow(e - mean, 2), 0) / 3;
+    const stdDev = Math.sqrt(variance);
 
-    // Normalize variance (max possible variance for 0-1 range is 0.25)
-    const normalizedVariance = Math.min(variance / 0.1, 1.0);
+    // Normalize stdDev (max possible for 3 values in [0,1] is sqrt(1/3) ≈ 0.577)
+    const normalizedVariance = stdDev / 0.577;
 
     // Combined strength: 70% variance, 30% mean energy
     const strength = (0.7 * normalizedVariance) + (0.3 * mean);

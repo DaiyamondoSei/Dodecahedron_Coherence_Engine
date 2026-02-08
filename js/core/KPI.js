@@ -146,10 +146,16 @@ export class KPI {
       ? (PHI_HARMONICS.CURVATURE[this.metricType] || 1.0)
       : 1.0;
 
+    // STRESS_TEST_FIX [H4]: Clamp linearScore BEFORE kappa to prevent
+    // Math.pow(negative, non-integer) = NaN propagation.
+    // Edge case: if normalization returns slightly negative due to floating
+    // point, Math.pow(-0.001, 1.618) = NaN, which silently poisons coherence.
+    const safeScore = Math.max(0, Math.min(1, linearScore));
+
     // Apply curvature: score^kappa
     // survival (kappa=0.618): 0.5^0.618 = 0.65 (forgiving)
     // growth (kappa=1.618): 0.5^1.618 = 0.33 (demanding)
-    return Math.pow(linearScore, kappa);
+    return Math.pow(safeScore, kappa);
   }
 
   /**
@@ -162,7 +168,11 @@ export class KPI {
   normalizeUp() {
     if (this.value >= this.targetIdeal) return 1.0;
     if (this.value <= this.targetMin) return 0.0;
-    return (this.value - this.targetMin) / (this.targetIdeal - this.targetMin);
+    // STRESS_TEST_FIX [C1]: Guard against targetIdeal === targetMin
+    // (organization confused its floor with its ceiling — concept breaks, so math must not)
+    const range = this.targetIdeal - this.targetMin;
+    if (range <= 0) return 0.0;
+    return (this.value - this.targetMin) / range;
   }
 
   /**
@@ -175,7 +185,10 @@ export class KPI {
   normalizeDown() {
     if (this.value <= this.targetMin) return 1.0;
     if (this.value >= this.absoluteMax) return 0.0;
-    return 1 - ((this.value - this.targetMin) / (this.absoluteMax - this.targetMin));
+    // STRESS_TEST_FIX [C1]: Guard against absoluteMax === targetMin
+    const range = this.absoluteMax - this.targetMin;
+    if (range <= 0) return 0.0;
+    return 1 - ((this.value - this.targetMin) / range);
   }
 
   /**
@@ -197,12 +210,18 @@ export class KPI {
     // Below plateau: linear rise from targetMin to healthyMin
     if (this.value < this.healthyMin) {
       if (this.value <= this.targetMin) return 0.0;
-      return (this.value - this.targetMin) / (this.healthyMin - this.targetMin);
+      // STRESS_TEST_FIX [C1]: Guard against healthyMin === targetMin
+      const riseRange = this.healthyMin - this.targetMin;
+      if (riseRange <= 0) return 0.0;
+      return (this.value - this.targetMin) / riseRange;
     }
 
     // Above plateau: linear decline from healthyMax to absoluteMax
     if (this.value >= this.absoluteMax) return 0.0;
-    return 1 - ((this.value - this.healthyMax) / (this.absoluteMax - this.healthyMax));
+    // STRESS_TEST_FIX [C1]: Guard against absoluteMax === healthyMax
+    const fallRange = this.absoluteMax - this.healthyMax;
+    if (fallRange <= 0) return 0.0;
+    return 1 - ((this.value - this.healthyMax) / fallRange);
   }
 
   /**

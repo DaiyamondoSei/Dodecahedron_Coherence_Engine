@@ -143,6 +143,12 @@ export class Edge {
    * @param {Face} faceB - Second connected face
    * @returns {number} Calculated tension (0-1)
    */
+  // STRESS_TEST_FIX [C2]: This is the CANONICAL edge tension formula (SSOT).
+  // Uses threshold-based phase detection (Synergetic/Depleted/Flowing/Stable)
+  // which captures organizational phase transitions — philosophically richer
+  // and more defensible for the thesis than pure mathematical ratios.
+  // Alternative perspectives exist in edge-analyzer.js (normalized relative tension)
+  // and main.js (absolute difference) — these are SUPPLEMENTARY, not authoritative.
   calculateTension(faceA, faceB) {
     if (!faceA || !faceB) return 0;
 

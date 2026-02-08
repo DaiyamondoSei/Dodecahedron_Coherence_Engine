@@ -171,21 +171,36 @@
 
 export class DynamicsAnalyzer {
   constructor() {
-    // Dodecahedron graph structure (adjacency list)
-    this.adjacency = {
-      1: [2, 5, 6, 8, 9],
-      2: [1, 3, 6, 9, 10],
-      3: [2, 4, 6, 10, 11],
-      4: [3, 5, 6, 7, 11],
-      5: [1, 4, 7, 8, 10],
-      6: [1, 2, 3, 4],
-      7: [4, 5, 8, 12],
-      8: [1, 5, 7, 9, 12],
-      9: [1, 2, 8, 10, 12],
-      10: [2, 3, 5, 9, 11, 12],
-      11: [3, 4, 10, 12],
-      12: [7, 8, 9, 10, 11]
-    };
+    // STRESS_TEST_FIX [H1]: Replace hardcoded adjacency with SSOT.
+    // dodecahedron-topology.js builds FACE_ADJACENCY dynamically from 30 edges,
+    // guaranteeing symmetry (A→B iff B→A) and exactly 5 neighbors per face.
+    // The previous manual adjacency list had 4 errors:
+    //   Face 6: 4 neighbors (should be 5), Face 7: 4 (should be 5),
+    //   Face 10: 6 (should be 5), Face 11: 4 (should be 5).
+    const topology = (typeof window !== 'undefined' && window.DodecahedronTopology)
+      ? window.DodecahedronTopology.FACE_ADJACENCY
+      : null;
+
+    if (topology) {
+      this.adjacency = topology;
+    } else {
+      // Fallback: log warning, module should be loaded before this
+      console.warn('DynamicsAnalyzer: DodecahedronTopology not available, using inline fallback');
+      this.adjacency = {
+        1: [2, 6, 7, 8, 10],
+        2: [1, 3, 6, 10, 11],
+        3: [2, 4, 6, 9, 11],
+        4: [3, 5, 6, 7, 9],
+        5: [4, 7, 8, 9, 12],
+        6: [1, 2, 3, 4, 7],
+        7: [1, 4, 5, 6, 8],
+        8: [1, 5, 7, 10, 12],
+        9: [3, 4, 5, 11, 12],
+        10: [1, 2, 8, 11, 12],
+        11: [2, 3, 9, 10, 12],
+        12: [5, 8, 9, 10, 11]
+      };
+    }
 
     // Octave boundaries (thresholds for phase transitions)
     this.octaveBoundaries = [
