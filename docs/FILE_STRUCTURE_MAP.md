@@ -197,15 +197,57 @@ render toggle handlers
 
 ---
 
-#### 6. **simulator.html** - Coherence Simulator
-**Purpose:** Interactive "what-if" analysis
+#### 6. **simulator.html** - Full Vision Coherence Simulator
+**Purpose:** Interactive what-if analysis for all 12 dodecahedron faces
 **What it does:**
-- Adjust KPI sliders
-- See real-time coherence changes
-- Test interventions
-- Scenario planning
+- 12 face energy sliders grouped in 6 breath axis pairs
+- Real-time Quannex engine integration (coherence recalculation on every change)
+- Breath axis balance visualization (6 polarity bars)
+- Shadow pattern detection (heuristic + engine-based)
+- BroadcastChannel sync for live 3D dodecahedron feedback
+- Company selector with data reload
+- Scenario save/load/compare/export
 
-**Status:** Coming soon / partially implemented
+**Architecture:** Modular (9 JS + 7 CSS files, thin HTML shell)
+```
+js/simulator/
+├── sim-state.js          # Central state registry (reads KpiConstants SSOT)
+├── sim-controls.js       # 12 face sliders in 6 breath axis pairs
+├── sim-engine.js         # Quannex engine integration + mock fallback
+├── sim-company.js        # Company selector dropdown
+├── sim-breath.js         # Breath axis balance bars
+├── sim-shadow.js         # Shadow pattern detection display
+├── sim-sync.js           # BroadcastChannel cross-window sync
+├── sim-scenarios.js      # Save/load/compare/export scenarios
+└── sim-main.js           # Orchestrator (12-phase init sequence)
+
+css/simulator/
+├── sim-main.css          # @import orchestrator
+├── sim-base.css          # CSS variables, reset
+├── sim-layout.css        # Grid layout, responsive
+├── sim-controls.css      # Slider cards, per-face colors
+├── sim-panels.css        # Impact, breath, shadow panels
+├── sim-scenarios.css     # Scenario cards, toolbar
+└── sim-animations.css    # Keyframes, utility classes
+```
+
+**Dependency Graph:**
+```
+sim-state (no deps - loaded first)
+     │
+  ┌──┼──────────┐
+  ▼  ▼          ▼
+company controls engine
+  │      │       │
+  └──┬───┘   ┌──┘
+     ▼       ▼
+   breath  shadow  sync  scenarios
+     └───────┼───────┘
+             ▼
+          sim-main (orchestrator - loaded last)
+```
+
+**Status:** Fully implemented (February 2026)
 
 ---
 
@@ -815,7 +857,7 @@ Shows dashboard
 ---
 
 **Created:** 2025-11-10
-**Updated:** 2025-12-21 (Added shadow overlay modular architecture)
+**Updated:** 2026-02-08 (Added Full Vision Coherence Simulator - 9 JS + 7 CSS modules)
 **For:** Thesis defense & demo preparation
 **Status:** Complete reference guide
 **Co-created by:** Deimantas Murauskas & Claude

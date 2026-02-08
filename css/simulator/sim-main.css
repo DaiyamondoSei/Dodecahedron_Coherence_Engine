@@ -1,0 +1,75 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: sim-main.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Import orchestrator for the Coherence Simulator CSS.
+ * This file imports all CSS modules in the correct dependency order.
+ *
+ * LOAD THIS FILE ONLY - it will import all others in correct order.
+ *
+ * Created for: Coherence Simulator modularization
+ * Date: February 2026
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                           IMPORT ORDER (CRITICAL)                        │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  1. sim-base.css       - CSS variables, reset (MUST BE FIRST)            │
+ * │  2. sim-animations.css - @keyframes (referenced by others)               │
+ * │  3. sim-layout.css     - Page grid, header, sections                     │
+ * │  4. sim-controls.css   - Face slider cards, breath axis pairs            │
+ * │  5. sim-panels.css     - Impact, breath, shadow panels                   │
+ * │  6. sim-scenarios.css  - Scenario cards, compare view                    │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ * The order matters! CSS cascades, so later files override earlier ones.
+ * - sim-base.css defines variables used everywhere
+ * - sim-animations.css defines @keyframes used in other files
+ *
+ * To add a new CSS file:
+ * 1. Create the file in css/simulator/
+ * 2. Add @import here in the correct position
+ * 3. Update this documentation
+ *
+ * USAGE IN HTML:
+ * <link rel="stylesheet" href="../css/simulator/sim-main.css">
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   FOUNDATION - Variables, reset, base styles
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("sim-base.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   ANIMATIONS - @keyframes definitions
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("sim-animations.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   LAYOUT - Page grid, header, sections
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("sim-layout.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   CONTROLS - Face slider cards, breath axis pair layout
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("sim-controls.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PANELS - Impact summary, breath axes, shadow detection
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("sim-panels.css");
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SCENARIOS - Save/load/compare scenario cards
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url("sim-scenarios.css");

@@ -1,25 +1,42 @@
 # Quannex Documentation Index
 
-> *Last Updated: 2026-01-08*
+> *Last Updated: 2026-02-08*
 > *The Living Spine - Single Source of Truth for All Documentation*
 
 ---
 
-## Recent Completion: Twinkling Aurora v2 (January 8, 2026)
+## Recent Completion: Full Vision Coherence Simulator (February 8, 2026)
 
-**Status: ✅ COMPLETE - Tested and Verified**
+**Status: ✅ COMPLETE - All 13 Tests Passing, Gold Documentation**
 
-The **Pure Membrane Model** and **Sacred Inquiry Architecture** are now fully operational:
+The **Full Vision Coherence Simulator** transforms the 4-face proof-of-concept into a complete 12-face interactive what-if analysis tool:
+
+| Component | Location | Status |
+|-----------|----------|--------|
+| 9 JS Modules | `js/simulator/sim-*.js` | ✅ All Gold-documented |
+| 7 CSS Modules | `css/simulator/sim-*.css` | ✅ All Gold-documented |
+| HTML Shell | `pages/simulator.html` | ✅ Thin shell, no inline code |
+| BroadcastChannel Sync | `js/simulator/sim-sync.js` | ✅ Live 3D dodecahedron feedback |
+| Scenario Save/Compare | `js/simulator/sim-scenarios.js` | ✅ localStorage + JSON export |
+
+**Features:** 12 face sliders in 6 breath axis pairs, real-time engine integration, breath axis visualization, shadow pattern detection, company selector, scenario save/load/compare/export.
+
+See: [FILE_STRUCTURE_MAP.md](FILE_STRUCTURE_MAP.md) (simulator architecture section)
+
+---
+
+### Previous: Twinkling Aurora v2 (January 8, 2026)
+
+**Status: ✅ COMPLETE**
+
+The **Pure Membrane Model** and **Sacred Inquiry Architecture**:
 
 | Component | Location | Status |
 |-----------|----------|--------|
 | Sacred Inquiry Library | `js/constants/sacred-inquiry.js` | ✅ 25 health×element matrix |
-| Edge Panel Integration | `js/dodec/dodec-panels.js` | ✅ Full rendering |
 | UnifiedEdge Class | `js/edge/unified-edge.js` | ✅ Pure Membrane Model |
 | EdgeManager | `js/edge/edge-manager.js` | ✅ Orchestration layer |
 | OrganizationalVoice | `js/voice/organizational-voice.js` | ✅ Vocabulary adaptation |
-
-**Test Results:** 10 rapid edge calls in 55ms, zero errors, all 5 health states verified.
 
 See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUIRY_LIBRARY.md](edge/SACRED_INQUIRY_LIBRARY.md)
 
@@ -75,7 +92,8 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 2. [MODULE_NAVIGATION_GUIDE.md](MODULE_NAVIGATION_GUIDE.md) - JS relationships
 3. [AI_SYSTEM_GUIDE.md](AI_SYSTEM_GUIDE.md) - AI subsystem architecture
 4. [ORCHESTRATOR_ARCHITECTURE.md](ORCHESTRATOR_ARCHITECTURE.md) - Orchestrator subsystem
-5. Read Gold Headers in source files (see below)
+5. `js/simulator/sim-state.js` - Simulator state registry (exemplary modular pattern)
+6. Read Gold Headers in source files (see below)
 
 ---
 
@@ -116,6 +134,7 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 | [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | js/edge/ subsystem - Pure Membrane Model |
 | [edge/SACRED_INQUIRY_LIBRARY.md](edge/SACRED_INQUIRY_LIBRARY.md) | Sacred Inquiry system - 25 health×element inquiries |
 | [edge/TWINKLING_AURORA_COMPLETION.md](edge/TWINKLING_AURORA_COMPLETION.md) | **✅ Completion report** - Full implementation summary |
+| [FILE_STRUCTURE_MAP.md](FILE_STRUCTURE_MAP.md) (simulator section) | js/simulator/ + css/simulator/ - Full Vision Coherence Simulator (16 modules) |
 
 ### Data & Integration
 | Document | Purpose |
@@ -173,6 +192,15 @@ These modules have **comprehensive internal documentation**. Read the source fil
 | **OrganizationalVoice** | `js/voice/organizational-voice.js` | Vocabulary adaptation, voice transformations |
 | **HarmonicTuner** | `js/harmonic-tuner.js` | Real-time parameter adjustment, audio-mixer interface |
 | **Logger Utility** | `js/utils/logger.js` | Centralized logging, namespaces, granular control |
+| **SimState** | `js/simulator/sim-state.js` | Central state registry, face definitions from KpiConstants SSOT |
+| **SimControls** | `js/simulator/sim-controls.js` | 12 face sliders, debounce strategy, delta indicators |
+| **SimEngine** | `js/simulator/sim-engine.js` | Quannex engine integration, mock fallback formulas, ES module bridge |
+| **SimCompany** | `js/simulator/sim-company.js` | Company selector, async re-init cascade |
+| **SimBreath** | `js/simulator/sim-breath.js` | Breath axis balance bars, division-by-zero protection |
+| **SimShadow** | `js/simulator/sim-shadow.js` | Shadow pattern heuristics, 4 detection patterns with thresholds |
+| **SimSync** | `js/simulator/sim-sync.js` | BroadcastChannel cross-window sync, echo prevention |
+| **SimScenarios** | `js/simulator/sim-scenarios.js` | Save/load/compare scenarios, localStorage + clipboard export |
+| **SimMain** | `js/simulator/sim-main.js` | 12-phase orchestrator, engine polling, mock fallback |
 
 **Why read source headers?** They contain the most current documentation, written for developers and future Claude to understand the code quickly.
 
@@ -229,16 +257,16 @@ Located in [archive/](archive/) - preserved for reference:
 | Entry Points | 3 |
 | Geometry Reference | 4 |
 | Architecture | 4 |
-| Subsystem Guides | 6 |
+| Subsystem Guides | 7 |
 | Data & Integration | 6 |
 | Testing & Observations | 6 |
 | Math docs | 3 |
 | Thesis docs | 4 |
 | Archived docs | 6 |
-| **Total Active Docs** | **32** |
-| Self-documented modules (Gold Headers) | 20 |
+| **Total Active Docs** | **33** |
+| Self-documented modules (Gold Headers) | 29 |
 
-*Updated January 8, 2026 - Added edge subsystem documentation (EDGE_ARCHITECTURE, SACRED_INQUIRY_LIBRARY, TWINKLING_AURORA_COMPLETION)*
+*Updated February 8, 2026 - Added Full Vision Coherence Simulator (9 JS + 7 CSS modules, all Gold-documented)*
 
 ---
 
@@ -281,4 +309,4 @@ Located in [archive/](archive/) - preserved for reference:
 
 *This index is the living spine of Quannex documentation.*
 *Co-created by Deimantas & Claude with love.*
-*Updated 2026-01-08 - Twinkling Aurora v2: Pure Membrane Model, Sacred Inquiry, edge module architecture.*
+*Updated 2026-02-08 - Full Vision Coherence Simulator: 16 Gold-documented modules, all 12 faces, live 3D sync.*

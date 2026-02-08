@@ -1,0 +1,160 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: sim-base.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Foundation styles for the Coherence Simulator.
+ * Contains CSS variables, reset, body setup, and base typography.
+ *
+ * This file MUST be loaded first - other sim CSS files depend on these variables.
+ *
+ * Created for: Coherence Simulator modularization
+ * Date: February 2026
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  None - this is the foundation file                                      │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * CSS VARIABLES DEFINED:
+ * - --sim-bg-*: Background gradients and surfaces
+ * - --sim-accent-*: Accent colors (cyan, magenta, green)
+ * - --sim-text-*: Text colors (primary, secondary, muted)
+ * - --sim-face-*: Per-face color coding (12 faces)
+ * - --sim-status-*: Status indicators (healthy, warning, critical)
+ * - --sim-glass-*: Glassmorphism panel effects
+ * - --sim-radius-*: Border radius tokens
+ * - --sim-phi-*: PHI-based timing
+ * - --sim-shadow-*: Box shadow tokens
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ * The color palette inherits the Quannex aesthetic from dodec-base.css
+ * (--neon-cyan, --neon-green) but adds simulator-specific tokens.
+ * Face colors match the dodecahedron 3D visualization for consistency.
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   CSS VARIABLES
+   ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+    /* Backgrounds */
+    --sim-bg-primary: #000000;
+    --sim-bg-radial: radial-gradient(circle at 50% 50%, #0a0a1a 0%, #000000 100%);
+    --sim-bg-surface: rgba(255, 255, 255, 0.03);
+    --sim-bg-surface-hover: rgba(255, 255, 255, 0.06);
+    --sim-bg-surface-active: rgba(255, 255, 255, 0.08);
+
+    /* Accent Colors */
+    --sim-accent-cyan: #00ffcc;
+    --sim-accent-magenta: #ff00ff;
+    --sim-accent-green: #00ff66;
+    --sim-accent-gold: #ffd700;
+    --sim-accent-violet: #8a2be2;
+
+    /* Text */
+    --sim-text-primary: #ffffff;
+    --sim-text-secondary: rgba(255, 255, 255, 0.7);
+    --sim-text-muted: rgba(255, 255, 255, 0.4);
+
+    /* Face Colors (matching dodecahedron 3D visualization) */
+    --sim-face-1: #ff6b6b;   /* Financial Capital - warm red */
+    --sim-face-2: #ffd93d;   /* Intellectual Capital - gold */
+    --sim-face-3: #6bcb77;   /* Human Capital - green */
+    --sim-face-4: #4d96ff;   /* Structural Capital - blue */
+    --sim-face-5: #ff8c42;   /* Market Resonance - orange */
+    --sim-face-6: #a66cff;   /* Community & Partners - purple */
+    --sim-face-7: #ffd700;   /* Brand & Reputation - gold */
+    --sim-face-8: #00ccff;   /* Core Operations - cyan */
+    --sim-face-9: #77dd77;   /* Regenerative Flow - light green */
+    --sim-face-10: #ff77aa;  /* Foundational Values - pink */
+    --sim-face-11: #88ddff;  /* Funding Pipeline - light blue */
+    --sim-face-12: #cc77ff;  /* Risk & Resilience - violet */
+
+    /* Status Colors */
+    --sim-status-healthy: #00ffcc;
+    --sim-status-warning: #ffaa00;
+    --sim-status-critical: #ff4444;
+    --sim-status-positive: #00ff66;
+    --sim-status-negative: #ff4444;
+    --sim-status-neutral: rgba(255, 255, 255, 0.5);
+
+    /* Glassmorphism */
+    --sim-glass-bg: rgba(255, 255, 255, 0.05);
+    --sim-glass-border: rgba(255, 255, 255, 0.1);
+    --sim-glass-border-accent: rgba(0, 255, 204, 0.3);
+    --sim-glass-blur: 10px;
+
+    /* Border Radius */
+    --sim-radius-sm: 8px;
+    --sim-radius-md: 12px;
+    --sim-radius-lg: 16px;
+    --sim-radius-xl: 20px;
+
+    /* PHI-based Timing */
+    --sim-phi-timing: 1.618s;
+    --sim-phi-short: 0.618s;
+    --sim-phi-micro: 0.382s;
+    --sim-phi-instant: 0.15s;
+
+    /* Shadows */
+    --sim-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --sim-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --sim-shadow-glow-cyan: 0 0 20px rgba(0, 255, 204, 0.15);
+    --sim-shadow-glow-magenta: 0 0 20px rgba(255, 0, 255, 0.15);
+
+    /* Spacing */
+    --sim-gap-xs: 8px;
+    --sim-gap-sm: 12px;
+    --sim-gap-md: 20px;
+    --sim-gap-lg: 32px;
+    --sim-gap-xl: 48px;
+
+    /* Font */
+    --sim-font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --sim-font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   RESET & BASE
+   ════════════════════════════════════════════════════════════════════════════ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--sim-font-family);
+    background: var(--sim-bg-radial);
+    color: var(--sim-text-primary);
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SCROLLBAR (matching dodecahedron page style)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}

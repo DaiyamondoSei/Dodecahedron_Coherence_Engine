@@ -1,0 +1,224 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: sim-layout.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Page layout structure for the Coherence Simulator.
+ * Defines the CSS grid, header, section containers, and responsive breakpoints.
+ *
+ * Created for: Coherence Simulator modularization
+ * Date: February 2026
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  sim-base.css - CSS variables (--sim-*)                                  │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * LAYOUT STRUCTURE:
+ * ┌────────────────────────────────────────────────┐
+ * │ .sim-header (title + company selector)          │
+ * ├────────────────────────────────────────────────┤
+ * │ .sim-status-bar (engine status + baseline)      │
+ * ├─────────────────────┬──────────────────────────┤
+ * │ .sim-controls-area  │ .sim-panels-area          │
+ * │ (12 face sliders    │ (impact + breath +        │
+ * │  in 6 axis pairs)   │  shadow panels)           │
+ * ├─────────────────────┴──────────────────────────┤
+ * │ .sim-scenarios-area (save/load/compare)         │
+ * └────────────────────────────────────────────────┘
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ * The grid uses a 2-column layout on desktop (sliders left, panels right).
+ * On tablets (< 1024px), it stacks to single column.
+ * The controls area uses its own internal grid for the 6 breath axis rows.
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PAGE CONTAINER
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--sim-gap-lg) var(--sim-gap-md);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   HEADER
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-header {
+    text-align: center;
+    margin-bottom: var(--sim-gap-lg);
+}
+
+.sim-title {
+    font-size: 42px;
+    font-weight: 200;
+    letter-spacing: 6px;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, var(--sim-accent-cyan), var(--sim-accent-magenta));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.sim-subtitle {
+    font-size: 14px;
+    color: var(--sim-text-secondary);
+    letter-spacing: 2px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   STATUS BAR
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-status-bar {
+    display: flex;
+    justify-content: center;
+    gap: var(--sim-gap-lg);
+    padding: var(--sim-gap-sm) var(--sim-gap-md);
+    background: var(--sim-glass-bg);
+    border: 1px solid var(--sim-glass-border);
+    border-radius: var(--sim-radius-md);
+    margin-bottom: var(--sim-gap-lg);
+    flex-wrap: wrap;
+}
+
+.sim-status-item {
+    display: flex;
+    align-items: center;
+    gap: var(--sim-gap-xs);
+    font-size: 13px;
+}
+
+.sim-status-label {
+    color: var(--sim-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 11px;
+}
+
+.sim-status-value {
+    color: var(--sim-text-primary);
+    font-family: var(--sim-font-mono);
+    font-size: 13px;
+}
+
+.sim-status-value.success {
+    color: var(--sim-status-healthy);
+}
+
+.sim-status-value.warning {
+    color: var(--sim-status-warning);
+}
+
+.sim-status-value.error {
+    color: var(--sim-status-critical);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   MAIN CONTENT GRID
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sim-gap-lg);
+    margin-bottom: var(--sim-gap-lg);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   CONTROLS AREA (left column)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-controls-area {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sim-gap-md);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PANELS AREA (right column)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-panels-area {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sim-gap-md);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SCENARIOS AREA (full width below)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-scenarios-area {
+    margin-bottom: var(--sim-gap-lg);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION TITLES
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-section-title {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sim-text-secondary);
+    margin-bottom: var(--sim-gap-sm);
+    padding-bottom: var(--sim-gap-xs);
+    border-bottom: 1px solid var(--sim-glass-border);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PANEL BASE (shared glass panel style)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-panel {
+    background: var(--sim-glass-bg);
+    backdrop-filter: blur(var(--sim-glass-blur));
+    -webkit-backdrop-filter: blur(var(--sim-glass-blur));
+    border: 1px solid var(--sim-glass-border);
+    border-radius: var(--sim-radius-lg);
+    padding: var(--sim-gap-md);
+}
+
+.sim-panel--accent {
+    border-color: var(--sim-glass-border-accent);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+    .sim-main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sim-title {
+        font-size: 32px;
+        letter-spacing: 4px;
+    }
+
+    .sim-container {
+        padding: var(--sim-gap-md) var(--sim-gap-sm);
+    }
+}
+
+@media (max-width: 640px) {
+    .sim-title {
+        font-size: 24px;
+        letter-spacing: 2px;
+    }
+
+    .sim-status-bar {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--sim-gap-sm);
+    }
+}

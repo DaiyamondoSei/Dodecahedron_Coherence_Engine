@@ -3,806 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚙️ Coherence Simulator - Quannex</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: radial-gradient(circle at 50% 50%, #0a0a1a 0%, #000000 100%);
-            color: #fff;
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .title {
-            font-size: 42px;
-            font-weight: 200;
-            letter-spacing: 6px;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #00ffcc, #ff00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            opacity: 0.7;
-            letter-spacing: 2px;
-        }
-
-        .coming-soon {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 255, 204, 0.3);
-            border-radius: 15px;
-            padding: 60px 40px;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .coming-soon-title {
-            font-size: 32px;
-            margin-bottom: 15px;
-            color: #00ffcc;
-        }
-
-        .coming-soon-text {
-            font-size: 16px;
-            line-height: 1.8;
-            opacity: 0.8;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .preview-section {
-            margin-top: 50px;
-        }
-
-        .preview-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-            opacity: 0.9;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 25px;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(0, 255, 204, 0.4);
-            transform: translateY(-3px);
-        }
-
-        .feature-icon {
-            font-size: 32px;
-            margin-bottom: 15px;
-        }
-
-        .feature-name {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #00ffcc;
-        }
-
-        .feature-description {
-            font-size: 14px;
-            line-height: 1.6;
-            opacity: 0.8;
-        }
-
-        .mockup-container {
-            margin-top: 50px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(0, 255, 204, 0.2);
-            border-radius: 15px;
-            padding: 40px;
-        }
-
-        .mockup-title {
-            font-size: 20px;
-            margin-bottom: 25px;
-            text-align: center;
-            opacity: 0.9;
-        }
-
-        .slider-demo {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .slider-item {
-            margin-bottom: 30px;
-        }
-
-        .slider-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .slider-name {
-            font-weight: 600;
-        }
-
-        .slider-value {
-            color: #00ffcc;
-            font-weight: 700;
-        }
-
-        .slider {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: rgba(255, 255, 255, 0.1);
-            outline: none;
-            appearance: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00ffcc, #00cc99);
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-        }
-
-        .slider::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00ffcc, #00cc99);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-        }
-
-        .impact-display {
-            margin-top: 40px;
-            padding: 30px;
-            background: rgba(0, 255, 204, 0.05);
-            border: 1px solid rgba(0, 255, 204, 0.3);
-            border-radius: 12px;
-        }
-
-        .impact-title {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #00ffcc;
-        }
-
-        .impact-metric {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .impact-metric:last-child {
-            border-bottom: none;
-        }
-
-        .impact-change {
-            font-weight: 700;
-        }
-
-        .positive {
-            color: #00ff66;
-        }
-
-        .negative {
-            color: #ff6666;
-        }
-
-        /* Status Bar */
-        .status-bar {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            background: rgba(0, 255, 204, 0.05);
-            border: 1px solid rgba(0, 255, 204, 0.2);
-            border-radius: 12px;
-            padding: 20px 40px;
-            margin-bottom: 30px;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .status-label {
-            font-size: 14px;
-            opacity: 0.7;
-        }
-
-        .status-value {
-            font-size: 16px;
-            font-weight: 600;
-            color: #00ffcc;
-        }
-
-        .status-value.warning {
-            color: #ffaa00;
-        }
-
-        .status-value.error {
-            color: #ff6666;
-        }
-
-        .status-value.success {
-            color: #00ff66;
-        }
-
-        /* Live indicator */
-        .live-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(0, 255, 102, 0.1);
-            border: 1px solid rgba(0, 255, 102, 0.3);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #00ff66;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #00ff66;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        /* Delta display */
-        .delta-display {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .delta-arrow {
-            font-size: 14px;
-            opacity: 0.7;
-        }
-    </style>
+    <title>Coherence Simulator - Quannex</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../css/simulator/sim-main.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="title">⚙️ COHERENCE SIMULATOR</div>
-            <div class="subtitle">Interactive What-If Analysis</div>
-        </div>
+    <!-- ════════════════════════════════════════════════════════════════════════
+         COHERENCE SIMULATOR - Full Vision
+         ════════════════════════════════════════════════════════════════════════
+         Interactive what-if analysis tool for organizational coherence.
+         All 12 dodecahedron faces. 6 breath axes. Live 3D feedback.
 
-        <div class="status-bar" id="statusBar">
-            <div class="status-item">
-                <span class="status-label">Company:</span>
-                <span class="status-value" id="currentCompany">Loading...</span>
+         Created: February 2026
+         Architecture: Modular (js/simulator/*.js + css/simulator/*.css)
+         ════════════════════════════════════════════════════════════════════════ -->
+
+    <div class="sim-container">
+
+        <!-- ═══════════════ HEADER ═══════════════ -->
+        <header class="sim-header">
+            <h1 class="sim-title">COHERENCE SIMULATOR</h1>
+            <p class="sim-subtitle">Interactive What-If Analysis</p>
+        </header>
+
+        <!-- ═══════════════ STATUS BAR ═══════════════ -->
+        <div class="sim-status-bar">
+            <div class="sim-status-item">
+                <span class="sim-status-label">Company</span>
+                <span class="sim-status-value" id="sim-current-company">Loading...</span>
+                <span id="sim-company-container"></span>
             </div>
-            <div class="status-item">
-                <span class="status-label">Baseline Coherence:</span>
-                <span class="status-value" id="baselineCoherence">--</span>
+            <div class="sim-status-item">
+                <span class="sim-status-label">Baseline</span>
+                <span class="sim-status-value" id="sim-baseline-coherence">--</span>
             </div>
-            <div class="status-item">
-                <span class="status-label">Engine:</span>
-                <span class="status-value" id="engineStatus">Initializing...</span>
-            </div>
-        </div>
-
-        <div class="preview-section">
-            <div class="preview-title">✨ Planned Features</div>
-
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🎚️</div>
-                    <div class="feature-name">Interactive KPI Sliders</div>
-                    <div class="feature-description">
-                        Adjust any organizational metric with smooth, real-time sliders.
-                        See instant feedback on how changes ripple through the system.
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔷</div>
-                    <div class="feature-name">Live 3D Feedback</div>
-                    <div class="feature-description">
-                        Watch the dodecahedron morph as you adjust values. Colors shift,
-                        edges pulse, vertices glow - all responding to your changes.
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <div class="feature-name">Coherence Impact Analysis</div>
-                    <div class="feature-description">
-                        See exactly how each change affects global coherence, local face health,
-                        breath ratios, and shadow patterns.
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">⚠️</div>
-                    <div class="feature-name">Shadow Detection</div>
-                    <div class="feature-description">
-                        Get real-time warnings about hypocrisy patterns: burnout engine,
-                        brittle profit, extractive growth, and more.
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">💡</div>
-                    <div class="feature-name">AI-Powered Insights</div>
-                    <div class="feature-description">
-                        Receive intelligent recommendations based on your simulated changes.
-                        What should you prioritize? What's the optimal path forward?
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">💾</div>
-                    <div class="feature-name">Save Scenarios</div>
-                    <div class="feature-description">
-                        Create multiple "what-if" scenarios and compare them side-by-side.
-                        Export scenarios as PDF reports for team discussions.
-                    </div>
-                </div>
+            <div class="sim-status-item">
+                <span class="sim-status-label">Engine</span>
+                <span class="sim-status-value warning" id="sim-engine-status">Initializing...</span>
             </div>
         </div>
 
-        <div class="mockup-container">
-            <div class="mockup-title">🎚️ Face Energy Sliders <span class="live-badge"><span class="live-dot"></span>LIVE</span></div>
+        <!-- ═══════════════ MAIN CONTENT ═══════════════ -->
+        <div class="sim-main-grid">
 
-            <div class="slider-demo">
-                <div class="slider-item">
-                    <div class="slider-label">
-                        <span class="slider-name">💰 Financial Capital</span>
-                        <span class="slider-value" id="financialValue">75%</span>
-                    </div>
-                    <input type="range" min="0" max="100" value="75" class="slider" id="financialSlider">
-                </div>
-
-                <div class="slider-item">
-                    <div class="slider-label">
-                        <span class="slider-name">👥 Human Capital</span>
-                        <span class="slider-value" id="humanValue">45%</span>
-                    </div>
-                    <input type="range" min="0" max="100" value="45" class="slider" id="humanSlider">
-                </div>
-
-                <div class="slider-item">
-                    <div class="slider-label">
-                        <span class="slider-name">⚙️ Core Operations</span>
-                        <span class="slider-value" id="operationsValue">90%</span>
-                    </div>
-                    <input type="range" min="0" max="100" value="90" class="slider" id="operationsSlider">
-                </div>
-
-                <div class="slider-item">
-                    <div class="slider-label">
-                        <span class="slider-name">🌱 Regenerative Flow</span>
-                        <span class="slider-value" id="regenValue">67%</span>
-                    </div>
-                    <input type="range" min="0" max="100" value="67" class="slider" id="regenSlider">
-                </div>
+            <!-- LEFT: Face Energy Controls (12 sliders in 6 axis pairs) -->
+            <div class="sim-controls-area" role="region" aria-label="Face energy controls">
+                <!-- Populated by sim-controls.js -->
             </div>
 
-            <div class="impact-display">
-                <div class="impact-title">📊 Coherence Impact</div>
-                <div class="impact-metric">
-                    <span>Global Coherence:</span>
-                    <span class="impact-change" id="globalImpact">67% → 71% (+4%)</span>
+            <!-- RIGHT: Analysis Panels -->
+            <div class="sim-panels-area" role="region" aria-label="Analysis panels">
+
+                <!-- Impact Summary -->
+                <div class="sim-panel sim-panel--accent sim-impact-panel" id="sim-impact-panel">
+                    <div class="sim-impact-title">Coherence Impact</div>
+                    <div class="sim-impact-metric">
+                        <span class="sim-impact-label">Global Coherence</span>
+                        <span class="sim-impact-value neutral" id="sim-impact-global">--</span>
+                    </div>
+                    <div class="sim-impact-metric">
+                        <span class="sim-impact-label">Being/Doing Balance</span>
+                        <span class="sim-impact-value neutral" id="sim-impact-balance">--</span>
+                    </div>
+                    <div class="sim-impact-metric">
+                        <span class="sim-impact-label">Shadow Alert</span>
+                        <span class="sim-impact-value neutral" id="sim-impact-shadow">--</span>
+                    </div>
                 </div>
-                <div class="impact-metric">
-                    <span>Being/Doing Balance:</span>
-                    <span class="impact-change" id="balanceImpact">0.50 → 0.89 (Improving)</span>
+
+                <!-- Breath Axis Balance -->
+                <div class="sim-panel sim-breath-panel" id="sim-breath-panel">
+                    <!-- Populated by sim-breath.js -->
                 </div>
-                <div class="impact-metric">
-                    <span>Shadow Alert:</span>
-                    <span class="impact-change negative" id="shadowImpact">⚠️ Burnout Engine Detected</span>
+
+                <!-- Shadow Detection -->
+                <div class="sim-panel sim-shadow-panel" id="sim-shadow-panel">
+                    <!-- Populated by sim-shadow.js -->
                 </div>
+
             </div>
         </div>
+
+        <!-- ═══════════════ SCENARIOS ═══════════════ -->
+        <div class="sim-scenarios-area" role="region" aria-label="Saved scenarios">
+            <!-- Populated by sim-scenarios.js -->
+        </div>
+
     </div>
 
-    <!-- Load Quannex Engine Dependencies -->
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SCRIPT LOAD ORDER (CRITICAL)
+         ════════════════════════════════════════════════════════════════════════
+         1. Logger utility (all modules log through this)
+         2. Constants (phi-harmonics, kpi-constants - SSOT for faces/axes)
+         3. Engine dependencies (breath-analyzer, spectral-analyzer, main.js)
+         4. Simulator modules in dependency order
+         5. ES Module bootstrap (bridges UnifiedDataLoader and starts init)
+         ════════════════════════════════════════════════════════════════════════ -->
+
+    <!-- Logger -->
+    <script src="../js/utils/logger.js"></script>
+
+    <!-- Constants (SimState reads AXIS_OPPOSITIONS and DOMAIN_NAMES) -->
     <script src="../js/constants/phi-harmonics.js"></script>
-    <script src="../js/breath-analyzer.js?v=20251231"></script>
-    <script src="../js/spectral-analyzer.js?v=20251231"></script>
-    <script type="module" src="../js/main.js?v=20251231d"></script>
+    <script src="../js/constants/kpi-constants.js"></script>
 
+    <!-- Engine Dependencies -->
+    <script src="../js/breath-analyzer.js"></script>
+    <script src="../js/spectral-analyzer.js"></script>
+    <script type="module" src="../js/main.js"></script>
+
+    <!-- Simulator Modules (dependency order) -->
+    <script src="../js/simulator/sim-state.js"></script>
+    <script src="../js/simulator/sim-company.js"></script>
+    <script src="../js/simulator/sim-controls.js"></script>
+    <script src="../js/simulator/sim-engine.js"></script>
+    <script src="../js/simulator/sim-breath.js"></script>
+    <script src="../js/simulator/sim-shadow.js"></script>
+    <script src="../js/simulator/sim-sync.js"></script>
+    <script src="../js/simulator/sim-scenarios.js"></script>
+    <script src="../js/simulator/sim-main.js"></script>
+
+    <!-- ES Module Bootstrap: Bridge UnifiedDataLoader and start initialization -->
     <script type="module">
-        // ════════════════════════════════════════════════════════════════════════════
-        // COHERENCE SIMULATOR - Real Engine Integration
-        // ════════════════════════════════════════════════════════════════════════════
-        // Wires slider controls to the real Quannex engine for live simulation.
-        // Face mapping: Financial(0), Human(2), Operations(7), Regenerative(8)
-        // ════════════════════════════════════════════════════════════════════════════
-
         import { UnifiedDataLoader } from '../js/unified-data-loader.js';
 
-        // ────────────────────────────────────────────────────────────────────────────
-        // STATE
-        // ────────────────────────────────────────────────────────────────────────────
-        let baselineCoherence = 0;
-        let currentLoadedCompanyId = null;
-        let engineReady = false;
-        let debounceTimer = null;
+        // Bridge ES module into IIFE world
+        window.SimEngine.setLoader(new UnifiedDataLoader());
 
-        // Face index mapping (1-based face number → 0-based array index)
-        const FACE_MAP = {
-            financial: 0,   // Face 1: Financial Capital
-            human: 2,       // Face 3: Human Capital
-            operations: 7,  // Face 8: Core Operations
-            regen: 8        // Face 9: Regenerative Flow
-        };
-
-        // Company name lookup
-        const COMPANY_NAMES = {
-            'quannex': 'Quannex AI',
-            'nova-tech': 'NovaTech Solutions',
-            'zenith-solutions': 'Zenith Global',
-            'apex-industries': 'Apex Industries'
-        };
-
-        // ────────────────────────────────────────────────────────────────────────────
-        // DOM ELEMENTS
-        // ────────────────────────────────────────────────────────────────────────────
-        const sliders = {
-            financial: document.getElementById('financialSlider'),
-            human: document.getElementById('humanSlider'),
-            operations: document.getElementById('operationsSlider'),
-            regen: document.getElementById('regenSlider')
-        };
-
-        const values = {
-            financial: document.getElementById('financialValue'),
-            human: document.getElementById('humanValue'),
-            operations: document.getElementById('operationsValue'),
-            regen: document.getElementById('regenValue')
-        };
-
-        const impacts = {
-            global: document.getElementById('globalImpact'),
-            balance: document.getElementById('balanceImpact'),
-            shadow: document.getElementById('shadowImpact')
-        };
-
-        const statusElements = {
-            company: document.getElementById('currentCompany'),
-            baseline: document.getElementById('baselineCoherence'),
-            engine: document.getElementById('engineStatus')
-        };
-
-        // ────────────────────────────────────────────────────────────────────────────
-        // ENGINE INITIALIZATION
-        // ────────────────────────────────────────────────────────────────────────────
-        async function initializeSimulator() {
-            console.log('[Simulator] 🚀 Initializing Coherence Simulator...');
-
-            // Get company ID from session storage
-            const companyId = sessionStorage.getItem('selectedCompanyId') || 'quannex';
-            currentLoadedCompanyId = companyId;
-
-            const companyName = COMPANY_NAMES[companyId] || companyId;
-            statusElements.company.textContent = companyName;
-            statusElements.engine.textContent = 'Loading...';
-            statusElements.engine.className = 'status-value warning';
-
-            // Update subtitle
-            const subtitle = document.querySelector('.subtitle');
-            if (subtitle) {
-                subtitle.textContent = `Interactive What-If Analysis • ${companyName}`;
-            }
-
-            try {
-                // Wait for Quannex engine to be available
-                await waitForEngine(5000);
-
-                // Load context data
-                const loader = new UnifiedDataLoader();
-                const context = await loader.loadContext(companyId);
-
-                if (!context) {
-                    throw new Error('Failed to load context');
-                }
-
-                // Initialize engine with company data
-                console.log('[Simulator] 📦 Initializing engine with company data...');
-                await window.Quannex.initWithCompany({
-                    ...context.company,
-                    faceConfig: { faces: context.faces },
-                    kpis: context.kpis,
-                    shadowPatterns: context.shadowPatterns || []
-                });
-
-                // Store baseline coherence
-                const state = window.Quannex.getState();
-                baselineCoherence = state.globalCoherence;
-
-                // Update status display
-                statusElements.baseline.textContent = Math.round(baselineCoherence * 100) + '%';
-                statusElements.engine.textContent = 'Ready';
-                statusElements.engine.className = 'status-value success';
-                engineReady = true;
-
-                // Initialize sliders with current face energies
-                initializeSlidersFromEngine(state);
-
-                // Wire up slider events
-                wireSliderEvents();
-
-                // Initial impact calculation
-                calculateImpact();
-
-                console.log('[Simulator] ✅ Simulator ready!');
-                console.log(`[Simulator] 📊 Baseline coherence: ${Math.round(baselineCoherence * 100)}%`);
-
-            } catch (error) {
-                console.error('[Simulator] ❌ Initialization failed:', error);
-                statusElements.engine.textContent = 'Error';
-                statusElements.engine.className = 'status-value error';
-
-                // Fall back to mock mode
-                console.log('[Simulator] ⚠️ Falling back to mock mode');
-                wireSliderEventsMock();
-            }
-        }
-
-        // Wait for Quannex engine to be available on window
-        function waitForEngine(timeout) {
-            return new Promise((resolve, reject) => {
-                const startTime = Date.now();
-
-                function check() {
-                    if (window.Quannex && typeof window.Quannex.initWithCompany === 'function') {
-                        console.log('[Simulator] ✅ Quannex engine detected');
-                        resolve();
-                    } else if (Date.now() - startTime > timeout) {
-                        reject(new Error('Quannex engine not available after timeout'));
-                    } else {
-                        setTimeout(check, 100);
-                    }
-                }
-
-                check();
-            });
-        }
-
-        // Initialize sliders with current face energies from engine
-        function initializeSlidersFromEngine(state) {
-            const faces = state.faces || [];
-
-            Object.keys(FACE_MAP).forEach(key => {
-                const faceIndex = FACE_MAP[key];
-                const face = faces[faceIndex];
-                // Use faceEnergy (engine property name) with fallback
-                const energy = face ? Math.round((face.faceEnergy ?? face.energy ?? 0.5) * 100) : 50;
-
-                sliders[key].value = energy;
-                values[key].textContent = energy + '%';
-            });
-        }
-
-        // ────────────────────────────────────────────────────────────────────────────
-        // SLIDER EVENT WIRING (Real Engine)
-        // ────────────────────────────────────────────────────────────────────────────
-        function wireSliderEvents() {
-            Object.keys(sliders).forEach(key => {
-                sliders[key].addEventListener('input', (e) => {
-                    values[key].textContent = e.target.value + '%';
-
-                    // Debounce engine updates (100ms)
-                    clearTimeout(debounceTimer);
-                    debounceTimer = setTimeout(() => {
-                        updateEngineFromSliders();
-                    }, 100);
-                });
-            });
-        }
-
-        // Update engine with current slider values
-        function updateEngineFromSliders() {
-            if (!engineReady || !window.Quannex) return;
-
-            try {
-                // Update each face energy in the engine
-                Object.keys(FACE_MAP).forEach(key => {
-                    const faceIndex = FACE_MAP[key];
-                    const newEnergy = parseInt(sliders[key].value) / 100;
-
-                    // Use engine's updateFaceEnergy if available, otherwise update directly
-                    if (window.Quannex.updateFaceEnergy) {
-                        window.Quannex.updateFaceEnergy(faceIndex, newEnergy);
-                    }
-                });
-
-                // Trigger recalculation
-                if (window.Quannex.recalculate) {
-                    window.Quannex.recalculate();
-                }
-
-                // Update impact display
-                calculateImpact();
-
-            } catch (error) {
-                console.error('[Simulator] Error updating engine:', error);
-            }
-        }
-
-        // Calculate and display impact (real engine mode)
-        function calculateImpact() {
-            if (!engineReady || !window.Quannex) {
-                calculateImpactMock();
-                return;
-            }
-
-            try {
-                const state = window.Quannex.getState();
-                const currentCoherence = state.globalCoherence || 0;
-                const changePercent = Math.round((currentCoherence - baselineCoherence) * 100);
-                const changeStr = changePercent >= 0 ? `+${changePercent}` : changePercent;
-
-                // Global coherence display
-                impacts.global.textContent = `${Math.round(baselineCoherence * 100)}% → ${Math.round(currentCoherence * 100)}% (${changeStr}%)`;
-                impacts.global.className = 'impact-change ' + (changePercent >= 0 ? 'positive' : 'negative');
-
-                // Being/Doing balance from spectral analysis
-                const spectral = window.Quannex.getSpectralAnalysis?.();
-                if (spectral?.diagnostics?.beingActionBalance) {
-                    const bab = spectral.diagnostics.beingActionBalance;
-                    const babValue = bab.score || 1.0;
-                    const babStatus = babValue > 1.2 ? 'Over-Inhaling' : babValue < 0.8 ? 'Over-Exhaling' : 'Balanced';
-                    impacts.balance.textContent = `${babValue.toFixed(2)} (${babStatus})`;
-                    impacts.balance.className = 'impact-change ' + (babStatus === 'Balanced' ? 'positive' : 'negative');
-                } else {
-                    // Fallback calculation
-                    const being = (parseInt(sliders.human.value) + parseInt(sliders.regen.value)) / 200;
-                    const doing = (parseInt(sliders.operations.value) + parseInt(sliders.financial.value)) / 200;
-                    const balance = being > 0 ? doing / being : 0;
-                    impacts.balance.textContent = `${balance.toFixed(2)} (${balance > 0.8 && balance < 1.2 ? 'Balanced' : 'Needs Work'})`;
-                    impacts.balance.className = 'impact-change ' + (balance > 0.8 && balance < 1.2 ? 'positive' : 'negative');
-                }
-
-                // Shadow detection from engine
-                const shadows = window.Quannex.getShadowAnalysis?.();
-                if (shadows && shadows.patterns && shadows.patterns.length > 0) {
-                    const activeShadows = shadows.patterns.filter(p => p.detected || p.severity === 'significant');
-                    if (activeShadows.length > 0) {
-                        impacts.shadow.textContent = `⚠️ ${activeShadows[0].name || 'Shadow Detected'}`;
-                        impacts.shadow.className = 'impact-change negative';
-                    } else {
-                        impacts.shadow.textContent = '✅ No Active Shadows';
-                        impacts.shadow.className = 'impact-change positive';
-                    }
-                } else {
-                    // Fallback shadow detection
-                    if (parseInt(sliders.operations.value) > 80 && parseInt(sliders.human.value) < 50) {
-                        impacts.shadow.textContent = '⚠️ Burnout Engine Risk';
-                        impacts.shadow.className = 'impact-change negative';
-                    } else if (currentCoherence > 0.7) {
-                        impacts.shadow.textContent = '✅ System Coherent';
-                        impacts.shadow.className = 'impact-change positive';
-                    } else {
-                        impacts.shadow.textContent = '◯ Minor Imbalances';
-                        impacts.shadow.className = 'impact-change';
-                    }
-                }
-
-            } catch (error) {
-                console.error('[Simulator] Error calculating impact:', error);
-                calculateImpactMock();
-            }
-        }
-
-        // ────────────────────────────────────────────────────────────────────────────
-        // FALLBACK MOCK MODE
-        // ────────────────────────────────────────────────────────────────────────────
-        function wireSliderEventsMock() {
-            Object.keys(sliders).forEach(key => {
-                sliders[key].addEventListener('input', (e) => {
-                    values[key].textContent = e.target.value + '%';
-                    calculateImpactMock();
-                });
-            });
-        }
-
-        function calculateImpactMock() {
-            const avg = (
-                parseInt(sliders.financial.value) +
-                parseInt(sliders.human.value) +
-                parseInt(sliders.operations.value) +
-                parseInt(sliders.regen.value)
-            ) / 4;
-
-            const newCoherence = Math.round(avg);
-            const change = newCoherence - 67;
-            const changeStr = change >= 0 ? `+${change}` : change;
-
-            impacts.global.textContent = `67% → ${newCoherence}% (${changeStr}%)`;
-            impacts.global.className = 'impact-change ' + (change >= 0 ? 'positive' : 'negative');
-
-            const being = (parseInt(sliders.human.value) + parseInt(sliders.regen.value)) / 200;
-            const doing = (parseInt(sliders.operations.value) + parseInt(sliders.financial.value)) / 200;
-            const balance = being > 0 ? doing / being : 0;
-
-            impacts.balance.textContent = `${balance.toFixed(2)} (${balance > 0.8 ? 'Improving' : 'Needs Work'})`;
-            impacts.balance.className = 'impact-change ' + (balance > 0.8 ? 'positive' : 'negative');
-
-            if (parseInt(sliders.operations.value) > 80 && parseInt(sliders.human.value) < 50) {
-                impacts.shadow.textContent = '⚠️ Burnout Engine Detected';
-                impacts.shadow.className = 'impact-change negative';
-            } else if (newCoherence > 75) {
-                impacts.shadow.textContent = '✅ No Shadows Detected';
-                impacts.shadow.className = 'impact-change positive';
-            } else {
-                impacts.shadow.textContent = '◯ Minor Imbalances';
-                impacts.shadow.className = 'impact-change';
-            }
-        }
-
-        // ────────────────────────────────────────────────────────────────────────────
-        // PARENT-CHILD COMMUNICATION (for iframe embedding)
-        // ────────────────────────────────────────────────────────────────────────────
-        window.addEventListener('message', async (event) => {
-            const { type, companyId } = event.data;
-
-            if (type === 'LOAD_COMPANY' && companyId !== currentLoadedCompanyId) {
-                console.log(`[Simulator] 📨 Company change request: ${companyId}`);
-                sessionStorage.setItem('selectedCompanyId', companyId);
-                await initializeSimulator();
-            }
-        });
-
-        // ────────────────────────────────────────────────────────────────────────────
-        // INITIALIZATION
-        // ────────────────────────────────────────────────────────────────────────────
-        console.log('[Simulator] 🎚️ Coherence Simulator v2.0 - Live Engine Mode');
-
-        // Initialize when DOM is ready
+        // Start the full initialization chain
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeSimulator);
+            document.addEventListener('DOMContentLoaded', () => window.SimMain.start());
         } else {
-            initializeSimulator();
+            window.SimMain.start();
         }
     </script>
 </body>

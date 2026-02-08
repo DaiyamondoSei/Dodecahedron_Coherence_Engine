@@ -1,0 +1,165 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: sim-scenarios.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Styles for scenario save/load/compare functionality.
+ *
+ * Created for: Coherence Simulator modularization
+ * Date: February 2026
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  sim-base.css - CSS variables (--sim-*)                                  │
+ * │  sim-layout.css - .sim-panel base class                                  │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ * LAYOUT:
+ * Scenarios section sits below the main 2-column grid (full width).
+ * Cards use horizontal flex row with overflow-x: auto for scrolling.
+ * scrollbar-width: thin keeps the scrollbar subtle on Firefox.
+ *
+ * CARD SIZING:
+ * flex: 0 0 200px makes cards fixed 200px width (no grow, no shrink).
+ * This ensures uniform card sizing regardless of content length.
+ * At 200px, approximately 5-6 cards are visible at 1280px viewport.
+ *
+ * MINI BAR CHART:
+ * .sim-scenario-bars shows 12 tiny bars (one per face) in each card.
+ * Height = max(2px, sliderValue * 0.2px), giving 0-20px visual range.
+ * Colors use var(--sim-face-N) matching the dodecahedron face colors.
+ * This gives a visual "fingerprint" of each scenario at a glance.
+ *
+ * INTERACTIONS:
+ * Click to load scenario, right-click (contextmenu) to delete.
+ * .selected class with cyan glow marks the currently loaded scenario.
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SCENARIOS TOOLBAR
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-scenarios-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--sim-gap-sm);
+}
+
+.sim-scenarios-actions {
+    display: flex;
+    gap: var(--sim-gap-xs);
+}
+
+.sim-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--sim-glass-border);
+    border-radius: var(--sim-radius-sm);
+    color: var(--sim-text-secondary);
+    font-size: 12px;
+    font-family: var(--sim-font-family);
+    cursor: pointer;
+    transition: all var(--sim-phi-micro) ease;
+}
+
+.sim-btn:hover {
+    background: var(--sim-bg-surface-hover);
+    border-color: var(--sim-accent-cyan);
+    color: var(--sim-accent-cyan);
+}
+
+.sim-btn--primary {
+    background: rgba(0, 255, 204, 0.1);
+    border-color: var(--sim-accent-cyan);
+    color: var(--sim-accent-cyan);
+}
+
+.sim-btn--primary:hover {
+    background: rgba(0, 255, 204, 0.2);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SCENARIO CARDS ROW
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-scenarios-row {
+    display: flex;
+    gap: var(--sim-gap-sm);
+    overflow-x: auto;
+    padding-bottom: var(--sim-gap-xs);
+    scrollbar-width: thin;
+}
+
+.sim-scenario-card {
+    flex: 0 0 200px;
+    background: var(--sim-glass-bg);
+    border: 1px solid var(--sim-glass-border);
+    border-radius: var(--sim-radius-md);
+    padding: var(--sim-gap-sm);
+    cursor: pointer;
+    transition: all var(--sim-phi-micro) ease;
+}
+
+.sim-scenario-card:hover {
+    border-color: var(--sim-glass-border-accent);
+    background: var(--sim-bg-surface-hover);
+}
+
+.sim-scenario-card.selected {
+    border-color: var(--sim-accent-cyan);
+    box-shadow: var(--sim-shadow-glow-cyan);
+}
+
+.sim-scenario-name {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.sim-scenario-date {
+    font-size: 11px;
+    color: var(--sim-text-muted);
+    margin-bottom: var(--sim-gap-xs);
+}
+
+.sim-scenario-coherence {
+    font-size: 20px;
+    font-weight: 600;
+    font-family: var(--sim-font-mono);
+    color: var(--sim-accent-cyan);
+}
+
+/* Mini bar chart in scenario card */
+.sim-scenario-bars {
+    display: flex;
+    gap: 2px;
+    height: 20px;
+    align-items: flex-end;
+    margin-top: var(--sim-gap-xs);
+}
+
+.sim-scenario-bar {
+    flex: 1;
+    border-radius: 2px 2px 0 0;
+    min-width: 4px;
+    transition: height var(--sim-phi-micro) ease;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   EMPTY STATE
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-scenarios-empty {
+    text-align: center;
+    padding: var(--sim-gap-lg);
+    color: var(--sim-text-muted);
+    font-size: 13px;
+}

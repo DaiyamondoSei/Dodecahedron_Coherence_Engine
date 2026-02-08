@@ -1,0 +1,105 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: sim-animations.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * @keyframes definitions and transition utilities for the Coherence Simulator.
+ * Loaded early so other CSS files can reference these animations.
+ *
+ * Created for: Coherence Simulator modularization
+ * Date: February 2026
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  sim-base.css - CSS variables (--sim-phi-*)                              │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ * PHI-BASED TIMING PHILOSOPHY:
+ * All timing values reference --sim-phi-* CSS variables from sim-base.css:
+ * - --sim-phi-micro: 0.2s  (fast feedback: value changes, hover)
+ * - --sim-phi-short: 0.382s (1-PHI ≈ 0.382, entrance animations)
+ * - --sim-phi-med:   0.618s (PHI-1 ≈ 0.618, transitions)
+ * - --sim-phi-long:  1.0s   (full cycle, loading states)
+ * These create natural-feeling motion because PHI ratios are found
+ * throughout nature and feel harmonious to human perception.
+ *
+ * KEYFRAMES:
+ * - sim-fade-in: 10px upward slide + opacity (entrance)
+ * - sim-pulse-glow: Breathing cyan glow (continuous, 2s cycle)
+ * - sim-slide-in-left/right: 20px horizontal slide (axis pairs)
+ * - sim-value-change: 1.15x scale bounce (slider value feedback)
+ * - sim-shimmer: Background gradient sweep (loading skeleton)
+ *
+ * UTILITY CLASSES:
+ * .sim-animate-in, .sim-animate-pulse, .sim-value-changed, .sim-loading
+ * can be added/removed from JS for declarative animation triggers.
+ * The sim-value-changed class is re-triggered using the offsetWidth
+ * reflow trick (see sim-controls.js NOTES).
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   KEYFRAMES
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes sim-fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sim-pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 rgba(0, 255, 204, 0); }
+    50%      { box-shadow: 0 0 15px rgba(0, 255, 204, 0.2); }
+}
+
+@keyframes sim-slide-in-left {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes sim-slide-in-right {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes sim-value-change {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+@keyframes sim-shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   UTILITY CLASSES
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-animate-in {
+    animation: sim-fade-in var(--sim-phi-short) ease-out both;
+}
+
+.sim-animate-pulse {
+    animation: sim-pulse-glow 2s ease-in-out infinite;
+}
+
+.sim-value-changed {
+    animation: sim-value-change var(--sim-phi-micro) ease-out;
+}
+
+/* Loading shimmer for panels waiting for data */
+.sim-loading {
+    background: linear-gradient(
+        90deg,
+        var(--sim-glass-bg) 25%,
+        rgba(255, 255, 255, 0.08) 50%,
+        var(--sim-glass-bg) 75%
+    );
+    background-size: 200% 100%;
+    animation: sim-shimmer 1.5s ease-in-out infinite;
+}

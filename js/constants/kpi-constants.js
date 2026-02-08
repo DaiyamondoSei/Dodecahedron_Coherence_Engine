@@ -50,19 +50,22 @@
  */
 
 // ════════════════════════════════════════════════════════════════════════════
-// SECTION 1: PHI IMPORTS (For values derived from Golden Ratio)
+// SECTION 1: PHI REFERENCE (Values come from phi-harmonics.js)
 // ════════════════════════════════════════════════════════════════════════════
 
 /**
- * Import PHI values from the single source of truth.
- * Browser-compatible pattern that works both with and without module loading.
+ * PHI values are provided by phi-harmonics.js (loaded before this file)
+ * and available via window.PhiHarmonics.
+ *
+ * We do NOT redeclare PHI/PHI_1/etc. here because when both phi-harmonics.js
+ * and kpi-constants.js are loaded as regular <script> tags, duplicate
+ * `const` declarations in the global scope cause a SyntaxError that
+ * kills the entire file.
+ *
+ * Access PHI values via: window.PhiHarmonics.PHI, .PHI_1, .PHI_2, etc.
+ * The PENTAGRAM_CONSTANTS below use hardcoded numeric values (derived from PHI)
+ * so no local PHI reference is needed in this file.
  */
-const PHI = (typeof window !== 'undefined' && window.PhiHarmonics?.PHI) || (1 + Math.sqrt(5)) / 2;
-const PHI_1 = (typeof window !== 'undefined' && window.PhiHarmonics?.PHI_1) || 1 / PHI;  // 0.618
-const PHI_2 = (typeof window !== 'undefined' && window.PhiHarmonics?.PHI_2) || PHI_1 / PHI;  // 0.382
-const PHI_3 = (typeof window !== 'undefined' && window.PhiHarmonics?.PHI_3) || PHI_2 / PHI;  // 0.236
-const PSI_3 = (typeof window !== 'undefined' && window.PhiHarmonics?.PSI_3) || (1 - PHI_3);  // 0.764
-const PSI_5 = (typeof window !== 'undefined' && window.PhiHarmonics?.PSI_5) || 0.910;
 
 // ════════════════════════════════════════════════════════════════════════════
 // SECTION 2: KPI TYPES - The Three Measurement Categories

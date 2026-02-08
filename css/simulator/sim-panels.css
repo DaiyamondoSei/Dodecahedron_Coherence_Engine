@@ -1,0 +1,236 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ * FILE: sim-panels.css
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * Styles for the analysis panels: Impact Summary, Breath Axes, Shadow Detection.
+ *
+ * Created for: Coherence Simulator modularization
+ * Date: February 2026
+ *
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │                              DEPENDENCIES                                │
+ * ├──────────────────────────────────────────────────────────────────────────┤
+ * │  sim-base.css - CSS variables (--sim-*)                                  │
+ * │  sim-animations.css - @keyframes                                         │
+ * │  sim-layout.css - .sim-panel base class                                  │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * NOTES FOR FUTURE CLAUDE:
+ * ════════════════════════════════════════════════════════════════════════════
+ * This file styles three distinct panels in the right column:
+ *
+ * 1. IMPACT SUMMARY (.sim-impact-panel)
+ *    Shows coherence delta, being/doing balance, shadow alert.
+ *    Values use .positive (green), .negative (red), .neutral (gray)
+ *    classes for semantic color coding.
+ *
+ * 2. BREATH AXES (.sim-breath-panel)
+ *    6 horizontal balance bars with center line at 50%.
+ *    .left fills from center-left, .right fills from center-right.
+ *    The center marker (.sim-breath-bar-center) is a 2px white line.
+ *    Status indicators: .balanced (green), .imbalanced (amber), .critical (red).
+ *
+ * 3. SHADOW DETECTION (.sim-shadow-panel)
+ *    Shadow items use red-tinted background (rgba(255, 68, 68, 0.05))
+ *    as a visual threat signal — red = organizational dysfunction.
+ *    Severity dot: .significant = red with glow, .moderate = amber, .minor = gray.
+ *    The glow (box-shadow) on significant dots draws attention to urgent patterns.
+ *    .sim-shadow-clear shows green "all clear" when no shadows detected.
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   IMPACT PANEL
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-impact-panel {
+    /* Inherits .sim-panel from sim-layout.css */
+}
+
+.sim-impact-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--sim-text-secondary);
+    margin-bottom: var(--sim-gap-sm);
+    letter-spacing: 1px;
+}
+
+.sim-impact-metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--sim-gap-xs) 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sim-impact-metric:last-child {
+    border-bottom: none;
+}
+
+.sim-impact-label {
+    font-size: 13px;
+    color: var(--sim-text-secondary);
+}
+
+.sim-impact-value {
+    font-size: 14px;
+    font-family: var(--sim-font-mono);
+    font-weight: 500;
+}
+
+.sim-impact-value.positive {
+    color: var(--sim-status-positive);
+}
+
+.sim-impact-value.negative {
+    color: var(--sim-status-negative);
+}
+
+.sim-impact-value.neutral {
+    color: var(--sim-text-secondary);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   BREATH AXIS PANEL
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-breath-panel {
+    /* Inherits .sim-panel from sim-layout.css */
+}
+
+.sim-breath-axis {
+    display: flex;
+    align-items: center;
+    gap: var(--sim-gap-xs);
+    padding: var(--sim-gap-xs) 0;
+}
+
+.sim-breath-face-label {
+    font-size: 11px;
+    color: var(--sim-text-muted);
+    min-width: 60px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sim-breath-bar-container {
+    flex: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sim-breath-bar-fill {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    border-radius: 4px;
+    transition: width var(--sim-phi-micro) ease, background var(--sim-phi-micro) ease;
+}
+
+.sim-breath-bar-fill.left {
+    right: 50%;
+    border-radius: 4px 0 0 4px;
+}
+
+.sim-breath-bar-fill.right {
+    left: 50%;
+    border-radius: 0 4px 4px 0;
+}
+
+.sim-breath-bar-center {
+    position: absolute;
+    left: 50%;
+    top: -2px;
+    width: 2px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(-50%);
+}
+
+.sim-breath-status {
+    font-size: 10px;
+    font-family: var(--sim-font-mono);
+    min-width: 28px;
+    text-align: center;
+}
+
+.sim-breath-status.balanced {
+    color: var(--sim-status-healthy);
+}
+
+.sim-breath-status.imbalanced {
+    color: var(--sim-status-warning);
+}
+
+.sim-breath-status.critical {
+    color: var(--sim-status-critical);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SHADOW PANEL
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.sim-shadow-panel {
+    /* Inherits .sim-panel from sim-layout.css */
+}
+
+.sim-shadow-item {
+    display: flex;
+    align-items: center;
+    gap: var(--sim-gap-sm);
+    padding: var(--sim-gap-sm);
+    background: rgba(255, 68, 68, 0.05);
+    border: 1px solid rgba(255, 68, 68, 0.15);
+    border-radius: var(--sim-radius-sm);
+    margin-bottom: var(--sim-gap-xs);
+}
+
+.sim-shadow-item:last-child {
+    margin-bottom: 0;
+}
+
+.sim-shadow-severity {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.sim-shadow-severity.significant {
+    background: var(--sim-status-critical);
+    box-shadow: 0 0 6px rgba(255, 68, 68, 0.5);
+}
+
+.sim-shadow-severity.moderate {
+    background: var(--sim-status-warning);
+    box-shadow: 0 0 6px rgba(255, 170, 0, 0.5);
+}
+
+.sim-shadow-severity.minor {
+    background: var(--sim-text-muted);
+}
+
+.sim-shadow-name {
+    font-size: 13px;
+    color: var(--sim-text-primary);
+    flex: 1;
+}
+
+.sim-shadow-faces {
+    font-size: 11px;
+    color: var(--sim-text-muted);
+    font-family: var(--sim-font-mono);
+}
+
+.sim-shadow-clear {
+    text-align: center;
+    padding: var(--sim-gap-md);
+    color: var(--sim-status-healthy);
+    font-size: 14px;
+}

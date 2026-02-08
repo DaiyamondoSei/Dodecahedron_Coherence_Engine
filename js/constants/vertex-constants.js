@@ -55,11 +55,19 @@
  */
 
 // ════════════════════════════════════════════════════════════════════════════
-// SECTION 1: PHI IMPORTS
+// SECTION 1: PHI REFERENCE (Values come from phi-harmonics.js)
 // ════════════════════════════════════════════════════════════════════════════
 
-const PHI = (typeof window !== 'undefined' && window.PhiHarmonics?.PHI) || (1 + Math.sqrt(5)) / 2;
-const PHI_1 = (typeof window !== 'undefined' && window.PhiHarmonics?.PHI_1) || 1 / PHI;
+/**
+ * PHI values are provided by phi-harmonics.js (loaded before this file)
+ * and available via window.PhiHarmonics.
+ *
+ * We do NOT redeclare PHI/PHI_1 here because when both phi-harmonics.js
+ * and this file are loaded as regular <script> tags, duplicate `const`
+ * declarations in the global scope cause a SyntaxError.
+ *
+ * Access PHI values via: window.PhiHarmonics.PHI, .PHI_1, etc.
+ */
 
 // ════════════════════════════════════════════════════════════════════════════
 // SECTION 2: VERTEX CLASSIFICATIONS - States of Triadic Health
