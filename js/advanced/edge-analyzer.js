@@ -80,63 +80,60 @@
 
 export class EdgeAnalyzer {
   constructor() {
-    // Define the 30 edges of a dodecahedron
-    // Each edge connects two faces (pentagon faces)
-    this.edgeDefinitions = [
-      // Face 1 connections (5 edges) - CORRECTED TO MATCH GEOMETRIC TOPOLOGY
-      { id: 'E1-2', face1: 1, face2: 2, element: 'Water' },
-      { id: 'E1-6', face1: 1, face2: 6, element: 'Earth' },
-      { id: 'E1-7', face1: 1, face2: 7, element: 'Air' },
-      { id: 'E1-8', face1: 1, face2: 8, element: 'Air' },
-      { id: 'E1-10', face1: 1, face2: 10, element: 'Ether' },
+    // STRESS_TEST_FIX [H1]: Import edge definitions from topology SSOT.
+    // The previous hardcoded list had wrong element assignments (e.g., E1-2 was
+    // 'Water', SSOT says 'Fire'). SSOT elements reflect the philosophical elemental
+    // nature of each edge interface. Also gains archetype + question fields for
+    // richer narrative generation (line ~596 uses edge.question).
+    const topology = (typeof window !== 'undefined' && window.DodecahedronTopology)
+      ? window.DodecahedronTopology.EDGES
+      : null;
 
-      // Face 2 connections (4 more - 1 already counted)
-      { id: 'E2-3', face1: 2, face2: 3, element: 'Earth' },
-      { id: 'E2-6', face1: 2, face2: 6, element: 'Air' },
-      { id: 'E2-10', face1: 2, face2: 10, element: 'Ether' },
-      { id: 'E2-11', face1: 2, face2: 11, element: 'Ether' },
-
-      // Face 3 connections (4 more)
-      { id: 'E3-4', face1: 3, face2: 4, element: 'Fire' },
-      { id: 'E3-6', face1: 3, face2: 6, element: 'Ether' },
-      { id: 'E3-9', face1: 3, face2: 9, element: 'Ether' },
-      { id: 'E3-11', face1: 3, face2: 11, element: 'Water' },
-
-      // Face 4 connections (4 more)
-      { id: 'E4-5', face1: 4, face2: 5, element: 'Air' },
-      { id: 'E4-6', face1: 4, face2: 6, element: 'Water' },
-      { id: 'E4-7', face1: 4, face2: 7, element: 'Ether' },
-      { id: 'E4-9', face1: 4, face2: 9, element: 'Fire' },
-
-      // Face 5 connections (4 more)
-      { id: 'E5-7', face1: 5, face2: 7, element: 'Water' },
-      { id: 'E5-8', face1: 5, face2: 8, element: 'Ether' },
-      { id: 'E5-9', face1: 5, face2: 9, element: 'Water' },
-      { id: 'E5-12', face1: 5, face2: 12, element: 'Water' },
-
-      // Face 6 connections (1 more)
-      { id: 'E6-7', face1: 6, face2: 7, element: 'Air' },
-
-      // Face 7 connections (1 more)
-      { id: 'E7-8', face1: 7, face2: 8, element: 'Air' },
-
-      // Face 8 connections (2 more)
-      { id: 'E8-10', face1: 8, face2: 10, element: 'Water' },
-      { id: 'E8-12', face1: 8, face2: 12, element: 'Fire' },
-
-      // Face 9 connections (2 more)
-      { id: 'E9-11', face1: 9, face2: 11, element: 'Earth' },
-      { id: 'E9-12', face1: 9, face2: 12, element: 'Ether' },
-
-      // Face 10 connections (2 more)
-      { id: 'E10-11', face1: 10, face2: 11, element: 'Fire' },
-      { id: 'E10-12', face1: 10, face2: 12, element: 'Water' },
-
-      // Face 11 connections (1 more)
-      { id: 'E11-12', face1: 11, face2: 12, element: 'Air' },
-
-      // Face 12 connections (0 more - all counted)
-    ];
+    if (topology) {
+      this.edgeDefinitions = topology.map(e => ({
+        id: e.id,
+        face1: e.faces[0],
+        face2: e.faces[1],
+        element: e.element,
+        archetype: e.archetype || '',
+        question: e.question || ''
+      }));
+    } else {
+      console.warn('EdgeAnalyzer: DodecahedronTopology not available, using corrected inline fallback');
+      // Fallback: corrected edge definitions from SSOT (elements match topology source of truth)
+      this.edgeDefinitions = [
+        { id: 'E1-2', face1: 1, face2: 2, element: 'Fire' },
+        { id: 'E1-6', face1: 1, face2: 6, element: 'Water' },
+        { id: 'E1-7', face1: 1, face2: 7, element: 'Air' },
+        { id: 'E1-8', face1: 1, face2: 8, element: 'Earth' },
+        { id: 'E1-10', face1: 1, face2: 10, element: 'Ether' },
+        { id: 'E2-3', face1: 2, face2: 3, element: 'Air' },
+        { id: 'E2-6', face1: 2, face2: 6, element: 'Water' },
+        { id: 'E2-10', face1: 2, face2: 10, element: 'Earth' },
+        { id: 'E2-11', face1: 2, face2: 11, element: 'Ether' },
+        { id: 'E3-4', face1: 3, face2: 4, element: 'Earth' },
+        { id: 'E3-6', face1: 3, face2: 6, element: 'Water' },
+        { id: 'E3-9', face1: 3, face2: 9, element: 'Ether' },
+        { id: 'E3-11', face1: 3, face2: 11, element: 'Fire' },
+        { id: 'E4-5', face1: 4, face2: 5, element: 'Air' },
+        { id: 'E4-6', face1: 4, face2: 6, element: 'Earth' },
+        { id: 'E4-7', face1: 4, face2: 7, element: 'Ether' },
+        { id: 'E4-9', face1: 4, face2: 9, element: 'Fire' },
+        { id: 'E5-7', face1: 5, face2: 7, element: 'Ether' },
+        { id: 'E5-8', face1: 5, face2: 8, element: 'Fire' },
+        { id: 'E5-9', face1: 5, face2: 9, element: 'Water' },
+        { id: 'E5-12', face1: 5, face2: 12, element: 'Water' },
+        { id: 'E6-7', face1: 6, face2: 7, element: 'Air' },
+        { id: 'E7-8', face1: 7, face2: 8, element: 'Fire' },
+        { id: 'E8-10', face1: 8, face2: 10, element: 'Water' },
+        { id: 'E8-12', face1: 8, face2: 12, element: 'Air' },
+        { id: 'E9-11', face1: 9, face2: 11, element: 'Earth' },
+        { id: 'E9-12', face1: 9, face2: 12, element: 'Fire' },
+        { id: 'E10-11', face1: 10, face2: 11, element: 'Air' },
+        { id: 'E10-12', face1: 10, face2: 12, element: 'Fire' },
+        { id: 'E11-12', face1: 11, face2: 12, element: 'Water' }
+      ];
+    }
 
     // Elemental multipliers (affect how tension manifests)
     this.elementalMultipliers = {

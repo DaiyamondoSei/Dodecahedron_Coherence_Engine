@@ -1479,13 +1479,15 @@ export class DodecahedronEngine {
    */
   getState() {
     // STRESS_TEST_FIX [S-Curve]: Include coherenceDetail in state for UI transparency.
-    // state.globalCoherence remains the S-curved value for backward compatibility.
-    // state.coherenceDetail provides raw/sCurved/rescaled breakdown.
+    // state.globalCoherence now returns RESCALED value (true 0-1 range) instead of
+    // raw S-curved value (which compresses into ~32%-68% at kappa=1.5).
+    // Rescaled restores intended behavior for all UI thresholds (0.618 PHI, 0.9, etc.)
+    // that were designed for a 0-1 range. For S-curve internals: state.coherenceDetail.
     const coherenceDetail = this.getCoherenceDetail();
     return {
-      globalCoherence: coherenceDetail.sCurved,
+      globalCoherence: coherenceDetail.rescaled,
       coherenceDetail: coherenceDetail,
-      coherenceStatus: this.getCoherenceStatus(coherenceDetail.sCurved),
+      coherenceStatus: this.getCoherenceStatus(coherenceDetail.rescaled),
       tuning: this.tuning, // Expose tuning to UI
       faces: this.faces.map(face => ({
         id: face.id,

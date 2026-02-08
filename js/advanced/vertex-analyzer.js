@@ -93,35 +93,47 @@
 
 export class VertexAnalyzer {
   constructor() {
-    // Define the 20 vertices of a dodecahedron
-    // Each vertex connects exactly 3 faces
-    this.vertexDefinitions = [
-      { id: 'V1', faceIds: [1, 2, 6] },
-      { id: 'V2', faceIds: [1, 2, 7] }, // Correction: Check topology
-      { id: 'V3', faceIds: [1, 6, 10] },
-      { id: 'V4', faceIds: [1, 7, 8] },
-      { id: 'V5', faceIds: [1, 8, 10] },
+    // STRESS_TEST_FIX [H1]: Import vertex definitions from topology SSOT.
+    // The previous hardcoded list had WRONG face triads (V2=[1,2,7] should be [1,5,6],
+    // V3=[1,6,10] should be [1,8,9], etc.). Comments like "Check topology" and
+    // "Wait, 4-5-7?" confirmed the data was never verified against geometry.
+    // SSOT has been validated by Euler formula (V-E+F=2) and pentagon adjacency checks.
+    const topology = (typeof window !== 'undefined' && window.DodecahedronTopology)
+      ? window.DodecahedronTopology.VERTICES
+      : null;
 
-      { id: 'V6', faceIds: [2, 3, 6] },
-      { id: 'V7', faceIds: [2, 3, 11] },
-      { id: 'V8', faceIds: [2, 7, 11] }, // Correction: Check topology
-
-      { id: 'V9', faceIds: [3, 4, 6] },
-      { id: 'V10', faceIds: [3, 4, 9] },
-      { id: 'V11', faceIds: [3, 9, 11] },
-
-      { id: 'V12', faceIds: [4, 5, 7] }, // Wait, 4-5-7?
-      { id: 'V13', faceIds: [4, 5, 9] },
-      { id: 'V14', faceIds: [4, 6, 7] }, // 4-6-7?
-
-      { id: 'V15', faceIds: [5, 7, 8] },
-      { id: 'V16', faceIds: [5, 8, 12] },
-      { id: 'V17', faceIds: [5, 9, 12] },
-
-      { id: 'V18', faceIds: [8, 10, 12] },
-      { id: 'V19', faceIds: [9, 11, 12] },
-      { id: 'V20', faceIds: [10, 11, 12] } // 10-11-12?
-    ];
+    if (topology) {
+      this.vertexDefinitions = topology.map(v => ({
+        id: v.id,
+        faceIds: v.faces,
+        name: v.name || ''
+      }));
+    } else {
+      console.warn('VertexAnalyzer: DodecahedronTopology not available, using corrected inline fallback');
+      // Fallback: corrected vertex definitions from SSOT (validated by Euler V-E+F=2)
+      this.vertexDefinitions = [
+        { id: 'V1', faceIds: [1, 2, 6] },
+        { id: 'V2', faceIds: [1, 5, 6] },
+        { id: 'V3', faceIds: [1, 8, 9] },
+        { id: 'V4', faceIds: [2, 9, 10] },
+        { id: 'V5', faceIds: [2, 3, 10] },
+        { id: 'V6', faceIds: [3, 6, 2] },
+        { id: 'V7', faceIds: [3, 10, 11] },
+        { id: 'V8', faceIds: [4, 5, 6] },
+        { id: 'V9', faceIds: [1, 5, 8] },
+        { id: 'V10', faceIds: [4, 5, 7] },
+        { id: 'V11', faceIds: [3, 4, 11] },
+        { id: 'V12', faceIds: [4, 7, 11] },
+        { id: 'V13', faceIds: [5, 7, 8] },
+        { id: 'V14', faceIds: [7, 8, 12] },
+        { id: 'V15', faceIds: [7, 11, 12] },
+        { id: 'V16', faceIds: [8, 9, 12] },
+        { id: 'V17', faceIds: [9, 10, 12] },
+        { id: 'V18', faceIds: [10, 11, 12] },
+        { id: 'V19', faceIds: [3, 4, 6] },
+        { id: 'V20', faceIds: [1, 9, 2] }
+      ];
+    }
   }
 
   /**

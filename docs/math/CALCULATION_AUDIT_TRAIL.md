@@ -114,7 +114,17 @@ const rawCoherence = mu * (1 - lambda * cv);
 
 // Step 6: Apply sensitivity amplifier (κ)
 // For balanced tuning, κ ≈ 1.0, so:
-// Final coherence ≈ 0.5615
+// sCurved ≈ 0.5615
+//
+// STRESS_TEST_FIX [S-Curve]: Step 7 — Rescaling
+// The S-curve compresses the operational range (e.g., 32%-68% at κ=1.5).
+// To restore intuitive 0-100% display for all UI consumers:
+//   floor    = S(0)  ← S-curve value when raw coherence = 0
+//   ceiling  = S(1)  ← S-curve value when raw coherence = 1
+//   rescaled = (sCurved - floor) / (ceiling - floor)
+//
+// state.globalCoherence now returns this RESCALED value.
+// state.coherenceDetail provides full breakdown: raw, sCurved, rescaled, κ, floor, ceiling.
 
 // VERIFICATION:
 engine.faces = testFaces.map((e, i) => ({ faceEnergy: e, id: i+1 }));
