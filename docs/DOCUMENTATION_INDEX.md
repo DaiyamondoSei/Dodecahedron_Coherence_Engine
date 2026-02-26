@@ -1,6 +1,6 @@
 # Quannex Documentation Index
 
-> *Last Updated: 2026-02-08*
+> *Last Updated: 2026-02-24*
 > *The Living Spine - Single Source of Truth for All Documentation*
 
 ---
@@ -61,13 +61,16 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 3. [EDGE_DYNAMICS_REFERENCE.md](EDGE_DYNAMICS_REFERENCE.md) - The 30 interfaces
 4. [VERTEX_DYNAMICS_REFERENCE.md](VERTEX_DYNAMICS_REFERENCE.md) - The 20 vortices
 5. [SYSTEM_COHERENCE_REFERENCE.md](SYSTEM_COHERENCE_REFERENCE.md) - How they dance together
-6. `js/constants/` folder - PHI-derived mathematical foundations & consciousness inquiries
+6. [SUB_RELATIONSHIP_CHART.md](SUB_RELATIONSHIP_CHART.md) - How every click reveals mathematical relationships
+7. `js/constants/` folder - PHI-derived mathematical foundations & consciousness inquiries
 
 ### "I need to understand the whole system"
 1. [SOUL_OF_QUANNEX.md](SOUL_OF_QUANNEX.md) - Soul first, then architecture
 2. [SYSTEM_CONSCIOUSNESS_MAP.md](SYSTEM_CONSCIOUSNESS_MAP.md) - Birds-eye view
 3. [FILE_STRUCTURE_MAP.md](FILE_STRUCTURE_MAP.md) - Codebase topology
 4. [MODULE_NAVIGATION_GUIDE.md](MODULE_NAVIGATION_GUIDE.md) - JS module relationships
+5. [UX_TREE_MAP.md](UX_TREE_MAP.md) - User experience flows, navigation graph, decision points
+6. [SUB_RELATIONSHIP_CHART.md](SUB_RELATIONSHIP_CHART.md) - Mathematical relationships between all geometric layers
 
 ### "I have 5 minutes"
 1. [README.md](README.md) - Quick overview
@@ -76,8 +79,11 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 ### "I'm preparing for thesis defense"
 1. [thesis/DEFENSE_PREPARATION.md](thesis/DEFENSE_PREPARATION.md) - **Start here: Q&A prep**
 2. [math/CALCULATION_AUDIT_TRAIL.md](math/CALCULATION_AUDIT_TRAIL.md) - **CRITICAL: Prove any calculation is correct**
-3. [thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md](thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md) - 4 novel frameworks
-4. [thesis/WISDOM_BRIEF.md](thesis/WISDOM_BRIEF.md) - Philosophical grounding
+3. [SUB_RELATIONSHIP_CHART.md](SUB_RELATIONSHIP_CHART.md) - **Mathematical Interaction Map: formulas + worked examples + manipulation paths**
+4. [thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md](thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md) - 4 novel frameworks
+5. [thesis/EMERGENT_MATHEMATICAL_TRUTHS.md](thesis/EMERGENT_MATHEMATICAL_TRUTHS.md) - **6 discoveries from stress testing — when math speaks truth**
+6. [thesis/WISDOM_BRIEF.md](thesis/WISDOM_BRIEF.md) - Philosophical grounding
+7. [STRESS_TEST_REPORT_2026-02-08.md](STRESS_TEST_REPORT_2026-02-08.md) - Full stress test (39/45 resolved, 32 traceability tags)
 5. [thesis/CONSCIOUSNESS_MODEL.md](thesis/CONSCIOUSNESS_MODEL.md) - Why octaves exist
 6. [math/SACRED_GEOMETRY_PROOF.md](math/SACRED_GEOMETRY_PROOF.md) - Why dodecahedron
 7. [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) - Real examples
@@ -90,10 +96,11 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 ### "I'm joining as a developer"
 1. [FILE_STRUCTURE_MAP.md](FILE_STRUCTURE_MAP.md) - Codebase map
 2. [MODULE_NAVIGATION_GUIDE.md](MODULE_NAVIGATION_GUIDE.md) - JS relationships
-3. [AI_SYSTEM_GUIDE.md](AI_SYSTEM_GUIDE.md) - AI subsystem architecture
-4. [ORCHESTRATOR_ARCHITECTURE.md](ORCHESTRATOR_ARCHITECTURE.md) - Orchestrator subsystem
-5. `js/simulator/sim-state.js` - Simulator state registry (exemplary modular pattern)
-6. Read Gold Headers in source files (see below)
+3. [UX_TREE_MAP.md](UX_TREE_MAP.md) - User journeys, navigation graph, state persistence
+4. [AI_SYSTEM_GUIDE.md](AI_SYSTEM_GUIDE.md) - AI subsystem architecture
+5. [ORCHESTRATOR_ARCHITECTURE.md](ORCHESTRATOR_ARCHITECTURE.md) - Orchestrator subsystem
+6. `js/simulator/sim-state.js` - Simulator state registry (exemplary modular pattern)
+7. Read Gold Headers in source files (see below)
 
 ---
 
@@ -146,6 +153,20 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 | [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) | Custom data connection |
 | [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) | 4 teaching examples |
 | [INTELLIGENT_FACE_MAPPING.md](INTELLIGENT_FACE_MAPPING.md) | AI face mapping logic |
+
+### User Experience & Relationships
+| Document | Purpose |
+|----------|---------|
+| **[SUB_RELATIONSHIP_CHART.md](SUB_RELATIONSHIP_CHART.md)** | **Mathematical Interaction Map — formulas + interpretation + worked examples + manipulation paths. For external validation.** |
+| **[UX_TREE_MAP.md](UX_TREE_MAP.md)** | **UX navigation map — all journeys, views, decision points** |
+| [ux-tree-map.json](ux-tree-map.json) | Machine-readable companion (JSON) |
+| [FAST_KPI_INTELLIGENCE.md](FAST_KPI_INTELLIGENCE.md) | **CONCEPT: 12-metric fast input with AI pentagramic distribution** |
+
+### Audit & Tracking
+| Document | Purpose |
+|----------|---------|
+| **[AUDIT_ACTION_TRACKER.md](AUDIT_ACTION_TRACKER.md)** | **Five-agent documentation audit findings — 8 priority actions, 13 growth ideas. Track across sessions.** |
+| [SUB_RELATIONSHIP_DISCREPANCY_TRACKER.md](SUB_RELATIONSHIP_DISCREPANCY_TRACKER.md) | Discrepancies and improvement points from sub-relationship analysis |
 
 ### Testing & Observations
 | Document | Purpose |
@@ -228,8 +249,9 @@ Located in [thesis/](thesis/):
 
 | Document | Purpose |
 |----------|---------|
-| [DEFENSE_PREPARATION.md](thesis/DEFENSE_PREPARATION.md) | Anticipated Q&A, demo script |
+| [DEFENSE_PREPARATION.md](thesis/DEFENSE_PREPARATION.md) | Anticipated Q&A, demo script, spectral deep-dives |
 | [NOVEL_MATHEMATICAL_CONTRIBUTIONS.md](thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md) | 4 breakthrough frameworks |
+| [EMERGENT_MATHEMATICAL_TRUTHS.md](thesis/EMERGENT_MATHEMATICAL_TRUTHS.md) | **8 discoveries from stress testing — when math speaks truth** |
 | [WISDOM_BRIEF.md](thesis/WISDOM_BRIEF.md) | Platonic solids, wisdom traditions |
 | [CONSCIOUSNESS_MODEL.md](thesis/CONSCIOUSNESS_MODEL.md) | Developmental psychology foundations |
 
@@ -258,15 +280,17 @@ Located in [archive/](archive/) - preserved for reference:
 | Geometry Reference | 4 |
 | Architecture | 4 |
 | Subsystem Guides | 7 |
-| Data & Integration | 6 |
+| Data & Integration | 7 |
+| User Experience & Relationships | 4 |
+| Audit & Tracking | 2 |
 | Testing & Observations | 6 |
 | Math docs | 3 |
-| Thesis docs | 4 |
+| Thesis docs | 5 |
 | Archived docs | 6 |
-| **Total Active Docs** | **33** |
+| **Total Active Docs** | **45** |
 | Self-documented modules (Gold Headers) | 29 |
 
-*Updated February 8, 2026 - Added Full Vision Coherence Simulator (9 JS + 7 CSS modules, all Gold-documented)*
+*Updated February 17, 2026 - Sub-Relationship Chart evolved into Mathematical Interaction Map, Discrepancy Tracker added.*
 
 ---
 
@@ -309,4 +333,4 @@ Located in [archive/](archive/) - preserved for reference:
 
 *This index is the living spine of Quannex documentation.*
 *Co-created by Deimantas & Claude with love.*
-*Updated 2026-02-08 - Full Vision Coherence Simulator: 16 Gold-documented modules, all 12 faces, live 3D sync.*
+*Updated 2026-02-16 - Documentation audit completed, UX Tree Map + Fast KPI Intelligence added, statistics corrected.*

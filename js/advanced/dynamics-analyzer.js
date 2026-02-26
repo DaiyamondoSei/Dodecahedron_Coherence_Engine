@@ -169,6 +169,15 @@
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
+// STRESS_TEST_FIX [M8]: Standardize epsilon to phi^-3 (≈ 0.236).
+// The stress test found 3 inconsistent epsilon values (0.01, 0.236, 1e-10).
+// phi^-3 is the philosophically grounded choice: derived from the golden ratio
+// that underpins all Quannex sacred geometry, even numerical guards embody
+// dodecahedral coherence. Also prevents extreme loop gain ratios that the
+// raw 0.01 epsilon allowed (up to 100x amplification at near-zero energy).
+const PHI = (1 + Math.sqrt(5)) / 2;
+const EPSILON_PHI3 = Math.pow(PHI, -3); // ≈ 0.236
+
 export class DynamicsAnalyzer {
   constructor() {
     // STRESS_TEST_FIX [H1]: Replace hardcoded adjacency with SSOT.
@@ -384,7 +393,8 @@ export class DynamicsAnalyzer {
       const transmission = 1.0 - (tension * 0.5); // 0.5 to 1.0
 
       // Energy ratio (how much next has relative to current)
-      const energyRatio = nextEnergy / (currentEnergy + 0.01); // Avoid div by zero
+      // STRESS_TEST_FIX [M8]: phi^-3 epsilon replaces arbitrary 0.01
+      const energyRatio = nextEnergy / (currentEnergy + EPSILON_PHI3);
 
       totalGain *= transmission * energyRatio;
     }
