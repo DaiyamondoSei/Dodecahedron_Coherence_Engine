@@ -1,0 +1,167 @@
+/**
+ * ============================================================================
+ * GLOW-CARD.CSS - Neon Edge Shadow Box Component
+ * ============================================================================
+ *
+ * Purpose: Reusable dark card with neon flowing border and inner glow.
+ *          The border animates like electricity flowing through wires.
+ *          Inner radial glow follows mouse position.
+ *
+ * Usage:
+ *   <div class="glow-card">Your content</div>
+ *   Then: GlowCard.init('.glow-card') in JS
+ *
+ * CSS Custom Properties (set by glow-card.js):
+ *   --glow-hue         : 0-360, current rainbow hue
+ *   --glow-intensity   : 0-1, proximity-based glow strength
+ *   --glow-x           : 0%-100%, horizontal glow center
+ *   --glow-y           : 0%-100%, vertical glow center
+ *   --border-angle     : 0-360deg, neon border rotation position
+ *
+ * Architecture:
+ *   - .glow-card        : Base card (dark bg, glassmorphism, inset shadows)
+ *   - .glow-card::before: Neon flowing border (conic-gradient + mask)
+ *   - .glow-card::after : Radial gradient glow (mouse-following inner light)
+ *
+ * ============================================================================
+ * NOTES FOR FUTURE CLAUDE
+ * ============================================================================
+ *
+ * NEON FLOWING BORDER TECHNIQUE:
+ * A conic-gradient creates a spotlight sweep. It rotates via --border-angle
+ * (driven by JS). A CSS mask subtracts the content-box from the border-box,
+ * leaving only the 2px border strip visible. Result: a bright neon light
+ * that appears to travel around the card perimeter like electricity.
+ *
+ * The mask uses -webkit-mask-composite: xor for WebKit browsers and
+ * mask-composite: exclude for standard. Both needed for cross-browser.
+ *
+ * LAYER STACKING:
+ *   z-index 0: ::before (neon border) - extends 2px outside card
+ *   z-index 1: ::after (radial glow) - fills card interior
+ *   z-index 3: content (> *) - card children above all effects
+ *
+ * OVERFLOW: intentionally NOT hidden so ::before can extend outside the
+ * card boundary for the neon border effect.
+ *
+ * ============================================================================
+ */
+
+/* =========================================================================
+   BASE CARD
+   ========================================================================= */
+
+.glow-card {
+    /* Parameterization layer - JS writes these */
+    --glow-hue: 0;
+    --glow-intensity: 0;
+    --glow-x: 50%;
+    --glow-y: 100%;
+    --border-angle: 0deg;
+
+    position: relative;
+    border-radius: 24px;
+
+    /* Dark gradient background - near-black */
+    background: linear-gradient(180deg, #0a0a0c 0%, #06060a 100%);
+
+    /* No static border - neon border ::before replaces it */
+    border: none;
+
+    /* Glassmorphism: frosted glass translucency */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    /* Inset shadows: depth containment + ambient glow */
+    box-shadow:
+        /* Inner depth highlight - always present, subtle */
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.03 + 0.04 * var(--glow-intensity))),
+        /* Inner colored glow - broad, soft */
+        inset 0 0 80px -20px hsla(var(--glow-hue), 80%, 45%, calc(0.2 * var(--glow-intensity))),
+        /* Inner colored glow - tighter, brighter */
+        inset 0 0 40px -10px hsla(var(--glow-hue), 90%, 55%, calc(0.15 * var(--glow-intensity))),
+        /* Outer ambient glow */
+        0 0 40px -10px hsla(var(--glow-hue), 80%, 50%, calc(0.12 * var(--glow-intensity))),
+        /* Outer soft spread */
+        0 8px 32px -8px hsla(var(--glow-hue), 70%, 40%, calc(0.08 * var(--glow-intensity)));
+
+    /* 3D tilt support */
+    transform-style: preserve-3d;
+    will-change: transform, box-shadow;
+}
+
+/* =========================================================================
+   NEON FLOWING BORDER
+   =========================================================================
+   A conic-gradient spotlight sweeps around the card perimeter.
+   CSS mask reveals only the 2px border strip, hiding the interior fill.
+   Result: electricity-flowing-through-wires effect.
+   ========================================================================= */
+
+.glow-card::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 0;
+
+    /* Conic gradient: a bright arc that sweeps around */
+    background: conic-gradient(
+        from var(--border-angle),
+        transparent 0%,
+        transparent 25%,
+        hsla(var(--glow-hue), 100%, 60%, calc(0.7 * var(--glow-intensity))) 30%,
+        hsla(var(--glow-hue), 100%, 85%, calc(1.0 * var(--glow-intensity))) 33%,
+        hsla(var(--glow-hue), 100%, 60%, calc(0.7 * var(--glow-intensity))) 36%,
+        transparent 41%,
+        transparent 100%
+    );
+
+    /* Mask: subtract content-box from border-box = only border visible */
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+
+    /* The padding defines the neon border thickness */
+    padding: 2px;
+}
+
+/* =========================================================================
+   RADIAL GLOW - Inner Light (Mouse-Following)
+   ========================================================================= */
+
+.glow-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+
+    /* Radial gradient centered at mouse position */
+    background: radial-gradient(
+        ellipse 80% 80% at var(--glow-x) var(--glow-y),
+        hsla(var(--glow-hue), 100%, 65%, calc(0.30 * var(--glow-intensity))) 0%,
+        hsla(var(--glow-hue), 95%, 55%, calc(0.15 * var(--glow-intensity))) 25%,
+        hsla(var(--glow-hue), 80%, 45%, calc(0.06 * var(--glow-intensity))) 50%,
+        transparent 75%
+    );
+
+    /* Screen blend for natural light addition */
+    mix-blend-mode: screen;
+}
+
+/* =========================================================================
+   CONTENT LAYER - Above all glow effects
+   ========================================================================= */
+
+.glow-card > * {
+    position: relative;
+    z-index: 3;
+}

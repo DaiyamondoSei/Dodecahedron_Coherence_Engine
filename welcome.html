@@ -16,9 +16,11 @@
     the vision of measuring organizational coherence through sacred geometry.
 
     ARCHITECTURE:
+    - CursorLight system (js/components/cursor-light.js + css/components/cursor-light.css)
+    - GlowCard component (js/components/glow-card.js + css/components/glow-card.css)
     - Starfield background (js/welcome/starfield.js)
     - Constellation dodecahedron (js/welcome/constellation-dodecahedron.js)
-    - Glass cards (js/welcome/glass-cards.js)
+    - Glass cards behavior (js/welcome/glass-cards.js) - delegates visuals to GlowCard
     - Hyperspace transitions (js/welcome/hyperspace.js)
     - Main orchestrator (js/welcome/welcome-main.js)
 
@@ -29,14 +31,22 @@
     This HTML file is intentionally thin - it's an orchestrator, not the
     implementation. All logic lives in the JS modules.
 
+    THE DARKNESS EXPERIENCE:
+    The page starts pitch black. The cursor is the only light source (a glow
+    halo). Content elements have .light-reveal class and start invisible.
+    As the cursor approaches, CursorLight.js reveals them with slide-in.
+    On mobile, device gyroscope tilt replaces the cursor.
+
     LOAD ORDER MATTERS:
     1. Three.js (external dependency)
-    2. CSS styles
-    3. Starfield (creates background)
-    4. ConstellationDodecahedron (creates Three.js scene)
-    5. GlassCards (enhances card elements)
-    6. Hyperspace (transition effects)
-    7. WelcomeMain (orchestrates everything)
+    2. CSS: cursor-light.css, glow-card.css (components), then welcome.css (page)
+    3. Logger (utility)
+    4. CursorLight + GlowCard (reusable components)
+    5. Starfield (creates background)
+    6. ConstellationDodecahedron (creates Three.js scene)
+    7. GlassCards (card click behavior - uses GlowCard internally)
+    8. Hyperspace (transition effects)
+    9. WelcomeMain (orchestrates everything, initializes CursorLight)
 
     The modules use IIFE pattern and attach to window. No bundler needed.
 
@@ -46,7 +56,11 @@
     <!-- External Dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-    <!-- Modular Styles -->
+    <!-- Reusable Components -->
+    <link rel="stylesheet" href="css/components/cursor-light.css">
+    <link rel="stylesheet" href="css/components/glow-card.css">
+
+    <!-- Page Styles -->
     <link rel="stylesheet" href="css/welcome/welcome.css">
 </head>
 
@@ -63,15 +77,16 @@
 
     <!-- ===================================================================
          MAIN CONTENT
+         All visible elements use .light-reveal for darkness/reveal system
          =================================================================== -->
 
     <div class="welcome-content">
         <!-- Title -->
-        <h1 class="welcome-title">Quannex</h1>
-        <p class="welcome-subtitle">Organizational Coherence Engine</p>
+        <h1 class="welcome-title light-reveal">Quannex</h1>
+        <p class="welcome-subtitle light-reveal">Organizational Coherence Engine</p>
 
         <!-- Tagline -->
-        <p class="welcome-tagline">
+        <p class="welcome-tagline light-reveal">
             Visualize your organization's health through the lens of
             <em>sacred geometry</em>. Twelve faces. Infinite insights.
         </p>
@@ -79,7 +94,7 @@
         <!-- Path Selection Cards -->
         <div class="path-selection">
             <!-- Template Path -->
-            <a href="demo-orchestrator.html?path=template" class="path-card template">
+            <a href="demo-orchestrator.html?path=template" class="path-card template light-reveal">
                 <span class="path-icon">🏢</span>
                 <div class="path-title">Template Path</div>
                 <div class="path-description">
@@ -88,7 +103,7 @@
             </a>
 
             <!-- Custom Path -->
-            <a href="demo-orchestrator.html?path=custom" class="path-card custom">
+            <a href="demo-orchestrator.html?path=custom" class="path-card custom light-reveal">
                 <span class="path-icon">✏️</span>
                 <div class="path-title">Custom Path</div>
                 <div class="path-description">
@@ -97,7 +112,7 @@
             </a>
 
             <!-- AI Path -->
-            <a href="demo-orchestrator.html?path=ai" class="path-card ai">
+            <a href="demo-orchestrator.html?path=ai" class="path-card ai light-reveal">
                 <span class="path-icon">🧠</span>
                 <div class="path-title">AI Path</div>
                 <div class="path-description">
@@ -107,7 +122,7 @@
         </div>
 
         <!-- Explanation Section -->
-        <div class="explanation-section">
+        <div class="explanation-section light-reveal">
             <div class="explanation-title">What is this?</div>
             <p class="explanation-text">
                 Quannex maps your organization onto a <strong>dodecahedron</strong> -
@@ -120,7 +135,7 @@
         </div>
 
         <!-- Footer -->
-        <div class="welcome-footer">
+        <div class="welcome-footer light-reveal">
             Part of the Bachelor's Thesis Project by Deimantas Martynas Aurelijus
         </div>
     </div>
@@ -133,7 +148,11 @@
     <!-- Global Utilities -->
     <script src="js/utils/logger.js"></script>
 
-    <!-- Core Modules -->
+    <!-- Reusable Components (loaded before page modules that depend on them) -->
+    <script src="js/components/cursor-light.js"></script>
+    <script src="js/components/glow-card.js"></script>
+
+    <!-- Page Modules -->
     <script src="js/welcome/starfield.js"></script>
     <script src="js/welcome/constellation-dodecahedron.js"></script>
     <script src="js/welcome/glass-cards.js"></script>
@@ -141,6 +160,11 @@
 
     <!-- Main Orchestrator (initializes everything) -->
     <script src="js/welcome/welcome-main.js"></script>
+
+    <!-- Initialize CursorLight after all modules are loaded -->
+    <script>
+        CursorLight.init({ revealDistance: 400 });
+    </script>
 </body>
 
 </html>

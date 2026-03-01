@@ -1,0 +1,170 @@
+/**
+ * ============================================================================
+ * CURSOR-LIGHT.CSS - Darkness & Light Reveal System
+ * ============================================================================
+ *
+ * Purpose: Makes a page pitch black. The cursor becomes the only light source.
+ *          Content reveals itself as the cursor approaches, with slide-in motion.
+ *          On mobile, device tilt replaces cursor via gyroscope.
+ *
+ * Usage:
+ *   Add class "cursor-light-scene" to <body>
+ *   All children with class "light-reveal" will start hidden
+ *   Then: CursorLight.init() in JS
+ *
+ * CSS Custom Properties (set by cursor-light.js):
+ *   --cursor-x        : cursor X in px (viewport-relative)
+ *   --cursor-y        : cursor Y in px (viewport-relative)
+ *
+ * Architecture:
+ *   - .cursor-light-scene     : Pitch black page
+ *   - .cursor-glow            : The visible light halo following cursor
+ *   - .light-reveal           : Any element that starts hidden, revealed by proximity
+ *   - .light-reveal--visible  : Applied by JS when cursor is near enough
+ *
+ * ============================================================================
+ * NOTES FOR FUTURE CLAUDE
+ * ============================================================================
+ *
+ * This is a PAGE-LEVEL SYSTEM, not a per-element component. It controls the
+ * entire page's darkness/light metaphor.
+ *
+ * The cursor-glow element is a large radial gradient that follows the cursor.
+ * It provides ambient illumination. Content reveal is handled per-element
+ * by cursor-light.js, which adds/removes .light-reveal--visible class.
+ *
+ * IMPORTANT: .light-reveal elements transition FROM opacity 0 + translateY
+ * TO opacity 1 + translateY(0). The transition is CSS-driven; JS only
+ * toggles the class. This keeps animation smooth and GPU-accelerated.
+ *
+ * ============================================================================
+ */
+
+/* =========================================================================
+   PITCH BLACK SCENE
+   ========================================================================= */
+
+.cursor-light-scene {
+    /* Cursor: none on the page - the glow halo IS the cursor */
+    cursor: none;
+}
+
+/* =========================================================================
+   CURSOR GLOW HALO - The Light Source
+   =========================================================================
+   A fixed-position element that follows the cursor, creating a soft
+   radial light on the black canvas. Pure atmosphere.
+   ========================================================================= */
+
+.cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 500px;
+    height: 500px;
+    pointer-events: none;
+    z-index: 10000;
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.06) 0%,
+        rgba(255, 255, 255, 0.03) 20%,
+        rgba(255, 255, 255, 0.01) 40%,
+        transparent 70%
+    );
+
+    /* Transform moves it - JS sets translate via style.transform */
+    transform: translate(-50%, -50%);
+    will-change: transform;
+
+    /* Invisible by default, JS activates on first mouse move */
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+.cursor-glow--active {
+    opacity: 1;
+}
+
+/* =========================================================================
+   LIGHT-REVEAL ELEMENTS - Hidden Until Illuminated
+   =========================================================================
+   Any element with .light-reveal starts invisible and offset.
+   When cursor approaches, JS adds .light-reveal--visible, triggering
+   a smooth slide-in + fade-in via CSS transition.
+   ========================================================================= */
+
+.light-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+        opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.light-reveal--visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered reveal: elements further down slide from further away */
+.light-reveal--from-left {
+    transform: translateX(-30px);
+    opacity: 0;
+}
+
+.light-reveal--from-left.light-reveal--visible {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.light-reveal--from-right {
+    transform: translateX(30px);
+    opacity: 0;
+}
+
+.light-reveal--from-right.light-reveal--visible {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* =========================================================================
+   MOBILE: SHOW CURSOR-GLOW ALTERNATIVE
+   =========================================================================
+   On touch devices, show a subtler tilt-reactive glow spot.
+   ========================================================================= */
+
+/* =========================================================================
+   GLOW-CARD COMPATIBILITY
+   =========================================================================
+   When .light-reveal is on a .glow-card, only transition opacity.
+   Glow-card.js controls transforms (tilt, scale) via inline styles.
+   CSS transform transitions would create lag with per-frame JS updates.
+   ========================================================================= */
+
+.glow-card.light-reveal {
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Override: no transform in initial state (glow-card.js handles it) */
+    transform: none;
+}
+
+.glow-card.light-reveal--visible {
+    /* Only opacity changes; transform stays under glow-card.js control */
+    transform: none;
+}
+
+/* =========================================================================
+   MOBILE: SHOW CURSOR-GLOW ALTERNATIVE
+   ========================================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+    .cursor-light-scene {
+        cursor: auto;
+    }
+
+    .cursor-glow {
+        width: 400px;
+        height: 400px;
+    }
+}

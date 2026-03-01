@@ -45,7 +45,7 @@ html {
 
 body {
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
+    background: #000000;
     color: #fff;
     min-height: 100vh;
     overflow-x: hidden;
@@ -161,24 +161,12 @@ body {
 }
 
 .path-card {
-    background: rgba(0, 0, 0, 0.5);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
+    /* Layout only - visual effects handled by glow-card component */
     padding: 30px 24px;
     width: 220px;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
     color: inherit;
-    position: relative;
-    overflow: hidden;
-}
-
-.path-card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(0, 255, 204, 0.5);
-    background: rgba(0, 255, 204, 0.08);
-    box-shadow: 0 20px 40px rgba(0, 255, 204, 0.15);
 }
 
 /* Card Icon */
@@ -209,38 +197,8 @@ body {
    CARD TYPE VARIANTS
    ========================================================================= */
 
-/* Template Card (Purple) */
-.path-card.template:hover {
-    border-color: rgba(147, 112, 219, 0.6);
-    background: rgba(147, 112, 219, 0.1);
-    box-shadow: 0 20px 40px rgba(147, 112, 219, 0.2);
-}
-
-.path-card.template:hover .path-title {
-    color: #9370db;
-}
-
-/* Custom Card (Green) */
-.path-card.custom:hover {
-    border-color: rgba(0, 255, 136, 0.6);
-    background: rgba(0, 255, 136, 0.1);
-    box-shadow: 0 20px 40px rgba(0, 255, 136, 0.2);
-}
-
-.path-card.custom:hover .path-title {
-    color: #00ff88;
-}
-
-/* AI Card (Blue) */
-.path-card.ai:hover {
-    border-color: rgba(0, 200, 255, 0.6);
-    background: rgba(0, 200, 255, 0.1);
-    box-shadow: 0 20px 40px rgba(0, 200, 255, 0.2);
-}
-
-.path-card.ai:hover .path-title {
-    color: #00c8ff;
-}
+/* Visual effects (glow, borders, shadows) are handled by glow-card component.
+   Card-type-specific overrides removed to avoid CSS conflicts. */
 
 /* =========================================================================
    EXPLANATION SECTION
