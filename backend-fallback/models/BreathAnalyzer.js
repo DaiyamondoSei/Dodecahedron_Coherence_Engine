@@ -13,6 +13,12 @@
  * The 6 Axes map to the 6 opposite face pairs of the dodecahedron.
  */
 
+// φ-derived constants (from PhiHarmonics SSOT, with inline fallback)
+const _PHI = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI : (1 + Math.sqrt(5)) / 2;
+const _PHI_1 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_1 : 1 / _PHI;           // φ⁻¹ = 0.618
+const _PHI_2 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_2 : 1 / (_PHI * _PHI);  // φ⁻² = 0.382
+const _PSI_4 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PSI_4 : 1 - _PHI_2 * _PHI_2; // 1−φ⁻⁴ = 0.854
+
 export class BreathAnalyzer {
   constructor(tuningConstants) {
     this.tuning = tuningConstants;
@@ -181,15 +187,16 @@ export class BreathAnalyzer {
       dominantTendency = 'mixed';
     }
 
-    // Overall status
+    // Overall status — φ-derived health thresholds
+    // Excellent ≥ ψ₄ (0.854), Good ≥ φ⁻¹ (0.618), Concerning ≥ φ⁻² (0.382), Critical below
     let overallStatus, message;
-    if (breathHealth >= 0.8) {
+    if (breathHealth >= _PSI_4) {
       overallStatus = 'Excellent';
       message = 'Organization breathes with healthy rhythm. Reception and projection are well-balanced.';
-    } else if (breathHealth >= 0.6) {
+    } else if (breathHealth >= _PHI_1) {
       overallStatus = 'Good';
       message = 'Some breath imbalances detected, but overall health is maintained.';
-    } else if (breathHealth >= 0.4) {
+    } else if (breathHealth >= _PHI_2) {
       overallStatus = 'Concerning';
       message = 'Significant breath imbalances. Organization may be overextending or under-utilizing itself.';
     } else {

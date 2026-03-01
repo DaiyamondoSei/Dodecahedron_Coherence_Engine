@@ -1,10 +1,18 @@
 /**
  * Vertex Class - The 20 Vortices of Transformation
- * 
+ *
  * Each Vertex is a meeting point where three Faces (organizational domains) converge.
  * Vertices are points of potential transformation, where energy can spiral up or down.
  * They represent decision points, leverage points, or vortices of change.
  */
+
+// φ-derived constants (from PhiHarmonics SSOT, with inline fallback)
+// Golden partition: φ⁻¹ + φ⁻² = 1.0 — the unique self-similar split of unity
+const _PHI = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI : (1 + Math.sqrt(5)) / 2;
+const _PHI_1 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_1 : 1 / _PHI;           // φ⁻¹ = 0.618
+const _PHI_2 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_2 : 1 / (_PHI * _PHI);  // φ⁻² = 0.382
+const _PHI_3 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_3 : _PHI_1 * _PHI_2;    // φ⁻³ = 0.236
+const _PSI_4 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PSI_4 : 1 - _PHI_2 * _PHI_2; // 1−φ⁻⁴ = 0.854
 
 export class Vertex {
   /**
@@ -58,8 +66,8 @@ export class Vertex {
     // Normalize standard deviation (max possible is ~0.577 for values 0-1)
     const normalizedVariance = stdDev / 0.577;
     
-    // Combined strength: 70% variance, 30% mean energy
-    const strength = (0.7 * normalizedVariance) + (0.3 * mean);
+    // Golden partition: φ⁻¹ variance + φ⁻² mean energy (φ⁻¹ + φ⁻² = 1.0)
+    const strength = (_PHI_1 * normalizedVariance) + (_PHI_2 * mean);
     
     return Math.min(1.0, Math.max(0.0, strength));
   }
@@ -151,12 +159,12 @@ export class Vertex {
     const strength = this.vortexStrength;
     const direction = this.vortexDirection;
     
-    if (strength < 0.3) return 'Dormant';
-    
-    if (direction > 0.3) {
-      return strength > 0.7 ? 'Powerful Ascent' : 'Rising';
-    } else if (direction < -0.3) {
-      return strength > 0.7 ? 'Critical Descent' : 'Declining';
+    if (strength < _PHI_2) return 'Dormant';          // < φ⁻² (0.382)
+
+    if (direction > _PHI_2) {
+      return strength > _PHI_1 ? 'Powerful Ascent' : 'Rising';     // φ⁻² / φ⁻¹
+    } else if (direction < -_PHI_2) {
+      return strength > _PHI_1 ? 'Critical Descent' : 'Declining';
     } else {
       return 'Turbulent';
     }
@@ -166,11 +174,12 @@ export class Vertex {
    * Get health status
    */
   get healthStatus() {
+    // φ-derived coherence health: PSI_4, φ⁻¹, φ⁻², φ⁻³
     const coherence = this.coherence;
-    if (coherence >= 0.8) return 'Harmonious';
-    if (coherence >= 0.6) return 'Balanced';
-    if (coherence >= 0.4) return 'Unstable';
-    if (coherence >= 0.2) return 'Chaotic';
+    if (coherence >= _PSI_4) return 'Harmonious';  // ≥ 0.854 (1−φ⁻⁴)
+    if (coherence >= _PHI_1) return 'Balanced';     // ≥ 0.618 (φ⁻¹)
+    if (coherence >= _PHI_2) return 'Unstable';     // ≥ 0.382 (φ⁻²)
+    if (coherence >= _PHI_3) return 'Chaotic';      // ≥ 0.236 (φ⁻³)
     return 'Critical';
   }
 
@@ -225,7 +234,8 @@ export class Vertex {
    * (high strength + low coherence = opportunity for transformation)
    */
   get isLeveragePoint() {
-    return this.vortexStrength > 0.7 && this.coherence < 0.5;
+    // φ⁻¹ (0.618) strength + φ⁻² (0.382) coherence thresholds
+    return this.vortexStrength > _PHI_1 && this.coherence < _PHI_2;
   }
 
   /**

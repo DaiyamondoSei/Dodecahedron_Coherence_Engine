@@ -150,6 +150,9 @@
  *    Calculated as: 1.0 - average(tension across all axes)
  *    Tension = absolute value of log ratio (distance from balance)
  *    Higher tension = lower health.
+ *    φ-derived status thresholds:
+ *      Excellent ≥ ψ₄ (0.854), Good ≥ φ⁻¹ (0.618),
+ *      Concerning ≥ φ⁻² (0.382), Critical below
  *
  * 6. DOMINANT TENDENCY:
  *    'over-exhaling': More axes depleting than accumulating
@@ -283,8 +286,9 @@ class BreathAnalyzer {
     // Golden Ratio constants - using single source from phi-harmonics.js
     const PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
     this.PHI = PH.PHI || 1.618033988749895;
-    this.PHI_INVERSE = PH.PHI_1 || PH.PHI_INV_1 || 0.618033988749895;   // 1/φ
-    this.PHI_INV_2 = PH.PHI_2 || PH.PHI_INV_2 || 0.381966011250105;     // φ^-2
+    this.PHI_INVERSE = PH.PHI_1 || PH.PHI_INV_1 || 0.618033988749895;   // 1/φ = φ⁻¹
+    this.PHI_INV_2 = PH.PHI_2 || PH.PHI_INV_2 || 0.381966011250105;     // φ⁻²
+    this.PSI_4 = PH.PSI_4 || (1 - Math.pow(this.PHI, -4));               // 1−φ⁻⁴ = 0.854
     this.EPSILON = PH.EPSILON || 1e-10;
 
     // Sprint 4 Task 31: φ-Based Breath Thresholds
@@ -484,15 +488,16 @@ class BreathAnalyzer {
       dominantTendency = 'mixed';
     }
 
-    // Overall status and message
+    // Overall status — φ-derived health thresholds
+    // Excellent ≥ ψ₄ (0.854), Good ≥ φ⁻¹ (0.618), Concerning ≥ φ⁻² (0.382), Critical below
     let overallStatus, message;
-    if (breathHealth >= 0.8) {
+    if (breathHealth >= this.PSI_4) {
       overallStatus = 'Excellent';
       message = 'Organization breathes with healthy rhythm. Reception and projection are well-balanced.';
-    } else if (breathHealth >= 0.6) {
+    } else if (breathHealth >= this.PHI_INVERSE) {
       overallStatus = 'Good';
       message = 'Some breath imbalances detected, but overall health is maintained.';
-    } else if (breathHealth >= 0.4) {
+    } else if (breathHealth >= this.PHI_INV_2) {
       overallStatus = 'Concerning';
       message = 'Significant breath imbalances. Organization may be overextending or under-utilizing itself.';
     } else {

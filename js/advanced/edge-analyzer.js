@@ -78,6 +78,15 @@
  * const tensionMap = analyzer.getTensionStats(edges);
  */
 
+// φ-derived constants (from PhiHarmonics SSOT, with inline fallback)
+// These define 5-state health boundaries for edge tension classification
+const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+const _PHI = _PH.PHI || (1 + Math.sqrt(5)) / 2;
+const _PHI_4 = _PH.PHI_4 || Math.pow(_PHI, -4);        // φ⁻⁴ = 0.146
+const _PHI_2 = _PH.PHI_2 || 1 / (_PHI * _PHI);         // φ⁻² = 0.382
+const _PHI_1 = _PH.PHI_1 || 1 / _PHI;                  // φ⁻¹ = 0.618
+const _PSI_4 = _PH.PSI_4 || 1 - _PHI_2 * _PHI_2;       // 1−φ⁻⁴ = 0.854
+
 export class EdgeAnalyzer {
   constructor() {
     // STRESS_TEST_FIX [H1]: Import edge definitions from topology SSOT.
@@ -167,17 +176,17 @@ export class EdgeAnalyzer {
    */
   // STRESS_TEST_FIX [C2]: ALTERNATIVE PERSPECTIVE — normalized relative tension.
   // This formula (T = |E_A - E_B| / (E_A + E_B + ε)) differs from the canonical
-  // threshold-based formula in Edge.js. Both are valid but measure different things:
-  //   - Edge.js (canonical): Phase detection — "what STATE is this relationship in?"
+  // geometric mean formula in Edge.js. Both are valid but measure different things:
+  //   - Edge.js (canonical): Membrane energy √(E_A × E_B) — "how STRONG is this boundary?"
   //   - This formula: Relative tension — "how PROPORTIONALLY imbalanced is the flow?"
   // The canonical formula is used for system coherence. This one provides analytical
   // depth for the advanced analysis views.
+  // Both share φ-derived classification boundaries: φ⁻⁴ / φ⁻² / φ⁻¹ / ψ₄.
   calculateTension(face1, face2, element, edgeKPI = null) {
     const E_A = face1.faceEnergy || 0;
     const E_B = face2.faceEnergy || 0;
 
-    // Use epsilon from PhiHarmonics (single source: js/constants/phi-harmonics.js)
-    const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+    // Use epsilon from PhiHarmonics SSOT (module-level _PH constant)
     const epsilon = _PH.EPSILON || 1e-10;
 
     // NORMALIZED tension formula: |E_A - E_B| / (E_A + E_B + epsilon)
@@ -226,9 +235,8 @@ export class EdgeAnalyzer {
     const E_A = face1.faceEnergy || 0;
     const E_B = face2.faceEnergy || 0;
 
-    // PHI constants - Single source: js/constants/phi-harmonics.js
-    const _PH = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
-    const phi = _PH.PHI || 1.618033988749895;
+    // PHI constants from module-level _PH (PhiHarmonics SSOT)
+    const phi = _PHI;
     const epsilon = _PH.EPSILON || 1e-10;
 
     // Logarithmic breath ratio using golden base
@@ -251,31 +259,33 @@ export class EdgeAnalyzer {
   }
 
   /**
-   * Get health status based on tension
+   * Get health status based on tension — φ-derived 5-state mapping
+   * Boundaries: φ⁻⁴ (0.146) / φ⁻² (0.382) / φ⁻¹ (0.618) / ψ₄ (0.854)
    */
   getHealthStatus(tension) {
-    if (tension <= 0.2) return 'Flowing';
-    if (tension <= 0.4) return 'Stable';
-    if (tension <= 0.6) return 'Stressed';
-    if (tension <= 0.8) return 'Strained';
+    if (tension <= _PHI_4) return 'Flowing';
+    if (tension <= _PHI_2) return 'Stable';
+    if (tension <= _PHI_1) return 'Stressed';
+    if (tension <= _PSI_4) return 'Strained';
     return 'Breaking';
   }
 
   /**
    * Get color based on tension level (green → yellow → red)
+   * Uses φ-derived boundaries: φ⁻² (0.382) and φ⁻¹ (0.618)
    */
   getTensionColor(tension) {
-    if (tension <= 0.3) {
+    if (tension <= _PHI_2) {
       // Green zone (low tension - good!)
-      const t = tension / 0.3;
+      const t = tension / _PHI_2;
       return this.interpolateColor('#00ff00', '#66ff00', t);
-    } else if (tension <= 0.6) {
+    } else if (tension <= _PHI_1) {
       // Yellow zone (medium tension)
-      const t = (tension - 0.3) / 0.3;
+      const t = (tension - _PHI_2) / (_PHI_1 - _PHI_2);
       return this.interpolateColor('#66ff00', '#ffaa00', t);
     } else {
       // Red zone (high tension - bad!)
-      const t = (tension - 0.6) / 0.4;
+      const t = (tension - _PHI_1) / (1.0 - _PHI_1);
       return this.interpolateColor('#ffaa00', '#ff0000', t);
     }
   }
@@ -417,9 +427,9 @@ export class EdgeAnalyzer {
     const maxTension = Math.max(...tensions);
     const minTension = Math.min(...tensions);
 
-    const highTension = edges.filter(e => e.tension > 0.6).length;
-    const mediumTension = edges.filter(e => e.tension > 0.3 && e.tension <= 0.6).length;
-    const lowTension = edges.filter(e => e.tension <= 0.3).length;
+    const highTension = edges.filter(e => e.tension > _PHI_1).length;
+    const mediumTension = edges.filter(e => e.tension > _PHI_2 && e.tension <= _PHI_1).length;
+    const lowTension = edges.filter(e => e.tension <= _PHI_2).length;
 
     return {
       average: avgTension,
@@ -555,18 +565,18 @@ export class EdgeAnalyzer {
     const direction = edge.breathRatio > 0 ? `→ (${edge.face2Name} is pulling)` : `← (${edge.face1Name} is pulling)`;
 
     if (magnitude < 0.1) flowDesc = "Stagnant / Balanced";
-    else if (magnitude < 0.4) flowDesc = `Gentle Flow ${direction}`;
-    else if (magnitude < 0.7) flowDesc = `Strong Current ${direction}`;
+    else if (magnitude < _PHI_2) flowDesc = `Gentle Flow ${direction}`;
+    else if (magnitude < _PHI_1) flowDesc = `Strong Current ${direction}`;
     else flowDesc = `Rushing Torrent ${direction}`;
 
     // 3. The Tension Status (Health)
     let tensionDesc = "";
     let insight = "";
 
-    if (edge.tension < 0.3) {
+    if (edge.tension < _PHI_2) {
       tensionDesc = "Harmonious";
       insight = `The relationship is healthy. Resources transform efficiently between these domains.`;
-    } else if (edge.tension < 0.6) {
+    } else if (edge.tension < _PHI_1) {
       tensionDesc = "Friction";
       insight = `There is resistance here. Energy is being lost during the transfer. Look for bureaucratic bottlenecks.`;
     } else {

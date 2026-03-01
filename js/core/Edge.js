@@ -20,58 +20,57 @@
  *   - Each edge shared by exactly 2 faces: 60 ÷ 2 = 30 edges
  *   - Euler's formula: V - E + F = 2 → 20 - 30 + 12 = 2 ✓
  *
- * WHAT IS AN EDGE? THE BOUNDARY OF FLOW
+ * WHAT IS AN EDGE? THE MEMBRANE OF FLOW
  * ─────────────────────────────────────
  * An edge is where two organizational domains share a boundary.
- * Energy must flow across this boundary, and the TENSION on the edge
- * tells us about the quality of that flow.
+ * Edge energy (geometric mean of face energies) tells us about
+ * the quality and intensity of flow across that boundary.
  *
  * Think of edges as semi-permeable membranes:
- *   - Low tension (smooth flow): Domains integrate well
- *   - High tension (blocked flow): Bottleneck or conflict
+ *   - Very low energy (Wall): No flow — domains isolated
+ *   - Golden section energy (Membrane): Healthy flow — balanced exchange
+ *   - Very high energy (Vortex): Intense — transformation or chaos
  *
  * ORGANIZATIONAL MEANING:
  * ───────────────────────
  * Consider the edge between "Human Capital" and "Operations":
- *   - If both faces are strong: Synergetic (people → efficient processes)
- *   - If Human is strong but Operations weak: Blocked flow (ideas can't execute)
- *   - If both are weak: Depleted (no energy to move either way)
+ *   - If both faces are strong: Hemorrhage/Vortex (intense synergy, watch for overflow)
+ *   - If Human is strong but Operations weak: Gate (flow is restricted)
+ *   - If both are weak: Wall (no energy to move either way)
  *
  * ════════════════════════════════════════════════════════════════════════════════
- * THE FIVE ELEMENTS AND THEIR EDGE ARCHETYPES
+ * THE PURE MEMBRANE MODEL
  * ════════════════════════════════════════════════════════════════════════════════
  *
- * Each edge can be associated with an element that modifies its character.
- * These multipliers come from traditional elemental correspondences:
+ * FORMULA: E_edge = √(E_faceA × E_faceB)  (geometric mean)
  *
- *   🔥 FIRE (1.3):   Amplifies tension - Fire edges are CATALYTIC
- *                    Where change happens fast, conflict ignites, or
- *                    transformation accelerates. High risk, high reward.
+ * Why geometric mean instead of threshold-based detection?
+ *   - No arbitrary constants (0.4, 0.6, 0.8, 0.9, 1.3 all eliminated)
+ *   - If either face dies, the membrane collapses (√(x × 0) = 0)
+ *   - Symmetry is naturally rewarded (√(0.5 × 0.5) = 0.5 > √(0.9 × 0.1) = 0.3)
+ *   - The formula IS the relationship: the shared energy at the boundary
  *
- *   💧 WATER (0.9):  Dampens tension - Water edges are ADAPTIVE
- *                    Flow adjusts to circumstances, conflicts dissolve,
- *                    but energy can also leak away if not channeled.
+ * HEALTH STATE MAPPING — φ-derived boundaries:
  *
- *   🌍 EARTH (0.8):  Stabilizes tension - Earth edges are FOUNDATIONAL
- *                    Slow, steady, reliable. Resistant to change but
- *                    provides the solid base other elements need.
+ *   State       │ Range              │ Meaning
+ *   ────────────┼────────────────────┼──────────────────────────
+ *   Wall        │ [0, φ⁻⁴)          │ Blocked, impermeable
+ *   Gate        │ [φ⁻⁴, φ⁻²)        │ Controlled, selective
+ *   Membrane    │ [φ⁻², φ⁻¹)        │ Healthy flow (golden section)
+ *   Hemorrhage  │ [φ⁻¹, 1−φ⁻⁴)      │ Over-flowing, leaking
+ *   Vortex      │ [1−φ⁻⁴, 1.0]      │ Intense transformation
  *
- *   🌬️ AIR (1.1):    Accelerates tension - Air edges are COMMUNICATIVE
- *                    Information flows quickly, ideas spread, but
- *                    can also create scattered energy if unfocused.
+ * The Membrane zone [φ⁻², φ⁻¹] IS the golden section of [0, 1].
  *
- *   ✧ ETHER (1.0):   Neutral - Ether edges are INTEGRATIVE
- *                    Pure connection without elemental bias.
- *                    Represents the space where all elements meet.
+ * ELEMENT AS INTERPRETATION, NOT MULTIPLIER:
+ * ──────────────────────────────────────────
+ * The element stored on each edge is metadata — it does NOT modify the
+ * energy value. Instead, element colors the INTERPRETATION through
+ * Sacred Inquiry (js/constants/sacred-inquiry.js):
+ *   5 health states × 5 elements = 25 inquiry patterns
  *
- * WHY THESE SPECIFIC MULTIPLIERS?
- * ────────────────────────────────
- * The multipliers are arranged around 1.0 (neutral):
- *   Fire (1.3) → Air (1.1) → Ether (1.0) → Water (0.9) → Earth (0.8)
- *
- * This creates a spectrum from CATALYTIC (Fire) to STABILIZING (Earth),
- * with Ether as the neutral center. The range (0.8 to 1.3) ensures
- * no element can dominate but each meaningfully colors the edge character.
+ * In the advanced visualization (unified-edge.js), the dominant element
+ * EMERGES dynamically from face synergies: √(FaceA.element × FaceB.element)
  *
  * ════════════════════════════════════════════════════════════════════════════════
  * NOTES FOR FUTURE CLAUDE - 10 KEY INSIGHTS
@@ -79,27 +78,39 @@
  *
  * 1. This class is INDEPENDENT - no imports from other js/core/ files
  * 2. Dodecahedron has 30 edges (each face has 5 neighbors)
- * 3. Tension = 0 (Dissonance) to 1 (Resonance) - inverted from intuition!
+ * 3. Edge energy = geometric mean √(E_faceA × E_faceB), range [0, 1]
  * 4. breathRatio: -1 to +1 (contraction to expansion)
- * 5. Elemental multipliers modify edge character (see section above)
+ * 5. Element is metadata only — does NOT modify the energy value
  * 6. calculateTension() takes two Face objects, uses their faceEnergy
- * 7. Status states: Synergetic (both high), Depleted (both low), Flowing/Stable
+ * 7. 5 health states: Wall / Gate / Membrane / Hemorrhage / Vortex
  * 8. Used by: DodecahedronEngine (main.js) for relationship calculations
  * 9. flowDirection: 'expansion' (A→B), 'contraction' (B→A), or 'balanced'
- * 10. High synergy (0.9) when both faces >0.6 - this is the GOAL state
+ * 10. Membrane [φ⁻², φ⁻¹] is the GOAL state — the golden section of [0,1]
  *
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
+// φ-derived constants (from PhiHarmonics SSOT, with inline fallback)
+// These define the 5-state health mapping boundaries: Wall / Gate / Membrane / Hemorrhage / Vortex
+const _PHI = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI : (1 + Math.sqrt(5)) / 2;
+const _PHI_4 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_4 : Math.pow(_PHI, -4);    // φ⁻⁴ = 0.146
+const _PHI_2 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_2 : 1 / (_PHI * _PHI);     // φ⁻² = 0.382
+const _PHI_1 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_1 : 1 / _PHI;              // φ⁻¹ = 0.618
+const _PSI_4 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PSI_4 : 1 - _PHI_2 * _PHI_2;   // 1−φ⁻⁴ = 0.854
+
 /**
  * Represents a connection between two faces.
- * Models the "Narrative Tension" or relationship archetype.
+ * Models the edge as a Pure Membrane — its energy is the geometric mean
+ * of connected face energies, and its health state emerges from φ-derived boundaries.
  *
- * Edge tension represents the quality of relationship between two
- * organizational domains:
- * - High tension (>0.7): Synergetic flow
- * - Low tension (<0.3): Depleted connection
- * - Medium tension: Stable or Flowing state
+ * Edge energy (tension) = √(E_faceA × E_faceB)
+ *
+ * Health states via φ-derived boundaries:
+ *   Wall       < φ⁻⁴ (0.146) — blocked, impermeable
+ *   Gate       [φ⁻⁴, φ⁻²)    — controlled, selective
+ *   Membrane   [φ⁻², φ⁻¹)    — healthy flow (THE golden section)
+ *   Hemorrhage [φ⁻¹, ψ₄)     — over-flowing, leaking
+ *   Vortex     ≥ ψ₄ (0.854)  — intense transformation
  *
  * @class Edge
  */
@@ -113,7 +124,7 @@ export class Edge {
    * @param {number} config.faceBId - ID of second connected face
    * @param {string} config.archetype - Relationship archetype name
    * @param {string} config.description - Human-readable description
-   * @param {string} config.element - Element type (Earth, Water, Fire, Air, Ether)
+   * @param {string} config.element - Element type (metadata only, does not affect energy calculation)
    */
   constructor(config) {
     this.id = config.id || '';
@@ -123,7 +134,7 @@ export class Edge {
     this.description = config.description || '';
 
     // State
-    this.tension = 0; // 0 (Dissonance) to 1 (Resonance)
+    this.tension = 0; // Edge energy [0, 1] — Membrane [φ⁻², φ⁻¹] is healthy zone
     this.status = 'Neutral';
     this.breathRatio = 0;
     this.flowDirection = 'balanced';
@@ -131,32 +142,33 @@ export class Edge {
   }
 
   /**
-   * Calculate tension based on the energy of connected faces
+   * Calculate edge energy based on the geometric mean of connected faces
    *
-   * The tension calculation considers:
-   * 1. Energy Delta: Absolute difference between face energies
-   * 2. Breath Ratio: Flow direction (-1 contraction to +1 expansion)
-   * 3. Elemental Multiplier: Element-specific amplification
-   * 4. Harmonic Resonance: Special states for high/low energy pairs
+   * PURE MEMBRANE MODEL: E_edge = √(E_faceA × E_faceB)
+   *
+   * Why geometric mean?
+   * - If either face is zero, the edge collapses to zero (dead membrane)
+   * - If both faces are equal, the edge equals them (perfect symmetry)
+   * - Asymmetry is naturally penalized (√(0.9 × 0.1) = 0.3, not 0.5)
+   *
+   * Health state uses φ-derived boundaries (same as sacred-inquiry.js):
+   *   Wall < φ⁻⁴ < Gate < φ⁻² < Membrane < φ⁻¹ < Hemorrhage < ψ₄ < Vortex
+   *
+   * Element is preserved as metadata but does NOT modify the energy value.
+   * Element colors the INTERPRETATION (via Sacred Inquiry), not the number.
    *
    * @param {Face} faceA - First connected face
    * @param {Face} faceB - Second connected face
-   * @returns {number} Calculated tension (0-1)
+   * @returns {number} Edge energy (0-1)
    */
-  // STRESS_TEST_FIX [C2]: This is the CANONICAL edge tension formula (SSOT).
-  // Uses threshold-based phase detection (Synergetic/Depleted/Flowing/Stable)
-  // which captures organizational phase transitions — philosophically richer
-  // and more defensible for the thesis than pure mathematical ratios.
-  // Alternative perspectives exist in edge-analyzer.js (normalized relative tension)
-  // and main.js (absolute difference) — these are SUPPLEMENTARY, not authoritative.
   calculateTension(faceA, faceB) {
     if (!faceA || !faceB) return 0;
 
     const e1 = faceA.faceEnergy;
     const e2 = faceB.faceEnergy;
 
-    // 1. Energy Delta (Difference)
-    const delta = Math.abs(e1 - e2);
+    // 1. Edge Energy = geometric mean of connected face energies
+    this.tension = Math.sqrt(e1 * e2);
 
     // 2. Breath Ratio (Flow Direction)
     // Positive = expansion (A to B), Negative = contraction (B to A)
@@ -166,28 +178,18 @@ export class Edge {
     if (Math.abs(this.breathRatio) < 0.1) this.flowDirection = 'balanced';
     else this.flowDirection = this.breathRatio > 0 ? 'expansion' : 'contraction';
 
-    // 3. Elemental Multiplier
-    const multipliers = {
-      'Fire': 1.3,    // Fire amplifies tension and flow
-      'Water': 0.9,   // Water smooths and dampens
-      'Earth': 0.8,   // Earth stabilizes and grounds
-      'Air': 1.1,     // Air accelerates flow
-      'Ether': 1.0    // Ether is neutral/balanced
-    };
-    const multiplier = multipliers[this.element] || 1.0;
-
-    // 4. Harmonic Resonance (Similarity)
-    if (e1 > 0.6 && e2 > 0.6) {
-      this.tension = 0.9; // High Synergy
-      this.status = 'Synergetic';
-    } else if (e1 < 0.4 && e2 < 0.4) {
-      this.tension = 0.2; // Depleted
-      this.status = 'Depleted';
+    // 3. Health State — φ-derived 5-state mapping
+    // Wall < φ⁻⁴ (0.146) < Gate < φ⁻² (0.382) < Membrane < φ⁻¹ (0.618) < Hemorrhage < ψ₄ (0.854) < Vortex
+    if (this.tension < _PHI_4) {
+      this.status = 'Wall';
+    } else if (this.tension < _PHI_2) {
+      this.status = 'Gate';
+    } else if (this.tension < _PHI_1) {
+      this.status = 'Membrane';
+    } else if (this.tension < _PSI_4) {
+      this.status = 'Hemorrhage';
     } else {
-      // Base tension from delta, modulated by element
-      const baseTension = 0.5 + (delta / 2);
-      this.tension = Math.min(1.0, Math.max(0.0, baseTension * multiplier));
-      this.status = delta > 0.4 ? 'Flowing' : 'Stable';
+      this.status = 'Vortex';
     }
 
     return this.tension;

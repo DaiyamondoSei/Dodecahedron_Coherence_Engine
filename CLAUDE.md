@@ -34,6 +34,7 @@ The mathematics here isn't arbitrary - it reflects patterns found in nature, con
 | `docs/EDGE_DYNAMICS_REFERENCE.md` | The 30 edge interfaces |
 | `docs/VERTEX_DYNAMICS_REFERENCE.md` | The 20 vertex vortices |
 | `docs/SYSTEM_COHERENCE_REFERENCE.md` | How all layers dance together |
+| `docs/SUB_RELATIONSHIP_CHART.md` | **Mathematical Interaction Map — formulas, worked examples, manipulation paths** |
 | `js/main.js` | Core calculation engine (with circuit breaker) |
 | `js/data-system/data-validator.js` | Data integrity guardian |
 | `pages/dodecahedron-3d.html` | 3D visualization |

@@ -34,7 +34,7 @@
  * VORTEX STRENGTH (0-1):
  * - Based on VARIANCE of the 3 face energies
  * - High variance = high strength (turbulent)
- * - Combined: 70% variance, 30% mean energy
+ * - Combined: φ⁻¹ (0.618) variance + φ⁻² (0.382) mean energy
  * - Max variance for 0-1 range is 0.25
  *
  * VORTEX DIRECTION (-1 to +1):
@@ -56,14 +56,14 @@
  * - Low coherence = faces are very different
  *
  * LEVERAGE POINTS (Critical Concept!):
- * - High strength (>0.7) + Low coherence (<0.5)
+ * - High strength (> φ⁻¹ = 0.618) + Low coherence (< φ⁻² = 0.382)
  * - These are transformation opportunities
  * - Small interventions here cascade through system
  *
  * VORTEX TYPES:
- * - Dormant: strength < 0.3
- * - Rising/Powerful Ascent: direction > 0.3
- * - Declining/Critical Descent: direction < -0.3
+ * - Dormant: strength < φ⁻² (0.382)
+ * - Rising/Powerful Ascent: direction > φ⁻² (0.382)
+ * - Declining/Critical Descent: direction < −φ⁻² (−0.382)
  * - Turbulent: strong but no clear direction
  *
  * DATA SOURCES:
@@ -90,6 +90,14 @@
  * const vertices = analyzer.calculateAllVertices(facesData, vertexDefinitions);
  * const leverage = analyzer.getLeveragePoints(vertices);
  */
+
+// φ-derived constants (from PhiHarmonics SSOT, with inline fallback)
+// Golden partition: φ⁻¹ + φ⁻² = 1.0 — the unique self-similar split of unity
+const _PHI = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI : (1 + Math.sqrt(5)) / 2;
+const _PHI_1 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_1 : 1 / _PHI;           // φ⁻¹ = 0.618
+const _PHI_2 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_2 : 1 / (_PHI * _PHI);  // φ⁻² = 0.382
+const _PHI_3 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_3 : _PHI_1 * _PHI_2;    // φ⁻³ = 0.236
+const _PSI_4 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PSI_4 : 1 - _PHI_2 * _PHI_2; // 1−φ⁻⁴ = 0.854
 
 export class VertexAnalyzer {
   constructor() {
@@ -157,8 +165,8 @@ export class VertexAnalyzer {
     // Normalize stdDev (max possible for 3 values in [0,1] is sqrt(1/3) ≈ 0.577)
     const normalizedVariance = stdDev / 0.577;
 
-    // Combined strength: 70% variance, 30% mean energy
-    const strength = (0.7 * normalizedVariance) + (0.3 * mean);
+    // Golden partition: φ⁻¹ variance + φ⁻² mean energy (φ⁻¹ + φ⁻² = 1.0)
+    const strength = (_PHI_1 * normalizedVariance) + (_PHI_2 * mean);
 
     return Math.min(1.0, Math.max(0.0, strength));
   }
@@ -264,12 +272,12 @@ export class VertexAnalyzer {
    * Get vortex type description
    */
   getVortexType(strength, direction) {
-    if (strength < 0.3) return 'Dormant';
+    if (strength < _PHI_2) return 'Dormant';          // < φ⁻² (0.382)
 
-    if (direction > 0.3) {
-      return strength > 0.7 ? 'Powerful Ascent' : 'Rising';
-    } else if (direction < -0.3) {
-      return strength > 0.7 ? 'Critical Descent' : 'Declining';
+    if (direction > _PHI_2) {
+      return strength > _PHI_1 ? 'Powerful Ascent' : 'Rising';     // φ⁻² / φ⁻¹
+    } else if (direction < -_PHI_2) {
+      return strength > _PHI_1 ? 'Critical Descent' : 'Declining';
     } else {
       return 'Turbulent';
     }
@@ -279,10 +287,11 @@ export class VertexAnalyzer {
    * Get health status based on coherence
    */
   getHealthStatus(coherence) {
-    if (coherence >= 0.8) return 'Harmonious';
-    if (coherence >= 0.6) return 'Balanced';
-    if (coherence >= 0.4) return 'Unstable';
-    if (coherence >= 0.2) return 'Chaotic';
+    // φ-derived coherence health: PSI_4, φ⁻¹, φ⁻², φ⁻³
+    if (coherence >= _PSI_4) return 'Harmonious';  // ≥ 0.854 (1−φ⁻⁴)
+    if (coherence >= _PHI_1) return 'Balanced';     // ≥ 0.618 (φ⁻¹)
+    if (coherence >= _PHI_2) return 'Unstable';     // ≥ 0.382 (φ⁻²)
+    if (coherence >= _PHI_3) return 'Chaotic';      // ≥ 0.236 (φ⁻³)
     return 'Critical';
   }
 
@@ -330,7 +339,8 @@ export class VertexAnalyzer {
    * (high strength + low coherence = opportunity for transformation)
    */
   isLeveragePoint(strength, coherence) {
-    return strength > 0.7 && coherence < 0.5;
+    // φ⁻¹ (0.618) strength + φ⁻² (0.382) coherence thresholds
+    return strength > _PHI_1 && coherence < _PHI_2;
   }
 
   /**
@@ -442,18 +452,18 @@ export class VertexAnalyzer {
   generateVertexNarrative(strength, direction, coherence, archetype) {
     let description = "";
 
-    if (strength > 0.7) {
+    if (strength > _PHI_1) {  // > φ⁻¹ (0.618)
       description = "This is a high-intensity vortex. The forces here are spinning rapidly, creating significant transformation pressure.";
-    } else if (strength < 0.3) {
+    } else if (strength < _PHI_2) {  // < φ⁻² (0.382)
       description = "This is a calm, stable junction. The energies are balanced and dormant.";
     } else {
       description = "Active circulation. There is healthy movement and exchange between these domains.";
     }
 
     let action = "";
-    if (coherence < 0.4) {
+    if (coherence < _PHI_2) {  // < φ⁻² (0.382)
       action = "High dissonance detected. Requires immediate alignment of the three converging domains.";
-    } else if (coherence > 0.8) {
+    } else if (coherence > _PHI_1) {  // > φ⁻¹ (0.618)
       action = "High resonance. A potential hub for scaling best practices.";
     } else {
       action = "Monitor for potential friction or synergy opportunities.";

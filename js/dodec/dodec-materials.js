@@ -49,6 +49,13 @@
 (function (global) {
     'use strict';
 
+    // φ-derived constants (from PhiHarmonics SSOT, with inline fallback)
+    // Used for edge tension color mapping: replaces arbitrary 0.3/0.6 thresholds
+    const _PH = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics : {};
+    const _PHI = _PH.PHI || (1 + Math.sqrt(5)) / 2;
+    const _PHI_2 = _PH.PHI_2 || 1 / (_PHI * _PHI);   // φ⁻² = 0.382
+    const _PHI_1 = _PH.PHI_1 || 1 / _PHI;             // φ⁻¹ = 0.618
+
     // ========================================
     // SECTION: Element Color Constants
     // ========================================
@@ -135,35 +142,35 @@
     /**
      * Get color for edge tension visualization
      *
-     * Tension represents the relationship health between two faces.
-     * Lower tension = healthier relationship = greener color.
-     * Higher tension = strained relationship = redder color.
+     * Uses φ-derived boundaries for consistent health mapping:
+     *   [0, φ⁻²)   = Healthy (green)     — low tension, flowing
+     *   [φ⁻², φ⁻¹)  = Warning (yellow)    — moderate tension
+     *   [φ⁻¹, 1.0]  = Critical (red)      — high tension, strained
      *
      * @param {number} tension - Tension level from 0.0 to 1.0
      * @returns {THREE.Color} Color object for the tension level
      */
     function getTensionColor(tension) {
-        // Invert: low tension (good) = green, high tension (bad) = red
-        if (tension <= 0.3) {
+        if (tension <= _PHI_2) {
             // Low tension: Healthy cyan-green
             return new THREE.Color().lerpColors(
                 new THREE.Color(0x00ffcc),
                 new THREE.Color(0x00ff88),
-                tension / 0.3
+                tension / _PHI_2
             );
-        } else if (tension <= 0.6) {
+        } else if (tension <= _PHI_1) {
             // Medium tension: Yellow-orange warning
             return new THREE.Color().lerpColors(
                 new THREE.Color(0xffcc00),
                 new THREE.Color(0xff9900),
-                (tension - 0.3) / 0.3
+                (tension - _PHI_2) / (_PHI_1 - _PHI_2)
             );
         } else {
             // High tension: Orange to red critical
             return new THREE.Color().lerpColors(
                 new THREE.Color(0xff6600),
                 new THREE.Color(0xff3333),
-                (tension - 0.6) / 0.4
+                (tension - _PHI_1) / (1.0 - _PHI_1)
             );
         }
     }

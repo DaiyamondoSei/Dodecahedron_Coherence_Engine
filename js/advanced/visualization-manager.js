@@ -399,6 +399,9 @@ export class VisualizationManager {
             return 'Gentle Convergence';
         };
 
+        // φ⁻² (0.382) = Dormant boundary for color thresholds (computed once, not per-vertex)
+        const PHI_2_THRESHOLD = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_2 : 0.382;
+
         vertices.forEach(vertex => {
             // Render ALL vertices (removed threshold to show all 20 vertices)
             {
@@ -435,8 +438,8 @@ export class VisualizationManager {
                 } else if (strength < 0.2) {
                     // Low-moderate - soft cyan/teal
                     color = vertex.vortexDirection > 0 ? 0x66cccc : 0xccaa66;
-                } else if (strength < 0.3) {
-                    // Moderate - more saturated
+                } else if (strength < PHI_2_THRESHOLD) {
+                    // Below Dormant threshold (φ⁻² ≈ 0.382) - more saturated
                     color = vertex.vortexDirection > 0 ? 0x00ddaa : 0xddaa00;
                 } else {
                     // High strength - vivid colors (hotspots, bermuda triangles)

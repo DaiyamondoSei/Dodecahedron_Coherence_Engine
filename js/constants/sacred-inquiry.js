@@ -40,6 +40,31 @@
  */
 
 // ============================================================================
+// SECTION 0: φ-DERIVED CONSTANTS (from PhiHarmonics SSOT)
+// ============================================================================
+
+/**
+ * Health state boundaries derived from the Golden Ratio (φ).
+ *
+ * These are NOT arbitrary thresholds. They emerge from φ powers:
+ *   φ⁻⁴ = 0.146  — Below this: Wall (blocked)
+ *   φ⁻² = 0.382  — Below this: Gate (controlled)
+ *   φ⁻¹ = 0.618  — The golden section. Below: Membrane (healthy)
+ *   1−φ⁻⁴ = 0.854 — Below this: Hemorrhage (over-flow). Above: Vortex.
+ *
+ * The Membrane zone [φ⁻², φ⁻¹] IS the golden section of [0, 1].
+ * φ⁻¹ + φ⁻² = 1.0 exactly — the unique self-similar partition of unity.
+ *
+ * Previously these were [0.15, 0.35, 0.65, 0.85] — close approximations
+ * that we now replace with the exact φ-derived values they were reaching for.
+ */
+const _PHI = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI : (1 + Math.sqrt(5)) / 2;
+const _PHI_4 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_4 : Math.pow(_PHI, -4);   // 0.14589803...
+const _PHI_2 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_2 : Math.pow(_PHI, -2);   // 0.38196601...
+const _PHI_1 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_1 : Math.pow(_PHI, -1);   // 0.61803399...
+const _PSI_4 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PSI_4 : 1 - Math.pow(_PHI, -4); // 0.85410197...
+
+// ============================================================================
 // SECTION 1: HEALTH STATE DEFINITIONS
 // ============================================================================
 
@@ -47,6 +72,9 @@
  * HEALTH_STATES - The 5 possible states of an edge relationship
  *
  * These describe HOW the edge is functioning, not what it "is"
+ *
+ * Boundaries are φ-derived: [φ⁻⁴, φ⁻², φ⁻¹, 1−φ⁻⁴]
+ * The Membrane zone [φ⁻², φ⁻¹] = [0.382, 0.618] IS the golden section.
  */
 const HEALTH_STATES = {
     wall: {
@@ -54,7 +82,7 @@ const HEALTH_STATES = {
         name: 'Wall',
         symbol: '🧱',
         description: 'The edge is blocked, defensive, impermeable',
-        tensionRange: [0, 0.15],  // Very low tension = no flow
+        tensionRange: [0, _PHI_4],  // [0, φ⁻⁴ ≈ 0.146] — Very low energy = no flow
         indicators: ['No exchange happening', 'Departments isolated', 'Communication breakdown'],
         healthLevel: 'critical'
     },
@@ -64,7 +92,7 @@ const HEALTH_STATES = {
         name: 'Gate',
         symbol: '🚪',
         description: 'The edge is controlled, selective, intentional',
-        tensionRange: [0.15, 0.35],  // Low-moderate tension = controlled
+        tensionRange: [_PHI_4, _PHI_2],  // [φ⁻⁴, φ⁻²] ≈ [0.146, 0.382] — Controlled flow
         indicators: ['Formal approval processes', 'Clear boundaries', 'Intentional exchange'],
         healthLevel: 'guarded'
     },
@@ -74,7 +102,7 @@ const HEALTH_STATES = {
         name: 'Membrane',
         symbol: '🫧',
         description: 'The edge is balanced, semi-permeable, healthy',
-        tensionRange: [0.35, 0.65],  // Moderate tension = balanced
+        tensionRange: [_PHI_2, _PHI_1],  // [φ⁻², φ⁻¹] ≈ [0.382, 0.618] — THE golden section
         indicators: ['Natural flow', 'Healthy boundaries', 'Reciprocal exchange'],
         healthLevel: 'healthy'
     },
@@ -84,7 +112,7 @@ const HEALTH_STATES = {
         name: 'Hemorrhage',
         symbol: '💧',
         description: 'The edge is too open, leaking, losing definition',
-        tensionRange: [0.65, 0.85],  // High tension = over-flow
+        tensionRange: [_PHI_1, _PSI_4],  // [φ⁻¹, 1−φ⁻⁴] ≈ [0.618, 0.854] — Over-flow
         indicators: ['Boundary confusion', 'Resource leakage', 'Role overlap'],
         healthLevel: 'stressed'
     },
@@ -94,7 +122,7 @@ const HEALTH_STATES = {
         name: 'Vortex',
         symbol: '🌀',
         description: 'The edge is amplifying, transforming, generating',
-        tensionRange: [0.85, 1.0],  // Very high tension = intense activity
+        tensionRange: [_PSI_4, 1.0],  // [1−φ⁻⁴, 1.0] ≈ [0.854, 1.0] — Intense activity
         indicators: ['Rapid transformation', 'Creative chaos', 'Emergence happening'],
         healthLevel: 'transcendent'
     }

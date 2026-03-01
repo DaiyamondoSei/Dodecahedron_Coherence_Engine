@@ -74,10 +74,19 @@
 // ════════════════════════════════════════════════════════════════════════════
 
 /**
+ * φ-derived thresholds for vertex classification.
+ * φ⁻¹ (0.618) and φ⁻² (0.382) are the golden partition of unity.
+ */
+const _phiRef = (typeof window !== 'undefined' && window.PhiHarmonics) || {};
+const _VTX_PHI_1 = _phiRef.PHI_1 || 0.618033988749895;  // φ⁻¹
+const _VTX_PHI_2 = _phiRef.PHI_2 || 0.381966011250105;  // φ⁻²
+
+/**
  * VERTEX_CLASSIFICATIONS - The four states a vertex can be in
  *
  * These classifications help prioritize attention and intervention.
- * They are determined by the combination of Strength and Coherence.
+ * They are determined by the combination of Strength (φ⁻¹ threshold)
+ * and Coherence (φ⁻² threshold).
  *
  * @constant {Object}
  */
@@ -88,8 +97,8 @@ const VERTEX_CLASSIFICATIONS = {
         emoji: '🌟',
         description: 'High strength, high coherence - thriving convergence',
         criteria: {
-            strength: '>= 0.7',
-            coherence: '>= 0.7'
+            strength: '>= φ⁻¹ (0.618)',
+            coherence: '>= φ⁻¹ (0.618)'
         },
         meaning: 'This is a place of organizational excellence where three domains dance beautifully together',
         action: 'Celebrate and learn from this pattern. Can it be replicated elsewhere?',
@@ -102,8 +111,8 @@ const VERTEX_CLASSIFICATIONS = {
         emoji: '🔺',
         description: 'High strength, low coherence - crisis point',
         criteria: {
-            strength: '>= 0.7',
-            coherence: '< 0.5'
+            strength: '>= φ⁻¹ (0.618)',
+            coherence: '< φ⁻² (0.382)'
         },
         meaning: 'High energy but misaligned - these three domains are fighting instead of flowing',
         action: 'URGENT: Get all three domain leaders in a room. This is a hidden source of chaos.',
@@ -116,8 +125,8 @@ const VERTEX_CLASSIFICATIONS = {
         emoji: '🎯',
         description: 'High strength, moderate coherence - high opportunity',
         criteria: {
-            strength: '>= 0.7',
-            coherence: '>= 0.5 && < 0.7'
+            strength: '>= φ⁻¹ (0.618)',
+            coherence: '>= φ⁻² (0.382) && < φ⁻¹ (0.618)'
         },
         meaning: 'Strong energy with room for alignment - small changes could create big effects',
         action: 'Strategic opportunity. Investment here would ripple far.',
@@ -130,7 +139,7 @@ const VERTEX_CLASSIFICATIONS = {
         emoji: '💤',
         description: 'Low strength - quiet convergence point',
         criteria: {
-            strength: '< 0.7',
+            strength: '< φ⁻¹ (0.618)',
             coherence: 'any'
         },
         meaning: 'Low energy meeting point - may be intentionally quiet or blocked',
@@ -646,13 +655,14 @@ function getVerticesByLatitude(latitude) {
  * @returns {Object} Classification object
  */
 function classifyVertex(strength, coherence) {
-    if (strength >= 0.7 && coherence >= 0.7) {
+    // All thresholds φ-derived: φ⁻¹ (0.618) and φ⁻² (0.382)
+    if (strength >= _VTX_PHI_1 && coherence >= _VTX_PHI_1) {
         return VERTEX_CLASSIFICATIONS.harmonyHub;
     }
-    if (strength >= 0.7 && coherence < 0.5) {
+    if (strength >= _VTX_PHI_1 && coherence < _VTX_PHI_2) {
         return VERTEX_CLASSIFICATIONS.bermudaTriangle;
     }
-    if (strength >= 0.7 && coherence >= 0.5) {
+    if (strength >= _VTX_PHI_1 && coherence >= _VTX_PHI_2) {
         return VERTEX_CLASSIFICATIONS.leveragePoint;
     }
     return VERTEX_CLASSIFICATIONS.dormant;

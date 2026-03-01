@@ -52,7 +52,12 @@
       "mcp__desktop-commander__*",
       "mcp__memory__*",
       "Bash(where:*)",
-      "Bash(del \"_ul\")"
+      "Bash(del \"_ul\")",
+      "WebFetch(domain:www.anthropic.com)",
+      "Bash(echo:*)",
+      "Bash(python3:*)",
+      "WebFetch(domain:21st.dev)",
+      "mcp__magic__21st_magic_component_inspiration"
     ],
     "deny": [],
     "ask": [
@@ -75,6 +80,43 @@
     "sequential-thinking",
     "github"
   ],
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR\\.claude\\hooks\\session-start.ps1\"",
+            "timeout": 15,
+            "statusMessage": "Gathering orientation context..."
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR\\.claude\\hooks\\pre-compact.ps1\"",
+            "timeout": 10,
+            "statusMessage": "Preserving session context before compaction..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You are a stop-validation hook. Respond with ONLY a JSON object, no markdown, no explanation, no code fences.\n\nEvaluate whether the assistant's response fully addressed the user's request.\n\nRules:\n- If the response is complete and all explicit requests are addressed, respond: {\"decision\":\"approve\"}\n- Only if there is a clear, genuine omission (not minor improvements), respond: {\"decision\":\"block\",\"reason\":\"<one sentence>\"}\n- Default to approve. Most responses are complete.\n\nYour entire response must be exactly one JSON object. Nothing else.",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  },
   "enabledPlugins": {
     "agent-sdk-dev@claude-code-plugins": true,
     "code-review@claude-code-plugins": true,

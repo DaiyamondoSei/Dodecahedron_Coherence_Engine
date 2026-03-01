@@ -67,22 +67,28 @@
  * ════════════════════════════════════════════════════════════════════════════════
  *
  * VORTEX STRENGTH FORMULA:
- *   strength = 0.7 × (σ / 0.577) + 0.3 × μ
+ *   strength = φ⁻¹ × (σ / 0.577) + φ⁻² × μ
  *
  * WHERE:
  *   σ = standard deviation of the 3 face energies
  *   μ = mean of the 3 face energies
  *   0.577 = √(1/3) = maximum possible σ for 3 values in [0,1]
+ *   φ⁻¹ = 0.618... (Golden Ratio inverse)
+ *   φ⁻² = 0.382... (Second Golden power)
  *
- * WHY 70/30 SPLIT?
- * ─────────────────
- * The 70% weight on variance and 30% on mean is intentional:
+ * WHY φ⁻¹/φ⁻² SPLIT? (The Golden Partition of Unity)
+ * ────────────────────────────────────────────────────
+ * φ⁻¹ + φ⁻² = 1.0 exactly. This is the ONLY partition of unity where:
+ *   larger/smaller = whole/larger = φ (the Golden Ratio itself)
  *
- *   - VARIANCE (70%): High variance = high TENSION = high POTENTIAL for change
+ * Previously 0.7/0.3 — a close approximation of what the geometry demands.
+ * Now the exact φ-derived values:
+ *
+ *   - VARIANCE (φ⁻¹ ≈ 0.618): High variance = high POTENTIAL for change
  *     A vertex where one domain is strong and another weak has more
  *     transformative potential than one where all are middling.
  *
- *   - MEAN (30%): Higher mean = more FUEL for the transformation
+ *   - MEAN (φ⁻² ≈ 0.382): Higher mean = more FUEL for the transformation
  *     You need some baseline energy for the vortex to actually spin.
  *
  * This captures the insight that LEVERAGE POINTS are often places of
@@ -114,12 +120,12 @@
  * NOTES FOR FUTURE CLAUDE - 10 KEY INSIGHTS
  * ════════════════════════════════════════════════════════════════════════════════
  *
- * 1. This class is INDEPENDENT - no imports from other js/core/ files
+ * 1. This class references PhiHarmonics (js/constants/) for φ constants, with inline fallback
  * 2. Dodecahedron has 20 vertices (each where 3 faces meet - this is FIXED)
- * 3. vortexStrength: 70% normalized variance + 30% mean energy
+ * 3. vortexStrength: φ⁻¹ (0.618) normalized variance + φ⁻² (0.382) mean energy
  * 4. vortexDirection: -1 to +1 (below/above 0.5 baseline, scaled by 2)
  * 5. coherence: 1 - (avgPairwiseDiff / 0.667), measures 3-way alignment
- * 6. isLeveragePoint: strength > 0.7 AND coherence < 0.5 = OPPORTUNITY
+ * 6. isLeveragePoint: strength > φ⁻¹ (0.618) AND coherence < φ⁻² (0.382) = OPPORTUNITY
  * 7. Constructor doesn't calculate - call calculateVortexEnergy(faces) explicitly
  * 8. The 0.577 normalization = √(1/3) = max σ for 3 values in [0,1]
  * 9. Status: Dormant/Rising/Declining/Powerful Ascent/Critical Descent/Turbulent
@@ -127,6 +133,19 @@
  *
  * ════════════════════════════════════════════════════════════════════════════════
  */
+
+// ════════════════════════════════════════════════════════════════════════════════
+// φ-DERIVED CONSTANTS (from PhiHarmonics SSOT, with inline fallback)
+// ════════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Golden partition of unity: φ⁻¹ + φ⁻² = 1.0 exactly.
+ * This is the ONLY split where larger/smaller = whole/larger = φ.
+ * Replaces the previous arbitrary 0.7/0.3 weight split.
+ */
+const _PHI = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI : (1 + Math.sqrt(5)) / 2;
+const _PHI_1 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_1 : 1 / _PHI;           // φ⁻¹ = 0.61803399...
+const _PHI_2 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_2 : 1 / (_PHI * _PHI);  // φ⁻² = 0.38196601...
 
 /**
  * Represents the intersection of three faces (The Vortex).
@@ -171,7 +190,7 @@ export class Vertex {
    * Calculations performed:
    * 1. Mean energy of 3 faces
    * 2. Variance and standard deviation
-   * 3. Vortex Strength: 70% normalized variance + 30% mean energy
+   * 3. Vortex Strength: φ⁻¹ (0.618) normalized variance + φ⁻² (0.382) mean energy
    * 4. Vortex Direction: Above/below 0.5 baseline (-1 to +1)
    * 5. Coherence: Inverse of average pairwise differences
    *
@@ -202,10 +221,11 @@ export class Vertex {
     const variance = ((f1 - mean) ** 2 + (f2 - mean) ** 2 + (f3 - mean) ** 2) / 3;
     const stdDev = Math.sqrt(variance);
 
-    // 3. Vortex Strength: 70% variance contribution, 30% mean energy
+    // 3. Vortex Strength: φ⁻¹ variance contribution + φ⁻² mean energy
+    // Golden partition: φ⁻¹ + φ⁻² = 1.0 (the unique self-similar split)
     // Normalized stdDev (max possible ~0.577 for values 0-1)
     const normalizedVariance = stdDev / 0.577;
-    this._vortexStrength = Math.min(1.0, Math.max(0.0, (0.7 * normalizedVariance) + (0.3 * mean)));
+    this._vortexStrength = Math.min(1.0, Math.max(0.0, (_PHI_1 * normalizedVariance) + (_PHI_2 * mean)));
 
     // 4. Vortex Direction: based on whether energy is above/below 0.5 baseline
     // Positive = upward spiral (generative), Negative = downward spiral (degenerative)
@@ -268,19 +288,20 @@ export class Vertex {
    * @returns {boolean} True if vertex is a leverage point
    */
   get isLeveragePoint() {
-    return this._vortexStrength > 0.7 && this._coherence < 0.5;
+    // φ⁻¹ (0.618) strength threshold + φ⁻² (0.382) coherence threshold
+    return this._vortexStrength > _PHI_1 && this._coherence < _PHI_2;
   }
 
   /**
    * Get status description based on vortex characteristics.
    *
-   * Status descriptions:
-   * - Dormant: Low strength (<0.3)
-   * - Rising: Positive direction, moderate strength
-   * - Powerful Ascent: Positive direction, high strength
-   * - Declining: Negative direction, moderate strength
-   * - Critical Descent: Negative direction, high strength
-   * - Turbulent: Neutral direction (neither rising nor declining)
+   * Status descriptions (all thresholds φ-derived):
+   * - Dormant: Low strength (< φ⁻² = 0.382)
+   * - Rising: Positive direction (> φ⁻²), moderate strength
+   * - Powerful Ascent: Positive direction, high strength (> φ⁻¹ = 0.618)
+   * - Declining: Negative direction (< −φ⁻²), moderate strength
+   * - Critical Descent: Negative direction, high strength (> φ⁻¹)
+   * - Turbulent: Neutral direction (between −φ⁻² and φ⁻²)
    *
    * @returns {string} Human-readable status
    */
@@ -288,9 +309,9 @@ export class Vertex {
     const strength = this._vortexStrength || 0;
     const direction = this._vortexDirection || 0;
 
-    if (strength < 0.3) return 'Dormant';
-    if (direction > 0.3) return strength > 0.7 ? 'Powerful Ascent' : 'Rising';
-    if (direction < -0.3) return strength > 0.7 ? 'Critical Descent' : 'Declining';
+    if (strength < _PHI_2) return 'Dormant';          // < φ⁻² (0.382)
+    if (direction > _PHI_2) return strength > _PHI_1 ? 'Powerful Ascent' : 'Rising';    // φ⁻² / φ⁻¹
+    if (direction < -_PHI_2) return strength > _PHI_1 ? 'Critical Descent' : 'Declining';
     return 'Turbulent';
   }
 }

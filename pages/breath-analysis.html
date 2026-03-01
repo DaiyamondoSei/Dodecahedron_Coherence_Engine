@@ -831,12 +831,18 @@
         }
 
         /**
-         * Get color based on breath health
+         * Get color based on breath health — φ-derived thresholds
+         * Excellent ≥ ψ₄ (0.854), Good ≥ φ⁻¹ (0.618), Concerning ≥ φ⁻² (0.382)
          */
         function getBreathHealthColor(breathHealth) {
-            if (breathHealth >= 0.8) return '#00ff66';
-            if (breathHealth >= 0.6) return '#ffff00';
-            if (breathHealth >= 0.4) return '#ff9900';
+            const PH = window.PhiHarmonics || {};
+            const PHI = PH.PHI || 1.618033988749895;
+            const PSI_4 = PH.PSI_4 || (1 - Math.pow(PHI, -4));   // 0.854
+            const PHI_1 = PH.PHI_1 || (1 / PHI);                 // 0.618
+            const PHI_2 = PH.PHI_2 || (1 / (PHI * PHI));         // 0.382
+            if (breathHealth >= PSI_4) return '#00ff66';
+            if (breathHealth >= PHI_1) return '#ffff00';
+            if (breathHealth >= PHI_2) return '#ff9900';
             return '#ff6666';
         }
 

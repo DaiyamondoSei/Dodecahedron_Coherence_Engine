@@ -78,6 +78,15 @@
     'use strict';
 
     // ════════════════════════════════════════════════════════════════════════
+    // φ-DERIVED CONSTANTS (from PhiHarmonics SSOT, with inline fallback)
+    // Used for edge health classification: replaces arbitrary 0.3/0.6 thresholds
+    // ════════════════════════════════════════════════════════════════════════
+    const _PH = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics : {};
+    const _PHI = _PH.PHI || (1 + Math.sqrt(5)) / 2;
+    const _PHI_2 = _PH.PHI_2 || 1 / (_PHI * _PHI);   // φ⁻² = 0.382
+    const _PHI_1 = _PH.PHI_1 || 1 / _PHI;             // φ⁻¹ = 0.618
+
+    // ════════════════════════════════════════════════════════════════════════
     // VOICE & INQUIRY INTEGRATION (Enhanced 2026-01-08)
     // ════════════════════════════════════════════════════════════════════════
 
@@ -164,7 +173,7 @@
             <div style="font-weight: bold; color: #00ffcc; margin-bottom: 4px;">${data.face1Name} ↔ ${data.face2Name}</div>
             <div style="display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 11px;">
                 <span style="opacity: 0.6;">Tension:</span>
-                <span style="color: ${data.tension > 0.6 ? '#ff4444' : '#00ff88'}">${(data.tension * 100).toFixed(0)}%</span>
+                <span style="color: ${data.tension > _PHI_1 ? '#ff4444' : '#00ff88'}">${(data.tension * 100).toFixed(0)}%</span>
                 <span style="opacity: 0.6;">Flow:</span>
                 <span>${(data.flow * 100).toFixed(0)}%</span>
                 ${data.kpiName ? `<span style="opacity: 0.6;">KPI:</span><span>${data.kpiName}</span>` : ''}
@@ -178,7 +187,7 @@
             ${narrative.question ? `<div class="edge-question" style="font-style: italic; color: #ffcc00; margin-bottom: 8px;">"${narrative.question}"</div>` : ''}
             <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 4px;">
                 <span>Tension:</span>
-                <span style="color: ${data.tension > 0.6 ? '#ff4444' : '#00ff88'}">${(data.tension * 100).toFixed(0)}% (${data.tensionStatus || 'Flowing'})</span>
+                <span style="color: ${data.tension > _PHI_1 ? '#ff4444' : '#00ff88'}">${(data.tension * 100).toFixed(0)}% (${data.tensionStatus || 'Flowing'})</span>
             </div>
             <div style="display: flex; justify-content: space-between; font-size: 10px;">
                 <span>Element:</span>
@@ -598,7 +607,7 @@
         // Show tension as energy
         const tensionPercent = Math.round((data.tension || 0) * 100);
         el.faceEnergyDisplay.textContent = `${tensionPercent}% Tension`;
-        el.faceEnergyDisplay.className = data.tension > 0.6 ? 'critical' : data.tension > 0.3 ? 'warning' : 'healthy';
+        el.faceEnergyDisplay.className = data.tension > _PHI_1 ? 'critical' : data.tension > _PHI_2 ? 'warning' : 'healthy';
 
         // Get narrative data if available
         const narrative = data.narrative || {};
@@ -669,7 +678,7 @@
                     <div style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Tension Analysis</div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                         <div><span style="opacity: 0.7;">Status:</span></div>
-                        <div style="color: ${data.tension > 0.6 ? '#ff4444' : data.tension > 0.3 ? '#ffaa00' : '#00ff88'}; font-weight: 600;">${data.tensionStatus}</div>
+                        <div style="color: ${data.tension > _PHI_1 ? '#ff4444' : data.tension > _PHI_2 ? '#ffaa00' : '#00ff88'}; font-weight: 600;">${data.tensionStatus}</div>
                         <div><span style="opacity: 0.7;">Tension:</span></div>
                         <div style="font-weight: 600;">${tensionPercent}%</div>
                         <div><span style="opacity: 0.7;">Element:</span></div>

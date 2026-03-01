@@ -62,6 +62,13 @@
 (function (global) {
     'use strict';
 
+    // φ-derived constants (from PhiHarmonics SSOT, with inline fallback)
+    // Used for edge tension classification: replaces arbitrary 0.3/0.4/0.6 thresholds
+    const _PH = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics : {};
+    const _PHI = _PH.PHI || (1 + Math.sqrt(5)) / 2;
+    const _PHI_2 = _PH.PHI_2 || 1 / (_PHI * _PHI);   // φ⁻² = 0.382
+    const _PHI_1 = _PH.PHI_1 || 1 / _PHI;             // φ⁻¹ = 0.618
+
     // ========================================
     // IMPORTS
     // ========================================
@@ -505,9 +512,9 @@
                     let tensionClass = 'success';
                     let contextIndicator = '';
 
-                    if (tension > 0.6) {
+                    if (tension > _PHI_1) {
                         tensionClass = 'critical';
-                    } else if (tension > 0.4) {
+                    } else if (tension > _PHI_2) {
                         tensionClass = 'warning';
                     } else {
                         // Low tension - check context
@@ -533,7 +540,7 @@
                     edgeItem.style.padding = '8px';
                     edgeItem.style.background = 'rgba(0, 255, 204, 0.05)';
                     edgeItem.style.borderRadius = '4px';
-                    edgeItem.style.borderLeft = `3px solid ${tension > 0.6 ? '#ff4444' : tension > 0.4 ? '#ffaa00' : '#00ff88'}`;
+                    edgeItem.style.borderLeft = `3px solid ${tension > _PHI_1 ? '#ff4444' : tension > _PHI_2 ? '#ffaa00' : '#00ff88'}`;
                     edgeItem.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                         <span style="color: #00ffcc; font-weight: 500;">${edgeName || `→ ${otherFaceName}`}</span>
@@ -799,7 +806,7 @@
         // Show tension as energy
         const tensionPercent = Math.round((edgeData.tension || 0) * 100);
         energyDisplay.textContent = `${tensionPercent}% Tension`;
-        energyDisplay.className = edgeData.tension > 0.6 ? 'critical' : edgeData.tension > 0.3 ? 'warning' : 'healthy';
+        energyDisplay.className = edgeData.tension > _PHI_1 ? 'critical' : edgeData.tension > _PHI_2 ? 'warning' : 'healthy';
 
         // ========================================
         // SACRED INQUIRY INTEGRATION (January 2026)

@@ -13,6 +13,12 @@
  * @version 1.0
  */
 
+// φ-derived constants (from PhiHarmonics SSOT, with inline fallback)
+const _PH = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics : {};
+const _PHI = _PH.PHI || (1 + Math.sqrt(5)) / 2;
+const _PHI_2 = _PH.PHI_2 || 1 / (_PHI * _PHI);   // φ⁻² = 0.382
+const _PHI_1 = _PH.PHI_1 || 1 / _PHI;             // φ⁻¹ = 0.618
+
 export class AIEdgeInterpreter {
   constructor() {
     // Archetypal relationship patterns based on domain combinations
@@ -267,7 +273,7 @@ export class AIEdgeInterpreter {
    * Generate edge intelligence summary
    */
   generateEdgeSummary(edge, metadata) {
-    const tensionLevel = edge.tension <= 0.3 ? 'low' : edge.tension <= 0.6 ? 'medium' : 'high';
+    const tensionLevel = edge.tension <= _PHI_2 ? 'low' : edge.tension <= _PHI_1 ? 'medium' : 'high';
     const flowDirection = edge.breathRatio > 0.1 ? 'expanding' : edge.breathRatio < -0.1 ? 'contracting' : 'balanced';
 
     const insights = [];
