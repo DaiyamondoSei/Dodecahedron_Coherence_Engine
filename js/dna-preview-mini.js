@@ -10,7 +10,7 @@ class DNAPreviewMini {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         if (!this.canvas) {
-            console.warn('DNA Preview: Canvas not found:', canvasId);
+            Logger.warn('DNAPreview', 'Canvas not found:', canvasId);
             return;
         }
         this.ctx = this.canvas.getContext('2d');

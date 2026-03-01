@@ -87,12 +87,12 @@ export const SHADOW_SCHEMA = {
  */
 export function validateShadow(shadow) {
   if (!shadow || typeof shadow !== 'object') {
-    console.warn('[Shadow] Invalid shadow object:', shadow);
+    Logger.warn('ShadowDetector', 'Invalid shadow object:', shadow);
     return false;
   }
   const missing = SHADOW_SCHEMA.required.filter(field => !shadow[field]);
   if (missing.length > 0) {
-    console.warn(`[Shadow] Missing required fields: ${missing.join(', ')}`, shadow);
+    Logger.warn('ShadowDetector', `Missing required fields: ${missing.join(', ')}`, shadow);
     return false;
   }
   return true;

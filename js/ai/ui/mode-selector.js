@@ -79,7 +79,7 @@ class ModeSelector {
         }
 
         if (!this._container) {
-            console.error('[ModeSelector] Container not found');
+            Logger.error('ModeSelector', 'Container not found');
             return;
         }
 

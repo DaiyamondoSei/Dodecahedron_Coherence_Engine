@@ -142,7 +142,7 @@ Use metaphors related to geometry, flow, breath, and harmony.
             const response = await this.callGemini(prompt);
             return response;
         } catch (error) {
-            console.error('❌ Voice Module Error:', error);
+            Logger.error('VoiceModule', 'Voice Module Error:', error);
             return "My voice is clouded. I cannot speak right now. (API Error)";
         }
     }

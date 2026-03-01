@@ -485,7 +485,7 @@
             try {
                 results[type] = await load(type);
             } catch (e) {
-                console.error(`[JSONDataLoader] Failed to load ${type}:`, e);
+                Logger.error('JSONDataLoader', `Failed to load ${type}:`, e);
                 results[type] = null;
             }
         }

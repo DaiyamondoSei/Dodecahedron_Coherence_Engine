@@ -606,7 +606,7 @@ class MappingContext {
     setFaceName(id, name, metadata = {}) {
         const face = this._faces.get(id);
         if (!face) {
-            console.warn(`MappingContext: Face ${id} not found`);
+            Logger.warn('MappingContext', `Face ${id} not found`);
             return false;
         }
 
@@ -678,7 +678,7 @@ class MappingContext {
      */
     setAllFaces(facesConfig, lens = null) {
         if (!Array.isArray(facesConfig) || facesConfig.length !== 12) {
-            console.error('MappingContext: Must provide exactly 12 face configurations');
+            Logger.error('MappingContext', 'Must provide exactly 12 face configurations');
             return false;
         }
 
@@ -896,7 +896,7 @@ class MappingContext {
 
     setMode(mode) {
         if (mode !== 'quick' && mode !== 'full') {
-            console.warn('MappingContext: Mode must be "quick" or "full"');
+            Logger.warn('MappingContext', 'Mode must be "quick" or "full"');
             return;
         }
         this._mode = mode;
@@ -1035,7 +1035,7 @@ class MappingContext {
             try {
                 callback(event);
             } catch (err) {
-                console.error('MappingContext subscriber error:', err);
+                Logger.error('MappingContext', 'Subscriber error:', err);
             }
         });
     }
@@ -1051,7 +1051,7 @@ class MappingContext {
             const state = this.toJSON();
             sessionStorage.setItem(MappingContext.STORAGE_KEY, JSON.stringify(state));
         } catch (err) {
-            console.warn('MappingContext: Failed to save to sessionStorage', err);
+            Logger.warn('MappingContext', 'Failed to save to sessionStorage', err);
         }
     }
 
@@ -1065,7 +1065,7 @@ class MappingContext {
                 this.fromJSON(state);
             }
         } catch (err) {
-            console.warn('MappingContext: Failed to restore from sessionStorage', err);
+            Logger.warn('MappingContext', 'Failed to restore from sessionStorage', err);
         }
     }
 

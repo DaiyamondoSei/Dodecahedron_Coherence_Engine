@@ -115,7 +115,7 @@ class ArchetypeSelector {
         }
 
         if (!this._container) {
-            console.error('[ArchetypeSelector] Container not found');
+            Logger.error('ArchetypeSelector', 'Container not found');
             return;
         }
 
@@ -270,7 +270,7 @@ class ArchetypeSelector {
         const constants = ARCHETYPE_PRESETS[this._selectedArchetype];
 
         if (!constants) {
-            console.error('[ArchetypeSelector] No presets for archetype:', this._selectedArchetype);
+            Logger.error('ArchetypeSelector', 'No presets for archetype:', this._selectedArchetype);
             return;
         }
 

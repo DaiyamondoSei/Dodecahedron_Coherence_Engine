@@ -97,7 +97,7 @@ class APIKeyManager {
         }
 
         if (!this._container) {
-            console.error('[APIKeyManager] Container not found');
+            Logger.error('APIKeyManager', 'Container not found');
             return;
         }
 
