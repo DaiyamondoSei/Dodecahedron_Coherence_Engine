@@ -302,6 +302,13 @@
      * The 20 vertices of the dodecahedron.
      * Each vertex is where exactly 3 faces meet, creating energy vortices.
      */
+    // NOTE (March 2026 topology audit): The VERTICES below match the CSV data
+    // (CSV_Vortex_Map.csv) which the engine uses for calculations. The EDGES
+    // above encode organizationally-meaningful questions and elements, but use
+    // a DIFFERENT face adjacency than the CSV. For example, CSV says F1 neighbors
+    // are [2,5,6,8,9] while EDGES say F1 neighbors are [2,6,7,8,10].
+    // The VERTICES are correct for calculations; the EDGES need future reconciliation.
+    // See SUB_RELATIONSHIP_DISCREPANCY_TRACKER.md D5 for full analysis.
     const VERTICES = [
         { id: 'V1', faces: [1, 2, 6], name: 'Financial-Intellectual-Community Hub' },
         { id: 'V2', faces: [1, 5, 6], name: 'Financial-Market-Community Hub' },

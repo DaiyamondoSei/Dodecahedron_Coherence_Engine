@@ -161,20 +161,24 @@ export class TuningConfig {
     // Controls the "emotional responsiveness" via logistic S-curve steepness.
     // Formula: f(x) = 1 / (1 + e^(-κ × (x - 0.5)))
     //
-    // DEFAULT: 2.0 (balanced responsiveness)
+    // DEFAULT: φ² = 2.618 (golden squared responsiveness)
     //
     // PHI DERIVATION NOTE:
     // Unlike other parameters, KAPPA is NOT a 0-1 proportion.
     // It controls curve steepness (range typically 1.0 to 6.0).
-    // 2.0 represents the musical "octave" relationship (doubling).
-    // While not directly PHI-derived, 2.0 has harmonic significance:
-    // - In music, octave = 2:1 frequency ratio (fundamental harmony)
-    // - φ² = 2.618, so 2.0 = φ² × φ^-1 (golden relationships)
+    // The phi-derived progression creates a natural harmonic series:
+    //   φ¹ = 1.618 (gentle) → φ² = 2.618 (balanced) → φ³ = 4.236 (sharp)
+    // φ² = φ + 1 (the golden identity) — the most fundamental phi relationship.
     //
-    // Philosophy: "Balanced awareness - neither panic nor numbness"
+    // S-curve operational ranges at each phi level:
+    //   κ=φ:  S(0)=0.308, S(1)=0.692, range=0.384 (forgiving)
+    //   κ=φ²: S(0)=0.212, S(1)=0.788, range=0.576 (balanced)
+    //   κ=φ³: S(0)=0.105, S(1)=0.895, range=0.790 (demanding)
+    //
+    // Philosophy: "Golden awareness - the natural balance point"
     // Range: 1.0 (gentle curve) to 6.0 (sharp, reactive curve)
     // ========================================================================
-    this.KAPPA = 2.0;
+    this.KAPPA = PHI_HARMONICS.PHI_SQUARED;  // φ² = 2.618
 
     // ========================================================================
     // PHI-DERIVED HARMONIC PARAMETERS (Sacred Geometry Foundation)
@@ -252,7 +256,7 @@ export class TuningConfig {
     config.DELTA = 0.95;  // Very local focus
 
     // Sensitivity: "Stay calm, we're learning"
-    config.KAPPA = 1.5;   // Gentle, forgiving curve
+    config.KAPPA = (1 + Math.sqrt(5)) / 2;  // φ = 1.618 (golden gentleness)
 
     // Resonance: "Harmony helps, but we're still learning to dance"
     config.ETA = 1 / Math.pow((1 + Math.sqrt(5)) / 2, 3);  // phi^-3 = 23.6% max boost
@@ -299,7 +303,7 @@ export class TuningConfig {
     config.DELTA = 0.8;   // More shadow awareness
 
     // Sensitivity: "We notice everything"
-    config.KAPPA = 4.0;   // Sharp, responsive curve
+    config.KAPPA = Math.pow(phi, 3);  // φ³ = 4.236 (golden responsiveness)
 
     // Resonance: "Harmony is rewarded at full phi power"
     config.ETA = 1 / (phi * phi);  // phi^-2 = 38.2% max boost
@@ -363,7 +367,7 @@ export class TuningConfig {
     config.DELTA = 0.5;   // Full non-duality
 
     // Sensitivity: "Balanced awareness"
-    config.KAPPA = 3.0;   // Moderate responsiveness
+    config.KAPPA = phi * phi;  // φ² = 2.618 (golden balanced awareness)
 
     // Resonance: "Harmony naturally amplifies"
     config.ETA = 1 / (phi * phi);  // phi^-2 = 38.2%
@@ -424,9 +428,10 @@ export class TuningConfig {
         value: this.KAPPA,
         symbol: 'kappa',
         name: 'Sensitivity',
-        meaning: this.KAPPA < 2 ? 'Gentle & Forgiving' :
-                 this.KAPPA > 4 ? 'Highly Reactive' :
-                 'Balanced Responsiveness'
+        meaning: this.KAPPA < phi ? 'Ultra-Gentle (<φ)' :
+                 this.KAPPA < phi * phi ? 'Gentle & Forgiving (φ)' :
+                 this.KAPPA > phi * phi * phi ? 'Highly Reactive (>φ³)' :
+                 'Balanced Responsiveness (φ²)'
       },
       eta: {
         value: this.ETA,

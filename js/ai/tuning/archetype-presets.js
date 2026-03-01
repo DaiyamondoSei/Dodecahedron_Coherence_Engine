@@ -6,6 +6,27 @@
  * Defines tuning presets for the 5 organizational archetypes.
  * ALL VALUES ARE PHI-DERIVED per project constraint.
  *
+ * ========================================
+ * RELATIONSHIP TO TuningConfig.js (R3)
+ * ========================================
+ *
+ * This module and js/core/TuningConfig.js are SEPARATE tuning layers:
+ *
+ * Layer 1 — TuningConfig (js/core/):
+ *   8 Greek params (α,β,γ,δ,κ,η,ζ,θ) controlling the calculation engine.
+ *   KAPPA here = S-curve steepness (range 1.0–6.0).
+ *   Used by: Face.js, DodecahedronEngine, main.js
+ *
+ * Layer 2 — ArchetypePresets (this file, js/ai/):
+ *   5 params (ALPHA,BETA,GAMMA,DELTA,KAPPA) for AI interpretation tuning.
+ *   KAPPA here = curvature constant (range 0–1, all φ-derived).
+ *   Used by: MappingContext, ArchetypeSelector, AI modules
+ *
+ * Same Greek names, DIFFERENT semantic meanings and value ranges.
+ * This is intentional — they tune different subsystems.
+ *
+ * ========================================
+ *
  * Available PHI-derived values:
  * - phi^-4 = 0.146 (Minimal threshold)
  * - phi^-3 = 0.236 (Variance penalty lambda)

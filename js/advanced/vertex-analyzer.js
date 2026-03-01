@@ -117,8 +117,10 @@ export class VertexAnalyzer {
         name: v.name || ''
       }));
     } else {
-      console.warn('VertexAnalyzer: DodecahedronTopology not available, using corrected inline fallback');
-      // Fallback: corrected vertex definitions from SSOT (validated by Euler V-E+F=2)
+      Logger.warn('VertexAnalyzer', 'DodecahedronTopology not available, using CSV-aligned fallback');
+      // Fallback: vertex definitions matching CSV_Vortex_Map.csv data.
+      // NOTE: These match the CSV topology (not the EDGES in dodecahedron-topology.js,
+      // which use a different face adjacency). See D5 in discrepancy tracker.
       this.vertexDefinitions = [
         { id: 'V1', faceIds: [1, 2, 6] },
         { id: 'V2', faceIds: [1, 5, 6] },
@@ -366,7 +368,7 @@ export class VertexAnalyzer {
       ).filter(f => f !== undefined);
 
       if (convergingFaces.length !== 3) {
-        console.warn(`Missing face data for vertex ${vertexDef.id}`);
+        Logger.warn('VertexAnalyzer', `Missing face data for vertex ${vertexDef.id}`);
         return;
       }
 

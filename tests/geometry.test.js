@@ -94,6 +94,83 @@ async function runGeometryTests() {
             assert(false, 'Could not find faces for Vertex Test');
         }
 
+        // ============================================================
+        // Test 5: Vortex Direction Formula
+        // Formula: direction = (avgEnergy - 0.5) * 2, clamped to [-1, +1]
+        // ============================================================
+        const directionTests = [
+            { energies: [0, 0, 0], expected: -1.0, label: 'All Dead → Full Downward' },
+            { energies: [0.5, 0.5, 0.5], expected: 0.0, label: 'Balanced → Neutral' },
+            { energies: [1.0, 1.0, 1.0], expected: 1.0, label: 'All Max → Full Upward' },
+            { energies: [0.25, 0.25, 0.25], expected: -0.5, label: 'Low → Slight Downward' },
+            { energies: [0.75, 0.75, 0.75], expected: 0.5, label: 'High → Slight Upward' },
+        ];
+        for (const test of directionTests) {
+            const avg = test.energies.reduce((a, b) => a + b, 0) / 3;
+            const direction = Math.max(-1.0, Math.min(1.0, (avg - 0.5) * 2));
+            assert(Math.abs(direction - test.expected) < 0.001,
+                `Vortex Direction: ${test.label} (Expected ${test.expected}, Got ${direction.toFixed(4)})`);
+        }
+
+        // ============================================================
+        // Test 6: Vertex Coherence Formula
+        // Formula: coherence = 1 - (avgPairwiseDiff / 0.667)
+        // 0.667 = max avg pairwise diff for 3 values in [0,1]
+        // ============================================================
+        const coherenceTests = [
+            { energies: [0.5, 0.5, 0.5], expected: 1.0, label: 'Identical → Perfect Coherence' },
+            { energies: [0.8, 0.8, 0.8], expected: 1.0, label: 'Identical High → Perfect' },
+            { energies: [0, 0.5, 1.0], label: 'Max Spread → Low Coherence' },
+        ];
+        for (const test of coherenceTests) {
+            const [a, b, c] = test.energies;
+            const avgDiff = (Math.abs(a - b) + Math.abs(b - c) + Math.abs(a - c)) / 3;
+            const coherence = Math.max(0, 1.0 - (avgDiff / 0.667));
+            if (test.expected !== undefined) {
+                assert(Math.abs(coherence - test.expected) < 0.01,
+                    `Coherence: ${test.label} (Expected ${test.expected}, Got ${coherence.toFixed(4)})`);
+            } else {
+                assert(coherence < 0.3,
+                    `Coherence: ${test.label} (Expected <0.3, Got ${coherence.toFixed(4)})`);
+            }
+        }
+
+        // ============================================================
+        // Test 7: Leverage Point Detection
+        // Criteria: strength > phi^-1 (0.618) AND coherence < phi^-2 (0.382)
+        // ============================================================
+        const _PHI_1 = (Math.sqrt(5) - 1) / 2;  // 0.618...
+        const _PHI_2 = _PHI_1 * _PHI_1;          // 0.382...
+        const leverageTests = [
+            { strength: 0.7, coherence: 0.3, isLeverage: true, label: 'High strength + low coherence → IS leverage' },
+            { strength: 0.5, coherence: 0.3, isLeverage: false, label: 'Low strength → NOT leverage' },
+            { strength: 0.7, coherence: 0.5, isLeverage: false, label: 'High coherence → NOT leverage' },
+            { strength: 0.4, coherence: 0.5, isLeverage: false, label: 'Both moderate → NOT leverage' },
+        ];
+        for (const test of leverageTests) {
+            const isLeverage = test.strength > _PHI_1 && test.coherence < _PHI_2;
+            assert(isLeverage === test.isLeverage,
+                `Leverage Point: ${test.label} (Got ${isLeverage})`);
+        }
+
+        // ============================================================
+        // Test 8: Breath Ratio Logarithmic Properties
+        // Formula: BR = ln(R/P) / ln(phi)
+        // ============================================================
+        const _PHI = (1 + Math.sqrt(5)) / 2;  // 1.618...
+        const LN_PHI = Math.log(_PHI);
+        const breathTests = [
+            { R: 1.0, P: 1.0, expected: 0, label: 'Equal → BR = 0 (balanced)' },
+            { R: _PHI, P: 1.0, expected: 1.0, label: 'R = phi * P → BR = +1 (golden expansion)' },
+            { R: 1.0, P: _PHI, expected: -1.0, label: 'P = phi * R → BR = -1 (golden contraction)' },
+            { R: _PHI * _PHI, P: 1.0, expected: 2.0, label: 'R = phi^2 * P → BR = +2 (severe over-inhaling)' },
+        ];
+        for (const test of breathTests) {
+            const br = Math.log(test.R / test.P) / LN_PHI;
+            assert(Math.abs(br - test.expected) < 0.001,
+                `Breath Ratio: ${test.label} (Expected ${test.expected}, Got ${br.toFixed(4)})`);
+        }
+
     } catch (error) {
         assert(false, `Exception during geometry tests: ${error.message}`);
         console.error(error);
