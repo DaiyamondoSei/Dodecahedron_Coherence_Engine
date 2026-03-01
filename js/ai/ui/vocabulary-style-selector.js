@@ -107,7 +107,7 @@ class VocabularyStyleSelector {
         }
 
         if (!this._container) {
-            console.error('[VocabularyStyleSelector] Container not found');
+            Logger.error('VocabularyStyleSelector', 'Container not found');
             return;
         }
 
@@ -282,4 +282,4 @@ if (typeof window !== 'undefined') {
     window.VOCABULARY_STYLES = VOCABULARY_STYLES;
 }
 
-console.log('✅ VocabularyStyleSelector loaded with 4 vocabulary styles');
+Logger.info('VocabularyStyleSelector', 'Module loaded with 4 vocabulary styles');

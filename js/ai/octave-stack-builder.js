@@ -50,7 +50,7 @@ class OctaveStackBuilder {
 
         this.kpiReference = await getOctaveKPIReference();
         this.initialized = true;
-        console.log('[OctaveStackBuilder] Initialized');
+        Logger.info('OctaveStackBuilder', 'Initialized');
     }
 
     /**
@@ -70,7 +70,7 @@ class OctaveStackBuilder {
             fallbackChain = this.fallbackChain
         } = options;
 
-        console.log(`[OctaveStackBuilder] Building octave stack for target ${targetOctave}`);
+        Logger.info('OctaveStackBuilder', `Building octave stack for target ${targetOctave}`);
 
         const result = {
             targetOctave: targetOctave,
@@ -103,7 +103,7 @@ class OctaveStackBuilder {
         result.aggregates = this._calculateAggregates(result.faces, targetOctave);
         result.meta.targetSource = useAI ? (result.aggregates.aiUsed ? 'ai' : 'csv_template') : 'csv_template';
 
-        console.log('[OctaveStackBuilder] Octave stack built successfully');
+        Logger.info('OctaveStackBuilder', 'Octave stack built successfully');
         return result;
     }
 
@@ -161,7 +161,7 @@ class OctaveStackBuilder {
                 );
                 targetSource = 'ai';
             } catch (error) {
-                console.warn(`[OctaveStackBuilder] AI failed for face ${faceId}, using templates:`, error.message);
+                Logger.warn('OctaveStackBuilder', `AI failed for face ${faceId}, using templates`, { error: error.message });
                 targetKPIs = this.kpiReference.getOctaveKPIs(faceId, targetOctave);
             }
         } else {
@@ -496,4 +496,4 @@ if (typeof window !== 'undefined') {
     window.getOctaveStackBuilder = getOctaveStackBuilder;
 }
 
-console.log('[OctaveStackBuilder] Module loaded');
+Logger.info('OctaveStackBuilder', 'Module loaded');

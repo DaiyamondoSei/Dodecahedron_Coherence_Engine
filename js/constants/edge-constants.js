@@ -700,8 +700,8 @@ if (typeof window !== 'undefined') {
         // See migration note above
     };
 
-    console.log('🔗 Edge Constants loaded - 30 pure membrane interfaces');
-    console.log('   Pure Membrane Model: Edge character emerges from SacredInquiry synergy calculation');
+    Logger.info('EdgeConstants', 'Loaded - 30 pure membrane interfaces');
+    Logger.info('EdgeConstants', 'Pure Membrane Model: Edge character emerges from SacredInquiry synergy calculation');
 }
 
 // CommonJS export (for Node.js testing)

@@ -197,7 +197,7 @@ class KPIExtractor {
         const mode = options.mode || this.context.getMode();
         const updateContext = options.updateContext !== false;
 
-        console.log(`[KPIExtractor] Extracting KPIs in ${mode} mode...`);
+        Logger.info('KPIExtractor', `Extracting KPIs in ${mode} mode...`);
 
         try {
             // First, do local pattern extraction
@@ -230,7 +230,7 @@ class KPIExtractor {
             };
 
         } catch (error) {
-            console.error('[KPIExtractor] Extraction failed:', error);
+            Logger.error('KPIExtractor', 'Extraction failed', error);
 
             // Return placeholder KPIs
             return this._getPlaceholderKPIs(mode);
@@ -490,7 +490,4 @@ if (typeof window !== 'undefined') {
 // ════════════════════════════════════════════════════════════════════════════
 // MODULE LOADED
 // ════════════════════════════════════════════════════════════════════════════
-console.log('🔍 KPI Extractor loaded - AI-powered narrative analysis');
-console.log('   KPI_TEMPLATES: 12 faces × quick/full modes');
-console.log('   EXTRACTION_PATTERNS: 6 financial regex patterns');
-console.log('   Remember: Library SUGGESTS, Extractor DISCOVERS');
+Logger.info('KPIExtractor', 'Module loaded - AI-powered narrative analysis (12 faces x quick/full modes, 6 regex patterns)');

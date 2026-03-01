@@ -489,4 +489,4 @@ if (typeof window !== 'undefined') {
     window.KPIMatcher = KPIMatcher;
 }
 
-console.log('✅ KPIMatcher loaded with 7-octave sophistication patterns');
+Logger.info('KPIMatcher', 'Module loaded with 7-octave sophistication patterns');

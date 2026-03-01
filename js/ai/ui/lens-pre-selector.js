@@ -91,7 +91,7 @@ class LensPreSelector {
         }
 
         if (!this._container) {
-            console.error('[LensPreSelector] Container not found');
+            Logger.error('LensPreSelector', 'Container not found');
             return;
         }
 
@@ -270,4 +270,4 @@ if (typeof window !== 'undefined') {
     window.STRATEGIC_LENSES = LENSES;
 }
 
-console.log('✅ LensPreSelector loaded with 3 strategic lenses');
+Logger.info('LensPreSelector', 'Module loaded with 3 strategic lenses');

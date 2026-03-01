@@ -765,8 +765,8 @@ if (typeof window !== 'undefined') {
     };
 
     const inquiryCount = countTotalInquiries();
-    console.log(`🙏 Consciousness Constants loaded - ${inquiryCount}+ contemplative inquiries`);
-    console.log('   Key insight: "If this metric could pray, what would it pray for?"');
+    Logger.info('ConsciousnessConstants', `Loaded - ${inquiryCount}+ contemplative inquiries`);
+    Logger.info('ConsciousnessConstants', 'Key insight: "If this metric could pray, what would it pray for?"');
 }
 
 // CommonJS export (for Node.js testing)

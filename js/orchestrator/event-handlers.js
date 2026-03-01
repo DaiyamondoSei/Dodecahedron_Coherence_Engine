@@ -241,7 +241,7 @@ function handleClick(event) {
         // Execute the handler
         handler(actionElement);
     } else {
-        console.warn(`[event-handlers] Unknown action: "${action}"`);
+        Logger.warn('EventHandlers', `Unknown action: "${action}"`);
     }
 }
 
@@ -256,7 +256,7 @@ function handleClick(event) {
  */
 function initEventHandlers() {
     document.addEventListener('click', handleClick);
-    console.log('✅ Event delegation system initialized (33 handlers)');
+    Logger.info('EventHandlers', 'Event delegation system initialized (33 handlers)');
 }
 
 

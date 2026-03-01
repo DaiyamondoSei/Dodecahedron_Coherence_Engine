@@ -49,12 +49,12 @@ async function loadCompanyProfile(companyId) {
     try {
         const response = await fetch(`${basePath}companies/${companyId}/company.json`);
         if (!response.ok) {
-            console.warn(`⚠️ Company profile not found for ${companyId} (HTTP ${response.status})`);
+            Logger.warn('CompanyLoader', `Company profile not found for ${companyId} (HTTP ${response.status})`);
             return null;
         }
         return await response.json();
     } catch (error) {
-        console.error(`Failed to load profile for ${companyId}:`, error);
+        Logger.error('CompanyLoader', `Failed to load profile for ${companyId}`, error);
         return null;
     }
 }
@@ -74,18 +74,18 @@ async function loadCompanyKPIs(companyId) {
     try {
         const kpiReq = await fetch(`${basePath}companies/${companyId}/kpis.csv`);
         if (!kpiReq.ok) {
-            console.warn(`⚠️ KPI file not found for ${companyId} (HTTP ${kpiReq.status}). Returning empty array.`);
-            console.warn(`   Expected path: ${basePath}companies/${companyId}/kpis.csv`);
+            Logger.warn('CompanyLoader', `KPI file not found for ${companyId} (HTTP ${kpiReq.status}). Returning empty array.`);
+            Logger.warn('CompanyLoader', `Expected path: ${basePath}companies/${companyId}/kpis.csv`);
             return [];
         }
         const kpiText = await kpiReq.text();
         const kpis = loader.parseKPIs(kpiText);
         if (kpis.length === 0) {
-            console.warn(`⚠️ KPI file for ${companyId} parsed to 0 records. Check CSV format.`);
+            Logger.warn('CompanyLoader', `KPI file for ${companyId} parsed to 0 records. Check CSV format.`);
         }
         return kpis;
     } catch (error) {
-        console.error(`Failed to load KPIs for ${companyId}:`, error);
+        Logger.error('CompanyLoader', `Failed to load KPIs for ${companyId}`, error);
         return [];
     }
 }
@@ -97,12 +97,12 @@ async function loadCompanyKPIs(companyId) {
 async function switchCompany(companyId) {
     // Re-entrancy guard: prevent infinite loop from selector change events
     if (_isSwitchingCompany) {
-        console.log(`[CompanyLoader] Ignoring recursive call for: ${companyId}`);
+        Logger.debug('CompanyLoader', `Ignoring recursive call for: ${companyId}`);
         return null;
     }
     _isSwitchingCompany = true;
 
-    console.log(`Switching to company: ${companyId}`);
+    Logger.info('CompanyLoader', `Switching to company: ${companyId}`);
 
     // Show loading state if UI elements exist
     const loadingOverlay = document.getElementById('loading-overlay');
@@ -134,7 +134,7 @@ async function switchCompany(companyId) {
                     },
                     kpis: customData.kpis || []
                 };
-                console.log('📦 Loaded custom config from sessionStorage:', customConfig);
+                Logger.debug('CompanyLoader', 'Loaded custom config from sessionStorage', customConfig);
             }
         }
 
@@ -152,7 +152,7 @@ async function switchCompany(companyId) {
         if (window.Quannex) {
             // Apply tuning parameters first (if available) for consistent coherence calculation
             if (context.tuning && typeof window.Quannex.importTuning === 'function') {
-                console.log(`[CompanyLoader] Applying tuning: ${context.tuning.perspective}`);
+                Logger.info('CompanyLoader', `Applying tuning: ${context.tuning.perspective}`);
                 window.Quannex.importTuning(context.tuning);
             }
 
@@ -170,13 +170,13 @@ async function switchCompany(companyId) {
         return context;
 
     } catch (error) {
-        console.error('Error switching company:', error);
+        Logger.error('CompanyLoader', `Error switching company: ${companyId}`, error);
         // Only show alert for real companies, not for 'custom' (which uses session data)
         if (companyId !== 'custom') {
             alert(`Failed to load company: ${companyId}`);
         } else {
             // For custom companies, log a helpful message but don't interrupt user
-            console.warn('⚠️ Custom session data may be missing. Starting from Demo Orchestrator is recommended.');
+            Logger.warn('CompanyLoader', 'Custom session data may be missing. Starting from Demo Orchestrator is recommended.');
         }
     } finally {
         if (loadingOverlay) loadingOverlay.style.display = 'none';

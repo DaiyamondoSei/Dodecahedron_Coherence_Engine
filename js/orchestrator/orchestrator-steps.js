@@ -1353,15 +1353,15 @@
             const kpiName = inputElement.value.trim();
             const datalistOptions = inputElement.list?.options;
 
-            console.log(`🔧 Autofill triggered for Face ${faceId}, KPI name: "${kpiName}"`);
+            Logger.debug('OrchestratorSteps', `Autofill triggered for Face ${faceId}, KPI name: "${kpiName}"`);
 
             if (!kpiName) {
-                console.log(`   ⚠️ No KPI name entered`);
+                Logger.debug('OrchestratorSteps', 'No KPI name entered');
                 return;
             }
 
             if (!datalistOptions) {
-                console.log(`   ⚠️ No datalist options found`);
+                Logger.debug('OrchestratorSteps', 'No datalist options found');
                 return;
             }
 
@@ -1397,7 +1397,7 @@
             }
 
             if (!matched) {
-                console.log(`   ℹ️ No matching suggestion found (custom KPI: "${kpiName}")`);
+                Logger.debug('OrchestratorSteps', `No matching suggestion found (custom KPI: "${kpiName}")`);
             }
 
             // Trigger live normalization after autofill
@@ -1603,7 +1603,7 @@
                                 element: element
                             };
                             kpis.push(kpiEntry);
-                            console.log(`      ✅ Added ${element} KPI:`, kpiEntry);
+                            Logger.debug('OrchestratorSteps', `Added ${element} KPI`, kpiEntry);
                         }
                     });
                 });

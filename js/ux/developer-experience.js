@@ -595,7 +595,7 @@ const DEV_TOOLS = {
             console.group('🕐 Performance Report');
             Object.entries(this.measures).forEach(([name, duration]) => {
                 const color = duration < 100 ? 'green' : duration < 500 ? 'orange' : 'red';
-                console.log(`%c${name}: ${duration.toFixed(2)}ms`, `color: ${color}`);
+                Logger.debug('DevExperience', `${name}: ${duration.toFixed(2)}ms`);
             });
             console.groupEnd();
         },
@@ -771,25 +771,7 @@ const QuannexDev = {
     },
 
     logWelcome: function () {
-        console.log(`
-%c🔮 Quannex Developer Mode Enabled %c
-
-Available commands:
-  quannex.inspect(1)           - Inspect face 1
-  quannex.inspect.edge("E3-4") - Inspect edge E3-4
-  quannex.validate()           - Run validation checks
-  quannex.timing()             - Show performance report
-  quannex.state()              - Dump application state
-  quannex.registers.preview("analytical")
-  quannex.help()               - Show all commands
-
-Type %cquannex.help()%c for full documentation.
-`,
-            'background: #7c3aed; color: white; padding: 4px 8px; border-radius: 4px;',
-            '',
-            'color: #7c3aed; font-weight: bold;',
-            ''
-        );
+        Logger.info('DevExperience', 'Quannex Developer Mode Enabled — type quannex.help() for full documentation');
     },
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -803,13 +785,13 @@ Type %cquannex.help()%c for full documentation.
         const data = this.getDataFor(type, id);
 
         if (!data) {
-            console.warn(`No data found for ${type} ${id}`);
+            Logger.warn('DevExperience', `No data found for ${type} ${id}`);
             console.groupEnd();
             return null;
         }
 
         console.table(data);
-        console.log('Raw object:', data);
+        Logger.debug('DevExperience', 'Raw object', data);
         console.groupEnd();
 
         return data;
@@ -861,8 +843,7 @@ Type %cquannex.help()%c for full documentation.
         };
 
         Object.entries(samples).forEach(([context, versions]) => {
-            console.log(`\n${context}:`);
-            console.log(`  → ${versions[register] || versions.balanced}`);
+            Logger.debug('DevExperience', `${context}: ${versions[register] || versions.balanced}`);
         });
 
         console.groupEnd();
@@ -873,8 +854,8 @@ Type %cquannex.help()%c for full documentation.
 
         const sampleContent = 'This face has a shadow in productivity with coherence at 0.78';
 
-        console.log('Original:', sampleContent);
-        console.log('\nTransformed by register:');
+        Logger.debug('DevExperience', 'Original', { content: sampleContent });
+        Logger.debug('DevExperience', 'Transformed by register:');
         console.table({
             analytical: this.transformSample(sampleContent, 'analytical'),
             balanced: this.transformSample(sampleContent, 'balanced'),
@@ -931,19 +912,19 @@ Type %cquannex.help()%c for full documentation.
         checks.forEach(({ name, check }) => {
             try {
                 if (check()) {
-                    console.log(`✅ ${name}`);
+                    Logger.debug('DevExperience', `PASS: ${name}`);
                     passed++;
                 } else {
-                    console.log(`❌ ${name}`);
+                    Logger.debug('DevExperience', `FAIL: ${name}`);
                     failed++;
                 }
             } catch (e) {
-                console.log(`❌ ${name}: ${e.message}`);
+                Logger.debug('DevExperience', `FAIL: ${name}: ${e.message}`);
                 failed++;
             }
         });
 
-        console.log(`\n${passed} passed, ${failed} failed`);
+        Logger.info('DevExperience', `${passed} passed, ${failed} failed`);
         console.groupEnd();
 
         return { passed, failed };
@@ -965,7 +946,7 @@ Type %cquannex.help()%c for full documentation.
         };
 
         console.table(state);
-        console.log('Full state object:', state);
+        Logger.debug('DevExperience', 'Full state object', state);
         console.groupEnd();
 
         return state;
@@ -990,7 +971,7 @@ Type %cquannex.help()%c for full documentation.
     // ─────────────────────────────────────────────────────────────────────────
 
     reset: function () {
-        console.log('🔄 Resetting to defaults...');
+        Logger.info('DevExperience', 'Resetting to defaults');
 
         // Clear Quannex-specific storage
         const keysToRemove = [];
@@ -1003,8 +984,7 @@ Type %cquannex.help()%c for full documentation.
 
         keysToRemove.forEach(key => localStorage.removeItem(key));
 
-        console.log(`✅ Cleared ${keysToRemove.length} stored items`);
-        console.log('Refresh the page to complete reset.');
+        Logger.info('DevExperience', `Cleared ${keysToRemove.length} stored items. Refresh the page to complete reset.`);
     },
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -1012,50 +992,7 @@ Type %cquannex.help()%c for full documentation.
     // ─────────────────────────────────────────────────────────────────────────
 
     help: function () {
-        console.log(`
-%c🔮 Quannex Developer Commands %c
-
-%cInspection:%c
-  quannex.inspect(1)              Inspect face by ID
-  quannex.inspect.edge("E3-4")    Inspect edge by ID
-  quannex.inspect.vertex("V7")    Inspect vertex by ID
-
-%cRegisters:%c
-  quannex.registers.preview("analytical")
-                                  Preview how content looks in a register
-  quannex.registers.compare()     Compare content across all registers
-
-%cValidation:%c
-  quannex.validate()              Run all validation checks
-
-%cPerformance:%c
-  quannex.timing()                Show performance timing report
-  quannex.performance.mark("x")   Create a timing mark
-  quannex.performance.measure("name", "start", "end")
-                                  Measure between marks
-
-%cState:%c
-  quannex.state()                 Dump current application state
-  quannex.reset()                 Reset to default state
-
-%cDebug Mode:%c
-  quannex.debug.enable()          Enable debug logging
-  quannex.debug.disable()         Disable debug logging
-  quannex.debug.visual("geometry") Toggle visual debug overlay
-
-%cStorage Keys:%c
-  quannexDev = "true"             Enable dev mode
-  quannexDebug = "true"           Enable debug logging
-`,
-            'background: #7c3aed; color: white; padding: 4px 8px; border-radius: 4px;', '',
-            'color: #3b82f6; font-weight: bold;', '',
-            'color: #22c55e; font-weight: bold;', '',
-            'color: #f97316; font-weight: bold;', '',
-            'color: #ec4899; font-weight: bold;', '',
-            'color: #a855f7; font-weight: bold;', '',
-            'color: #6366f1; font-weight: bold;', '',
-            'color: #64748b; font-weight: bold;', ''
-        );
+        Logger.info('DevExperience', 'Quannex Developer Commands: inspect(id), inspect.edge("E3-4"), inspect.vertex("V7"), registers.preview("analytical"), registers.compare(), validate(), timing(), performance.mark/measure, state(), reset(), debug.enable/disable(), debug.visual("geometry")');
     },
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -1064,12 +1001,12 @@ Type %cquannex.help()%c for full documentation.
 
     enableDebug: function () {
         localStorage.setItem('quannexDebug', 'true');
-        console.log('🔍 Debug mode enabled. Verbose logging is now active.');
+        Logger.info('DevExperience', 'Debug mode enabled. Verbose logging is now active.');
     },
 
     disableDebug: function () {
         localStorage.removeItem('quannexDebug');
-        console.log('🔇 Debug mode disabled.');
+        Logger.info('DevExperience', 'Debug mode disabled.');
     },
 
     toggleVisualDebug: function (overlay) {
@@ -1078,10 +1015,10 @@ Type %cquannex.help()%c for full documentation.
 
         if (body.classList.contains(className)) {
             body.classList.remove(className);
-            console.log(`Visual debug overlay "${overlay}" disabled.`);
+            Logger.info('DevExperience', `Visual debug overlay "${overlay}" disabled.`);
         } else {
             body.classList.add(className);
-            console.log(`Visual debug overlay "${overlay}" enabled.`);
+            Logger.info('DevExperience', `Visual debug overlay "${overlay}" enabled.`);
         }
     }
 };

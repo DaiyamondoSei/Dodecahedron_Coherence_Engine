@@ -106,11 +106,11 @@
         const financials = window.getExtractedFinancials ? window.getExtractedFinancials() : {};
 
         if (extractedKPIs.length === 0 && Object.keys(financials).length === 0) {
-            console.log('[kpi-autofill] No extracted KPIs to auto-fill');
+            Logger.debug('KpiAutofill', 'No extracted KPIs to auto-fill');
             return;
         }
 
-        console.log(`[kpi-autofill] Auto-filling ${extractedKPIs.length} extracted KPIs...`);
+        Logger.info('KpiAutofill', `Auto-filling ${extractedKPIs.length} extracted KPIs`);
 
         // Fill KPIs by face
         extractedKPIs.forEach(kpi => {
@@ -241,15 +241,15 @@
         const kpiName = inputElement.value.trim();
         const datalistOptions = inputElement.list?.options;
 
-        console.log(`[kpi-autofill] Autofill triggered for Face ${faceId}, KPI name: "${kpiName}"`);
+        Logger.debug('KpiAutofill', `Autofill triggered for Face ${faceId}, KPI name: "${kpiName}"`);
 
         if (!kpiName) {
-            console.log(`[kpi-autofill] No KPI name entered`);
+            Logger.debug('KpiAutofill', 'No KPI name entered');
             return;
         }
 
         if (!datalistOptions) {
-            console.log(`[kpi-autofill] No datalist options found`);
+            Logger.debug('KpiAutofill', 'No datalist options found');
             return;
         }
 
@@ -279,13 +279,13 @@
                 });
 
                 matched = true;
-                console.log(`[kpi-autofill] Autofilled KPI: ${kpiName}`);
+                Logger.debug('KpiAutofill', `Autofilled KPI: ${kpiName}`);
                 break;
             }
         }
 
         if (!matched) {
-            console.log(`[kpi-autofill] No matching suggestion found (custom KPI: "${kpiName}")`);
+            Logger.debug('KpiAutofill', `No matching suggestion found (custom KPI: "${kpiName}")`);
         }
 
         // Trigger live normalization after autofill
@@ -327,7 +327,7 @@
                     }
                 });
 
-                console.log(`[kpi-autofill] Autofilled ${element} KPI: ${kpiName}`);
+                Logger.debug('KpiAutofill', `Autofilled ${element} KPI: ${kpiName}`);
                 break;
             }
         }
@@ -423,7 +423,7 @@
      * and ensure DOM updates are visible.
      */
     function calculateAllNormalizations() {
-        console.log('[kpi-autofill] Calculating normalization for all 12 faces...');
+        Logger.debug('KpiAutofill', 'Calculating normalization for all 12 faces');
 
         let calculated = 0;
 
@@ -439,7 +439,7 @@
             }
         }
 
-        console.log(`[kpi-autofill] Normalization calculated for ${calculated} faces`);
+        Logger.info('KpiAutofill', `Normalization calculated for ${calculated} faces`);
     }
 
     // ========================================
@@ -452,6 +452,6 @@
     global.calculateAllNormalizations = calculateAllNormalizations;
     global.autoFillExtractedKPIs = autoFillExtractedKPIs;
 
-    console.log('[kpi-autofill] Module loaded');
+    Logger.info('KpiAutofill', 'Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

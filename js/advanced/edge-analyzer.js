@@ -108,7 +108,7 @@ export class EdgeAnalyzer {
         question: e.question || ''
       }));
     } else {
-      console.warn('EdgeAnalyzer: DodecahedronTopology not available, using corrected inline fallback');
+      Logger.warn('EdgeAnalyzer', 'DodecahedronTopology not available, using corrected inline fallback');
       // Fallback: corrected edge definitions from SSOT (elements match topology source of truth)
       this.edgeDefinitions = [
         { id: 'E1-2', face1: 1, face2: 2, element: 'Fire' },
@@ -345,7 +345,7 @@ export class EdgeAnalyzer {
       const face2 = faces.find(f => f.id === canonicalDef.face2);
 
       if (!face1 || !face2) {
-        console.warn(`Missing face data for edge ${canonicalDef.id}`);
+        Logger.warn('EdgeAnalyzer', `Missing face data for edge ${canonicalDef.id}`);
         return;
       }
 
@@ -610,22 +610,19 @@ export class EdgeAnalyzer {
   logTopologyValidation(topology) {
     const result = this.validateTopology(topology);
 
-    console.log('\n🔍 EDGE TOPOLOGY VALIDATION');
-    console.log('='.repeat(60));
-    console.log(`Total edges defined: ${result.totalEdges}`);
-    console.log(`✅ Valid geometric edges: ${result.validCount}`);
-    console.log(`❌ Invalid geometric edges: ${result.invalidCount}`);
+    Logger.info('EdgeAnalyzer', 'EDGE TOPOLOGY VALIDATION');
+    Logger.info('EdgeAnalyzer', `Total edges defined: ${result.totalEdges}`);
+    Logger.info('EdgeAnalyzer', `Valid geometric edges: ${result.validCount}`);
+    Logger.info('EdgeAnalyzer', `Invalid geometric edges: ${result.invalidCount}`);
 
     if (result.invalidEdges.length > 0) {
-      console.warn('\n⚠️ INVALID EDGES (do not match dodecahedron topology):');
+      Logger.warn('EdgeAnalyzer', 'INVALID EDGES (do not match dodecahedron topology)');
       result.invalidEdges.forEach(edge => {
-        console.warn(`  ${edge.id}: Face ${edge.face1}-${edge.face2} (shares ${edge.sharedVertices} vertices, expected 2)`);
+        Logger.warn('EdgeAnalyzer', `${edge.id}: Face ${edge.face1}-${edge.face2} (shares ${edge.sharedVertices} vertices, expected 2)`);
       });
     } else {
-      console.log('\n✅ All edges are geometrically valid!');
+      Logger.info('EdgeAnalyzer', 'All edges are geometrically valid!');
     }
-
-    console.log('='.repeat(60));
     return result;
   }
 }

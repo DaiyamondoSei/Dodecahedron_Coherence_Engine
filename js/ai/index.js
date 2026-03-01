@@ -189,7 +189,7 @@ export async function initializeAI(options = {}) {
         if (apiKeyContainer) {
             apiKeyManager = new APIKeyManager({
                 onKeyValidated: (valid) => {
-                    console.log('[QuannexAI] API key validated:', valid);
+                    Logger.info('QuannexAI', 'API key validated', { valid });
                 }
             });
             apiKeyManager.init(apiKeyContainer);
@@ -198,7 +198,7 @@ export async function initializeAI(options = {}) {
         if (modeContainer) {
             modeSelector = new ModeSelector({
                 onModeChange: (mode, config) => {
-                    console.log('[QuannexAI] Mode changed:', mode, config);
+                    Logger.info('QuannexAI', 'Mode changed', { mode, config });
                 }
             });
             modeSelector.init(modeContainer);
@@ -215,7 +215,7 @@ export async function initializeAI(options = {}) {
         return result;
 
     } catch (error) {
-        console.error('[QuannexAI] Initialization error:', error);
+        Logger.error('QuannexAI', 'Initialization error', error);
         onError(error);
         throw error;
     }
@@ -273,5 +273,5 @@ if (typeof window !== 'undefined') {
         getAIStatus
     };
 
-    console.log('[QuannexAI] Sprint 2 Module loaded with OpenAI support. Access via window.QuannexAI');
+    Logger.info('QuannexAI', 'Sprint 2 Module loaded with OpenAI support. Access via window.QuannexAI');
 }

@@ -124,7 +124,7 @@ class OctaveDeterminer {
     async determineOctaves(storyText = '') {
         await this._ensureProvider();
 
-        console.log('[OctaveDeterminer] Determining octaves...');
+        Logger.info('OctaveDeterminer', 'Determining octaves');
 
         const faces = this.context.getAllFaces();
 
@@ -152,7 +152,7 @@ class OctaveDeterminer {
             };
 
         } catch (error) {
-            console.warn('[OctaveDeterminer] AI failed, using sentiment-based fallback');
+            Logger.warn('OctaveDeterminer', 'AI failed, using sentiment-based fallback');
             return this._fallbackDetermination(faces);
         }
     }
@@ -381,7 +381,7 @@ class OctaveDeterminer {
      */
     setOctave(faceId, octaveId, reasoning = '') {
         if (!OCTAVE_THRESHOLDS[octaveId]) {
-            console.error('[OctaveDeterminer] Invalid octave:', octaveId);
+            Logger.error('OctaveDeterminer', 'Invalid octave', { octaveId });
             return false;
         }
 

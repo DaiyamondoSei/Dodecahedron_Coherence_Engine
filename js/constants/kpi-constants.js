@@ -702,9 +702,9 @@ if (typeof window !== 'undefined') {
         getElementByPosition
     };
 
-    console.log('📊 KPI Constants loaded - Single Source of Truth for KPI definitions');
-    console.log('   Layers: Ball (α=0.6) → Pillar (5×0.2) → Pentagram (calculated)');
-    console.log('   Greek: α=0.6, β=0.5, γ=0.7, δ=0.9, κ=2.0');
+    Logger.info('KpiConstants', 'Loaded - Single Source of Truth for KPI definitions');
+    Logger.info('KpiConstants', 'Layers: Ball (alpha=0.6) -> Pillar (5x0.2) -> Pentagram (calculated)');
+    Logger.info('KpiConstants', 'Greek: alpha=0.6, beta=0.5, gamma=0.7, delta=0.9, kappa=2.0');
 }
 
 // CommonJS export (for Node.js testing)

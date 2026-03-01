@@ -254,6 +254,6 @@
         };
     }
 
-    console.log('[dashboard/octave-utilities] Module loaded - utility functions ready');
+    Logger.info('OctaveUtilities', 'Module loaded - utility functions ready');
 
 })(typeof window !== 'undefined' ? window : this);

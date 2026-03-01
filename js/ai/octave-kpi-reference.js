@@ -90,7 +90,7 @@ class OctaveKPIReference {
         try {
             const response = await fetch('/data/CSV_Refrence_Models.csv');
             if (!response.ok) {
-                console.warn('[OctaveKPIReference] CSV not found, using embedded templates');
+                Logger.warn('OctaveKPIReference', 'CSV not found, using embedded templates');
                 this._loadEmbeddedTemplates();
                 this.loaded = true;
                 return;
@@ -99,9 +99,9 @@ class OctaveKPIReference {
             const csvText = await response.text();
             this._parseCSV(csvText);
             this.loaded = true;
-            console.log(`[OctaveKPIReference] Loaded ${this.getTotalKPICount()} KPI templates from CSV`);
+            Logger.info('OctaveKPIReference', `Loaded ${this.getTotalKPICount()} KPI templates from CSV`);
         } catch (error) {
-            console.warn('[OctaveKPIReference] Failed to load CSV, using embedded templates:', error);
+            Logger.warn('OctaveKPIReference', 'Failed to load CSV, using embedded templates', error);
             this._loadEmbeddedTemplates();
             this.loaded = true;
         }
@@ -125,7 +125,7 @@ class OctaveKPIReference {
         }
 
         if (headerRowIndex === -1) {
-            console.warn('[OctaveKPIReference] Could not find header row, using embedded templates');
+            Logger.warn('OctaveKPIReference', 'Could not find header row, using embedded templates');
             this._loadEmbeddedTemplates();
             return;
         }
@@ -499,4 +499,4 @@ if (typeof window !== 'undefined') {
     window.getOctaveKPIReference = getOctaveKPIReference;
 }
 
-console.log('[OctaveKPIReference] Module loaded');
+Logger.info('OctaveKPIReference', 'Module loaded');

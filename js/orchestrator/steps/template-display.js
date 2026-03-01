@@ -187,7 +187,7 @@
             infoBox.parentNode.insertBefore(banner, infoBox);
         }
 
-        console.log('✅ Template grid hidden for pre-loaded company');
+        Logger.info('TemplateDisplay', 'Template grid hidden for pre-loaded company');
     }
 
     // ========================================
@@ -232,7 +232,7 @@
         const faceEditorSection = document.getElementById('faceEditorSection');
         if (faceEditorSection) faceEditorSection.style.display = 'none';
 
-        console.log('✅ Reset to template selection');
+        Logger.info('TemplateDisplay', 'Reset to template selection');
     }
 
     // ========================================
@@ -243,6 +243,6 @@
     global.hideTemplateGridForPreloadedCompany = hideTemplateGridForPreloadedCompany;
     global.resetToTemplateSelection = resetToTemplateSelection;
 
-    console.log('[template-display] Module loaded');
+    Logger.info('TemplateDisplay', 'Module loaded');
 
 })(typeof window !== 'undefined' ? window : this);

@@ -293,4 +293,4 @@ if (typeof window !== 'undefined') {
     window.BreathAxisAnalyzer = BreathAxisAnalyzer;
 }
 
-console.log('✅ BreathAxisAnalyzer loaded with 6 breath axes');
+Logger.info('BreathAxisAnalyzer', 'Module loaded with 6 breath axes');

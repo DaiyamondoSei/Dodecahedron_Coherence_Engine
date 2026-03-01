@@ -133,7 +133,7 @@ class TooltipManager {
         // Attach to all knob controls
         this.attachToKnobs();
 
-        console.log('[Tooltips] Initialized with', Object.keys(this.tooltipData).length, 'parameters');
+        Logger.info('HarmonicTunerTooltips', `Initialized with ${Object.keys(this.tooltipData).length} parameters`);
     }
 
     attachToKnobs() {

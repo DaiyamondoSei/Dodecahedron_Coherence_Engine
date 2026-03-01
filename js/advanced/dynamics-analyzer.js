@@ -194,7 +194,7 @@ export class DynamicsAnalyzer {
       this.adjacency = topology;
     } else {
       // Fallback: log warning, module should be loaded before this
-      console.warn('DynamicsAnalyzer: DodecahedronTopology not available, using inline fallback');
+      Logger.warn('DynamicsAnalyzer', 'DodecahedronTopology not available, using inline fallback');
       this.adjacency = {
         1: [2, 6, 7, 8, 10],
         2: [1, 3, 6, 10, 11],
@@ -852,7 +852,7 @@ export class DynamicsAnalyzer {
    * Complete dynamics analysis (all 4 systems)
    */
   analyzeComplete(faces, edges, spectralAnalysis) {
-    console.log('🔬 Running complete dynamics analysis...');
+    Logger.info('DynamicsAnalyzer', 'Running complete dynamics analysis...');
 
     const feedbackLoops = this.detectFeedbackLoops(faces, edges);
     const phaseTransitions = this.analyzePhaseTransitions(faces.map(f => f.faceEnergy));

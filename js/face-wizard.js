@@ -399,7 +399,7 @@ async function analyzeStory() {
                 }
             },
             onFallback: (failedProvider, error) => {
-                console.warn(`⚠️ Fallback triggered: ${failedProvider} failed - ${error}`);
+                Logger.warn('FaceWizard', `Fallback triggered: ${failedProvider} failed - ${error}`);
             }
         });
 
@@ -506,7 +506,7 @@ async function analyzeStory() {
                 Logger.info('FaceWizard', `KPI Extraction Complete: ${extractedKPIs.length} KPIs extracted`);
                 Logger.debug('FaceWizard', '   Sample KPIs:', extractedKPIs.slice(0, 3));
             } else {
-                console.warn('⚠️ KPI extraction returned no results, using financials only');
+                Logger.warn('FaceWizard', 'KPI extraction returned no results, using financials only');
                 // Create minimal KPIs from financials as fallback
                 extractedKPIs = Object.entries(extractedFinancials).map(([key, data], index) => ({
                     faceId: index + 1,
@@ -636,7 +636,7 @@ function populateLensSelector(lenses) {
     const section = document.getElementById('lensSelectorSection');
 
     if (!container || !lenses) {
-        console.warn('Lens selector not found or no lenses provided');
+        Logger.warn('FaceWizard', 'Lens selector not found or no lenses provided');
         return;
     }
 
@@ -679,7 +679,7 @@ function populateLensSelector(lenses) {
  */
 function selectLens(lensType) {
     if (!currentLenses || !currentLenses[lensType]) {
-        console.warn(`Lens '${lensType}' not available`);
+        Logger.warn('FaceWizard', `Lens '${lensType}' not available`);
         return;
     }
 
@@ -858,14 +858,14 @@ function updateFaceName(faceId, newName) {
     const face = currentFaces.find(f => f.id === faceId);
     if (face) {
         face.name = newName;
-        console.log(`✅ Updated Face ${faceId}: ${newName}`);
+        Logger.debug('FaceWizard', `Updated Face ${faceId}: ${newName}`);
 
         // Sync to demoState.faceConfig for persistence
         if (window.demoState && window.demoState.faceConfig && window.demoState.faceConfig.faces) {
             const demoFace = window.demoState.faceConfig.faces.find(f => f.id === faceId);
             if (demoFace) {
                 demoFace.name = newName;
-                console.log(`   ↳ Synced to demoState.faceConfig`);
+                Logger.debug('FaceWizard', 'Synced to demoState.faceConfig');
             }
         }
 
@@ -889,7 +889,7 @@ function restoreFacesFromDemoState() {
                 name: f.name,
                 icon: f.icon || ''
             }));
-            console.log('🔄 Restored faces from demoState.faceConfig');
+            Logger.debug('FaceWizard', 'Restored faces from demoState.faceConfig');
 
             // Re-render the face editor if visible
             const faceEditor = document.getElementById('faceEditorSection');
@@ -947,7 +947,7 @@ function getFaceConfiguration() {
                 id: parseInt(input.getAttribute('data-face-id')),
                 name: input.value.trim() || `Face ${input.getAttribute('data-face-id')}`
             }));
-            console.log('[getFaceConfiguration] Read faces from DOM:', faces.length);
+            Logger.debug('FaceWizard', `Read faces from DOM: ${faces.length}`);
         }
     }
 
@@ -973,7 +973,7 @@ function exportFaceConfiguration() {
     a.click();
 
     URL.revokeObjectURL(url);
-    console.log('✅ Configuration exported');
+    Logger.info('FaceWizard', 'Configuration exported');
 }
 
 /**
@@ -993,10 +993,10 @@ function importFaceConfiguration(jsonString) {
         // Update UI
         selectTemplate(currentTemplate);
 
-        console.log('✅ Configuration imported');
+        Logger.info('FaceWizard', 'Configuration imported');
         return true;
     } catch (error) {
-        console.error('❌ Import failed:', error);
+        Logger.error('FaceWizard', 'Import failed', error);
         alert('Failed to import configuration: ' + error.message);
         return false;
     }
@@ -1032,4 +1032,4 @@ window.getExtractedFinancials = () => extractedFinancials;
 window.getKPIsForFace = (faceId) => extractedKPIs.filter(k => k.faceId === faceId);
 window.getCurrentStoryText = () => currentStoryText;
 
-console.log('✅ Face Wizard loaded with Sprint 2 Lenses, Octaves & KPI extraction');
+Logger.info('FaceWizard', 'Face Wizard loaded with Sprint 2 Lenses, Octaves & KPI extraction');

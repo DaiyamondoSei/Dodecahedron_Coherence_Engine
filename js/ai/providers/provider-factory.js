@@ -63,7 +63,7 @@ class ProviderFactory {
 
         // Force offline mode
         if (forceOffline) {
-            console.log('[ProviderFactory] Forcing offline mode');
+            Logger.info('ProviderFactory', 'Forcing offline mode');
             return new OfflineProvider();
         }
 
@@ -78,7 +78,7 @@ class ProviderFactory {
 
         // Check network connectivity
         if (!navigator.onLine) {
-            console.log('[ProviderFactory] No network, using offline provider');
+            Logger.info('ProviderFactory', 'No network, using offline provider');
             return new OfflineProvider();
         }
 
@@ -100,7 +100,7 @@ class ProviderFactory {
         }
 
         // Try fallback provider
-        console.log(`[ProviderFactory] ${preferred} failed, trying ${fallback}`);
+        Logger.info('ProviderFactory', `${preferred} failed, trying ${fallback}`);
         const fallbackResult = await ProviderFactory._tryProvider(fallback, {
             geminiKey: geminiKey || ProviderFactory.getStoredGeminiKey(),
             openaiKey: openaiKey || ProviderFactory.getStoredOpenAIKey(),
@@ -112,7 +112,7 @@ class ProviderFactory {
         }
 
         // Last resort: offline provider
-        console.log('[ProviderFactory] All online providers failed, using offline');
+        Logger.info('ProviderFactory', 'All online providers failed, using offline');
         return new OfflineProvider();
     }
 
@@ -126,7 +126,7 @@ class ProviderFactory {
         switch (providerType) {
             case PROVIDER_TYPES.GEMINI:
                 if (!geminiKey) {
-                    console.warn('[ProviderFactory] No Gemini key, falling back to offline');
+                    Logger.warn('ProviderFactory', 'No Gemini key, falling back to offline');
                     return new OfflineProvider();
                 }
                 const gemini = new GeminiProvider(geminiKey);
@@ -137,12 +137,12 @@ class ProviderFactory {
                 if (geminiConnected) {
                     return gemini;
                 }
-                console.warn('[ProviderFactory] Gemini connection failed');
+                Logger.warn('ProviderFactory', 'Gemini connection failed');
                 return new OfflineProvider();
 
             case PROVIDER_TYPES.OPENAI:
                 if (!openaiKey) {
-                    console.warn('[ProviderFactory] No OpenAI key, falling back to offline');
+                    Logger.warn('ProviderFactory', 'No OpenAI key, falling back to offline');
                     return new OfflineProvider();
                 }
                 const openai = new OpenAIProvider(openaiKey);
@@ -153,7 +153,7 @@ class ProviderFactory {
                 if (openaiConnected) {
                     return openai;
                 }
-                console.warn('[ProviderFactory] OpenAI connection failed');
+                Logger.warn('ProviderFactory', 'OpenAI connection failed');
                 return new OfflineProvider();
 
             case PROVIDER_TYPES.OFFLINE:
@@ -177,7 +177,7 @@ class ProviderFactory {
                     timeout
                 );
                 if (connected) {
-                    console.log('[ProviderFactory] Gemini provider available');
+                    Logger.info('ProviderFactory', 'Gemini provider available');
                     return gemini;
                 }
             } else if (providerType === PROVIDER_TYPES.OPENAI && openaiKey) {
@@ -187,12 +187,12 @@ class ProviderFactory {
                     timeout
                 );
                 if (connected) {
-                    console.log('[ProviderFactory] OpenAI provider available');
+                    Logger.info('ProviderFactory', 'OpenAI provider available');
                     return openai;
                 }
             }
         } catch (error) {
-            console.warn(`[ProviderFactory] ${providerType} error:`, error.message);
+            Logger.warn('ProviderFactory', `${providerType} error`, { error: error.message });
         }
 
         return null;

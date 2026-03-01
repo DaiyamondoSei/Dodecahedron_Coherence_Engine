@@ -219,7 +219,7 @@ export class VisualizationManager {
                     material.emissive = new THREE.Color(0x4488ff); // Blue-ish frozen glow
                     material.needsUpdate = true;
                 }
-                console.log(`❄️ Face ${faceInertia.faceId} (${faceInertia.faceName}) is FROZEN`);
+                Logger.debug('VisualizationManager', `Face ${faceInertia.faceId} (${faceInertia.faceName}) is FROZEN`);
             } else if (faceInertia.responsiveness === 'Sticky') {
                 // Moderate glow for sticky faces
                 if (material.emissiveIntensity !== undefined) {
@@ -594,7 +594,7 @@ export class VisualizationManager {
             this.groups.feedbackLoops.add(line);
         });
 
-        console.log(`✅ Rendered ${this.groups.feedbackLoops.children.length} feedback loops`);
+        Logger.debug('VisualizationManager', `Rendered ${this.groups.feedbackLoops.children.length} feedback loops`);
     }
 
     /**
@@ -605,11 +605,11 @@ export class VisualizationManager {
     getFaceCenterPosition(faceIndex) {
         const faceMeshes = window.dodecahedronViz?.faceMeshes;
         if (!faceMeshes) {
-            console.warn('⚠️ faceMeshes not available');
+            Logger.warn('VisualizationManager', 'faceMeshes not available');
             return null;
         }
         if (faceIndex < 0 || faceIndex >= faceMeshes.length) {
-            console.warn(`⚠️ faceIndex ${faceIndex} out of bounds`);
+            Logger.warn('VisualizationManager', `faceIndex ${faceIndex} out of bounds`);
             return null;
         }
 
@@ -649,7 +649,7 @@ export class VisualizationManager {
         this.phaseTransitionImminent = transitions.isImminent || false;
 
         if (proximity > 0.8 && transitions.isImminent) {
-            console.log('⚠️ PHASE TRANSITION IMMINENT - Activating effects');
+            Logger.info('VisualizationManager', 'PHASE TRANSITION IMMINENT - Activating effects');
 
             // Trigger camera shake effect
             this.triggerCameraShake();
@@ -760,7 +760,7 @@ export class VisualizationManager {
         const cleanId = edgeId.replace(/^E/, '');
         const parts = cleanId.split('-').map(Number);
         if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) {
-            console.warn(`Invalid edge ID format: ${edgeId}`);
+            Logger.warn('VisualizationManager', `Invalid edge ID format: ${edgeId}`);
             return null;
         }
         const [f1, f2] = parts;
@@ -793,7 +793,7 @@ export class VisualizationManager {
             : vertexId;
 
         if (idNum < 1 || idNum > 20) {
-            console.warn(`[visualization-manager] Invalid vertex ID: ${vertexId}`);
+            Logger.warn('VisualizationManager', `Invalid vertex ID: ${vertexId}`);
             return null;
         }
 
@@ -803,7 +803,7 @@ export class VisualizationManager {
         }
 
         if (!this._cachedVertexPositions || this._cachedVertexPositions.length < 20) {
-            console.warn(`[visualization-manager] Could not extract vertex positions`);
+            Logger.warn('VisualizationManager', 'Could not extract vertex positions');
             return null;
         }
 
@@ -835,7 +835,7 @@ export class VisualizationManager {
             }
 
             const vertices = Array.from(uniqueMap.values());
-            console.log(`[visualization-manager] Extracted ${vertices.length} unique vertex positions from geometry`);
+            Logger.debug('VisualizationManager', `Extracted ${vertices.length} unique vertex positions from geometry`);
 
             if (vertices.length === 20) {
                 return vertices;
@@ -864,14 +864,14 @@ export class VisualizationManager {
             }
 
             const vertices = Array.from(uniqueMap.values());
-            console.log(`[visualization-manager] Extracted ${vertices.length} unique vertex positions from face meshes`);
+            Logger.debug('VisualizationManager', `Extracted ${vertices.length} unique vertex positions from face meshes`);
 
             if (vertices.length === 20) {
                 return vertices;
             }
         }
 
-        console.warn('[visualization-manager] Could not extract 20 vertex positions');
+        Logger.warn('VisualizationManager', 'Could not extract 20 vertex positions');
         return null;
     }
 
@@ -885,7 +885,7 @@ export class VisualizationManager {
      * clearing visualizations. Called via window.vizManager.clearAll()
      */
     clearAll() {
-        console.log('🧹 [VisualizationManager] Clearing all advanced visualizations');
+        Logger.info('VisualizationManager', 'Clearing all advanced visualizations');
 
         // Clear neon edge tubes
         while (this.groups.neonEdges.children.length > 0) {
@@ -917,6 +917,6 @@ export class VisualizationManager {
         // Reset analysis state
         this.currentAnalysis = null;
 
-        console.log('✅ [VisualizationManager] All visualizations cleared');
+        Logger.info('VisualizationManager', 'All visualizations cleared');
     }
 }

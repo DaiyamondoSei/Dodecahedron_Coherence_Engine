@@ -203,7 +203,7 @@ Return ONLY valid JSON:
         const kpiCount = mode === 'quick' ? 12 : 60;
         const prompt = this._buildKPIExtractionPrompt(storyText, kpiCount, octave);
 
-        console.log(`[OpenAIProvider] extractKPIs called: mode=${mode}, octave=${octave}, kpiCount=${kpiCount}`);
+        Logger.debug('OpenAIProvider', `extractKPIs called: mode=${mode}, octave=${octave}, kpiCount=${kpiCount}`);
 
         try {
             const response = await this._callResponsesAPI(prompt, {
@@ -551,7 +551,7 @@ Return ONLY valid JSON:
             return data.output_text;
         }
 
-        console.error('[OpenAI] Unexpected response:', JSON.stringify(data, null, 2));
+        Logger.error('OpenAIProvider', 'Unexpected response', { data });
         throw new Error('Unexpected response structure from OpenAI API');
     }
 

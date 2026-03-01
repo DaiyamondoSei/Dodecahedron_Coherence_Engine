@@ -154,7 +154,7 @@ class AIProvider {
      * @param {Object} details - Additional context
      */
     log(action, details = {}) {
-        console.log(`[${this.name}] ${action}`, details);
+        Logger.debug(this.name, action, details);
     }
 
     /**
@@ -164,7 +164,7 @@ class AIProvider {
      */
     logError(action, error) {
         this.lastError = error;
-        console.error(`[${this.name}] ${action} failed:`, error.message);
+        Logger.error(this.name, `${action} failed`, error);
     }
 }
 

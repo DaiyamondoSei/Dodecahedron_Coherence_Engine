@@ -32,12 +32,12 @@
 // ============================================================================
 const PHI_HARMONICS = (function() {
   if (typeof window !== 'undefined' && window.PhiHarmonics) {
-    console.log('   KPI: Using PhiHarmonics from single-source module');
+    Logger.debug('KPI', 'Using PhiHarmonics from single-source module');
     return window.PhiHarmonics;
   }
 
   // Fallback for standalone use or testing
-  console.log('   KPI: Using local PHI_HARMONICS fallback');
+  Logger.debug('KPI', 'Using local PHI_HARMONICS fallback');
   const PHI = (1 + Math.sqrt(5)) / 2;
 
   return {
@@ -241,4 +241,4 @@ if (typeof window !== 'undefined') {
   window.KPI = KPI;
 }
 
-console.log('   KPI module loaded');
+Logger.info('KPI', 'KPI module loaded');

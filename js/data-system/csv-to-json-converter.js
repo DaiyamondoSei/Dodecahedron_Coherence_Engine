@@ -1983,7 +1983,7 @@
      * @returns {Object} Self-documenting JSON
      */
     function convert(type, csvContent) {
-        console.log(`[CSVToJSONConverter] Converting ${type}...`);
+        Logger.debug('CSVToJSONConverter', `Converting ${type}...`);
 
         switch (type) {
             case 'kpi-database':
@@ -2021,9 +2021,9 @@
         for (const [type, content] of Object.entries(csvFiles)) {
             try {
                 results[type] = convert(type, content);
-                console.log(`[CSVToJSONConverter] ✓ ${type} converted`);
+                Logger.debug('CSVToJSONConverter', `${type} converted`);
             } catch (e) {
-                console.error(`[CSVToJSONConverter] ✗ ${type} failed: ${e.message}`);
+                Logger.error('CSVToJSONConverter', `${type} failed: ${e.message}`, e);
                 errors.push({ type, error: e.message });
             }
         }
@@ -2094,6 +2094,6 @@
     // Export to window
     global.CSVToJSONConverter = CSVToJSONConverter;
 
-    console.log('🔄 CSVToJSONConverter v2.0.0 loaded - Self-documenting data migration');
+    Logger.info('CSVToJSONConverter', 'v2.0.0 loaded - Self-documenting data migration');
 
 })(typeof window !== 'undefined' ? window : this);

@@ -85,8 +85,8 @@
     const PH = checkPhiHarmonics();
 
     if (!PH) {
-        console.warn('⚠️ PhiHarmonics not loaded. Using inline constants (not recommended).');
-        console.warn('   Please ensure phi-harmonics.js is loaded before octave-thresholds.js');
+        Logger.warn('OctaveThresholds', 'PhiHarmonics not loaded. Using inline constants (not recommended).');
+        Logger.warn('OctaveThresholds', 'Please ensure phi-harmonics.js is loaded before octave-thresholds.js');
 
         // Fallback inline constants (only if phi-harmonics.js not loaded)
         const PHI = (1 + Math.sqrt(5)) / 2;
@@ -152,9 +152,9 @@
             PhiHarmonics: PH
         };
 
-        console.log('🎵 Octave Thresholds loaded (via PhiHarmonics)');
-        console.log('   Fully φ-derived: O1(0) O2(φ⁻²) O3(½) O4(φ⁻¹) O5(ψ₃) O6(ψ₄) O7(ψ₅)');
-        console.log('   Values:          0    0.382   0.5  0.618  0.764  0.854  0.910');
+        Logger.info('OctaveThresholds', 'Loaded (via PhiHarmonics)');
+        Logger.info('OctaveThresholds', 'Fully phi-derived: O1(0) O2(phi^-2) O3(1/2) O4(phi^-1) O5(psi3) O6(psi4) O7(psi5)');
+        Logger.info('OctaveThresholds', 'Values: 0  0.382  0.5  0.618  0.764  0.854  0.910');
     }
 
     // CommonJS export (for Node.js testing)

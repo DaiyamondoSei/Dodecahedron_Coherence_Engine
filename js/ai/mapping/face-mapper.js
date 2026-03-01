@@ -143,7 +143,7 @@ class FaceMapper {
             generateLenses = true
         } = options;
 
-        console.log('[FaceMapper] Analyzing story...');
+        Logger.info('FaceMapper', 'Analyzing story...');
 
         try {
             // Get basic story analysis
@@ -177,7 +177,7 @@ class FaceMapper {
             };
 
         } catch (error) {
-            console.error('[FaceMapper] Analysis failed:', error);
+            Logger.error('FaceMapper', 'Analysis failed', error);
             return {
                 success: false,
                 error: error.message,
@@ -250,7 +250,7 @@ class FaceMapper {
     async generateStrategicLenses(storyText) {
         await this._ensureProvider();
 
-        console.log('[FaceMapper] Generating strategic lenses...');
+        Logger.info('FaceMapper', 'Generating strategic lenses...');
 
         try {
             const result = await this.provider.generateStrategicLenses(storyText);
@@ -267,7 +267,7 @@ class FaceMapper {
             return this._lastLenses;
 
         } catch (error) {
-            console.error('[FaceMapper] Lens generation failed:', error);
+            Logger.error('FaceMapper', 'Lens generation failed', error);
 
             // Return fallback lenses
             return this._getFallbackLenses();
@@ -364,12 +364,12 @@ class FaceMapper {
      */
     async applyLens(lensId) {
         if (!LENS_CONFIGS[lensId]) {
-            console.error('[FaceMapper] Invalid lens:', lensId);
+            Logger.error('FaceMapper', 'Invalid lens', { lensId });
             return false;
         }
 
         if (!this._lastLenses?.lenses?.[lensId]) {
-            console.error('[FaceMapper] Lens not available. Generate lenses first.');
+            Logger.error('FaceMapper', 'Lens not available. Generate lenses first.');
             return false;
         }
 
@@ -388,7 +388,7 @@ class FaceMapper {
         this.context.setAllFaces(faceConfigs, lensId);
         this.context.setLens(lensId);
 
-        console.log(`[FaceMapper] Applied ${lensId} lens`);
+        Logger.info('FaceMapper', `Applied ${lensId} lens`);
         return true;
     }
 
@@ -511,8 +511,8 @@ class FaceMapper {
         // SEND TO AI PROVIDER
         // ════════════════════════════════════════════════════════════════════
 
-        console.log(`[FaceMapper] Refining Face ${faceId}: "${currentFace.name}"`);
-        console.log(`[FaceMapper] User feedback: "${trimmedContext.substring(0, 100)}${trimmedContext.length > 100 ? '...' : ''}"`);
+        Logger.info('FaceMapper', `Refining Face ${faceId}: "${currentFace.name}"`);
+        Logger.debug('FaceMapper', `User feedback: "${trimmedContext.substring(0, 100)}${trimmedContext.length > 100 ? '...' : ''}"`);;
 
         let aiResponse;
         try {
@@ -521,7 +521,7 @@ class FaceMapper {
                 maxTokens: 500
             });
         } catch (err) {
-            console.error('[FaceMapper] AI call failed:', err);
+            Logger.error('FaceMapper', 'AI call failed', err);
             throw new Error(`AI refinement request failed: ${err.message}`);
         }
 
@@ -533,7 +533,7 @@ class FaceMapper {
         try {
             refinement = parseRefinementResponse(aiResponse);
         } catch (err) {
-            console.error('[FaceMapper] Refinement parsing failed:', err.message);
+            Logger.error('FaceMapper', 'Refinement parsing failed', err);
             throw new Error(`AI refinement response invalid: ${err.message}`);
         }
 
@@ -565,7 +565,7 @@ class FaceMapper {
 
         this.context.updateFace(faceId, updateData);
 
-        console.log(`[FaceMapper] ✓ Face ${faceId} refined: "${currentFace.name}" → "${refinement.refinedName}" (${Math.round(refinement.confidence * 100)}% confidence)`);
+        Logger.info('FaceMapper', `Face ${faceId} refined: "${currentFace.name}" -> "${refinement.refinedName}" (${Math.round(refinement.confidence * 100)}% confidence)`);
 
         // ════════════════════════════════════════════════════════════════════
         // RETURN RESULT FOR UI

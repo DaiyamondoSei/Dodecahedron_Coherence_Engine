@@ -131,7 +131,7 @@ export class SpectralAnalyzer {
     // This prevents null reference errors in downstream calculations
     if (dominantMode === null && modalAmplitudes.length > 1) {
       dominantMode = modalAmplitudes[1]; // Mode 2 (first non-DC mode)
-      console.log('⚠️ SpectralAnalyzer: All modal amplitudes are 0, defaulting to Mode 2');
+      Logger.warn('SpectralAnalyzer', 'All modal amplitudes are 0, defaulting to Mode 2');
     }
 
     return dominantMode;

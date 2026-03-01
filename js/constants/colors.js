@@ -301,5 +301,5 @@ if (typeof window !== 'undefined') {
         interpolateOctaveColors
     };
 
-    console.log('[OctaveColors] Single source loaded - 7 octaves, 5 elements, 6 health states');
+    Logger.info('OctaveColors', 'Single source loaded - 7 octaves, 5 elements, 6 health states');
 }

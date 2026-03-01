@@ -515,11 +515,11 @@ window.CompanyTemplatesBundle = {
     initOfflineMode: function() {
         // Create fallback Quannex API if module didn't load
         if (typeof window.Quannex === 'undefined') {
-            console.warn('[Offline] Creating fallback Quannex API');
+            Logger.warn('CompanyTemplatesBundle', 'Creating fallback Quannex API');
             window.Quannex = {
                 async init() { return { globalCoherence: 0.5 }; },
                 async initWithCompany(data) {
-                    console.log('[Offline Quannex] Init with company:', data?.name);
+                    Logger.debug('CompanyTemplatesBundle', 'Offline Quannex init with company', data?.name);
                     return { globalCoherence: data?.kpis?.length > 0 ? 0.5 : 0.3 };
                 },
                 getState() {
@@ -534,15 +534,15 @@ window.CompanyTemplatesBundle = {
 
         // Create fallback PortraitView if module didn't load
         if (typeof window.PortraitView === 'undefined') {
-            console.warn('[Offline] Creating fallback PortraitView');
+            Logger.warn('CompanyTemplatesBundle', 'Creating fallback PortraitView');
             window.PortraitView = class {
                 constructor(containerId, options) {
                     this.containerId = containerId;
                     this.options = options || {};
-                    console.log('[Offline PortraitView] Created for:', containerId);
+                    Logger.debug('CompanyTemplatesBundle', `Offline PortraitView created for: ${containerId}`);
                 }
                 update(data) {
-                    console.log('[Offline PortraitView] Update called with:', data?.faces?.length, 'faces');
+                    Logger.debug('CompanyTemplatesBundle', `Offline PortraitView update called with ${data?.faces?.length} faces`);
                     const container = document.getElementById(this.containerId);
                     if (container) {
                         container.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">Portrait visualization requires HTTP server. Start with: python -m http.server 8080</p>';
@@ -553,7 +553,7 @@ window.CompanyTemplatesBundle = {
 
         // Create fallback DataTransformer if needed
         if (typeof window.DataTransformer === 'undefined') {
-            console.warn('[Offline] Creating fallback DataTransformer');
+            Logger.warn('CompanyTemplatesBundle', 'Creating fallback DataTransformer');
             window.DataTransformer = {
                 transform: (demoData) => ({
                     name: demoData?.faceConfig?.templateName || 'Demo Company',
@@ -570,7 +570,7 @@ window.CompanyTemplatesBundle = {
             };
         }
 
-        console.log('[Offline] Fallback APIs initialized');
+        Logger.info('CompanyTemplatesBundle', 'Fallback APIs initialized');
     }
 };
 
@@ -578,10 +578,10 @@ window.CompanyTemplatesBundle = {
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         if (window.location.protocol === 'file:') {
-            console.log('[Offline] Detected file:// protocol, initializing fallbacks...');
+            Logger.info('CompanyTemplatesBundle', 'Detected file:// protocol, initializing fallbacks');
             window.CompanyTemplatesBundle.initOfflineMode();
         }
     }, 500);
 });
 
-console.log('📦 Company Templates Bundle loaded (offline support)');
+Logger.info('CompanyTemplatesBundle', 'Company Templates Bundle loaded (offline support)');

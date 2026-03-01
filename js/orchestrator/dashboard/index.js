@@ -297,7 +297,6 @@
     // Export module registry for programmatic access
     global.DASHBOARD_MODULES = DASHBOARD_MODULES;
 
-    console.log('[dashboard/index] Navigation map loaded - Session 5 modular architecture');
-    console.log('[dashboard/index] Modules:', Object.keys(DASHBOARD_MODULES).join(', '));
+    Logger.info('DashboardIndex', 'Navigation map loaded - Session 5 modular architecture', { modules: Object.keys(DASHBOARD_MODULES).join(', ') });
 
 })(typeof window !== 'undefined' ? window : this);

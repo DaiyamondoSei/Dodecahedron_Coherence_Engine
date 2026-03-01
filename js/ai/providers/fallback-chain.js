@@ -371,7 +371,7 @@ class FallbackChain {
         this.onProviderChange = options.onProviderChange || (() => {});
         this.onFallback = options.onFallback || (() => {});
 
-        console.log('🔗 FallbackChain initialized');
+        Logger.info('FallbackChain', 'Initialized');
     }
 
     /**
@@ -423,7 +423,7 @@ class FallbackChain {
         // Try each provider in order
         for (const { type, key, timeout } of providerOrder) {
             try {
-                console.log(`🔄 Attempting ${operationName} with ${type}...`);
+                Logger.debug('FallbackChain', `Attempting ${operationName} with ${type}`);
                 this.onProviderChange(type, 'attempting');
 
                 let provider;
@@ -445,7 +445,7 @@ class FallbackChain {
                 this.providerStatus[type].lastSuccess = Date.now();
                 this.onProviderChange(type, 'success');
 
-                console.log(`✅ ${operationName} succeeded with ${type}`);
+                Logger.info('FallbackChain', `${operationName} succeeded with ${type}`);
 
                 return {
                     ...result,
@@ -457,7 +457,7 @@ class FallbackChain {
                 };
 
             } catch (error) {
-                console.warn(`⚠️ ${type} failed for ${operationName}:`, error.message);
+                Logger.warn('FallbackChain', `${type} failed for ${operationName}`, { error: error.message });
 
                 this.providerStatus[type].available = false;
                 this.providerStatus[type].lastError = { message: error.message, time: Date.now() };
@@ -468,7 +468,7 @@ class FallbackChain {
         }
 
         // If we get here, even offline failed (shouldn't happen)
-        console.error('❌ All providers failed, using cached demo data');
+        Logger.error('FallbackChain', 'All providers failed, using cached demo data');
         return {
             ...DEMO_CACHE.startup,
             _meta: {
@@ -523,7 +523,7 @@ class FallbackChain {
      * @param {string} octave - Target octave 'O1'-'O7' (default: 'O2')
      */
     async extractKPIs(storyText, mode = 'quick', octave = 'O2') {
-        console.log(`[FallbackChain] extractKPIs called with mode=${mode}, octave=${octave}`);
+        Logger.debug('FallbackChain', `extractKPIs called with mode=${mode}, octave=${octave}`);
 
         const attempts = [];
         const providerOrder = this._buildProviderOrder();
@@ -535,7 +535,7 @@ class FallbackChain {
 
             while (retryCount <= maxRetries) {
                 try {
-                    console.log(`🔄 [extractKPIs] Attempting with ${type} (attempt ${retryCount + 1}/${maxRetries + 1})...`);
+                    Logger.debug('FallbackChain', `extractKPIs attempting with ${type} (attempt ${retryCount + 1}/${maxRetries + 1})`);
                     this.onProviderChange(type, 'attempting');
 
                     let provider;
@@ -564,7 +564,7 @@ class FallbackChain {
 
                         const finalResult = validation.valid ? result : validation.fixedResult;
 
-                        console.log(`✅ [extractKPIs] succeeded with ${type}:`, {
+                        Logger.info('FallbackChain', `extractKPIs succeeded with ${type}`, {
                             kpiCount: finalResult.kpis?.length,
                             valid: validation.valid,
                             issues: validation.issues
@@ -583,11 +583,11 @@ class FallbackChain {
                     }
 
                     // Response invalid - log and possibly retry
-                    console.warn(`⚠️ [extractKPIs] ${type} returned invalid response:`, validation.issues);
+                    Logger.warn('FallbackChain', `extractKPIs: ${type} returned invalid response`, { issues: validation.issues });
 
                     if (retryCount < maxRetries) {
                         const delay = getBackoffDelay(retryCount);
-                        console.log(`🔄 Retrying ${type} in ${delay}ms...`);
+                        Logger.debug('FallbackChain', `Retrying ${type} in ${delay}ms`);
                         await sleep(delay);
                         retryCount++;
                         continue;
@@ -603,7 +603,7 @@ class FallbackChain {
                     break;
 
                 } catch (error) {
-                    console.warn(`⚠️ [extractKPIs] ${type} error:`, error.message);
+                    Logger.warn('FallbackChain', `extractKPIs: ${type} error`, { error: error.message });
 
                     this.providerStatus[type].available = false;
                     this.providerStatus[type].lastError = { message: error.message, time: Date.now() };
@@ -613,7 +613,7 @@ class FallbackChain {
 
                     if (isRetryable && retryCount < maxRetries) {
                         const delay = getBackoffDelay(retryCount);
-                        console.log(`🔄 Retrying ${type} in ${delay}ms (${error.message})...`);
+                        Logger.debug('FallbackChain', `Retrying ${type} in ${delay}ms`, { error: error.message });
                         await sleep(delay);
                         retryCount++;
                         continue;
@@ -633,7 +633,7 @@ class FallbackChain {
         }
 
         // All providers failed - return cached demo with KPI structure
-        console.error('❌ [extractKPIs] All providers failed, using cached demo data');
+        Logger.error('FallbackChain', 'extractKPIs: All providers failed, using cached demo data');
         return this._generateFallbackKPIs(mode, octave, attempts);
     }
 
@@ -766,7 +766,7 @@ class FallbackChain {
     async performFullAnalysis(storyText, options = {}) {
         const { mode = 'quick', octave = 'O2' } = options;
 
-        console.log(`🚀 Starting full analysis with fallback chain (mode=${mode}, octave=${octave})...`);
+        Logger.info('FallbackChain', `Starting full analysis with fallback chain (mode=${mode}, octave=${octave})`);
 
         // Step 1: Story analysis
         const storyResult = await this.analyzeStory(storyText);
@@ -775,7 +775,7 @@ class FallbackChain {
 
         // For offline/cached, we can't make more calls - return early with defaults
         if (usedProvider === 'offline' || usedProvider === 'cached_demo') {
-            console.log('📴 Using offline mode - generating all data locally');
+            Logger.info('FallbackChain', 'Using offline mode - generating all data locally');
 
             const lensResult = await this.offlineProvider.generateStrategicLenses(storyText);
             const octaveResult = await this.offlineProvider.determineOctaves(faces, storyText);
@@ -827,4 +827,4 @@ if (typeof window !== 'undefined') {
     window.FallbackChain = FallbackChain;
 }
 
-console.log('✅ FallbackChain module loaded');
+Logger.info('FallbackChain', 'Module loaded');

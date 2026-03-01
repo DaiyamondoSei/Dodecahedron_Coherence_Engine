@@ -262,7 +262,7 @@ const DynamicEdgeInquiry = {
                     };
                 }
             } catch (e) {
-                console.warn('[DynamicEdgeInquiry] AI generation failed, using template:', e.message);
+                Logger.warn('DynamicEdgeInquiry', 'AI generation failed, using template', e);
             }
         }
 
@@ -414,9 +414,7 @@ if (typeof window !== 'undefined') {
     window.DynamicEdgeInquiry = DynamicEdgeInquiry;
     window.QUESTION_TEMPLATES = QUESTION_TEMPLATES;
 
-    console.log('🌟 Dynamic Edge Inquiry Generator loaded');
-    console.log('   Fallback hierarchy: AI → Template → Static');
-    console.log('   Use DynamicEdgeInquiry.generate({ faceA, faceB, tension })');
+    Logger.info('DynamicEdgeInquiry', 'Module loaded — Fallback hierarchy: AI > Template > Static');
 }
 
 // CommonJS export

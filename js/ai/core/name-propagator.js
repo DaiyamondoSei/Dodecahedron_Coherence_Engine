@@ -85,7 +85,7 @@ class NamePropagator {
      */
     start() {
         if (this._unsubscribe) {
-            console.warn('[NamePropagator] Already started');
+            Logger.warn('NamePropagator', 'Already started');
             return;
         }
 
@@ -409,7 +409,7 @@ class NamePropagator {
      */
     _log(...args) {
         if (this.debug) {
-            console.log('[NamePropagator]', ...args);
+            Logger.debug('NamePropagator', args.join(' '));
         }
     }
 

@@ -493,7 +493,7 @@ class KPIExtractionPanel {
         }
 
         if (!this._container) {
-            console.error('[KPIExtractionPanel] Container not found');
+            Logger.error('KPIExtractionPanel', 'Container not found');
             return;
         }
 
@@ -625,7 +625,7 @@ class KPIExtractionPanel {
                     // Get detected octave from story analysis (stored in window or context)
                     const octave = window.overallOctave || context.getOverallOctave?.() || 'O2';
 
-                    console.log(`[KPIExtractionPanel] Extracting KPIs in ${mode} mode, octave ${octave}...`);
+                    Logger.info('KPIExtractionPanel', `Extracting KPIs in ${mode} mode, octave ${octave}`);
                     resultDiv.innerHTML = `<div style="text-align: center; color: rgba(255,255,255,0.6);">🤖 Calling AI to generate intelligent KPI suggestions (${mode} mode, ${octave})...</div>`;
 
                     const fallbackChain = new window.FallbackChain();
@@ -635,10 +635,10 @@ class KPIExtractionPanel {
                         // Convert AI result to our format
                         result = this._convertAIResultToDisplayFormat(aiResult, faces);
                         usedAI = true;
-                        console.log('✅ AI KPI extraction succeeded:', aiResult);
+                        Logger.info('KPIExtractionPanel', 'AI KPI extraction succeeded', aiResult);
                     }
                 } catch (aiError) {
-                    console.warn('AI KPI extraction failed, falling back to patterns:', aiError);
+                    Logger.warn('KPIExtractionPanel', 'AI KPI extraction failed, falling back to patterns', aiError);
                 }
             }
 
@@ -656,7 +656,7 @@ class KPIExtractionPanel {
             this.onExtracted(result);
 
         } catch (error) {
-            console.error('KPI extraction failed:', error);
+            Logger.error('KPIExtractionPanel', 'KPI extraction failed', error);
             resultDiv.innerHTML = `<div style="color: #f87171;">⚠️ Extraction failed: ${error.message}</div>`;
         }
     }
@@ -1068,7 +1068,7 @@ class KPIExtractionPanel {
             btn.disabled = true;
         }
 
-        console.log('📊 KPIs applied:', result.byFace);
+        Logger.info('KPIExtractionPanel', 'KPIs applied', result.byFace);
     }
 
     getExtractionResult() {
@@ -1094,4 +1094,4 @@ if (typeof window !== 'undefined') {
     window.KPIExtractionPanel = KPIExtractionPanel;
 }
 
-console.log('✅ KPIExtractor module loaded');
+Logger.info('KPIExtractor', 'Module loaded');

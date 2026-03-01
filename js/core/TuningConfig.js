@@ -37,12 +37,12 @@
 // ============================================================================
 const PHI_HARMONICS = (function() {
   if (typeof window !== 'undefined' && window.PhiHarmonics) {
-    console.log('   TuningConfig: Using PhiHarmonics from single-source module');
+    Logger.debug('TuningConfig', 'Using PhiHarmonics from single-source module');
     return window.PhiHarmonics;
   }
 
   // Fallback for standalone use or testing
-  console.log('   TuningConfig: Using local PHI_HARMONICS fallback');
+  Logger.debug('TuningConfig', 'Using local PHI_HARMONICS fallback');
   const PHI = (1 + Math.sqrt(5)) / 2;
 
   return {
@@ -515,4 +515,4 @@ if (typeof window !== 'undefined') {
   window.TuningConfig = TuningConfig;
 }
 
-console.log('   TuningConfig module loaded');
+Logger.info('TuningConfig', 'TuningConfig module loaded');
