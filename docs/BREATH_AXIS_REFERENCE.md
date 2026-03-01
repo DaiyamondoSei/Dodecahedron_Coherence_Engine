@@ -10,6 +10,8 @@
 
 ## What Are Breath Axes?
 
+> **Architectural Note:** The breath axis is the **only feedback loop** in the Quannex calculation pipeline. Each face receives 10% influence from its opposite (δ = 0.9). All other layers — edges, vertices, spectral analyzers — are read-only consumers. For the full Read/Write/Feedback architecture, see [SYSTEM_COHERENCE_REFERENCE.md](SYSTEM_COHERENCE_REFERENCE.md#readwrite-architecture-thesis-reference-diagram).
+
 A dodecahedron has **6 pairs of opposing faces**. In Quannex, these pairs represent **breath axes** - the fundamental rhythms of organizational energy flow.
 
 Just as human breath has inhalation (reception) and exhalation (projection), organizations breathe between opposing domains:

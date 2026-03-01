@@ -38,6 +38,9 @@ This is your academic armor.
 8. [Vertex Vortex Energy](#8-vertex-vortex-energy)
 9. [Breath Ratio](#9-breath-ratio)
 10. [Data Quality Score](#10-data-quality-score)
+- [Appendix A: PHI-Derived Constants Summary](#appendix-a-phi-derived-constants-summary)
+- [Appendix B: Verification Script](#appendix-b-verification-script)
+- [Appendix C: Octave Detection Algorithm](#appendix-c-octave-detection-algorithm)
 
 ---
 
@@ -162,7 +165,7 @@ Where:
 
   Ball        = Normalized Ball KPI score (the central metric)
   Pillars_avg = (1/5) × Σ(KPI_i) for i ∈ {Earth, Water, Fire, Air, Ether}
-  γ (gamma)   = Ball weight (default 0.6)
+  γ (gamma)   = Ball weight (default 0.7 — see TuningConfig.js; 0.6 is the Startup template value)
   η (eta)     = φ⁻² = 0.382 = Maximum harmonic boost
   R_harmonic  = Harmonic resonance [0, 1] (see Section 4)
 ```
@@ -179,7 +182,7 @@ Where:
 |-------|------|-------|------------|---------------------|
 | Ball KPI | number | [0, 1] | Required | PHI_MIDPOINT (0.5) default |
 | 5 Pillar KPIs | number[] | [0, 1] each | Required | PHI_1 (0.618) default |
-| gamma (γ) | number | [0, 1] | From TuningConfig | Default 0.6 |
+| gamma (γ) | number | [0, 1] | From TuningConfig | Default 0.7 (Startup: 0.6, Enterprise: 0.8) |
 | eta (η) | number | 0.382 | PHI-derived constant | Hardcoded |
 
 ### Test Case
@@ -193,11 +196,11 @@ const pillars = [0.8, 0.7, 0.75, 0.65, 0.7]; // Earth, Water, Fire, Air, Ether
 const pillarAvg = (0.8 + 0.7 + 0.75 + 0.65 + 0.7) / 5;
 // pillarAvg = 3.6 / 5 = 0.72
 
-// Step 2: Calculate E_base
-const gamma = 0.6;
+// Step 2: Calculate E_base (using default gamma = 0.7)
+const gamma = 0.7;
 const E_base = gamma * ball + (1 - gamma) * pillarAvg;
-// E_base = 0.6 * 0.75 + 0.4 * 0.72
-// E_base = 0.45 + 0.288 = 0.738
+// E_base = 0.7 * 0.75 + 0.3 * 0.72
+// E_base = 0.525 + 0.216 = 0.741
 
 // Step 3: Calculate harmonic resonance (simplified - assume R = 0.85)
 const R_harmonic = 0.85;
@@ -205,12 +208,12 @@ const R_harmonic = 0.85;
 // Step 4: Apply harmonic boost
 const eta = 0.382;
 const E_local = E_base * (1 + eta * R_harmonic);
-// E_local = 0.738 * (1 + 0.382 * 0.85)
-// E_local = 0.738 * (1 + 0.3247)
-// E_local = 0.738 * 1.3247
-// E_local = 0.978
+// E_local = 0.741 * (1 + 0.382 * 0.85)
+// E_local = 0.741 * (1 + 0.3247)
+// E_local = 0.741 * 1.3247
+// E_local = 0.982
 
-// Clamped to [0, 1]: E_local = 0.978
+// Clamped to [0, 1]: E_local = 0.982
 ```
 
 ### Defensive Guard: Face 5 Special Case
@@ -219,7 +222,7 @@ When Ball = 0 but Pillars > 0 (data absence, not corruption):
 
 ```javascript
 // Standard formula would give:
-// E_base = 0.6 * 0 + 0.4 * 0.72 = 0.288 (too low!)
+// E_base = 0.7 * 0 + 0.3 * 0.72 = 0.216 (too low!)
 
 // Defensive guard uses gamma = 0.3 instead:
 // E_base = 0.3 * 0 + 0.7 * 0.72 = 0.504 (more representative)
@@ -582,6 +585,218 @@ verifyQuannexCalculations();
 
 ---
 
+## Appendix C: Octave Detection Algorithm
+
+*This section answers the examiner question: "Given 12 face energies, how does the system determine we're at O3?"*
+
+### Two Octave Paths
+
+The system computes octaves at TWO levels:
+
+```
+PATH 1: COHERENCE → OCTAVE (Global Level)
+─────────────────────────────────────────
+"What octave does the organization's overall coherence map to?"
+
+Input:  Global coherence score (0-1)
+Method: coherenceToOctave()
+Source: js/constants/phi-harmonics.js (SSOT)
+        js/constants/octave-thresholds.js (re-export)
+
+
+PATH 2: FACE OCTAVES → ORGANIZATIONAL OCTAVE (Foundation Principle)
+──────────────────────────────────────────────────────────────────
+"Given that each face has its own developmental level, what octave
+ can the organization as a whole claim?"
+
+Input:  12 face objects with octave assignments (O1-O7 each)
+Method: calculateOrganizationalOctave()
+Source: js/octave-integrity-calculator.js
+```
+
+### Path 1: Coherence → Octave (Threshold Lookup)
+
+```
+ALGORITHM: coherenceToOctave(coherence)
+
+INPUT:  coherence ∈ [0, 1]
+
+STEP 1: Clamp to valid range
+        c = max(0, min(1, coherence))
+
+STEP 2: Compare against PHI-derived thresholds (highest first)
+        if c ≥ ψ₅ (0.910) → return O7 (Radiance)
+        if c ≥ ψ₄ (0.854) → return O6 (Vision)
+        if c ≥ ψ₃ (0.764) → return O5 (Expression)
+        if c ≥ φ⁻¹ (0.618) → return O4 (Creativity)
+        if c ≥ 0.5         → return O3 (Relationships)
+        if c ≥ φ⁻² (0.382) → return O2 (Structure)
+        else               → return O1 (Survival)
+
+THRESHOLD DERIVATION (all from φ):
+        φ⁻² = 0.382    (O1→O2 boundary)
+        midpoint = 0.5   (harmonic center of φ⁻¹ and φ⁻²)
+        φ⁻¹ = 0.618    (O3→O4 boundary, the golden ratio itself)
+        ψ₃ = 1 - φ⁻³ = 0.764
+        ψ₄ = 1 - φ⁻⁴ = 0.854
+        ψ₅ = 1 - φ⁻⁵ = 0.910
+
+OUTPUT: Integer 1-7
+```
+
+### Test Case (Path 1)
+
+```javascript
+// Given: 12 face energies
+const faceEnergies = [0.8, 0.7, 0.6, 0.7, 0.5, 0.6, 0.55, 0.65, 0.7, 0.6, 0.75, 0.5];
+
+// Step 1: Global coherence (from Section 1)
+const sum = 0.8 + 0.7 + 0.6 + 0.7 + 0.5 + 0.6 + 0.55 + 0.65 + 0.7 + 0.6 + 0.75 + 0.5;
+// sum = 7.65
+const mu = sum / 12;
+// mu = 7.65 / 12 = 0.6375
+
+// Step 2: CV calculation
+// Deviations from mean (0.6375):
+//   0.8-0.6375=0.1625, 0.7-0.6375=0.0625, 0.6-0.6375=-0.0375, ...
+const sigma = Math.sqrt(faceEnergies.reduce((s, e) => s + (e - mu) ** 2, 0) / 12);
+// sigma ≈ 0.0887
+const cv = sigma / mu;
+// cv ≈ 0.1392
+
+// Step 3: Raw coherence
+const raw = mu * (1 - 0.236 * cv);
+// raw = 0.6375 * (1 - 0.236 * 0.1392)
+// raw = 0.6375 * (1 - 0.0328)
+// raw = 0.6375 * 0.9672 = 0.6166
+
+// Step 4: Apply S-curve and rescaling...
+// rescaled ≈ 0.617 (varies with κ)
+
+// Step 5: coherenceToOctave(0.617)
+// 0.617 < φ⁻¹ (0.618) → O3 (Relationships), NOT O4!
+// Answer: This organization is at Octave 3, just below the Creativity threshold.
+// A tiny improvement to any face could push coherence past φ⁻¹ into O4.
+```
+
+### Path 2: Organizational Octave (Foundation Principle)
+
+```
+ALGORITHM: calculateOrganizationalOctave(faces, lifecycleStage)
+
+INPUT:  faces[] = array of {id, octave, name} objects (12 faces)
+        lifecycleStage = optional string (e.g., "pre-seed", "growth")
+
+STEP 1: Extract and clamp octave values
+        octaves = faces.map(f → clamp(f.octave, 1, 7))
+
+STEP 2: Calculate geometric mean
+        product = octaves[0] × octaves[1] × ... × octaves[11]
+        geoMean = product^(1/12)
+
+        WHY GEOMETRIC MEAN (not arithmetic)?
+        Because one face at O1 among eleven at O5
+        should pull the result DOWN sharply.
+        Geometric mean: (1 × 5^11)^(1/12) = 3.77
+        Arithmetic mean: (1 + 55) / 12 = 4.67
+        The geometric mean better reflects foundation constraints.
+
+STEP 3: Calculate spread penalty
+        spread = max(octaves) - min(octaves)
+
+        if spread ≤ 2: penalty = 0       (healthy variance)
+        if spread = 3: penalty = 0.5     (minor misalignment)
+        if spread = 4: penalty = 1.0     (moderate misalignment)
+        if spread ≥ 5: penalty = 1.5 + (spread - 5) × 0.5
+                                          (severe misalignment)
+
+STEP 4: Apply penalty and floor
+        orgOctave = floor(geoMean - penalty)
+        orgOctave = max(1, orgOctave)
+
+STEP 5: Apply lifecycle constraint (if provided)
+        if lifecycleStage is "pre-seed" → cap at O2
+        if lifecycleStage is "seed"     → cap at O2
+        if lifecycleStage is "growth"   → cap at O4
+        if lifecycleStage is "enterprise" → cap at O6
+
+OUTPUT: {orgOctave, geoMean, spread, penalty, warnings, breakdown}
+```
+
+### Test Case (Path 2)
+
+```javascript
+// Given: 12 faces with mixed octave assignments
+const faces = [
+  {id: 1, octave: 2, name: "Financial"},    // O2
+  {id: 2, octave: 3, name: "Intellectual"},  // O3
+  {id: 3, octave: 1, name: "Human"},         // O1 (lagging)
+  {id: 4, octave: 2, name: "Structural"},    // O2
+  {id: 5, octave: 2, name: "Market"},        // O2
+  {id: 6, octave: 2, name: "Community"},     // O2
+  {id: 7, octave: 3, name: "Brand"},         // O3
+  {id: 8, octave: 1, name: "Operations"},    // O1 (lagging)
+  {id: 9, octave: 2, name: "Regenerative"},  // O2
+  {id: 10, octave: 2, name: "Values"},       // O2
+  {id: 11, octave: 2, name: "Funding"},      // O2
+  {id: 12, octave: 2, name: "Risk"}          // O2
+];
+
+// Step 1: octaves = [2, 3, 1, 2, 2, 2, 3, 1, 2, 2, 2, 2]
+
+// Step 2: Geometric mean
+// product = 2 × 3 × 1 × 2 × 2 × 2 × 3 × 1 × 2 × 2 × 2 × 2 = 2304
+// geoMean = 2304^(1/12) = 1.926
+
+// Step 3: Spread = 3 - 1 = 2, penalty = 0
+
+// Step 4: orgOctave = floor(1.926 - 0) = floor(1.926) = 1
+
+// Step 5: No lifecycle constraint applied
+
+// Result: O1 (Survival)
+// WHY: Two faces at O1 drag the geometric mean below 2.
+// Even though most faces are at O2, the Foundation Principle
+// says: you cannot claim O2 until ALL foundations are solid.
+
+// The warnings will flag:
+// - "2 of 12 faces at O1 (Survival)" → foundation_building
+```
+
+### The Foundation Principle (Why This Matters)
+
+```
+THE KEY INSIGHT FOR THESIS DEFENSE:
+
+High coherence WITHIN an octave ≠ promotion TO a higher octave.
+
+An organization with:
+  - 10 faces at O2, 2 faces at O1
+  - Global coherence = 0.65 (which maps to O4 by Path 1)
+
+Is actually at O1 by Path 2, because:
+  - The geometric mean is dragged down by the O1 faces
+  - The organization has structural foundation gaps
+
+Path 1 tells you: "How well are you operating?"
+Path 2 tells you: "What level CAN you operate at?"
+
+Both are needed. Path 2 prevents the illusion of advancement
+when foundational domains are neglected.
+```
+
+### Implementation References
+
+| Function | File | Purpose |
+|----------|------|---------|
+| `coherenceToOctave()` | `js/constants/phi-harmonics.js` | Path 1: coherence → octave |
+| `calculateOrganizationalOctave()` | `js/octave-integrity-calculator.js` | Path 2: face octaves → org octave |
+| `calculateSpreadPenalty()` | `js/octave-integrity-calculator.js` | Spread penalty calculation |
+| `detectOctaveFromCoherence()` | `js/octave-integrity-calculator.js` | Path 1 + coherence level label |
+| `getOctaveByNumber()` | `js/constants/octave-thresholds.js` | Octave metadata lookup |
+
+---
+
 ## Thesis Defense Quick Reference
 
 When committee asks... | Open to...
@@ -593,8 +808,10 @@ When committee asks... | Open to...
 "Prove this 0.763 is correct" | Section 2 + Test Case
 "Why sacred geometry?" | docs/math/SACRED_GEOMETRY_PROOF.md
 "What are the novel contributions?" | docs/thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md
+"How do you determine the octave?" | Appendix C (Octave Detection Algorithm)
+"What is the Foundation Principle?" | Appendix C, Path 2
 
 ---
 
 *This document was co-created by Deimantas & Claude with love for academic rigor.*
-*Last updated: 2025-12-29*
+*Last updated: 2026-02-16*

@@ -21,10 +21,28 @@ POC/
 
 ### **Entry Points** (Where users start)
 
-#### 1. **demo.html** ⭐ MAIN DEMO (Recommended)
-**Purpose:** Master landing page with company selection
+#### 1. **welcome.html** ⭐ PRIMARY LANDING PAGE (Recommended)
+**Purpose:** Glass card selection interface — the front door to Quannex
 **What it does:**
-- Beautiful welcome screen
+- Darkness-to-light reveal experience (CursorLight system)
+- 3 glass cards presenting journey choices:
+  - Template Path → pre-built company profiles
+  - Custom Path → manual organizational data input
+  - AI-Assisted Path → AI-guided face mapping
+- Links to demo-orchestrator.html with `?path=` parameter
+
+**When to use:**
+- New users exploring Quannex for the first time
+- Client onboarding sessions
+- Full guided journey demonstrations
+
+**URL:** `http://localhost:8000/welcome.html`
+
+---
+
+#### 2. **demo.html** ⭐ QUICK DEMO (Thesis Defense / Presentations)
+**Purpose:** Pre-loaded company showcase with tab-based visualization
+**What it does:**
 - Company selection modal (Quannex, Nova Tech, etc.)
 - Hosts 4 visualization views as iframes:
   - Dashboard (index.html)
@@ -35,27 +53,28 @@ POC/
 - Keyboard shortcuts (1-4, arrows)
 
 **When to use:**
-- Video demos
-- Presentations
+- Thesis defense (minimal clicks, pre-loaded data)
+- Video demos and presentations
 - Investor pitches
-- Thesis defense
+- Quick standalone showcase
 
 **URL:** `http://localhost:8000/demo.html`
 
 ---
 
-#### 2. **demo-orchestrator.html** ⭐ DATA INPUT WIZARD
-**Purpose:** Step-by-step wizard for custom data entry
+#### 3. **demo-orchestrator.html** — DATA INPUT WIZARD
+**Purpose:** 5-step guided wizard for custom data entry
 **What it does:**
-- Step 1: Define 12 organizational faces (templates available)
-- Step 2: Map KPIs (Quick: 12 KPIs, Full: 60 KPIs)
-- Step 3: Calculate coherence
-- Step 4: View results + export
+- Step 0: Company selection (archetype, template, or custom)
+- Step 1: Face configuration (12 organizational domains)
+- Step 2: KPI input (Quick: 12 KPIs, Full: 60 KPIs)
+- Step 3: Review & calculate
+- Step 4: Results & exploration (navigate to deep-dive views)
 
 **When to use:**
 - Entering your own company data
+- Demonstrating the full user journey
 - Client onboarding sessions
-- Custom analysis demos
 - Showing extensibility
 
 **URL:** `http://localhost:8000/demo-orchestrator.html`
@@ -64,8 +83,8 @@ POC/
 
 ---
 
-#### 3. **index.html** - Dashboard View
-**Purpose:** Main results dashboard (usually embedded in demo.html)
+#### 4. **index.html** — Dashboard View
+**Purpose:** Results dashboard (usually reached via wizard or embedded in demo.html)
 **What it does:**
 - Shows global coherence score
 - Displays all 12 faces with energy levels
@@ -74,8 +93,9 @@ POC/
 - Loads data from CSV or company-loader
 
 **When to use:**
-- As standalone dashboard
-- Embedded in demo.html (primary use)
+- As standalone dashboard for development
+- Embedded in demo.html (iframe)
+- Reached from wizard Step 4 results
 
 **URL:** `http://localhost:8000/index.html`
 
@@ -83,7 +103,7 @@ POC/
 
 ### **Visualization Pages** (Usually embedded in demo.html)
 
-#### 4. **dodecahedron-3d.html** - Interactive 3D Geometry
+#### 5. **dodecahedron-3d.html** - Interactive 3D Geometry
 **Purpose:** Rotating 3D dodecahedron visualization
 **What it does:**
 - Three.js 3D rendering
@@ -662,11 +682,14 @@ backend-fallback/
 
 ## 🎯 Which File to Use When
 
-### **For Video Demos**
-→ `demo.html` (company selection → instant visualization)
+### **For New Users / Full Experience**
+→ `welcome.html` ⭐ (glass card landing → choose journey → wizard → results)
+
+### **For Video Demos / Thesis Defense**
+→ `demo.html` (pre-loaded companies → instant visualization)
 
 ### **For Custom Data Entry**
-→ `demo-orchestrator.html` (wizard interface)
+→ `welcome.html` or `demo-orchestrator.html` directly (wizard interface)
 
 ### **For Development/Testing**
 → `index.html` (standalone dashboard)
@@ -681,7 +704,25 @@ backend-fallback/
 
 ## 🔄 Data Flow Paths
 
-### **Path 1: Pre-loaded Company Demo**
+### **Path 0: Welcome Journey** ⭐ (Recommended for new users)
+```
+User opens welcome.html
+  ↓
+Chooses journey path (Template / Custom / AI)
+  ↓
+Redirects to demo-orchestrator.html?path=template|custom|ai
+  ↓
+5-step wizard (company → faces → KPIs → calculate → results)
+  ↓
+Results navigate to deep-dive views:
+  - Dashboard (index.html)
+  - 3D Dodecahedron (dodecahedron-3d.html)
+  - Simulator (simulator.html)
+  - Breath Analysis (breath-analysis.html)
+  - Calculations (calculations.html)
+```
+
+### **Path 1: Pre-loaded Company Demo** (Thesis defense / presentations)
 ```
 User opens demo.html
   ↓
@@ -704,13 +745,16 @@ Renders in index.html (dashboard iframe)
 User can switch tabs to see:
   - 3D view (dodecahedron-3d.html)
   - DNA helix (octave-dna.html)
+  - Simulator (simulator.html)
 ```
 
-### **Path 2: Custom Data Wizard**
+### **Path 2: Custom Data Wizard** (Direct wizard access)
 ```
 User opens demo-orchestrator.html
   ↓
-Step 1: Defines 12 faces (from template or custom)
+Step 0: Company selection (archetype, template, or custom)
+  ↓
+Step 1: Face configuration (12 organizational domains)
   ↓
 Step 2: Enters KPI values (12 or 60)
   ↓
@@ -765,13 +809,17 @@ Shows dashboard
 
 | Use Case | File | Why |
 |----------|------|-----|
+| **New User / Full Journey** | welcome.html ⭐ | Glass card landing, choose your path |
 | **Quick Demo** | demo.html | Pre-loaded companies, one-click |
-| **Thesis Defense** | demo.html | Professional, visual, complete |
+| **Thesis Defense** | demo.html | Professional, visual, minimal clicks |
 | **Investor Pitch** | demo.html → Quannex | Shows real data + vision |
-| **Client Onboarding** | demo-orchestrator.html | Guided input process |
+| **Client Onboarding** | welcome.html → wizard | Full guided journey |
+| **Custom Data Entry** | demo-orchestrator.html | Direct wizard access |
 | **Development** | index.html | Fast iteration, direct access |
 | **Academic Paper** | MATH_REFERENCE.md | Full theory |
 | **Code Review** | js/main.js | Core algorithms |
+
+> **See also:** `docs/UX_TREE_MAP.md` for the complete navigation graph, user journeys, and decision points.
 
 ---
 
@@ -817,11 +865,12 @@ Shows dashboard
 ## 🔑 Key Files Cheat Sheet
 
 **Must understand:**
-1. `demo.html` - Main entry point
-2. `demo-orchestrator.html` - Data input wizard
-3. `js/main.js` - All calculations happen here
-4. `js/data-transformer.js` - Bridges UI ↔ Engine
-5. `companies/*/` - Sample data
+1. `welcome.html` - Primary landing page (glass card journey selection)
+2. `demo.html` - Quick demo / thesis defense entry
+3. `demo-orchestrator.html` - Data input wizard (5-step guided flow)
+4. `js/main.js` - All calculations happen here
+5. `js/data-transformer.js` - Bridges UI ↔ Engine
+6. `companies/*/` - Sample data
 
 **Nice to know:**
 6. `js/company-loader.js` - Loads samples
@@ -836,10 +885,11 @@ Shows dashboard
 
 ## 📋 Summary
 
-**3 Main Entry Points:**
-1. **demo.html** - For presentations (USE THIS!)
-2. **demo-orchestrator.html** - For data entry
-3. **index.html** - For development
+**4 Entry Points (standardized):**
+1. **welcome.html** ⭐ - Primary landing page (new users, full journey)
+2. **demo.html** - Quick demo / thesis defense (pre-loaded companies)
+3. **demo-orchestrator.html** - Data input wizard (custom analysis)
+4. **index.html** - Dashboard (development, standalone results)
 
 **Core Engine:**
 - **js/main.js** - All math happens here
@@ -857,7 +907,7 @@ Shows dashboard
 ---
 
 **Created:** 2025-11-10
-**Updated:** 2026-02-08 (Added Full Vision Coherence Simulator - 9 JS + 7 CSS modules)
+**Updated:** 2026-02-16 (Entry points standardized: welcome.html as primary, demo.html for quick demos)
 **For:** Thesis defense & demo preparation
 **Status:** Complete reference guide
 **Co-created by:** Deimantas Murauskas & Claude

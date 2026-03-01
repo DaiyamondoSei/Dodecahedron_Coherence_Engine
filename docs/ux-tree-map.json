@@ -1,0 +1,302 @@
+{
+  "$schema": "Quannex UX Tree Map",
+  "$created": "2026-02-16",
+  "$purpose": "Machine-readable user experience navigation map",
+  "$companion": "docs/UX_TREE_MAP.md",
+
+  "entryPoints": [
+    {
+      "id": "welcome",
+      "file": "welcome.html",
+      "label": "Welcome — Choose Your Journey",
+      "type": "landing",
+      "description": "Glass card selection interface with 3 journey paths",
+      "paths": [
+        { "label": "Template Path", "target": "wizard", "query": "?path=template", "description": "Start with a pre-built company profile" },
+        { "label": "Custom Path", "target": "wizard", "query": "?path=custom", "description": "Input your own organizational data" },
+        { "label": "AI-Assisted Path", "target": "wizard", "query": "?path=ai", "description": "Let AI map your organization" }
+      ]
+    },
+    {
+      "id": "demo",
+      "file": "demo.html",
+      "label": "Demo Container",
+      "type": "standalone",
+      "description": "Simplified entry for quick demonstrations and thesis defense"
+    },
+    {
+      "id": "dashboard",
+      "file": "index.html",
+      "label": "Dashboard",
+      "type": "results",
+      "description": "Face cards, breath axes, spectral analysis display"
+    },
+    {
+      "id": "simulator",
+      "file": "pages/simulator.html",
+      "label": "Coherence Simulator",
+      "type": "interactive",
+      "description": "What-if analysis with 12 face sliders"
+    }
+  ],
+
+  "wizard": {
+    "id": "wizard",
+    "file": "demo-orchestrator.html",
+    "label": "Guided Wizard — 5 Steps",
+    "type": "sequential",
+    "steps": [
+      {
+        "step": 0,
+        "id": "company-selection",
+        "label": "Company Selection",
+        "description": "Choose archetype, select template, or describe organization",
+        "userActions": ["Select archetype", "Choose template company", "Enter custom info"],
+        "aiFeatures": ["Archetype detection from narrative"],
+        "dataWritten": ["companyConfig", "archetype"]
+      },
+      {
+        "step": 1,
+        "id": "face-configuration",
+        "label": "Face Configuration",
+        "description": "Map 12 organizational domains to dodecahedron faces",
+        "userActions": ["Review face mappings", "Customize domain names", "Validate AI suggestions"],
+        "aiFeatures": ["Intelligent Face Mapper", "Confidence scoring"],
+        "dataWritten": ["faceMappings", "domainNames"]
+      },
+      {
+        "step": 2,
+        "id": "kpi-input",
+        "label": "KPI Input",
+        "description": "Enter 5 KPIs per face (60 total) with pentagram structure",
+        "userActions": ["Enter KPI values", "Set targets", "Choose direction (up/down/band)"],
+        "aiFeatures": ["KPI extraction from narratives", "Autofill from templates"],
+        "dataWritten": ["kpiValues", "targets", "directions"],
+        "futureFeature": {
+          "id": "fast-kpi",
+          "label": "Fast KPI Intelligence",
+          "description": "12 metrics only — AI distributes into pentagramic 5-element structure",
+          "reference": "docs/FAST_KPI_INTELLIGENCE.md"
+        }
+      },
+      {
+        "step": 3,
+        "id": "review-calculate",
+        "label": "Review & Calculate",
+        "description": "Validate inputs, trigger calculation engine",
+        "userActions": ["Review all inputs", "Confirm calculation"],
+        "aiFeatures": [],
+        "systemActions": ["Circuit breaker validation", "Data integrity checks", "Engine calculation"]
+      },
+      {
+        "step": 4,
+        "id": "results",
+        "label": "Results & Exploration",
+        "description": "View coherence scores, octave detection, shadow alerts",
+        "userActions": ["Explore results", "Navigate to deep-dive views"],
+        "displays": ["globalCoherence", "octaveLevel", "shadowAlerts", "faceEnergyCards"],
+        "navigatesTo": ["dashboard", "dodecahedron-3d", "simulator", "calculations", "breath-analysis"]
+      }
+    ]
+  },
+
+  "deepDiveViews": [
+    {
+      "id": "dodecahedron-3d",
+      "file": "pages/dodecahedron-3d.html",
+      "label": "3D Dodecahedron Visualization",
+      "technology": "Three.js",
+      "description": "Interactive 3D model with face colors, edge glow, rotation/zoom",
+      "dataSource": "Engine results",
+      "sync": { "receives": "BroadcastChannel:quannex-sync", "sends": null }
+    },
+    {
+      "id": "simulator",
+      "file": "pages/simulator.html",
+      "label": "Coherence Simulator",
+      "description": "12 face sliders in 6 breath axis pairs, real-time recalculation",
+      "features": ["Face energy sliders", "Breath axis balance bars", "Shadow pattern detection", "Scenario save/load/compare/export", "Company selector"],
+      "dataSource": "Engine results",
+      "dataWritten": ["scenarios (localStorage)", "clipboard export"],
+      "sync": { "receives": null, "sends": "BroadcastChannel:quannex-sync" }
+    },
+    {
+      "id": "calculations",
+      "file": "pages/calculations.html",
+      "label": "Detailed Calculations",
+      "description": "Formula breakdown for each face energy",
+      "dataSource": "Engine results"
+    },
+    {
+      "id": "breath-analysis",
+      "file": "pages/breath-analysis.html",
+      "label": "Breath Axis Analysis",
+      "description": "Deep-dive into 6 breath axis polarities",
+      "dataSource": "Engine results"
+    },
+    {
+      "id": "octave-dna",
+      "file": "pages/octave-dna.html",
+      "label": "Octave DNA Visualization",
+      "description": "Developmental stage (O1-O7) visualization",
+      "dataSource": "Engine results"
+    },
+    {
+      "id": "results-summary",
+      "file": "pages/results-summary.html",
+      "label": "Results Summary",
+      "description": "Printable/exportable results overview",
+      "dataSource": "Engine results"
+    },
+    {
+      "id": "radiance-check",
+      "file": "pages/radiance-check.html",
+      "label": "Radiance Check",
+      "description": "O7 (Radiance) aspiration assessment",
+      "dataSource": "Engine results"
+    }
+  ],
+
+  "journeys": [
+    {
+      "id": "template-journey",
+      "label": "Template Exploration",
+      "estimatedTime": "2 minutes",
+      "userClicks": 3,
+      "path": ["welcome", "wizard:step0", "wizard:step1", "wizard:step2", "wizard:step3", "wizard:step4", "dashboard", "dodecahedron-3d"],
+      "description": "Fastest path to results. KPIs and face mappings pre-populated from template."
+    },
+    {
+      "id": "custom-journey",
+      "label": "Custom Data Input",
+      "estimatedTime": "15-30 minutes",
+      "path": ["welcome", "wizard:step0", "wizard:step1", "wizard:step2", "wizard:step3", "wizard:step4", "dashboard", "simulator"],
+      "description": "Full manual input. Most time on Step 2 (60 KPIs). Deepest understanding."
+    },
+    {
+      "id": "ai-journey",
+      "label": "AI-Guided Mapping",
+      "estimatedTime": "5-10 minutes",
+      "path": ["welcome", "wizard:step0", "wizard:step1", "wizard:step2", "wizard:step3", "wizard:step4", "dashboard"],
+      "description": "AI handles face mapping and KPI extraction. User validates suggestions."
+    },
+    {
+      "id": "fast-kpi-journey",
+      "label": "Fast KPI Intelligence (FUTURE)",
+      "estimatedTime": "3-5 minutes",
+      "path": ["welcome", "fast-kpi-input", "ai-pentagramic-distribution", "wizard:step3", "wizard:step4", "dashboard"],
+      "description": "12 metrics only. AI distributes each into 5 pentagramic elements using golden ratio symmetry."
+    },
+    {
+      "id": "demo-journey",
+      "label": "Thesis Demo",
+      "estimatedTime": "2 minutes",
+      "path": ["demo", "dashboard", "dodecahedron-3d", "simulator"],
+      "description": "Minimal-click presentation flow for thesis defense."
+    }
+  ],
+
+  "dataFlow": {
+    "input": "User KPIs (60 values, or 12 in Fast KPI mode)",
+    "transform": "js/data-transformer.js (normalize, validate, structure)",
+    "engine": "js/main.js (DodecahedronEngine — face energy, breath, edges, vertices, spectral)",
+    "output": {
+      "dashboard": "Face cards, breath bars, spectral charts",
+      "3dView": "Face colors, edge glow, vertex markers",
+      "simulator": "Slider positions, balance bars, shadow alerts",
+      "deepDives": "Detailed breakdowns per view"
+    }
+  },
+
+  "crossWindowSync": {
+    "channel": "quannex-sync",
+    "protocol": "BroadcastChannel API",
+    "sender": "pages/simulator.html",
+    "receiver": "pages/dodecahedron-3d.html",
+    "echoProtection": true,
+    "payload": "Face energy array (12 values)"
+  },
+
+  "navigationGraph": {
+    "$description": "Directed edges showing how users can navigate between views",
+    "edges": [
+      { "from": "welcome", "to": "wizard", "mechanism": "path-card link", "params": "?path=template|custom|ai" },
+      { "from": "wizard:step4", "to": "dashboard", "mechanism": "results navigation" },
+      { "from": "wizard:step4", "to": "dodecahedron-3d", "mechanism": "results navigation" },
+      { "from": "wizard:step4", "to": "simulator", "mechanism": "results navigation" },
+      { "from": "dashboard", "to": "calculations", "mechanism": "button onclick" },
+      { "from": "dashboard", "to": "breath-analysis", "mechanism": "button onclick" },
+      { "from": "dashboard", "to": "octave-dna", "mechanism": "button onclick" },
+      { "from": "breath-analysis", "to": "calculations", "mechanism": "nav-btn link" },
+      { "from": "breath-analysis", "to": "dodecahedron-3d", "mechanism": "nav-btn link" },
+      { "from": "breath-analysis", "to": "octave-dna", "mechanism": "nav-btn link" },
+      { "from": "breath-analysis", "to": "wizard", "mechanism": "smartNavigateBack()", "params": "?restore=true" },
+      { "from": "calculations", "to": "breath-analysis", "mechanism": "nav-btn link" },
+      { "from": "calculations", "to": "dodecahedron-3d", "mechanism": "nav-btn link" },
+      { "from": "calculations", "to": "octave-dna", "mechanism": "nav-btn link" },
+      { "from": "calculations", "to": "wizard", "mechanism": "smartNavigateBack()", "params": "?restore=true" },
+      { "from": "octave-dna", "to": "dashboard", "mechanism": "nav-btn link" },
+      { "from": "simulator", "to": "dodecahedron-3d", "mechanism": "BroadcastChannel (real-time)", "channel": "quannex-sync" }
+    ]
+  },
+
+  "statePersistence": {
+    "sessionStorage": {
+      "selectedCompanyId": { "writtenBy": "demo-orchestrator (Step 0)", "readBy": "ALL deep-dive views", "fallback": "Default company" },
+      "customCompanyData": { "writtenBy": "demo-orchestrator (Step 0-2)", "readBy": "ALL deep-dive views", "fallback": "Default company" }
+    },
+    "localStorage": {
+      "quannex-scenarios": { "writtenBy": "simulator (save scenario)", "readBy": "simulator (load scenario)", "persistent": true }
+    },
+    "urlParameters": {
+      "path": { "values": ["template", "custom", "ai"], "usedBy": "welcome → wizard" },
+      "restore": { "values": ["true"], "usedBy": "deep-dive → wizard (back navigation)" }
+    },
+    "broadcastChannel": {
+      "channel": "quannex-sync",
+      "sender": "simulator.html",
+      "receiver": "dodecahedron-3d.html",
+      "echoProtection": true
+    }
+  },
+
+  "decisionPoints": [
+    { "id": "D1", "location": "welcome.html", "question": "Which journey?", "options": ["Template", "Custom", "AI"], "impact": "Determines entire flow depth" },
+    { "id": "D2", "location": "wizard:step0", "question": "Which archetype?", "options": ["Startup", "Enterprise", "Balanced", "NonDual"], "impact": "Sets face mapping defaults" },
+    { "id": "D3", "location": "wizard:step0", "question": "Which company?", "options": ["Pre-built template", "Custom"], "impact": "Determines KPI pre-fill" },
+    { "id": "D4", "location": "wizard:step1", "question": "Accept AI mapping?", "options": ["Accept", "Modify", "Start over"], "impact": "Face configuration" },
+    { "id": "D5", "location": "wizard:step2", "question": "How detailed?", "options": ["All 60 KPIs", "Use autofill", "Skip optional"], "impact": "Data quality vs speed" },
+    { "id": "D6", "location": "wizard:step4", "question": "Where to explore?", "options": ["Dashboard", "3D View", "Simulator", "Deep-dives"], "impact": "Post-results navigation" },
+    { "id": "D7", "location": "dashboard", "question": "Which deep-dive?", "options": ["Calculations", "Breath", "DNA"], "impact": "Analysis focus" },
+    { "id": "D8", "location": "simulator", "question": "Save scenario?", "options": ["Save", "Compare", "Export", "Continue"], "impact": "Scenario management" },
+    { "id": "D9", "location": "any deep-dive", "question": "Go back or explore more?", "options": ["Back to orchestrator", "Another deep-dive"], "impact": "Navigation loop" }
+  ],
+
+  "documentationBridge": {
+    "$description": "Maps each view to its relevant documentation in the spine",
+    "views": {
+      "welcome": { "primary": "SOUL_OF_QUANNEX.md", "position": "1 (Soul)" },
+      "wizard:step0": { "primary": "COMPANY_TEMPLATES_GUIDE.md", "supporting": "INTELLIGENT_FACE_MAPPING.md" },
+      "wizard:step1": { "primary": "INTELLIGENT_FACE_MAPPING.md", "supporting": "AI_SYSTEM_GUIDE.md" },
+      "wizard:step2": { "primary": "KPI_DATA_FLOW.md", "supporting": "DATA_SYSTEM_GUIDE.md", "future": "FAST_KPI_INTELLIGENCE.md" },
+      "wizard:step3": { "primary": "math/CALCULATION_AUDIT_TRAIL.md" },
+      "dashboard": { "primary": "SYSTEM_CONSCIOUSNESS_MAP.md", "supporting": "BREATH_AXIS_REFERENCE.md" },
+      "dodecahedron-3d": { "primary": "math/SACRED_GEOMETRY_PROOF.md", "supporting": "EDGE_DYNAMICS_REFERENCE.md" },
+      "simulator": { "primary": "FILE_STRUCTURE_MAP.md (simulator section)", "supporting": "SYSTEM_COHERENCE_REFERENCE.md" },
+      "calculations": { "primary": "math/CALCULATION_AUDIT_TRAIL.md", "supporting": "thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md" },
+      "breath-analysis": { "primary": "BREATH_AXIS_REFERENCE.md", "supporting": "VERTEX_DYNAMICS_REFERENCE.md" },
+      "octave-dna": { "primary": "thesis/CONSCIOUSNESS_MODEL.md" },
+      "radiance-check": { "primary": "thesis/CONSCIOUSNESS_MODEL.md", "supporting": "thesis/WISDOM_BRIEF.md" }
+    },
+    "chronologicalPosition": "7 of 10 — after architecture (6), before examples (8)"
+  },
+
+  "developerTools": [
+    { "file": "tools/migrate-csv-to-json.html", "purpose": "Data migration utility" },
+    { "file": "tests/test-runner.html", "purpose": "Test suite runner" },
+    { "file": "tests/circuit-breaker.test.html", "purpose": "Data integrity validation" },
+    { "file": "tests/kpi-constants-integrity.test.html", "purpose": "Constants SSOT verification" },
+    { "file": "dev/test-octave-dna.html", "purpose": "Octave visualization testing" },
+    { "file": "dev/test-advanced-math.html", "purpose": "Advanced math testing" }
+  ]
+}

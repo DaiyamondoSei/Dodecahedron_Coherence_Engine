@@ -81,12 +81,13 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 2. [math/CALCULATION_AUDIT_TRAIL.md](math/CALCULATION_AUDIT_TRAIL.md) - **CRITICAL: Prove any calculation is correct**
 3. [SUB_RELATIONSHIP_CHART.md](SUB_RELATIONSHIP_CHART.md) - **Mathematical Interaction Map: formulas + worked examples + manipulation paths**
 4. [thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md](thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md) - 4 novel frameworks
-5. [thesis/EMERGENT_MATHEMATICAL_TRUTHS.md](thesis/EMERGENT_MATHEMATICAL_TRUTHS.md) - **6 discoveries from stress testing — when math speaks truth**
-6. [thesis/WISDOM_BRIEF.md](thesis/WISDOM_BRIEF.md) - Philosophical grounding
-7. [STRESS_TEST_REPORT_2026-02-08.md](STRESS_TEST_REPORT_2026-02-08.md) - Full stress test (39/45 resolved, 32 traceability tags)
-5. [thesis/CONSCIOUSNESS_MODEL.md](thesis/CONSCIOUSNESS_MODEL.md) - Why octaves exist
-6. [math/SACRED_GEOMETRY_PROOF.md](math/SACRED_GEOMETRY_PROOF.md) - Why dodecahedron
-7. [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) - Real examples
+5. [thesis/EMERGENT_MATHEMATICAL_TRUTHS.md](thesis/EMERGENT_MATHEMATICAL_TRUTHS.md) - **11 discoveries (6 stress test + 5 spectral) — when math speaks truth**
+6. [thesis/SPECTRAL_ANALYSIS_CHAPTER.md](thesis/SPECTRAL_ANALYSIS_CHAPTER.md) - **Academic chapter draft for General Thesis.docx — 14 citations, 7 tables**
+7. [thesis/WISDOM_BRIEF.md](thesis/WISDOM_BRIEF.md) - Philosophical grounding
+8. [STRESS_TEST_REPORT_2026-02-08.md](STRESS_TEST_REPORT_2026-02-08.md) - Full stress test (39/45 resolved, 32 traceability tags)
+9. [thesis/CONSCIOUSNESS_MODEL.md](thesis/CONSCIOUSNESS_MODEL.md) - Why octaves exist
+10. [math/SACRED_GEOMETRY_PROOF.md](math/SACRED_GEOMETRY_PROOF.md) - Why dodecahedron
+11. [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) - Real examples
 
 ### "I'm integrating custom data"
 1. [DATA_SYSTEM_GUIDE.md](DATA_SYSTEM_GUIDE.md) - Complete data architecture
@@ -251,7 +252,8 @@ Located in [thesis/](thesis/):
 |----------|---------|
 | [DEFENSE_PREPARATION.md](thesis/DEFENSE_PREPARATION.md) | Anticipated Q&A, demo script, spectral deep-dives |
 | [NOVEL_MATHEMATICAL_CONTRIBUTIONS.md](thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md) | 4 breakthrough frameworks |
-| [EMERGENT_MATHEMATICAL_TRUTHS.md](thesis/EMERGENT_MATHEMATICAL_TRUTHS.md) | **8 discoveries from stress testing — when math speaks truth** |
+| [EMERGENT_MATHEMATICAL_TRUTHS.md](thesis/EMERGENT_MATHEMATICAL_TRUTHS.md) | **11 discoveries (6 stress test + 5 spectral) — when math speaks truth** |
+| [SPECTRAL_ANALYSIS_CHAPTER.md](thesis/SPECTRAL_ANALYSIS_CHAPTER.md) | **Academic chapter draft — spectral graph theory of the dodecahedron, ready for General Thesis.docx** |
 | [WISDOM_BRIEF.md](thesis/WISDOM_BRIEF.md) | Platonic solids, wisdom traditions |
 | [CONSCIOUSNESS_MODEL.md](thesis/CONSCIOUSNESS_MODEL.md) | Developmental psychology foundations |
 
@@ -285,9 +287,9 @@ Located in [archive/](archive/) - preserved for reference:
 | Audit & Tracking | 2 |
 | Testing & Observations | 6 |
 | Math docs | 3 |
-| Thesis docs | 5 |
+| Thesis docs | 6 |
 | Archived docs | 6 |
-| **Total Active Docs** | **45** |
+| **Total Active Docs** | **46** |
 | Self-documented modules (Gold Headers) | 29 |
 
 *Updated February 17, 2026 - Sub-Relationship Chart evolved into Mathematical Interaction Map, Discrepancy Tracker added.*
@@ -325,6 +327,8 @@ Located in [archive/](archive/) - preserved for reference:
 - [ ] Can demo live without errors
 - [ ] Can defend mathematical choices (use [CALCULATION_AUDIT_TRAIL.md](math/CALCULATION_AUDIT_TRAIL.md))
 - [ ] Can answer "why sacred geometry?"
+- [ ] Can answer "why phi?" with spectral proof (eigenvalues ARE phi)
+- [ ] Can explain spectral distance tiers and shadow edges
 - [ ] Can show real-world impact (company templates)
 - [ ] Can explain breath axes, edges, and vertices as organizational metaphors
 - [ ] Can prove any calculation is correct (open CALCULATION_AUDIT_TRAIL.md)

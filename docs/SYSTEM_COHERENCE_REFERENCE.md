@@ -131,6 +131,82 @@ THE BREATH AXIS FEEDBACK (The Only Cross-Talk)
     The breath axis is the only place where faces truly see each other.
 ```
 
+### Read/Write Architecture (Thesis Reference Diagram)
+
+The system's information flow falls into three distinct categories:
+
+```
+READ / WRITE / FEEDBACK ARCHITECTURE
+═══════════════════════════════════════════════════════
+
+╔═══════════════════════════════════════════════════════╗
+║  WRITE LAYER  (Input → Processing)                    ║
+║                                                        ║
+║  KPIs (60 values)                                     ║
+║       │                                                ║
+║       ▼                                                ║
+║  Face.calculateLocalCoherence()                        ║
+║  ┌─ Pentagram star pairs (α = φ⁻¹)                    ║
+║  ├─ Intersection nodes (β = 0.5)                       ║
+║  ├─ Ball/Pillar composite (γ = 0.7)                    ║
+║  └─ Harmonic resonance boost (η = φ⁻²)                ║
+║                                                        ║
+║  Direction: ONE-WAY IN                                 ║
+║  KPIs → Faces only. Faces never modify KPIs.           ║
+╚═══════════════════════════════════════════════════════╝
+                        │
+                        ▼
+╔═══════════════════════════════════════════════════════╗
+║  FEEDBACK LAYER  (Bidirectional — the ONLY one)       ║
+║                                                        ║
+║  Face A ◄══════► Face B  (via Breath Axis)             ║
+║                                                        ║
+║  6 breath axes connect 6 opposing face pairs.          ║
+║  Each face gives 10% of its energy to its opposite:    ║
+║                                                        ║
+║    E_final = 0.9 × E_self + 0.1 × E_opposite          ║
+║                                                        ║
+║  This is SHADOW INTEGRATION — the only place where     ║
+║  faces see each other. All other layers are read-only.  ║
+║                                                        ║
+║  Direction: BIDIRECTIONAL (δ = 0.9)                    ║
+╚═══════════════════════════════════════════════════════╝
+                        │
+                        ▼
+╔═══════════════════════════════════════════════════════╗
+║  READ LAYER  (Output — diagnostic consumers)          ║
+║                                                        ║
+║  These layers RECEIVE face energy. They COMPUTE        ║
+║  derived metrics. They NEVER feed back to faces.       ║
+║                                                        ║
+║  ┌────────────────────┬───────────────────────────────┐║
+║  │ Consumer           │ What it reads                 │║
+║  ├────────────────────┼───────────────────────────────┤║
+║  │ 30 Edges           │ 2 face energies → tension     │║
+║  │ 20 Vertices        │ 3 face energies → vortex      │║
+║  │ 6 Breath Ratios    │ 2 face energies → balance     │║
+║  │ Spectral Analyzer  │ All 12 energies → eigenvalues │║
+║  │ Shadow Analyzer    │ All 12 energies → patterns    │║
+║  │ Global Coherence   │ All 12 energies → C_global    │║
+║  │ Octave Detection   │ C_global → O1-O7              │║
+║  └────────────────────┴───────────────────────────────┘║
+║                                                        ║
+║  Direction: ONE-WAY OUT                                ║
+║  Faces → Consumers. Consumers never modify faces.      ║
+╚═══════════════════════════════════════════════════════╝
+```
+
+**Why this matters for the thesis:**
+
+The one-directional architecture is a *design choice*, not a limitation. It ensures:
+1. **Determinism** — Given the same 60 KPIs, the system always produces the same result.
+2. **Interpretability** — Every output traces back to input through one path.
+3. **No circular dependencies** — The breath axis feedback converges in one pass (δ = 0.9 means the cross-pollination is 10%, not enough to create oscillation).
+
+The system intentionally runs exactly **one pass** of breath axis integration. This represents a single "breath" of shadow integration — not an iterative equilibrium. One pass is sufficient because the breath axis is not trying to find a fixed point; it is applying a *defined proportion* of shadow influence (10%). If we did run multiple passes, the operator `M = [[0.9, 0.1], [0.1, 0.9]]` has spectral radius < 1 (eigenvalues 1.0 and 0.8), so the system would converge — but to a state where both faces equal `(a+b)/2`, which would destroy the very polarity the breath axis is designed to measure. One pass preserves meaningful face differences while acknowledging shadow influence. This is a design choice, not a limitation.
+
+---
+
 ### What This Means
 
 **Edges and Vertices are DOWNSTREAM CONSUMERS.**

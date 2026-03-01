@@ -523,32 +523,219 @@ const result = OctaveIntegrityCalculator.calculateOrganizationalOctave(
 
 ---
 
+## Bringing Real Organization Data Into Quannex
+
+### Two Integration Paths
+
+| Path | Who It's For | What You Need | Complexity |
+|------|-------------|---------------|------------|
+| **Easy Path** | Quick evaluation, demos, presentations | 12 high-level metrics (1 per face) | Low — minutes |
+| **Full Path** | Deep analysis, thesis-grade assessment | 60 KPI values (5 per face × 12 faces) | Medium — requires data mapping |
+
+---
+
+### Easy Path: 12-Metric Quick Integration
+
+1. **Open** `welcome.html` (or `demo-orchestrator.html` directly)
+2. **Choose** "Custom Path" on the glass card landing page
+3. **Select** the archetype closest to your organization (Startup, Enterprise, Balanced, NonDual)
+4. **Use Quick Mode** in Step 2 — enter 1 KPI per face
+5. **Calculate** and explore results
+
+**Data you need:**
+```
+12 values, one per organizational domain:
+  Face 1:  Financial Health      → e.g., revenue growth %
+  Face 2:  Intellectual Capital  → e.g., patents/innovation index
+  Face 3:  Human Resources       → e.g., employee satisfaction
+  Face 4:  Structural Capital    → e.g., process maturity score
+  Face 5:  Market Position       → e.g., market share %
+  Face 6:  Community Relations   → e.g., stakeholder trust index
+  Face 7:  Brand Reputation      → e.g., NPS score
+  Face 8:  Operational Excellence → e.g., efficiency ratio
+  Face 9:  Regenerative Capacity → e.g., sustainability score
+  Face 10: Values Alignment      → e.g., culture survey score
+  Face 11: Funding Access        → e.g., capital availability
+  Face 12: Risk Management       → e.g., risk mitigation index
+```
+
+**Future enhancement:** Fast KPI Intelligence will AI-distribute each metric into 5 pentagramic elements. See `docs/FAST_KPI_INTELLIGENCE.md`.
+
+---
+
+### Full Path: 60-KPI Deep Integration
+
+For thesis-grade analysis, you need 60 KPIs organized as 5 elements per face:
+
+1. **Prepare your data** as a JSON file following the company template format:
+
+```json
+{
+  "company": {
+    "name": "Your Organization",
+    "archetype": "balanced",
+    "lifecycle": "growth"
+  },
+  "faces": [
+    {
+      "id": 1,
+      "name": "Financial Health",
+      "octave": 3,
+      "kpis": {
+        "ball": { "value": 0.72, "name": "Overall Financial Health" },
+        "earth": { "value": 0.80, "name": "Revenue Stability" },
+        "water": { "value": 0.65, "name": "Cash Flow" },
+        "fire": { "value": 0.55, "name": "Growth Investment" },
+        "air": { "value": 0.70, "name": "Financial Communication" },
+        "ether": { "value": 0.78, "name": "Financial Purpose Alignment" }
+      }
+    }
+  ]
+}
+```
+
+2. **Place the file** in `companies/your-org/company.json`
+3. **Add a KPI data file** at `companies/your-org/kpis.json` (see existing templates)
+4. **Register** in `js/company-templates-bundle.js` (optional, for dropdown access)
+5. **Load** via `CompanyLoader.loadCompany('your-org')` or select in the wizard
+
+**Reference templates:**
+```
+companies/quannex/         → Pre-seed startup (O1-O2)
+companies/nova-tech/       → Seed stage with burnout (O2-O3)
+companies/zenith/          → Growth with scaling debt (O3-O4)
+companies/apex-industries/ → Mature enterprise (O6-O7)
+```
+
+---
+
+### Module Dependency Map
+
+The Quannex system loads in a specific order. If building a custom integration, respect these layers:
+
+```
+MODULE LOAD ORDER (dependency chain)
+════════════════════════════════════
+
+LAYER 1: UTILITIES (no dependencies)
+  js/utils/logger.js
+
+LAYER 2: CONSTANTS (depends on Layer 1)
+  js/constants/phi-harmonics.js        ← SSOT for all PHI constants
+  js/constants/octave-thresholds.js    ← Re-exports from phi-harmonics
+  js/constants/colors.js
+
+LAYER 3: DATA SYSTEM (depends on Layers 1-2)
+  js/data-system/data-validator.js     ← Circuit breaker, integrity
+  js/data-system/json-data-loader.js   ← JSON/CSV parsing
+  js/data-transformer.js              ← Bridges UI ↔ Engine
+  js/kpi-library.js                   ← KPI definitions & suggestions
+
+LAYER 4: CORE ENGINE (depends on Layers 1-3)
+  js/octave-integrity-calculator.js   ← Foundation Principle
+  js/breath-analyzer.js               ← 6 breath axes
+  js/main.js                          ← DodecahedronEngine (THE engine)
+  js/company-loader.js                ← Multi-company data management
+
+LAYER 4b: ADVANCED ANALYZERS (depends on Layer 4, optional)
+  js/advanced/edge-analyzer.js        ← Advanced edge diagnostics
+  js/advanced/vertex-analyzer.js      ← Advanced vertex diagnostics
+  js/advanced/dynamics-analyzer.js    ← System dynamics analysis
+  js/spectral-analyzer.js             ← Eigenvalue spectral analysis
+
+LAYER 5: AI LAYER (depends on Layer 4, optional)
+  js/gemini-client.js                 ← AI provider
+  js/face-wizard.js                   ← Face mapping templates
+  js/company-templates-bundle.js      ← Offline template access
+  js/context-synthesizer.js           ← Organizational narrative
+
+LAYER 6: ORCHESTRATOR (depends on Layers 1-5)
+  js/orchestrator/orchestrator-state.js
+  js/orchestrator/orchestrator-session.js
+  js/orchestrator/orchestrator-sync.js
+  js/orchestrator/orchestrator-utils.js
+  js/orchestrator/orchestrator-navigation.js
+  js/orchestrator/orchestrator-dashboard.js
+  js/orchestrator/steps/*.js           ← 8 step modules
+  js/orchestrator/event-handlers.js
+  js/demo-orchestrator-logic.js       ← Main orchestrator logic
+
+LAYER 7: UX ENHANCEMENTS (depends on Layer 6, optional)
+  js/ux/toast-notifications.js
+  js/ux/export-manager.js
+  js/ux/error-recovery.js
+  js/ux/glossary-hover.js
+  js/ux/keyboard-shortcuts.js
+```
+
+### Minimum Viable Integration
+
+If you only want the calculation engine (no UI):
+
+```html
+<!-- Minimum: 7 scripts for headless calculation -->
+<script src="js/utils/logger.js"></script>
+<script src="js/constants/phi-harmonics.js"></script>
+<script src="js/constants/octave-thresholds.js"></script>
+<script src="js/data-system/data-validator.js"></script>
+<script src="js/octave-integrity-calculator.js"></script>
+<script src="js/breath-analyzer.js"></script>
+<script type="module" src="js/main.js"></script>
+
+<script>
+  // main.js sets window.quannexEngine after module initialization.
+  // Since it's a module, wait for DOMContentLoaded + small delay:
+  function waitForEngine(callback, maxAttempts = 50) {
+    let attempts = 0;
+    const check = setInterval(() => {
+      if (window.quannexEngine || attempts >= maxAttempts) {
+        clearInterval(check);
+        if (window.quannexEngine) callback(window.quannexEngine);
+        else console.warn('Engine did not load');
+      }
+      attempts++;
+    }, 100);
+  }
+
+  waitForEngine((engine) => {
+    const state = engine.getState();
+    console.log('Global coherence:', state.globalCoherence);
+  });
+</script>
+```
+
+---
+
 ## Next Steps
 
-1. **Test the standalone demo**: Open `demo-orchestrator.html` and walk through all 4 steps
-2. **Integrate with engine**: Follow "Option B: Integrated Mode" above
-3. **Explore company templates**: Load pre-built examples to see the model in action
-4. **Customize templates**: Add organization-specific face templates
-5. **Add presenter notes**: Create `docs/PRESENTER_SCRIPT.md` with talking points
-6. **Record a demo**: Screen capture walkthrough for training
+1. **Quick evaluation**: Use the Easy Path — open `welcome.html`, choose Custom, enter 12 metrics
+2. **Deep analysis**: Use the Full Path — create a company JSON, load via wizard
+3. **Custom integration**: Use the Minimum Viable Integration above for headless calculation
+4. **Explore templates**: Load pre-built examples to see the model in action
+5. **Record a demo**: Screen capture walkthrough for training
+
+> **See also:** `docs/UX_TREE_MAP.md` for the complete user journey map and navigation graph.
 
 ---
 
 ## Support
 
 **Documentation**:
-- User guide: [DEMO_GUIDE.md](DEMO_GUIDE.md)
+- User experience map: [UX_TREE_MAP.md](UX_TREE_MAP.md)
 - Math reference: [MATH_REFERENCE.md](MATH_REFERENCE.md)
+- Calculation audit: [math/CALCULATION_AUDIT_TRAIL.md](math/CALCULATION_AUDIT_TRAIL.md)
+- Company templates: [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md)
 - Main README: [../README.md](../README.md)
 
 **Key Files**:
-- Main demo: `demo-orchestrator.html`
-- Face wizard: `js/face-wizard.js`
-- Orchestrator logic: `js/demo-orchestrator-logic.js`
+- Primary landing: `welcome.html`
+- Data input wizard: `demo-orchestrator.html`
+- Quick demo: `demo.html`
+- Core engine: `js/main.js`
 
 ---
 
-**Built with intention • Documented with care • Ready to transform organizations**
+**Built with intention. Documented with care. Ready to transform organizations.**
 
-Version: 2.1
-Last Updated: 2025-12-09
+Version: 3.0
+Last Updated: 2026-02-16

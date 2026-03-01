@@ -93,7 +93,15 @@ The **pentagram** within each face creates star pairs and intersection nodes - t
 | **ζ (Zeta)** | φ^-2/6 (0.064) | "Each octave raises expectations by 6.4%" |
 | **θ (Theta)** | φ^-1 (0.618) | "The Golden Threshold - 61.8% to advance" |
 
-These are **discovered, not invented**. Each encodes a philosophical stance derived from PHI.
+These encode philosophical stances grounded in PHI:
+
+| Derivation | Constants | Basis |
+|------------|-----------|-------|
+| **Fully PHI-derived** | α, β, η, ζ, θ | Direct φ powers or complements |
+| **PHI-bounded, pragmatically tuned** | γ (0.7), δ (0.9) | Sit within φ-defined bounds; include human-intuitive adjustment |
+| **Harmonically referenced** | κ (2.0) | Octave ratio (2:1 frequency), approximates φ relationships |
+
+Most are **discovered, not invented**. Two (γ, κ) bridge mathematics with human intuition — they live within phi-defined bounds but include pragmatic tuning. This honesty strengthens the framework: we disclose where mathematics ends and design begins.
 
 ---
 

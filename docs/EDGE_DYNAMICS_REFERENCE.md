@@ -220,6 +220,10 @@ Health Score: 0 (completely blocked) to 1 (perfect flow)
 
 ### Edge Health Indicators
 
+> **⚠️ RECONCILIATION NOTE (February 2026):** The table below uses an early 5-state model (Wall/Friction/Gate/Flow/Symbiosis) with evenly-spaced 0.2 intervals. This has been **superseded** by the unified φ-derived health model documented in `docs/SUB_RELATIONSHIP_CHART.md` Section 2B, which uses Sacred Inquiry's 5-state model (Wall/Gate/Membrane/Hemorrhage/Vortex) with boundaries at [φ⁻⁴, φ⁻², φ⁻¹, 1−φ⁻⁴]. The unified model eliminates arbitrary 0.2-interval boundaries and aligns with the implemented Sacred Inquiry system in `js/constants/sacred-inquiry.js`. See `docs/SUB_RELATIONSHIP_DISCREPANCY_TRACKER.md` D1 for the full reconciliation roadmap.
+
+**Legacy model (retained for reference):**
+
 | Score | State | Symptoms | Example |
 |-------|-------|----------|---------|
 | 0.0-0.2 | **Wall** | No communication, silos, dropped handoffs | Engineering never talks to Sales |
@@ -227,6 +231,16 @@ Health Score: 0 (completely blocked) to 1 (perfect flow)
 | 0.4-0.6 | **Gate** | Formal handoffs, some delays, controlled flow | Documented but slow process |
 | 0.6-0.8 | **Flow** | Natural handoffs, mutual understanding | Cross-functional collaboration |
 | 0.8-1.0 | **Symbiosis** | Seamless integration, anticipatory support | Teams feel like one organism |
+
+**Unified φ-derived model (canonical):**
+
+| Score | State | φ Boundaries | Organizational Meaning |
+|-------|-------|-------------|----------------------|
+| [0, 0.146) | **🧱 Wall** | [0, φ⁻⁴] | Blocked — no exchange, departments isolated |
+| [0.146, 0.382) | **🚪 Gate** | [φ⁻⁴, φ⁻²] | Controlled — selective, intentional exchange |
+| [0.382, 0.618) | **🫧 Membrane** | [φ⁻², φ⁻¹] | Healthy — balanced semi-permeable flow |
+| [0.618, 0.854) | **💧 Hemorrhage** | [φ⁻¹, 1−φ⁻⁴] | Over-flowing — boundary dissolution |
+| [0.854, 1.0] | **🌀 Vortex** | [1−φ⁻⁴, 1] | Transformative — emergence happening |
 
 ### Measuring Edge Health
 
@@ -494,7 +508,7 @@ EDGE CHARACTER EMERGES FROM CONTEXT
 ```
 
 **What the edge DOES have:**
-- Health state (Wall → Friction → Gate → Flow → Symbiosis)
+- Health state (unified model: Wall → Gate → Membrane → Hemorrhage → Vortex; see reconciliation note above)
 - Bidirectional flow metrics
 - Phi-optimal balance target
 - Value chain membership

@@ -2,7 +2,7 @@
 
 *The living architecture of Quannex - how everything breathes together.*
 
-**Last Updated:** December 27, 2025
+**Last Updated:** February 16, 2026
 **Purpose:** Birds-eye view of the complete modular structure
 
 ---
@@ -12,9 +12,15 @@
 ```
                            ┌─────────────────────────────────────┐
                            │         ENTRY POINTS                │
-                           │   welcome.html → demo-orchestrator  │
-                           │         ↓           ↓               │
-                           │   3D Dodecahedron  Octave DNA       │
+                           │                                     │
+                           │  welcome.html  ⭐ Primary landing   │
+                           │       ↓  (3 journey paths)         │
+                           │  demo-orchestrator.html  Wizard     │
+                           │       ↓  (5-step guided flow)      │
+                           │  Deep-dive views (results)          │
+                           │                                     │
+                           │  demo.html  Quick demo / thesis     │
+                           │  index.html  Dashboard (legacy)     │
                            └─────────────────────────────────────┘
                                           │
           ┌───────────────────────────────┼───────────────────────────────┐
@@ -373,18 +379,28 @@ css/
 ## HTML Entry Points
 
 ```
-WELCOME FLOW:
-  welcome.html ──► demo-orchestrator.html ──► pages/dodecahedron-3d.html
-                                          └──► pages/octave-dna.html
+PRIMARY FLOW (recommended for new users):
+  welcome.html ⭐ ──► demo-orchestrator.html ──► pages/dodecahedron-3d.html
+  (glass card          (5-step wizard)            pages/breath-analysis.html
+   landing page)                                  pages/calculations.html
+                                                  pages/octave-dna.html
+                                                  pages/simulator.html
 
-DIRECT ACCESS:
-  index.html                  # Legacy dashboard
-  demo.html                   # Tab-based demo container
+QUICK DEMO (thesis defense, presentations):
+  demo.html ──► Embedded views via iframes (dashboard, 3D, DNA, simulator)
+
+DIRECT ACCESS (development, standalone use):
+  index.html                  # Dashboard (results display)
   pages/dodecahedron-3d.html  # 3D visualization standalone
   pages/octave-dna.html       # DNA helix standalone
+  pages/simulator.html        # Coherence simulator standalone
   pages/calculations.html     # Math details view
   pages/breath-analysis.html  # Breath axes view
+  pages/results-summary.html  # Printable results
+  pages/radiance-check.html   # O7 aspiration assessment
 ```
+
+> **See also:** `docs/UX_TREE_MAP.md` for the complete navigation graph and user journey map.
 
 ---
 
