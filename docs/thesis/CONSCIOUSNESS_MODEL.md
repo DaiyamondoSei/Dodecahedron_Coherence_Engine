@@ -1,7 +1,7 @@
 # Consciousness Development Model
 
 > *Why Organizations Develop in Octaves*
-> *For Thesis Defense: February 2026*
+> *For Thesis Defense: June 2026*
 
 ---
 

@@ -14,7 +14,7 @@
 - **7 Octaves** of development (Survival → Structure → Relations → Creativity → Expression → Vision → Radiance)
 - **Golden Ratio (φ = 1.618...)** throughout all calculations
 
-**Defense Date**: February 2026 (Bachelor's thesis)
+**Defense Date**: June 2026 (Bachelor's thesis)
 
 ---
 

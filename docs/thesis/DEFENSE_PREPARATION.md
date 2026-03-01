@@ -1,7 +1,7 @@
 # Thesis Defense Preparation
 
 > *Anticipated Questions and Strong Answers*
-> *Defense Date: February 2026*
+> *Defense Date: June 2026*
 
 ---
 

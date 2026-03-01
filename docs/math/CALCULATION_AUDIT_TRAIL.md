@@ -3,7 +3,7 @@
 > **Purpose:** Mathematical proof and code verification for every calculation in Quannex
 > **Author:** Deimantas Murauskas & Claude
 > **Created:** 2025-12-29
-> **For:** Bachelor's Thesis Defense (February 2026)
+> **For:** Bachelor's Thesis Defense (June 2026)
 > **Standard:** ALCOA+ Pharmaceutical-Grade Data Integrity
 
 ---

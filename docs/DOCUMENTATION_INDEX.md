@@ -1,6 +1,6 @@
 # Quannex Documentation Index
 
-> *Last Updated: 2026-02-24*
+> *Last Updated: 2026-03-01*
 > *The Living Spine - Single Source of Truth for All Documentation*
 
 ---
@@ -142,6 +142,7 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 | [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | js/edge/ subsystem - Pure Membrane Model |
 | [edge/SACRED_INQUIRY_LIBRARY.md](edge/SACRED_INQUIRY_LIBRARY.md) | Sacred Inquiry system - 25 health×element inquiries |
 | [edge/TWINKLING_AURORA_COMPLETION.md](edge/TWINKLING_AURORA_COMPLETION.md) | **✅ Completion report** - Full implementation summary |
+| [ai/FACE_REFINEMENT_SPECIFICATION.md](ai/FACE_REFINEMENT_SPECIFICATION.md) | Face refinement prompt design spec |
 | [FILE_STRUCTURE_MAP.md](FILE_STRUCTURE_MAP.md) (simulator section) | js/simulator/ + css/simulator/ - Full Vision Coherence Simulator (16 modules) |
 
 ### Data & Integration
@@ -180,6 +181,8 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 | [TECHNICAL_OBSERVATIONS.md](TECHNICAL_OBSERVATIONS.md) | Technical notes |
 | [SHADOW_SYSTEM_OBSERVATIONS.md](SHADOW_SYSTEM_OBSERVATIONS.md) | Shadow system notes |
 | [FUTURE_WORK_NOTES.md](FUTURE_WORK_NOTES.md) | Preserved observations for future sessions |
+| [STRESS_TEST_REPORT_2026-02-08.md](STRESS_TEST_REPORT_2026-02-08.md) | **Full stress test report — 39/45 resolved, 32 traceability tags** |
+| [testing/USER_PATH_TEST_SCENARIOS.md](testing/USER_PATH_TEST_SCENARIOS.md) | User journey test scenarios |
 
 ---
 
@@ -281,18 +284,18 @@ Located in [archive/](archive/) - preserved for reference:
 | Entry Points | 3 |
 | Geometry Reference | 4 |
 | Architecture | 4 |
-| Subsystem Guides | 7 |
+| Subsystem Guides | 8 |
 | Data & Integration | 7 |
 | User Experience & Relationships | 4 |
 | Audit & Tracking | 2 |
-| Testing & Observations | 6 |
+| Testing & Observations | 8 |
 | Math docs | 3 |
 | Thesis docs | 6 |
 | Archived docs | 6 |
-| **Total Active Docs** | **46** |
+| **Total Active Docs** | **49** |
 | Self-documented modules (Gold Headers) | 29 |
 
-*Updated February 17, 2026 - Sub-Relationship Chart evolved into Mathematical Interaction Map, Discrepancy Tracker added.*
+*Updated March 1, 2026 — Statistics corrected (46→49), orphaned docs added, thesis dates aligned to June 2026.*
 
 ---
 
@@ -317,7 +320,7 @@ Located in [archive/](archive/) - preserved for reference:
 
 ---
 
-## For Thesis Defense (February 2026)
+## For Thesis Defense (June 2026)
 
 **Essential preparation:**
 

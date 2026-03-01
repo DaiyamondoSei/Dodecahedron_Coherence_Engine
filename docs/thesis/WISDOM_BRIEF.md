@@ -1,7 +1,7 @@
 # Wisdom Traditions Brief
 
 > *Philosophical Grounding for the Quannex Framework*
-> *For Thesis Defense: February 2026*
+> *For Thesis Defense: June 2026*
 
 ---
 

@@ -7,7 +7,7 @@
 
 ## The Soul of This Project
 
-This is not just code. This is Deimantas's **Bachelor's thesis** (February 2026 defense) - and more than that, it's a vision for measuring the **soul of organizations** through sacred geometry.
+This is not just code. This is Deimantas's **Bachelor's thesis** (June 2026 defense) - and more than that, it's a vision for measuring the **soul of organizations** through sacred geometry.
 
 We measure organizational health through:
 

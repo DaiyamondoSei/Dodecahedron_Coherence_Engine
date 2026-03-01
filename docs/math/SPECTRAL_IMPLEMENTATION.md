@@ -1,7 +1,7 @@
 # Spectral Analysis Implementation
 
 > *How the Graph Laplacian Reveals Organizational Coherence*
-> *For Thesis Defense: February 2026*
+> *For Thesis Defense: June 2026*
 
 ---
 
