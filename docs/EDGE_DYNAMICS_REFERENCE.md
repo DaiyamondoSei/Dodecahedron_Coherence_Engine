@@ -220,9 +220,24 @@ Health Score: 0 (completely blocked) to 1 (perfect flow)
 
 ### Edge Health Indicators
 
-> **⚠️ RECONCILIATION NOTE (February 2026):** The table below uses an early 5-state model (Wall/Friction/Gate/Flow/Symbiosis) with evenly-spaced 0.2 intervals. This has been **superseded** by the unified φ-derived health model documented in `docs/SUB_RELATIONSHIP_CHART.md` Section 2B, which uses Sacred Inquiry's 5-state model (Wall/Gate/Membrane/Hemorrhage/Vortex) with boundaries at [φ⁻⁴, φ⁻², φ⁻¹, 1−φ⁻⁴]. The unified model eliminates arbitrary 0.2-interval boundaries and aligns with the implemented Sacred Inquiry system in `js/constants/sacred-inquiry.js`. See `docs/SUB_RELATIONSHIP_DISCREPANCY_TRACKER.md` D1 for the full reconciliation roadmap.
+The edge health model uses φ-derived boundaries from Sacred Inquiry (`js/constants/sacred-inquiry.js`):
 
-**Legacy model (retained for reference):**
+| Score | State | φ Boundaries | Organizational Meaning |
+|-------|-------|-------------|----------------------|
+| [0, 0.146) | **Wall** | [0, φ⁻⁴] | Blocked — no exchange, departments isolated |
+| [0.146, 0.382) | **Gate** | [φ⁻⁴, φ⁻²] | Controlled — selective, intentional exchange |
+| [0.382, 0.618) | **Membrane** | [φ⁻², φ⁻¹] | Healthy — balanced semi-permeable flow |
+| [0.618, 0.854) | **Hemorrhage** | [φ⁻¹, 1−φ⁻⁴] | Over-flowing — boundary dissolution |
+| [0.854, 1.0] | **Vortex** | [1−φ⁻⁴, 1] | Transformative — emergence happening |
+
+The Membrane zone [φ⁻², φ⁻¹] = [0.382, 0.618] IS the golden section of [0, 1] — this isn't arbitrary, it's the unique self-similar partition of unity where φ⁻¹ + φ⁻² = 1.0 exactly.
+
+> **Source of truth:** `js/core/Edge.js` → `getHealthState()`, `js/constants/sacred-inquiry.js`
+
+<details>
+<summary><strong>Historical Reference:</strong> Legacy 5-state model (pre-φ unification)</summary>
+
+The original model used evenly-spaced 0.2 intervals with different vocabulary:
 
 | Score | State | Symptoms | Example |
 |-------|-------|----------|---------|
@@ -232,15 +247,8 @@ Health Score: 0 (completely blocked) to 1 (perfect flow)
 | 0.6-0.8 | **Flow** | Natural handoffs, mutual understanding | Cross-functional collaboration |
 | 0.8-1.0 | **Symbiosis** | Seamless integration, anticipatory support | Teams feel like one organism |
 
-**Unified φ-derived model (canonical):**
-
-| Score | State | φ Boundaries | Organizational Meaning |
-|-------|-------|-------------|----------------------|
-| [0, 0.146) | **🧱 Wall** | [0, φ⁻⁴] | Blocked — no exchange, departments isolated |
-| [0.146, 0.382) | **🚪 Gate** | [φ⁻⁴, φ⁻²] | Controlled — selective, intentional exchange |
-| [0.382, 0.618) | **🫧 Membrane** | [φ⁻², φ⁻¹] | Healthy — balanced semi-permeable flow |
-| [0.618, 0.854) | **💧 Hemorrhage** | [φ⁻¹, 1−φ⁻⁴] | Over-flowing — boundary dissolution |
-| [0.854, 1.0] | **🌀 Vortex** | [1−φ⁻⁴, 1] | Transformative — emergence happening |
+*Superseded by φ-derived model. See `docs/SUB_RELATIONSHIP_DISCREPANCY_TRACKER.md` D1 for the reconciliation history.*
+</details>
 
 ### Measuring Edge Health
 
@@ -1251,13 +1259,13 @@ When an edge is unhealthy, specific interventions can restore flow:
 │      0.6    0.7    0.4    0.5    0.8                                     │
 │                   ▲ BOTTLENECK                                           │
 │                                                                          │
-│  EDGE STATES BY CATEGORY                                                 │
-│  ─────────────────────────                                               │
-│  Wall (0-0.2):     ██ 2 edges                                           │
-│  Friction (0.2-0.4): ████ 4 edges                                       │
-│  Gate (0.4-0.6):   ████████ 8 edges                                     │
-│  Flow (0.6-0.8):   ████████████ 12 edges                                │
-│  Symbiosis (0.8+): ████ 4 edges                                         │
+│  EDGE STATES BY CATEGORY (φ-derived)                                     │
+│  ────────────────────────────────────                                     │
+│  Wall (0-φ⁻⁴):        ██ 2 edges                                        │
+│  Gate (φ⁻⁴-φ⁻²):      ████ 4 edges                                     │
+│  Membrane (φ⁻²-φ⁻¹):  ████████ 8 edges                                 │
+│  Hemorrhage (φ⁻¹-ψ₄): ████████████ 12 edges                            │
+│  Vortex (ψ₄-1.0):     ████ 4 edges                                      │
 │                                                                          │
 │  TOP PRIORITY EDGES                                                      │
 │  ─────────────────                                                       │
@@ -1635,8 +1643,8 @@ FIBONACCI EDGE INTERVENTION HIERARCHY
 
 Choose intervention level based on edge state:
 - Wall edges need 8-13 week interventions
-- Friction edges need 3-5 week interventions
-- Gate edges need 1-2 week interventions
+- Gate edges need 3-5 week interventions
+- Membrane edges need 1-2 week interventions
 ```
 
 ### Edge Cascade Timing

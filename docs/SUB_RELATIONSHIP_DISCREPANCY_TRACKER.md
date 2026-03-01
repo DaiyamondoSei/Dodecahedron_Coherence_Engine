@@ -304,7 +304,7 @@ condition: (e8, e3) => e8 > 0.75 && e3 < 0.40  // Burnout Engine
 
 ---
 
-### A8. Breath Ratio Formula — 3 Conflicting Formulas 🔴
+### A8. Breath Ratio Formula — 3 Conflicting Formulas ✅
 
 Four documents used different breath ratio formulas:
 
@@ -312,24 +312,24 @@ Four documents used different breath ratio formulas:
 |--------|---------|--------|
 | `js/breath-analyzer.js` | `BR = ln(R/P) / ln(φ)` | **CANONICAL (SSOT)** |
 | `docs/SUB_RELATIONSHIP_CHART.md` | `BR = ln(R/P) / ln(φ)` | ✅ Aligned |
-| `docs/BREATH_AXIS_REFERENCE.md` | `(P - R) / max(R + P, 0.01)` | ❌ **Deprecated** — needs update |
+| `docs/BREATH_AXIS_REFERENCE.md` | `BR = ln(R/P) / ln(φ)` | ✅ **Updated March 1, 2026** |
 | `docs/math/CALCULATION_AUDIT_TRAIL.md` | `E_A / (E_A + E_B)` | ⚠️ Different concept (proportion, not ratio) |
 
-**Action Required:** Update BREATH_AXIS_REFERENCE to use the canonical logarithmic base-φ formula.
+**Resolved:** BREATH_AXIS_REFERENCE updated with canonical log-φ formula, φ-derived anchor points, and breath tension definition.
 
 ---
 
-### A9. Edge Health Classification — 3 Conflicting Systems 🟡
+### A9. Edge Health Classification — 3 Conflicting Systems ✅
 
 | Source | States | Boundaries | Status |
 |--------|--------|-----------|--------|
 | `js/core/Edge.js` | 5: Wall/Gate/Membrane/Hemorrhage/Vortex | φ⁻⁴, φ⁻², φ⁻¹, 1−φ⁻⁴ | ✅ **Unified** (February 26, 2026) |
 | `js/advanced/edge-analyzer.js` | 5: Flowing/Stable/Stressed/Strained/Breaking | φ⁻⁴, φ⁻², φ⁻¹, 1−φ⁻⁴ | ✅ **φ-derived** (February 26, 2026) |
 | `js/constants/sacred-inquiry.js` | 5: Wall/Gate/Membrane/Hemorrhage/Vortex | φ⁻⁴, φ⁻², φ⁻¹, 1−φ⁻⁴ | ✅ **φ-derived** (February 26, 2026) |
-| `docs/EDGE_DYNAMICS_REFERENCE.md` | 5: Wall/Friction/Gate/Flow/Symbiosis | 0.2 intervals | ❌ **Deprecated** (reconciliation note added, needs update) |
+| `docs/EDGE_DYNAMICS_REFERENCE.md` | 5: Wall/Gate/Membrane/Hemorrhage/Vortex | φ⁻⁴, φ⁻², φ⁻¹, 1−φ⁻⁴ | ✅ **Updated March 1, 2026** |
 | **Unified Model** | 5: Wall/Gate/Membrane/Hemorrhage/Vortex | φ⁻⁴, φ⁻², φ⁻¹, 1−φ⁻⁴ | ✅ **CANONICAL** (documented in chart) |
 
-**Code fully unified.** Edge.js, edge-analyzer.js, sacred-inquiry.js, and all 5 downstream consumers now use φ-derived boundaries. Only `EDGE_DYNAMICS_REFERENCE.md` still has the deprecated 5-state vocabulary — needs documentation update.
+**Fully resolved.** All code AND documentation now use the unified φ-derived model. Legacy vocabulary moved to collapsible historical reference section in EDGE_DYNAMICS_REFERENCE.md.
 
 ---
 
@@ -339,7 +339,7 @@ Four documents used different breath ratio formulas:
 |----------|-----------|-----------|--------|
 | Edge system (D1 + A4 + A9) | 12 | **0** | ✅ **All 12 φ-purified in code** (Feb 26): D1 Steps 1-4 done, A4 multipliers eliminated, A9 is documentation only |
 | Vertex system (A1) | 12 | **0** | ✅ **All 12 φ-purified in code** (Feb 26): 6 original + 4 coherence health + 2 narrative |
-| Breath system (A2 + A3 + A8) | 7 | **4** | ✅ A2 done (3 health thresholds, 4 files). Remaining: A3 balance threshold + A8 formula unification |
+| Breath system (A2 + A3 + A8) | 7 | **3** | ✅ A2 done, A8 done (March 1, 2026). Remaining: A3 balance threshold |
 | Tuning KAPPAs (A5) | 3 | 3 | φ-derive sensitivity values |
 | Spectral analysis (A6) | 5 | 5 | Align with actual eigenvalues + φ |
 | Gamma discrepancy (A7) | 1 | **0** | ✅ Fixed |
@@ -358,8 +358,8 @@ Four documents used different breath ratio formulas:
 |----|----------|--------|--------|----------------|
 | D1 | 🟡 Steps 5+7 | Low | Low | **Math unified (Steps 1-4 ✅), downstream aligned (Step 6 ✅). Remaining: rename tension→edgeEnergy (Step 5), verify Apex values (Step 7)** |
 | A1 | ✅ Resolved | — | — | **Vertex system φ-purified: 6 constants → φ⁻¹/φ⁻² partition (5 code files updated)** |
-| A8 | 🔴 Critical | Low | High | **Unify breath ratio formula: update BREATH_AXIS_REFERENCE to canonical log-φ** |
-| A9 | 🔴 Critical | Low | High | **Eliminate 3rd edge vocabulary: reconciliation note added to EDGE_DYNAMICS_REFERENCE** |
+| A8 | ✅ Resolved | — | — | **Breath formula unified: BREATH_AXIS_REFERENCE updated to canonical log-φ (March 1, 2026)** |
+| A9 | ✅ Resolved | — | — | **Edge vocabulary unified: EDGE_DYNAMICS_REFERENCE updated, legacy moved to historical section (March 1, 2026)** |
 | D2 | 🔴 Critical | Medium | High | Build vertex detail panels before thesis defense |
 | M1 | 🔴 Critical | High | High | Build relationship explorer as interactive artifact |
 | A4 | ✅ Resolved | — | — | **Elemental multipliers eliminated: geometric mean formula, element as metadata only** |

@@ -268,55 +268,43 @@ This axis governs the relationship between internal resilience and external conn
 
 ### Breath Ratio Calculation
 
-The breath ratio measures the **direction and intensity** of energy flow along an axis:
+The breath ratio measures the **direction and intensity** of energy flow along an axis using a logarithmic formula with golden ratio base:
 
-```javascript
-breathRatio = (projectionEnergy - receptionEnergy) / max(receptionEnergy + projectionEnergy, 0.01)
+```
+breathRatio = log_φ(Reception / Projection) = ln(R / P) / ln(φ)
 ```
 
-| Breath Ratio | Meaning |
-|--------------|---------|
-| -1.0 | Extreme contraction (all reception, no projection) |
-| -0.5 | Moderate contraction (reception dominant) |
-| 0.0 | Balanced breath (healthy reciprocity) |
-| +0.5 | Moderate expansion (projection dominant) |
-| +1.0 | Extreme expansion (all projection, no reception) |
+**Why logarithmic with base φ?** This creates natural anchor points rooted in the golden ratio:
 
-### Breath Health Score
+| Breath Ratio | Linear R/P Ratio | Meaning |
+|--------------|-------------------|---------|
+| -2.0 | φ⁻² = 0.382 | Severe over-exhaling |
+| -1.0 | φ⁻¹ = 0.618 | Golden contraction boundary |
+| 0.0 | 1.0 | Perfect balance (healthy reciprocity) |
+| +1.0 | φ = 1.618 | Golden expansion boundary |
+| +2.0 | φ² = 2.618 | Severe over-inhaling |
 
-```javascript
-// Core calculation
-function calculateBreathHealth(receptionFace, projectionFace) {
-    const receptionEnergy = extractFaceEnergy(receptionFace);
-    const projectionEnergy = extractFaceEnergy(projectionFace);
+The scale is **symmetric**: `log_φ(R/P) = -log_φ(P/R)`. Balance zone is `±maxBalanced` (default ±1.0 in golden mode, ±φ⁻² in strict mode).
 
-    // Calculate breath ratio (-1 to +1)
-    const ratio = (projectionEnergy - receptionEnergy) /
-                  Math.max(receptionEnergy + projectionEnergy, 0.01);
+> **Source of truth:** `js/breath-analyzer.js` → `calculateAxisBreath()`
 
-    // Health = how balanced the breath is (0 = perfect balance)
-    const imbalance = Math.abs(ratio);
+### Breath Tension
 
-    // Convert to 0-1 score (1 = healthy, 0 = severely imbalanced)
-    const health = 1 - imbalance;
+Breath tension is the absolute distance from balance:
 
-    return {
-        ratio: ratio,
-        health: health,
-        status: getBreathStatus(ratio),
-        direction: ratio > 0.15 ? 'expansion' : ratio < -0.15 ? 'contraction' : 'balanced'
-    };
-}
 ```
+breathTension = |breathRatio|
+```
+
+The linear ratio for display is recovered via: `linearRatio = e^(breathRatio × ln(φ))`
 
 ### Status Classification
 
-| Ratio Range | Status | Description |
-|-------------|--------|-------------|
-| -0.15 to +0.15 | Balanced | Healthy reciprocal flow |
-| -0.35 to -0.15 or +0.15 to +0.35 | Flowing | Active but sustainable |
-| -0.60 to -0.35 or +0.35 to +0.60 | Strained | Needs attention |
-| Beyond ±0.60 | Critical | Urgent rebalancing needed |
+| Ratio Range | Status | Severity | Description |
+|-------------|--------|----------|-------------|
+| Within ±maxBalanced | Healthy | None | Balanced reciprocal flow |
+| Beyond ±maxBalanced, within ±1.0 | Unbalanced | Moderate | Active but needs attention |
+| Beyond ±1.0 | Unbalanced | Critical | Urgent rebalancing needed |
 
 ---
 
