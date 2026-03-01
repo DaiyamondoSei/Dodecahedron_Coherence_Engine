@@ -26,5 +26,8 @@ nul
 # Playwright MCP screenshots (testing artifacts)
 .playwright-mcp/
 
+# Claude session working files (ephemeral)
+.claude/last-session-context.md
+
 # LinkedIn content (lives in QNX_BUSINESS_DATA/LinkedIn, workflow outputs only)
 linkedin-content/
