@@ -161,27 +161,28 @@ const BASE_EDGE_DEFINITIONS = [
  * Base vertex definitions from CSV_Vortex_Map.csv
  * These define the dodecahedron's 20 vertices where 3 faces meet
  */
+// RECONCILED (March 2026): Edge-derived canonical vertex triads
 const BASE_VERTEX_DEFINITIONS = [
-    { id: 'V1', faceIds: [1, 2, 6], name: 'Financial-Intellectual-Community Hub' },
-    { id: 'V2', faceIds: [1, 5, 6], name: 'Financial-Market-Community Hub' },
-    { id: 'V3', faceIds: [1, 8, 9], name: 'Financial-Operations-Regenerative Hub' },
-    { id: 'V4', faceIds: [2, 9, 10], name: 'Intellectual-Regenerative-Values Hub' },
-    { id: 'V5', faceIds: [2, 3, 10], name: 'Intellectual-Human-Values Hub' },
-    { id: 'V6', faceIds: [3, 6, 2], name: 'Human-Community-Intellectual Hub' },
-    { id: 'V7', faceIds: [3, 10, 11], name: 'Human-Values-Funding Hub' },
-    { id: 'V8', faceIds: [4, 5, 6], name: 'Structural-Market-Community Hub' },
-    { id: 'V9', faceIds: [1, 5, 8], name: 'Financial-Market-Operations Hub' },
-    { id: 'V10', faceIds: [4, 5, 7], name: 'Structural-Market-Brand Hub' },
-    { id: 'V11', faceIds: [3, 4, 11], name: 'Human-Structural-Funding Hub' },
-    { id: 'V12', faceIds: [4, 7, 11], name: 'Structural-Brand-Funding Hub' },
-    { id: 'V13', faceIds: [5, 7, 8], name: 'Market-Brand-Operations Hub' },
-    { id: 'V14', faceIds: [7, 8, 12], name: 'Brand-Operations-Risk Hub' },
-    { id: 'V15', faceIds: [7, 11, 12], name: 'Brand-Funding-Risk Hub' },
-    { id: 'V16', faceIds: [8, 9, 12], name: 'Operations-Regenerative-Risk Hub' },
-    { id: 'V17', faceIds: [9, 10, 12], name: 'Regenerative-Values-Risk Hub' },
-    { id: 'V18', faceIds: [10, 11, 12], name: 'Values-Funding-Risk Hub' },
-    { id: 'V19', faceIds: [3, 4, 6], name: 'Human-Structural-Community Hub' },
-    { id: 'V20', faceIds: [1, 9, 2], name: 'Financial-Regenerative-Intellectual Hub' }
+    { id: 'V1',  faceIds: [1, 2, 6],   name: 'Financial-Intellectual-Community Hub' },
+    { id: 'V2',  faceIds: [1, 2, 10],  name: 'Financial-Intellectual-Values Hub' },
+    { id: 'V3',  faceIds: [1, 6, 7],   name: 'Financial-Community-Brand Hub' },
+    { id: 'V4',  faceIds: [1, 7, 8],   name: 'Financial-Brand-Operations Hub' },
+    { id: 'V5',  faceIds: [1, 8, 10],  name: 'Financial-Operations-Values Hub' },
+    { id: 'V6',  faceIds: [2, 3, 6],   name: 'Intellectual-Human-Community Hub' },
+    { id: 'V7',  faceIds: [2, 3, 11],  name: 'Intellectual-Human-Funding Hub' },
+    { id: 'V8',  faceIds: [2, 10, 11], name: 'Intellectual-Values-Funding Hub' },
+    { id: 'V9',  faceIds: [3, 4, 6],   name: 'Human-Structural-Community Hub' },
+    { id: 'V10', faceIds: [3, 4, 9],   name: 'Human-Structural-Regenerative Hub' },
+    { id: 'V11', faceIds: [3, 9, 11],  name: 'Human-Regenerative-Funding Hub' },
+    { id: 'V12', faceIds: [4, 5, 7],   name: 'Structural-Market-Brand Hub' },
+    { id: 'V13', faceIds: [4, 5, 9],   name: 'Structural-Market-Regenerative Hub' },
+    { id: 'V14', faceIds: [4, 6, 7],   name: 'Structural-Community-Brand Hub' },
+    { id: 'V15', faceIds: [5, 7, 8],   name: 'Market-Brand-Operations Hub' },
+    { id: 'V16', faceIds: [5, 8, 12],  name: 'Market-Operations-Risk Hub' },
+    { id: 'V17', faceIds: [5, 9, 12],  name: 'Market-Regenerative-Risk Hub' },
+    { id: 'V18', faceIds: [8, 10, 12], name: 'Operations-Values-Risk Hub' },
+    { id: 'V19', faceIds: [9, 11, 12], name: 'Regenerative-Funding-Risk Hub' },
+    { id: 'V20', faceIds: [10, 11, 12], name: 'Values-Funding-Risk Hub' }
 ];
 
 /**

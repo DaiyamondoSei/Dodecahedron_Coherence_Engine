@@ -742,40 +742,48 @@ export class DodecahedronEngine {
     // DODECAHEDRON EDGE TOPOLOGY
     // ════════════════════════════════════════════════════════════════════════
     //
-    // Organized by face neighborhood:
+    // Uses DodecahedronTopology SSOT when available (loaded from
+    // js/geometry/dodecahedron-topology.js). Falls back to canonical
+    // edge-derived values matching CSV_Edge_tension_Map.csv.
     //
-    // NORTH POLE (Face 1) - connected to its 5 neighbors
-    // EQUATORIAL BELT - faces 2-6 and 7-11 interlocking
-    // SOUTH POLE (Face 12) - connected to its 5 neighbors
+    // Face adjacency (from 30 edges):
+    //   F1→[2,6,7,8,10]  F2→[1,3,6,10,11]  F3→[2,4,6,9,11]
+    //   F4→[3,5,6,7,9]   F5→[4,7,8,9,12]   F6→[1,2,3,4,7]
+    //   F7→[1,4,5,6,8]   F8→[1,5,7,10,12]  F9→[3,4,5,11,12]
+    //   F10→[1,2,8,11,12] F11→[2,3,9,10,12] F12→[5,8,9,10,11]
     //
-    // Each row groups edges by their "latitude" in the dodecahedron
-    //
-    const edgeTopology = [
-      // Face 1 (North Pole) connections - 5 edges radiating outward
-      [1, 2], [1, 3], [1, 4], [1, 5], [1, 6],
+    let edgeTopology;
 
-      // Upper equatorial belt - Face 2's remaining connections
-      [2, 3], [2, 7], [2, 11], [2, 6],
-
-      // Upper equatorial - Face 3's remaining connections
-      [3, 4], [3, 7], [3, 8],
-
-      // Upper equatorial - Face 4's remaining connections
-      [4, 5], [4, 8], [4, 9],
-
-      // Upper equatorial - Face 5's remaining connections
-      [5, 6], [5, 9], [5, 10],
-
-      // Upper equatorial - Face 6's remaining connections
-      [6, 10], [6, 11],
-
-      // Lower equatorial belt - connecting to Face 12 (South Pole)
-      [7, 8], [7, 11], [7, 12],
-      [8, 9], [8, 12],
-      [9, 10], [9, 12],
-      [10, 11], [10, 12],
-      [11, 12]
-    ];
+    if (typeof DodecahedronTopology !== 'undefined' && DodecahedronTopology.EDGES) {
+      edgeTopology = DodecahedronTopology.EDGES.map(e => e.faces);
+      Logger.debug('Main3D', '🔗 Using DodecahedronTopology.EDGES (SSOT)');
+    } else {
+      Logger.warn('Main3D', '🔗 DodecahedronTopology not available, using canonical fallback');
+      edgeTopology = [
+        // Face 1 connections (adjacent to 2, 6, 7, 8, 10)
+        [1, 2], [1, 6], [1, 7], [1, 8], [1, 10],
+        // Face 2 remaining (adjacent to 3, 6, 10, 11)
+        [2, 3], [2, 6], [2, 10], [2, 11],
+        // Face 3 remaining (adjacent to 4, 6, 9, 11)
+        [3, 4], [3, 6], [3, 9], [3, 11],
+        // Face 4 remaining (adjacent to 5, 6, 7, 9)
+        [4, 5], [4, 6], [4, 7], [4, 9],
+        // Face 5 remaining (adjacent to 7, 8, 9, 12)
+        [5, 7], [5, 8], [5, 9], [5, 12],
+        // Face 6 remaining (adjacent to 7)
+        [6, 7],
+        // Face 7 remaining (adjacent to 8)
+        [7, 8],
+        // Face 8 remaining (adjacent to 10, 12)
+        [8, 10], [8, 12],
+        // Face 9 remaining (adjacent to 11, 12)
+        [9, 11], [9, 12],
+        // Face 10 remaining (adjacent to 11, 12)
+        [10, 11], [10, 12],
+        // Face 11 remaining (adjacent to 12)
+        [11, 12]
+      ];
+    }
 
     edgeTopology.forEach(([faceAId, faceBId], index) => {
       const faceA = this.faces.find(f => f.id === faceAId);
@@ -867,54 +875,43 @@ export class DodecahedronEngine {
     //
     // Each vertex lists the 3 faces that meet there.
     // The order matters: faces are listed in clockwise order when
-    // viewed from outside the dodecahedron looking at the vertex.
+    // Uses DodecahedronTopology SSOT when available. Falls back to canonical
+    // edge-derived values (March 2026 reconciliation). Each vertex triple
+    // (a,b,c) has all three edges a-b, a-c, b-c present in the edge list.
     //
-    // Organized by latitude:
-    //   V1-V5:   Around Face 1 (North Pole)
-    //   V6-V15:  Equatorial belt (where most dynamics happen)
-    //   V16-V20: Around Face 12 (South Pole)
-    //
-    const vertexTopology = [
-      // ──────────────────────────────────────────────────────────────────────
-      // NORTH POLAR VERTICES (V1-V5): Where Face 1 meets its neighbors
-      // These represent the "visionary" leverage points of the organization
-      // ──────────────────────────────────────────────────────────────────────
-      [1, 2, 3],   // V1: Financial + Intellectual + Human
-      [1, 3, 4],   // V2: Financial + Human + Structural
-      [1, 4, 5],   // V3: Financial + Structural + Market
-      [1, 5, 6],   // V4: Financial + Market + Community
-      [1, 6, 2],   // V5: Financial + Community + Intellectual
+    let vertexTopology;
 
-      // ──────────────────────────────────────────────────────────────────────
-      // UPPER EQUATORIAL VERTICES (V6-V10): The "creative tension" zone
-      // Where upper and lower hemispheres begin to interface
-      // ──────────────────────────────────────────────────────────────────────
-      [2, 7, 3],   // V6: Intellectual + Brand + Human
-      [3, 7, 8],   // V7: Human + Brand + Operations
-      [3, 8, 4],   // V8: Human + Operations + Structural
-      [4, 8, 9],   // V9: Structural + Operations + Regenerative
-      [4, 9, 5],   // V10: Structural + Regenerative + Market
-
-      // ──────────────────────────────────────────────────────────────────────
-      // LOWER EQUATORIAL VERTICES (V11-V15): The "grounding" zone
-      // Where vision meets implementation
-      // ──────────────────────────────────────────────────────────────────────
-      [5, 9, 10],  // V11: Market + Regenerative + Values
-      [5, 10, 6],  // V12: Market + Values + Community
-      [6, 10, 11], // V13: Community + Values + Funding
-      [6, 11, 2],  // V14: Community + Funding + Intellectual
-      [2, 11, 7],  // V15: Intellectual + Funding + Brand
-
-      // ──────────────────────────────────────────────────────────────────────
-      // SOUTH POLAR VERTICES (V16-V20): Where Face 12 meets its neighbors
-      // These represent the "resilience" leverage points of the organization
-      // ──────────────────────────────────────────────────────────────────────
-      [7, 12, 8],  // V16: Brand + Risk + Operations
-      [8, 12, 9],  // V17: Operations + Risk + Regenerative
-      [9, 12, 10], // V18: Regenerative + Risk + Values
-      [10, 12, 11],// V19: Values + Risk + Funding
-      [11, 12, 7]  // V20: Funding + Risk + Brand
-    ];
+    if (typeof DodecahedronTopology !== 'undefined' && DodecahedronTopology.VERTICES) {
+      vertexTopology = DodecahedronTopology.VERTICES.map(v => v.faces);
+      Logger.debug('Main3D', '🌀 Using DodecahedronTopology.VERTICES (SSOT)');
+    } else {
+      Logger.warn('Main3D', '🌀 DodecahedronTopology not available, using canonical fallback');
+      vertexTopology = [
+        // NORTH POLAR (V1-V5): Where Face 1 meets its neighbors
+        [1, 2, 6],   // V1:  Financial + Intellectual + Community
+        [1, 2, 10],  // V2:  Financial + Intellectual + Values
+        [1, 6, 7],   // V3:  Financial + Community + Brand
+        [1, 7, 8],   // V4:  Financial + Brand + Operations
+        [1, 8, 10],  // V5:  Financial + Operations + Values
+        // EQUATORIAL (V6-V17): The dynamic zone
+        [2, 3, 6],   // V6:  Intellectual + Human + Community
+        [2, 3, 11],  // V7:  Intellectual + Human + Funding
+        [2, 10, 11], // V8:  Intellectual + Values + Funding
+        [3, 4, 6],   // V9:  Human + Structural + Community
+        [3, 4, 9],   // V10: Human + Structural + Regenerative
+        [3, 9, 11],  // V11: Human + Regenerative + Funding
+        [4, 5, 7],   // V12: Structural + Market + Brand
+        [4, 5, 9],   // V13: Structural + Market + Regenerative
+        [4, 6, 7],   // V14: Structural + Community + Brand
+        [5, 7, 8],   // V15: Market + Brand + Operations
+        [5, 8, 12],  // V16: Market + Operations + Risk
+        [5, 9, 12],  // V17: Market + Regenerative + Risk
+        // SOUTH POLAR (V18-V20): Where Face 12 meets its neighbors
+        [8, 10, 12], // V18: Operations + Values + Risk
+        [9, 11, 12], // V19: Regenerative + Funding + Risk
+        [10, 11, 12] // V20: Values + Funding + Risk
+      ];
+    }
 
     vertexTopology.forEach((faceIds, index) => {
       const faces = faceIds.map(id => this.faces.find(f => f.id === id)).filter(f => f);

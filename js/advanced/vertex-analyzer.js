@@ -101,11 +101,10 @@ const _PSI_4 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PSI_4 : 1 - 
 
 export class VertexAnalyzer {
   constructor() {
-    // STRESS_TEST_FIX [H1]: Import vertex definitions from topology SSOT.
-    // The previous hardcoded list had WRONG face triads (V2=[1,2,7] should be [1,5,6],
-    // V3=[1,6,10] should be [1,8,9], etc.). Comments like "Check topology" and
-    // "Wait, 4-5-7?" confirmed the data was never verified against geometry.
-    // SSOT has been validated by Euler formula (V-E+F=2) and pentagon adjacency checks.
+    // Import vertex definitions from topology SSOT (dodecahedron-topology.js).
+    // RECONCILED (March 2026): All 20 vertex triads are edge-derived — each
+    // triple (a,b,c) has edges a-b, a-c, b-c in the canonical 30-edge set.
+    // Validated by Euler formula (V-E+F=2) and pentagon adjacency checks.
     const topology = (typeof window !== 'undefined' && window.DodecahedronTopology)
       ? window.DodecahedronTopology.VERTICES
       : null;

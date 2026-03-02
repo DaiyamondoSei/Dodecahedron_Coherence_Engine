@@ -197,28 +197,28 @@ const DODECAHEDRON_TOPOLOGY = {
         { id: 'E11-12', faces: [11, 12], element: 'Water' }  // Funding Pipeline ↔ Risk & Resilience
     ],
 
-    // 20 Vertices (where 3 faces meet)
+    // 20 Vertices (where 3 faces meet) — edge-derived canonical topology
     vertices: [
-        { id: 'V1', faces: [1, 2, 3] },
-        { id: 'V2', faces: [1, 3, 4] },
-        { id: 'V3', faces: [1, 4, 5] },
-        { id: 'V4', faces: [1, 5, 6] },
-        { id: 'V5', faces: [1, 2, 6] },
-        { id: 'V6', faces: [2, 3, 8] },
-        { id: 'V7', faces: [3, 4, 9] },
-        { id: 'V8', faces: [4, 5, 10] },
-        { id: 'V9', faces: [5, 6, 11] },
-        { id: 'V10', faces: [2, 6, 7] },
-        { id: 'V11', faces: [2, 7, 8] },
-        { id: 'V12', faces: [3, 8, 9] },
-        { id: 'V13', faces: [4, 9, 10] },
-        { id: 'V14', faces: [5, 10, 11] },
-        { id: 'V15', faces: [6, 7, 11] },
-        { id: 'V16', faces: [7, 8, 12] },
-        { id: 'V17', faces: [8, 9, 12] },
-        { id: 'V18', faces: [9, 10, 12] },
-        { id: 'V19', faces: [10, 11, 12] },
-        { id: 'V20', faces: [7, 11, 12] }
+        { id: 'V1', faces: [1, 2, 6] },
+        { id: 'V2', faces: [1, 2, 10] },
+        { id: 'V3', faces: [1, 6, 7] },
+        { id: 'V4', faces: [1, 7, 8] },
+        { id: 'V5', faces: [1, 8, 10] },
+        { id: 'V6', faces: [2, 3, 6] },
+        { id: 'V7', faces: [2, 3, 11] },
+        { id: 'V8', faces: [2, 10, 11] },
+        { id: 'V9', faces: [3, 4, 6] },
+        { id: 'V10', faces: [3, 4, 9] },
+        { id: 'V11', faces: [3, 9, 11] },
+        { id: 'V12', faces: [4, 5, 7] },
+        { id: 'V13', faces: [4, 5, 9] },
+        { id: 'V14', faces: [4, 6, 7] },
+        { id: 'V15', faces: [5, 7, 8] },
+        { id: 'V16', faces: [5, 8, 12] },
+        { id: 'V17', faces: [5, 9, 12] },
+        { id: 'V18', faces: [8, 10, 12] },
+        { id: 'V19', faces: [9, 11, 12] },
+        { id: 'V20', faces: [10, 11, 12] }
     ],
 
     // Default face names (12 organizational domains)

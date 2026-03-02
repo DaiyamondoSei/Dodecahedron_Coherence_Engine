@@ -160,10 +160,14 @@ const VERTEX_CLASSIFICATIONS = {
  *
  * @constant {Object}
  */
+// RECONCILED (March 2026): All face triads are edge-derived — each vertex
+// triple (a,b,c) has edges a-b, a-c, and b-c present in the canonical 30-edge
+// set from dodecahedron-topology.js. Latitude is determined by pole membership:
+// North Polar (contains Face 1), South Polar (contains Face 12), Equatorial (neither).
 const VERTEX_TOPOLOGY = {
 
     // ═══════════════════════════════════════════════════════════════════════
-    // NORTH POLAR VERTICES (V1-V5) - Resource & Capital Convergences
+    // NORTH POLAR VERTICES (V1-V5) - Where Face 1 (Financial Capital) converges
     // ═══════════════════════════════════════════════════════════════════════
 
     V1: {
@@ -178,46 +182,46 @@ const VERTEX_TOPOLOGY = {
 
     V2: {
         id: 'V2',
-        faces: [1, 5, 6],
-        domains: ['Financial Capital', 'Market Resonance', 'Community & Partners'],
-        archetype: 'The Market Community Gateway',
-        theme: 'Where capital meets market presence and partner ecosystem',
-        question: 'Is our market strategy serving both finances and community?',
+        faces: [1, 2, 10],
+        domains: ['Financial Capital', 'Intellectual Capital', 'Foundational Values'],
+        archetype: 'The Ethical Capital Foundation',
+        theme: 'Where capital meets knowledge meets purpose',
+        question: 'Does our investment in knowledge serve our deepest values?',
         latitude: 'northPolar'
     },
 
     V3: {
         id: 'V3',
-        faces: [1, 8, 9],
-        domains: ['Financial Capital', 'Core Operations', 'Regenerative Flow'],
-        archetype: 'The Operational Sustainability Engine',
-        theme: 'Where capital meets operations meets regeneration',
-        question: 'Are our operations financially sustainable AND regenerative?',
+        faces: [1, 6, 7],
+        domains: ['Financial Capital', 'Community & Partners', 'Brand & Reputation'],
+        archetype: 'The Stakeholder Trust Engine',
+        theme: 'Where capital meets community meets reputation',
+        question: 'Does our financial relationship with community build authentic brand trust?',
         latitude: 'northPolar'
     },
 
     V4: {
         id: 'V4',
-        faces: [2, 9, 10],
-        domains: ['Intellectual Capital', 'Regenerative Flow', 'Foundational Values'],
-        archetype: 'The Innovation Ethics Nexus',
-        theme: 'Where ideas meet sustainability meets values',
-        question: 'Does our innovation serve regeneration and align with values?',
+        faces: [1, 7, 8],
+        domains: ['Financial Capital', 'Brand & Reputation', 'Core Operations'],
+        archetype: 'The Value Delivery Chain',
+        theme: 'Where capital meets brand meets delivery',
+        question: 'Do our operations deliver on the brand promise our capital supports?',
         latitude: 'northPolar'
     },
 
     V5: {
         id: 'V5',
-        faces: [2, 3, 10],
-        domains: ['Intellectual Capital', 'Human Capital', 'Foundational Values'],
-        archetype: 'The Purpose-Driven Knowledge Center',
-        theme: 'Where knowledge meets people meets purpose',
-        question: 'Is our knowledge creating meaningful work aligned with values?',
+        faces: [1, 8, 10],
+        domains: ['Financial Capital', 'Core Operations', 'Foundational Values'],
+        archetype: 'The Operational Ethics Nexus',
+        theme: 'Where capital meets operations meets values',
+        question: 'Are our operations financially sustainable AND values-aligned?',
         latitude: 'northPolar'
     },
 
     // ═══════════════════════════════════════════════════════════════════════
-    // EQUATORIAL VERTICES (V6-V15) - Operational & Relational Convergences
+    // EQUATORIAL VERTICES (V6-V17) - Operational & Relational Convergences
     // ═══════════════════════════════════════════════════════════════════════
 
     V6: {
@@ -232,36 +236,56 @@ const VERTEX_TOPOLOGY = {
 
     V7: {
         id: 'V7',
-        faces: [3, 10, 11],
-        domains: ['Human Capital', 'Foundational Values', 'Funding Pipeline'],
-        archetype: 'The Values-Funding Alignment Point',
-        theme: 'Where team meets values meets funding',
-        question: 'Is our team attracting funding that aligns with our values?',
+        faces: [2, 3, 11],
+        domains: ['Intellectual Capital', 'Human Capital', 'Funding Pipeline'],
+        archetype: 'The Innovation Funding Pipeline',
+        theme: 'Where knowledge meets people meets capital sources',
+        question: 'Can our team\'s knowledge attract aligned funding?',
         latitude: 'equatorial'
     },
 
     V8: {
         id: 'V8',
-        faces: [4, 5, 6],
-        domains: ['Structural Capital', 'Market Resonance', 'Community & Partners'],
-        archetype: 'The External Coherence Gateway',
-        theme: 'Where structure meets market meets partners',
-        question: 'Does our structure serve both market and community relationships?',
+        faces: [2, 10, 11],
+        domains: ['Intellectual Capital', 'Foundational Values', 'Funding Pipeline'],
+        archetype: 'The Purpose-Driven Investment Point',
+        theme: 'Where knowledge meets values meets funding',
+        question: 'Does our intellectual capital attract values-aligned investment?',
         latitude: 'equatorial'
     },
 
     V9: {
         id: 'V9',
-        faces: [1, 5, 8],
-        domains: ['Financial Capital', 'Market Resonance', 'Core Operations'],
-        archetype: 'The Market Operations Engine',
-        theme: 'Where capital meets market meets delivery',
-        question: 'Is our market presence backed by solid operations and finances?',
+        faces: [3, 4, 6],
+        domains: ['Human Capital', 'Structural Capital', 'Community & Partners'],
+        archetype: 'The Execution Gateway',
+        theme: 'Where people meet structure meets community',
+        question: 'How well do people, process, and community dance together?',
         latitude: 'equatorial'
     },
 
     V10: {
         id: 'V10',
+        faces: [3, 4, 9],
+        domains: ['Human Capital', 'Structural Capital', 'Regenerative Flow'],
+        archetype: 'The Regenerative Structure Hub',
+        theme: 'Where people meet structure meets regeneration',
+        question: 'Do our structures support regenerative human practices?',
+        latitude: 'equatorial'
+    },
+
+    V11: {
+        id: 'V11',
+        faces: [3, 9, 11],
+        domains: ['Human Capital', 'Regenerative Flow', 'Funding Pipeline'],
+        archetype: 'The Regenerative Funding Catalyst',
+        theme: 'Where people meet regeneration meets funding',
+        question: 'Does our regenerative human capital attract aligned resources?',
+        latitude: 'equatorial'
+    },
+
+    V12: {
+        id: 'V12',
         faces: [4, 5, 7],
         domains: ['Structural Capital', 'Market Resonance', 'Brand & Reputation'],
         archetype: 'The Brand Structure Nexus',
@@ -270,28 +294,28 @@ const VERTEX_TOPOLOGY = {
         latitude: 'equatorial'
     },
 
-    V11: {
-        id: 'V11',
-        faces: [3, 4, 11],
-        domains: ['Human Capital', 'Structural Capital', 'Funding Pipeline'],
-        archetype: 'The Team Structure Investment Point',
-        theme: 'Where people meet structure meets funding',
-        question: 'Is our team structure attractive to investors?',
-        latitude: 'equatorial'
-    },
-
-    V12: {
-        id: 'V12',
-        faces: [4, 7, 11],
-        domains: ['Structural Capital', 'Brand & Reputation', 'Funding Pipeline'],
-        archetype: 'The Governance Credibility Gateway',
-        theme: 'Where structure meets brand meets funding',
-        question: 'Does our governance structure build credibility with funders?',
-        latitude: 'equatorial'
-    },
-
     V13: {
         id: 'V13',
+        faces: [4, 5, 9],
+        domains: ['Structural Capital', 'Market Resonance', 'Regenerative Flow'],
+        archetype: 'The Regenerative Market Engine',
+        theme: 'Where structure meets market meets regeneration',
+        question: 'Can our structure deliver regenerative value to the market?',
+        latitude: 'equatorial'
+    },
+
+    V14: {
+        id: 'V14',
+        faces: [4, 6, 7],
+        domains: ['Structural Capital', 'Community & Partners', 'Brand & Reputation'],
+        archetype: 'The Community Credibility Gateway',
+        theme: 'Where structure meets community meets brand',
+        question: 'Does our governance build community trust in our brand?',
+        latitude: 'equatorial'
+    },
+
+    V15: {
+        id: 'V15',
         faces: [5, 7, 8],
         domains: ['Market Resonance', 'Brand & Reputation', 'Core Operations'],
         archetype: 'The Market Presence Triangle',
@@ -300,78 +324,58 @@ const VERTEX_TOPOLOGY = {
         latitude: 'equatorial'
     },
 
-    V14: {
-        id: 'V14',
-        faces: [7, 8, 12],
-        domains: ['Brand & Reputation', 'Core Operations', 'Risk & Resilience'],
-        archetype: 'The Operational Integrity Guardian',
-        theme: 'Where brand meets operations meets risk',
-        question: 'Does our operational excellence protect our reputation from risk?',
-        latitude: 'equatorial'
-    },
-
-    V15: {
-        id: 'V15',
-        faces: [7, 11, 12],
-        domains: ['Brand & Reputation', 'Funding Pipeline', 'Risk & Resilience'],
-        archetype: 'The Investor Confidence Triangle',
-        theme: 'Where brand meets funding meets risk',
-        question: 'Does our brand and risk posture inspire investor confidence?',
-        latitude: 'equatorial'
-    },
-
     // ═══════════════════════════════════════════════════════════════════════
-    // SOUTH POLAR VERTICES (V16-V20) - Protection & Resilience Convergences
+    // SOUTH POLAR VERTICES (V16-V20) - Where Face 12 (Risk & Resilience) converges
     // ═══════════════════════════════════════════════════════════════════════
 
     V16: {
         id: 'V16',
-        faces: [8, 9, 12],
-        domains: ['Core Operations', 'Regenerative Flow', 'Risk & Resilience'],
-        archetype: 'The Regenerative Resilience Engine',
-        theme: 'Where operations meet regeneration meets protection',
-        question: 'Are our operations both regenerative AND resilient?',
+        faces: [5, 8, 12],
+        domains: ['Market Resonance', 'Core Operations', 'Risk & Resilience'],
+        archetype: 'The Operational Risk Horizon',
+        theme: 'Where market meets operations meets risk',
+        question: 'Do our operations manage market-facing risks effectively?',
         latitude: 'southPolar'
     },
 
     V17: {
         id: 'V17',
-        faces: [9, 10, 12],
-        domains: ['Regenerative Flow', 'Foundational Values', 'Risk & Resilience'],
-        archetype: 'The Values-Based Resilience Center',
-        theme: 'Where regeneration meets values meets protection',
-        question: 'Do our values create genuine resilience through regeneration?',
+        faces: [5, 9, 12],
+        domains: ['Market Resonance', 'Regenerative Flow', 'Risk & Resilience'],
+        archetype: 'The Regenerative Risk Shield',
+        theme: 'Where market meets regeneration meets resilience',
+        question: 'Does our regenerative practice protect us from market risk?',
         latitude: 'southPolar'
     },
 
     V18: {
         id: 'V18',
+        faces: [8, 10, 12],
+        domains: ['Core Operations', 'Foundational Values', 'Risk & Resilience'],
+        archetype: 'The Ethical Resilience Engine',
+        theme: 'Where operations meet values meets risk',
+        question: 'Are our risk management practices grounded in operational values?',
+        latitude: 'southPolar'
+    },
+
+    V19: {
+        id: 'V19',
+        faces: [9, 11, 12],
+        domains: ['Regenerative Flow', 'Funding Pipeline', 'Risk & Resilience'],
+        archetype: 'The Sustainable Funding Guardian',
+        theme: 'Where regeneration meets funding meets risk',
+        question: 'Is our funding pipeline sustainably resilient?',
+        latitude: 'southPolar'
+    },
+
+    V20: {
+        id: 'V20',
         faces: [10, 11, 12],
         domains: ['Foundational Values', 'Funding Pipeline', 'Risk & Resilience'],
         archetype: 'The Ethical Funding Guardian',
         theme: 'Where values meet funding meets risk',
         question: 'Is our funding aligned with values while managing risk?',
         latitude: 'southPolar'
-    },
-
-    V19: {
-        id: 'V19',
-        faces: [3, 4, 6],
-        domains: ['Human Capital', 'Structural Capital', 'Community & Partners'],
-        archetype: 'The Execution Gateway',
-        theme: 'Where people meet structure meets community',
-        question: 'How well do people, process, and community dance together?',
-        latitude: 'equatorial'  // Actually equatorial per CSV
-    },
-
-    V20: {
-        id: 'V20',
-        faces: [1, 2, 9],
-        domains: ['Financial Capital', 'Intellectual Capital', 'Regenerative Flow'],
-        archetype: 'The Regenerative Innovation Funder',
-        theme: 'Where capital meets ideas meets regeneration',
-        question: 'Are we investing in innovation that regenerates?',
-        latitude: 'northPolar'  // Actually north polar per CSV
     }
 };
 
@@ -390,7 +394,7 @@ const VERTEX_TOPOLOGY = {
  */
 const VERTEX_LATITUDE = {
     northPolar: {
-        vertices: ['V1', 'V2', 'V3', 'V4', 'V5', 'V20'],
+        vertices: ['V1', 'V2', 'V3', 'V4', 'V5'],
         centralFace: 1,
         centralDomain: 'Financial Capital',
         theme: 'Resource & Capital convergences',
@@ -398,13 +402,13 @@ const VERTEX_LATITUDE = {
     },
 
     equatorial: {
-        vertices: ['V6', 'V7', 'V8', 'V9', 'V10', 'V11', 'V12', 'V13', 'V14', 'V15', 'V19'],
+        vertices: ['V6', 'V7', 'V8', 'V9', 'V10', 'V11', 'V12', 'V13', 'V14', 'V15'],
         theme: 'Operational & Relational convergences',
         question: 'Where does daily work converge and transform?'
     },
 
     southPolar: {
-        vertices: ['V16', 'V17', 'V18'],
+        vertices: ['V16', 'V17', 'V18', 'V19', 'V20'],
         centralFace: 12,
         centralDomain: 'Risk & Resilience',
         theme: 'Protection & Resilience convergences',

@@ -101,17 +101,19 @@
     function buildVertexToFacesMap() {
         // Vertex definitions: which 3 faces each vertex belongs to
         // Format: { id: analytical vertex ID (1-20), faces: [faceId, faceId, faceId] }
+        // RECONCILED (March 2026): Edge-derived canonical vertex triads.
+        // Each triple (a,b,c) has edges a-b, a-c, b-c in the 30-edge set.
         const definitions = [
-            { id: 1, faces: [1, 2, 6] }, { id: 2, faces: [1, 5, 6] },
-            { id: 3, faces: [1, 5, 8] }, { id: 4, faces: [1, 8, 9] },
-            { id: 5, faces: [1, 2, 9] }, { id: 6, faces: [2, 3, 6] },
-            { id: 7, faces: [2, 3, 10] }, { id: 8, faces: [2, 9, 10] },
-            { id: 9, faces: [3, 4, 6] }, { id: 10, faces: [3, 4, 11] },
-            { id: 11, faces: [3, 10, 11] }, { id: 12, faces: [4, 5, 6] },
-            { id: 13, faces: [4, 5, 7] }, { id: 14, faces: [4, 7, 11] },
-            { id: 15, faces: [5, 7, 8] }, { id: 16, faces: [5, 8, 10] },
-            { id: 17, faces: [7, 8, 12] }, { id: 18, faces: [8, 9, 12] },
-            { id: 19, faces: [9, 10, 12] }, { id: 20, faces: [10, 11, 12] }
+            { id: 1, faces: [1, 2, 6] },   { id: 2, faces: [1, 2, 10] },
+            { id: 3, faces: [1, 6, 7] },   { id: 4, faces: [1, 7, 8] },
+            { id: 5, faces: [1, 8, 10] },  { id: 6, faces: [2, 3, 6] },
+            { id: 7, faces: [2, 3, 11] },  { id: 8, faces: [2, 10, 11] },
+            { id: 9, faces: [3, 4, 6] },   { id: 10, faces: [3, 4, 9] },
+            { id: 11, faces: [3, 9, 11] }, { id: 12, faces: [4, 5, 7] },
+            { id: 13, faces: [4, 5, 9] },  { id: 14, faces: [4, 6, 7] },
+            { id: 15, faces: [5, 7, 8] },  { id: 16, faces: [5, 8, 12] },
+            { id: 17, faces: [5, 9, 12] }, { id: 18, faces: [8, 10, 12] },
+            { id: 19, faces: [9, 11, 12] }, { id: 20, faces: [10, 11, 12] }
         ];
 
         const map = new Map();
@@ -435,26 +437,27 @@
         // We need to find the analytical vertex ID by matching topology patterns
 
         // Analytical vertex definitions: vertex ID → faces it belongs to
+        // RECONCILED (March 2026): Edge-derived canonical vertex triads
         const analyticalVertexDefs = [
             { id: 1, faces: new Set([1, 2, 6]) },
-            { id: 2, faces: new Set([1, 5, 6]) },
-            { id: 3, faces: new Set([1, 5, 8]) },
-            { id: 4, faces: new Set([1, 8, 9]) },
-            { id: 5, faces: new Set([1, 2, 9]) },
+            { id: 2, faces: new Set([1, 2, 10]) },
+            { id: 3, faces: new Set([1, 6, 7]) },
+            { id: 4, faces: new Set([1, 7, 8]) },
+            { id: 5, faces: new Set([1, 8, 10]) },
             { id: 6, faces: new Set([2, 3, 6]) },
-            { id: 7, faces: new Set([2, 3, 10]) },
-            { id: 8, faces: new Set([2, 9, 10]) },
+            { id: 7, faces: new Set([2, 3, 11]) },
+            { id: 8, faces: new Set([2, 10, 11]) },
             { id: 9, faces: new Set([3, 4, 6]) },
-            { id: 10, faces: new Set([3, 4, 11]) },
-            { id: 11, faces: new Set([3, 10, 11]) },
-            { id: 12, faces: new Set([4, 5, 6]) },
-            { id: 13, faces: new Set([4, 5, 7]) },
-            { id: 14, faces: new Set([4, 7, 11]) },
+            { id: 10, faces: new Set([3, 4, 9]) },
+            { id: 11, faces: new Set([3, 9, 11]) },
+            { id: 12, faces: new Set([4, 5, 7]) },
+            { id: 13, faces: new Set([4, 5, 9]) },
+            { id: 14, faces: new Set([4, 6, 7]) },
             { id: 15, faces: new Set([5, 7, 8]) },
-            { id: 16, faces: new Set([5, 8, 10]) },  // Note: Was wrong in original (5,8,10 not 7,8,12)
-            { id: 17, faces: new Set([7, 8, 12]) },
-            { id: 18, faces: new Set([8, 9, 12]) },
-            { id: 19, faces: new Set([9, 10, 12]) },
+            { id: 16, faces: new Set([5, 8, 12]) },
+            { id: 17, faces: new Set([5, 9, 12]) },
+            { id: 18, faces: new Set([8, 10, 12]) },
+            { id: 19, faces: new Set([9, 11, 12]) },
             { id: 20, faces: new Set([10, 11, 12]) }
         ];
 

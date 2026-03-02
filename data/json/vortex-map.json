@@ -1,8 +1,8 @@
 {
   "$schema": "./schemas/vortex-map.schema.json",
-  "$version": "2.0.0",
-  "$generatedAt": "2026-01-08T15:08:41.380Z",
-  "$source": "CSV_Vortex_Map.csv",
+  "$version": "3.0.0",
+  "$generatedAt": "2026-03-02T09:01:33.235Z",
+  "$source": "Edge-derived from dodecahedron-topology.js (March 2026 reconciliation)",
   "$philosophy": {
     "purpose": "Map of 20 triadic intersections where 3 domains meet",
     "sacredGeometry": "Each vertex is a crossroads of organizational energy",
@@ -17,17 +17,20 @@
     "validated": true,
     "violations": [],
     "triadicConstraint": "Each vertex connects exactly 3 faces",
-    "note": "Face IDs match CSV_Vortex_Map.csv (historical Apex Industries data). The engine uses edge-derived vertex definitions from dodecahedron-topology.js which may differ."
+    "derivation": "Edge-derived: each vertex triple (a,b,c) has all edges a-b, a-c, b-c",
+    "note": "Reconciled March 2026. All vertex triads are topologically valid."
   },
   "$integrityReport": {
     "totalRecords": 20,
     "substitutionCount": 0,
     "harmonyHubs": [
-      "V14",
-      "V4"
+      "V3",
+      "V4",
+      "V9",
+      "V14"
     ],
     "bermudaTriangles": [],
-    "averageLambda": 0.119057,
+    "averageLambda": 0.095035,
     "substitutions": []
   },
   "vertices": [
@@ -57,14 +60,334 @@
       },
       "computed": {
         "macroVMean": 0.295792,
-        "vortexStrength": 0.107501,
-        "microVMean": 0.161251,
-        "overallCoherence": 0.728,
+        "vortexStrength": 0.071667,
+        "microVMean": 0.107501,
+        "overallCoherence": 0.758,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V2",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.239612
+        },
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.400864
+        },
+        {
+          "id": 10,
+          "name": "Foundational Values",
+          "energy": 0.416284
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Intellectual Capital meets Foundational Values",
+        "question": "Are Financial Capital, Intellectual Capital, Foundational Values aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.352253,
+        "vortexStrength": 0.078521,
+        "microVMean": 0.117781,
+        "overallCoherence": 0.777,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V3",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.239612
+        },
+        {
+          "id": 6,
+          "name": "Community & Partners",
+          "energy": 0.246899
+        },
+        {
+          "id": 7,
+          "name": "Brand & Reputation",
+          "energy": 0.20813
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Community & Partners meets Brand & Reputation",
+        "question": "Are Financial Capital, Community & Partners, Brand & Reputation aligned?",
+        "status": "Harmony Hub"
+      },
+      "computed": {
+        "macroVMean": 0.231547,
+        "vortexStrength": 0.017231,
+        "microVMean": 0.025846,
+        "overallCoherence": 0.926,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V4",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.239612
+        },
+        {
+          "id": 7,
+          "name": "Brand & Reputation",
+          "energy": 0.20813
+        },
+        {
+          "id": 8,
+          "name": "Core Operations",
+          "energy": 0.220891
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Brand & Reputation meets Core Operations",
+        "question": "Are Financial Capital, Brand & Reputation, Core Operations aligned?",
+        "status": "Harmony Hub"
+      },
+      "computed": {
+        "macroVMean": 0.222878,
+        "vortexStrength": 0.013992,
+        "microVMean": 0.020988,
+        "overallCoherence": 0.937,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V5",
+      "faces": [
+        {
+          "id": 1,
+          "name": "Financial Capital",
+          "energy": 0.239612
+        },
+        {
+          "id": 8,
+          "name": "Core Operations",
+          "energy": 0.220891
+        },
+        {
+          "id": 10,
+          "name": "Foundational Values",
+          "energy": 0.416284
+        }
+      ],
+      "philosophy": {
+        "archetype": "Financial Capital meets Core Operations meets Foundational Values",
+        "question": "Are Financial Capital, Core Operations, Foundational Values aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.292262,
+        "vortexStrength": 0.086841,
+        "microVMean": 0.130262,
+        "overallCoherence": 0.703,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V6",
+      "faces": [
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.400864
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.165592
+        },
+        {
+          "id": 6,
+          "name": "Community & Partners",
+          "energy": 0.246899
+        }
+      ],
+      "philosophy": {
+        "archetype": "Intellectual Capital meets Human Capital meets Community & Partners",
+        "question": "Are Intellectual Capital, Human Capital, Community & Partners aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.271118,
+        "vortexStrength": 0.104565,
+        "microVMean": 0.156848,
+        "overallCoherence": 0.614,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V7",
+      "faces": [
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.400864
+        },
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.165592
+        },
+        {
+          "id": 11,
+          "name": "Funding Pipeline",
+          "energy": 0.123435
+        }
+      ],
+      "philosophy": {
+        "archetype": "Intellectual Capital meets Human Capital meets Funding Pipeline",
+        "question": "Are Intellectual Capital, Human Capital, Funding Pipeline aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.229964,
+        "vortexStrength": 0.123302,
+        "microVMean": 0.184953,
+        "overallCoherence": 0.464,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V8",
+      "faces": [
+        {
+          "id": 2,
+          "name": "Intellectual Capital",
+          "energy": 0.400864
+        },
+        {
+          "id": 10,
+          "name": "Foundational Values",
+          "energy": 0.416284
+        },
+        {
+          "id": 11,
+          "name": "Funding Pipeline",
+          "energy": 0.123435
+        }
+      ],
+      "philosophy": {
+        "archetype": "Intellectual Capital meets Foundational Values meets Funding Pipeline",
+        "question": "Are Intellectual Capital, Foundational Values, Funding Pipeline aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.313528,
+        "vortexStrength": 0.130155,
+        "microVMean": 0.195233,
+        "overallCoherence": 0.585,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V9",
+      "faces": [
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.165592
+        },
+        {
+          "id": 4,
+          "name": "Structural Capital",
+          "energy": 0.244788
+        },
+        {
+          "id": 6,
+          "name": "Community & Partners",
+          "energy": 0.246899
+        }
+      ],
+      "philosophy": {
+        "archetype": "Human Capital meets Structural Capital meets Community & Partners",
+        "question": "Are Human Capital, Structural Capital, Community & Partners aligned?",
+        "status": "Harmony Hub"
+      },
+      "computed": {
+        "macroVMean": 0.219093,
+        "vortexStrength": 0.036137,
+        "microVMean": 0.054205,
+        "overallCoherence": 0.835,
         "wasSubstituted": false
       }
     },
     {
       "id": "V10",
+      "faces": [
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.165592
+        },
+        {
+          "id": 4,
+          "name": "Structural Capital",
+          "energy": 0.244788
+        },
+        {
+          "id": 9,
+          "name": "Regenerative Flow",
+          "energy": 0.438344
+        }
+      ],
+      "philosophy": {
+        "archetype": "Human Capital meets Structural Capital meets Regenerative Flow",
+        "question": "Are Human Capital, Structural Capital, Regenerative Flow aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.282908,
+        "vortexStrength": 0.121223,
+        "microVMean": 0.181835,
+        "overallCoherence": 0.572,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V11",
+      "faces": [
+        {
+          "id": 3,
+          "name": "Human Capital",
+          "energy": 0.165592
+        },
+        {
+          "id": 9,
+          "name": "Regenerative Flow",
+          "energy": 0.438344
+        },
+        {
+          "id": 11,
+          "name": "Funding Pipeline",
+          "energy": 0.123435
+        }
+      ],
+      "philosophy": {
+        "archetype": "Human Capital meets Regenerative Flow meets Funding Pipeline",
+        "question": "Are Human Capital, Regenerative Flow, Funding Pipeline aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.242457,
+        "vortexStrength": 0.139959,
+        "microVMean": 0.209939,
+        "overallCoherence": 0.423,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V12",
       "faces": [
         {
           "id": 4,
@@ -89,78 +412,78 @@
       },
       "computed": {
         "macroVMean": 0.166391,
-        "vortexStrength": 0.132356,
-        "microVMean": 0.198535,
-        "overallCoherence": 0.705,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V11",
-      "faces": [
-        {
-          "id": 3,
-          "name": "Human Capital",
-          "energy": 0.165592
-        },
-        {
-          "id": 4,
-          "name": "Structural Capital",
-          "energy": 0.244788
-        },
-        {
-          "id": 11,
-          "name": "Funding Pipeline",
-          "energy": 0.123435
-        }
-      ],
-      "philosophy": {
-        "archetype": "Human Capital meets Structural Capital meets Funding Pipeline",
-        "question": "Are Human Capital, Structural Capital, Funding Pipeline aligned?",
-        "status": "Moderate"
-      },
-      "computed": {
-        "macroVMean": 0.177938,
-        "vortexStrength": 0.080902,
-        "microVMean": 0.121353,
-        "overallCoherence": 0.712,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V12",
-      "faces": [
-        {
-          "id": 4,
-          "name": "Structural Capital",
-          "energy": 0.244788
-        },
-        {
-          "id": 7,
-          "name": "Brand & Reputation",
-          "energy": 0.20813
-        },
-        {
-          "id": 11,
-          "name": "Funding Pipeline",
-          "energy": 0.123435
-        }
-      ],
-      "philosophy": {
-        "archetype": "Structural Capital meets Brand & Reputation meets Funding Pipeline",
-        "question": "Are Structural Capital, Brand & Reputation, Funding Pipeline aligned?",
-        "status": "Moderate"
-      },
-      "computed": {
-        "macroVMean": 0.192118,
-        "vortexStrength": 0.080902,
-        "microVMean": 0.121353,
-        "overallCoherence": 0.581,
+        "vortexStrength": 0.088238,
+        "microVMean": 0.132356,
+        "overallCoherence": 0.47,
         "wasSubstituted": false
       }
     },
     {
       "id": "V13",
+      "faces": [
+        {
+          "id": 4,
+          "name": "Structural Capital",
+          "energy": 0.244788
+        },
+        {
+          "id": 5,
+          "name": "Market Resonance",
+          "energy": 0.046254
+        },
+        {
+          "id": 9,
+          "name": "Regenerative Flow",
+          "energy": 0.438344
+        }
+      ],
+      "philosophy": {
+        "archetype": "Structural Capital meets Market Resonance meets Regenerative Flow",
+        "question": "Are Structural Capital, Market Resonance, Regenerative Flow aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.243129,
+        "vortexStrength": 0.174262,
+        "microVMean": 0.261393,
+        "overallCoherence": 0.283,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V14",
+      "faces": [
+        {
+          "id": 4,
+          "name": "Structural Capital",
+          "energy": 0.244788
+        },
+        {
+          "id": 6,
+          "name": "Community & Partners",
+          "energy": 0.246899
+        },
+        {
+          "id": 7,
+          "name": "Brand & Reputation",
+          "energy": 0.20813
+        }
+      ],
+      "philosophy": {
+        "archetype": "Structural Capital meets Community & Partners meets Brand & Reputation",
+        "question": "Are Structural Capital, Community & Partners, Brand & Reputation aligned?",
+        "status": "Harmony Hub"
+      },
+      "computed": {
+        "macroVMean": 0.233272,
+        "vortexStrength": 0.017231,
+        "microVMean": 0.025846,
+        "overallCoherence": 0.926,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V15",
       "faces": [
         {
           "id": 5,
@@ -185,73 +508,9 @@
       },
       "computed": {
         "macroVMean": 0.158425,
-        "vortexStrength": 0.116425,
-        "microVMean": 0.174637,
-        "overallCoherence": 0.649,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V14",
-      "faces": [
-        {
-          "id": 7,
-          "name": "Brand & Reputation",
-          "energy": 0.20813
-        },
-        {
-          "id": 8,
-          "name": "Core Operations",
-          "energy": 0.220891
-        },
-        {
-          "id": 12,
-          "name": "Risk & Resilience",
-          "energy": 0.196326
-        }
-      ],
-      "philosophy": {
-        "archetype": "Brand & Reputation meets Core Operations meets Risk & Resilience",
-        "question": "Are Brand & Reputation, Core Operations, Risk & Resilience aligned?",
-        "status": "Harmony Hub"
-      },
-      "computed": {
-        "macroVMean": 0.208449,
-        "vortexStrength": 0.016377,
-        "microVMean": 0.024565,
-        "overallCoherence": 0.585,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V15",
-      "faces": [
-        {
-          "id": 7,
-          "name": "Brand & Reputation",
-          "energy": 0.20813
-        },
-        {
-          "id": 11,
-          "name": "Funding Pipeline",
-          "energy": 0.123435
-        },
-        {
-          "id": 12,
-          "name": "Risk & Resilience",
-          "energy": 0.196326
-        }
-      ],
-      "philosophy": {
-        "archetype": "Brand & Reputation meets Funding Pipeline meets Risk & Resilience",
-        "question": "Are Brand & Reputation, Funding Pipeline, Risk & Resilience aligned?",
-        "status": "Moderate"
-      },
-      "computed": {
-        "macroVMean": 0.175964,
-        "vortexStrength": 0.056463,
-        "microVMean": 0.084695,
-        "overallCoherence": 0.537,
+        "vortexStrength": 0.077616,
+        "microVMean": 0.116425,
+        "overallCoherence": 0.51,
         "wasSubstituted": false
       }
     },
@@ -259,9 +518,41 @@
       "id": "V16",
       "faces": [
         {
+          "id": 5,
+          "name": "Market Resonance",
+          "energy": 0.046254
+        },
+        {
           "id": 8,
           "name": "Core Operations",
           "energy": 0.220891
+        },
+        {
+          "id": 12,
+          "name": "Risk & Resilience",
+          "energy": 0.196326
+        }
+      ],
+      "philosophy": {
+        "archetype": "Market Resonance meets Core Operations meets Risk & Resilience",
+        "question": "Are Market Resonance, Core Operations, Risk & Resilience aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.15449,
+        "vortexStrength": 0.077617,
+        "microVMean": 0.116425,
+        "overallCoherence": 0.498,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V17",
+      "faces": [
+        {
+          "id": 5,
+          "name": "Market Resonance",
+          "energy": 0.046254
         },
         {
           "id": 9,
@@ -275,25 +566,25 @@
         }
       ],
       "philosophy": {
-        "archetype": "Core Operations meets Regenerative Flow meets Risk & Resilience",
-        "question": "Are Core Operations, Regenerative Flow, Risk & Resilience aligned?",
+        "archetype": "Market Resonance meets Regenerative Flow meets Risk & Resilience",
+        "question": "Are Market Resonance, Regenerative Flow, Risk & Resilience aligned?",
         "status": "Moderate"
       },
       "computed": {
-        "macroVMean": 0.285187,
-        "vortexStrength": 0.161345,
-        "microVMean": 0.242017,
-        "overallCoherence": 0.74,
+        "macroVMean": 0.226975,
+        "vortexStrength": 0.174262,
+        "microVMean": 0.261393,
+        "overallCoherence": 0.232,
         "wasSubstituted": false
       }
     },
     {
-      "id": "V17",
+      "id": "V18",
       "faces": [
         {
-          "id": 9,
-          "name": "Regenerative Flow",
-          "energy": 0.438344
+          "id": 8,
+          "name": "Core Operations",
+          "energy": 0.220891
         },
         {
           "id": 10,
@@ -307,20 +598,52 @@
         }
       ],
       "philosophy": {
-        "archetype": "Regenerative Flow meets Foundational Values meets Risk & Resilience",
-        "question": "Are Regenerative Flow, Foundational Values, Risk & Resilience aligned?",
+        "archetype": "Core Operations meets Foundational Values meets Risk & Resilience",
+        "question": "Are Core Operations, Foundational Values, Risk & Resilience aligned?",
         "status": "Moderate"
       },
       "computed": {
-        "macroVMean": 0.350318,
-        "vortexStrength": 0.161345,
-        "microVMean": 0.242017,
-        "overallCoherence": 0.88,
+        "macroVMean": 0.277834,
+        "vortexStrength": 0.097759,
+        "microVMean": 0.146639,
+        "overallCoherence": 0.648,
         "wasSubstituted": false
       }
     },
     {
-      "id": "V18",
+      "id": "V19",
+      "faces": [
+        {
+          "id": 9,
+          "name": "Regenerative Flow",
+          "energy": 0.438344
+        },
+        {
+          "id": 11,
+          "name": "Funding Pipeline",
+          "energy": 0.123435
+        },
+        {
+          "id": 12,
+          "name": "Risk & Resilience",
+          "energy": 0.196326
+        }
+      ],
+      "philosophy": {
+        "archetype": "Regenerative Flow meets Funding Pipeline meets Risk & Resilience",
+        "question": "Are Regenerative Flow, Funding Pipeline, Risk & Resilience aligned?",
+        "status": "Moderate"
+      },
+      "computed": {
+        "macroVMean": 0.252702,
+        "vortexStrength": 0.139959,
+        "microVMean": 0.209939,
+        "overallCoherence": 0.446,
+        "wasSubstituted": false
+      }
+    },
+    {
+      "id": "V20",
       "faces": [
         {
           "id": 10,
@@ -344,330 +667,10 @@
         "status": "Moderate"
       },
       "computed": {
-        "macroVMean": 0.245349,
-        "vortexStrength": 0.195233,
-        "microVMean": 0.292849,
-        "overallCoherence": 0.5,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V19",
-      "faces": [
-        {
-          "id": 3,
-          "name": "Human Capital",
-          "energy": 0.165592
-        },
-        {
-          "id": 4,
-          "name": "Structural Capital",
-          "energy": 0.244788
-        },
-        {
-          "id": 6,
-          "name": "Community & Partners",
-          "energy": 0.246899
-        }
-      ],
-      "philosophy": {
-        "archetype": "Human Capital meets Structural Capital meets Community & Partners",
-        "question": "Are Human Capital, Structural Capital, Community & Partners aligned?",
-        "status": "Moderate"
-      },
-      "computed": {
-        "macroVMean": 0.219093,
-        "vortexStrength": 0.054205,
-        "microVMean": 0.081307,
-        "overallCoherence": 0.778,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V2",
-      "faces": [
-        {
-          "id": 1,
-          "name": "Financial Capital",
-          "energy": 0.239612
-        },
-        {
-          "id": 5,
-          "name": "Market Resonance",
-          "energy": 0.046254
-        },
-        {
-          "id": 6,
-          "name": "Community & Partners",
-          "energy": 0.246899
-        }
-      ],
-      "philosophy": {
-        "archetype": "Financial Capital meets Market Resonance meets Community & Partners",
-        "question": "Are Financial Capital, Market Resonance, Community & Partners aligned?",
-        "status": "Moderate"
-      },
-      "computed": {
-        "macroVMean": 0.177588,
-        "vortexStrength": 0.133764,
-        "microVMean": 0.200646,
-        "overallCoherence": 0.535,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V20",
-      "faces": [
-        {
-          "id": 1,
-          "name": "Financial Capital",
-          "energy": 0.239612
-        },
-        {
-          "id": 9,
-          "name": "Regenerative Flow",
-          "energy": 0.438344
-        },
-        {
-          "id": 2,
-          "name": "Intellectual Capital",
-          "energy": 0.400864
-        }
-      ],
-      "philosophy": {
-        "archetype": "Financial Capital meets Regenerative Flow meets Intellectual Capital",
-        "question": "Are Financial Capital, Regenerative Flow, Intellectual Capital aligned?",
-        "status": "Moderate"
-      },
-      "computed": {
-        "macroVMean": 0.359607,
-        "vortexStrength": 0.132488,
-        "microVMean": 0.198731,
-        "overallCoherence": 0.67,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V3",
-      "faces": [
-        {
-          "id": 1,
-          "name": "Financial Capital",
-          "energy": 0.239612
-        },
-        {
-          "id": 8,
-          "name": "Core Operations",
-          "energy": 0.220891
-        },
-        {
-          "id": 9,
-          "name": "Regenerative Flow",
-          "energy": 0.438344
-        }
-      ],
-      "philosophy": {
-        "archetype": "Financial Capital meets Core Operations meets Regenerative Flow",
-        "question": "Are Financial Capital, Core Operations, Regenerative Flow aligned?",
-        "status": "Moderate"
-      },
-      "computed": {
-        "macroVMean": 0.299616,
-        "vortexStrength": 0.144968,
-        "microVMean": 0.217452,
-        "overallCoherence": 0.623,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V4",
-      "faces": [
-        {
-          "id": 2,
-          "name": "Intellectual Capital",
-          "energy": 0.400864
-        },
-        {
-          "id": 9,
-          "name": "Regenerative Flow",
-          "energy": 0.438344
-        },
-        {
-          "id": 10,
-          "name": "Foundational Values",
-          "energy": 0.416284
-        }
-      ],
-      "philosophy": {
-        "archetype": "Intellectual Capital meets Regenerative Flow meets Foundational Values",
-        "question": "Are Intellectual Capital, Regenerative Flow, Foundational Values aligned?",
-        "status": "Harmony Hub"
-      },
-      "computed": {
-        "macroVMean": 0.418497,
-        "vortexStrength": 0.024987,
-        "microVMean": 0.03748,
-        "overallCoherence": 0.825,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V5",
-      "faces": [
-        {
-          "id": 2,
-          "name": "Intellectual Capital",
-          "energy": 0.400864
-        },
-        {
-          "id": 3,
-          "name": "Human Capital",
-          "energy": 0.165592
-        },
-        {
-          "id": 10,
-          "name": "Foundational Values",
-          "energy": 0.416284
-        }
-      ],
-      "philosophy": {
-        "archetype": "Intellectual Capital meets Human Capital meets Foundational Values",
-        "question": "Are Intellectual Capital, Human Capital, Foundational Values aligned?",
-        "status": "Moderate"
-      },
-      "computed": {
-        "macroVMean": 0.32758,
-        "vortexStrength": 0.167128,
-        "microVMean": 0.250692,
-        "overallCoherence": 0.727,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V6",
-      "faces": [
-        {
-          "id": 3,
-          "name": "Human Capital",
-          "energy": 0.165592
-        },
-        {
-          "id": 6,
-          "name": "Community & Partners",
-          "energy": 0.246899
-        },
-        {
-          "id": 2,
-          "name": "Intellectual Capital",
-          "energy": 0.400864
-        }
-      ],
-      "philosophy": {
-        "archetype": "Human Capital meets Community & Partners meets Intellectual Capital",
-        "question": "Are Human Capital, Community & Partners, Intellectual Capital aligned?",
-        "status": "Moderate"
-      },
-      "computed": {
-        "macroVMean": 0.271118,
-        "vortexStrength": 0.156848,
-        "microVMean": 0.235272,
-        "overallCoherence": 0.71,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V7",
-      "faces": [
-        {
-          "id": 3,
-          "name": "Human Capital",
-          "energy": 0.165592
-        },
-        {
-          "id": 10,
-          "name": "Foundational Values",
-          "energy": 0.416284
-        },
-        {
-          "id": 11,
-          "name": "Funding Pipeline",
-          "energy": 0.123435
-        }
-      ],
-      "philosophy": {
-        "archetype": "Human Capital meets Foundational Values meets Funding Pipeline",
-        "question": "Are Human Capital, Foundational Values, Funding Pipeline aligned?",
-        "status": "Moderate"
-      },
-      "computed": {
-        "macroVMean": 0.235104,
-        "vortexStrength": 0.195233,
-        "microVMean": 0.292849,
-        "overallCoherence": 0.502,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V8",
-      "faces": [
-        {
-          "id": 4,
-          "name": "Structural Capital",
-          "energy": 0.244788
-        },
-        {
-          "id": 5,
-          "name": "Market Resonance",
-          "energy": 0.046254
-        },
-        {
-          "id": 6,
-          "name": "Community & Partners",
-          "energy": 0.246899
-        }
-      ],
-      "philosophy": {
-        "archetype": "Structural Capital meets Market Resonance meets Community & Partners",
-        "question": "Are Structural Capital, Market Resonance, Community & Partners aligned?",
-        "status": "Moderate"
-      },
-      "computed": {
-        "macroVMean": 0.179314,
-        "vortexStrength": 0.133764,
-        "microVMean": 0.200646,
-        "overallCoherence": 0.549,
-        "wasSubstituted": false
-      }
-    },
-    {
-      "id": "V9",
-      "faces": [
-        {
-          "id": 1,
-          "name": "Financial Capital",
-          "energy": 0.239612
-        },
-        {
-          "id": 5,
-          "name": "Market Resonance",
-          "energy": 0.046254
-        },
-        {
-          "id": 8,
-          "name": "Core Operations",
-          "energy": 0.220891
-        }
-      ],
-      "philosophy": {
-        "archetype": "Financial Capital meets Market Resonance meets Core Operations",
-        "question": "Are Financial Capital, Market Resonance, Core Operations aligned?",
-        "status": "Moderate"
-      },
-      "computed": {
-        "macroVMean": 0.168919,
-        "vortexStrength": 0.128906,
-        "microVMean": 0.193358,
-        "overallCoherence": 0.514,
+        "macroVMean": 0.245348,
+        "vortexStrength": 0.130155,
+        "microVMean": 0.195233,
+        "overallCoherence": 0.47,
         "wasSubstituted": false
       }
     }
