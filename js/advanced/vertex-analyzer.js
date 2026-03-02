@@ -117,31 +117,30 @@ export class VertexAnalyzer {
         name: v.name || ''
       }));
     } else {
-      Logger.warn('VertexAnalyzer', 'DodecahedronTopology not available, using CSV-aligned fallback');
-      // Fallback: vertex definitions matching CSV_Vortex_Map.csv data.
-      // NOTE: These match the CSV topology (not the EDGES in dodecahedron-topology.js,
-      // which use a different face adjacency). See D5 in discrepancy tracker.
+      Logger.warn('VertexAnalyzer', 'DodecahedronTopology not available, using edge-derived fallback');
+      // Fallback: vertex definitions derived from the 30 EDGES.
+      // Each vertex is a triple (a,b,c) where all three face pairs are edges.
       this.vertexDefinitions = [
-        { id: 'V1', faceIds: [1, 2, 6] },
-        { id: 'V2', faceIds: [1, 5, 6] },
-        { id: 'V3', faceIds: [1, 8, 9] },
-        { id: 'V4', faceIds: [2, 9, 10] },
-        { id: 'V5', faceIds: [2, 3, 10] },
-        { id: 'V6', faceIds: [3, 6, 2] },
-        { id: 'V7', faceIds: [3, 10, 11] },
-        { id: 'V8', faceIds: [4, 5, 6] },
-        { id: 'V9', faceIds: [1, 5, 8] },
-        { id: 'V10', faceIds: [4, 5, 7] },
-        { id: 'V11', faceIds: [3, 4, 11] },
-        { id: 'V12', faceIds: [4, 7, 11] },
-        { id: 'V13', faceIds: [5, 7, 8] },
-        { id: 'V14', faceIds: [7, 8, 12] },
-        { id: 'V15', faceIds: [7, 11, 12] },
-        { id: 'V16', faceIds: [8, 9, 12] },
-        { id: 'V17', faceIds: [9, 10, 12] },
-        { id: 'V18', faceIds: [10, 11, 12] },
-        { id: 'V19', faceIds: [3, 4, 6] },
-        { id: 'V20', faceIds: [1, 9, 2] }
+        { id: 'V1',  faceIds: [1, 2, 6] },
+        { id: 'V2',  faceIds: [1, 2, 10] },
+        { id: 'V3',  faceIds: [1, 6, 7] },
+        { id: 'V4',  faceIds: [1, 7, 8] },
+        { id: 'V5',  faceIds: [1, 8, 10] },
+        { id: 'V6',  faceIds: [2, 3, 6] },
+        { id: 'V7',  faceIds: [2, 3, 11] },
+        { id: 'V8',  faceIds: [2, 10, 11] },
+        { id: 'V9',  faceIds: [3, 4, 6] },
+        { id: 'V10', faceIds: [3, 4, 9] },
+        { id: 'V11', faceIds: [3, 9, 11] },
+        { id: 'V12', faceIds: [4, 5, 7] },
+        { id: 'V13', faceIds: [4, 5, 9] },
+        { id: 'V14', faceIds: [4, 6, 7] },
+        { id: 'V15', faceIds: [5, 7, 8] },
+        { id: 'V16', faceIds: [5, 8, 12] },
+        { id: 'V17', faceIds: [5, 9, 12] },
+        { id: 'V18', faceIds: [8, 10, 12] },
+        { id: 'V19', faceIds: [9, 11, 12] },
+        { id: 'V20', faceIds: [10, 11, 12] }
       ];
     }
   }

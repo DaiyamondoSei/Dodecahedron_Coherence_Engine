@@ -103,29 +103,23 @@ condition: (e8, e3) => e8 > 0.75 && e3 < 0.40  // Burnout Engine
 
 ---
 
-### D5. Dual Topology: CSV Data vs Topology Module 🟡
+### D5. Vertex-Edge Topology Inconsistency ✅
 
-**AUDITED (March 1, 2026) — Two distinct topologies coexist in the codebase:**
+**RECONCILED (March 2, 2026) — VERTICES now mathematically derived from EDGES.**
 
-**Topology A — CSV/JSON data (computational SSOT):**
-- `CSV_Vortex_Map.csv` + `CSV_Edge_tension_Map.csv` + `data/json/vortex-map.json`
-- F1 neighbors: [2, 5, 6, 8, 9] (from CSV vertex triads)
-- References edges like E1-5, E1-9, E5-6 (not in topology module)
-- VERTICES match this topology: V2=[1,5,6], V3=[1,8,9], V20=[1,9,2]
+**Discovery:** The 30 EDGES in `dodecahedron-topology.js` and `CSV_Edge_tension_Map.csv` are **identical** (same 30 face pairs). The discrepancy was that 14 of 20 VERTICES referenced face triads where not all three pairs were actual edges. For example, old V2=[1,5,6] required edges E1-5 and E5-6, which don't exist.
 
-**Topology B — `js/geometry/dodecahedron-topology.js` EDGES (semantic SSOT):**
-- 30 edges with organizational questions, elements, and archetypes
-- F1 neighbors: [2, 6, 7, 8, 10] (from EDGES array)
-- References edges like E1-7, E1-10 (not in CSV)
-- VERTICES in this file match Topology A (CSV), NOT its own EDGES
+**Root cause:** The CSV_Vortex_Map vertex triads were authored using a different dodecahedron face labeling than the edge data. Both are valid dodecahedra, but mixing vertices from one with edges from another is topologically inconsistent.
 
-**Root cause:** The EDGES were authored to encode which organizational domains *should* relate to each other, while the CSV data encodes the *original* dodecahedron placement. Both are valid 5-regular graphs on 12 nodes with 30 edges and 20 vertices.
+**Fix applied:**
+- Mathematically derived all 20 correct vertices from the 30 EDGES (find all triples (a,b,c) where edges a-b, a-c, b-c all exist)
+- Updated `dodecahedron-topology.js` VERTICES (14 of 20 changed)
+- Updated `vertex-analyzer.js` fallback definitions
+- Added `validateVertexEdgeConsistency()` — runs on page load, will catch any future inconsistency
 
-**Impact on calculations:** None — the engine loads from CSV, vertex-analyzer uses CSV-aligned vertices. Edge questions/elements are used only for display/interpretation. The mismatch means some Sacred Inquiry questions are attached to face pairs that aren't actually adjacent in the computational topology.
+**Remaining:** CSV_Vortex_Map.csv and vortex-map.json retain old vertex triads (Apex Industries sample data). These are historical and will be regenerated when new organizational data is loaded. Also, vortex-map.json has a separate bug: face IDs are always 1,2,3 regardless of actual vertex — the JSON generator needs fixing.
 
-**Resolution:** VERTICES and vertex-analyzer fallback now have comments documenting this duality. Full reconciliation (choosing one canonical topology for both data and semantics) is a future-work item that would require re-authoring either the CSV data or the edge questions.
-
-**Action completed:** Documented in code (`dodecahedron-topology.js`, `vertex-analyzer.js`). No calculation impact.
+**Impact:** Vertex calculations now use topologically correct face triads. Every vertex's three faces are genuinely adjacent (share edges with organizational questions and elements).
 
 ---
 
@@ -392,7 +386,7 @@ Four documents used different breath ratio formulas:
 | A2 | ✅ Resolved | — | — | **Breath health φ-purified: 3 thresholds → ψ₄/φ⁻¹/φ⁻² (4 files updated)** |
 | A5 | ✅ Resolved | — | — | **Tuning KAPPAs φ-derived: φ/φ²/φ³ progression (March 1, 2026)** |
 | D3 | 🟡 Important | Low | Medium | Parameterize shadow thresholds by tuning template |
-| D5 | ✅ Resolved | — | — | **Dual topology documented: CSV=computational SSOT, EDGES=semantic SSOT (March 1, 2026)** |
+| D5 | ✅ Resolved | — | — | **Topology reconciled: VERTICES derived from EDGES, 14/20 fixed, consistency validator added (March 2, 2026)** |
 | R3 | ✅ Resolved | — | — | **Two-layer architecture documented: TuningConfig (engine) vs archetype-presets (AI) (March 1, 2026)** |
 | R1 | ✅ Resolved | — | — | **Harmonic resonance math proven correct: 10/10 = 5/5 (March 1, 2026)** |
 | A6 | 🟢 Enhancement | Low | Medium | φ-derive spectral analysis thresholds |
@@ -410,4 +404,5 @@ Four documents used different breath ratio formulas:
 *Updated February 26, 2026 — **φ-purification in actual code:** A1 (vertex system, 12 constants across 5 files), D1 Steps 1-4 (edge system unified: geometric mean + φ-derived health states + multipliers eliminated), A2 (breath health thresholds, 3 constants across 4 files), A4 (elemental multipliers eliminated). Arbitrary count: 40 → 12 (70% eliminated). All φ values reference PhiHarmonics SSOT with inline fallback. Tests updated.*
 *Updated February 26, 2026 (session 2) — **D1 Step 6: downstream threshold alignment.** 5 files updated with φ-derived boundaries: `dodec-tooltips.js` (4 sites), `dodec-panels.js` (4 sites), `dodec-materials.js` (getTensionColor), `ai-edge-interpreter.js` (generateEdgeSummary), `edge-analyzer.js` (getHealthStatus + getTensionColor + getTensionStats + generateNarrative). All hardcoded 0.2/0.3/0.4/0.6/0.8 thresholds replaced with φ⁻⁴/φ⁻²/φ⁻¹/ψ₄. Full edge pipeline now speaks pure φ from core to visualization.*
 *Updated March 1, 2026 — **Deep discrepancy resolution session:** D5 (dual topology audit: CSV vs EDGES documented with full analysis), R1 (harmonic resonance proven correct, marked resolved), A5 (4 KAPPA values φ-derived: φ/φ²/φ³ in TuningConfig.js), R3 (two-layer architecture documented in archetype-presets.js). Added 16 test cases for vortex direction, coherence, leverage points, and breath ratio. Arbitrary count: 40→41 (A5 had 4, not 3) → 6 remaining (85% eliminated).*
+*Updated March 2, 2026 — **D5 topology reconciliation:** Discovered CSV_Edge_tension_Map and topology.js EDGES are identical (same 30 edges). The discrepancy was only in VERTICES — 14/20 referenced face triads with non-existent edges. Mathematically derived all 20 correct vertices from the 30 EDGES. Added `validateVertexEdgeConsistency()` to catch future inconsistencies at load time. Also found vortex-map.json has buggy face ID mapping (always uses 1,2,3).*
 *Companion to: `docs/SUB_RELATIONSHIP_CHART.md` (evolved)*

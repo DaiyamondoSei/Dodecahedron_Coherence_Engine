@@ -302,34 +302,39 @@
      * The 20 vertices of the dodecahedron.
      * Each vertex is where exactly 3 faces meet, creating energy vortices.
      */
-    // NOTE (March 2026 topology audit): The VERTICES below match the CSV data
-    // (CSV_Vortex_Map.csv) which the engine uses for calculations. The EDGES
-    // above encode organizationally-meaningful questions and elements, but use
-    // a DIFFERENT face adjacency than the CSV. For example, CSV says F1 neighbors
-    // are [2,5,6,8,9] while EDGES say F1 neighbors are [2,6,7,8,10].
-    // The VERTICES are correct for calculations; the EDGES need future reconciliation.
-    // See SUB_RELATIONSHIP_DISCREPANCY_TRACKER.md D5 for full analysis.
+    // RECONCILED (March 2026): VERTICES are now mathematically derived from
+    // the 30 EDGES above. Each vertex is a triple (a,b,c) where edges a-b,
+    // a-c, and b-c ALL exist. This ensures topological consistency: the faces
+    // that meet at each vertex are genuinely adjacent in the edge graph.
+    //
+    // Previous vertices matched the CSV_Vortex_Map.csv (a different dodecahedron
+    // labeling). 14 of 20 old triads contained face pairs that weren't edges.
+    // The CSV sample data (Apex Industries) retains the old triads for historical
+    // reference; the engine now uses these edge-consistent definitions.
+    //
+    // Verification: Each face appears in exactly 5 vertices (pentagonal). ✓
+    // Euler: V(20) - E(30) + F(12) = 2 ✓
     const VERTICES = [
-        { id: 'V1', faces: [1, 2, 6], name: 'Financial-Intellectual-Community Hub' },
-        { id: 'V2', faces: [1, 5, 6], name: 'Financial-Market-Community Hub' },
-        { id: 'V3', faces: [1, 8, 9], name: 'Financial-Operations-Regenerative Hub' },
-        { id: 'V4', faces: [2, 9, 10], name: 'Intellectual-Regenerative-Values Hub' },
-        { id: 'V5', faces: [2, 3, 10], name: 'Intellectual-Human-Values Hub' },
-        { id: 'V6', faces: [3, 6, 2], name: 'Human-Community-Intellectual Hub' },
-        { id: 'V7', faces: [3, 10, 11], name: 'Human-Values-Funding Hub' },
-        { id: 'V8', faces: [4, 5, 6], name: 'Structural-Market-Community Hub' },
-        { id: 'V9', faces: [1, 5, 8], name: 'Financial-Market-Operations Hub' },
-        { id: 'V10', faces: [4, 5, 7], name: 'Structural-Market-Brand Hub' },
-        { id: 'V11', faces: [3, 4, 11], name: 'Human-Structural-Funding Hub' },
-        { id: 'V12', faces: [4, 7, 11], name: 'Structural-Brand-Funding Hub' },
-        { id: 'V13', faces: [5, 7, 8], name: 'Market-Brand-Operations Hub' },
-        { id: 'V14', faces: [7, 8, 12], name: 'Brand-Operations-Risk Hub' },
-        { id: 'V15', faces: [7, 11, 12], name: 'Brand-Funding-Risk Hub' },
-        { id: 'V16', faces: [8, 9, 12], name: 'Operations-Regenerative-Risk Hub' },
-        { id: 'V17', faces: [9, 10, 12], name: 'Regenerative-Values-Risk Hub' },
-        { id: 'V18', faces: [10, 11, 12], name: 'Values-Funding-Risk Hub' },
-        { id: 'V19', faces: [3, 4, 6], name: 'Human-Structural-Community Hub' },
-        { id: 'V20', faces: [1, 9, 2], name: 'Financial-Regenerative-Intellectual Hub' }
+        { id: 'V1',  faces: [1, 2, 6],   name: 'Financial-Intellectual-Community Hub' },
+        { id: 'V2',  faces: [1, 2, 10],  name: 'Financial-Intellectual-Values Hub' },
+        { id: 'V3',  faces: [1, 6, 7],   name: 'Financial-Community-Brand Hub' },
+        { id: 'V4',  faces: [1, 7, 8],   name: 'Financial-Brand-Operations Hub' },
+        { id: 'V5',  faces: [1, 8, 10],  name: 'Financial-Operations-Values Hub' },
+        { id: 'V6',  faces: [2, 3, 6],   name: 'Intellectual-Human-Community Hub' },
+        { id: 'V7',  faces: [2, 3, 11],  name: 'Intellectual-Human-Funding Hub' },
+        { id: 'V8',  faces: [2, 10, 11], name: 'Intellectual-Values-Funding Hub' },
+        { id: 'V9',  faces: [3, 4, 6],   name: 'Human-Structural-Community Hub' },
+        { id: 'V10', faces: [3, 4, 9],   name: 'Human-Structural-Regenerative Hub' },
+        { id: 'V11', faces: [3, 9, 11],  name: 'Human-Regenerative-Funding Hub' },
+        { id: 'V12', faces: [4, 5, 7],   name: 'Structural-Market-Brand Hub' },
+        { id: 'V13', faces: [4, 5, 9],   name: 'Structural-Market-Regenerative Hub' },
+        { id: 'V14', faces: [4, 6, 7],   name: 'Structural-Community-Brand Hub' },
+        { id: 'V15', faces: [5, 7, 8],   name: 'Market-Brand-Operations Hub' },
+        { id: 'V16', faces: [5, 8, 12],  name: 'Market-Operations-Risk Hub' },
+        { id: 'V17', faces: [5, 9, 12],  name: 'Market-Regenerative-Risk Hub' },
+        { id: 'V18', faces: [8, 10, 12], name: 'Operations-Values-Risk Hub' },
+        { id: 'V19', faces: [9, 11, 12], name: 'Regenerative-Funding-Risk Hub' },
+        { id: 'V20', faces: [10, 11, 12], name: 'Values-Funding-Risk Hub' }
     ];
 
     // ========================================
@@ -419,6 +424,30 @@
     }
 
     /**
+     * Validate that every vertex's face triple is mutually adjacent.
+     * For vertex (a,b,c), edges a-b, a-c, and b-c must all exist.
+     * @returns {boolean} True if all vertices are edge-consistent
+     */
+    function validateVertexEdgeConsistency() {
+        const edgeSet = new Set(EDGES.map(e => {
+            const [a, b] = e.faces.slice().sort((x, y) => x - y);
+            return `${a}-${b}`;
+        }));
+
+        for (const vertex of VERTICES) {
+            const [a, b, c] = vertex.faces.slice().sort((x, y) => x - y);
+            const pairs = [`${a}-${b}`, `${a}-${c}`, `${b}-${c}`];
+            for (const pair of pairs) {
+                if (!edgeSet.has(pair)) {
+                    Logger.error('Topology', `Vertex ${vertex.id} has face pair ${pair} but no such edge exists`);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
      * Run all topology validations
      * @returns {Object} Validation results
      */
@@ -427,6 +456,7 @@
             euler: validateEuler(),
             pentagons: validatePentagons(),
             vertices: validateVertices(),
+            vertexEdgeConsistency: validateVertexEdgeConsistency(),
             counts: {
                 faces: Object.keys(FACES).length === FACE_COUNT,
                 edges: EDGES.length === EDGE_COUNT,
@@ -438,6 +468,7 @@
         results.valid = results.euler &&
             results.pentagons &&
             results.vertices &&
+            results.vertexEdgeConsistency &&
             Object.values(results.counts).every(v => v);
 
         return results;
@@ -590,6 +621,7 @@
         validateEuler,
         validatePentagons,
         validateVertices,
+        validateVertexEdgeConsistency,
         validateTopology,
 
         // Helper functions
