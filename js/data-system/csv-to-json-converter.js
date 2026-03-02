@@ -761,9 +761,10 @@
             const tracking = { wasSubstituted: false };
 
             const vertexId = rawVertexId.trim();
-            const face1Id = parseInt(row[1]) || 1;
-            const face2Id = parseInt(row[2]) || 2;
-            const face3Id = parseInt(row[3]) || 3;
+            // CSV columns contain "Face X" — extract the number (parseInt("Face 6") → NaN)
+            const face1Id = parseInt(String(row[1] || '').replace(/\D/g, '')) || 1;
+            const face2Id = parseInt(String(row[2] || '').replace(/\D/g, '')) || 2;
+            const face3Id = parseInt(String(row[3] || '').replace(/\D/g, '')) || 3;
 
             const face1Energy = validateField(row[4], `${vertexId} Face 1 energy`, phi.PHI_2, tracking);
             const face2Energy = validateField(row[5], `${vertexId} Face 2 energy`, phi.PHI_2, tracking);

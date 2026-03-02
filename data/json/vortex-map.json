@@ -16,7 +16,8 @@
     "actualVertices": 20,
     "validated": true,
     "violations": [],
-    "triadicConstraint": "Each vertex connects exactly 3 faces"
+    "triadicConstraint": "Each vertex connects exactly 3 faces",
+    "note": "Face IDs match CSV_Vortex_Map.csv (historical Apex Industries data). The engine uses edge-derived vertex definitions from dodecahedron-topology.js which may differ."
   },
   "$integrityReport": {
     "totalRecords": 20,
@@ -44,14 +45,14 @@
           "energy": 0.400864
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 6,
+          "name": "Community & Partners",
           "energy": 0.246899
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Financial Capital meets Intellectual Capital meets Community & Partners",
+        "question": "Are Financial Capital, Intellectual Capital, Community & Partners aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -66,24 +67,24 @@
       "id": "V10",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 4,
+          "name": "Structural Capital",
           "energy": 0.244788
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 5,
+          "name": "Market Resonance",
           "energy": 0.046254
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 7,
+          "name": "Brand & Reputation",
           "energy": 0.20813
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Structural Capital meets Market Resonance meets Brand & Reputation",
+        "question": "Are Structural Capital, Market Resonance, Brand & Reputation aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -98,24 +99,24 @@
       "id": "V11",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 3,
+          "name": "Human Capital",
           "energy": 0.165592
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 4,
+          "name": "Structural Capital",
           "energy": 0.244788
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 11,
+          "name": "Funding Pipeline",
           "energy": 0.123435
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Human Capital meets Structural Capital meets Funding Pipeline",
+        "question": "Are Human Capital, Structural Capital, Funding Pipeline aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -130,24 +131,24 @@
       "id": "V12",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 4,
+          "name": "Structural Capital",
           "energy": 0.244788
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 7,
+          "name": "Brand & Reputation",
           "energy": 0.20813
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 11,
+          "name": "Funding Pipeline",
           "energy": 0.123435
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Structural Capital meets Brand & Reputation meets Funding Pipeline",
+        "question": "Are Structural Capital, Brand & Reputation, Funding Pipeline aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -162,24 +163,24 @@
       "id": "V13",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 5,
+          "name": "Market Resonance",
           "energy": 0.046254
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 7,
+          "name": "Brand & Reputation",
           "energy": 0.20813
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 8,
+          "name": "Core Operations",
           "energy": 0.220891
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Market Resonance meets Brand & Reputation meets Core Operations",
+        "question": "Are Market Resonance, Brand & Reputation, Core Operations aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -194,24 +195,24 @@
       "id": "V14",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 7,
+          "name": "Brand & Reputation",
           "energy": 0.20813
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 8,
+          "name": "Core Operations",
           "energy": 0.220891
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 12,
+          "name": "Risk & Resilience",
           "energy": 0.196326
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Brand & Reputation meets Core Operations meets Risk & Resilience",
+        "question": "Are Brand & Reputation, Core Operations, Risk & Resilience aligned?",
         "status": "Harmony Hub"
       },
       "computed": {
@@ -226,24 +227,24 @@
       "id": "V15",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 7,
+          "name": "Brand & Reputation",
           "energy": 0.20813
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 11,
+          "name": "Funding Pipeline",
           "energy": 0.123435
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 12,
+          "name": "Risk & Resilience",
           "energy": 0.196326
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Brand & Reputation meets Funding Pipeline meets Risk & Resilience",
+        "question": "Are Brand & Reputation, Funding Pipeline, Risk & Resilience aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -258,24 +259,24 @@
       "id": "V16",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 8,
+          "name": "Core Operations",
           "energy": 0.220891
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 9,
+          "name": "Regenerative Flow",
           "energy": 0.438344
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 12,
+          "name": "Risk & Resilience",
           "energy": 0.196326
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Core Operations meets Regenerative Flow meets Risk & Resilience",
+        "question": "Are Core Operations, Regenerative Flow, Risk & Resilience aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -290,24 +291,24 @@
       "id": "V17",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 9,
+          "name": "Regenerative Flow",
           "energy": 0.438344
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 10,
+          "name": "Foundational Values",
           "energy": 0.416284
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 12,
+          "name": "Risk & Resilience",
           "energy": 0.196326
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Regenerative Flow meets Foundational Values meets Risk & Resilience",
+        "question": "Are Regenerative Flow, Foundational Values, Risk & Resilience aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -322,24 +323,24 @@
       "id": "V18",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 10,
+          "name": "Foundational Values",
           "energy": 0.416284
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 11,
+          "name": "Funding Pipeline",
           "energy": 0.123435
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 12,
+          "name": "Risk & Resilience",
           "energy": 0.196326
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Foundational Values meets Funding Pipeline meets Risk & Resilience",
+        "question": "Are Foundational Values, Funding Pipeline, Risk & Resilience aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -354,24 +355,24 @@
       "id": "V19",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 3,
+          "name": "Human Capital",
           "energy": 0.165592
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 4,
+          "name": "Structural Capital",
           "energy": 0.244788
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 6,
+          "name": "Community & Partners",
           "energy": 0.246899
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Human Capital meets Structural Capital meets Community & Partners",
+        "question": "Are Human Capital, Structural Capital, Community & Partners aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -391,19 +392,19 @@
           "energy": 0.239612
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 5,
+          "name": "Market Resonance",
           "energy": 0.046254
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 6,
+          "name": "Community & Partners",
           "energy": 0.246899
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Financial Capital meets Market Resonance meets Community & Partners",
+        "question": "Are Financial Capital, Market Resonance, Community & Partners aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -423,19 +424,19 @@
           "energy": 0.239612
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 9,
+          "name": "Regenerative Flow",
           "energy": 0.438344
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 2,
+          "name": "Intellectual Capital",
           "energy": 0.400864
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Financial Capital meets Regenerative Flow meets Intellectual Capital",
+        "question": "Are Financial Capital, Regenerative Flow, Intellectual Capital aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -455,19 +456,19 @@
           "energy": 0.239612
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 8,
+          "name": "Core Operations",
           "energy": 0.220891
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 9,
+          "name": "Regenerative Flow",
           "energy": 0.438344
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Financial Capital meets Core Operations meets Regenerative Flow",
+        "question": "Are Financial Capital, Core Operations, Regenerative Flow aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -482,24 +483,24 @@
       "id": "V4",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 2,
+          "name": "Intellectual Capital",
           "energy": 0.400864
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 9,
+          "name": "Regenerative Flow",
           "energy": 0.438344
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 10,
+          "name": "Foundational Values",
           "energy": 0.416284
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Intellectual Capital meets Regenerative Flow meets Foundational Values",
+        "question": "Are Intellectual Capital, Regenerative Flow, Foundational Values aligned?",
         "status": "Harmony Hub"
       },
       "computed": {
@@ -514,24 +515,24 @@
       "id": "V5",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
-          "energy": 0.400864
-        },
-        {
           "id": 2,
           "name": "Intellectual Capital",
-          "energy": 0.165592
+          "energy": 0.400864
         },
         {
           "id": 3,
           "name": "Human Capital",
+          "energy": 0.165592
+        },
+        {
+          "id": 10,
+          "name": "Foundational Values",
           "energy": 0.416284
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Intellectual Capital meets Human Capital meets Foundational Values",
+        "question": "Are Intellectual Capital, Human Capital, Foundational Values aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -546,24 +547,24 @@
       "id": "V6",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 3,
+          "name": "Human Capital",
           "energy": 0.165592
+        },
+        {
+          "id": 6,
+          "name": "Community & Partners",
+          "energy": 0.246899
         },
         {
           "id": 2,
           "name": "Intellectual Capital",
-          "energy": 0.246899
-        },
-        {
-          "id": 3,
-          "name": "Human Capital",
           "energy": 0.400864
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Human Capital meets Community & Partners meets Intellectual Capital",
+        "question": "Are Human Capital, Community & Partners, Intellectual Capital aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -578,24 +579,24 @@
       "id": "V7",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 3,
+          "name": "Human Capital",
           "energy": 0.165592
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 10,
+          "name": "Foundational Values",
           "energy": 0.416284
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 11,
+          "name": "Funding Pipeline",
           "energy": 0.123435
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Human Capital meets Foundational Values meets Funding Pipeline",
+        "question": "Are Human Capital, Foundational Values, Funding Pipeline aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -610,24 +611,24 @@
       "id": "V8",
       "faces": [
         {
-          "id": 1,
-          "name": "Financial Capital",
+          "id": 4,
+          "name": "Structural Capital",
           "energy": 0.244788
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 5,
+          "name": "Market Resonance",
           "energy": 0.046254
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 6,
+          "name": "Community & Partners",
           "energy": 0.246899
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Structural Capital meets Market Resonance meets Community & Partners",
+        "question": "Are Structural Capital, Market Resonance, Community & Partners aligned?",
         "status": "Moderate"
       },
       "computed": {
@@ -647,19 +648,19 @@
           "energy": 0.239612
         },
         {
-          "id": 2,
-          "name": "Intellectual Capital",
+          "id": 5,
+          "name": "Market Resonance",
           "energy": 0.046254
         },
         {
-          "id": 3,
-          "name": "Human Capital",
+          "id": 8,
+          "name": "Core Operations",
           "energy": 0.220891
         }
       ],
       "philosophy": {
-        "archetype": "Financial Capital meets Intellectual Capital meets Human Capital",
-        "question": "Are Financial Capital, Intellectual Capital, and Human Capital aligned?",
+        "archetype": "Financial Capital meets Market Resonance meets Core Operations",
+        "question": "Are Financial Capital, Market Resonance, Core Operations aligned?",
         "status": "Moderate"
       },
       "computed": {
