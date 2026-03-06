@@ -971,6 +971,9 @@
         </div>
     </div>
 
+    <!-- Utilities (Must load before modules) -->
+    <script src="../js/utils/logger.js"></script>
+
     <!-- UX Enhancement Modules (Phase: Thesis Polish) -->
     <script src="../js/ux/toast-notifications.js"></script>
     <script src="../js/ux/export-manager.js"></script>
@@ -1043,6 +1046,16 @@
             }
         }
 
+        /**
+         * Unified energy accessor: handles all three data source property names.
+         * - Template data (mapping-context.json): face.sentiment
+         * - Engine getState(): face.faceEnergy
+         * - Engine getFaces() / fallback calc: face.energy
+         */
+        function getEnergy(face) {
+            return face.faceEnergy ?? face.energy ?? face.sentiment ?? 0.5;
+        }
+
         function populateReport(context, companyId) {
             // Company name and date
             const companyMeta = context.companyMeta || { name: companyId };
@@ -1056,7 +1069,7 @@
 
             // Calculate global coherence
             const faces = context.faces || [];
-            const avgEnergy = faces.reduce((sum, f) => sum + (f.sentiment || 0.5), 0) / (faces.length || 1);
+            const avgEnergy = faces.reduce((sum, f) => sum + getEnergy(f), 0) / (faces.length || 1);
             const coherencePercent = Math.round(avgEnergy * 100);
 
             // Update coherence score
@@ -1102,15 +1115,15 @@
             const container = document.getElementById('keyInsights');
 
             // Find strongest and weakest faces
-            const sortedFaces = [...faces].sort((a, b) => (b.sentiment || 0) - (a.sentiment || 0));
+            const sortedFaces = [...faces].sort((a, b) => getEnergy(b) - getEnergy(a));
             const strongest = sortedFaces[0];
             const weakest = sortedFaces[sortedFaces.length - 1];
 
             // Count health statuses
             const healthCounts = {
-                healthy: faces.filter(f => (f.sentiment || 0) >= 0.7).length,
-                warning: faces.filter(f => (f.sentiment || 0) >= 0.4 && (f.sentiment || 0) < 0.7).length,
-                critical: faces.filter(f => (f.sentiment || 0) < 0.4).length
+                healthy: faces.filter(f => getEnergy(f) >= 0.7).length,
+                warning: faces.filter(f => getEnergy(f) >= 0.4 && getEnergy(f) < 0.7).length,
+                critical: faces.filter(f => getEnergy(f) < 0.4).length
             };
 
             container.innerHTML = `
@@ -1118,14 +1131,14 @@
                     <div class="insight-icon">&#x1F4AA;</div>
                     <div class="insight-content">
                         <div class="insight-label">Strongest Domain</div>
-                        <div class="insight-value">${strongest?.name || 'N/A'} (${Math.round((strongest?.sentiment || 0) * 100)}%)</div>
+                        <div class="insight-value">${strongest?.name || 'N/A'} (${Math.round(getEnergy(strongest || {}) * 100)}%)</div>
                     </div>
                 </div>
                 <div class="insight-item">
                     <div class="insight-icon">&#x26A0;</div>
                     <div class="insight-content">
                         <div class="insight-label">Needs Most Attention</div>
-                        <div class="insight-value">${weakest?.name || 'N/A'} (${Math.round((weakest?.sentiment || 0) * 100)}%)</div>
+                        <div class="insight-value">${weakest?.name || 'N/A'} (${Math.round(getEnergy(weakest || {}) * 100)}%)</div>
                     </div>
                 </div>
                 <div class="insight-item">
@@ -1163,10 +1176,10 @@
             // Calculate average energies
             let receptionSum = 0, projectionSum = 0;
             receptionIndices.forEach(i => {
-                receptionSum += (faces[i]?.sentiment || 0.5);
+                receptionSum += getEnergy(faces[i] || {});
             });
             projectionIndices.forEach(i => {
-                projectionSum += (faces[i]?.sentiment || 0.5);
+                projectionSum += getEnergy(faces[i] || {});
             });
 
             const avgReception = receptionSum / receptionIndices.length;
@@ -1213,7 +1226,7 @@
             let leverageIndex = -1;
 
             faces.forEach((face, index) => {
-                const energy = face.sentiment || 0.5;
+                const energy = getEnergy(face);
                 const delta = Math.abs(energy - PHI_INVERSE);
                 const leverage = delta * (1 - energy) * 1.0; // All faces equal importance for now
 
@@ -1226,7 +1239,7 @@
 
             // Update Leverage card
             if (leverageFace) {
-                const energy = Math.round((leverageFace.sentiment || 0.5) * 100);
+                const energy = Math.round(getEnergy(leverageFace) * 100);
                 const gap = Math.round(Math.abs(energy - 61.8));
                 const expectedImpact = Math.round(maxLeverage * 100 * 2); // Scaled for display
 
@@ -1255,7 +1268,7 @@
             };
 
             container.innerHTML = faces.map((face, index) => {
-                const energy = Math.round((face.sentiment || 0.5) * 100);
+                const energy = Math.round(getEnergy(face) * 100);
                 const healthClass = energy >= 70 ? 'healthy' : energy >= 40 ? 'warning' : 'critical';
                 const color = getHealthColor(energy);
 
@@ -1350,16 +1363,16 @@
             const recommendations = [];
 
             // Find faces that need attention
-            const sortedFaces = [...faces].sort((a, b) => (a.sentiment || 0) - (b.sentiment || 0));
+            const sortedFaces = [...faces].sort((a, b) => getEnergy(a) - getEnergy(b));
 
             sortedFaces.slice(0, 3).forEach((face, index) => {
-                const energy = Math.round((face.sentiment || 0.5) * 100);
+                const energy = Math.round(getEnergy(face) * 100);
                 if (energy < 70) {
                     recommendations.push({
                         priority: index + 1,
                         title: `Strengthen ${face.name || 'Face ' + (face.id || index + 1)}`,
                         detail: `Current energy at ${energy}%. Focus on improving the 5 elements within this domain.`,
-                        impact: `Potential +${Math.round((0.7 - (face.sentiment || 0.5)) * 100)}% improvement in global coherence`
+                        impact: `Potential +${Math.round((0.7 - getEnergy(face)) * 100)}% improvement in global coherence`
                     });
                 }
             });
