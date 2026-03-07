@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quannex - Weekly Measurement Input</title>
+    <link rel="icon" href="data:,">
+    <style>
+        :root {
+            --bg-primary: #0a0f1a;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.95);
+            --accent: #00ffcc;
+            --accent-dim: rgba(0, 255, 204, 0.15);
+            --accent-secondary: #7c3aed;
+            --text-primary: #f0f4f8;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(0, 255, 204, 0.2);
+            --healthy: #00ff88;
+            --warning: #ffaa00;
+            --critical: #ff4466;
+            --phi: 1.618;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 30px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 300;
+            background: linear-gradient(135deg, var(--accent), #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .header .subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-card);
+            margin-bottom: 30px;
+        }
+
+        .upload-zone:hover, .upload-zone.drag-over {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .upload-zone .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.6;
+        }
+
+        .upload-zone h2 {
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+
+        .upload-zone p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .upload-zone input[type="file"] { display: none; }
+
+        /* Status Messages */
+        .status {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .status.success {
+            display: block;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: var(--healthy);
+        }
+
+        .status.error {
+            display: block;
+            background: rgba(255, 68, 102, 0.1);
+            border: 1px solid rgba(255, 68, 102, 0.3);
+            color: var(--critical);
+        }
+
+        /* Two Column Layout */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .content-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Face Energy Table */
+        .face-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .face-table th {
+            text-align: left;
+            padding: 8px 10px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .face-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .face-table tr:hover td {
+            background: rgba(0, 255, 204, 0.03);
+        }
+
+        .energy-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255,255,255,0.08);
+            overflow: hidden;
+            min-width: 60px;
+        }
+
+        .energy-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .energy-healthy { background: var(--healthy); }
+        .energy-warning { background: var(--warning); }
+        .energy-critical { background: var(--critical); }
+
+        /* Breath Axis List */
+        .axis-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .axis-item:last-child { border-bottom: none; }
+
+        .axis-theme {
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .axis-score {
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: center;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .axis-projection { background: rgba(255, 68, 102, 0.15); color: var(--critical); }
+        .axis-balanced { background: rgba(0, 255, 204, 0.15); color: var(--accent); }
+        .axis-reception { background: rgba(124, 58, 237, 0.2); color: #a78bfa; }
+
+        /* Diagnostics Panel */
+        .diagnostics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .diag-metric {
+            text-align: center;
+            padding: 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+        }
+
+        .diag-metric .value {
+            font-size: 28px;
+            font-weight: 300;
+            color: var(--accent);
+        }
+
+        .diag-metric .label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #00ff88);
+            color: #0a0f1a;
+        }
+
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,255,204,0.3); }
+        .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.08);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover { background: rgba(255,255,255,0.12); }
+
+        .btn-danger {
+            background: rgba(255, 68, 102, 0.15);
+            color: var(--critical);
+            border: 1px solid rgba(255, 68, 102, 0.2);
+        }
+
+        /* Measurement History */
+        .history-section {
+            margin-top: 40px;
+        }
+
+        .history-section h2 {
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .history-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .history-item:hover {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .history-item.active {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .history-item .week-label {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .history-item .week-date {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .history-item .coherence-badge {
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--accent);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Preview hidden by default */
+        #preview { display: none; }
+        #preview.visible { display: block; }
+
+        /* Navigation */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .nav-bar a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-bar a:hover { color: var(--accent); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <a href="../demo-orchestrator.html">Back to Orchestrator</a>
+            <a href="calculations.html">Calculations View</a>
+        </div>
+
+        <div class="header">
+            <h1>Weekly Measurement Input</h1>
+            <p class="subtitle">Upload your Quannex self-measurement Excel file</p>
+        </div>
+
+        <!-- Upload Zone -->
+        <div class="upload-zone" id="uploadZone">
+            <div class="icon">&#128203;</div>
+            <h2>Drop your Excel file here</h2>
+            <p>or click to browse &mdash; accepts .xlsx files (Quannex_Weekly_Input format)</p>
+            <input type="file" id="fileInput" accept=".xlsx,.xls">
+        </div>
+
+        <!-- Status -->
+        <div class="status" id="statusMessage"></div>
+
+        <!-- Preview (shown after parsing) -->
+        <div id="preview">
+            <div class="content-grid">
+                <!-- Face Energies -->
+                <div class="card">
+                    <h3>12 Face Energies</h3>
+                    <table class="face-table">
+                        <thead>
+                            <tr>
+                                <th>Face</th>
+                                <th>Domain</th>
+                                <th>K_norm</th>
+                                <th>Weight</th>
+                                <th>E_f</th>
+                                <th>Energy</th>
+                            </tr>
+                        </thead>
+                        <tbody id="faceTableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- Breath Axes + Diagnostics -->
+                <div>
+                    <div class="card" style="margin-bottom: 20px;">
+                        <h3>6 Breath Axes</h3>
+                        <div id="breathAxesList"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Diagnostics</h3>
+                        <div class="diagnostics-grid" id="diagnosticsGrid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="card">
+                <div class="actions">
+                    <button class="btn btn-primary" id="btnRunCalc" disabled>
+                        Run Full Calculations
+                    </button>
+                    <button class="btn btn-secondary" id="btnSave" disabled>
+                        Save Measurement
+                    </button>
+                    <button class="btn btn-secondary" id="btnExportJSON">
+                        Export All (JSON)
+                    </button>
+                    <label class="btn btn-secondary" style="cursor: pointer;">
+                        Import JSON
+                        <input type="file" id="importJsonInput" accept=".json" style="display:none;">
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Measurement History -->
+        <div class="history-section">
+            <h2>Measurement History</h2>
+            <div id="historyList" class="history-list">
+                <div class="empty-state">No measurements saved yet. Upload your first Excel file above.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SheetJS CDN for Excel parsing -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
+    <!-- Quannex dependencies -->
+    <script src="../js/utils/logger.js"></script>
+    <script src="../js/geometry/dodecahedron-topology.js"></script>
+    <script src="../js/data-system/json-data-loader.js"></script>
+    <script src="../js/breath-analyzer.js"></script>
+    <script src="../js/spectral-analyzer-global.js"></script>
+    <script type="module" src="../js/company-loader.js"></script>
+    <script type="module" src="../js/main.js"></script>
+
+    <!-- Measurement modules -->
+    <script src="../js/excel-measurement-parser.js"></script>
+    <script src="../js/measurement-store.js"></script>
+
+    <script>
+        // ========================================
+        // STATE
+        // ========================================
+        let currentMeasurement = null;
+        let currentEngineData = null;
+
+        // ========================================
+        // UPLOAD HANDLING
+        // ========================================
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const statusEl = document.getElementById('statusMessage');
+
+        uploadZone.addEventListener('click', () => fileInput.click());
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('drag-over');
+        });
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('drag-over');
+        });
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) processFile(file);
+        });
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) processFile(file);
+        });
+
+        async function processFile(file) {
+            try {
+                showStatus(`Parsing ${file.name}...`, 'success');
+
+                const buffer = await file.arrayBuffer();
+                currentMeasurement = ExcelMeasurementParser.parse(buffer);
+
+                // Try to load existing Quannex KPIs for merge mode
+                let baseKPIs = null;
+                try {
+                    const resp = await fetch('../companies/quannex/kpis.csv');
+                    if (resp.ok) {
+                        const csvText = await resp.text();
+                        baseKPIs = parseCSVtoKPIs(csvText);
+                    }
+                } catch (e) {
+                    Logger.debug('WeeklyInput', 'No base KPIs found, using quick mode');
+                }
+
+                currentEngineData = ExcelMeasurementParser.toEngineFormat(currentMeasurement, baseKPIs);
+
+                renderPreview(currentMeasurement);
+                document.getElementById('preview').classList.add('visible');
+                document.getElementById('btnRunCalc').disabled = false;
+                document.getElementById('btnSave').disabled = false;
+
+                const week = currentMeasurement.meta.week;
+                const weekLabel = week != null ? `Week ${week}` : currentMeasurement.meta.date;
+                showStatus(`Successfully parsed: ${weekLabel} (${currentMeasurement.faces.length} faces, ${currentMeasurement.breathAxes.length} breath axes)`, 'success');
+
+            } catch (err) {
+                showStatus(`Error parsing file: ${err.message}`, 'error');
+                Logger.error('WeeklyInput', 'Parse error', err);
+            }
+        }
+
+        /**
+         * Minimal CSV parser to load base KPIs for merge mode.
+         */
+        function parseCSVtoKPIs(csvText) {
+            const lines = csvText.trim().split('\n');
+            if (lines.length < 2) return [];
+            const headers = lines[0].split(',').map(h => h.trim());
+            return lines.slice(1).filter(l => l.trim()).map(line => {
+                const values = line.split(',');
+                const obj = {};
+                headers.forEach((h, i) => {
+                    const v = (values[i] || '').trim();
+                    obj[h] = isNaN(v) || v === '' ? v : parseFloat(v);
+                });
+                return obj;
+            });
+        }
+
+        // ========================================
+        // PREVIEW RENDERING
+        // ========================================
+        function renderPreview(measurement) {
+            renderFaceTable(measurement.faces);
+            renderBreathAxes(measurement.breathAxes);
+            renderDiagnostics(measurement.diagnostics);
+        }
+
+        function renderFaceTable(faces) {
+            const tbody = document.getElementById('faceTableBody');
+            tbody.innerHTML = faces.map(f => {
+                const norm = f.normalizedScore != null ? f.normalizedScore : 0;
+                const pct = Math.round(norm * 100);
+                const colorClass = norm >= 0.6 ? 'energy-healthy' : norm >= 0.3 ? 'energy-warning' : 'energy-critical';
+                const ef = f.faceEnergy != null ? f.faceEnergy.toFixed(3) : '-';
+
+                return `<tr>
+                    <td style="color: var(--text-secondary);">F${f.faceId}</td>
+                    <td>${f.domain}</td>
+                    <td>${norm != null ? norm.toFixed(3) : '-'}</td>
+                    <td>${f.weight}</td>
+                    <td>${ef}</td>
+                    <td>
+                        <div class="energy-bar">
+                            <div class="energy-bar-fill ${colorClass}" style="width: ${pct}%"></div>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function renderBreathAxes(axes) {
+            const container = document.getElementById('breathAxesList');
+            container.innerHTML = axes.map(a => {
+                let scoreClass = 'axis-balanced';
+                if (a.score < 0) scoreClass = 'axis-projection';
+                if (a.score > 0) scoreClass = 'axis-reception';
+
+                const scoreLabel = a.score > 0 ? `+${a.score}` : `${a.score}`;
+
+                return `<div class="axis-item">
+                    <span class="axis-theme">${a.theme}</span>
+                    <span class="axis-score ${scoreClass}">${a.score != null ? scoreLabel : '-'}</span>
+                </div>`;
+            }).join('');
+        }
+
+        function renderDiagnostics(diag) {
+            const grid = document.getElementById('diagnosticsGrid');
+            if (!diag) {
+                grid.innerHTML = '<div class="empty-state">No diagnostics data</div>';
+                return;
+            }
+
+            const coherence = diag.globalCoherence != null ? diag.globalCoherence.toFixed(3) : '-';
+            const aag = diag.aspirationActualityGap != null ? diag.aspirationActualityGap.toFixed(3) : '-';
+            const sumE = diag.sumFaceEnergies != null ? diag.sumFaceEnergies.toFixed(2) : '-';
+            const maxP = diag.maxPossible != null ? diag.maxPossible.toFixed(1) : '-';
+
+            grid.innerHTML = `
+                <div class="diag-metric">
+                    <div class="value">${coherence}</div>
+                    <div class="label">Global Coherence</div>
+                </div>
+                <div class="diag-metric">
+                    <div class="value">${aag}</div>
+                    <div class="label">AAG (Aspiration-Actuality)</div>
+                </div>
+                <div class="diag-metric">
+                    <div class="value">${sumE}</div>
+                    <div class="label">Sum Face Energies</div>
+                </div>
+                <div class="diag-metric">
+                    <div class="value">${maxP}</div>
+                    <div class="label">Max Possible</div>
+                </div>
+            `;
+        }
+
+        // ========================================
+        // ACTIONS
+        // ========================================
+
+        /**
+         * Save measurement to store
+         */
+        document.getElementById('btnSave').addEventListener('click', () => {
+            if (!currentMeasurement) return;
+            const key = MeasurementStore.save(currentMeasurement);
+            showStatus(`Saved as "${key}". You now have ${MeasurementStore.getAll().length} measurement(s).`, 'success');
+            renderHistory();
+        });
+
+        /**
+         * Run full calculations — sends data through the Quannex engine pipeline
+         */
+        document.getElementById('btnRunCalc').addEventListener('click', async () => {
+            if (!currentEngineData) return;
+
+            // Save to sessionStorage so calculations.html picks it up
+            const customCompanyData = {
+                id: 'weekly-measurement',
+                name: `Quannex Self-Measurement (Week ${currentMeasurement.meta.week || '?'})`,
+                description: `Weekly coherence measurement from ${currentMeasurement.meta.date || 'unknown date'}`,
+                kpis: currentEngineData.kpis,
+                faceConfig: currentEngineData.faceConfig,
+                breathAxes: currentEngineData.breathAxes
+            };
+
+            sessionStorage.setItem('selectedCompanyId', 'custom');
+            sessionStorage.setItem('customCompanyData', JSON.stringify(customCompanyData));
+
+            // Also auto-save the measurement
+            if (currentMeasurement) {
+                MeasurementStore.save(currentMeasurement);
+            }
+
+            // Navigate to calculations page
+            window.location.href = 'calculations.html';
+        });
+
+        /**
+         * Export all measurements as JSON
+         */
+        document.getElementById('btnExportJSON').addEventListener('click', () => {
+            MeasurementStore.exportJSON();
+        });
+
+        /**
+         * Import measurements from JSON
+         */
+        document.getElementById('importJsonInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const text = await file.text();
+            const count = MeasurementStore.importJSON(text);
+            showStatus(`Imported ${count} measurement(s).`, 'success');
+            renderHistory();
+        });
+
+        // ========================================
+        // MEASUREMENT HISTORY
+        // ========================================
+        function renderHistory() {
+            const container = document.getElementById('historyList');
+            const all = MeasurementStore.getAll();
+
+            if (all.length === 0) {
+                container.innerHTML = '<div class="empty-state">No measurements saved yet. Upload your first Excel file above.</div>';
+                return;
+            }
+
+            container.innerHTML = all.map(({ key, measurement }) => {
+                const week = measurement.meta?.week;
+                const date = measurement.meta?.date || '';
+                const coherence = measurement.diagnostics?.globalCoherence;
+                const coherenceStr = coherence != null ? coherence.toFixed(3) : '-';
+
+                return `<div class="history-item" onclick="loadMeasurement('${key}')">
+                    <div>
+                        <div class="week-label">${week != null ? 'Week ' + week : key}</div>
+                        <div class="week-date">${date}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div class="coherence-badge">${coherenceStr}</div>
+                        <button class="btn btn-danger" onclick="event.stopPropagation(); deleteMeasurement('${key}')" style="padding: 6px 12px; font-size: 12px;">Delete</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function loadMeasurement(key) {
+            const measurement = MeasurementStore.get(key);
+            if (!measurement) return;
+
+            currentMeasurement = measurement;
+
+            let baseKPIs = null;
+            // Attempt to parse any cached base KPIs (non-blocking)
+            currentEngineData = ExcelMeasurementParser.toEngineFormat(measurement, baseKPIs);
+
+            renderPreview(measurement);
+            document.getElementById('preview').classList.add('visible');
+            document.getElementById('btnRunCalc').disabled = false;
+            document.getElementById('btnSave').disabled = false;
+
+            const week = measurement.meta?.week;
+            showStatus(`Loaded ${week != null ? 'Week ' + week : key} measurement.`, 'success');
+        }
+
+        function deleteMeasurement(key) {
+            MeasurementStore.delete(key);
+            renderHistory();
+            showStatus(`Deleted "${key}".`, 'success');
+        }
+
+        // ========================================
+        // UTILITIES
+        // ========================================
+        function showStatus(message, type) {
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+
+        // Initialize history on load
+        renderHistory();
+    </script>
+</body>
+</html>
