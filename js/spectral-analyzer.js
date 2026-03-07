@@ -46,11 +46,11 @@
  * 3. Eigenvalues are "frequencies" - higher = more local oscillations
  *
  * EIGENVALUE INTERPRETATION (Critical!):
+ * Analytical: λ = 0 (×1), 5−√5 (×3), 5 (×5), 5+√5 (×3)
  * - λ = 0 (Mode 1): DC offset - just the average energy, skip this
- * - λ ≈ 2.4 (Modes 2-4): GLOBAL patterns - whole-system imbalances
- * - λ ≈ 5.6 (Modes 5-7): REGIONAL patterns - clusters of faces
- * - λ ≈ 6.9 (Modes 8-9): LOCAL oscillations - adjacent face differences
- * - λ ≈ 8.1 (Modes 10-12): FINE-GRAINED - subtle dissonance
+ * - λ = 5−√5 ≈ 2.764 (Modes 2-4): GLOBAL patterns - whole-system imbalances
+ * - λ = 5 (Modes 5-9): REGIONAL patterns - clusters of faces
+ * - λ = 5+√5 ≈ 7.236 (Modes 10-12): FINE-GRAINED - local dissonance
  *
  * THE DELTA VECTOR (Most Important Output):
  * - Formula: Δ = -u_dominant × a_dominant
@@ -115,33 +115,43 @@ class SpectralAnalyzer {
 
     // The Dodecahedron Eigenvector Matrix (U)
     // Each column is an eigenvector corresponding to an eigenvalue
-    // Eigenvalues: λ = [0, 2.394, 2.394, 2.394, 5.584, 5.584, 5.584, 6.854, 6.854, 8.146, 8.146, 8.146]
+    //
+    // CORRECTED March 7, 2026 — Verified via numpy.linalg.eigh(L)
+    // Previous values were incorrect (wrong eigenvalues and eigenvectors).
+    //
+    // Analytical eigenvalues of the icosahedral graph Laplacian:
+    //   λ = 0 (×1), 5−√5 ≈ 2.7639 (×3), 5 (×5), 5+√5 ≈ 7.2361 (×3)
+    //
+    // Note: 5−√5 = 2(3−φ) and 5+√5 = 2(2+φ) — deeply φ-connected.
+    // Multiplicities: 1+3+5+3 = 12 ✓
+    //
     this.U = [
-      // Mode 1    2       3       4       5       6       7       8       9       10      11      12
-      [0.289, -0.421, 0.000, 0.250, 0.000, -0.354, -0.289, 0.408, 0.000, 0.368, 0.000, -0.421],  // Face 1
-      [0.289, -0.368, 0.250, -0.325, 0.354, -0.289, 0.162, -0.162, 0.408, -0.250, 0.500, 0.000],  // Face 2
-      [0.289, -0.368, -0.250, -0.325, -0.354, -0.289, 0.162, -0.162, -0.408, -0.250, -0.500, 0.000],  // Face 3
-      [0.289, -0.250, 0.000, 0.408, 0.000, 0.421, -0.368, 0.250, 0.000, 0.162, 0.000, 0.577],  // Face 4
-      [0.289, -0.250, 0.408, 0.162, 0.577, 0.000, 0.250, 0.250, -0.162, -0.421, -0.325, -0.289],  // Face 5
-      [0.289, 0.000, 0.368, -0.368, -0.577, 0.162, 0.250, -0.421, -0.250, 0.000, 0.325, -0.162],  // Face 6
-      [0.289, 0.162, -0.368, -0.368, 0.577, 0.162, 0.250, -0.421, 0.250, 0.000, -0.325, -0.162],  // Face 7
-      [0.289, 0.250, -0.408, 0.162, 0.000, 0.500, -0.421, 0.162, -0.250, 0.289, 0.162, 0.289],  // Face 8
-      [0.289, 0.250, 0.408, 0.162, -0.354, -0.162, 0.289, 0.162, 0.250, -0.421, -0.162, 0.289],  // Face 9
-      [0.289, 0.408, -0.162, 0.250, 0.354, 0.368, 0.000, -0.500, 0.125, 0.125, -0.289, -0.162],  // Face 10
-      [0.289, 0.408, 0.162, 0.250, 0.000, -0.368, 0.000, 0.000, 0.500, 0.125, 0.289, -0.162],  // Face 11
-      [0.289, 0.577, 0.000, -0.500, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, -0.577]   // Face 12
+      // Mode 1     2        3        4        5        6        7        8        9        10       11       12
+      [ 0.2887, -0.4976,  0.0486,  0.0000,  0.6219,  0.0000,  0.0000, -0.1216,  0.1230,  0.0114, -0.4927, -0.0846],  // Face 1
+      [ 0.2887, -0.2226,  0.0213, -0.4472, -0.0542,  0.3928,  0.0412,  0.4995,  0.0906, -0.3587,  0.1660,  0.3062],  // Face 2
+      [ 0.2887,  0.1970, -0.2837, -0.3615, -0.0434, -0.1567, -0.4791,  0.0630, -0.3958, -0.1459, -0.1525, -0.4533],  // Face 3
+      [ 0.2887,  0.1812, -0.4449,  0.1386, -0.2769, -0.0266, -0.2211, -0.2448,  0.4801, -0.1201, -0.2958,  0.3848],  // Face 4
+      [ 0.2887, -0.2481, -0.2395,  0.3621, -0.1480,  0.2816,  0.2931, -0.3742, -0.2992, -0.3746,  0.2546, -0.2117],  // Face 5
+      [ 0.2887, -0.2639, -0.4017, -0.1378, -0.0994, -0.4911,  0.3659,  0.1781,  0.0013,  0.4418,  0.2327,  0.0262],  // Face 6
+      [ 0.2887,  0.2226, -0.0213,  0.4472, -0.0542,  0.3928,  0.0412,  0.4995,  0.0906,  0.3587, -0.1660, -0.3062],  // Face 7
+      [ 0.2887, -0.1970,  0.2837,  0.3615, -0.0434, -0.1567, -0.4791,  0.0630, -0.3958,  0.1459,  0.1525,  0.4533],  // Face 8
+      [ 0.2887, -0.1812,  0.4449, -0.1386, -0.2769, -0.0266, -0.2211, -0.2448,  0.4801,  0.1201,  0.2958, -0.3848],  // Face 9
+      [ 0.2887,  0.2481,  0.2395, -0.3621, -0.1480,  0.2816,  0.2931, -0.3742, -0.2992,  0.3746, -0.2546,  0.2117],  // Face 10
+      [ 0.2887,  0.4976, -0.0486,  0.0000,  0.6219,  0.0000,  0.0000, -0.1216,  0.1230, -0.0114,  0.4927,  0.0846],  // Face 11
+      [ 0.2887,  0.2639,  0.4017,  0.1378, -0.0994, -0.4911,  0.3659,  0.1781,  0.0013, -0.4418, -0.2327, -0.0262]   // Face 12
     ];
 
     // Eigenvalues corresponding to each eigenvector (mode)
-    this.eigenvalues = [0, 2.394, 2.394, 2.394, 5.584, 5.584, 5.584, 6.854, 6.854, 8.146, 8.146, 8.146];
+    // Analytical: 0, 5−√5 (×3), 5 (×5), 5+√5 (×3)
+    const SQRT5 = Math.sqrt(5);
+    this.eigenvalues = [0, 5-SQRT5, 5-SQRT5, 5-SQRT5, 5, 5, 5, 5, 5, 5+SQRT5, 5+SQRT5, 5+SQRT5];
 
-    // Mode interpretations
+    // Mode interpretations keyed by rounded eigenvalue
     this.modeInterpretations = {
       0: 'DC Offset (Overall Average Energy)',
-      2.394: 'Low-Frequency Mode (Global Imbalance)',
-      5.584: 'Mid-Frequency Mode (Regional Patterns)',
-      6.854: 'High-Frequency Mode (Local Oscillations)',
-      8.146: 'Highest-Frequency Mode (Fine-Grained Dissonance)'
+      [+(5-SQRT5).toFixed(4)]: 'Low-Frequency Mode (Global Imbalance)',
+      5: 'Mid-Frequency Mode (Regional Patterns)',
+      [+(5+SQRT5).toFixed(4)]: 'High-Frequency Mode (Fine-Grained Dissonance)'
     };
 
     // Projection/Reception pole definitions for BAB Score
@@ -428,14 +438,13 @@ class SpectralAnalyzer {
     const eigenvalue = dominantMode.eigenvalue;
     let pattern = '';
 
+    // Thresholds aligned with analytical eigenvalues: 0, 5-√5≈2.764, 5, 5+√5≈7.236
     if (eigenvalue === 0) {
       pattern = 'System Average';
-    } else if (eigenvalue <= 2.5) {
+    } else if (eigenvalue < 4) {
       pattern = 'Global Imbalance Pattern';
-    } else if (eigenvalue <= 6.0) {
+    } else if (eigenvalue < 6.5) {
       pattern = 'Regional Pattern';
-    } else if (eigenvalue <= 7.0) {
-      pattern = 'Local Oscillation Pattern';
     } else {
       pattern = 'Fine-Grained Dissonance';
     }
@@ -454,8 +463,10 @@ class SpectralAnalyzer {
    * Get mode interpretation
    */
   getModeInterpretation(eigenvalue) {
-    const rounded = Math.round(eigenvalue * 1000) / 1000;
-    return this.modeInterpretations[rounded] || 'Unknown Mode';
+    if (eigenvalue < 0.01) return this.modeInterpretations[0];
+    if (eigenvalue < 4) return this.modeInterpretations[+(5 - Math.sqrt(5)).toFixed(4)];
+    if (eigenvalue < 6.5) return this.modeInterpretations[5];
+    return this.modeInterpretations[+(5 + Math.sqrt(5)).toFixed(4)];
   }
 
   /**
@@ -504,10 +515,10 @@ class SpectralAnalyzer {
       recommendations.push('Address systemic imbalances through the highest-leverage faces identified in the delta vector');
     }
 
-    // Mode-specific recommendation
-    if (dominantMode.eigenvalue <= 2.5) {
+    // Mode-specific recommendation (thresholds: 5-√5≈2.764, 5, 5+√5≈7.236)
+    if (dominantMode.eigenvalue < 4) {
       recommendations.push('Global pattern detected - requires whole-system intervention');
-    } else if (dominantMode.eigenvalue >= 7.0) {
+    } else if (dominantMode.eigenvalue > 6.5) {
       recommendations.push('Local issues detected - can be addressed through targeted interventions');
     }
 

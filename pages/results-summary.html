@@ -849,6 +849,152 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Spectral Analysis Section */
+        .spectral-diagnostics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .spectral-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .spectral-card-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .spectral-card-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .spectral-card-detail {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .spectral-table-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .spectral-table-title {
+            font-size: 15px;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .spectral-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .spectral-table th {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .spectral-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-primary);
+        }
+
+        .spectral-table tr.dominant-row {
+            background: rgba(0, 255, 204, 0.08);
+        }
+
+        .spectral-table tr.dominant-row td {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .spectral-corrections {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .correction-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .correction-card.reduce {
+            border-left-color: var(--warning);
+        }
+
+        .correction-face {
+            font-weight: 600;
+            min-width: 80px;
+            font-size: 13px;
+        }
+
+        .correction-delta {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .correction-delta.positive { color: var(--healthy); }
+        .correction-delta.negative { color: var(--warning); }
+
+        .correction-action {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .spectral-diagnostics {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            .spectral-card {
+                border: 1px solid #ddd;
+                background: #f9f9f9;
+            }
+            .spectral-table-wrapper {
+                border: 1px solid #ddd;
+                background: white;
+            }
+            .spectral-card-value {
+                color: #1a1a1a;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1011,6 +1157,56 @@
                 </div>
             </section>
 
+            <!-- Spectral Analysis Section -->
+            <section class="report-section" id="spectralSection" style="display: none;">
+                <div class="section-header">
+                    <div class="section-icon">&#x1F50D;</div>
+                    <div>
+                        <h2 class="section-title">Spectral Decomposition</h2>
+                        <p class="section-subtitle">Graph Laplacian modal analysis of the 12-face energy vector</p>
+                    </div>
+                </div>
+
+                <!-- Spectral Diagnostics Grid -->
+                <div class="spectral-diagnostics" id="spectralDiagnostics">
+                    <div class="spectral-card">
+                        <div class="spectral-card-label">Dominant Mode</div>
+                        <div class="spectral-card-value" id="specDominantMode">--</div>
+                        <div class="spectral-card-detail" id="specDominantDetail">--</div>
+                    </div>
+                    <div class="spectral-card">
+                        <div class="spectral-card-label">Dissonance Index</div>
+                        <div class="spectral-card-value" id="specDissonance">--</div>
+                        <div class="spectral-card-detail" id="specDissonanceDetail">--</div>
+                    </div>
+                </div>
+
+                <!-- Modal Amplitudes Table -->
+                <div class="spectral-table-wrapper">
+                    <h3 class="spectral-table-title">Modal Amplitudes (12 modes)</h3>
+                    <table class="spectral-table" id="spectralModesTable">
+                        <thead>
+                            <tr>
+                                <th>Mode</th>
+                                <th>Eigenvalue</th>
+                                <th>Band</th>
+                                <th>Amplitude</th>
+                                <th>|Amplitude|</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- Top Delta Corrections -->
+                <div class="spectral-table-wrapper">
+                    <h3 class="spectral-table-title">Top Corrective Actions (Delta Vector)</h3>
+                    <div class="spectral-corrections" id="spectralCorrections">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
             <!-- Footer -->
             <footer class="report-footer">
                 <p>Generated by Quannex Coherence Engine</p>
@@ -1022,6 +1218,7 @@
     <!-- Utilities (Must load before modules) -->
     <script src="../js/utils/logger.js"></script>
     <script src="../js/geometry/dodecahedron-topology.js"></script>
+    <script src="../js/spectral-analyzer.js"></script>
 
     <!-- UX Enhancement Modules (Phase: Thesis Polish) -->
     <script src="../js/ux/toast-notifications.js"></script>
@@ -1171,6 +1368,9 @@
 
             // Populate recommendations
             populateRecommendations(context, faces);
+
+            // Populate spectral analysis (if SpectralAnalyzer available)
+            populateSpectralAnalysis(faces);
         }
 
         function populateInsights(context, faces) {
@@ -1464,6 +1664,96 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        function populateSpectralAnalysis(faces) {
+            const section = document.getElementById('spectralSection');
+
+            if (typeof SpectralAnalyzer === 'undefined') {
+                Logger.warn('Report', 'SpectralAnalyzer not available, skipping spectral section');
+                return;
+            }
+
+            // Extract face energies as flat array
+            const faceEnergies = faces.map(f => getEnergy(f));
+            if (faceEnergies.length !== 12) {
+                Logger.warn('Report', `Expected 12 faces, got ${faceEnergies.length}. Skipping spectral.`);
+                return;
+            }
+
+            try {
+                const analyzer = new SpectralAnalyzer();
+                const result = analyzer.analyze(faceEnergies);
+
+                // Show the section
+                section.style.display = '';
+
+                // Dominant Mode card
+                const dm = result.dominantMode;
+                document.getElementById('specDominantMode').textContent = `Mode ${dm.mode}`;
+                const bandLabel = dm.eigenvalue < 0.01 ? 'DC Offset'
+                    : dm.eigenvalue < 4 ? 'Global Imbalance'
+                    : dm.eigenvalue < 6.5 ? 'Regional Pattern'
+                    : 'Fine-Grained';
+                document.getElementById('specDominantDetail').textContent =
+                    `λ = ${dm.eigenvalue.toFixed(3)} · ${bandLabel} · amplitude ${dm.amplitude.toFixed(3)}`;
+
+                // Dissonance card
+                const di = result.diagnostics.dissonanceIndex;
+                const disEl = document.getElementById('specDissonance');
+                disEl.textContent = di.percentage.toFixed(1) + '%';
+                disEl.style.color = di.percentage > 40 ? 'var(--critical)'
+                    : di.percentage > 20 ? 'var(--warning)' : 'var(--healthy)';
+                document.getElementById('specDissonanceDetail').textContent = di.interpretation;
+
+                // Modal amplitudes table
+                const tbody = document.querySelector('#spectralModesTable tbody');
+                tbody.innerHTML = result.modalAmplitudes.map((mode, i) => {
+                    const ev = analyzer.eigenvalues[i];
+                    const band = ev < 0.01 ? 'DC Offset'
+                        : ev < 4 ? 'Global'
+                        : ev < 6.5 ? 'Regional'
+                        : 'Fine-Grained';
+                    const isDominant = (i + 1) === dm.mode;
+                    return `<tr class="${isDominant ? 'dominant-row' : ''}">
+                        <td>${i + 1}${isDominant ? ' ★' : ''}</td>
+                        <td>${ev.toFixed(4)}</td>
+                        <td>${band}</td>
+                        <td>${mode.amplitude.toFixed(4)}</td>
+                        <td>${Math.abs(mode.amplitude).toFixed(4)}</td>
+                    </tr>`;
+                }).join('');
+
+                // Top corrective actions (top 6)
+                const corrections = document.getElementById('spectralCorrections');
+                const allActions = [
+                    ...result.correctiveActions.addEnergy.map(a => ({ ...a, type: 'add' })),
+                    ...result.correctiveActions.reduceEnergy.map(a => ({ ...a, type: 'reduce' }))
+                ].sort((a, b) => b.priority - a.priority).slice(0, 6);
+
+                const FACE_NAMES = [
+                    'Financial Capital', 'Intellectual Capital', 'Social Capital',
+                    'Operational Efficiency', 'Market Position', 'Innovation & Creativity',
+                    'Human Capital', 'Environmental Stewardship', 'Governance & Ethics',
+                    'Stakeholder Relations', 'Risk & Resilience', 'Strategic Vision'
+                ];
+
+                corrections.innerHTML = allActions.map(a => {
+                    const name = FACE_NAMES[a.faceId - 1] || `Face ${a.faceId}`;
+                    const isAdd = a.type === 'add';
+                    return `<div class="correction-card ${isAdd ? '' : 'reduce'}">
+                        <div class="correction-face">F${a.faceId}: ${name}</div>
+                        <div class="correction-delta ${isAdd ? 'positive' : 'negative'}">
+                            ${isAdd ? '+' : ''}${a.deltaValue.toFixed(3)}
+                        </div>
+                        <div class="correction-action">${isAdd ? 'ADD ENERGY' : 'REDUCE'}</div>
+                    </div>`;
+                }).join('');
+
+                Logger.info('Report', 'Spectral analysis section populated successfully');
+            } catch (error) {
+                Logger.error('Report', 'Spectral analysis failed', error);
+            }
         }
 
         function getHealthColor(percent) {

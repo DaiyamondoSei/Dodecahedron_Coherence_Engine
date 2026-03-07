@@ -305,15 +305,21 @@ condition: (e8, e3) => e8 > 0.75 && e3 < 0.40  // Burnout Engine
 
 ---
 
-### A6. Spectral Analysis Thresholds — 5 Arbitrary Constants 🟢
+### A6. Spectral Analysis Thresholds — 5 Arbitrary Constants 🟢 (Partially Resolved)
+
+**Eigenvalue band thresholds: ✅ RESOLVED (March 7, 2026)**
+Critical discovery: eigenvalues were WRONG in all 3 SpectralAnalyzer copies.
+- Old (incorrect): `[0, 2.394×3, 5.584×3, 6.854×2, 8.146×3]` — wrong multiplicities
+- Correct (verified via `numpy.linalg.eigh`): `[0 (×1), 5−√5≈2.764 (×3), 5 (×5), 5+√5≈7.236 (×3)]`
+- Band thresholds now aligned with actual eigenvalue gaps: `<0.01` DC, `<4` Global, `<6.5` Regional, else Fine-Grained
+- φ-connection: `√5 = 2φ−1`, so eigenvalues are inherently φ-derived
+
+**BAB thresholds: REMAINING (2 constants)**
 
 | File | Current | Purpose | φ-Derived Alternative |
 |------|---------|---------|----------------------|
-| `spectral-analyzer.js:433` | 2.5 | Global imbalance eigenvalue | Align with actual eigenvalue 2.394 |
-| `spectral-analyzer.js:435` | 6.0 | Regional pattern eigenvalue | Align with actual eigenvalue 5.584 |
-| `spectral-analyzer.js:437` | 7.0 | Local oscillation eigenvalue | Align with actual eigenvalue 6.854 |
-| `spectral-analyzer.js:474` | 120% | Over-inhaling percentage | **φ × 100 = 161.8%** |
-| `spectral-analyzer.js:475` | 80% | Over-exhaling percentage | **φ⁻¹ × 100 = 61.8%** |
+| `spectral-analyzer.js` | 120% | Over-inhaling percentage | **φ × 100 = 161.8%** |
+| `spectral-analyzer.js` | 80% | Over-exhaling percentage | **φ⁻¹ × 100 = 61.8%** |
 
 ---
 
@@ -361,9 +367,9 @@ Four documents used different breath ratio formulas:
 | Vertex system (A1) | 12 | **0** | ✅ **All 12 φ-purified in code** (Feb 26): 6 original + 4 coherence health + 2 narrative |
 | Breath system (A2 + A3 + A8) | 7 | **1** | ✅ A2 done, A8 done (March 1, 2026). Remaining: A3 balance threshold (chart-only) |
 | Tuning KAPPAs (A5) | 4 | **0** | ✅ **All 4 φ-derived** (March 1, 2026): φ/φ²/φ³ progression in TuningConfig.js |
-| Spectral analysis (A6) | 5 | 5 | Align with actual eigenvalues + φ |
+| Spectral analysis (A6) | 5 | **2** | ✅ 3 eigenvalue band thresholds fixed (March 7, 2026). Remaining: 2 BAB % thresholds |
 | Gamma discrepancy (A7) | 1 | **0** | ✅ Fixed |
-| **Total** | **41** | **6** | **35 eliminated, 6 remaining** |
+| **Total** | **41** | **3** | **38 eliminated, 3 remaining** |
 
 **Backend thresholds (not counted above, separate system):**
 - `backend-fallback/models/Edge.js`: `healthStatus` (0.2/0.4/0.6/0.8), `getTensionColor()` (0.3/0.6) — 6 constants
@@ -389,7 +395,7 @@ Four documents used different breath ratio formulas:
 | D5 | ✅ Resolved | — | — | **Topology reconciled: VERTICES derived from EDGES, 14/20 fixed, consistency validator added (March 2, 2026)** |
 | R3 | ✅ Resolved | — | — | **Two-layer architecture documented: TuningConfig (engine) vs archetype-presets (AI) (March 1, 2026)** |
 | R1 | ✅ Resolved | — | — | **Harmonic resonance math proven correct: 10/10 = 5/5 (March 1, 2026)** |
-| A6 | 🟢 Enhancement | Low | Medium | φ-derive spectral analysis thresholds |
+| A6 | 🟢 Partial ✅ | Low | Medium | **Eigenvalue bands fixed (March 7). Remaining: BAB 120%/80% → φ×100/φ⁻¹×100** |
 | M4 | 🟢 Enhancement | Medium | Medium | Add edge-level recommendations |
 | M5 | 🟢 Enhancement | High | Medium | Add temporal tracking |
 | M6 | 🟢 Enhancement | Medium | Medium | Add edge/vertex navigation to dashboard |

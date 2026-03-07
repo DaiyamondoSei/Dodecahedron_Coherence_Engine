@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quannex Thesis Export - Spectral Analysis Pipeline</title>
+    <link rel="icon" href="data:,">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #fafbfc;
+            --card: #ffffff;
+            --border: #e1e5ea;
+            --text: #1a1a2e;
+            --text-secondary: #5a6072;
+            --accent: #0066cc;
+            --positive: #16a34a;
+            --negative: #dc2626;
+            --neutral: #6b7280;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .input-section h2 {
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .face-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 8px;
+        }
+
+        .face-row {
+            display: grid;
+            grid-template-columns: 90px 1fr 60px 60px 50px;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            padding: 4px 0;
+        }
+
+        .face-row label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .face-row .domain {
+            font-size: 12px;
+            color: var(--text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .face-row input {
+            width: 100%;
+            padding: 4px 6px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .face-row .weight-display {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .input-header {
+            display: grid;
+            grid-template-columns: 90px 1fr 60px 60px 50px;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 8px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            margin-top: 16px;
+        }
+
+        .btn-primary:hover { background: #0052a3; }
+
+        .btn-copy {
+            background: #f3f4f6;
+            color: var(--text);
+            font-size: 12px;
+            padding: 4px 10px;
+            border: 1px solid var(--border);
+        }
+
+        .btn-copy:hover { background: #e5e7eb; }
+        .btn-copy.copied { background: #dcfce7; color: var(--positive); border-color: var(--positive); }
+
+        /* Output Sections */
+        .output-section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .output-section.visible { display: block; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .section-header h3 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th, td {
+            padding: 6px 10px;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+
+        th {
+            background: #f8f9fb;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        td.num { text-align: right; font-variant-numeric: tabular-nums; }
+        td.positive { color: var(--positive); }
+        td.negative { color: var(--negative); }
+
+        .summary-card {
+            background: #f8f9fb;
+            border-radius: 6px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .summary-card dt {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .summary-card dd {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .narrative {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 6px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .diagnostics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        @media print {
+            body { padding: 0; background: white; }
+            .btn, .input-section { display: none !important; }
+            .output-section { display: block !important; border: none; padding: 12px 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quannex Thesis Export</h1>
+        <p class="subtitle">Spectral Analysis Pipeline &mdash; Chapter 5 Data Generation</p>
+
+        <!-- INPUT SECTION -->
+        <div class="input-section">
+            <h2>Face Energy Scores</h2>
+            <div class="input-header">
+                <span>Face</span>
+                <span>Domain</span>
+                <span>Wk0</span>
+                <span>Wk5</span>
+                <span>Weight</span>
+            </div>
+            <div id="faceInputs"></div>
+            <button class="btn btn-primary" onclick="runAnalysis()">Analyze</button>
+        </div>
+
+        <!-- OUTPUT SECTIONS -->
+        <div class="output-section" id="sectionA">
+            <div class="section-header">
+                <h3>A. Face Energy Table (Table 5.4)</h3>
+                <button class="btn btn-copy" onclick="copyMarkdown('A')">Copy Markdown</button>
+            </div>
+            <div id="tableA"></div>
+        </div>
+
+        <div class="output-section" id="sectionB">
+            <div class="section-header">
+                <h3>B. Edge Tension Analysis (30 Edges)</h3>
+                <button class="btn btn-copy" onclick="copyMarkdown('B')">Copy Markdown</button>
+            </div>
+            <div id="tableB"></div>
+        </div>
+
+        <div class="output-section" id="sectionC">
+            <div class="section-header">
+                <h3>C. Spectral Decomposition (12 Modes)</h3>
+                <button class="btn btn-copy" onclick="copyMarkdown('C')">Copy Markdown</button>
+            </div>
+            <div id="tableC"></div>
+        </div>
+
+        <div class="output-section" id="sectionD">
+            <div class="section-header">
+                <h3>D. Diagnostics: AAG + BAB + Dissonance</h3>
+                <button class="btn btn-copy" onclick="copyMarkdown('D')">Copy Markdown</button>
+            </div>
+            <div id="tableD"></div>
+        </div>
+
+        <div class="output-section" id="sectionE">
+            <div class="section-header">
+                <h3>E. Delta Vector (Corrective Actions)</h3>
+                <button class="btn btn-copy" onclick="copyMarkdown('E')">Copy Markdown</button>
+            </div>
+            <div id="tableE"></div>
+        </div>
+
+        <div class="output-section" id="sectionF">
+            <div class="section-header">
+                <h3>F. Thesis Narrative (Section 5.1.3)</h3>
+                <button class="btn btn-copy" onclick="copyMarkdown('F')">Copy Markdown</button>
+            </div>
+            <div id="tableF"></div>
+        </div>
+    </div>
+
+    <!-- Dependencies -->
+    <script src="../js/utils/logger.js"></script>
+    <script src="../js/spectral-analyzer.js"></script>
+
+    <script>
+    // ============================================================
+    // FACE DEFINITIONS
+    // ============================================================
+    const FACES = [
+        { id: 1,  domain: 'Financial Capital',   archetype: 'The Steward',  wk0: 0.33, wk5: 0.33, weight: 1.0 },
+        { id: 2,  domain: 'Intellectual Capital', archetype: 'The Sage',     wk0: 0.17, wk5: 0.57, weight: 1.0 },
+        { id: 3,  domain: 'Human Capital',        archetype: 'The Gardener', wk0: 0.67, wk5: 0.72, weight: 1.0 },
+        { id: 4,  domain: 'Structural Capital',   archetype: 'The Architect',wk0: 0.33, wk5: 0.67, weight: 1.0 },
+        { id: 5,  domain: 'Market Resonance',     archetype: 'The Mirror',   wk0: 0.65, wk5: 0.45, weight: 0.9 },
+        { id: 6,  domain: 'Community & Partners',  archetype: 'The Weaver',   wk0: 0.00, wk5: 0.32, weight: 0.8 },
+        { id: 7,  domain: 'Brand & Reputation',   archetype: 'The Voice',    wk0: 0.00, wk5: 0.30, weight: 0.6 },
+        { id: 8,  domain: 'Core Operations',      archetype: 'The Engine',   wk0: 0.00, wk5: 0.30, weight: 1.0 },
+        { id: 9,  domain: 'Regenerative Flow',    archetype: 'The Spring',   wk0: 0.00, wk5: 0.36, weight: 0.6 },
+        { id: 10, domain: 'Foundational Values',  archetype: 'The Compass',  wk0: 0.00, wk5: 0.63, weight: 0.9 },
+        { id: 11, domain: 'Funding Pipeline',     archetype: 'The River',    wk0: 0.00, wk5: 0.21, weight: 0.7 },
+        { id: 12, domain: 'Risk & Resilience',    archetype: 'The Shield',   wk0: 0.00, wk5: 0.27, weight: 0.9 }
+    ];
+
+    // 30 edges from dodecahedron-topology.js (face pairs only)
+    const EDGES = [
+        [1,2],[1,6],[1,7],[1,8],[1,10],
+        [2,3],[2,6],[2,10],[2,11],
+        [3,4],[3,6],[3,9],[3,11],
+        [4,5],[4,6],[4,7],[4,9],
+        [5,7],[5,8],[5,9],[5,12],
+        [6,7],
+        [7,8],
+        [8,10],[8,12],
+        [9,11],[9,12],
+        [10,11],[10,12],
+        [11,12]
+    ];
+
+    // Phi-derived edge health thresholds
+    const PHI = (1 + Math.sqrt(5)) / 2;
+    const EDGE_THRESHOLDS = {
+        wall:        Math.pow(PHI, -4),  // 0.146
+        gate:        Math.pow(PHI, -2),  // 0.382
+        membrane_hi: Math.pow(PHI, -1),  // 0.618
+        hemorrhage:  1 - Math.pow(PHI, -4) // 0.854
+    };
+
+    function classifyEdge(tension) {
+        if (tension < EDGE_THRESHOLDS.wall) return 'Wall';
+        if (tension < EDGE_THRESHOLDS.gate) return 'Gate';
+        if (tension < EDGE_THRESHOLDS.membrane_hi) return 'Membrane';
+        if (tension < EDGE_THRESHOLDS.hemorrhage) return 'Hemorrhage';
+        return 'Vortex';
+    }
+
+    // BAB pole definitions
+    const RECEPTION_FACES = [1, 2, 3, 9, 10, 12];  // Being/Inhale
+    const PROJECTION_FACES = [4, 5, 6, 7, 8, 11];  // Action/Exhale
+
+    // ============================================================
+    // BUILD INPUT FORM
+    // ============================================================
+    function buildInputForm() {
+        const container = document.getElementById('faceInputs');
+        container.innerHTML = FACES.map(f => `
+            <div class="face-row">
+                <label>F${f.id}</label>
+                <span class="domain" title="${f.domain} (${f.archetype})">${f.domain}</span>
+                <input type="number" id="wk0_${f.id}" value="${f.wk0}" step="0.01" min="0" max="1">
+                <input type="number" id="wk5_${f.id}" value="${f.wk5}" step="0.01" min="0" max="1">
+                <span class="weight-display">${f.weight}</span>
+            </div>
+        `).join('');
+    }
+
+    // ============================================================
+    // MAIN ANALYSIS
+    // ============================================================
+    function runAnalysis() {
+        // Read inputs
+        const wk0 = FACES.map(f => parseFloat(document.getElementById(`wk0_${f.id}`).value) || 0);
+        const wk5 = FACES.map(f => parseFloat(document.getElementById(`wk5_${f.id}`).value) || 0);
+        const weights = FACES.map(f => f.weight);
+
+        // Compute weighted energies
+        const ef_wk0 = wk0.map((v, i) => v * weights[i]);
+        const ef_wk5 = wk5.map((v, i) => v * weights[i]);
+
+        // Run spectral analysis on Wk5 weighted energies
+        const analyzer = new SpectralAnalyzer();
+        const spectral = analyzer.analyze(ef_wk5);
+
+        // Render all sections
+        renderFaceTable(wk0, wk5, weights, ef_wk0, ef_wk5);
+        renderEdgeTable(ef_wk5);
+        renderSpectralTable(spectral);
+        renderDiagnostics(ef_wk0, ef_wk5, spectral);
+        renderDeltaVector(spectral, ef_wk5);
+        renderNarrative(ef_wk5, spectral, ef_wk0);
+
+        // Show all sections
+        document.querySelectorAll('.output-section').forEach(s => s.classList.add('visible'));
+    }
+
+    // ============================================================
+    // SECTION A: Face Energy Table
+    // ============================================================
+    function renderFaceTable(wk0, wk5, weights, ef_wk0, ef_wk5) {
+        const rows = FACES.map((f, i) => {
+            const delta = ef_wk5[i] - ef_wk0[i];
+            const sign = delta >= 0 ? '+' : '';
+            return `<tr>
+                <td>F${f.id}</td>
+                <td>${f.domain}</td>
+                <td class="num">${wk5[i].toFixed(2)}</td>
+                <td class="num">${weights[i].toFixed(1)}</td>
+                <td class="num">${ef_wk0[i].toFixed(3)}</td>
+                <td class="num">${ef_wk5[i].toFixed(3)}</td>
+                <td class="num ${delta > 0 ? 'positive' : delta < 0 ? 'negative' : ''}">${sign}${delta.toFixed(3)}</td>
+            </tr>`;
+        });
+
+        const globalWk0 = ef_wk0.reduce((s, v) => s + v, 0);
+        const globalWk5 = ef_wk5.reduce((s, v) => s + v, 0);
+        const maxPossible = weights.reduce((s, v) => s + v, 0);
+
+        document.getElementById('tableA').innerHTML = `
+            <table>
+                <thead><tr><th>Face</th><th>Domain</th><th>K_norm</th><th>Weight</th><th>E_f (Wk0)</th><th>E_f (Wk5)</th><th>Delta</th></tr></thead>
+                <tbody>${rows.join('')}</tbody>
+                <tfoot><tr style="font-weight:600;">
+                    <td colspan="4">Global Coherence</td>
+                    <td class="num">${(globalWk0 / maxPossible).toFixed(3)}</td>
+                    <td class="num">${(globalWk5 / maxPossible).toFixed(3)}</td>
+                    <td class="num ${globalWk5 > globalWk0 ? 'positive' : ''}">${globalWk5 > globalWk0 ? '+' : ''}${((globalWk5 - globalWk0) / maxPossible).toFixed(3)}</td>
+                </tr></tfoot>
+            </table>`;
+    }
+
+    // ============================================================
+    // SECTION B: Edge Tension Table
+    // ============================================================
+    function renderEdgeTable(ef) {
+        const rows = EDGES.map(([a, b]) => {
+            const ea = ef[a - 1];
+            const eb = ef[b - 1];
+            const tension = Math.abs(ea - eb);
+            const status = classifyEdge(tension);
+            return `<tr>
+                <td>E${a}-${b}</td>
+                <td>${FACES[a-1].domain}</td>
+                <td>${FACES[b-1].domain}</td>
+                <td class="num">${ea.toFixed(3)}</td>
+                <td class="num">${eb.toFixed(3)}</td>
+                <td class="num">${tension.toFixed(3)}</td>
+                <td>${status}</td>
+            </tr>`;
+        });
+
+        document.getElementById('tableB').innerHTML = `
+            <table>
+                <thead><tr><th>Edge</th><th>Face A</th><th>Face B</th><th>E_A</th><th>E_B</th><th>|Tension|</th><th>Health</th></tr></thead>
+                <tbody>${rows.join('')}</tbody>
+            </table>`;
+    }
+
+    // ============================================================
+    // SECTION C: Spectral Decomposition
+    // ============================================================
+    function renderSpectralTable(spectral) {
+        const bandLabels = {
+            0: 'DC Offset',
+            1: 'Global (5-sqrt5)',
+            2: 'Regional (5)',
+            3: 'Fine-Grained (5+sqrt5)'
+        };
+
+        function getBand(eigenvalue) {
+            if (eigenvalue < 0.01) return bandLabels[0];
+            if (eigenvalue < 4) return bandLabels[1];
+            if (eigenvalue < 6.5) return bandLabels[2];
+            return bandLabels[3];
+        }
+
+        const rows = spectral.modalAmplitudes.map(m => {
+            const isDominant = m.mode === spectral.dominantMode.mode;
+            return `<tr style="${isDominant ? 'background:#eff6ff;font-weight:600;' : ''}">
+                <td>${m.mode}${isDominant ? ' *' : ''}</td>
+                <td class="num">${m.eigenvalue.toFixed(4)}</td>
+                <td>${getBand(m.eigenvalue)}</td>
+                <td class="num">${m.amplitude.toFixed(4)}</td>
+                <td class="num">${Math.abs(m.amplitude).toFixed(4)}</td>
+            </tr>`;
+        });
+
+        document.getElementById('tableC').innerHTML = `
+            <table>
+                <thead><tr><th>Mode</th><th>Eigenvalue</th><th>Band</th><th>Amplitude (a_i)</th><th>|a_i|</th></tr></thead>
+                <tbody>${rows.join('')}</tbody>
+            </table>
+            <p style="margin-top:8px;font-size:12px;color:var(--text-secondary);">* = dominant mode (largest |a_i| excluding DC)</p>`;
+    }
+
+    // ============================================================
+    // SECTION D: Diagnostics (AAG + BAB + Dissonance)
+    // ============================================================
+    function renderDiagnostics(ef_wk0, ef_wk5, spectral) {
+        // AAG: Aspiration-Actuality Gap
+        const actuality_wk0 = (ef_wk0[0] + ef_wk0[1] + ef_wk0[2]) / 3;
+        const aspiration_wk0 = (ef_wk0[9] + ef_wk0[10] + ef_wk0[11]) / 3;
+        const actuality_wk5 = (ef_wk5[0] + ef_wk5[1] + ef_wk5[2]) / 3;
+        const aspiration_wk5 = (ef_wk5[9] + ef_wk5[10] + ef_wk5[11]) / 3;
+        const aag_wk0 = actuality_wk0 > 0 ? aspiration_wk0 / actuality_wk0 : 0;
+        const aag_wk5 = actuality_wk5 > 0 ? aspiration_wk5 / actuality_wk5 : 0;
+
+        // BAB from spectral
+        const bab = spectral.diagnostics.beingActionBalance;
+        const dis = spectral.diagnostics.dissonanceIndex;
+
+        // Dominant mode info
+        const dm = spectral.dominantMode;
+
+        document.getElementById('tableD').innerHTML = `
+            <div class="diagnostics-grid">
+                <div class="summary-card">
+                    <dt>Dominant Mode</dt>
+                    <dd>Mode ${dm.mode} (lambda = ${dm.eigenvalue.toFixed(4)})</dd>
+                    <dt>Band</dt>
+                    <dd>${spectral.summary.pattern}</dd>
+                    <dt>Amplitude</dt>
+                    <dd>${dm.amplitude.toFixed(4)}</dd>
+                </div>
+                <div class="summary-card">
+                    <dt>AAG (Aspiration-Actuality Gap)</dt>
+                    <dd>Wk0: ${aag_wk0.toFixed(3)} &rarr; Wk5: ${aag_wk5.toFixed(3)}</dd>
+                    <dt>E_Actuality (avg F1,F2,F3)</dt>
+                    <dd>Wk0: ${actuality_wk0.toFixed(3)} &rarr; Wk5: ${actuality_wk5.toFixed(3)}</dd>
+                    <dt>E_Aspiration (avg F10,F11,F12)</dt>
+                    <dd>Wk0: ${aspiration_wk0.toFixed(3)} &rarr; Wk5: ${aspiration_wk5.toFixed(3)}</dd>
+                </div>
+                <div class="summary-card">
+                    <dt>BAB (Being-Action Balance)</dt>
+                    <dd>${bab.percentage.toFixed(1)}% &mdash; ${bab.interpretation}</dd>
+                    <dt>Reception avg (F1,2,3,9,10,12)</dt>
+                    <dd>${bab.receptionEnergy.toFixed(3)}</dd>
+                    <dt>Projection avg (F4,5,6,7,8,11)</dt>
+                    <dd>${bab.projectionEnergy.toFixed(3)}</dd>
+                </div>
+                <div class="summary-card">
+                    <dt>Dissonance Index</dt>
+                    <dd>${dis.percentage.toFixed(1)}% &mdash; ${dis.interpretation}</dd>
+                    <dt>Total Magnitude</dt>
+                    <dd>${dis.totalMagnitude.toFixed(4)}</dd>
+                </div>
+            </div>`;
+    }
+
+    // ============================================================
+    // SECTION E: Delta Vector
+    // ============================================================
+    function renderDeltaVector(spectral, ef) {
+        const rows = spectral.deltaVector.map(d => {
+            const current = ef[d.faceId - 1];
+            const target = current + d.deltaValue;
+            const sign = d.deltaValue >= 0 ? '+' : '';
+            const cls = d.deltaValue > 0.02 ? 'positive' : d.deltaValue < -0.02 ? 'negative' : '';
+            const action = d.deltaValue > 0.02 ? 'ADD ENERGY' : d.deltaValue < -0.02 ? 'REDUCE' : 'BALANCED';
+            return `<tr>
+                <td>F${d.faceId}</td>
+                <td>${FACES[d.faceId - 1].domain}</td>
+                <td class="num">${current.toFixed(3)}</td>
+                <td class="num ${cls}">${sign}${d.deltaValue.toFixed(4)}</td>
+                <td class="num">${target.toFixed(3)}</td>
+                <td>${action}</td>
+            </tr>`;
+        });
+
+        document.getElementById('tableE').innerHTML = `
+            <table>
+                <thead><tr><th>Face</th><th>Domain</th><th>Current E_f</th><th>Delta</th><th>Target E_f</th><th>Action</th></tr></thead>
+                <tbody>${rows.join('')}</tbody>
+            </table>`;
+    }
+
+    // ============================================================
+    // SECTION F: Auto-generated Thesis Narrative
+    // ============================================================
+    function renderNarrative(ef_wk5, spectral, ef_wk0) {
+        const dm = spectral.dominantMode;
+        const bab = spectral.diagnostics.beingActionBalance;
+        const dis = spectral.diagnostics.dissonanceIndex;
+
+        // AAG
+        const act_wk0 = (ef_wk0[0] + ef_wk0[1] + ef_wk0[2]) / 3;
+        const asp_wk0 = (ef_wk0[9] + ef_wk0[10] + ef_wk0[11]) / 3;
+        const act_wk5 = (ef_wk5[0] + ef_wk5[1] + ef_wk5[2]) / 3;
+        const asp_wk5 = (ef_wk5[9] + ef_wk5[10] + ef_wk5[11]) / 3;
+        const aag_wk0 = act_wk0 > 0 ? asp_wk0 / act_wk0 : 0;
+        const aag_wk5 = act_wk5 > 0 ? asp_wk5 / act_wk5 : 0;
+
+        // Pole structure from dominant eigenvector
+        const modeIdx = dm.mode - 1;
+        const analyzer = new SpectralAnalyzer();
+        const eigvec = analyzer.U.map(row => row[modeIdx]);
+        const negativePole = FACES.filter((_, i) => eigvec[i] < -0.15).map(f => `F${f.id} (${f.domain})`);
+        const positivePole = FACES.filter((_, i) => eigvec[i] > 0.15).map(f => `F${f.id} (${f.domain})`);
+
+        // Top corrections
+        const addEnergy = spectral.correctiveActions.addEnergy.slice(0, 3);
+        const reduceEnergy = spectral.correctiveActions.reduceEnergy.slice(0, 3);
+
+        const vector = ef_wk5.map(v => v.toFixed(2)).join(', ');
+
+        const narrative = `Spectral decomposition of the Week 5 face energy vector E = [${vector}] via the Graph Laplacian of the dodecahedral face adjacency graph (the icosahedral graph) yields 12 modal amplitudes. The Laplacian has analytical eigenvalues 0 (x1), 5-sqrt(5) = ${(5-Math.sqrt(5)).toFixed(4)} (x3), 5 (x5), and 5+sqrt(5) = ${(5+Math.sqrt(5)).toFixed(4)} (x3), reflecting the icosahedral symmetry of the dual graph.
+
+The dominant mode is Mode ${dm.mode} (lambda = ${dm.eigenvalue.toFixed(4)}), a ${spectral.summary.pattern.toLowerCase()} with amplitude |a_${dm.mode}| = ${Math.abs(dm.amplitude).toFixed(4)}. ${negativePole.length > 0 ? `The dominant eigenvector reveals a pole structure: the negative pole comprises ${negativePole.join(', ')}, while the positive pole comprises ${positivePole.join(', ')}.` : ''}
+
+The Aspiration-Actuality Gap, an emergent KPI derived from the eigenvector structure rather than designed a priori, improved from ${aag_wk0.toFixed(3)} (Week 0) to ${aag_wk5.toFixed(3)} (Week 5). E_Actuality (avg of F1, F2, F3) rose from ${act_wk0.toFixed(3)} to ${act_wk5.toFixed(3)}, while E_Aspiration (avg of F10, F11, F12) moved from ${asp_wk0.toFixed(3)} to ${asp_wk5.toFixed(3)}.
+
+The Being-Action Balance score is ${bab.percentage.toFixed(1)}%, indicating ${bab.percentage > 120 ? 'over-inhaling (excessive reception relative to projection)' : bab.percentage < 80 ? 'over-exhaling (excessive action relative to regeneration)' : 'a balanced organizational breath'}. The system dissonance index stands at ${dis.percentage.toFixed(1)}%, classified as ${dis.interpretation.split(' - ')[0]}.
+
+${addEnergy.length > 0 ? `The delta vector prescribes highest-leverage corrective actions: add energy to ${addEnergy.map(a => `F${a.faceId} (${FACES[a.faceId-1].domain}, delta = +${a.deltaValue.toFixed(3)})`).join(', ')}` : ''}${reduceEnergy.length > 0 ? `; and redistribute excess from ${reduceEnergy.map(a => `F${a.faceId} (${FACES[a.faceId-1].domain}, delta = ${a.deltaValue.toFixed(3)})`).join(', ')}` : ''}.`;
+
+        document.getElementById('tableF').innerHTML = `<div class="narrative">${narrative.replace(/\n\n/g, '</p><p style="margin-top:12px;">').replace(/^/, '<p>').replace(/$/, '</p>')}</div>`;
+    }
+
+    // ============================================================
+    // COPY TO CLIPBOARD (Markdown)
+    // ============================================================
+    const markdownGenerators = {
+        A: () => {
+            const wk0 = FACES.map(f => parseFloat(document.getElementById(`wk0_${f.id}`).value) || 0);
+            const wk5 = FACES.map(f => parseFloat(document.getElementById(`wk5_${f.id}`).value) || 0);
+            const weights = FACES.map(f => f.weight);
+            const ef0 = wk0.map((v, i) => v * weights[i]);
+            const ef5 = wk5.map((v, i) => v * weights[i]);
+            let md = '| Face | Domain | K_norm | Weight | E_f (Wk0) | E_f (Wk5) | Delta |\n';
+            md += '|------|--------|--------|--------|-----------|-----------|-------|\n';
+            FACES.forEach((f, i) => {
+                const d = ef5[i] - ef0[i];
+                md += `| F${f.id} | ${f.domain} | ${wk5[i].toFixed(2)} | ${weights[i].toFixed(1)} | ${ef0[i].toFixed(3)} | ${ef5[i].toFixed(3)} | ${d >= 0 ? '+' : ''}${d.toFixed(3)} |\n`;
+            });
+            return md;
+        },
+        B: () => {
+            const wk5 = FACES.map(f => parseFloat(document.getElementById(`wk5_${f.id}`).value) || 0);
+            const weights = FACES.map(f => f.weight);
+            const ef = wk5.map((v, i) => v * weights[i]);
+            let md = '| Edge | Face A | Face B | E_A | E_B | Tension | Health |\n';
+            md += '|------|--------|--------|-----|-----|---------|--------|\n';
+            EDGES.forEach(([a, b]) => {
+                const ea = ef[a-1], eb = ef[b-1];
+                const t = Math.abs(ea - eb);
+                md += `| E${a}-${b} | ${FACES[a-1].domain} | ${FACES[b-1].domain} | ${ea.toFixed(3)} | ${eb.toFixed(3)} | ${t.toFixed(3)} | ${classifyEdge(t)} |\n`;
+            });
+            return md;
+        },
+        C: () => {
+            const analyzer = new SpectralAnalyzer();
+            const wk5 = FACES.map(f => parseFloat(document.getElementById(`wk5_${f.id}`).value) || 0);
+            const weights = FACES.map(f => f.weight);
+            const ef = wk5.map((v, i) => v * weights[i]);
+            const result = analyzer.analyze(ef);
+            let md = '| Mode | Eigenvalue | Band | Amplitude | |Amplitude| |\n';
+            md += '|------|-----------|------|-----------|------------|\n';
+            result.modalAmplitudes.forEach(m => {
+                const band = m.eigenvalue < 0.01 ? 'DC Offset' : m.eigenvalue < 4 ? 'Global' : m.eigenvalue < 6.5 ? 'Regional' : 'Fine-Grained';
+                md += `| ${m.mode}${m.mode === result.dominantMode.mode ? ' *' : ''} | ${m.eigenvalue.toFixed(4)} | ${band} | ${m.amplitude.toFixed(4)} | ${Math.abs(m.amplitude).toFixed(4)} |\n`;
+            });
+            return md;
+        },
+        D: () => {
+            const el = document.getElementById('tableD');
+            return el.innerText;
+        },
+        E: () => {
+            const analyzer = new SpectralAnalyzer();
+            const wk5 = FACES.map(f => parseFloat(document.getElementById(`wk5_${f.id}`).value) || 0);
+            const weights = FACES.map(f => f.weight);
+            const ef = wk5.map((v, i) => v * weights[i]);
+            const result = analyzer.analyze(ef);
+            let md = '| Face | Domain | Current | Delta | Target | Action |\n';
+            md += '|------|--------|---------|-------|--------|--------|\n';
+            result.deltaVector.forEach(d => {
+                const c = ef[d.faceId - 1];
+                const t = c + d.deltaValue;
+                const action = d.deltaValue > 0.02 ? 'ADD ENERGY' : d.deltaValue < -0.02 ? 'REDUCE' : 'BALANCED';
+                md += `| F${d.faceId} | ${FACES[d.faceId-1].domain} | ${c.toFixed(3)} | ${d.deltaValue >= 0 ? '+' : ''}${d.deltaValue.toFixed(4)} | ${t.toFixed(3)} | ${action} |\n`;
+            });
+            return md;
+        },
+        F: () => {
+            return document.getElementById('tableF').innerText;
+        }
+    };
+
+    function copyMarkdown(section) {
+        const md = markdownGenerators[section]();
+        navigator.clipboard.writeText(md).then(() => {
+            const btn = event.target;
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'Copy Markdown'; btn.classList.remove('copied'); }, 2000);
+        });
+    }
+
+    // Initialize
+    buildInputForm();
+    </script>
+</body>
+</html>

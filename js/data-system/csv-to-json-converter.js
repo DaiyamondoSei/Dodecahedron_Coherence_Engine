@@ -1395,10 +1395,9 @@
                     explanation: 'Eigenvalues reveal natural frequencies of the graph',
                     degeneracies: {
                         'λ=0': { count: 1, meaning: 'Trivial mode - overall average' },
-                        'λ=2.394': { count: 3, meaning: '3-fold degenerate - rotational symmetry' },
-                        'λ=5.584': { count: 3, meaning: 'Mid-frequency regional patterns' },
-                        'λ=6.854': { count: 2, meaning: 'High-frequency local oscillations' },
-                        'λ=8.146': { count: 3, meaning: 'Highest frequency - fine-grained dissonance' }
+                        'λ=5-√5≈2.764': { count: 3, meaning: '3-fold degenerate - global imbalance' },
+                        'λ=5': { count: 5, meaning: '5-fold degenerate - regional patterns' },
+                        'λ=5+√5≈7.236': { count: 3, meaning: '3-fold degenerate - fine-grained dissonance' }
                     },
                     symmetryGroup: 'Icosahedral symmetry group (order 120), dual to dodecahedron'
                 },
@@ -1439,13 +1438,12 @@
             eigenvectorMatrix,
 
             eigenvalues: {
-                values: [0, 2.394, 2.394, 2.394, 5.584, 5.584, 5.584, 6.854, 6.854, 8.146, 8.146, 8.146],
+                values: [0, 5-Math.sqrt(5), 5-Math.sqrt(5), 5-Math.sqrt(5), 5, 5, 5, 5, 5, 5+Math.sqrt(5), 5+Math.sqrt(5), 5+Math.sqrt(5)],
                 interpretations: {
                     0: 'DC Offset (Overall Average Energy)',
-                    2.394: 'Low-Frequency Mode (Global Imbalance)',
-                    5.584: 'Mid-Frequency Mode (Regional Patterns)',
-                    6.854: 'High-Frequency Mode (Local Oscillations)',
-                    8.146: 'Highest-Frequency Mode (Fine-Grained Dissonance)'
+                    '5-√5': 'Low-Frequency Mode (Global Imbalance)',
+                    5: 'Mid-Frequency Mode (Regional Patterns)',
+                    '5+√5': 'High-Frequency Mode (Fine-Grained Dissonance)'
                 }
             },
 
@@ -1453,7 +1451,7 @@
 
             dominantMode: {
                 index: dominantMode.mode || 9,
-                eigenvalue: dominantMode.eigenvalue || 6.854,
+                eigenvalue: dominantMode.eigenvalue || 5,
                 amplitude: dominantMode.amplitude || 0,
                 absAmplitude: dominantMode.absAmplitude || 0,
                 eigenvector: dominantEigenvector,
