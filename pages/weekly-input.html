@@ -227,6 +227,20 @@
         .axis-balanced { background: rgba(0, 255, 204, 0.15); color: var(--accent); }
         .axis-reception { background: rgba(124, 58, 237, 0.2); color: #a78bfa; }
 
+        .axis-score-select {
+            background: rgba(255,255,255,0.06);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 13px;
+            cursor: pointer;
+            min-width: 55px;
+            text-align: center;
+        }
+        .axis-score-select:focus { border-color: var(--accent); outline: none; }
+        .axis-score-select option { background: var(--bg-secondary); }
+
         /* Diagnostics Panel */
         .diagnostics-grid {
             display: grid;
@@ -606,18 +620,40 @@
 
         function renderBreathAxes(axes) {
             const container = document.getElementById('breathAxesList');
-            container.innerHTML = axes.map(a => {
-                let scoreClass = 'axis-balanced';
-                if (a.score < 0) scoreClass = 'axis-projection';
-                if (a.score > 0) scoreClass = 'axis-reception';
+            container.innerHTML = axes.map((a, i) => {
+                const tensionStr = a.edgeTension != null ? a.edgeTension.toFixed(3) : '-';
+                const hasScore = a.score != null;
 
-                const scoreLabel = a.score > 0 ? `+${a.score}` : `${a.score}`;
+                // Build score options
+                const options = [-2, -1, 0, 1, 2].map(v => {
+                    const label = v > 0 ? `+${v}` : `${v}`;
+                    const selected = hasScore && a.score === v ? 'selected' : '';
+                    return `<option value="${v}" ${selected}>${label}</option>`;
+                }).join('');
 
                 return `<div class="axis-item">
-                    <span class="axis-theme">${a.theme}</span>
-                    <span class="axis-score ${scoreClass}">${a.score != null ? scoreLabel : '-'}</span>
+                    <div>
+                        <span class="axis-theme">${a.theme}</span>
+                        <span style="font-size:11px; color:var(--text-secondary); margin-left:8px;">tension: ${tensionStr}</span>
+                    </div>
+                    <select class="axis-score-select" data-axis="${i}" onchange="updateAxisScore(${i}, this.value)">
+                        <option value="" ${!hasScore ? 'selected' : ''}>-</option>
+                        ${options}
+                    </select>
                 </div>`;
             }).join('');
+        }
+
+        /**
+         * Update a breath axis score from the dropdown and sync to measurement data
+         */
+        function updateAxisScore(axisIndex, value) {
+            if (!currentMeasurement) return;
+            const score = value === '' ? null : parseInt(value);
+            currentMeasurement.breathAxes[axisIndex].score = score;
+
+            // Re-generate engine data with updated scores
+            currentEngineData = ExcelMeasurementParser.toEngineFormat(currentMeasurement);
         }
 
         function renderDiagnostics(diag) {
