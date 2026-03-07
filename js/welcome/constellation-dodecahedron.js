@@ -1206,9 +1206,9 @@ const ConstellationDodecahedron = (function () {
                 const elapsed = performance.now() - startTime;
                 const progress = Math.min(elapsed / duration, 1);
 
-                // Fade out wireframe and solid
-                wireframeMaterial.opacity = CONFIG.appearance.edges.opacity * (1 - progress);
-                solidMaterial.opacity = CONFIG.appearance.solid.opacity * (1 - progress);
+                // Fade out wireframe and solid (guard against disposed materials during navigation)
+                if (wireframeMaterial) wireframeMaterial.opacity = CONFIG.appearance.edges.opacity * (1 - progress);
+                if (solidMaterial) solidMaterial.opacity = CONFIG.appearance.solid.opacity * (1 - progress);
 
                 // Scatter vertices outward
                 vertexMeshes.forEach(vertex => {
