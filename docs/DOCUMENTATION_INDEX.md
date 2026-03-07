@@ -74,7 +74,7 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 
 ### "I have 5 minutes"
 1. [README.md](README.md) - Quick overview
-2. Open `demo.html` and explore
+2. Open `welcome.html` and explore
 
 ### "I'm preparing for thesis defense"
 1. [thesis/DEFENSE_PREPARATION.md](thesis/DEFENSE_PREPARATION.md) - **Start here: Q&A prep**

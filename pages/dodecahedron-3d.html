@@ -1466,7 +1466,7 @@
                 }
 
                 Logger.info('3D View', '\n🔍 EXTRACTED ACTUAL TOPOLOGY FROM THREE.JS GEOMETRY:');
-                console.log('='.repeat(60));
+                Logger.info('3D', '='.repeat(60));
 
                 const topology = {};
                 vertexToFacesMap.forEach((faceSet, geoIdx) => {
@@ -1475,7 +1475,7 @@
                     Logger.info('3D View', `Vertex ${geoIdx + 1}: faces [${faces.join(', ')}] (${faces.length} faces)`);
                 });
 
-                console.log('='.repeat(60));
+                Logger.info('3D', '='.repeat(60));
                 Logger.info('3D View', `✅ Extracted ${Object.keys(topology).length} vertices from actual geometry\n`);
 
                 // Validate topology

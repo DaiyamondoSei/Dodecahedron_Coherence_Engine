@@ -679,6 +679,34 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Print Optimization */
+        @media print {
+            body { background: white !important; color: #222 !important; margin: 0; padding: 0; }
+            .header { background: white !important; border: 1px solid #ddd !important; }
+            .title { background: none !important; -webkit-text-fill-color: #222 !important; color: #222 !important; }
+            .subtitle, .status { color: #555 !important; }
+            .global-coherence { text-shadow: none !important; color: #222 !important; }
+            .stat-card, .spectral-card, .formula-card { 
+                background: white !important; 
+                border: 1px solid #ccc !important; 
+                color: #222 !important; 
+                box-shadow: none !important; 
+                break-inside: avoid;
+            }
+            .face-card {
+                background: white !important;
+                border: 1px solid #ccc !important;
+                color: #222 !important;
+                break-inside: avoid;
+            }
+            .face-name, .face-energy { color: #222 !important; }
+            .element-label { color: #555 !important; }
+            
+            .stat-value, .spectral-value, .formula-name, h2, h3, h4 { color: #222 !important; }
+            .stat-label, .spectral-interpretation, .formula-desc, .delta-table th, .delta-table td { color: #555 !important; border-color: #eee !important; }
+            .nav-bar, .actions-bar, .no-print, .footer, button { display: none !important; }
+        }
     </style>
 </head>
 
@@ -763,6 +791,8 @@
 
     <!-- Utilities (Must load before modules) -->
     <script src="../js/utils/logger.js"></script>
+    <script src="../js/geometry/dodecahedron-topology.js"></script>
+    <script src="../js/ux/export-manager.js"></script>
     
     <!-- Load dependencies (ES modules for company-loader and main) -->
     <script type="module" src="../js/company-loader.js"></script>
@@ -785,7 +815,7 @@
 
             // Option 1: If this window was opened by another (e.g., window.open())
             if (window.opener && !window.opener.closed) {
-                console.log('[Nav] Returning to opener window');
+                Logger.debug('Calculations', 'Returning to opener window');
                 window.opener.focus();
                 window.close();
                 return;
@@ -793,14 +823,14 @@
 
             // Option 2: Check if we came from demo-orchestrator via history
             if (document.referrer && document.referrer.includes('demo-orchestrator')) {
-                console.log('[Nav] Using history.back() to return to orchestrator');
+                Logger.debug('Calculations', 'Using history.back() to return to orchestrator');
                 history.back();
                 return;
             }
 
             // Option 3: Navigate with state preservation marker
             // The orchestrator should check for this and restore from sessionStorage
-            console.log('[Nav] Navigating to orchestrator with restore flag');
+            Logger.debug('Calculations', 'Navigating to orchestrator with restore flag');
             window.location.href = '../demo-orchestrator.html?restore=true';
         }
 
@@ -812,14 +842,14 @@
          */
         async function init() {
             try {
-                console.log('🔬 Initializing Calculations page...');
+                Logger.info('Calculations', 'Initializing Calculations page...');
 
                 // Check sessionStorage for company data
                 const selectedCompanyId = sessionStorage.getItem('selectedCompanyId');
                 const customDataJson = sessionStorage.getItem('customCompanyData');
 
                 if (selectedCompanyId === 'custom' && customDataJson) {
-                    console.log('🎨 Loading custom data from orchestrator');
+                    Logger.info('Calculations', 'Loading custom data from orchestrator');
 
                     const customData = JSON.parse(customDataJson);
                     const company = {
@@ -830,7 +860,7 @@
                         faceConfig: customData.faceConfig  // ✅ Pass custom face names
                     };
 
-                    console.log(`📊 Custom company has ${company.kpis.length} KPIs`);
+                    Logger.info('Calculations', `Custom company has ${company.kpis.length} KPIs`);
 
                     // Initialize engine
                     const state = await window.Quannex.initWithCompany(company);
@@ -839,10 +869,10 @@
                     displayCalculations(state, company);
 
                     currentLoadedCompanyId = 'custom';
-                    console.log('✅ Successfully loaded custom data');
+                    Logger.info('Calculations', 'Successfully loaded custom data');
 
                 } else if (selectedCompanyId && window.CompanyLoader) {
-                    console.log(`📦 Loading company: ${selectedCompanyId}`);
+                    Logger.info('Calculations', `Loading company: ${selectedCompanyId}`);
 
                     const company = await window.CompanyLoader.loadCompany(selectedCompanyId);
                     const state = await window.Quannex.initWithCompany(company);
@@ -850,11 +880,11 @@
                     displayCalculations(state, company);
 
                     currentLoadedCompanyId = selectedCompanyId;
-                    console.log(`✅ Successfully loaded ${company.name}`);
+                    Logger.info('Calculations', `Successfully loaded ${company.name}`);
 
                 } else {
                     // No sessionStorage data - load default company
-                    console.log('📭 No sessionStorage data, loading default company...');
+                    Logger.info('Calculations', 'No sessionStorage data, loading default company...');
 
                     // Wait for CompanyLoader to be available
                     let attempts = 0;
@@ -867,20 +897,20 @@
                         const companies = window.CompanyLoader.getAvailableCompanies();
                         const defaultCompany = companies[0];
 
-                        console.log(`📦 Loading default company: ${defaultCompany.name}`);
+                        Logger.info('Calculations', `Loading default company: ${defaultCompany.name}`);
                         const company = await window.CompanyLoader.loadCompany(defaultCompany.id);
                         const state = await window.Quannex.initWithCompany(company);
 
                         displayCalculations(state, company);
                         currentLoadedCompanyId = defaultCompany.id;
-                        console.log(`✅ Successfully loaded ${company.name}`);
+                        Logger.info('Calculations', `Successfully loaded ${company.name}`);
                     } else {
                         throw new Error('No company data found and CompanyLoader not available');
                     }
                 }
 
             } catch (error) {
-                console.error('❌ Failed to initialize:', error);
+                Logger.error('Calculations', 'Failed to initialize', error);
                 document.getElementById('loading').innerHTML = `
                     <div class="spinner"></div>
                     <div>Error: ${error.message}</div>
@@ -1062,7 +1092,7 @@
 
             // Check if SpectralAnalyzer is available
             if (typeof window.SpectralAnalyzer === 'undefined') {
-                console.warn('[Spectral] SpectralAnalyzer not loaded — skipping');
+                Logger.warn('Spectral', 'SpectralAnalyzer not loaded — skipping');
                 return;
             }
 
@@ -1071,7 +1101,7 @@
                 const energies = state.faces.map(f => f.faceEnergy || f.energy || 0);
 
                 if (energies.length !== 12) {
-                    console.warn('[Spectral] Expected 12 face energies, got', energies.length);
+                    Logger.warn('Spectral', );
                     return;
                 }
 
@@ -1080,11 +1110,11 @@
                 const result = analyzer.analyze(energies);
 
                 if (!result) {
-                    console.warn('[Spectral] Analysis returned null');
+                    Logger.warn('Spectral', 'Analysis returned null');
                     return;
                 }
 
-                console.log('[Spectral] Analysis complete:', result);
+                Logger.info('Spectral', 'Analysis complete', result);
 
                 // === RENDER RESULTS ===
 
@@ -1297,10 +1327,10 @@
                 `;
 
                 section.style.display = 'block';
-                console.log('[Spectral] Section rendered successfully');
+                Logger.debug('Spectral', 'Section rendered successfully');
 
             } catch (error) {
-                console.error('[Spectral] Failed to run analysis:', error);
+                Logger.error('Spectral', 'Failed to run analysis', error);
                 section.style.display = 'none';
             }
         }

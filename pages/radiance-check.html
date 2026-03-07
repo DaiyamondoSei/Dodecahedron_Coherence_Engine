@@ -47,7 +47,7 @@
             div.className = 'log fail';
             div.textContent = `❌ GLOBAL ERROR: ${msg} at ${url}:${line}:${col}`;
             logDiv.appendChild(div);
-            console.error('Global Error:', error);
+            Logger.error('RadianceCheck', 'Global Error', error);
             return false;
         };
         window.addEventListener('unhandledrejection', function (event) {
@@ -56,7 +56,7 @@
             div.className = 'log fail';
             div.textContent = `❌ UNHANDLED PROMISE: ${event.reason}`;
             logDiv.appendChild(div);
-            console.error('Unhandled Rejection:', event.reason);
+            Logger.error('RadianceCheck', 'Unhandled Rejection', event.reason);
         });
     </script>
 
@@ -73,7 +73,7 @@
             div.className = `log ${type}`;
             div.textContent = `> ${msg}`;
             logDiv.appendChild(div);
-            console.log(msg);
+            Logger.info('RadianceCheck', msg);
         }
 
         function assert(condition, message) {
@@ -121,7 +121,7 @@
 
             } catch (error) {
                 log(`❌ CRITICAL FAILURE: ${error.message}`, 'fail');
-                console.error(error);
+                Logger.error('RadianceCheck', 'Error occurred', error);
             }
         }
 

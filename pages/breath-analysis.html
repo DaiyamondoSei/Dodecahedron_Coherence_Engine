@@ -544,7 +544,7 @@
 
             // Option 1: If this window was opened by another (e.g., window.open())
             if (window.opener && !window.opener.closed) {
-                console.log('[Nav] Returning to opener window');
+                Logger.debug('BreathAnalysis', 'Returning to opener window');
                 window.opener.focus();
                 window.close();
                 return;
@@ -552,14 +552,14 @@
 
             // Option 2: Check if we came from demo-orchestrator via history
             if (document.referrer && document.referrer.includes('demo-orchestrator')) {
-                console.log('[Nav] Using history.back() to return to orchestrator');
+                Logger.debug('BreathAnalysis', 'Using history.back() to return to orchestrator');
                 history.back();
                 return;
             }
 
             // Option 3: Navigate with state preservation marker
             // The orchestrator should check for this and restore from sessionStorage
-            console.log('[Nav] Navigating to orchestrator with restore flag');
+            Logger.debug('BreathAnalysis', 'Navigating to orchestrator with restore flag');
             window.location.href = '../demo-orchestrator.html?restore=true';
         }
 
@@ -571,14 +571,14 @@
          */
         async function init() {
             try {
-                console.log('🌊 Initializing Breath Analysis page...');
+                Logger.info('BreathAnalysis', 'Initializing Breath Analysis page...');
 
                 // Check sessionStorage for company data
                 const selectedCompanyId = sessionStorage.getItem('selectedCompanyId');
                 const customDataJson = sessionStorage.getItem('customCompanyData');
 
                 if (selectedCompanyId === 'custom' && customDataJson) {
-                    console.log('🎨 Loading custom data from orchestrator');
+                    Logger.info('BreathAnalysis', 'Loading custom data from orchestrator');
 
                     const customData = JSON.parse(customDataJson);
                     const company = {
@@ -589,7 +589,7 @@
                         faceConfig: customData.faceConfig  // ✅ Pass custom face names
                     };
 
-                    console.log(`📊 Custom company has ${company.kpis.length} KPIs`);
+                    Logger.info('BreathAnalysis', `Custom company has ${company.kpis.length} KPIs`);
 
                     // Initialize engine
                     const state = await window.Quannex.initWithCompany(company);
@@ -601,10 +601,10 @@
                     displayBreathAnalysis(company);
 
                     currentLoadedCompanyId = 'custom';
-                    console.log('✅ Successfully loaded custom data');
+                    Logger.info('BreathAnalysis', 'Successfully loaded custom data');
 
                 } else if (selectedCompanyId && window.CompanyLoader) {
-                    console.log(`📦 Loading company: ${selectedCompanyId}`);
+                    Logger.info('BreathAnalysis', `Loading company: ${selectedCompanyId}`);
 
                     const company = await window.CompanyLoader.loadCompany(selectedCompanyId);
                     const state = await window.Quannex.initWithCompany(company);
@@ -615,11 +615,11 @@
                     displayBreathAnalysis(company);
 
                     currentLoadedCompanyId = selectedCompanyId;
-                    console.log(`✅ Successfully loaded ${company.name}`);
+                    Logger.info('BreathAnalysis', `Successfully loaded ${company.name}`);
 
                 } else {
                     // No sessionStorage data - load default company
-                    console.log('📭 No sessionStorage data, loading default company...');
+                    Logger.info('BreathAnalysis', 'No sessionStorage data, loading default company...');
 
                     // Wait for CompanyLoader to be available
                     let attempts = 0;
@@ -632,7 +632,7 @@
                         const companies = window.CompanyLoader.getAvailableCompanies();
                         const defaultCompany = companies[0];
 
-                        console.log(`📦 Loading default company: ${defaultCompany.name}`);
+                        Logger.info('BreathAnalysis', `Loading default company: ${defaultCompany.name}`);
                         const company = await window.CompanyLoader.loadCompany(defaultCompany.id);
                         const state = await window.Quannex.initWithCompany(company);
 
@@ -641,14 +641,14 @@
 
                         displayBreathAnalysis(company);
                         currentLoadedCompanyId = defaultCompany.id;
-                        console.log(`✅ Successfully loaded ${company.name}`);
+                        Logger.info('BreathAnalysis', `Successfully loaded ${company.name}`);
                     } else {
                         throw new Error('No company data found and CompanyLoader not available');
                     }
                 }
 
             } catch (error) {
-                console.error('❌ Failed to initialize:', error);
+                Logger.error('BreathAnalysis', 'Failed to initialize', error);
                 document.getElementById('loading').innerHTML = `
                     <div class="spinner"></div>
                     <div>Error: ${error.message}</div>
@@ -666,7 +666,7 @@
             const breathAnalysis = window.Quannex.getBreathAnalysis();
 
             if (!breathAnalysis) {
-                console.error('❌ No breath analysis available');
+                Logger.error('BreathAnalysis', 'No breath analysis available');
                 document.getElementById('loading').innerHTML = `
                     <div>Breath analysis not available</div>
                     <div style="margin-top: 20px; font-size: 14px; opacity: 0.7;">
@@ -676,7 +676,7 @@
                 return;
             }
 
-            console.log('🌊 Displaying breath analysis:', breathAnalysis);
+            Logger.info('BreathAnalysis', 'Displaying breath analysis', breathAnalysis);
 
             // Hide loading
             document.getElementById('loading').style.display = 'none';
