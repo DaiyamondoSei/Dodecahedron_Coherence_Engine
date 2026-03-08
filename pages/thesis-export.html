@@ -223,6 +223,9 @@
             gap: 12px;
         }
 
+        [title] { cursor: help; }
+        th[title] { cursor: help; }
+
         @media print {
             body { padding: 0; background: white; }
             .btn, .input-section { display: none !important; }
@@ -288,6 +291,14 @@
                 <button class="btn btn-copy" onclick="copyMarkdown('E')">Copy Markdown</button>
             </div>
             <div id="tableE"></div>
+        </div>
+
+        <div class="output-section" id="sectionE2">
+            <div class="section-header">
+                <h3>E2. Multi-Mode Sensitivity Matrix (Table 5.6)</h3>
+                <button class="btn btn-copy" onclick="copyMarkdown('E2')">Copy Markdown</button>
+            </div>
+            <div id="tableE2"></div>
         </div>
 
         <div class="output-section" id="sectionF">
@@ -358,6 +369,32 @@
     const RECEPTION_FACES = [1, 2, 3, 9, 10, 12];  // Being/Inhale
     const PROJECTION_FACES = [4, 5, 6, 7, 8, 11];  // Action/Exhale
 
+    // Breath axis pairs
+    const AXIS_MAP = {1:11,2:7,3:8,4:9,5:10,6:12,7:2,8:3,9:4,10:5,11:1,12:6};
+
+    // Edge health state tooltips
+    const EDGE_HEALTH_TIPS = {
+        'Wall':       'Wall (tension < φ⁻⁴ ≈ 0.146) — faces are energetically walled off, almost no exchange',
+        'Gate':       'Gate (φ⁻⁴ ≤ tension < φ⁻²  ≈ 0.382) — restricted flow, potential for opening',
+        'Membrane':   'Membrane (φ⁻² ≤ tension < φ⁻¹ ≈ 0.618) — healthy semi-permeable exchange, the golden zone',
+        'Hemorrhage': 'Hemorrhage (φ⁻¹ ≤ tension < 1−φ⁻⁴ ≈ 0.854) — excessive energy bleeding between faces',
+        'Vortex':     'Vortex (tension ≥ 1−φ⁻⁴ ≈ 0.854) — chaotic energy exchange, structural instability'
+    };
+
+    // Mode names for tooltips
+    const MODE_NAMES = [
+        'Uniform Energy', 'Global Imbalance', 'Dipolar Split', 'Tripolar Pattern',
+        'Quadrupolar Field', 'Pentagonal Mode', 'Hexagonal Mode', 'Heptagonal Mode',
+        'Octagonal Mode', 'Higher-Order 9', 'Higher-Order 10', 'Highest Complexity'
+    ];
+
+    function faceTip(faceId) {
+        const f = FACES[faceId - 1];
+        const opp = AXIS_MAP[faceId];
+        const oppName = FACES[opp - 1].domain;
+        return `F${faceId}: ${f.domain} (${f.archetype}) — Breath axis pair with F${opp} ${oppName}`;
+    }
+
     // ============================================================
     // BUILD INPUT FORM
     // ============================================================
@@ -397,6 +434,7 @@
         renderSpectralTable(spectral);
         renderDiagnostics(ef_wk0, ef_wk5, spectral);
         renderDeltaVector(spectral, ef_wk5);
+        renderSensitivityMatrix(spectral, ef_wk5);
         renderNarrative(ef_wk5, spectral, ef_wk0);
 
         // Show all sections
@@ -411,8 +449,8 @@
             const delta = ef_wk5[i] - ef_wk0[i];
             const sign = delta >= 0 ? '+' : '';
             return `<tr>
-                <td>F${f.id}</td>
-                <td>${f.domain}</td>
+                <td title="${faceTip(f.id)}">F${f.id}</td>
+                <td title="${f.archetype}">${f.domain}</td>
                 <td class="num">${wk5[i].toFixed(2)}</td>
                 <td class="num">${weights[i].toFixed(1)}</td>
                 <td class="num">${ef_wk0[i].toFixed(3)}</td>
@@ -427,7 +465,15 @@
 
         document.getElementById('tableA').innerHTML = `
             <table>
-                <thead><tr><th>Face</th><th>Domain</th><th>K_norm</th><th>Weight</th><th>E_f (Wk0)</th><th>E_f (Wk5)</th><th>Delta</th></tr></thead>
+                <thead><tr>
+                    <th title="Dodecahedron face identifier (F1–F12)">Face</th>
+                    <th title="Organizational domain mapped to this face">Domain</th>
+                    <th title="Normalized coherence score (0–1) from KPI aggregation">K_norm</th>
+                    <th title="Phi-derived importance weight for this face (0.6–1.0)">Weight</th>
+                    <th title="Weighted face energy at Week 0 (baseline): E_f = K_norm × Weight">E_f (Wk0)</th>
+                    <th title="Weighted face energy at Week 5 (current): E_f = K_norm × Weight">E_f (Wk5)</th>
+                    <th title="Change in face energy: E_f(Wk5) − E_f(Wk0)">Delta</th>
+                </tr></thead>
                 <tbody>${rows.join('')}</tbody>
                 <tfoot><tr style="font-weight:600;">
                     <td colspan="4">Global Coherence</td>
@@ -449,18 +495,26 @@
             const status = classifyEdge(tension);
             return `<tr>
                 <td>E${a}-${b}</td>
-                <td>${FACES[a-1].domain}</td>
-                <td>${FACES[b-1].domain}</td>
+                <td title="${faceTip(a)}">${FACES[a-1].domain}</td>
+                <td title="${faceTip(b)}">${FACES[b-1].domain}</td>
                 <td class="num">${ea.toFixed(3)}</td>
                 <td class="num">${eb.toFixed(3)}</td>
                 <td class="num">${tension.toFixed(3)}</td>
-                <td>${status}</td>
+                <td title="${EDGE_HEALTH_TIPS[status]}">${status}</td>
             </tr>`;
         });
 
         document.getElementById('tableB').innerHTML = `
             <table>
-                <thead><tr><th>Edge</th><th>Face A</th><th>Face B</th><th>E_A</th><th>E_B</th><th>|Tension|</th><th>Health</th></tr></thead>
+                <thead><tr>
+                    <th title="Edge connecting two adjacent dodecahedron faces">Edge</th>
+                    <th title="First face in the edge pair">Face A</th>
+                    <th title="Second face in the edge pair">Face B</th>
+                    <th title="Weighted energy of Face A">E_A</th>
+                    <th title="Weighted energy of Face B">E_B</th>
+                    <th title="Absolute energy difference |E_A − E_B| — measures interface tension">|Tension|</th>
+                    <th title="Phi-derived health state: Wall (< φ⁻⁴) → Gate (< φ⁻²) → Membrane (< φ⁻¹) → Hemorrhage (< 1−φ⁻⁴) → Vortex">Health</th>
+                </tr></thead>
                 <tbody>${rows.join('')}</tbody>
             </table>`;
     }
@@ -483,20 +537,35 @@
             return bandLabels[3];
         }
 
+        const bandTips = {
+            'DC Offset': 'DC Offset (λ=0) — uniform energy across all faces; represents the system average',
+            'Global (5-sqrt5)': 'Global band (λ ≈ 2.76) — whole-system imbalance patterns spanning all faces',
+            'Regional (5)': 'Regional band (λ = 5) — cluster-level patterns affecting groups of adjacent faces',
+            'Fine-Grained (5+sqrt5)': 'Fine-Grained band (λ ≈ 7.24) — local adjacent-face tension, highest spatial frequency'
+        };
+
         const rows = spectral.modalAmplitudes.map(m => {
             const isDominant = m.mode === spectral.dominantMode.mode;
+            const band = getBand(m.eigenvalue);
+            const modeName = MODE_NAMES[m.mode - 1] || 'Mode ' + m.mode;
             return `<tr style="${isDominant ? 'background:#eff6ff;font-weight:600;' : ''}">
-                <td>${m.mode}${isDominant ? ' *' : ''}</td>
-                <td class="num">${m.eigenvalue.toFixed(4)}</td>
-                <td>${getBand(m.eigenvalue)}</td>
-                <td class="num">${m.amplitude.toFixed(4)}</td>
+                <td title="Mode ${m.mode}: ${modeName}${isDominant ? ' (DOMINANT — largest |a_i| excluding DC)' : ''}">${m.mode}${isDominant ? ' *' : ''}</td>
+                <td class="num" title="Eigenvalue of the graph Laplacian — determines spatial frequency of this mode">${m.eigenvalue.toFixed(4)}</td>
+                <td title="${bandTips[band] || band}">${band}</td>
+                <td class="num" title="Signed modal amplitude: projection of face energy vector onto this eigenvector (a = Uᵀ × E)">${m.amplitude.toFixed(4)}</td>
                 <td class="num">${Math.abs(m.amplitude).toFixed(4)}</td>
             </tr>`;
         });
 
         document.getElementById('tableC').innerHTML = `
             <table>
-                <thead><tr><th>Mode</th><th>Eigenvalue</th><th>Band</th><th>Amplitude (a_i)</th><th>|a_i|</th></tr></thead>
+                <thead><tr>
+                    <th title="Eigenvector index of the dodecahedral graph Laplacian (1–12)">Mode</th>
+                    <th title="Eigenvalue λ — determines spatial frequency. λ=0 is DC, λ≈2.76 global, λ=5 regional, λ≈7.24 local">Eigenvalue</th>
+                    <th title="Frequency band: DC Offset / Global (5−√5) / Regional (5) / Fine-Grained (5+√5)">Band</th>
+                    <th title="Signed amplitude: a_i = Uᵀ × E. Positive = aligned with eigenvector, negative = anti-aligned">Amplitude (a_i)</th>
+                    <th title="Absolute amplitude — magnitude of this mode's contribution to the energy pattern">|a_i|</th>
+                </tr></thead>
                 <tbody>${rows.join('')}</tbody>
             </table>
             <p style="margin-top:8px;font-size:12px;color:var(--text-secondary);">* = dominant mode (largest |a_i| excluding DC)</p>`;
@@ -524,33 +593,33 @@
         document.getElementById('tableD').innerHTML = `
             <div class="diagnostics-grid">
                 <div class="summary-card">
-                    <dt>Dominant Mode</dt>
-                    <dd>Mode ${dm.mode} (lambda = ${dm.eigenvalue.toFixed(4)})</dd>
-                    <dt>Band</dt>
+                    <dt title="The eigenvector mode with the largest absolute amplitude (excluding DC mode 1). This mode represents the strongest structural pattern in the organization.">Dominant Mode</dt>
+                    <dd title="${MODE_NAMES[dm.mode - 1] || ''}">Mode ${dm.mode} (lambda = ${dm.eigenvalue.toFixed(4)})</dd>
+                    <dt title="Frequency band classification based on eigenvalue groupings of the dodecahedral graph Laplacian">Band</dt>
                     <dd>${spectral.summary.pattern}</dd>
                     <dt>Amplitude</dt>
                     <dd>${dm.amplitude.toFixed(4)}</dd>
                 </div>
                 <div class="summary-card">
-                    <dt>AAG (Aspiration-Actuality Gap)</dt>
+                    <dt title="Emergent diagnostic: ratio of aspiration-pole energy (F10,F11,F12) to actuality-pole energy (F1,F2,F3). AAG > 1 means the organization aspires beyond its current capacity.">AAG (Aspiration-Actuality Gap)</dt>
                     <dd>Wk0: ${aag_wk0.toFixed(3)} &rarr; Wk5: ${aag_wk5.toFixed(3)}</dd>
-                    <dt>E_Actuality (avg F1,F2,F3)</dt>
+                    <dt title="Average weighted energy of the actuality pole: Financial Capital (F1), Intellectual Capital (F2), Human Capital (F3)">E_Actuality (avg F1,F2,F3)</dt>
                     <dd>Wk0: ${actuality_wk0.toFixed(3)} &rarr; Wk5: ${actuality_wk5.toFixed(3)}</dd>
-                    <dt>E_Aspiration (avg F10,F11,F12)</dt>
+                    <dt title="Average weighted energy of the aspiration pole: Foundational Values (F10), Funding Pipeline (F11), Risk & Resilience (F12)">E_Aspiration (avg F10,F11,F12)</dt>
                     <dd>Wk0: ${aspiration_wk0.toFixed(3)} &rarr; Wk5: ${aspiration_wk5.toFixed(3)}</dd>
                 </div>
                 <div class="summary-card">
-                    <dt>BAB (Being-Action Balance)</dt>
+                    <dt title="Being-Action Balance: ratio of reception (Being/Inhale) energy to projection (Action/Exhale) energy × 100%. Balanced = 80–120%. Over-inhaling > 120%. Over-exhaling < 80%.">BAB (Being-Action Balance)</dt>
                     <dd>${bab.percentage.toFixed(1)}% &mdash; ${bab.interpretation}</dd>
-                    <dt>Reception avg (F1,2,3,9,10,12)</dt>
+                    <dt title="Average energy of Being/Inhale faces: F1 Financial, F2 Intellectual, F3 Human, F9 Regenerative, F10 Values, F12 Risk">Reception avg (F1,2,3,9,10,12)</dt>
                     <dd>${bab.receptionEnergy.toFixed(3)}</dd>
-                    <dt>Projection avg (F4,5,6,7,8,11)</dt>
+                    <dt title="Average energy of Action/Exhale faces: F4 Structural, F5 Market, F6 Community, F7 Brand, F8 Operations, F11 Funding">Projection avg (F4,5,6,7,8,11)</dt>
                     <dd>${bab.projectionEnergy.toFixed(3)}</dd>
                 </div>
                 <div class="summary-card">
-                    <dt>Dissonance Index</dt>
+                    <dt title="Weighted average of absolute deviations from harmonic equilibrium. Low < 15% (near equilibrium), Moderate 15–30%, High > 30% (significant structural imbalance).">Dissonance Index</dt>
                     <dd>${dis.percentage.toFixed(1)}% &mdash; ${dis.interpretation}</dd>
-                    <dt>Total Magnitude</dt>
+                    <dt title="Sum of all absolute delta corrections: Σ|Δ_f| — measures total energy redistribution needed">Total Magnitude</dt>
                     <dd>${dis.totalMagnitude.toFixed(4)}</dd>
                 </div>
             </div>`;
@@ -560,6 +629,11 @@
     // SECTION E: Delta Vector
     // ============================================================
     function renderDeltaVector(spectral, ef) {
+        const actionTips = {
+            'ADD ENERGY':  'Face energy is below harmonic equilibrium — increase KPI scores to close the gap',
+            'REDUCE':      'Face energy exceeds harmonic equilibrium — redistribute excess to under-energized faces',
+            'BALANCED':    'Delta within ±2% — no significant spectral correction needed'
+        };
         const rows = spectral.deltaVector.map(d => {
             const current = ef[d.faceId - 1];
             const target = current + d.deltaValue;
@@ -567,20 +641,104 @@
             const cls = d.deltaValue > 0.02 ? 'positive' : d.deltaValue < -0.02 ? 'negative' : '';
             const action = d.deltaValue > 0.02 ? 'ADD ENERGY' : d.deltaValue < -0.02 ? 'REDUCE' : 'BALANCED';
             return `<tr>
-                <td>F${d.faceId}</td>
-                <td>${FACES[d.faceId - 1].domain}</td>
+                <td title="${faceTip(d.faceId)}">F${d.faceId}</td>
+                <td title="${FACES[d.faceId - 1].archetype}">${FACES[d.faceId - 1].domain}</td>
                 <td class="num">${current.toFixed(3)}</td>
                 <td class="num ${cls}">${sign}${d.deltaValue.toFixed(4)}</td>
                 <td class="num">${target.toFixed(3)}</td>
-                <td>${action}</td>
+                <td title="${actionTips[action]}">${action}</td>
             </tr>`;
         });
 
         document.getElementById('tableE').innerHTML = `
             <table>
-                <thead><tr><th>Face</th><th>Domain</th><th>Current E_f</th><th>Delta</th><th>Target E_f</th><th>Action</th></tr></thead>
+                <thead><tr>
+                    <th title="Dodecahedron face identifier">Face</th>
+                    <th title="Organizational domain mapped to this face">Domain</th>
+                    <th title="Current weighted face energy at Week 5">Current E_f</th>
+                    <th title="Multi-mode correction: Δ_f = −Σ(U_fm × a_m) summed across all significant spectral modes">Delta</th>
+                    <th title="Target face energy after applying the spectral correction: Current + Delta">Target E_f</th>
+                    <th title="Recommended action direction based on delta sign (±2% threshold)">Action</th>
+                </tr></thead>
                 <tbody>${rows.join('')}</tbody>
             </table>`;
+    }
+
+    // ============================================================
+    // SECTION E2: Multi-Mode Sensitivity Matrix
+    // ============================================================
+    function renderSensitivityMatrix(spectral, ef) {
+        const SQRT5 = Math.sqrt(5);
+
+        // Identify significant modes (|a_m| >= 0.1 * |a_max|)
+        const amps = spectral.modalAmplitudes;
+        const maxAmp = Math.max(...amps.map(a => Math.abs(a.amplitude)));
+        const sigModes = amps.filter(a => Math.abs(a.amplitude) >= 0.1 * maxAmp && a.eigenvalue > 0.01);
+        sigModes.sort((a, b) => Math.abs(b.amplitude) - Math.abs(a.amplitude));
+
+        // Build Face x Mode matrix from deltaVector modeContributions
+        const matrix = spectral.deltaVector.map(d => {
+            const row = { faceId: d.faceId, domain: FACES[d.faceId - 1].domain, delta: d.deltaValue };
+            row.modes = {};
+            (d.modeContributions || []).forEach(mc => {
+                row.modes[mc.mode] = mc.contribution;
+            });
+            return row;
+        });
+
+        // Sort faces by |delta| descending
+        matrix.sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+
+        // Build header
+        const modeHeaders = sigModes.map(m => {
+            const band = m.eigenvalue < (5 - SQRT5 + 0.01) ? 'G' : m.eigenvalue > (5 + SQRT5 - 0.01) ? 'L' : 'R';
+            return `<th title="Mode ${m.mode} (λ=${m.eigenvalue.toFixed(2)}, ${band === 'G' ? 'Global' : band === 'R' ? 'Regional' : 'Local'})\n|a|=${Math.abs(m.amplitude).toFixed(3)}">M${m.mode}<br><span style="font-size:10px;color:var(--text-secondary);">${band}</span></th>`;
+        }).join('');
+
+        // Build rows
+        const rows = matrix.map(r => {
+            const cls = r.delta > 0.02 ? 'positive' : r.delta < -0.02 ? 'negative' : '';
+            const modeCells = sigModes.map(m => {
+                const val = r.modes[m.mode] || 0;
+                const pct = (val * 100).toFixed(1);
+                const cellCls = val > 0.005 ? 'positive' : val < -0.005 ? 'negative' : '';
+                const bg = Math.abs(val) > 0.01 ? `background: rgba(${val > 0 ? '22,163,74' : '220,38,38'}, ${Math.min(Math.abs(val) * 3, 0.25).toFixed(2)});` : '';
+                return `<td class="num ${cellCls}" style="${bg}">${Math.abs(val) < 0.001 ? '—' : (val >= 0 ? '+' : '') + pct + '%'}</td>`;
+            }).join('');
+
+            return `<tr>
+                <td title="${faceTip(r.faceId)}">F${r.faceId}</td>
+                <td title="${FACES[r.faceId - 1].archetype}">${r.domain}</td>
+                <td class="num ${cls}" title="Total multi-mode correction for this face">${r.delta >= 0 ? '+' : ''}${(r.delta * 100).toFixed(1)}%</td>
+                ${modeCells}
+            </tr>`;
+        }).join('');
+
+        // Legend
+        const legend = sigModes.map(m => {
+            const band = m.eigenvalue < (5 - SQRT5 + 0.01) ? 'Global (whole-system)' :
+                         m.eigenvalue > (5 + SQRT5 - 0.01) ? 'Local (adjacent-face)' : 'Regional (cluster)';
+            return `M${m.mode}: λ=${m.eigenvalue.toFixed(2)}, |a|=${Math.abs(m.amplitude).toFixed(3)} — ${band}`;
+        }).join('<br>');
+
+        document.getElementById('tableE2').innerHTML = `
+            <p style="margin-bottom:12px;font-size:13px;color:var(--text-secondary);">
+                Each cell shows the contribution of mode <em>m</em> to face <em>f</em>'s correction:
+                Δ<sub>f,m</sub> = −U<sub>fm</sub> × a<sub>m</sub>.
+                Positive = adds energy, negative = removes energy.
+                Only significant modes shown (|a<sub>m</sub>| ≥ 10% of max).
+                Band: G = Global (λ ≈ ${(5-SQRT5).toFixed(2)}), R = Regional (λ = 5), L = Local (λ ≈ ${(5+SQRT5).toFixed(2)}).
+            </p>
+            <table>
+                <thead><tr>
+                    <th>Face</th><th>Domain</th><th>Total Δ</th>
+                    ${modeHeaders}
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+            <p style="margin-top:12px;font-size:11px;color:var(--text-secondary);">
+                ${legend}
+            </p>`;
     }
 
     // ============================================================
@@ -687,6 +845,34 @@ ${addEnergy.length > 0 ? `The delta vector prescribes highest-leverage correctiv
                 const t = c + d.deltaValue;
                 const action = d.deltaValue > 0.02 ? 'ADD ENERGY' : d.deltaValue < -0.02 ? 'REDUCE' : 'BALANCED';
                 md += `| F${d.faceId} | ${FACES[d.faceId-1].domain} | ${c.toFixed(3)} | ${d.deltaValue >= 0 ? '+' : ''}${d.deltaValue.toFixed(4)} | ${t.toFixed(3)} | ${action} |\n`;
+            });
+            return md;
+        },
+        E2: () => {
+            const analyzer = new SpectralAnalyzer();
+            const wk5 = FACES.map(f => parseFloat(document.getElementById(`wk5_${f.id}`).value) || 0);
+            const weights = FACES.map(f => f.weight);
+            const ef = wk5.map((v, i) => v * weights[i]);
+            const result = analyzer.analyze(ef);
+            const SQRT5 = Math.sqrt(5);
+
+            const maxAmp = Math.max(...result.modalAmplitudes.map(a => Math.abs(a.amplitude)));
+            const sigModes = result.modalAmplitudes
+                .filter(a => Math.abs(a.amplitude) >= 0.1 * maxAmp && a.eigenvalue > 0.01)
+                .sort((a, b) => Math.abs(b.amplitude) - Math.abs(a.amplitude));
+
+            const modeLabels = sigModes.map(m => `M${m.mode}`);
+            let md = `| Face | Domain | Total Δ | ${modeLabels.join(' | ')} |\n`;
+            md += `|------|--------|---------|${modeLabels.map(() => '------').join('|')}|\n`;
+
+            const sorted = [...result.deltaVector].sort((a, b) => Math.abs(b.deltaValue) - Math.abs(a.deltaValue));
+            sorted.forEach(d => {
+                const modeCols = sigModes.map(m => {
+                    const mc = (d.modeContributions || []).find(c => c.mode === m.mode);
+                    const val = mc ? mc.contribution : 0;
+                    return Math.abs(val) < 0.001 ? '—' : `${val >= 0 ? '+' : ''}${(val * 100).toFixed(1)}%`;
+                });
+                md += `| F${d.faceId} | ${FACES[d.faceId-1].domain} | ${d.deltaValue >= 0 ? '+' : ''}${(d.deltaValue * 100).toFixed(1)}% | ${modeCols.join(' | ')} |\n`;
             });
             return md;
         },

@@ -1279,10 +1279,16 @@
                     calculatedState = window.Quannex.getState?.();
                 }
 
-                // Use calculated state if available, otherwise fall back to raw context
-                const reportData = calculatedState?.faces?.length > 0
-                    ? { ...context, faces: calculatedState.faces }
-                    : context;
+                // Use calculated state if available, then coherenceResults from orchestrator, then raw context
+                let reportData;
+                if (calculatedState?.faces?.length > 0) {
+                    reportData = { ...context, faces: calculatedState.faces };
+                } else if (customConfig?.coherenceResults?.faces?.length > 0) {
+                    // Orchestrator stores computed faces in coherenceResults (has energy values)
+                    reportData = { ...context, faces: customConfig.coherenceResults.faces };
+                } else {
+                    reportData = context;
+                }
 
                 // Populate report
                 populateReport(reportData, companyId);
@@ -1317,7 +1323,7 @@
 
         function populateReport(context, companyId) {
             // Company name and date
-            const companyMeta = context.companyMeta || { name: companyId };
+            const companyMeta = context.companyMeta || context.company || { name: companyId };
             document.getElementById('companyName').textContent = companyMeta.name || companyId;
             document.getElementById('reportDate').textContent = `Generated on ${new Date().toLocaleDateString('en-US', {
                 weekday: 'long',
@@ -1561,32 +1567,44 @@
         function populateBreathAnalysis(context) {
             const container = document.getElementById('breathGrid');
             const breathAxes = context.breathAxes || [];
+            const faces = context.faces || [];
 
             if (breathAxes.length === 0) {
                 container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary);">Breath analysis data not available</div>';
                 return;
             }
 
+            // Helper: resolve face reference (could be object or face ID number)
+            function resolveFace(ref) {
+                if (typeof ref === 'object' && ref !== null) return ref;
+                if (typeof ref === 'number') return faces.find(f => f.id === ref) || { name: `Face ${ref}` };
+                return { name: 'Unknown' };
+            }
+
             container.innerHTML = breathAxes.map((axis, index) => {
-                const ratio = axis.ratio || 1;
+                const ratio = axis.ratio || axis.currentRatio || 1;
                 const ratioDisplay = ratio.toFixed(2);
+                const projFace = resolveFace(axis.projectionFace);
+                const recFace = resolveFace(axis.receptionFace);
+                const axisName = axis.breathName || axis.name || `Axis ${index + 1}`;
+                const status = axis.status || (ratio > 1.2 ? 'Over-Inhaling' : ratio < 0.8 ? 'Over-Exhaling' : 'Balanced');
 
                 return `
                     <div class="breath-card">
-                        <div class="breath-axis-label">Axis ${index + 1}</div>
+                        <div class="breath-axis-label">${axisName}</div>
                         <div class="breath-faces">
                             <div class="breath-face">
-                                <div class="breath-face-name">${axis.projectionFace?.name || 'Projection'}</div>
-                                <div class="breath-face-energy">${Math.round((axis.projectionFace?.sentiment || 0.5) * 100)}%</div>
+                                <div class="breath-face-name">${projFace.name || projFace.customName || projFace.baseName || 'Projection'}</div>
+                                <div class="breath-face-energy">${Math.round(getEnergy(projFace) * 100)}%</div>
                             </div>
                             <div style="color: var(--text-secondary);">&#x21C4;</div>
                             <div class="breath-face">
-                                <div class="breath-face-name">${axis.receptionFace?.name || 'Reception'}</div>
-                                <div class="breath-face-energy">${Math.round((axis.receptionFace?.sentiment || 0.5) * 100)}%</div>
+                                <div class="breath-face-name">${recFace.name || recFace.customName || recFace.baseName || 'Reception'}</div>
+                                <div class="breath-face-energy">${Math.round(getEnergy(recFace) * 100)}%</div>
                             </div>
                         </div>
                         <div class="breath-ratio">
-                            <div class="breath-ratio-label">Breath Ratio</div>
+                            <div class="breath-ratio-label">${status}</div>
                             <div class="breath-ratio-value">${ratioDisplay}</div>
                         </div>
                     </div>
@@ -1609,11 +1627,13 @@
                         <div class="shadow-icon">&#x1F311;</div>
                         <div class="shadow-name">${shadow.name || 'Unknown Pattern'}</div>
                     </div>
-                    <div class="shadow-description">${shadow.description || 'A hidden dynamic in the system'}</div>
+                    <div class="shadow-description">${shadow.description || shadow.suppressed || 'A hidden dynamic in the system'}</div>
                     <div class="shadow-gift">
                         <div class="shadow-gift-label">Gift When Integrated</div>
-                        <div class="shadow-gift-text">${shadow.gift || 'Awaiting discovery'}</div>
+                        <div class="shadow-gift-text">${shadow.gift || shadow.integrated || 'Awaiting discovery'}</div>
                     </div>
+                    ${shadow.severity ? `<div class="shadow-severity" style="margin-top: 0.5rem; font-size: 0.75rem; color: ${shadow.severity === 'critical' ? 'var(--accent-critical, #ff4444)' : 'var(--text-secondary, #999)'}; text-transform: uppercase; letter-spacing: 0.05em;">${shadow.severity}</div>` : ''}
+                    ${shadow.prescription ? `<div class="shadow-prescription" style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-secondary, #aaa); font-style: italic;">${shadow.prescription}</div>` : ''}
                 </div>
             `).join('');
         }
@@ -1731,15 +1751,9 @@
                     ...result.correctiveActions.reduceEnergy.map(a => ({ ...a, type: 'reduce' }))
                 ].sort((a, b) => b.priority - a.priority).slice(0, 6);
 
-                const FACE_NAMES = [
-                    'Financial Capital', 'Intellectual Capital', 'Social Capital',
-                    'Operational Efficiency', 'Market Position', 'Innovation & Creativity',
-                    'Human Capital', 'Environmental Stewardship', 'Governance & Ethics',
-                    'Stakeholder Relations', 'Risk & Resilience', 'Strategic Vision'
-                ];
-
                 corrections.innerHTML = allActions.map(a => {
-                    const name = FACE_NAMES[a.faceId - 1] || `Face ${a.faceId}`;
+                    const face = faces.find(f => f.id === a.faceId) || faces[a.faceId - 1];
+                    const name = face?.name || face?.customName || face?.baseName || `Face ${a.faceId}`;
                     const isAdd = a.type === 'add';
                     return `<div class="correction-card ${isAdd ? '' : 'reduce'}">
                         <div class="correction-face">F${a.faceId}: ${name}</div>
@@ -1763,10 +1777,10 @@
         }
 
 
-        // Dropdown Logic
-        function toggleDropdown() {
+        // Expose functions to global scope (module scripts don't auto-expose)
+        window.toggleDropdown = function() {
             document.getElementById("reportDropdown").classList.toggle("active");
-        }
+        };
 
         window.onclick = function(event) {
             if (!event.target.matches('.nav-btn')) {
@@ -1778,14 +1792,14 @@
                     }
                 }
             }
-        }
+        };
 
-        function exportCalculationsPdf() {
+        window.exportCalculationsPdf = function() {
             sessionStorage.setItem('quannex.autoPrint', 'true');
             window.location.href = 'calculations.html';
-        }
+        };
 
-        // Initialize on click
+        // Initialize on load
         document.addEventListener('DOMContentLoaded', initReport);
     </script>
 </body>

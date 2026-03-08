@@ -647,7 +647,7 @@
             font-style: normal;
         }
 
-        /* Delta Vector Table */
+        /* Delta Vector Table — Enhanced with expandable rows */
         .delta-table {
             width: 100%;
             border-collapse: collapse;
@@ -673,6 +673,138 @@
         .delta-positive { color: #00ff88; }
         .delta-negative { color: #ff6b6b; }
         .delta-neutral  { color: rgba(255, 255, 255, 0.4); }
+
+        /* Expandable delta rows */
+        .delta-row-expandable {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .delta-row-expandable:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .delta-row-expandable.expanded {
+            background: rgba(124, 58, 237, 0.08);
+            border-left: 2px solid #7c3aed;
+        }
+        .delta-row-expandable .expand-icon {
+            display: inline-block;
+            width: 14px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-right: 4px;
+        }
+
+        /* Detail panel (hidden by default) */
+        .delta-detail-panel {
+            display: none;
+            background: rgba(0, 0, 0, 0.25);
+            border-left: 2px solid #7c3aed;
+            padding: 16px 20px;
+            margin: 0 0 4px 0;
+        }
+        .delta-detail-panel h4 {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0 0 12px 0;
+        }
+
+        /* Sensitivity sub-table */
+        .sensitivity-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            table-layout: fixed;
+        }
+        .sensitivity-table colgroup .col-kpi { width: 30%; }
+        .sensitivity-table colgroup .col-num { width: 12%; }
+        .sensitivity-table colgroup .col-leverage { width: 14%; }
+        .sensitivity-table th {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: left;
+        }
+        .sensitivity-table td {
+            padding: 6px 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            color: rgba(255, 255, 255, 0.75);
+        }
+        .sensitivity-table .num {
+            font-family: 'Courier New', monospace;
+            text-align: right;
+        }
+
+        /* Leverage bar */
+        .leverage-cell {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .leverage-bar {
+            height: 4px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #00ff88, #00ccff);
+            min-width: 2px;
+            max-width: 80px;
+        }
+        .leverage-pct {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            min-width: 28px;
+            text-align: right;
+        }
+
+        /* Mode chips */
+        .mode-chip {
+            display: inline-block;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            margin-right: 4px;
+            background: rgba(124, 58, 237, 0.2);
+            color: #a78bfa;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+        .mode-chip.low-freq {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+            border-color: rgba(0, 255, 136, 0.2);
+        }
+        .mode-chip.high-freq {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+            border-color: rgba(255, 107, 107, 0.2);
+        }
+
+        /* Clamped indicator */
+        .clamped-star {
+            color: #ffaa00;
+            cursor: help;
+            font-weight: bold;
+            margin-left: 2px;
+        }
+
+        /* Caveat note */
+        .delta-caveat {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35);
+            font-style: italic;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Mode breakdown line */
+        .mode-breakdown {
+            margin-top: 10px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+        }
 
         @media (max-width: 768px) {
             .spectral-grid, .formula-grid {
@@ -704,7 +836,9 @@
             .element-label { color: #555 !important; }
             
             .stat-value, .spectral-value, .formula-name, h2, h3, h4 { color: #222 !important; }
-            .stat-label, .spectral-interpretation, .formula-desc, .delta-table th, .delta-table td { color: #555 !important; border-color: #eee !important; }
+            .stat-label, .spectral-interpretation, .formula-desc, .delta-table th, .delta-table td, .sensitivity-table th, .sensitivity-table td { color: #555 !important; border-color: #eee !important; }
+            .delta-detail-panel { background: #f5f5f5 !important; border-left-color: #7c3aed !important; display: block !important; }
+            .leverage-bar { background: #333 !important; }
             .nav-bar, .actions-bar, .no-print, .footer, button { display: none !important; }
         }
     </style>
@@ -725,6 +859,7 @@
             <a href="breath-analysis.html" class="nav-btn">🌊 View Breath Analysis</a>
             <a href="dodecahedron-3d.html" class="nav-btn">🔷 View 3D Model</a>
             <a href="octave-dna.html" class="nav-btn">🧬 View DNA Helix</a>
+            <a href="#" onclick="downloadExcelReport(event)" class="nav-btn">📊 Download Excel Report</a>
         </div>
 
         <!-- Summary Stats -->
@@ -801,6 +936,10 @@
     <script src="../js/data-system/json-data-loader.js"></script>
     <script type="module" src="../js/main.js"></script>
 
+    <!-- Excel report generation -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+    <script src="../js/excel-report-generator.js"></script>
+
     <script>
         /**
          * Smart Back Navigation (Issue #10 Fix)
@@ -832,6 +971,35 @@
             // The orchestrator should check for this and restore from sessionStorage
             Logger.debug('Calculations', 'Navigating to orchestrator with restore flag');
             window.location.href = '../demo-orchestrator.html?restore=true';
+        }
+
+        /**
+         * Download Excel Report with all calculation results.
+         */
+        function downloadExcelReport(event) {
+            if (event) event.preventDefault();
+            try {
+                const state = window.Quannex.getState();
+                const spectral = window.Quannex.getSpectralAnalysis();
+                const breath = window.Quannex.getBreathAnalysis();
+                const companyName = document.getElementById('companyName')?.textContent || 'Quannex';
+                const weekMatch = companyName.match(/Week\s+(\d+)/i);
+
+                ExcelReportGenerator.generate({
+                    state,
+                    spectral,
+                    breath,
+                    company: { name: companyName },
+                    sensitivityFn: calculateFaceSensitivity,
+                    week: weekMatch ? weekMatch[1] : null,
+                    date: new Date().toISOString().split('T')[0]
+                });
+
+                Logger.info('Calculations', 'Excel report downloaded');
+            } catch (err) {
+                Logger.error('Calculations', 'Excel report generation failed:', err);
+                alert('Failed to generate Excel report: ' + err.message);
+            }
         }
 
         // Track loaded company to prevent duplicates
@@ -1079,6 +1247,238 @@
             return icons[status] || '●';
         }
 
+        // ═══════════════════════════════════════════════════════
+        // Sensitivity Analysis: KPI → Face Energy partial derivatives
+        // ═══════════════════════════════════════════════════════
+
+        const sensitivityCache = {};
+
+        // Shared mode names & tooltip helper (used by delta table + sensitivity panel)
+        const modeNamesShared = [
+            'Uniform Energy', 'Global Imbalance', 'Dipolar Split', 'Tripolar Pattern',
+            'Quadrupolar Field', 'Pentagonal Mode', 'Hexagonal Mode', 'Heptagonal Mode',
+            'Octagonal Mode', 'Higher-Order 9', 'Higher-Order 10', 'Highest Complexity'
+        ];
+        function modeTooltipShared(modeNum, eigenvalue) {
+            const name = modeNamesShared[modeNum - 1] || 'Mode ' + modeNum;
+            let band;
+            if (eigenvalue < 0.01) band = 'DC offset (average)';
+            else if (eigenvalue < 4) band = 'Low-frequency (\u03BB=' + eigenvalue.toFixed(2) + ') \u2014 whole-system pattern';
+            else if (eigenvalue < 6.5) band = 'Mid-frequency (\u03BB=' + eigenvalue.toFixed(0) + ') \u2014 regional cluster pattern';
+            else band = 'High-frequency (\u03BB=' + eigenvalue.toFixed(2) + ') \u2014 local adjacent-face tension';
+            return 'Mode ' + modeNum + ': ' + name + '\n' + band;
+        }
+
+        /**
+         * Calculate sensitivity of face energy to each KPI via numerical differentiation.
+         * Returns array of 5 objects with sensitivity, leverage, target raw/normalized values.
+         *
+         * @param {number} faceIndex - 0-based face index
+         * @param {number} deltaFace - desired change in face energy (from spectral delta)
+         * @returns {Array|null} Sensitivity results for each KPI, or null if unavailable
+         */
+        function calculateFaceSensitivity(faceIndex, deltaFace) {
+            const face = window.quannexEngine?.faces?.[faceIndex];
+            if (!face || !face.elementalKPIs?.length) return null;
+
+            const origLocal = face._localCoherence;
+            const origFaceEnergy = face._faceEnergy;
+            const origHarmonicResonance = face._harmonicResonance;
+            const origOctaveCoherence = face._octaveCoherence;
+            const origStarPairs = face.starPairs ? [...face.starPairs] : [];
+            const origIntersectionNodes = face.intersectionNodes ? [...face.intersectionNodes] : [];
+            const tuning = window.quannexEngine.tuning;
+
+            // Chain factor: dE_face / dE_local
+            // E_face = delta_blend * E_local * octaveMultiplier + (1-delta_blend) * E_opposing
+            const octave = face.currentOctave || 1;
+            const zeta = tuning?.zeta || 0.0637;
+            const octaveMultiplier = 1 - zeta * (octave - 1);
+            const delta_blend = tuning?.delta || 0.9;
+            const chainFactor = delta_blend * octaveMultiplier;
+
+            const results = [];
+
+            for (const kpi of face.elementalKPIs) {
+                const origValue = kpi.value;
+                const origNorm = kpi.normalizedScore;
+
+                // Epsilon in raw units (1% of normalization range)
+                let epsilonRaw;
+                if (kpi.direction === '\u2191') { // ↑
+                    epsilonRaw = 0.01 * Math.max(kpi.targetIdeal - kpi.targetMin, 1);
+                } else if (kpi.direction === '\u2193') { // ↓
+                    epsilonRaw = 0.01 * Math.max(kpi.absoluteMax - kpi.targetMin, 1);
+                } else { // Band
+                    epsilonRaw = 0.01 * Math.max((kpi.healthyMax || kpi.targetIdeal) - (kpi.healthyMin || kpi.targetMin), 1);
+                }
+                if (epsilonRaw === 0) epsilonRaw = 0.01;
+
+                // Numerical derivative: dLocalCoherence / dRawValue
+                let dLocal_dRaw = 0;
+                try {
+                    kpi.value = origValue + epsilonRaw;
+                    face.invalidateCache();
+                    const newLocal = face.calculateLocalCoherence();
+                    dLocal_dRaw = (newLocal - origLocal) / epsilonRaw;
+                } finally {
+                    kpi.value = origValue;
+                    face._localCoherence = origLocal;
+                    face._faceEnergy = origFaceEnergy;
+                    face._harmonicResonance = origHarmonicResonance;
+                    face._octaveCoherence = origOctaveCoherence;
+                    face.starPairs = origStarPairs;
+                    face.intersectionNodes = origIntersectionNodes;
+                }
+
+                // Full chain: dFaceEnergy / dRawValue
+                const sensitivity_face = dLocal_dRaw * chainFactor;
+
+                // Target KPI via linear approximation in raw-value space
+                let targetRaw = origValue;
+                let targetNorm = origNorm;
+                let deltaRaw = 0;
+                if (Math.abs(sensitivity_face) > 1e-6) {
+                    deltaRaw = deltaFace / sensitivity_face;
+                    targetRaw = origValue + deltaRaw;
+                    // Clamp to meaningful range and read normalized score via getter
+                    const rawMin = kpi.targetMin || 0;
+                    const rawMax = kpi.absoluteMax || kpi.targetIdeal * 2 || 100;
+                    targetRaw = Math.max(rawMin, Math.min(rawMax, targetRaw));
+                    deltaRaw = targetRaw - origValue;
+                    // Read targetNorm through the KPI's own normalizedScore getter
+                    kpi.value = targetRaw;
+                    targetNorm = kpi.normalizedScore;
+                    kpi.value = origValue;
+                }
+
+                results.push({
+                    kpiId: kpi.id, kpiName: kpi.name, element: kpi.element,
+                    currentRaw: origValue, currentNormalized: origNorm,
+                    sensitivity: sensitivity_face,
+                    targetNormalized: targetNorm, targetRaw, deltaRaw,
+                    direction: kpi.direction,
+                    targetMin: kpi.targetMin, targetIdeal: kpi.targetIdeal,
+                    absoluteMax: kpi.absoluteMax
+                });
+            }
+
+            // Compute leverage (relative sensitivity, 0-1)
+            const maxSens = Math.max(...results.map(r => Math.abs(r.sensitivity)), 1e-6);
+            results.forEach(r => { r.leverage = Math.abs(r.sensitivity) / maxSens; });
+
+            return results;
+        }
+
+        /**
+         * Render the sensitivity panel content for a given face.
+         */
+        function renderSensitivityPanel(panel, sensData, faceIndex, modeContributions) {
+            if (!sensData || sensData.length === 0) {
+                panel.innerHTML = '<div style="color: rgba(255,255,255,0.4); font-size: 12px;">No KPI data available for sensitivity analysis.</div>';
+                return;
+            }
+
+            const SQRT5 = Math.sqrt(5);
+            const lowFreqThreshold = 5 - SQRT5 + 0.01;  // ~2.764
+            const highFreqThreshold = 5 + SQRT5 - 0.01;  // ~7.236
+
+            // KPI sensitivity table
+            let rows = sensData
+                .sort((a, b) => Math.abs(b.sensitivity) - Math.abs(a.sensitivity))
+                .map(s => {
+                    const leveragePct = Math.round(s.leverage * 100);
+                    const rawFmt = typeof s.currentRaw === 'number' ? s.currentRaw.toLocaleString(undefined, {maximumFractionDigits: 2}) : s.currentRaw;
+                    // Detect when target is clamped (linear approximation overflows)
+                    const isClamped = s.targetNormalized <= 0.001 || s.targetNormalized >= 0.999;
+                    const targetRawFmt = typeof s.targetRaw === 'number' ? s.targetRaw.toLocaleString(undefined, {maximumFractionDigits: 2}) : s.targetRaw;
+                    const targetFmt = isClamped
+                        ? `${targetRawFmt}<span class="clamped-star" title="Target hit the 0–1 boundary — the spectral delta is too large for a single-KPI linear correction. The real adjustment likely involves multiple KPIs working together.">*</span>`
+                        : targetRawFmt;
+                    const deltaFmt = s.deltaRaw >= 0 ? `+${s.deltaRaw.toLocaleString(undefined, {maximumFractionDigits: 2})}` : s.deltaRaw.toLocaleString(undefined, {maximumFractionDigits: 2});
+                    const deltaColor = s.deltaRaw > 0 ? '#00ff88' : s.deltaRaw < 0 ? '#ff6b6b' : 'rgba(255,255,255,0.4)';
+
+                    const elemColor = {'Fire':'#ff6b4a','Earth':'#8B7355','Water':'#4a9eff','Air':'#b8b8ff','Aether':'#c084fc'}[s.element] || 'rgba(255,255,255,0.4)';
+                    const elemTip = {'Fire':'Fire — transformative drive, catalyst for change','Earth':'Earth — grounding stability, material foundation','Water':'Water — adaptive flow, emotional intelligence','Air':'Air — intellectual clarity, communication','Aether':'Aether — integrating spirit, transcendent purpose'}[s.element] || '';
+                    return `<tr>
+                        <td>${s.kpiName} <span style="font-size:9px;color:${elemColor};cursor:help;" title="${elemTip}">${s.element || ''}</span></td>
+                        <td class="num">${rawFmt}</td>
+                        <td class="num">${s.currentNormalized.toFixed(2)}</td>
+                        <td class="num">${targetFmt}</td>
+                        <td class="num" style="color: ${deltaColor};">${deltaFmt}</td>
+                        <td>
+                            <div class="leverage-cell">
+                                <div class="leverage-bar" style="width: ${Math.max(leveragePct, 3)}%;"></div>
+                                <span class="leverage-pct">${leveragePct}%</span>
+                            </div>
+                        </td>
+                    </tr>`;
+                }).join('');
+
+            // Mode breakdown
+            let modeHTML = '';
+            if (modeContributions && modeContributions.length > 0) {
+                const sortedModes = [...modeContributions].sort((a, b) => Math.abs(b.contribution) - Math.abs(a.contribution));
+                modeHTML = '<div class="mode-breakdown">Modes: ' +
+                    sortedModes.map(mc => {
+                        const sign = mc.contribution >= 0 ? '+' : '';
+                        const pct = (mc.contribution * 100).toFixed(1);
+                        let chipClass = 'mode-chip';
+                        if (mc.eigenvalue < lowFreqThreshold) chipClass += ' low-freq';
+                        else if (mc.eigenvalue > highFreqThreshold) chipClass += ' high-freq';
+                        const tip = modeTooltipShared(mc.mode, mc.eigenvalue).replace(/"/g, '&quot;');
+                        return `<span class="${chipClass}" title="${tip}">M${mc.mode} ${sign}${pct}%</span>`;
+                    }).join(' ') +
+                    '</div>';
+            }
+
+            panel.innerHTML = `
+                <h4>KPI Sensitivity Analysis</h4>
+                <table class="sensitivity-table">
+                    <colgroup>
+                        <col class="col-kpi"><col class="col-num"><col class="col-num"><col class="col-num"><col class="col-num"><col class="col-leverage">
+                    </colgroup>
+                    <thead><tr>
+                        <th title="Key Performance Indicator feeding this face's energy calculation">KPI</th>
+                        <th title="Current raw value in original units">Raw</th>
+                        <th title="Normalized score (0–1) after direction &amp; curvature adjustment (φ for growth, φ⁻¹ for survival)">Score</th>
+                        <th title="Estimated raw value needed to achieve the spectral correction (linear approximation)">Target</th>
+                        <th title="Raw value change needed: Target minus Current">Change</th>
+                        <th title="Relative sensitivity — how much this KPI influences face energy vs. other KPIs. 100% = highest-impact lever">Leverage</th>
+                    </tr></thead>
+                    <tbody>${rows}</tbody>
+                </table>
+                ${modeHTML}
+                <div class="delta-caveat">Targets are first-order approximations. Values marked with * are clamped (delta exceeds linear range). Changing multiple KPIs simultaneously shifts harmonic resonance between elements.</div>
+            `;
+        }
+
+        /**
+         * Toggle a delta detail panel (lazy-computes sensitivity on first expand).
+         */
+        function toggleDeltaDetail(faceIndex, deltaFace, modeContributions) {
+            const panel = document.getElementById('delta-detail-' + faceIndex);
+            const row = document.getElementById('delta-row-' + faceIndex);
+            if (!panel || !row) return;
+
+            const isOpen = panel.style.display !== 'none';
+
+            const icon = row.querySelector('.expand-icon');
+            if (isOpen) {
+                panel.style.display = 'none';
+                row.classList.remove('expanded');
+                if (icon) icon.textContent = '\u25B6'; // ▶
+            } else {
+                if (!sensitivityCache[faceIndex]) {
+                    sensitivityCache[faceIndex] = calculateFaceSensitivity(faceIndex, deltaFace);
+                    renderSensitivityPanel(panel, sensitivityCache[faceIndex], faceIndex, modeContributions);
+                }
+                panel.style.display = 'block';
+                row.classList.add('expanded');
+                if (icon) icon.textContent = '\u25BC'; // ▼
+            }
+        }
+
         /**
          * Run Spectral Analysis and display results + formulas
          * ═══════════════════════════════════════════════════════
@@ -1101,7 +1501,7 @@
                 const energies = state.faces.map(f => f.faceEnergy || f.energy || 0);
 
                 if (energies.length !== 12) {
-                    Logger.warn('Spectral', );
+                    Logger.warn('Spectral', 'Expected 12 face energies, got ' + energies.length);
                     return;
                 }
 
@@ -1118,25 +1518,9 @@
 
                 // === RENDER RESULTS ===
 
-                // Mode names for interpretation
-                const modeNames = [
-                    'Uniform Energy',
-                    'Global Imbalance',
-                    'Dipolar Split',
-                    'Tripolar Pattern',
-                    'Quadrupolar Field',
-                    'Pentagonal Mode',
-                    'Hexagonal Mode',
-                    'Heptagonal Mode',
-                    'Octagonal Mode',
-                    'Higher-Order 9',
-                    'Higher-Order 10',
-                    'Highest Complexity'
-                ];
-
                 const dominantModeInfo = result.dominantMode || {};
                 const dominantMode = dominantModeInfo.mode || 1;
-                const dominantModeName = modeNames[dominantMode - 1] || `Mode ${dominantMode}`;
+                const dominantModeName = modeNamesShared[dominantMode - 1] || `Mode ${dominantMode}`;
 
                 // BAB interpretation
                 const bab = result.diagnostics?.beingActionBalance?.score || 1.0;
@@ -1158,28 +1542,81 @@
                 else if (dissonance < 0.3) dissonanceColor = '#ffaa00';
                 else dissonanceColor = '#ff6b6b';
 
-                // Delta vector top corrections
+                // Delta vector — all 12 faces with expandable KPI sensitivity
                 const deltaVector = result.deltaVector || [];
                 const faceNames = state.faces.map(f => f.name || `Face ${f.id}`);
+                const SQRT5 = Math.sqrt(5);
+                const lowFreqThreshold = 5 - SQRT5 + 0.01;
+                const highFreqThreshold = 5 + SQRT5 - 0.01;
+
                 let deltaRows = '';
                 if (deltaVector.length > 0) {
-                    // Maps { faceId, deltaValue, absDelta } into our local format and slices top 6
                     const sortedDeltas = [...deltaVector]
-                        .sort((a, b) => b.absDelta - a.absDelta)
-                        .slice(0, 6);
+                        .sort((a, b) => b.absDelta - a.absDelta);
 
-                    sortedDeltas.forEach(item => {
+                    const axisMap = {1:11,2:7,3:8,4:9,5:10,6:12,7:2,8:3,9:4,10:5,11:1,12:6};
+                    sortedDeltas.forEach((item, idx) => {
+                        const faceIdx = (item.faceId || 1) - 1;
                         const val = item.deltaValue;
                         const sign = val >= 0 ? '+' : '';
                         const cls = val > 0.02 ? 'delta-positive' : val < -0.02 ? 'delta-negative' : 'delta-neutral';
-                        const direction = val > 0.02 ? '↑ Increase' : val < -0.02 ? '↓ Decrease' : '≈ Stable';
-                        const name = faceNames[(item.faceId || 1) - 1] || `Face ${item.faceId}`;
-                        
-                        deltaRows += `<tr>
-                            <td>${name}</td>
-                            <td class="${cls}">${sign}${(val * 100).toFixed(1)}%</td>
-                            <td style="color: rgba(255,255,255,0.5);">${direction}</td>
-                        </tr>`;
+                        const direction = val > 0.02 ? '\u2191 Increase' : val < -0.02 ? '\u2193 Decrease' : '\u2248 Stable';
+                        const name = faceNames[faceIdx] || `Face ${item.faceId}`;
+                        const currentE = (energies[faceIdx] * 100).toFixed(1);
+                        const targetE = ((energies[faceIdx] + val) * 100).toFixed(1);
+                        const expandIcon = idx < 2 ? '\u25BC' : '\u25B6';
+
+                        // Direction tooltip
+                        let dirTip;
+                        if (val > 0.02) dirTip = 'This face is below its equilibrium target and needs energy added';
+                        else if (val < -0.02) dirTip = 'This face has excess energy relative to equilibrium and should decrease';
+                        else dirTip = 'Delta is within \u00B12% \u2014 no significant spectral correction needed';
+                        const opposingId = axisMap[item.faceId];
+                        const opposingName = opposingId ? (faceNames[opposingId - 1] || `Face ${opposingId}`) : '?';
+                        const faceTip = `${name} (Face ${item.faceId}) \u2014 Breath axis pair with ${opposingName} (Face ${opposingId})`;
+
+                        // Mode chips — top 3 by |contribution|
+                        const topModes = [...(item.modeContributions || [])]
+                            .sort((a, b) => Math.abs(b.contribution) - Math.abs(a.contribution))
+                            .slice(0, 3);
+                        const modeChips = topModes.map(mc => {
+                            let chipClass = 'mode-chip';
+                            if (mc.eigenvalue < lowFreqThreshold) chipClass += ' low-freq';
+                            else if (mc.eigenvalue > highFreqThreshold) chipClass += ' high-freq';
+                            const tip = modeTooltipShared(mc.mode, mc.eigenvalue).replace(/"/g, '&quot;');
+                            return `<span class="${chipClass}" title="${tip}">M${mc.mode}</span>`;
+                        }).join('');
+
+                        // Escape modeContributions for onclick
+                        const mcJSON = JSON.stringify(item.modeContributions || []).replace(/"/g, '&quot;');
+
+                        deltaRows += `
+                            <tr id="delta-row-${faceIdx}" class="delta-row-expandable${idx < 2 ? ' expanded' : ''}"
+                                onclick="toggleDeltaDetail(${faceIdx}, ${val}, JSON.parse(this.dataset.mc))"
+                                data-mc="${mcJSON}">
+                                <td title="${faceTip}"><span class="expand-icon">${expandIcon}</span>${name}</td>
+                                <td style="color: rgba(255,255,255,0.5);">${currentE}%</td>
+                                <td style="color: rgba(255,255,255,0.8);">${targetE}%</td>
+                                <td class="${cls}">${sign}${(val * 100).toFixed(1)}%</td>
+                                <td style="color: rgba(255,255,255,0.5);" title="${dirTip}">${direction}</td>
+                                <td>${Math.abs(val) > 0.02 ? (modeChips || '') : '<span style="color:rgba(255,255,255,0.2);">\u2014</span>'}</td>
+                            </tr>
+                            <tr><td colspan="6" style="padding: 0; border: none;">
+                                <div id="delta-detail-${faceIdx}" class="delta-detail-panel"
+                                     style="display: ${idx < 2 ? 'block' : 'none'};">
+                                </div>
+                            </td></tr>`;
+
+                        // Auto-expand top 2 on render
+                        if (idx < 2) {
+                            setTimeout(() => {
+                                const panel = document.getElementById('delta-detail-' + faceIdx);
+                                if (panel && !sensitivityCache[faceIdx]) {
+                                    sensitivityCache[faceIdx] = calculateFaceSensitivity(faceIdx, val);
+                                    renderSensitivityPanel(panel, sensitivityCache[faceIdx], faceIdx, item.modeContributions);
+                                }
+                            }, 100);
+                        }
                     });
                 }
 
@@ -1195,7 +1632,7 @@
                     const maxAmp = topAmps[0]?.amp || 1;
                     topAmps.forEach(item => {
                         const pct = ((item.amp / maxAmp) * 100).toFixed(0);
-                        const name = modeNames[item.mode - 1] || `Mode ${item.mode}`;
+                        const name = modeNamesShared[item.mode - 1] || `Mode ${item.mode}`;
                         ampHTML += `
                             <div style="margin-bottom: 12px;">
                                 <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
@@ -1246,17 +1683,20 @@
                         </div>
                     </div>
 
-                    <!-- Delta Vector: Top Corrective Actions -->
+                    <!-- Delta Vector: Multi-Mode Corrective Actions with KPI Sensitivity -->
                     ${deltaRows ? `
                     <div class="spectral-card" style="margin-bottom: 30px;">
                         <h3>🔧 Spectral Corrections (Delta Vector)</h3>
-                        <div class="spectral-label" style="margin-bottom: 15px;">Top face corrections needed to reach harmonic equilibrium</div>
+                        <div class="spectral-label" style="margin-bottom: 15px;">Multi-mode corrections needed to reach harmonic equilibrium — click a face to see KPI targets</div>
                         <table class="delta-table">
                             <thead>
                                 <tr>
-                                    <th>Face</th>
-                                    <th>Delta</th>
-                                    <th>Direction</th>
+                                    <th title="Organizational domain (dodecahedron face). Click to expand KPI sensitivity analysis.">Face</th>
+                                    <th title="Current face energy as percentage (0–100%)">Current</th>
+                                    <th title="Target face energy after applying multi-mode spectral correction">Target</th>
+                                    <th title="Multi-mode correction: Δf = −Σ(Ufm × am) summed across all significant spectral modes">Delta</th>
+                                    <th title="Whether this face needs more energy (↑) or less energy (↓) to reach harmonic equilibrium">Direction</th>
+                                    <th title="Top 3 spectral modes driving this correction. Hover each chip for details.">Modes</th>
                                 </tr>
                             </thead>
                             <tbody>${deltaRows}</tbody>
@@ -1320,6 +1760,20 @@
                                 <div class="formula-desc">
                                     Weighted average of absolute deviations from equilibrium.
                                     <span class="var">w</span> = PHI-derived importance weights.
+                                </div>
+                            </div>
+
+                            <div class="formula-card">
+                                <div class="formula-name">Multi-Mode Delta</div>
+                                <div class="formula-math">
+                                    <span class="var">Δ</span><sub>f</sub> <span class="op">=</span>
+                                    <span class="op">−Σ</span><sub style="color: #a78bfa;">m</sub>
+                                    <span class="var">U</span><sub>fm</sub> <span class="op">×</span>
+                                    <span class="var">a</span><sub>m</sub>
+                                </div>
+                                <div class="formula-desc">
+                                    Sum over modes where |a<sub>m</sub>| ≥ 0.1|a<sub>max</sub>|.
+                                    Reconstructs full correction toward harmonic equilibrium.
                                 </div>
                             </div>
                         </div>

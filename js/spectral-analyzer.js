@@ -268,11 +268,53 @@ class SpectralAnalyzer {
   }
 
   /**
+   * Calculate Multi-Mode Delta Vector
+   * Sums corrections across ALL significant spectral modes (not just dominant).
+   * Formula: Delta_total[f] = -SUM(U[f][m] * a[m]) for |a[m]| >= 0.1 * |a_dominant|
+   *
+   * @param {Array<Object>} modalAmplitudes - All 12 modal amplitudes
+   * @returns {Array<Object>} Delta vector with per-mode contribution breakdown
+   */
+  calculateMultiModeDeltaVector(modalAmplitudes) {
+    const dominantAmp = Math.max(...modalAmplitudes.slice(1).map(m => Math.abs(m.amplitude)));
+    const threshold = 0.1 * dominantAmp;
+    const deltaVector = [];
+
+    for (let face = 0; face < 12; face++) {
+      let totalDelta = 0;
+      const modeContributions = [];
+
+      for (let m = 1; m < 12; m++) {
+        const amp = modalAmplitudes[m].amplitude;
+        if (Math.abs(amp) >= threshold) {
+          const contribution = -this.U[face][m] * amp;
+          totalDelta += contribution;
+          modeContributions.push({
+            mode: m + 1,
+            eigenvalue: this.eigenvalues[m],
+            contribution: contribution
+          });
+        }
+      }
+
+      deltaVector.push({
+        faceId: face + 1,
+        deltaValue: totalDelta,
+        absDelta: Math.abs(totalDelta),
+        modeContributions: modeContributions,
+        interpretation: this.interpretDelta(totalDelta)
+      });
+    }
+
+    return deltaVector;
+  }
+
+  /**
    * Calculate the Being-Action Balance (BAB) Score
    * This measures the balance between "Projection/Action" faces and "Reception/Being" faces
    * Formula: BAB = (Reception Energy / Projection Energy) × 100%
-   * 
-   * @param {Array<number>} faceEnergies 
+   *
+   * @param {Array<number>} faceEnergies
    * @returns {Object} BAB score and analysis
    */
   calculateBABScore(faceEnergies) {
@@ -354,10 +396,14 @@ class SpectralAnalyzer {
       // Step 2: Identify dominant mode
       let dominantMode = this.identifyDominantMode(modalAmplitudes);
 
-      // Step 3: Calculate delta vector
+      // Step 3: Calculate delta vectors
       let deltaVector = [];
+      let singleModeDelta = [];
       if (dominantMode) {
-        deltaVector = this.calculateDeltaVector(dominantMode);
+        // Multi-mode: sums across all significant modes
+        deltaVector = this.calculateMultiModeDeltaVector(modalAmplitudes);
+        // Single-mode: preserved for backward compatibility
+        singleModeDelta = this.calculateDeltaVector(dominantMode);
       } else {
         Logger.warn('SpectralAnalyzer', 'No dominant mode found (System Empty/Balanced). Using dummy mode.');
         dominantMode = { mode: 0, eigenvalue: 0, amplitude: 0, interpretation: 'System Balanced / Empty' };
@@ -379,6 +425,7 @@ class SpectralAnalyzer {
           interpretation: dominantMode.interpretation
         },
         deltaVector: deltaVector,
+        singleModeDelta: singleModeDelta,
         diagnostics: {
           beingActionBalance: babScore,
           dissonanceIndex: dissonanceIndex

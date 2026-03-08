@@ -386,6 +386,8 @@ export class UnifiedDataLoader {
             // (mapping-context has proper object format vs company.json string format)
             let shadowPatterns = profile.shadowPatterns || [];
             let tuning = null;
+            let mappingFaces = null;
+            let breathAxes = [];
             try {
                 const mappingReq = await fetch(`${basePath}companies/${companyId}/mapping-context.json`);
                 if (mappingReq.ok) {
@@ -402,6 +404,20 @@ export class UnifiedDataLoader {
                         tuning = mappingContext.diagnostics.tuning;
                         Logger.debug('UnifiedLoader', `Loaded tuning (${tuning.perspective}) from mapping-context.json`);
                     }
+                    // Extract faces with sentiment/energy data
+                    if (mappingContext.faces && mappingContext.faces.length > 0) {
+                        // Normalize: ensure each face has a 'name' property (downstream code expects it)
+                        mappingFaces = mappingContext.faces.map(f => ({
+                            ...f,
+                            name: f.name || f.customName || f.baseName || `Face ${f.id}`
+                        }));
+                        Logger.debug('UnifiedLoader', `Loaded ${mappingFaces.length} faces from mapping-context.json`);
+                    }
+                    // Extract breath axes
+                    if (mappingContext.breathAxes && mappingContext.breathAxes.length > 0) {
+                        breathAxes = mappingContext.breathAxes;
+                        Logger.debug('UnifiedLoader', `Loaded ${breathAxes.length} breath axes from mapping-context.json`);
+                    }
                 }
             } catch (mappingError) {
                 // mapping-context.json not available, use company.json shadowPatterns
@@ -412,7 +428,9 @@ export class UnifiedDataLoader {
                 ...profile,
                 kpis: kpis,
                 shadowPatterns: shadowPatterns,
-                tuning: tuning
+                tuning: tuning,
+                mappingFaces: mappingFaces,
+                breathAxes: breathAxes
             };
         } catch (error) {
             Logger.warn('UnifiedLoader', `Could not load profile for '${companyId}':`, error);
@@ -424,8 +442,8 @@ export class UnifiedDataLoader {
      * Synthesize the final context object
      */
     synthesizeContext(baseData, companyData) {
-        // 1. Map Faces
-        const faces = companyData.faceConfig ? companyData.faceConfig.faces : this.getDefaultFaces();
+        // 1. Map Faces — prefer mapping-context faces (have sentiment/energy), then faceConfig, then defaults
+        const faces = companyData.mappingFaces || (companyData.faceConfig ? companyData.faceConfig.faces : this.getDefaultFaces());
 
         // 2. Map Edges (Merge Base Geometry with Company Context)
         const edges = baseData.edgeDefinitions.map(def => {
@@ -472,7 +490,8 @@ export class UnifiedDataLoader {
             vertices: vertices,
             kpis: companyData.kpis,
             shadowPatterns: companyData.shadowPatterns || [],
-            tuning: companyData.tuning || null
+            tuning: companyData.tuning || null,
+            breathAxes: companyData.breathAxes || []
         };
     }
 

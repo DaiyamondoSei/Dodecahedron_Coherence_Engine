@@ -109,7 +109,11 @@ class ExcelMeasurementParser {
 
         for (let row = 2; row <= 13; row++) {
             const faceIndex = row - 2;
-            const domain = this.FACE_DOMAINS[faceIndex];
+            const domainDefault = this.FACE_DOMAINS[faceIndex];
+
+            // Read domain name dynamically from column B, fall back to static default
+            const domainFromExcel = this.cellString(sheet, `B${row}`);
+            const domainName = domainFromExcel || domainDefault.name;
 
             const rawValue = this.cellValue(sheet, `E${row}`);
             const kNorm = this.cellValue(sheet, `F${row}`);
@@ -121,9 +125,9 @@ class ExcelMeasurementParser {
             const formulaRef = this.cellString(sheet, `D${row}`);
 
             faces.push({
-                faceId: domain.id,
-                domain: domain.name,
-                kpiName: kpiName || `Face ${domain.id} KPI`,
+                faceId: domainDefault.id,
+                domain: domainName,
+                kpiName: kpiName || `Face ${domainDefault.id} KPI`,
                 formulaReference: formulaRef || '',
                 rawValue: rawValue,
                 normalizedScore: kNorm,
@@ -150,6 +154,12 @@ class ExcelMeasurementParser {
             const axisIndex = row - 2;
             const axisDef = this.BREATH_AXES[axisIndex];
 
+            // Read projection/reception names and theme dynamically from Excel
+            const projectionFromExcel = this.cellString(sheet, `B${row}`);
+            const receptionFromExcel = this.cellString(sheet, `C${row}`);
+            const themeFromExcel = this.cellString(sheet, `D${row}`);
+            const theme = themeFromExcel || axisDef.theme;
+
             const score = this.cellValue(sheet, `E${row}`);
             const eFProj = this.cellValue(sheet, `F${row}`);
             const eFRecep = this.cellValue(sheet, `G${row}`);
@@ -160,7 +170,9 @@ class ExcelMeasurementParser {
                 axisId: axisDef.id,
                 projectionFaceId: axisDef.projectionFace,
                 receptionFaceId: axisDef.receptionFace,
-                theme: axisDef.theme,
+                projectionName: projectionFromExcel || null,
+                receptionName: receptionFromExcel || null,
+                theme: theme,
                 score: score,
                 projectionEnergy: eFProj,
                 receptionEnergy: eFRecep,

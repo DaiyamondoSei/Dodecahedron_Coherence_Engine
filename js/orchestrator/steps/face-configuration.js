@@ -343,13 +343,16 @@
         const faces = [];
 
         // Use data-face-id selector (consistent with validateFaces and FaceWizard)
+        // Preserve all original face data (sentiment, tooltip, elements) from template
         for (let i = 1; i <= 12; i++) {
             const input = document.querySelector(`.face-input[data-face-id="${i}"]`);
+            const originalFace = demoState.faceConfig?.faces?.[i - 1] || {};
             faces.push({
+                ...originalFace,
                 id: i,
-                name: input ? input.value.trim() : `Face ${i}`,
-                icon: '',
-                octave: demoState.faceConfig?.faces?.[i - 1]?.octave || 1
+                name: input ? input.value.trim() : (originalFace.name || `Face ${i}`),
+                icon: originalFace.icon || '',
+                octave: originalFace.octave || 1
             });
         }
 

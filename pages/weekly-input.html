@@ -539,19 +539,9 @@
                 const buffer = await file.arrayBuffer();
                 currentMeasurement = ExcelMeasurementParser.parse(buffer);
 
-                // Try to load existing Quannex KPIs for merge mode
-                let baseKPIs = null;
-                try {
-                    const resp = await fetch('../companies/quannex/kpis.csv');
-                    if (resp.ok) {
-                        const csvText = await resp.text();
-                        baseKPIs = parseCSVtoKPIs(csvText);
-                    }
-                } catch (e) {
-                    Logger.debug('WeeklyInput', 'No base KPIs found, using quick mode');
-                }
-
-                currentEngineData = ExcelMeasurementParser.toEngineFormat(currentMeasurement, baseKPIs);
+                // Quick mode (12 KPIs) is the right default for weekly measurements.
+                // Merge mode (60 KPIs) should only be used when the Excel actually has 5 KPIs per face.
+                currentEngineData = ExcelMeasurementParser.toEngineFormat(currentMeasurement, null);
 
                 renderPreview(currentMeasurement);
                 document.getElementById('preview').classList.add('visible');
@@ -631,9 +621,15 @@
                     return `<option value="${v}" ${selected}>${label}</option>`;
                 }).join('');
 
+                // Show projection ↔ reception names if available from Excel
+                const axisLabel = (a.projectionName && a.receptionName)
+                    ? `${a.projectionName} ↔ ${a.receptionName}`
+                    : a.theme;
+
                 return `<div class="axis-item">
                     <div>
-                        <span class="axis-theme">${a.theme}</span>
+                        <span class="axis-theme">${axisLabel}</span>
+                        ${(a.projectionName && a.receptionName && a.theme !== axisLabel) ? `<span style="font-size:11px; color:var(--text-secondary); margin-left:6px;">(${a.theme})</span>` : ''}
                         <span style="font-size:11px; color:var(--text-secondary); margin-left:8px;">tension: ${tensionStr}</span>
                     </div>
                     <select class="axis-score-select" data-axis="${i}" onchange="updateAxisScore(${i}, this.value)">
