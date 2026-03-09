@@ -2,11 +2,13 @@
 
 **Date:** March 9, 2026
 **Scope:** Mathematical integrity, informational representation, user journey
-**Result:** All critical issues resolved. 15/15 math tests pass, 13/13 info tests pass, 9/9 journey tests pass.
+**Result:** All critical issues resolved. 15/15 math tests pass. Info and journey tests verified via manual inspection + Playwright automation.
 
 ---
 
-## 1. Mathematical Integrity (15 Tests)
+## 1. Mathematical Integrity (15 Tests — Automated via Node.js)
+
+All tests run via `test-spectral.mjs` with the corrected `SpectralAnalyzer` class.
 
 | # | Test | Result | Detail |
 |---|------|--------|--------|
@@ -46,39 +48,85 @@ When all projection (Action/Exhale) faces have zero energy but reception faces d
 
 ---
 
-## 2. Informational Representation (13 Tests)
+## 2. Informational Representation (13 Checks — Playwright + Manual)
 
-| # | Test | Result | Detail |
-|---|------|--------|--------|
-| IR-1 | All 7 sections present | PASS | A, B, C, D, E, E2, F all render |
-| IR-2 | Column headers have tooltips | PASS | 30 headers with title attributes |
-| IR-3 | Face cells have breath axis tooltips | PASS | 96 face cells with axis pair info |
-| IR-4 | No stale eigenvalue=5 references | PASS | Clean |
-| IR-5 | Eigenvalue 6 correctly shown | PASS | Regional(6) in labels and narrative |
-| IR-6 | Band labels valid | PASS | 11 valid band labels |
-| IR-7 | Mode tooltips present | PASS | 12 mode tooltips with names |
-| IR-8 | Sensitivity matrix rendered | PASS | 13 rows (header + 12 faces) |
-| IR-9 | Edge health tooltips | PASS | 33 edge cells with health state descriptions |
-| IR-10 | Diagnostic KPI tooltips (AAG, BAB, Dissonance) | PASS | All 3 present with rich descriptions |
-| IR-11 | No NaN/undefined/null in output | PASS | All sections clean |
-| IR-12 | Narrative uses eigenvalue 6 | PASS | "6 (x5)" in spectral narrative |
-| IR-13 | All 12 faces in Section A | PASS | F1–F12 all present |
+Tested on `thesis-export.html` after clicking Analyze. Automated via `page.evaluate()` in Playwright.
+
+| # | Test | Result | Method | Detail |
+|---|------|--------|--------|--------|
+| IR-1 | All 7 sections present | PASS | Auto | A, B, C, D, E, E2, F all render |
+| IR-2 | Column headers have tooltips | PASS | Auto | 30 headers with title attributes |
+| IR-3 | Face cells have breath axis tooltips | PASS | Auto | 96 face cells with axis pair info |
+| IR-4 | No stale eigenvalue=5 references | PASS | Auto | No `5 (×5)` or `λ = 5` in page text |
+| IR-5 | Eigenvalue 6 correctly shown | PASS | Auto | `Regional (6)` in band labels and narrative |
+| IR-6 | Band labels valid | PASS | Auto | 11 valid band labels (DC/Global/Regional/Fine-Grained) |
+| IR-7 | Mode tooltips present | PASS | Auto | 12 mode tooltips with semantic names |
+| IR-8 | Sensitivity matrix rendered | PASS | Auto | 13 rows (header + 12 faces) |
+| IR-9 | Edge health tooltips | PASS | Auto | 33 edge cells with phi-threshold descriptions |
+| IR-10 | Diagnostic KPI tooltips | PASS | Manual | AAG, BAB, Dissonance all have rich title attrs (initial automation used wrong query; manual inspection confirmed all 3 present in Section D) |
+| IR-11 | No NaN/undefined/null in output | PASS | Auto | All output sections clean |
+| IR-12 | Narrative uses eigenvalue 6 | PASS | Auto | `6 (x5)` in spectral narrative text |
+| IR-13 | All 12 faces in Section A | PASS | Auto | F1–F12 all present |
+
+**Note on IR-10:** The automated selector `[title*="Aspiration"]` returned 0 results because the actual title uses lowercase `aspiration-pole`. Manual inspection confirmed the tooltip reads: *"Emergent diagnostic: ratio of aspiration-pole energy (F10,F11,F12) to actuality-pole energy (F1,F2,F3). AAG > 1 means the organization aspires beyond its current capacity."* — fully correct.
 
 ---
 
-## 3. User Journey (9 Tests)
+## 3. User Journey (9 Checks — Playwright + Manual)
 
-| # | Test | Result | Detail |
-|---|------|--------|--------|
-| UJ-1 | Calculations page loads with data | PASS | 12 face cards, spectral analysis visible |
-| UJ-2 | Eigenvalue λ=6 in calculations | PASS | In mode badge tooltips |
-| UJ-3 | Mode badges with tooltips | PASS | 5+ mode badges with names + eigenvalues |
-| UJ-4 | Face card expandable | PASS | Click expands KPI details |
-| UJ-5 | No JS errors | PASS | Page renders without console errors |
-| UJ-6 | Math formulas section | PASS | Coherence, Modal, BAB, Delta formulas |
-| UJ-7 | Results summary loads | PASS | Title: "Coherence Report - Results Summary" |
-| UJ-8 | No NaN/undefined in results | PASS | Clean output |
-| UJ-9 | Thesis-export round-trip | PASS | Navigation successful |
+Tested across `calculations.html`, `results-summary.html`, and `thesis-export.html`.
+
+| # | Test | Result | Method | Detail |
+|---|------|--------|--------|--------|
+| UJ-1 | Calculations page loads with data | PASS | Auto | 12 face cards, spectral analysis section visible |
+| UJ-2 | Eigenvalue λ=6 in calculations | PASS | Manual | Mode badge tooltips show `λ=6` (automation searched `innerText` but values are in `title` attributes; snapshot confirms `Mid-frequency (λ=6)`) |
+| UJ-3 | Mode badges with tooltips | PASS | Auto | 5+ mode badges with names + eigenvalues |
+| UJ-4 | Face card expandable | PASS | Auto | Click expands KPI sensitivity panel |
+| UJ-5 | No JS errors | PASS | Auto | Page renders without console errors |
+| UJ-6 | Math formulas section | PASS | Manual | Coherence, Modal Amplitudes, BAB, Delta formulas all visible (automation ran after page navigation caused viewport shift; snapshot confirms all 5 formula cards) |
+| UJ-7 | Results summary loads | PASS | Auto | Title: "Coherence Report - Results Summary" |
+| UJ-8 | No NaN/undefined in results | PASS | Auto | Clean output |
+| UJ-9 | Thesis-export round-trip | PASS | Auto | Navigation successful |
+
+**Note on UJ-2 and UJ-6:** The automated Playwright tests searched `document.body.innerText` but the eigenvalue references are in `title` attributes (tooltips), and the math formulas section was below the viewport after a click event. Both were verified correct via page snapshot analysis and a separate `browser_evaluate` cross-check.
+
+---
+
+## 4. Browser Cross-Verification (calculations.html)
+
+Additional numerical verification performed in-browser on `calculations.html` (which loads `spectral-analyzer-global.js`):
+
+| Check | Value | Status |
+|-------|-------|--------|
+| `eigenvalues[4]` | 6.0 | Correct |
+| L matches 30 canonical EDGES | true | Correct |
+| L×u = λ×u max error | 1.6e-6 | Correct (post-normalization) |
+| Parseval error (face vs modal energy) | 2.4e-7 | Correct |
+| Delta sum (Σ Δ_f) | 5.8e-7 | ≈ 0, correct |
+| `U[6][1]` (F7, Mode 2) | -0.495024 | Matches new U (old was +0.2226) |
+| Dominant mode | 6 (λ=6) | Correct |
+| BAB | 203.3% | Correct |
+| Dissonance | 17.7% | Correct |
+
+This confirms the corrected eigenvector matrix is live in the browser and producing correct results.
+
+---
+
+## Which Analyzer Copy Does Each Page Load?
+
+| Page | Analyzer File |
+|------|---------------|
+| `calculations.html` | `spectral-analyzer-global.js` |
+| `breath-analysis.html` | `spectral-analyzer-global.js` |
+| `weekly-input.html` | `spectral-analyzer-global.js` |
+| `results-summary.html` | `spectral-analyzer.js` |
+| `thesis-export.html` | `spectral-analyzer.js` |
+| `simulator.html` | `spectral-analyzer.js` |
+| `index.html` | `spectral-analyzer.js` |
+| `dodecahedron-3d.html` | `spectral-analyzer.js` + `advanced/spectral-analyzer.js` (dynamic import) |
+| `dev/test-advanced-math.html` | `advanced/spectral-analyzer.js` (ES module) |
+
+All 3 copies were corrected in this session.
 
 ---
 
@@ -97,3 +145,5 @@ When all projection (Action/Exhale) faces have zero energy but reception faces d
 ## Conclusion
 
 The spectral analysis subsystem is now mathematically correct and fully aligned with the canonical dodecahedron topology. The Laplacian, eigenvectors, and eigenvalues are consistent across all 3 analyzer copies, and the user-facing information accurately reflects the underlying mathematics. All edge cases (zero input, NaN, extreme values, wrong dimensions) are handled gracefully.
+
+The browser cross-verification on `calculations.html` confirms the corrected U matrix is live (`U[6][1] = -0.495024` vs old value `+0.2226`) and all derived quantities (Parseval, delta conservation, eigenvalue decomposition) hold to numerical precision.
