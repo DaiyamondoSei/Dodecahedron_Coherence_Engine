@@ -526,7 +526,7 @@
         const bandLabels = {
             0: 'DC Offset',
             1: 'Global (5-sqrt5)',
-            2: 'Regional (5)',
+            2: 'Regional (6)',
             3: 'Fine-Grained (5+sqrt5)'
         };
 
@@ -540,7 +540,7 @@
         const bandTips = {
             'DC Offset': 'DC Offset (λ=0) — uniform energy across all faces; represents the system average',
             'Global (5-sqrt5)': 'Global band (λ ≈ 2.76) — whole-system imbalance patterns spanning all faces',
-            'Regional (5)': 'Regional band (λ = 5) — cluster-level patterns affecting groups of adjacent faces',
+            'Regional (6)': 'Regional band (λ = 6) — cluster-level patterns affecting groups of adjacent faces',
             'Fine-Grained (5+sqrt5)': 'Fine-Grained band (λ ≈ 7.24) — local adjacent-face tension, highest spatial frequency'
         };
 
@@ -561,8 +561,8 @@
             <table>
                 <thead><tr>
                     <th title="Eigenvector index of the dodecahedral graph Laplacian (1–12)">Mode</th>
-                    <th title="Eigenvalue λ — determines spatial frequency. λ=0 is DC, λ≈2.76 global, λ=5 regional, λ≈7.24 local">Eigenvalue</th>
-                    <th title="Frequency band: DC Offset / Global (5−√5) / Regional (5) / Fine-Grained (5+√5)">Band</th>
+                    <th title="Eigenvalue λ — determines spatial frequency. λ=0 is DC, λ≈2.76 global, λ=6 regional, λ≈7.24 local">Eigenvalue</th>
+                    <th title="Frequency band: DC Offset / Global (5−√5) / Regional (6) / Fine-Grained (5+√5)">Band</th>
                     <th title="Signed amplitude: a_i = Uᵀ × E. Positive = aligned with eigenvector, negative = anti-aligned">Amplitude (a_i)</th>
                     <th title="Absolute amplitude — magnitude of this mode's contribution to the energy pattern">|a_i|</th>
                 </tr></thead>
@@ -727,7 +727,7 @@
                 Δ<sub>f,m</sub> = −U<sub>fm</sub> × a<sub>m</sub>.
                 Positive = adds energy, negative = removes energy.
                 Only significant modes shown (|a<sub>m</sub>| ≥ 10% of max).
-                Band: G = Global (λ ≈ ${(5-SQRT5).toFixed(2)}), R = Regional (λ = 5), L = Local (λ ≈ ${(5+SQRT5).toFixed(2)}).
+                Band: G = Global (λ ≈ ${(5-SQRT5).toFixed(2)}), R = Regional (λ = 6), L = Local (λ ≈ ${(5+SQRT5).toFixed(2)}).
             </p>
             <table>
                 <thead><tr>
@@ -770,7 +770,7 @@
 
         const vector = ef_wk5.map(v => v.toFixed(2)).join(', ');
 
-        const narrative = `Spectral decomposition of the Week 5 face energy vector E = [${vector}] via the Graph Laplacian of the dodecahedral face adjacency graph (the icosahedral graph) yields 12 modal amplitudes. The Laplacian has analytical eigenvalues 0 (x1), 5-sqrt(5) = ${(5-Math.sqrt(5)).toFixed(4)} (x3), 5 (x5), and 5+sqrt(5) = ${(5+Math.sqrt(5)).toFixed(4)} (x3), reflecting the icosahedral symmetry of the dual graph.
+        const narrative = `Spectral decomposition of the Week 5 face energy vector E = [${vector}] via the Graph Laplacian of the dodecahedral face adjacency graph (the icosahedral graph) yields 12 modal amplitudes. The Laplacian has analytical eigenvalues 0 (x1), 5-sqrt(5) = ${(5-Math.sqrt(5)).toFixed(4)} (x3), 6 (x5), and 5+sqrt(5) = ${(5+Math.sqrt(5)).toFixed(4)} (x3), reflecting the icosahedral symmetry of the dual graph.
 
 The dominant mode is Mode ${dm.mode} (lambda = ${dm.eigenvalue.toFixed(4)}), a ${spectral.summary.pattern.toLowerCase()} with amplitude |a_${dm.mode}| = ${Math.abs(dm.amplitude).toFixed(4)}. ${negativePole.length > 0 ? `The dominant eigenvector reveals a pole structure: the negative pole comprises ${negativePole.join(', ')}, while the positive pole comprises ${positivePole.join(', ')}.` : ''}
 

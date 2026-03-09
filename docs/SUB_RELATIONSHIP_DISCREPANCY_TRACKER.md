@@ -307,11 +307,14 @@ condition: (e8, e3) => e8 > 0.75 && e3 < 0.40  // Burnout Engine
 
 ### A6. Spectral Analysis Thresholds — 5 Arbitrary Constants 🟢 (Partially Resolved)
 
-**Eigenvalue band thresholds: ✅ RESOLVED (March 7, 2026)**
-Critical discovery: eigenvalues were WRONG in all 3 SpectralAnalyzer copies.
+**Eigenvalue band thresholds: ✅ RESOLVED (March 9, 2026)**
+Critical discovery: eigenvalues AND Laplacian topology were wrong in all 3 SpectralAnalyzer copies.
 - Old (incorrect): `[0, 2.394×3, 5.584×3, 6.854×2, 8.146×3]` — wrong multiplicities
-- Correct (verified via `numpy.linalg.eigh`): `[0 (×1), 5−√5≈2.764 (×3), 5 (×5), 5+√5≈7.236 (×3)]`
-- Band thresholds now aligned with actual eigenvalue gaps: `<0.01` DC, `<4` Global, `<6.5` Regional, else Fine-Grained
+- March 7 fix had correct multiplicities but wrong mid-frequency: `5 (×5)` should be `6 (×5)`
+- Correct (verified via Jacobi eigendecomposition of canonical EDGES Laplacian):
+  `[0 (×1), 5−√5≈2.764 (×3), 6 (×5), 5+√5≈7.236 (×3)]`
+- Derivation: icosahedron adjacency eigenvalues are {5, √5, −1, −√5}, L = 5I−A gives {0, 5−√5, 6, 5+√5}
+- Band thresholds: `<0.01` DC, `<4` Global, `<6.5` Regional, else Fine-Grained
 - φ-connection: `√5 = 2φ−1`, so eigenvalues are inherently φ-derived
 
 **BAB thresholds: REMAINING (2 constants)**
