@@ -698,7 +698,7 @@ backend-fallback/
 → `dodecahedron-3d.html` (standalone 3D)
 
 ### **For Academic Presentation**
-→ `demo.html` + `MATH_REFERENCE.md` (visual + theory)
+→ `demo.html` + `math/CALCULATION_AUDIT_TRAIL.md` (visual + theory)
 
 ---
 
@@ -816,7 +816,7 @@ Shows dashboard
 | **Client Onboarding** | welcome.html → wizard | Full guided journey |
 | **Custom Data Entry** | demo-orchestrator.html | Direct wizard access |
 | **Development** | index.html | Fast iteration, direct access |
-| **Academic Paper** | MATH_REFERENCE.md | Full theory |
+| **Academic Paper** | math/CALCULATION_AUDIT_TRAIL.md | Full theory |
 | **Code Review** | js/main.js | Core algorithms |
 
 > **See also:** `docs/UX_TREE_MAP.md` for the complete navigation graph, user journeys, and decision points.
@@ -875,7 +875,7 @@ Shows dashboard
 **Nice to know:**
 6. `js/company-loader.js` - Loads samples
 7. `js/kpi-library.js` - Suggestions library
-8. `MATH_REFERENCE.md` - Theory
+8. `math/CALCULATION_AUDIT_TRAIL.md` - Theory & audit trail
 
 **Can ignore for now:**
 9. `backend-fallback/` - Alternative engine

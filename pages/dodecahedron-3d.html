@@ -2195,7 +2195,7 @@
                 } else if (window.self !== window.top && selectedCompanyId) {
                     if (selectedCompanyId && !currentLoadedCompanyId) {
                         Logger.info('3D View', `💾 Found company ID in sessionStorage: ${selectedCompanyId}`);
-                        window.postMessage({ type: 'LOAD_COMPANY', companyId: selectedCompanyId }, '*');
+                        window.postMessage({ type: 'LOAD_COMPANY', companyId: selectedCompanyId }, window.location.origin);
                     }
                 }
             }

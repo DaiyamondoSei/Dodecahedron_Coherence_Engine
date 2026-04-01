@@ -62,7 +62,7 @@ http://localhost:8080/demo-orchestrator.html
 | `js/face-wizard.js` | Face template selection | None (standalone) |
 | `js/demo-orchestrator-logic.js` | Navigation & state | face-wizard.js, main.js (optional) |
 | `DEMO_GUIDE.md` | User documentation | None |
-| `MATH_REFERENCE.md` | Formula documentation | None |
+| `math/CALCULATION_AUDIT_TRAIL.md` | Formula documentation & audit trail | None |
 | `INTEGRATION_GUIDE.md` | This file | None |
 
 ### Existing Files (Quannex Engine)
@@ -722,8 +722,7 @@ If you only want the calculation engine (no UI):
 
 **Documentation**:
 - User experience map: [UX_TREE_MAP.md](UX_TREE_MAP.md)
-- Math reference: [MATH_REFERENCE.md](MATH_REFERENCE.md)
-- Calculation audit: [math/CALCULATION_AUDIT_TRAIL.md](math/CALCULATION_AUDIT_TRAIL.md)
+- Math reference & audit trail: [math/CALCULATION_AUDIT_TRAIL.md](math/CALCULATION_AUDIT_TRAIL.md)
 - Company templates: [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md)
 - Main README: [../README.md](../README.md)
 

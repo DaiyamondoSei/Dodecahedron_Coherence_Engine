@@ -1,6 +1,10 @@
 /**
  * SpectralAnalyzer - Browser-Compatible Edition
  *
+ * VARIANT: ES module export
+ * Used by: dodecahedron-3d.html (dynamic import), dev/test-advanced-math.html
+ * Context: Advanced analysis with caching, used via `import { SpectralAnalyzer }` syntax
+ *
  * The Mathematical Heart of the Coherence Engine
  *
  * This performs spectral analysis on the dodecahedron graph using:

@@ -101,6 +101,25 @@
     --q-provider-gemini: #4285f4;
     --q-provider-openai: #10a37f;
     --q-provider-offline: #9ca3af;
+
+    /* Page-level backgrounds (unified across all pages) */
+    --q-bg-page: #0a0f1a;
+    --q-bg-card: rgba(17, 24, 39, 0.95);
+    --q-bg-overlay: rgba(0, 0, 0, 0.7);
+
+    /* Status colors */
+    --q-status-healthy: #00ff88;
+    --q-status-warning: #ffaa00;
+    --q-status-critical: #ff4466;
+
+    /* Breath Analysis accent (blue polarity) */
+    --q-accent-breath: #66b2ff;
+
+    /* Extended scale */
+    --q-font-size-3xl: 32px;
+    --q-font-size-4xl: 48px;
+    --q-space-3xl: 48px;
+    --q-space-4xl: 64px;
 }
 
 /* ========================================

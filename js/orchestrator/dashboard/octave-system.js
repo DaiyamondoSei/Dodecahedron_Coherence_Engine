@@ -194,8 +194,8 @@
     //   O3: 0.5 to 0.618 (PHI^-1)    - Relationships
     //   O4: 0.618 to 0.764 (PSI^3)   - Creativity
     //   O5: 0.764 to 0.854 (PSI^4)   - Expression
-    //   O6: 0.854 to 0.95            - Vision
-    //   O7: Above 0.95               - Radiance
+    //   O6: 0.854 to 0.910 (PSI^5)   - Vision
+    //   O7: Above 0.910 (PSI^5)      - Radiance
     //
     // PHILOSOPHY:
     // The 7 Octaves represent a developmental journey from basic survival
@@ -360,7 +360,7 @@
      * └─────────────────────────────────────────────────────────────────────┘
      *
      * Threshold values (from orchestrator-state.js):
-     *   O7: 0.95     (Radiance)
+     *   O7: 0.910    (Radiance, PSI^5)
      *   O6: ~0.854   (Vision, PSI^4)
      *   O5: ~0.764   (Expression, PSI^3)
      *   O4: ~0.618   (Creativity, PHI^-1)
@@ -400,7 +400,7 @@
         if (!thresholds) {
             Logger.warn('OrchestratorDash', '[octave-system] OCTAVE_COHERENCE_THRESHOLDS not found, using defaults');
             // PHI^-2 = 0.381966..., PHI^-1 = 0.618033..., etc.
-            if (coherence >= 0.95) return 7;   // Radiance
+            if (coherence >= 0.909830056250526) return 7;  // Radiance (PSI_5 = 1 - φ^-5)
             if (coherence >= 0.854) return 6;  // Vision (PSI^4)
             if (coherence >= 0.764) return 5;  // Expression (PSI^3)
             if (coherence >= 0.618) return 4;  // Creativity (PHI^-1)
@@ -410,7 +410,7 @@
         }
 
         // Use centralized PHI-derived thresholds
-        if (coherence >= thresholds.O7) return 7;  // 0.95 - Radiance
+        if (coherence >= thresholds.O7) return 7;  // PSI_5 ~ 0.910 - Radiance
         if (coherence >= thresholds.O6) return 6;  // PSI^4 ~ 0.854 - Vision
         if (coherence >= thresholds.O5) return 5;  // PSI^3 ~ 0.764 - Expression
         if (coherence >= thresholds.O4) return 4;  // PHI^-1 ~ 0.618 - Creativity
@@ -471,7 +471,7 @@
         // STEP 2: Use centralized PHI-based coherence thresholds
         // ────────────────────────────────────────────────────────────────────
         const thresholds = global.OCTAVE_COHERENCE_THRESHOLDS || {
-            O7: 0.95, O6: 0.854, O5: 0.764, O4: 0.618, O3: 0.5, O2: 0.382
+            O7: 0.909830056250526, O6: 0.854, O5: 0.764, O4: 0.618, O3: 0.5, O2: 0.382
         };
 
         // Base octave from coherence score

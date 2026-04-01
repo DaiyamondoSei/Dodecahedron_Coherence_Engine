@@ -5,35 +5,8 @@
     <meta charset="UTF-8">
     <title>Project Radiance: Brain Transplant Verification</title>
     <link rel="icon" href="data:,"><!-- Suppress favicon 404 -->
-    <style>
-        body {
-            background: #111;
-            color: #eee;
-            font-family: monospace;
-            padding: 2rem;
-        }
-
-        .pass {
-            color: #0f0;
-        }
-
-        .fail {
-            color: #f00;
-            font-weight: bold;
-        }
-
-        .log {
-            margin-bottom: 0.5rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 0.2rem;
-        }
-
-        h1 {
-            color: #d4af37;
-            border-bottom: 2px solid #d4af37;
-            padding-bottom: 1rem;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/sprint2-theme.css">
+    <link rel="stylesheet" href="../css/pages/radiance-check.css">
 </head>
 
 <body>
@@ -41,6 +14,12 @@
     <div id="console">Initializing...</div>
 
     <script src="../js/utils/logger.js"></script>
+
+    <!-- UX utilities -->
+    <script src="../js/ux/back-navigation.js"></script>
+    <script src="../js/ux/toast-notifications.js"></script>
+    <script src="../js/ux/error-recovery.js"></script>
+
     <script>
         window.onerror = function (msg, url, line, col, error) {
             const logDiv = document.getElementById('console');

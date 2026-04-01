@@ -16,22 +16,24 @@
 
 **Defense Date**: June 2026 (Bachelor's thesis)
 
+> **See also:** [MODULE_ARCHITECTURE.md](MODULE_ARCHITECTURE.md) — Explains the hybrid module strategy (ES modules vs window globals), the dual export pattern, HTML loading sequence, and Node.js test compatibility. Read that document to understand *why* modules are structured the way they are; this guide focuses on *what* each module does and how they connect.
+
 ---
 
 ## The 10 Most Critical Files (Priority Reading Order)
 
 | # | File | Lines | Purpose | When to Read |
 |---|------|-------|---------|--------------|
-| 1 | [main.js](js/main.js) | 1,981 | Core calculation engine (TuningConfig, KPI, Face, Edge classes) | Before ANY calculation changes |
-| 2 | [data-transformer.js](js/data-transformer.js) | 380 | UI ↔ Engine data format bridge | Before modifying data flow |
-| 3 | [demo-orchestrator-logic.js](js/demo-orchestrator-logic.js) | 3,528 | Main navigation, state, sessions | Before UI/flow changes |
-| 4 | [unified-data-loader.js](js/unified-data-loader.js) | 305 | Single source of truth for data loading | Before data loading changes |
-| 5 | [dodecahedron-viz.js](js/dodecahedron-viz.js) | 2,792 | 3D Three.js visualization | Before visual changes |
-| 6 | [context-synthesizer.js](js/context-synthesizer.js) | 503 | Generates edges/vertices from custom configs | Before custom data features |
-| 7 | [breath-analyzer.js](js/breath-analyzer.js) | 433 | 6-axis breath dynamics analysis | Before breath calculations |
-| 8 | [constants/octave-thresholds.js](js/constants/octave-thresholds.js) | ~100 | PHI-based constants (SINGLE SOURCE OF TRUTH) | Before ANY constant changes |
-| 9 | [advanced/index.js](js/advanced/index.js) | 183 | Unified analysis engine interface | Before adding analyzers |
-| 10 | [gemini-client.js](js/gemini-client.js) | 599 | AI integration with Gemini API | Before AI feature changes |
+| 1 | [main.js](../js/main.js) | 1,981 | Core calculation engine (TuningConfig, KPI, Face, Edge classes) | Before ANY calculation changes |
+| 2 | [data-transformer.js](../js/data-transformer.js) | 380 | UI ↔ Engine data format bridge | Before modifying data flow |
+| 3 | [demo-orchestrator-logic.js](../js/demo-orchestrator-logic.js) | 3,528 | Main navigation, state, sessions | Before UI/flow changes |
+| 4 | [unified-data-loader.js](../js/unified-data-loader.js) | 305 | Single source of truth for data loading | Before data loading changes |
+| 5 | [dodec/](../js/dodec/) | 14 modules | 3D Three.js visualization (modularized) | Before visual changes |
+| 6 | [context-synthesizer.js](../js/context-synthesizer.js) | 503 | Generates edges/vertices from custom configs | Before custom data features |
+| 7 | [breath-analyzer.js](../js/breath-analyzer.js) | 433 | 6-axis breath dynamics analysis | Before breath calculations |
+| 8 | [constants/octave-thresholds.js](../js/constants/octave-thresholds.js) | ~100 | PHI-based constants (SINGLE SOURCE OF TRUTH) | Before ANY constant changes |
+| 9 | [advanced/index.js](../js/advanced/index.js) | 183 | Unified analysis engine interface | Before adding analyzers |
+| 10 | [gemini-client.js](../js/gemini-client.js) | 599 | AI integration with Gemini API | Before AI feature changes |
 
 ---
 
@@ -173,7 +175,7 @@ Step 6: VISUALIZATION (dodecahedron-viz.js + octave-dna/ + UI modules)
 │  • Breath axis charts (6 opposing pairs)                        │
 │  • Shadow pattern overlays                                      │
 │  • Global coherence meter                                       │
-│  • DNA Helix (js/octave-dna/ - 14 modular files)                │
+│  • DNA Helix (../js/octave-dna/ - 14 modular files)                │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -334,6 +336,8 @@ Relationship tension between two faces:
 - **CSV**: SCREAMING_SNAKE with prefix (`CSV_Face_Models.csv`)
 - **Classes**: PascalCase (`TuningConfig`, `Face`, `Edge`)
 - **Methods**: camelCase (`calculateLocalCoherence()`)
+
+> **Module patterns per directory:** See the Module Boundaries table in [MODULE_ARCHITECTURE.md](MODULE_ARCHITECTURE.md) for which export pattern (ES module, window global, CommonJS) each directory uses.
 
 ### Folder Structure
 ```

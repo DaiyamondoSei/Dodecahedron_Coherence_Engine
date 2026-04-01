@@ -5,997 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coherence Report - Results Summary</title>
     <link rel="icon" href="data:,"><!-- Suppress favicon 404 -->
-    <style>
-        /* ========================================
-           RESULTS SUMMARY - Print-Ready Report
-           Optimized for readability and PDF export
-           ======================================== */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #0a0f1a;
-            --bg-secondary: #111827;
-            --bg-card: rgba(17, 24, 39, 0.95);
-            --accent: #00ffcc;
-            --accent-secondary: #7c3aed;
-            --text-primary: #f0f4f8;
-            --text-secondary: #94a3b8;
-            --border-color: rgba(0, 255, 204, 0.2);
-            --healthy: #00ff88;
-            --warning: #ffaa00;
-            --critical: #ff4466;
-        }
-
-        body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-
-        .report-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 30px;
-        }
-
-        /* Print Styles */
-        @media print {
-            body {
-                background: white;
-                color: #1a1a1a;
-            }
-            .report-container {
-                padding: 20px;
-            }
-            .report-section {
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .face-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-            }
-        }
-
-        /* ========================================
-           HEADER SECTION
-           ======================================== */
-        .report-header {
-            text-align: center;
-            padding: 40px 20px;
-            margin-bottom: 40px;
-            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .report-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-secondary), var(--accent));
-        }
-
-        .company-name {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--accent);
-            margin-bottom: 8px;
-        }
-
-        .report-title {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--text-primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .report-subtitle {
-            font-size: 16px;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-        }
-
-        .report-date {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        /* ========================================
-           EXECUTIVE SUMMARY
-           ======================================== */
-        .executive-summary {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        .coherence-score-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 30px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .score-label {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-        }
-
-        .score-value {
-            font-size: 72px;
-            font-weight: 700;
-            line-height: 1;
-            margin-bottom: 10px;
-        }
-
-        .score-value.healthy { color: var(--healthy); }
-        .score-value.warning { color: var(--warning); }
-        .score-value.critical { color: var(--critical); }
-
-        .score-status {
-            font-size: 14px;
-            padding: 6px 16px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-
-        .score-status.healthy { background: rgba(0, 255, 136, 0.15); color: var(--healthy); }
-        .score-status.warning { background: rgba(255, 170, 0, 0.15); color: var(--warning); }
-        .score-status.critical { background: rgba(255, 68, 102, 0.15); color: var(--critical); }
-
-        .insights-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 30px;
-        }
-
-        .insights-title {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--accent);
-            margin-bottom: 20px;
-        }
-
-        .insight-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .insight-item:last-child {
-            border-bottom: none;
-        }
-
-        .insight-icon {
-            font-size: 20px;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 255, 204, 0.1);
-            border-radius: 8px;
-            flex-shrink: 0;
-        }
-
-        .insight-content {
-            flex: 1;
-        }
-
-        .insight-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-
-        .insight-value {
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        /* ========================================
-           SECTION STYLES
-           ======================================== */
-        .report-section {
-            margin-bottom: 50px;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .section-icon {
-            font-size: 24px;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 255, 204, 0.1);
-            border-radius: 12px;
-        }
-
-        .section-title {
-            font-size: 22px;
-            font-weight: 600;
-        }
-
-        .section-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        /* ========================================
-           STRATEGIC FOCUS SECTION
-           ======================================== */
-        .strategic-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            margin-top: 20px;
-        }
-
-        .strategic-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px;
-            position: relative;
-        }
-
-        .strategic-card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .strategic-card-icon {
-            font-size: 28px;
-        }
-
-        .strategic-card-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .bab-score {
-            font-size: 48px;
-            font-weight: 700;
-            text-align: center;
-            margin: 16px 0;
-        }
-
-        .bab-score.balanced { color: var(--healthy); }
-        .bab-score.over-exhaling { color: var(--warning); }
-        .bab-score.over-inhaling { color: #a78bfa; }
-
-        .bab-status {
-            text-align: center;
-            font-size: 14px;
-            font-weight: 600;
-            padding: 6px 16px;
-            border-radius: 20px;
-            display: inline-block;
-            margin: 0 auto 16px;
-            width: fit-content;
-        }
-
-        .bab-status.balanced {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--healthy);
-        }
-
-        .bab-status.over-exhaling {
-            background: rgba(255, 170, 0, 0.15);
-            color: var(--warning);
-        }
-
-        .bab-status.over-inhaling {
-            background: rgba(167, 139, 250, 0.15);
-            color: #a78bfa;
-        }
-
-        .bab-comparison {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            margin: 16px 0;
-        }
-
-        .bab-pole {
-            text-align: center;
-            flex: 1;
-        }
-
-        .bab-pole-label {
-            display: block;
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-
-        .bab-pole-value {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .bab-divider {
-            font-size: 24px;
-            color: var(--text-secondary);
-            padding: 0 16px;
-        }
-
-        .bab-interpretation {
-            font-size: 13px;
-            color: var(--text-secondary);
-            text-align: center;
-            line-height: 1.5;
-        }
-
-        .leverage-face {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 12px;
-        }
-
-        .leverage-reason {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-            line-height: 1.5;
-        }
-
-        .leverage-action {
-            background: rgba(0, 255, 204, 0.1);
-            border-left: 3px solid var(--accent);
-            padding: 12px 16px;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 16px;
-        }
-
-        .leverage-impact {
-            display: flex;
-            justify-content: space-between;
-            padding-top: 12px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .leverage-impact-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .leverage-impact-value {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--healthy);
-        }
-
-        @media (max-width: 768px) {
-            .strategic-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ========================================
-           FACES GRID
-           ======================================== */
-        .face-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-
-        .face-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .face-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--face-color, var(--accent));
-        }
-
-        .face-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .face-number {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .face-name {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            color: var(--face-color, var(--accent));
-        }
-
-        .face-energy {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .face-energy.healthy { color: var(--healthy); }
-        .face-energy.warning { color: var(--warning); }
-        .face-energy.critical { color: var(--critical); }
-
-        .face-bar {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-bottom: 12px;
-        }
-
-        .face-bar-fill {
-            height: 100%;
-            border-radius: 3px;
-            transition: width 0.5s ease;
-        }
-
-        .element-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 4px;
-        }
-
-        .element-dot {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            position: relative;
-        }
-
-        .element-dot::after {
-            content: attr(data-value);
-            position: absolute;
-            bottom: -14px;
-            font-size: 8px;
-            color: var(--text-secondary);
-        }
-
-        /* ========================================
-           BREATH ANALYSIS
-           ======================================== */
-        .breath-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .breath-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-        .breath-axis-label {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent);
-            margin-bottom: 12px;
-        }
-
-        .breath-faces {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .breath-face {
-            text-align: center;
-            flex: 1;
-        }
-
-        .breath-face-name {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-
-        .breath-face-energy {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .breath-ratio {
-            text-align: center;
-            padding: 8px;
-            background: rgba(0, 255, 204, 0.1);
-            border-radius: 8px;
-        }
-
-        .breath-ratio-label {
-            font-size: 10px;
-            color: var(--text-secondary);
-        }
-
-        .breath-ratio-value {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--accent);
-        }
-
-        /* ========================================
-           SHADOW PATTERNS
-           ======================================== */
-        .shadow-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .shadow-card {
-            background: var(--bg-card);
-            border: 1px solid rgba(255, 68, 102, 0.3);
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-        .shadow-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .shadow-icon {
-            font-size: 24px;
-        }
-
-        .shadow-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--critical);
-        }
-
-        .shadow-description {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-        }
-
-        .shadow-gift {
-            padding: 12px;
-            background: rgba(0, 255, 136, 0.1);
-            border-radius: 8px;
-            border-left: 3px solid var(--healthy);
-        }
-
-        .shadow-gift-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--healthy);
-            margin-bottom: 4px;
-        }
-
-        .shadow-gift-text {
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* ========================================
-           RECOMMENDATIONS
-           ======================================== */
-        .recommendations-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .recommendation-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-        }
-
-        .recommendation-priority {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .priority-1 { background: var(--critical); color: white; }
-        .priority-2 { background: var(--warning); color: #1a1a1a; }
-        .priority-3 { background: var(--accent); color: #1a1a1a; }
-
-        .recommendation-content {
-            flex: 1;
-        }
-
-        .recommendation-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .recommendation-detail {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .recommendation-impact {
-            font-size: 12px;
-            color: var(--accent);
-            margin-top: 8px;
-        }
-
-        /* ========================================
-           FOOTER
-           ======================================== */
-        .report-footer {
-            text-align: center;
-            padding: 30px;
-            margin-top: 50px;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-size: 13px;
-        }
-
-        /* ========================================
-           NAVIGATION BAR
-           ======================================== */
-        .nav-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(10, 15, 26, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-        }
-
-        .nav-brand {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--accent);
-        }
-
-        .nav-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        .nav-btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: transparent;
-            color: var(--text-primary);
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn:hover {
-            background: rgba(0, 255, 204, 0.1);
-            border-color: var(--accent);
-        }
-
-        .nav-btn.primary {
-            background: var(--accent);
-            color: #0a0f1a;
-            border-color: var(--accent);
-        }
-
-        .nav-btn.primary:hover {
-            background: #00e6b8;
-        }
-
-        /* ========================================
-           REPORT DROPDOWN
-           ======================================== */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            right: 0;
-            background-color: var(--bg-card);
-            min-width: 220px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            z-index: 101;
-            overflow: hidden;
-            margin-top: 5px;
-            text-align: left;
-        }
-
-        .dropdown-content a {
-            color: var(--text-primary);
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            font-size: 13px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .dropdown-content a:hover {
-            background-color: rgba(0, 255, 204, 0.1);
-            color: var(--accent);
-        }
-
-        .dropdown.active .dropdown-content {
-            display: block;
-        }
-
-        body {
-            padding-top: 60px;
-        }
-
-        /* Loading State */
-        .loading-state {
-            text-align: center;
-            padding: 60px;
-        }
-
-        .loading-spinner {
-            width: 48px;
-            height: 48px;
-            border: 3px solid rgba(0, 255, 204, 0.2);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 1024px) {
-            .face-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .executive-summary {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .face-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .breath-grid {
-                grid-template-columns: 1fr;
-            }
-            .shadow-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Spectral Analysis Section */
-        .spectral-diagnostics {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .spectral-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px;
-            text-align: center;
-        }
-
-        .spectral-card-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .spectral-card-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 6px;
-        }
-
-        .spectral-card-detail {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .spectral-table-wrapper {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-        }
-
-        .spectral-table-title {
-            font-size: 15px;
-            color: var(--text-primary);
-            margin-bottom: 16px;
-            font-weight: 600;
-        }
-
-        .spectral-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-
-        .spectral-table th {
-            text-align: left;
-            padding: 10px 12px;
-            border-bottom: 2px solid var(--border-color);
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .spectral-table td {
-            padding: 8px 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            color: var(--text-primary);
-        }
-
-        .spectral-table tr.dominant-row {
-            background: rgba(0, 255, 204, 0.08);
-        }
-
-        .spectral-table tr.dominant-row td {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .spectral-corrections {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 12px;
-        }
-
-        .correction-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            border-left: 3px solid var(--accent);
-        }
-
-        .correction-card.reduce {
-            border-left-color: var(--warning);
-        }
-
-        .correction-face {
-            font-weight: 600;
-            min-width: 80px;
-            font-size: 13px;
-        }
-
-        .correction-delta {
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .correction-delta.positive { color: var(--healthy); }
-        .correction-delta.negative { color: var(--warning); }
-
-        .correction-action {
-            font-size: 12px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        @media (max-width: 768px) {
-            .spectral-diagnostics {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media print {
-            .spectral-card {
-                border: 1px solid #ddd;
-                background: #f9f9f9;
-            }
-            .spectral-table-wrapper {
-                border: 1px solid #ddd;
-                background: white;
-            }
-            .spectral-card-value {
-                color: #1a1a1a;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../css/sprint2-theme.css">
+    <link rel="stylesheet" href="../css/pages/results-summary.css">
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -1007,7 +18,7 @@
             </button>
             <div class="dropdown" id="reportDropdown">
                 <button class="nav-btn" onclick="toggleDropdown()">
-                    Report Options ▼
+                    Report Options &#x25BC;
                 </button>
                 <div class="dropdown-content">
                     <a onclick="window.print()">Executive Summary (Short)</a>
@@ -1221,6 +232,7 @@
     <script src="../js/spectral-analyzer.js"></script>
 
     <!-- UX Enhancement Modules (Phase: Thesis Polish) -->
+    <script src="../js/ux/back-navigation.js"></script>
     <script src="../js/ux/toast-notifications.js"></script>
     <script src="../js/ux/export-manager.js"></script>
     <script src="../js/ux/error-recovery.js"></script>
@@ -1300,8 +312,8 @@
             } catch (error) {
                 Logger.error('Report', 'Error loading data', error);
                 document.getElementById('loadingState').innerHTML = `
-                    <div style="color: var(--critical);">Error loading report data</div>
-                    <div style="margin-top: 10px; font-size: 14px; color: var(--text-secondary);">
+                    <div style="color: var(--q-status-critical);">Error loading report data</div>
+                    <div style="margin-top: 10px; font-size: 14px; color: var(--q-text-secondary);">
                         ${error.message}
                     </div>
                     <button class="nav-btn" style="margin-top: 20px;" onclick="window.location.href='dodecahedron-3d.html'">
@@ -1428,20 +440,11 @@
 
         /**
          * Populate Strategic Focus section with BAB and Leverage cards
-         * ════════════════════════════════════════════════════════════════════════════
-         * Being-Action Balance (BAB) = avgReception / avgProjection × 100%
-         * Reception faces: [1, 2, 3, 9, 10, 12] (Being/Inhale)
-         * Projection faces: [4, 5, 6, 7, 8, 11] (Action/Exhale)
-         * Thresholds: >120% over-inhaling, <80% over-exhaling, else balanced
-         * ════════════════════════════════════════════════════════════════════════════
          */
         function populateStrategicFocus(context, faces) {
-            // Reception (Being) faces: indices 0, 1, 2, 8, 9, 11 (faces 1, 2, 3, 9, 10, 12)
             const receptionIndices = [0, 1, 2, 8, 9, 11];
-            // Projection (Action) faces: indices 3, 4, 5, 6, 7, 10 (faces 4, 5, 6, 7, 8, 11)
             const projectionIndices = [3, 4, 5, 6, 7, 10];
 
-            // Calculate average energies
             let receptionSum = 0, projectionSum = 0;
             receptionIndices.forEach(i => {
                 receptionSum += getEnergy(faces[i] || {});
@@ -1453,12 +456,10 @@
             const avgReception = receptionSum / receptionIndices.length;
             const avgProjection = projectionSum / projectionIndices.length;
 
-            // BAB Score: Reception / Projection × 100%
             const EPSILON = 1e-10;
             const babScore = avgProjection > EPSILON ? (avgReception / avgProjection) : 1.0;
             const babPercentage = Math.round(babScore * 100);
 
-            // Determine status
             let statusClass, statusText, interpretation;
             if (babPercentage > 120) {
                 statusClass = 'over-inhaling';
@@ -1474,7 +475,6 @@
                 interpretation = 'Healthy balance between reception and projection. The organization breathes naturally.';
             }
 
-            // Update BAB card
             document.getElementById('babScore').textContent = babPercentage + '%';
             document.getElementById('babScore').className = 'bab-score ' + statusClass;
             document.getElementById('babStatus').textContent = statusText;
@@ -1483,11 +483,6 @@
             document.getElementById('babProjection').textContent = Math.round(avgProjection * 100) + '%';
             document.getElementById('babInterpretation').textContent = interpretation;
 
-            // ════════════════════════════════════════════════════════════════════════════
-            // Calculate Highest Leverage Action
-            // Leverage = |deltaFromOptimal| × (1 - faceEnergy) × importance
-            // High leverage = low energy face with large gap from optimal (0.618)
-            // ════════════════════════════════════════════════════════════════════════════
             const PHI_INVERSE = 0.618;
             let maxLeverage = 0;
             let leverageFace = null;
@@ -1496,7 +491,7 @@
             faces.forEach((face, index) => {
                 const energy = getEnergy(face);
                 const delta = Math.abs(energy - PHI_INVERSE);
-                const leverage = delta * (1 - energy) * 1.0; // All faces equal importance for now
+                const leverage = delta * (1 - energy) * 1.0;
 
                 if (leverage > maxLeverage) {
                     maxLeverage = leverage;
@@ -1505,11 +500,10 @@
                 }
             });
 
-            // Update Leverage card
             if (leverageFace) {
                 const energy = Math.round(getEnergy(leverageFace) * 100);
                 const gap = Math.round(Math.abs(energy - 61.8));
-                const expectedImpact = Math.round(maxLeverage * 100 * 2); // Scaled for display
+                const expectedImpact = Math.round(maxLeverage * 100 * 2);
 
                 document.getElementById('leverageFaceName').textContent = leverageFace.name || `Face ${leverageIndex + 1}`;
                 document.getElementById('leverageReason').textContent =
@@ -1570,11 +564,10 @@
             const faces = context.faces || [];
 
             if (breathAxes.length === 0) {
-                container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary);">Breath analysis data not available</div>';
+                container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--q-text-secondary);">Breath analysis data not available</div>';
                 return;
             }
 
-            // Helper: resolve face reference (could be object or face ID number)
             function resolveFace(ref) {
                 if (typeof ref === 'object' && ref !== null) return ref;
                 if (typeof ref === 'number') return faces.find(f => f.id === ref) || { name: `Face ${ref}` };
@@ -1597,7 +590,7 @@
                                 <div class="breath-face-name">${projFace.name || projFace.customName || projFace.baseName || 'Projection'}</div>
                                 <div class="breath-face-energy">${Math.round(getEnergy(projFace) * 100)}%</div>
                             </div>
-                            <div style="color: var(--text-secondary);">&#x21C4;</div>
+                            <div style="color: var(--q-text-secondary);">&#x21C4;</div>
                             <div class="breath-face">
                                 <div class="breath-face-name">${recFace.name || recFace.customName || recFace.baseName || 'Reception'}</div>
                                 <div class="breath-face-energy">${Math.round(getEnergy(recFace) * 100)}%</div>
@@ -1617,7 +610,7 @@
             const shadows = context.shadowPatterns || [];
 
             if (shadows.length === 0) {
-                container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary);">No shadow patterns currently active</div>';
+                container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--q-text-secondary);">No shadow patterns currently active</div>';
                 return;
             }
 
@@ -1632,8 +625,8 @@
                         <div class="shadow-gift-label">Gift When Integrated</div>
                         <div class="shadow-gift-text">${shadow.gift || shadow.integrated || 'Awaiting discovery'}</div>
                     </div>
-                    ${shadow.severity ? `<div class="shadow-severity" style="margin-top: 0.5rem; font-size: 0.75rem; color: ${shadow.severity === 'critical' ? 'var(--accent-critical, #ff4444)' : 'var(--text-secondary, #999)'}; text-transform: uppercase; letter-spacing: 0.05em;">${shadow.severity}</div>` : ''}
-                    ${shadow.prescription ? `<div class="shadow-prescription" style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-secondary, #aaa); font-style: italic;">${shadow.prescription}</div>` : ''}
+                    ${shadow.severity ? `<div class="shadow-severity" style="margin-top: 0.5rem; font-size: 0.75rem; color: ${shadow.severity === 'critical' ? 'var(--q-status-critical)' : 'var(--q-text-secondary)'}; text-transform: uppercase; letter-spacing: 0.05em;">${shadow.severity}</div>` : ''}
+                    ${shadow.prescription ? `<div class="shadow-prescription" style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--q-text-secondary); font-style: italic;">${shadow.prescription}</div>` : ''}
                 </div>
             `).join('');
         }
@@ -1641,10 +634,8 @@
         function populateRecommendations(context, faces) {
             const container = document.getElementById('recommendationsList');
 
-            // Generate recommendations based on face health
             const recommendations = [];
 
-            // Find faces that need attention
             const sortedFaces = [...faces].sort((a, b) => getEnergy(a) - getEnergy(b));
 
             sortedFaces.slice(0, 3).forEach((face, index) => {
@@ -1659,7 +650,6 @@
                 }
             });
 
-            // Add shadow-related recommendations
             if (context.shadowPatterns?.length > 0) {
                 recommendations.push({
                     priority: recommendations.length + 1,
@@ -1670,7 +660,7 @@
             }
 
             if (recommendations.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">System is healthy - continue current practices</div>';
+                container.innerHTML = '<div style="text-align: center; color: var(--q-text-secondary); padding: 20px;">System is healthy - continue current practices</div>';
                 return;
             }
 
@@ -1694,7 +684,6 @@
                 return;
             }
 
-            // Extract face energies as flat array
             const faceEnergies = faces.map(f => getEnergy(f));
             if (faceEnergies.length !== 12) {
                 Logger.warn('Report', `Expected 12 faces, got ${faceEnergies.length}. Skipping spectral.`);
@@ -1705,10 +694,8 @@
                 const analyzer = new SpectralAnalyzer();
                 const result = analyzer.analyze(faceEnergies);
 
-                // Show the section
                 section.style.display = '';
 
-                // Dominant Mode card
                 const dm = result.dominantMode;
                 document.getElementById('specDominantMode').textContent = `Mode ${dm.mode}`;
                 const bandLabel = dm.eigenvalue < 0.01 ? 'DC Offset'
@@ -1716,17 +703,15 @@
                     : dm.eigenvalue < 6.5 ? 'Regional Pattern'
                     : 'Fine-Grained';
                 document.getElementById('specDominantDetail').textContent =
-                    `λ = ${dm.eigenvalue.toFixed(3)} · ${bandLabel} · amplitude ${dm.amplitude.toFixed(3)}`;
+                    `\u03BB = ${dm.eigenvalue.toFixed(3)} \u00B7 ${bandLabel} \u00B7 amplitude ${dm.amplitude.toFixed(3)}`;
 
-                // Dissonance card
                 const di = result.diagnostics.dissonanceIndex;
                 const disEl = document.getElementById('specDissonance');
                 disEl.textContent = di.percentage.toFixed(1) + '%';
-                disEl.style.color = di.percentage > 40 ? 'var(--critical)'
-                    : di.percentage > 20 ? 'var(--warning)' : 'var(--healthy)';
+                disEl.style.color = di.percentage > 40 ? 'var(--q-status-critical)'
+                    : di.percentage > 20 ? 'var(--q-status-warning)' : 'var(--q-status-healthy)';
                 document.getElementById('specDissonanceDetail').textContent = di.interpretation;
 
-                // Modal amplitudes table
                 const tbody = document.querySelector('#spectralModesTable tbody');
                 tbody.innerHTML = result.modalAmplitudes.map((mode, i) => {
                     const ev = analyzer.eigenvalues[i];
@@ -1736,7 +721,7 @@
                         : 'Fine-Grained';
                     const isDominant = (i + 1) === dm.mode;
                     return `<tr class="${isDominant ? 'dominant-row' : ''}">
-                        <td>${i + 1}${isDominant ? ' ★' : ''}</td>
+                        <td>${i + 1}${isDominant ? ' \u2605' : ''}</td>
                         <td>${ev.toFixed(4)}</td>
                         <td>${band}</td>
                         <td>${mode.amplitude.toFixed(4)}</td>
@@ -1744,7 +729,6 @@
                     </tr>`;
                 }).join('');
 
-                // Top corrective actions (top 6)
                 const corrections = document.getElementById('spectralCorrections');
                 const allActions = [
                     ...result.correctiveActions.addEnergy.map(a => ({ ...a, type: 'add' })),

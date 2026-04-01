@@ -41,6 +41,7 @@
     // PSI Values (complements): PSI_n = 1 - φ^-n
     const PSI_3 = _PH.PSI_3 || 0.763932022500210;           // 1 - φ^-3 ≈ 0.764
     const PSI_4 = _PH.PSI_4 || 0.8541019662496847;          // 1 - φ^-4 ≈ 0.854
+    const PSI_5 = _PH.PSI_5 || 0.909830056250526;           // 1 - φ^-5 ≈ 0.910
 
     // ========================================
     // GLOBAL STATE
@@ -115,7 +116,7 @@
      * - O4 (Creativity): φ^-1 ≈ 0.618 (Golden Ratio)
      * - O5 (Expression): Ψ³ ≈ 0.764
      * - O6 (Vision): Ψ⁴ ≈ 0.854
-     * - O7 (Radiance): 0.95 (near unity)
+     * - O7 (Radiance): PSI_5 ≈ 0.910
      *
      * @constant
      */
@@ -126,7 +127,7 @@
         O4: PHI_1,      // Creativity - φ^-1 ≈ 0.618 (Golden Ratio)
         O5: PSI_3,      // Expression - Ψ³ ≈ 0.764
         O6: PSI_4,      // Vision - Ψ⁴ ≈ 0.854
-        O7: 0.95        // Radiance - near unity
+        O7: PSI_5       // Radiance - Ψ⁵ ≈ 0.910
     };
 
     // Also export numeric-keyed version for compatibility
@@ -137,7 +138,7 @@
         4: PHI_1,       // O4 Creativity
         5: PSI_3,       // O5 Expression
         6: PSI_4,       // O6 Vision
-        7: 0.95         // O7 Radiance
+        7: PSI_5        // O7 Radiance
     };
 
     // ========================================
@@ -153,7 +154,7 @@
     // Also export the local PHI values for any module that needs them
     global.OrchestratorPHI = {
         PHI_1, PHI_2, PHI_3, PHI_4,
-        PSI_3, PSI_4
+        PSI_3, PSI_4, PSI_5
     };
 
     Logger.info('OrchestratorState', 'Module loaded');

@@ -163,7 +163,7 @@
         }
 
         // Fallback: manual PHI threshold detection
-        if (energy >= 0.910) return 7;
+        if (energy >= 0.909830056250526) return 7;  // PSI_5 = 1 - φ^-5
         if (energy >= 0.854) return 6;
         if (energy >= 0.764) return 5;
         if (energy >= 0.618) return 4;
@@ -191,7 +191,7 @@
             4: { name: 'Creativity', color: '#44BB44', threshold: 0.618 },
             5: { name: 'Expression', color: '#00CCCC', threshold: 0.764 },
             6: { name: 'Vision', color: '#4488FF', threshold: 0.854 },
-            7: { name: 'Radiance', color: '#AA44FF', threshold: 0.910 }
+            7: { name: 'Radiance', color: '#AA44FF', threshold: 0.909830056250526 }
         };
         return fallbackInfo[octaveNum] || fallbackInfo[1];
     }

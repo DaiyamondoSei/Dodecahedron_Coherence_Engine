@@ -3,6 +3,10 @@
  * MODULE: spectral-analyzer.js
  * ========================================
  *
+ * VARIANT: IIFE → window.SpectralAnalyzer
+ * Used by: index.html, simulator.html, results-summary.html, dodecahedron-3d.html, thesis-export.html
+ * Context: Standard dashboard pages that load scripts via <script> tags
+ *
  * SpectralAnalyzer - The Mathematical Heart of the Coherence Engine
  *
  * This class performs spectral analysis on the dodecahedron graph using:

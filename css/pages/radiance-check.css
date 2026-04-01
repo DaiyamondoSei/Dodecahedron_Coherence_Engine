@@ -1,0 +1,32 @@
+/**
+ * radiance-check.css - Extracted from radiance-check.html <style> block
+ * Minimal diagnostic page styling.
+ */
+
+body {
+    background: #111;
+    color: #eee;
+    font-family: monospace;
+    padding: 2rem;
+}
+
+.pass {
+    color: #0f0;
+}
+
+.fail {
+    color: #f00;
+    font-weight: bold;
+}
+
+.log {
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.2rem;
+}
+
+h1 {
+    color: #d4af37;
+    border-bottom: 2px solid #d4af37;
+    padding-bottom: 1rem;
+}

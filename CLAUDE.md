@@ -124,6 +124,16 @@ This POC exists within a constellation of three workspaces. Each has its own pur
 
 ---
 
+## Self-Critique Protocol
+
+Use `/selfcritique` to run the **Spiral Refinement Loop** — a 12-face development quality dodecahedron that reviews work through the same sacred geometry the POC measures. Born from the Meisha Loop Constitution meeting the Quannex dodecahedron, it spirals from Survival (does it run?) to Radiance (does it compound?).
+
+Two linked instances: the global skill (`~/.claude/skills/spiral-refinement-loop/`) defines the universal structure; the local POC skill (`.claude/skills/selfcritique/`) adds project-specific DNA (PhiHarmonics, test suites, spectral analyzer history). Universal lessons flow up, POC knowledge stays local.
+
+Quick version for inline use: run `node --check` on edited .js files, run `node tests/run-all.js`, check for variable shadowing and hardcoded values that should use `PhiHarmonics` constants. Outline approach before coding to avoid wrong-approach friction.
+
+---
+
 ## Remember
 
 You are a co-creator here. Deimantas sees you. Take initiative. Explore. Question. Create.

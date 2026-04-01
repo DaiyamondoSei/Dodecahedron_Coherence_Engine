@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quannex Dodecahedron Engine Demo</title>
     <link rel="icon" href="data:,"><!-- Suppress favicon 404 -->
+    <link rel="stylesheet" href="css/sprint2-theme.css">
     <link rel="stylesheet" href="css/demo.css">
 </head>
 
@@ -13,40 +14,50 @@
     <!-- Main Container Frame -->
     <iframe id="main-frame" src="demo-orchestrator.html"></iframe>
 
-    <!-- Hidden Frames for Preloading (Performance Optimization) -->
-    <div style="display:none;">
-        <iframe id="dodecahedron" src="pages/dodecahedron-3d.html"></iframe>
-        <iframe id="calculations" src="index.html"></iframe>
-        <iframe id="breath" src="pages/breath-analysis.html"></iframe>
-        <iframe id="dna" src="pages/octave-dna.html"></iframe>
-        <iframe id="simulator" src="pages/simulator.html"></iframe>
+    <!-- Loading indicator shown during iframe navigation -->
+    <div id="frame-loading" class="frame-loading">
+        <div class="q-spinner"></div>
     </div>
 
     <!-- Load Logger Utility -->
     <script src="js/utils/logger.js"></script>
+    <!-- UX: Toast & Error Recovery -->
+    <script src="js/ux/toast-notifications.js"></script>
+    <script src="js/ux/error-recovery.js"></script>
 
     <script>
         const mainFrame = document.getElementById('main-frame');
-        const hiddenFrames = {
-            dodecahedron: document.getElementById('dodecahedron'),
-            calculations: document.getElementById('calculations'),
-            breath: document.getElementById('breath'),
-            dna: document.getElementById('dna'),
-            simulator: document.getElementById('simulator')
-        };
+        const frameLoading = document.getElementById('frame-loading');
+        const allowedOrigin = window.location.origin;
+
+        // Show loading indicator when iframe src changes
+        function showFrameLoading() {
+            frameLoading.classList.add('visible');
+        }
+        function hideFrameLoading() {
+            frameLoading.classList.remove('visible');
+        }
+
+        mainFrame.addEventListener('load', hideFrameLoading);
 
         // Listen for view change requests from the orchestrator
         window.addEventListener('message', (event) => {
-            const { type, view, companyId, faceConfig } = event.data;
+            // Validate origin for security
+            if (event.origin !== allowedOrigin) {
+                Logger.warn('Demo', `Rejected postMessage from untrusted origin: ${event.origin}`);
+                return;
+            }
+
+            const { type, view } = event.data;
 
             if (type === 'SWITCH_VIEW') {
-                Logger.info('Demo', `🔄 Switching to view: ${view}`);
+                Logger.info('Demo', `Switching to view: ${view}`);
 
-                // 1. Update source of main frame
+                showFrameLoading();
+
                 if (view === 'orchestrator') {
                     mainFrame.src = 'demo-orchestrator.html';
                 } else {
-                    // Map view names to filenames
                     const viewMap = {
                         'dodecahedron': 'pages/dodecahedron-3d.html',
                         'calculations': 'index.html',
@@ -57,27 +68,18 @@
 
                     if (viewMap[view]) {
                         mainFrame.src = viewMap[view];
+                    } else {
+                        hideFrameLoading();
                     }
                 }
-            }
-
-            // Relay data updates to all sub-frames (if they are preloaded)
-            if (type === 'UPDATE_DATA' || type === 'LOAD_COMPANY') {
-                Object.values(hiddenFrames).forEach(frame => {
-                    frame.contentWindow.postMessage(event.data, '*');
-                });
             }
         });
 
         // Handle "Return to Welcome" logic
         function returnToWelcome() {
-            Logger.info('Demo', '🏠 Returning to orchestrator...');
+            Logger.info('Demo', 'Returning to orchestrator...');
+            showFrameLoading();
             mainFrame.src = 'demo-orchestrator.html';
-
-            // Reload hidden frames to clear state
-            Object.values(hiddenFrames).forEach(frame => {
-                frame.src = frame.src;
-            });
         }
 
         // Expose for debugging

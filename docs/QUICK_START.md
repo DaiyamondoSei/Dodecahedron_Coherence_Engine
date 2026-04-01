@@ -215,8 +215,8 @@ If you encounter issues:
 4. Try different browser
 
 **For development help:**
-- See [DEMO_ROADMAP.md](DEMO_ROADMAP.md) for full plan
-- Check [COMPLETE_PROJECT_KNOWLEDGE_MAP.md](../COMPLETE_PROJECT_KNOWLEDGE_MAP.md) for architecture
+- See [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) for full documentation map
+- Check [FILE_STRUCTURE_MAP.md](FILE_STRUCTURE_MAP.md) for architecture overview
 
 ---
 

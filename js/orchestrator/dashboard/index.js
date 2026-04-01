@@ -224,8 +224,8 @@
  *   O3: RELATIONSHIPS (connection focus)  - 0.5 to 0.618 (PHI^-1)
  *   O4: CREATIVITY  (innovation focus)    - 0.618 to 0.764 (PSI^3)
  *   O5: EXPRESSION  (authenticity focus)  - 0.764 to 0.854 (PSI^4)
- *   O6: VISION      (purpose focus)       - 0.854 to 0.95
- *   O7: RADIANCE    (service focus)       - Above 0.95
+ *   O6: VISION      (purpose focus)       - 0.854 to 0.910 (PSI^5)
+ *   O7: RADIANCE    (service focus)       - Above 0.910 (PSI^5)
  *
  * These aren't arbitrary numbers - they're derived from the Golden Ratio (PHI).
  * See phi-harmonics.js for the mathematical foundations.

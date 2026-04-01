@@ -125,7 +125,7 @@ This is where mathematics becomes poetry. Where measurement becomes meaning.
 | You Want To... | Go Here |
 |----------------|---------|
 | Understand wisdom traditions | [thesis/WISDOM_BRIEF.md](thesis/WISDOM_BRIEF.md) (includes 42 Breath Names, Tuning Constants philosophy) |
-| See the math | [MATH_OVERVIEW.md](math/MATH_OVERVIEW.md) |
+| See the math | [MATH_OVERVIEW.md](../math/MATH_OVERVIEW.md) |
 | Understand octaves deeply | [thesis/CONSCIOUSNESS_MODEL.md](thesis/CONSCIOUSNESS_MODEL.md) |
 | See why dodecahedron | [math/SACRED_GEOMETRY_PROOF.md](math/SACRED_GEOMETRY_PROOF.md) |
 | Prepare for thesis defense | [thesis/DEFENSE_PREPARATION.md](thesis/DEFENSE_PREPARATION.md) |

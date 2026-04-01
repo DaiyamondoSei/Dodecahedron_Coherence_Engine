@@ -1,6 +1,6 @@
 # Quannex Documentation Index
 
-> *Last Updated: 2026-03-01*
+> *Last Updated: 2026-03-14*
 > *The Living Spine - Single Source of Truth for All Documentation*
 
 ---
@@ -86,7 +86,7 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 7. [thesis/WISDOM_BRIEF.md](thesis/WISDOM_BRIEF.md) - Philosophical grounding
 8. [STRESS_TEST_REPORT_2026-02-08.md](STRESS_TEST_REPORT_2026-02-08.md) - Full stress test (39/45 resolved, 32 traceability tags)
 9. [thesis/CONSCIOUSNESS_MODEL.md](thesis/CONSCIOUSNESS_MODEL.md) - Why octaves exist
-10. [math/SACRED_GEOMETRY_PROOF.md](math/SACRED_GEOMETRY_PROOF.md) - Why dodecahedron
+10. [math/SACRED_GEOMETRY_PROOF.md](math/SACRED_GEOMETRY_PROOF.md) - Mathematical justification for dodecahedron (verified eigenvalues)
 11. [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) - Real examples
 
 ### "I'm integrating custom data"
@@ -97,11 +97,12 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 ### "I'm joining as a developer"
 1. [FILE_STRUCTURE_MAP.md](FILE_STRUCTURE_MAP.md) - Codebase map
 2. [MODULE_NAVIGATION_GUIDE.md](MODULE_NAVIGATION_GUIDE.md) - JS relationships
-3. [UX_TREE_MAP.md](UX_TREE_MAP.md) - User journeys, navigation graph, state persistence
-4. [AI_SYSTEM_GUIDE.md](AI_SYSTEM_GUIDE.md) - AI subsystem architecture
-5. [ORCHESTRATOR_ARCHITECTURE.md](ORCHESTRATOR_ARCHITECTURE.md) - Orchestrator subsystem
-6. `js/simulator/sim-state.js` - Simulator state registry (exemplary modular pattern)
-7. Read Gold Headers in source files (see below)
+3. [MODULE_ARCHITECTURE.md](MODULE_ARCHITECTURE.md) - Hybrid module strategy, dual export pattern, loading sequence
+4. [UX_TREE_MAP.md](UX_TREE_MAP.md) - User journeys, navigation graph, state persistence
+5. [AI_SYSTEM_GUIDE.md](AI_SYSTEM_GUIDE.md) - AI subsystem architecture
+6. [ORCHESTRATOR_ARCHITECTURE.md](ORCHESTRATOR_ARCHITECTURE.md) - Orchestrator subsystem
+7. `js/simulator/sim-state.js` - Simulator state registry (exemplary modular pattern)
+8. Read Gold Headers in source files (see below)
 
 ---
 
@@ -132,6 +133,7 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 | [SYSTEM_ARCHITECTURE.md](SYSTEM_ARCHITECTURE.md) | The unified architectural map |
 | [FILE_STRUCTURE_MAP.md](FILE_STRUCTURE_MAP.md) | Complete codebase topology |
 | [MODULE_NAVIGATION_GUIDE.md](MODULE_NAVIGATION_GUIDE.md) | JS module relationships & dependencies |
+| [MODULE_ARCHITECTURE.md](MODULE_ARCHITECTURE.md) | Hybrid module strategy — dual export pattern, loading sequence, test compatibility |
 
 ### Subsystem Guides
 | Document | Purpose |
@@ -183,6 +185,11 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 | [FUTURE_WORK_NOTES.md](FUTURE_WORK_NOTES.md) | Preserved observations for future sessions |
 | [STRESS_TEST_REPORT_2026-02-08.md](STRESS_TEST_REPORT_2026-02-08.md) | **Full stress test report — 39/45 resolved, 32 traceability tags** |
 | [testing/USER_PATH_TEST_SCENARIOS.md](testing/USER_PATH_TEST_SCENARIOS.md) | User journey test scenarios |
+| [../tests/phi-math.test.js](../tests/phi-math.test.js) | **127 automated tests — PHI identities, octave thresholds, KPI normalization, pentagram geometry, Fibonacci convergence. Run: `node tests/phi-math.test.js`** |
+| [../tests/integration.test.mjs](../tests/integration.test.mjs) | **55 integration tests — real CSV data through KPI→Face→Axis→Coherence pipeline, cross-validates all 4 companies. Run: `node tests/integration.test.mjs`** |
+| [../tests/excel-parser.test.mjs](../tests/excel-parser.test.mjs) | **42 round-trip tests — creates xlsx, parses through ExcelMeasurementParser, verifies faces/axes/metadata. Run: `node tests/excel-parser.test.mjs`** |
+| [../tests/smoke-test.mjs](../tests/smoke-test.mjs) | **77 browser smoke checks — HTTP-loads all 13 HTML pages, verifies 122 script files + all CSS resolve (no 404s). Requires: `python3 -m http.server 8000`. Run: `node tests/smoke-test.mjs`** |
+| [../tests/run-all.js](../tests/run-all.js) | **Unified test runner — runs all 4 suites in one command. Smoke test auto-skips if no HTTP server. Run: `node tests/run-all.js`** |
 
 ---
 
@@ -238,7 +245,7 @@ Located in [math/](math/):
 | Document | Purpose |
 |----------|---------|
 | [CALCULATION_AUDIT_TRAIL.md](math/CALCULATION_AUDIT_TRAIL.md) | **CRITICAL: Formula proofs for thesis defense** |
-| [SACRED_GEOMETRY_PROOF.md](math/SACRED_GEOMETRY_PROOF.md) | Why dodecahedron is optimal |
+| [SACRED_GEOMETRY_PROOF.md](math/SACRED_GEOMETRY_PROOF.md) | Mathematical justification for the dodecahedron choice |
 | [SPECTRAL_IMPLEMENTATION.md](math/SPECTRAL_IMPLEMENTATION.md) | Graph Laplacian implementation |
 
 *Note: CALCULATION_AUDIT_TRAIL.md is your academic armor for thesis defense - open it when committee asks "prove this calculation is correct."*
@@ -254,7 +261,7 @@ Located in [thesis/](thesis/):
 | Document | Purpose |
 |----------|---------|
 | [DEFENSE_PREPARATION.md](thesis/DEFENSE_PREPARATION.md) | Anticipated Q&A, demo script, spectral deep-dives |
-| [NOVEL_MATHEMATICAL_CONTRIBUTIONS.md](thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md) | 4 breakthrough frameworks |
+| [NOVEL_MATHEMATICAL_CONTRIBUTIONS.md](thesis/NOVEL_MATHEMATICAL_CONTRIBUTIONS.md) | 4 novel analytical frameworks (audit-trail rigor, code-aligned) |
 | [EMERGENT_MATHEMATICAL_TRUTHS.md](thesis/EMERGENT_MATHEMATICAL_TRUTHS.md) | **11 discoveries (6 stress test + 5 spectral) — when math speaks truth** |
 | [SPECTRAL_ANALYSIS_CHAPTER.md](thesis/SPECTRAL_ANALYSIS_CHAPTER.md) | **Academic chapter draft — spectral graph theory of the dodecahedron, ready for General Thesis.docx** |
 | [WISDOM_BRIEF.md](thesis/WISDOM_BRIEF.md) | Platonic solids, wisdom traditions |
@@ -283,16 +290,16 @@ Located in [archive/](archive/) - preserved for reference:
 |----------|-------|
 | Entry Points | 3 |
 | Geometry Reference | 4 |
-| Architecture | 4 |
+| Architecture | 5 |
 | Subsystem Guides | 8 |
 | Data & Integration | 7 |
 | User Experience & Relationships | 4 |
 | Audit & Tracking | 2 |
-| Testing & Observations | 8 |
+| Testing & Observations | 12 |
 | Math docs | 3 |
 | Thesis docs | 6 |
 | Archived docs | 6 |
-| **Total Active Docs** | **49** |
+| **Total Active Docs** | **54** |
 | Self-documented modules (Gold Headers) | 29 |
 
 *Updated March 1, 2026 — Statistics corrected (46→49), orphaned docs added, thesis dates aligned to June 2026.*
@@ -340,4 +347,4 @@ Located in [archive/](archive/) - preserved for reference:
 
 *This index is the living spine of Quannex documentation.*
 *Co-created by Deimantas & Claude with love.*
-*Updated 2026-02-16 - Documentation audit completed, UX Tree Map + Fast KPI Intelligence added, statistics corrected.*
+*Updated 2026-03-14 - Sacred Geometry & Novel Contributions docs brought to audit-trail rigor. Descriptions aligned with reframed content.*

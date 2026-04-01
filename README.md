@@ -19,21 +19,20 @@
 
 **That's it!** No installation, no backend, no dependencies.
 
-For detailed instructions: See [QUICK_START.md](QUICK_START.md)
+For detailed instructions: See [QUICK_START.md](docs/QUICK_START.md)
 
 ---
 
 ## 📖 Documentation Hub
 
 ### **For First-Time Users**
-- 📘 [**QUICK_START.md**](QUICK_START.md) - Get running in 5 minutes
-- 📙 [**DEMO_GUIDE.md**](DEMO_GUIDE.md) - Complete walkthrough of all features
-- 📗 [**FILE_STRUCTURE_MAP.md**](FILE_STRUCTURE_MAP.md) - Navigate the codebase
+- 📘 [**QUICK_START.md**](docs/QUICK_START.md) - Get running in 5 minutes
+- 📗 [**FILE_STRUCTURE_MAP.md**](docs/FILE_STRUCTURE_MAP.md) - Navigate the codebase
 
 ### **For Developers**
-- 🔧 [**DATA_FLOW_ARCHITECTURE.md**](DATA_FLOW_ARCHITECTURE.md) - How data flows through the system
-- 🧪 [**TESTING_CHECKLIST.md**](TESTING_CHECKLIST.md) - Quality assurance guide
-- 🔗 [**INTEGRATION_GUIDE.md**](INTEGRATION_GUIDE.md) - Connect custom data sources
+- 🔧 [**DATA_FLOW_ARCHITECTURE.md**](docs/DATA_FLOW_ARCHITECTURE.md) - How data flows through the system
+- 🧪 [**TESTING_CHECKLIST.md**](docs/TESTING_CHECKLIST.md) - Quality assurance guide
+- 🔗 [**INTEGRATION_GUIDE.md**](docs/INTEGRATION_GUIDE.md) - Connect custom data sources
 
 ### **For Researchers & Mathematicians**
 - 📐 [**MATH_OVERVIEW.md**](math/MATH_OVERVIEW.md) - Conceptual framework (start here!)
@@ -44,8 +43,8 @@ For detailed instructions: See [QUICK_START.md](QUICK_START.md)
 - 🌌 [**SPECTRAL_SHADOW.md**](math/SPECTRAL_SHADOW.md) - Advanced analysis techniques
 
 ### **Feature Deep-Dives**
-- 🗺️ [**INTELLIGENT_FACE_MAPPING.md**](INTELLIGENT_FACE_MAPPING.md) - Adaptive breath axis mapping
-- 🏢 [**COMPANY_TEMPLATES_GUIDE.md**](COMPANY_TEMPLATES_GUIDE.md) - 4 teaching examples (O1→O7 lifecycle)
+- 🗺️ [**INTELLIGENT_FACE_MAPPING.md**](docs/INTELLIGENT_FACE_MAPPING.md) - Adaptive breath axis mapping
+- 🏢 [**COMPANY_TEMPLATES_GUIDE.md**](docs/COMPANY_TEMPLATES_GUIDE.md) - 4 teaching examples (O1→O7 lifecycle)
 
 ---
 
@@ -162,16 +161,16 @@ This POC was developed for a **Bachelor's thesis** exploring how sacred geometry
 → Open [DEMO.html](DEMO.html)
 
 ### **Path 2: Want to Understand It**
-→ Read [DEMO_GUIDE.md](DEMO_GUIDE.md)
+→ Read [DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md)
 
 ### **Path 3: Want to Build On It**
-→ Read [DATA_FLOW_ARCHITECTURE.md](DATA_FLOW_ARCHITECTURE.md)
+→ Read [DATA_FLOW_ARCHITECTURE.md](docs/DATA_FLOW_ARCHITECTURE.md)
 
 ### **Path 4: Want to Validate the Math**
 → Start with [math/MATH_OVERVIEW.md](math/MATH_OVERVIEW.md) → then [FOUNDATION_PRINCIPLE.md](math/FOUNDATION_PRINCIPLE.md)
 
 ### **Path 5: Want Real-World Examples**
-→ Read [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md)
+→ Read [COMPANY_TEMPLATES_GUIDE.md](docs/COMPANY_TEMPLATES_GUIDE.md)
 
 ### **Path 6: Want to Deploy It**
 → Coming soon: `DEPLOYMENT.md` (Netlify instructions)
@@ -191,7 +190,7 @@ The POC includes 4 fictional companies demonstrating archetypal patterns across 
 
 **Key Insight (Foundation Principle):** Quannex has O7-level Foundational Values but operates at O1. High coherence within an octave means *excellent survival*, NOT promotion to the next octave.
 
-See [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) for detailed profiles and `mapping-context.json` structure.
+See [COMPANY_TEMPLATES_GUIDE.md](docs/COMPANY_TEMPLATES_GUIDE.md) for detailed profiles and `mapping-context.json` structure.
 
 ---
 
@@ -215,9 +214,9 @@ See [COMPANY_TEMPLATES_GUIDE.md](COMPANY_TEMPLATES_GUIDE.md) for detailed profil
 
 ## 📞 Questions?
 
-- **New to the project?** Start with [QUICK_START.md](QUICK_START.md)
-- **Want the full story?** Read [DEMO_GUIDE.md](DEMO_GUIDE.md)
-- **Lost in the code?** Check [FILE_STRUCTURE_MAP.md](FILE_STRUCTURE_MAP.md)
+- **New to the project?** Start with [QUICK_START.md](docs/QUICK_START.md)
+- **Want the full story?** Read [DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md)
+- **Lost in the code?** Check [FILE_STRUCTURE_MAP.md](docs/FILE_STRUCTURE_MAP.md)
 - **Math not making sense?** Begin with [math/MATH_OVERVIEW.md](math/MATH_OVERVIEW.md)
 
 ---

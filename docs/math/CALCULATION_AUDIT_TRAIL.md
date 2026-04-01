@@ -293,12 +293,18 @@ Where:
   (i, j) are pentagram star connections (non-adjacent pairs)
   k_i, k_j are normalized KPI scores
 
-Pentagram connections (5 star edges):
-  Earth ↔ Fire (non-adjacent)
-  Fire ↔ Water (non-adjacent)
-  Water ↔ Air (non-adjacent)
-  Air ↔ Ether (non-adjacent)
-  Ether ↔ Earth (non-adjacent)
+Pentagram connections (5 unique edges, each traversed from both directions = 10 directed links):
+  Earth(0) ↔ Fire(2)    — skip-one connection
+  Earth(0) ↔ Air(3)     — skip-two connection
+  Water(1) ↔ Air(3)     — skip-one connection
+  Water(1) ↔ Ether(4)   — skip-two connection
+  Fire(2) ↔ Ether(4)    — skip-one connection
+
+Code: pentagramConnections[i] gives the 2 connections per vertex:
+  [0]→[2,3]  [1]→[3,4]  [2]→[0,4]  [3]→[0,1]  [4]→[1,2]
+
+Each vertex has 2 connections. 5 vertices × 2 = 10 directed links.
+Dividing by 10 averages over all directed connections.
 ```
 
 ### Implementation Reference
@@ -386,20 +392,28 @@ At O7, the multiplier equals φ⁻¹ = 0.618 - the golden ratio inverse! This cr
 ### Canonical Formula (SSOT: `js/core/Edge.js`)
 
 ```
-STRESS_TEST_FIX [C2]: Threshold-based phase detection (canonical)
-
-if E_A > 0.6 AND E_B > 0.6:  T = 0.9           (Synergetic)
-if E_A < 0.4 AND E_B < 0.4:  T = 0.2           (Depleted)
-else:                          T = (0.5 + δ/2) × m (Flowing/Stable)
+T = √(E_A × E_B)
 
 Where:
   E_A, E_B = Face energies [0, 1]
-  δ = |E_A - E_B|
-  m = elemental multiplier (Fire=1.3, Water=0.9, Earth=0.8, Air=1.1, Ether=1.0)
-  T = Edge tension [0, 1]
+  T = Edge tension [0, 1] (geometric mean of connected face energies)
 
-Status: Synergetic (T=0.9), Depleted (T=0.2), Flowing (δ>0.4), Stable (δ≤0.4)
+Breath Ratio (flow direction):
+  breathRatio = clamp((E_B - E_A) × 2, -1, +1)
+  Positive = expansion (A→B), Negative = contraction (B→A)
+  |breathRatio| < 0.1 → "balanced"
+
+Health State — φ-derived 5-state mapping:
+  T < φ⁻⁴ (0.146) → Wall      (near-zero energy exchange)
+  T < φ⁻² (0.382) → Gate      (restricted flow)
+  T < φ⁻¹ (0.618) → Membrane  (selective exchange)
+  T < ψ₄  (0.854) → Hemorrhage (high but potentially unstable flow)
+  T ≥ ψ₄  (0.854) → Vortex    (maximum energy exchange)
 ```
+
+### Why Geometric Mean?
+
+The geometric mean rewards edges where BOTH faces are strong. Unlike arithmetic mean, it severely penalizes imbalance: if one face is at 0.9 and the other at 0.1, arithmetic mean = 0.5 but geometric mean = 0.3. This captures the insight that an edge can only transmit as much energy as its weakest face allows.
 
 ### Alternative Perspective (`js/advanced/edge-analyzer.js`)
 
@@ -413,18 +427,18 @@ Used for advanced analysis views, NOT for system coherence.
 
 ### Implementation Reference
 
-- **Canonical SSOT:** `js/core/Edge.js` → `Edge.calculateTension()`
+- **Canonical SSOT:** `js/core/Edge.js` → `Edge.calculateTension()` (line 164)
 - **Alternative:** `js/advanced/edge-analyzer.js` → `EdgeAnalyzer.calculateTension()`
 
 ### Edge Health Spectrum
 
 | Tension | Status | Meaning |
 |---------|--------|---------|
-| T = 0.9 | Synergetic | Both faces strong, energy flows freely |
-| T > 0.7 | Flowing | Active energy exchange |
-| T > 0.5 | Stable | Moderate exchange |
-| T = 0.2 | Depleted | Both faces weak, low energy |
-| T < 0.2 | Critical | Near-breakdown |
+| T ≥ 0.854 (ψ₄) | Vortex | Both faces strong, maximum energy exchange |
+| T ≥ 0.618 (φ⁻¹) | Hemorrhage | High flow, potentially unstable |
+| T ≥ 0.382 (φ⁻²) | Membrane | Selective exchange, healthy filtering |
+| T ≥ 0.146 (φ⁻⁴) | Gate | Restricted flow, building toward opening |
+| T < 0.146 (φ⁻⁴) | Wall | Near-zero exchange, blocked |
 
 ---
 
@@ -435,17 +449,21 @@ Used for advanced analysis views, NOT for system coherence.
 ```
 STRESS_TEST_FIX [C3]: Canonical vortex strength formula
 
-strength = 0.7 × (σ / 0.577) + 0.3 × μ
+strength = φ⁻¹ × (σ / 0.577) + φ⁻² × μ
 
 Where:
   E_A, E_B, E_C = Energies of 3 converging faces
   μ = (E_A + E_B + E_C) / 3
   σ = sqrt(Σ(E_i - μ)² / 3)
   0.577 = sqrt(1/3) = max possible σ for 3 values in [0,1]
+  φ⁻¹ = 0.618033988...  (golden ratio inverse)
+  φ⁻² = 0.381966011...  (golden ratio inverse squared)
+
+Note: φ⁻¹ + φ⁻² = 1.0 — the unique self-similar partition.
 
 Interpretation:
-  70% weight on VARIANCE (tension = potential for transformation)
-  30% weight on MEAN (fuel for the transformation)
+  φ⁻¹ (61.8%) weight on VARIANCE (tension = potential for transformation)
+  φ⁻² (38.2%) weight on MEAN (fuel for the transformation)
 
 Direction = (μ - 0.5) × 2  → [-1, +1]  (downward/upward spiral)
 Coherence = 1 - (avg_pairwise_diff / 0.667)
@@ -458,9 +476,9 @@ Each vertex is where exactly 3 faces meet - this is geometrically fixed. High va
 
 ### Implementation Reference
 
-- **Canonical SSOT:** `js/core/Vertex.js` → `Vertex.calculateVortexEnergy()`
+- **Canonical SSOT:** `js/core/Vertex.js` → `Vertex.calculateVortexEnergy()` (line 204)
 - **Aligned:** `js/advanced/vertex-analyzer.js` → `VertexAnalyzer.calculateVortexStrength()`
-  (aligned to use stdDev/0.577 per STRESS_TEST_FIX [C3])
+  (aligned to use stdDev/0.577 and φ⁻¹/φ⁻² partition per STRESS_TEST_FIX [C3])
 
 ---
 
@@ -814,4 +832,4 @@ When committee asks... | Open to...
 ---
 
 *This document was co-created by Deimantas & Claude with love for academic rigor.*
-*Last updated: 2026-02-16*
+*Last updated: 2026-03-10*

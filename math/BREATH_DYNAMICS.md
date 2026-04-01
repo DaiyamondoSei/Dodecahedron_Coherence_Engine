@@ -264,7 +264,7 @@ class BreathAnalyzer {
 
 ## Visualization
 
-The POC DNA helix ([octave-dna.html](../octave-dna.html)) renders each axis as a **double helix**:
+The POC DNA helix ([octave-dna.html](../pages/octave-dna.html)) renders each axis as a **double helix**:
 
 - **Left strand**: Reception face (inhale)
 - **Right strand**: Projection face (exhale)

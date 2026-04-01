@@ -166,8 +166,8 @@
  *
  * GOTCHAS:
  * - SpectralAnalyzer loaded via window (not ES import) due to legacy
- * - BreathAnalyzer is defined inline in this file (should extract)
- * - axisMap hardcodes the 6 breath axis pairs
+ * - BreathAnalyzer loaded from js/breath-analyzer.js via window.BreathAnalyzer
+ * - BREATH_AXIS_MAP imported from js/constants/breath-axes.js (6 breath axis pairs)
  * - Shadow penalties can reduce face energy by up to 90%
  * - quannexEngine is a singleton - only one instance exists
  *
@@ -225,6 +225,12 @@ import { OrganizationalCoherenceEngine } from './advanced/index.js';
 // NEW: Import core classes from js/core/ (extracted December 16, 2025)
 import { TuningConfig, KPI, Face, Edge, Vertex } from './core/index.js';
 
+// Breath axis constants — loaded via window global from js/constants/breath-axes.js
+// (matches phi-harmonics.js pattern: no ES import, uses window.BreathAxes)
+const BREATH_AXIS_MAP = (typeof window !== 'undefined' && window.BreathAxes)
+    ? window.BreathAxes.BREATH_AXIS_MAP
+    : Object.freeze({ 1:11, 11:1, 2:7, 7:2, 3:8, 8:3, 4:9, 9:4, 5:10, 10:5, 6:12, 12:6 });
+
 // ========================================
 // UTILITY: CSV Parser
 // ========================================
@@ -235,16 +241,26 @@ import { TuningConfig, KPI, Face, Edge, Vertex } from './core/index.js';
  * @returns {Array<Object>} Parsed data with headers as keys
  */
 function parseCSV(csvText) {
+  // Strip UTF-8 BOM if present
+  if (csvText.charCodeAt(0) === 0xFEFF) {
+    csvText = csvText.slice(1);
+  }
+
   const lines = csvText.split('\n').filter(line => line.trim());
   if (lines.length === 0) return [];
 
-  const headers = lines[0].split(',').map(h => h.trim());
+  const headers = splitCSVLine(lines[0]);
+  const expectedCols = headers.length;
   const data = [];
 
   for (let i = 1; i < lines.length; i++) {
-    const values = lines[i].split(',').map(v => v.trim());
-    const row = {};
+    const values = splitCSVLine(lines[i]);
 
+    if (values.length !== expectedCols) {
+      Logger.warn('CSV', `Row ${i + 1} has ${values.length} columns (expected ${expectedCols}) — processing anyway`);
+    }
+
+    const row = {};
     headers.forEach((header, index) => {
       row[header] = values[index] || '';
     });
@@ -253,6 +269,37 @@ function parseCSV(csvText) {
   }
 
   return data;
+}
+
+/**
+ * Split a single CSV line respecting quoted fields.
+ * Fields like "value,with,commas" are kept as one value.
+ * @param {string} line - A single CSV line
+ * @returns {string[]} Array of trimmed field values
+ */
+function splitCSVLine(line) {
+  const fields = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && i + 1 < line.length && line[i + 1] === '"') {
+        current += '"';  // escaped quote
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (ch === ',' && !inQuotes) {
+      fields.push(current.trim());
+      current = '';
+    } else {
+      current += ch;
+    }
+  }
+  fields.push(current.trim());
+  return fields;
 }
 
 // ========================================
@@ -1263,17 +1310,10 @@ export class DodecahedronEngine {
     // The numbering {1↔11, 2↔7, 3↔8, 4↔9, 5↔10, 6↔12} follows the standard
     // dodecahedron face labeling used in crystallography and sacred geometry.
     //
-    const axisMap = {
-      1: 11, 11: 1,   // Financial ↔ Funding
-      2: 7, 7: 2,    // Intellectual ↔ Brand
-      3: 8, 8: 3,    // Human ↔ Operations
-      4: 9, 9: 4,    // Structural ↔ Regenerative
-      5: 10, 10: 5,   // Market ↔ Values
-      6: 12, 12: 6    // Community ↔ Risk
-    };
+    // Breath axis pairs imported from js/constants/breath-axes.js (single source of truth)
 
     this.faces.forEach(face => {
-      const opposingId = axisMap[face.id];
+      const opposingId = BREATH_AXIS_MAP[face.id];
       let opposingEnergy = 0;
 
       if (opposingId) {

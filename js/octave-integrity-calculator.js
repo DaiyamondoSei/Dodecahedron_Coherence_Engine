@@ -92,7 +92,7 @@
         O4: { id: 4, name: 'Creativity', focus: 'Possibility', threshold: PHI_INVERSE, color: '#44BB44' },
         O5: { id: 5, name: 'Expression', focus: 'Clarity', threshold: 0.764, color: '#00CCCC' },
         O6: { id: 6, name: 'Vision', focus: 'Direction', threshold: 0.854, color: '#4488FF' },
-        O7: { id: 7, name: 'Radiance', focus: 'Service', threshold: 0.95, color: '#AA44FF' }
+        O7: { id: 7, name: 'Radiance', focus: 'Service', threshold: 0.909830056250526, color: '#AA44FF' }
     };
 
     /**
@@ -292,7 +292,7 @@
 
         // Determine octave based on PHI thresholds
         let octave = 1;
-        if (c >= 0.95) octave = 7;
+        if (c >= 0.909830056250526) octave = 7;  // PSI_5 = 1 - φ^-5
         else if (c >= 0.854) octave = 6;
         else if (c >= 0.764) octave = 5;
         else if (c >= PHI_INVERSE) octave = 4;

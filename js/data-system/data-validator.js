@@ -162,6 +162,140 @@
    */
   const corruptionLog = [];
 
+  // ══════════════════════════════════════════════════════════════════════════
+  // SECTION 3b: STRUCTURED AUDIT TRAIL (Thesis Defense Proof)
+  // ══════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Structured audit trail for thesis defense.
+   * Records every PHI-derived substitution with full traceability:
+   * faceId, field, originalValue, substitutedValue, reason, phiDerivation.
+   */
+  const _auditTrail = [];
+
+  /**
+   * Determine a human-readable reason string for why a value was corrupted.
+   * @param {*} value - The original corrupted value
+   * @returns {string} Reason description
+   */
+  function _detectReason(value) {
+    if (value === undefined) return 'undefined';
+    if (value === null) return 'null';
+    if (typeof value === 'boolean') return 'boolean detected';
+    if (typeof value === 'function') return 'function detected';
+    if (Array.isArray(value)) return 'array detected';
+    if (typeof value === 'object') return '[object Object]';
+    if (typeof value === 'number') {
+      if (isNaN(value)) return 'NaN detected';
+      if (!isFinite(value)) return value > 0 ? 'Infinity detected' : '-Infinity detected';
+    }
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      if (trimmed === '') return 'empty string';
+      for (const pattern of CORRUPTION_PATTERNS) {
+        if (trimmed.includes(pattern)) return `"${pattern}" detected`;
+      }
+      // If string but parseFloat fails
+      if (isNaN(parseFloat(trimmed))) return 'unparseable string';
+    }
+    return 'unknown corruption';
+  }
+
+  /**
+   * Determine the PHI derivation label for a given default value.
+   * @param {number} defaultVal - The substituted PHI-derived value
+   * @returns {string} Human-readable derivation string
+   */
+  function _phiDerivationLabel(defaultVal) {
+    // Use approximate matching to handle floating-point
+    if (Math.abs(defaultVal - PHI_2) < 1e-9) return 'PHI_2 (\u03C6^-2 = 0.382)';
+    if (Math.abs(defaultVal - PHI_MIDPOINT) < 1e-9) return 'PHI_MIDPOINT (0.5)';
+    if (Math.abs(defaultVal - PHI_1) < 1e-9) return 'PHI_1 (\u03C6^-1 = 0.618)';
+    if (defaultVal === 1.0) return 'Unity (1.0)';
+    return `custom (${defaultVal})`;
+  }
+
+  /**
+   * Parse faceId and field name from a context string.
+   * Context strings follow patterns like:
+   *   "Face 5 (Market Resonance) energy"
+   *   "KPI IMC-Score (Initial Message Coherence) on Face 5"
+   *   "F10-Ether at V3"
+   * @param {string} context
+   * @returns {{ faceId: number|null, field: string }}
+   */
+  function _parseContext(context) {
+    let faceId = null;
+    let field = context;
+
+    // Try "Face N" pattern
+    const faceMatch = context.match(/Face\s+(\d+)/i);
+    if (faceMatch) {
+      faceId = parseInt(faceMatch[1], 10);
+    }
+
+    // Try "F<N>-" pattern (e.g. "F10-Ether")
+    if (faceId === null) {
+      const fMatch = context.match(/\bF(\d+)-/);
+      if (fMatch) {
+        faceId = parseInt(fMatch[1], 10);
+      }
+    }
+
+    // Determine field from context keywords
+    if (/energy/i.test(context)) {
+      field = 'energy';
+    } else if (/coherence/i.test(context)) {
+      field = 'coherence';
+    } else if (/KPI/i.test(context)) {
+      field = 'kpiValue';
+    } else if (/pillar/i.test(context)) {
+      field = 'pillarScore';
+    } else if (/edge/i.test(context)) {
+      field = 'edgeTension';
+    } else if (/vortex/i.test(context)) {
+      field = 'vortexEnergy';
+    } else if (/element/i.test(context)) {
+      field = 'elementalCoherence';
+    }
+
+    return { faceId, field };
+  }
+
+  /**
+   * Push a structured audit trail entry.
+   * @param {string} context - The validation context string
+   * @param {*} originalValue - The corrupted/missing value
+   * @param {number} substitutedValue - The PHI-derived replacement
+   * @param {string} [reasonOverride] - Optional explicit reason
+   */
+  function _pushAuditEntry(context, originalValue, substitutedValue, reasonOverride) {
+    const { faceId, field } = _parseContext(context);
+    _auditTrail.push(Object.freeze({
+      faceId: faceId,
+      field: field,
+      originalValue: originalValue,
+      substitutedValue: substitutedValue,
+      reason: reasonOverride || _detectReason(originalValue),
+      phiDerivation: _phiDerivationLabel(substitutedValue)
+    }));
+  }
+
+  /**
+   * Get the current structured audit trail.
+   * @returns {Array<Object>} Array of audit trail entries
+   */
+  function getLastAuditTrail() {
+    return [..._auditTrail];
+  }
+
+  /**
+   * Clear the audit trail (e.g., before a fresh validation run).
+   */
+  function clearAuditTrail() {
+    _auditTrail.length = 0;
+  }
+
   /**
    * Log a corruption instance
    *
@@ -231,6 +365,7 @@
       Logger.warn('DataValidator', `DATA CORRUPTION: ${context}`);
       Logger.debug('DataValidator', `   Raw value: "${value}" → Using default: ${defaultValue.toFixed(6)}`);
       logCorruption(context, value, defaultValue);
+      _pushAuditEntry(context, value, defaultValue);
       return defaultValue;
     }
 
@@ -240,6 +375,7 @@
       Logger.warn('DataValidator', `PARSE FAILURE: ${context}`);
       Logger.debug('DataValidator', `   Cannot parse: "${value}" → Using default: ${defaultValue.toFixed(6)}`);
       logCorruption(context, value, defaultValue);
+      _pushAuditEntry(context, value, defaultValue, 'unparseable string');
       return defaultValue;
     }
 
@@ -294,13 +430,14 @@
    * @returns {number} Validated coherence (0-1)
    */
   function validateElementalCoherence(value, elementKey, vertexId) {
-    const context = `${elementKey} at ${vertexId}`;
+    const context = `element ${elementKey} at ${vertexId}`;
 
     // Special handling for "Not Found" string
     if (typeof value === 'string' && value.includes('Not Found')) {
       Logger.warn('DataValidator', `MISSING DATA: ${context}`);
       Logger.debug('DataValidator', '   Using PHI_MIDPOINT (0.5) as neutral default');
       logCorruption(context, value, DEFAULTS.elementalCoherence);
+      _pushAuditEntry(context, value, DEFAULTS.elementalCoherence, '"Not Found" detected');
       return DEFAULTS.elementalCoherence;
     }
 
@@ -380,7 +517,11 @@
     // Logging
     logCorruption,
     getCorruptionReport,
-    clearLog
+    clearLog,
+
+    // Structured Audit Trail (Thesis Defense)
+    getLastAuditTrail,
+    clearAuditTrail
   };
 
   // Browser global export

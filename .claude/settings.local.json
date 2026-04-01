@@ -57,7 +57,22 @@
       "Bash(echo:*)",
       "Bash(python3:*)",
       "WebFetch(domain:21st.dev)",
-      "mcp__magic__21st_magic_component_inspiration"
+      "mcp__magic__21st_magic_component_inspiration",
+      "Bash(grep -l \"<style>\" pages/*.html)",
+      "Bash(for f:*)",
+      "Bash(do echo:*)",
+      "Read(//c/Users/murau/OneDrive/Stalinis kompiuteris/POC/**)",
+      "Bash(done)",
+      "Bash(grep -cE \"#[0-9a-fA-F]{3,8}\" css/pages/breath-analysis.css)",
+      "Bash(grep -nE \"#[0-9a-fA-F]{3,8}\" css/pages/breath-analysis.css)",
+      "Bash(mkdir -p \".claude/skills/selfcritique\")",
+      "Bash(mkdir -p \".claude/skills/thesis\")",
+      "Bash(CLAUDE_PROJECT_DIR=\"/c/Users/murau/OneDrive/Stalinis kompiuteris/POC\" pwsh -ExecutionPolicy Bypass -File \"C:/Users/murau/.claude/hooks/spiral-session-start.ps1\")",
+      "Bash(powershell -Command '$PSVersionTable.PSVersion.ToString\\(\\)')",
+      "Bash(pwsh -Command '$PSVersionTable.PSVersion.ToString\\(\\)')",
+      "Bash(pwsh -Command 'Join-Path \"\"C:\\\\Users\\\\murau\"\" \"\".claude\"\" \"\"skills\"\" \"\"selfcritique\"\" \"\"SKILL.md\"\"')",
+      "Bash(CLAUDE_PROJECT_DIR=\"C:\\\\Users\\\\murau\\\\OneDrive\\\\Stalinis kompiuteris\\\\POC\" pwsh -ExecutionPolicy Bypass -File \"C:/Users/murau/.claude/hooks/spiral-session-start.ps1\")",
+      "Bash(CLAUDE_PROJECT_DIR=\"C:\\\\Users\\\\murau\\\\Desktop\" pwsh -ExecutionPolicy Bypass -File \"C:/Users/murau/.claude/hooks/spiral-session-start.ps1\")"
     ],
     "deny": [],
     "ask": [
@@ -86,7 +101,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR\\.claude\\hooks\\session-start.ps1\"",
+            "command": "pwsh -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR\\.claude\\hooks\\session-start.ps1\"",
             "timeout": 15,
             "statusMessage": "Gathering orientation context..."
           }
@@ -98,7 +113,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR\\.claude\\hooks\\pre-compact.ps1\"",
+            "command": "pwsh -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR\\.claude\\hooks\\pre-compact.ps1\"",
             "timeout": 10,
             "statusMessage": "Preserving session context before compaction..."
           }

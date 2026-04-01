@@ -365,7 +365,7 @@ Single source of truth for all octave-related calculations across the system.
 ## See Also
 
 - [OCTAVE_FRAMEWORK.md](OCTAVE_FRAMEWORK.md) - The full 7-octave developmental model
-- [COMPANY_TEMPLATES_GUIDE.md](../COMPANY_TEMPLATES_GUIDE.md) - See the Foundation Principle in action across 4 companies
+- [COMPANY_TEMPLATES_GUIDE.md](../docs/COMPANY_TEMPLATES_GUIDE.md) - See the Foundation Principle in action across 4 companies
 - [SPECTRAL_SHADOW.md](SPECTRAL_SHADOW.md) - Advanced analysis including shadow pattern detection
 - [js/octave-integrity-calculator.js](../js/octave-integrity-calculator.js) - The implementation
 

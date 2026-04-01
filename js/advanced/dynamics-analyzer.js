@@ -212,14 +212,41 @@ export class DynamicsAnalyzer {
     }
 
     // Octave boundaries (thresholds for phase transitions)
-    this.octaveBoundaries = [
-      { octave: 'O1→O2', threshold: 0.35, name: 'Survival → Structure' },
-      { octave: 'O2→O3', threshold: 0.50, name: 'Structure → Relationships' },
-      { octave: 'O3→O4', threshold: 0.60, name: 'Relationships → Creativity' },
-      { octave: 'O4→O5', threshold: 0.70, name: 'Creativity → Expression' },
-      { octave: 'O5→O6', threshold: 0.80, name: 'Expression → Vision' },
-      { octave: 'O6→O7', threshold: 0.90, name: 'Vision → Radiance' }
-    ];
+    // FIX (March 2026): Import from phi-harmonics.js SSOT instead of hardcoding
+    // approximate values. The old hardcoded values (0.35, 0.60, 0.70, 0.80) diverged
+    // from the φ-derived values (φ⁻², φ⁻¹, ψ₃, ψ₄) used everywhere else in Quannex.
+    const phiHarmonics = (typeof window !== 'undefined' && window.PHI_HARMONICS)
+      ? window.PHI_HARMONICS
+      : null;
+
+    if (phiHarmonics && phiHarmonics.OCTAVE_THRESHOLDS) {
+      const OT = phiHarmonics.OCTAVE_THRESHOLDS;
+      this.octaveBoundaries = [
+        { octave: 'O1→O2', threshold: OT.O2.threshold, name: `${OT.O1.name} → ${OT.O2.name}` },
+        { octave: 'O2→O3', threshold: OT.O3.threshold, name: `${OT.O2.name} → ${OT.O3.name}` },
+        { octave: 'O3→O4', threshold: OT.O4.threshold, name: `${OT.O3.name} → ${OT.O4.name}` },
+        { octave: 'O4→O5', threshold: OT.O5.threshold, name: `${OT.O4.name} → ${OT.O5.name}` },
+        { octave: 'O5→O6', threshold: OT.O6.threshold, name: `${OT.O5.name} → ${OT.O6.name}` },
+        { octave: 'O6→O7', threshold: OT.O7.threshold, name: `${OT.O6.name} → ${OT.O7.name}` }
+      ];
+      Logger.info('DynamicsAnalyzer', 'Octave boundaries loaded from phi-harmonics.js SSOT');
+    } else {
+      // Fallback: phi-derived values hardcoded (matches SSOT to 3 decimal places)
+      Logger.warn('DynamicsAnalyzer', 'phi-harmonics.js not available, using φ-derived fallback');
+      const phi1 = 1 / PHI;            // φ⁻¹ = 0.618
+      const phi2 = 1 / (PHI * PHI);    // φ⁻² = 0.382
+      const psi3 = 1 - Math.pow(PHI, -3); // ψ₃ = 0.764
+      const psi4 = 1 - Math.pow(PHI, -4); // ψ₄ = 0.854
+      const psi5 = 1 - Math.pow(PHI, -5); // ψ₅ = 0.910
+      this.octaveBoundaries = [
+        { octave: 'O1→O2', threshold: phi2, name: 'Survival → Structure' },
+        { octave: 'O2→O3', threshold: 0.5,  name: 'Structure → Relationships' },
+        { octave: 'O3→O4', threshold: phi1, name: 'Relationships → Creativity' },
+        { octave: 'O4→O5', threshold: psi3, name: 'Creativity → Expression' },
+        { octave: 'O5→O6', threshold: psi4, name: 'Expression → Vision' },
+        { octave: 'O6→O7', threshold: psi5, name: 'Vision → Radiance' }
+      ];
+    }
   }
 
   /**
@@ -499,13 +526,27 @@ export class DynamicsAnalyzer {
     // High variance near boundaries = critical slowing
     const varianceScore = Math.min(variance / 0.1, 1.0); // Normalize
 
-    // Check for "flickering" (high difference between adjacent faces)
+    // Check for "flickering" (high energy difference between geometrically adjacent faces)
+    // FIX (March 2026): Use dodecahedron face adjacency instead of array index.
+    // Array index (i, i+1) has no topological meaning — faces are numbered arbitrarily.
+    // Using geometric adjacency ensures flicker detection reflects actual organizational interfaces.
     let flickerCount = 0;
-    for (let i = 0; i < faceEnergies.length - 1; i++) {
-      const diff = Math.abs(faceEnergies[i] - faceEnergies[i + 1]);
-      if (diff > 0.3) flickerCount++;
+    const faceIds = Object.keys(this.adjacency).map(Number);
+    for (const faceId of faceIds) {
+      const faceEnergy = faceEnergies[faceId - 1]; // faces are 1-indexed
+      if (faceEnergy === undefined) continue;
+      for (const neighborId of this.adjacency[faceId]) {
+        const neighborEnergy = faceEnergies[neighborId - 1];
+        if (neighborEnergy === undefined) continue;
+        // Only count each edge once (when faceId < neighborId)
+        if (faceId < neighborId) {
+          const diff = Math.abs(faceEnergy - neighborEnergy);
+          if (diff > 0.3) flickerCount++;
+        }
+      }
     }
-    const flickerScore = Math.min(flickerCount / 6, 1.0);
+    // 30 total edges; normalize to [0, 1]
+    const flickerScore = Math.min(flickerCount / 10, 1.0);
 
     // Combined score
     const score = (varianceScore * 0.6) + (flickerScore * 0.4);
@@ -575,7 +616,9 @@ export class DynamicsAnalyzer {
 
       // Inertia = how much force needed vs. current state
       // High required change + low current energy = high inertia (stuck)
-      const inertiaScore = Math.abs(requiredChange) / (currentEnergy + 0.1);
+      // Smoothing term: φ⁻³ ≈ 0.236 (prevents division by zero while maintaining
+      // phi-coherence with the rest of the system — see phi-harmonics.js)
+      const inertiaScore = Math.abs(requiredChange) / (currentEnergy + EPSILON_PHI3);
 
       // Classify responsiveness
       let responsiveness, status;
@@ -754,13 +797,16 @@ export class DynamicsAnalyzer {
    * Identify nearest attractor (stable equilibrium point)
    */
   identifyNearestAttractor(avgEnergy, gradient) {
-    // Define theoretical attractors
+    // Define theoretical attractors — phi-derived, symmetric around 0.5
+    // Each pair sums to 1.0: (φ⁻⁴ + ψ₄ = 1), (φ⁻³ + ψ₃ = 1), center = 0.5
+    const phi4 = Math.pow(PHI, -4);  // ≈ 0.146
+    const phi3 = EPSILON_PHI3;        // ≈ 0.236
     const attractors = [
-      { energy: 0.15, name: 'Chaos Basin', type: 'Low Coherence' },
-      { energy: 0.35, name: 'Survival Equilibrium', type: 'O1-O2 Boundary' },
-      { energy: 0.50, name: 'Structure Equilibrium', type: 'O2-O3 Boundary' },
-      { energy: 0.70, name: 'Flow State', type: 'O4-O5 Boundary' },
-      { energy: 0.90, name: 'Radiance Basin', type: 'High Coherence' }
+      { energy: phi4, name: 'Chaos Basin', type: 'Low Coherence' },
+      { energy: phi3, name: 'Survival Equilibrium', type: 'Below O1-O2' },
+      { energy: 0.50, name: 'Structure Equilibrium', type: 'O2-O3 Center' },
+      { energy: 1 - phi3, name: 'Flow State', type: 'O4-O5 Range' },
+      { energy: 1 - phi4, name: 'Radiance Basin', type: 'High Coherence' }
     ];
 
     // Find nearest

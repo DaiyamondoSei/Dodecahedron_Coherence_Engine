@@ -3,6 +3,10 @@
  * SPECTRAL-ANALYZER-GLOBAL.JS - BROWSER-COMPATIBLE EDITION
  * ════════════════════════════════════════════════════════════════════════════════
  *
+ * VARIANT: Global-scope for standalone pages
+ * Used by: breath-analysis.html, calculations.html, weekly-input.html
+ * Context: Pages that need SpectralAnalyzer in global scope without ES module imports
+ *
  * @module js/spectral-analyzer-global
  * @author Deimantas Murauskas & Claude
  * @version 2.1.0 - Gold documentation standard

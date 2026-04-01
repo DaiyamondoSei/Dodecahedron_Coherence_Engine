@@ -445,7 +445,7 @@ These templates demonstrate:
 
 ---
 
-**Next:** See [FOUNDATION_PRINCIPLE.md](math/FOUNDATION_PRINCIPLE.md) for the mathematical basis of octave calculation.
+**Next:** See [FOUNDATION_PRINCIPLE.md](../math/FOUNDATION_PRINCIPLE.md) for the mathematical basis of octave calculation.
 
 **Back:** Return to [FILE_STRUCTURE_MAP.md](FILE_STRUCTURE_MAP.md) for codebase navigation.
 
