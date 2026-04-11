@@ -304,8 +304,9 @@ Contains:
 #### `js/company-loader.js` - Multi-Company Support
 **What it does:**
 - Loads company profiles from `/companies/` folder
-- Manages 4 sample companies:
-  - Quannex
+- Manages 5 company templates:
+  - Quannex (founder self-assessment)
+  - CEN — Conscious Enterprises Network (first external client, April 2026)
   - Nova Tech
   - Zenith Solutions
   - Apex Industries
@@ -509,6 +510,10 @@ Org Octave = floor(geometric_mean(face_octaves) - spread_penalty)
 
 ```
 companies/
+├── cen/                   ★ FIRST EXTERNAL CLIENT (April 2026)
+│   ├── company.json       (CEN metadata, 12 faces, co-founder story)
+│   ├── kpis.csv           (60 KPIs from D+E average of frozen Phase 2 scores)
+│   └── mapping-context.json (Full topology: 12F, 41E, 20V, 6 axes, 4 shadows)
 ├── quannex/
 │   ├── company.json       (Profile, story, challenges)
 │   ├── kpis.csv           (60 KPI values)
@@ -870,7 +875,7 @@ Shows dashboard
 3. `demo-orchestrator.html` - Data input wizard (5-step guided flow)
 4. `js/main.js` - All calculations happen here
 5. `js/data-transformer.js` - Bridges UI ↔ Engine
-6. `companies/*/` - Sample data
+6. `companies/*/` - Company data (5 templates: quannex, cen, nova-tech, apex-industries, zenith-solutions)
 
 **Nice to know:**
 6. `js/company-loader.js` - Loads samples

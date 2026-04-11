@@ -1,11 +1,26 @@
 # Quannex Documentation Index
 
-> *Last Updated: 2026-03-14*
+> *Last Updated: 2026-04-11*
 > *The Living Spine - Single Source of Truth for All Documentation*
 
 ---
 
-## Recent Completion: Full Vision Coherence Simulator (February 8, 2026)
+## Recent: CEN Template + Control Panel (April 11, 2026)
+
+**Status: ✅ COMPLETE — 306/306 Tests, Spiral Verdict: CLEAN**
+
+| Component | Location | Status |
+|-----------|----------|--------|
+| CEN Company Template | `companies/cen/` (company.json + kpis.csv + mapping-context.json) | ✅ First external client — Phase 2 frozen scores |
+| Control Panel | `CONTROL_PANEL.xlsx` (7 sheets) | ✅ 12-face tracking + CEN deliverables |
+
+**CEN:** First external validation partner (Conscious Enterprises Network). D+E average scores from April 7 questionnaires. Unlocks 3D visualization, shadow analysis, and live demo for Phase 3 validation (~April 17).
+
+**Control Panel:** Dashboard (auto-updating thesis countdown), 60 Elements (spiral refinement grid), Test Tracker, Thesis Evidence Map, Codebase Inventory, Session Log, CEN Deliverables (8 promised deliverables tracked from signed partnership agreement).
+
+---
+
+## Previous: Full Vision Coherence Simulator (February 8, 2026)
 
 **Status: ✅ COMPLETE - All 13 Tests Passing, Gold Documentation**
 
