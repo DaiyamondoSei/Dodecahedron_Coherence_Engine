@@ -1,0 +1,61 @@
+KPI_ID,KPI_Name,Face_ID,Element,Value,Weight,Direction,Target_Min,Target_Ideal,Healthy_Min,Healthy_Max,Absolute_Max,metricType
+F1_E1,Financial Stability Score,1,Earth,3.5,1.2,↑,1,10,7,10,10,survival
+F1_E2,Cash Flow Health,1,Water,2.8,1.0,↑,1,10,7,10,10,survival
+F1_E3,Funding Momentum,1,Fire,2.5,1.0,↑,1,10,7,10,10,growth
+F1_E4,Financial Clarity,1,Air,4.0,0.9,↑,1,10,7,10,10,completion
+F1_E5,Capital Alignment,1,Ether,4.2,0.8,↑,1,10,7,10,10,completion
+F2_E1,Conceptual Framework Depth,2,Earth,7.5,1.3,↑,1,10,7,10,10,completion
+F2_E2,Research & Learning Flow,2,Water,7.0,1.0,↑,1,10,7,10,10,completion
+F2_E3,Knowledge Development,2,Fire,8.0,1.1,↑,1,10,7,10,10,growth
+F2_E4,Model Documentation,2,Air,7.2,1.0,↑,1,10,7,10,10,completion
+F2_E5,Intellectual Integrity,2,Ether,7.8,0.9,↑,1,10,7,10,10,completion
+F3_E1,Team Energy Level,3,Earth,5.0,1.5,Band,5,7,8.5,10,survival
+F3_E2,Rest & Recovery,3,Water,4.5,1.3,↑,1,10,7,10,10,survival
+F3_E3,Creative Capacity,3,Fire,5.5,1.2,↑,1,10,7,10,10,growth
+F3_E4,Self-Awareness,3,Air,6.0,1.0,↑,1,10,7,10,10,completion
+F3_E5,Joy in Work,3,Ether,4.5,1.1,↑,1,10,7,10,10,survival
+F4_E1,Governance Documentation,4,Earth,4.0,1.0,↑,1,10,7,10,10,completion
+F4_E2,Decision Protocols,4,Water,4.0,1.0,↑,1,10,7,10,10,completion
+F4_E3,Structural Clarity,4,Fire,4.5,0.9,↑,1,10,7,10,10,completion
+F4_E4,Process Documentation,4,Air,4.5,1.0,↑,1,10,7,10,10,completion
+F4_E5,Organizational Ethics,4,Ether,5.5,0.9,↑,1,10,7,10,10,survival
+F5_E1,External Visibility Score,5,Earth,2.0,1.2,↑,1,10,7,10,10,growth
+F5_E2,Audience Understanding,5,Water,2.5,1.0,↑,1,10,7,10,10,growth
+F5_E3,Market Engagement,5,Fire,2.0,1.0,↑,1,10,7,10,10,growth
+F5_E4,Communication Clarity,5,Air,2.0,1.1,↑,1,10,7,10,10,completion
+F5_E5,Market Resonance,5,Ether,2.0,0.9,↑,1,10,7,10,10,growth
+F6_E1,Community Events & Dialogue,6,Earth,3.5,1.0,↑,1,10,7,10,10,growth
+F6_E2,Partnership Quality,6,Water,3.5,1.0,↑,1,10,7,10,10,growth
+F6_E3,Network Strength,6,Fire,3.5,0.9,↑,1,10,7,10,10,growth
+F6_E4,Collaboration Clarity,6,Air,3.5,0.8,↑,1,10,7,10,10,completion
+F6_E5,Stakeholder Trust,6,Ether,3.5,1.0,↑,1,10,7,10,10,survival
+F7_E1,Public Presence Score,7,Earth,5.0,1.0,↑,1,10,7,10,10,growth
+F7_E2,Brand Consistency,7,Water,4.5,0.9,↑,1,10,7,10,10,survival
+F7_E3,Content & Comms Quality,7,Fire,5.5,1.0,↑,1,10,7,10,10,growth
+F7_E4,Message Clarity,7,Air,5.0,1.1,↑,1,10,7,10,10,completion
+F7_E5,Reputation Building,7,Ether,5.0,0.8,↑,1,10,7,10,10,growth
+F8_E1,Operational Systematization,8,Earth,3.5,1.2,↑,1,10,7,10,10,completion
+F8_E2,Operational Flow,8,Water,4.0,1.0,↑,1,10,7,10,10,completion
+F8_E3,Execution Velocity,8,Fire,4.0,1.1,↑,1,10,7,10,10,growth
+F8_E4,Process Quality,8,Air,4.5,0.9,↑,1,10,7,10,10,completion
+F8_E5,Operational Elegance,8,Ether,4.0,0.8,↑,1,10,7,10,10,completion
+F9_E1,Regenerative Practices Score,9,Earth,5.5,1.0,↑,1,10,7,10,10,survival
+F9_E2,Ecological Awareness,9,Water,5.5,1.0,↑,1,10,7,10,10,completion
+F9_E3,Sustainability Practice,9,Fire,5.5,0.9,↑,1,10,7,10,10,survival
+F9_E4,Regenerative Strategy,9,Air,5.5,0.8,↑,1,10,7,10,10,completion
+F9_E5,Planetary Service,9,Ether,5.5,1.1,↑,1,10,7,10,10,growth
+F10_E1,Values Alignment Score,10,Earth,9.5,1.2,↑,1,10,7,10,10,survival
+F10_E2,Values Documentation,10,Water,9.0,1.0,↑,1,10,7,10,10,completion
+F10_E3,Integrity Practice,10,Fire,9.5,1.1,↑,1,10,7,10,10,survival
+F10_E4,Foundational Clarity,10,Air,9.5,0.9,↑,1,10,7,10,10,completion
+F10_E5,Core Wisdom,10,Ether,9.5,1.0,↑,1,10,7,10,10,completion
+F11_E1,Grant Opportunities Pursued,11,Earth,5.0,1.0,↑,1,10,7,10,10,growth
+F11_E2,Pitch & Proposal Quality,11,Water,4.5,0.9,↑,1,10,7,10,10,growth
+F11_E3,Funder Engagement,11,Fire,4.5,1.0,↑,1,10,7,10,10,growth
+F11_E4,Funding Story Clarity,11,Air,5.5,0.8,↑,1,10,7,10,10,completion
+F11_E5,Pipeline Strength,11,Ether,5.5,1.0,↑,1,10,7,10,10,growth
+F12_E1,Organizational Redundancy,12,Earth,2.0,1.0,↑,1,10,7,10,10,survival
+F12_E2,Risk Awareness,12,Water,2.0,1.0,↑,1,10,7,10,10,survival
+F12_E3,Adaptive Capacity,12,Fire,2.0,0.9,↑,1,10,7,10,10,growth
+F12_E4,Strategic Flexibility,12,Air,2.0,0.8,↑,1,10,7,10,10,growth
+F12_E5,Organizational Resilience,12,Ether,2.0,1.0,↑,1,10,7,10,10,survival

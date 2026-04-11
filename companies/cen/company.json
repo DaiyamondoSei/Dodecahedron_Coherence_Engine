@@ -1,0 +1,77 @@
+{
+  "id": "cen",
+  "name": "CEN",
+  "tagline": "Conscious Enterprises Network",
+  "stage": "Early-Stage NGO",
+  "founded": "2023",
+  "employees": 2,
+  "funding": "Grant-seeking",
+  "monthlyBurn": "Minimal",
+  "runway": "Unknown",
+  "revenue": "$0 (pre-revenue NGO)",
+  "story": "Conscious Enterprises Network (CEN) is an NGO co-founded by Dominique and Esther, dedicated to fostering conscious enterprise, peace education, and AI governance. The two co-founders carry radically different perceptions of the organization's health: Dominique, the optimistic visionary, scores the organization considerably higher across most domains, while Esther, the grounded realist, surfaces critical gaps — particularly in financial capital, structural foundations, core operations, market resonance, and risk resilience. Where they deeply agree is in the domain of Foundational Values, which both score at 9-10 out of 10. This near-perfect alignment on values — combined with a genuine commitment to regenerative flow (scoring 6 and 8 respectively from founders and researcher) — provides the bedrock from which everything else must be built. The organization's central tension is a profound Aspiration-Reality Gap: a values-rich NGO whose operational, market, structural, and financial faces are largely underdeveloped. CEN's path forward requires translating its exceptional values alignment and regenerative orientation into grounded operational reality — building the structural spine, the market voice, and the financial resilience to carry its mission forward.",
+  "octaveProfile": {
+    "dominant": "O1: Survival",
+    "secondary": "O4: Creativity",
+    "reaching": "O5: Expression",
+    "description": "CEN exists in a paradoxical state: operating at Survival-Structure level on most organizational dimensions while holding Vision-level clarity in values and regenerative flow. The extreme divergence between co-founder perceptions (Dominique at O3-O4, Esther at O1) signals systemic misalignment that must be surfaced and healed."
+  },
+  "challenges": [
+    "Severe founder perception gap: Dominique scores 7, Esther scores 3 on overall coherence",
+    "Critical financial uncertainty: F1 average 3.5/10, no clear runway or funding pipeline",
+    "Market invisibility: F5 average 2.0/10, near-zero external presence or traction",
+    "Structural fragility: F4 average 4.5/10, governance and documentation incomplete",
+    "Core operations underdeveloped: F8 average 4.0/10, processes not systematized",
+    "Risk exposure: F12 average 2.0/10, no resilience mechanisms in place",
+    "Funding pipeline dormant: F11 average 5.0/10, insufficient grant pursuit relative to need",
+    "Brand & Reputation undercommunicated: F7 average 5.0/10, mission not reaching audiences"
+  ],
+  "strengths": [
+    "Exceptional foundational values: F10 = 9.5/10 — rare and powerful foundation",
+    "Strong regenerative orientation: F9 = 5.5/10 with researcher confirming 8/10",
+    "Solid intellectual capital: F2 = 7.5/10 — strong conceptual and methodological depth",
+    "Co-founder complementarity: Visionary + Realist dyad creates productive creative tension",
+    "Mission coherence: Peace education and AI governance mission is timely and resonant",
+    "Community presence: F6 = 3.5/10, genuine network emerging despite early stage"
+  ],
+  "breathDynamics": {
+    "overInhaling": [
+      "Foundational Values (F10 = 9.5 — deep integrity, strong alignment)",
+      "Intellectual Capital (F2 = 7.5 — rich conceptual framework, active research)",
+      "Regenerative Flow (F9 = 5.5 — conscious choices and sustainable orientation)"
+    ],
+    "underExhaling": [
+      "Financial Capital (F1 = 3.5 — no clear runway, funding gap unaddressed)",
+      "Market Resonance (F5 = 2.0 — mission not translating to external visibility)",
+      "Core Operations (F8 = 4.0 — processes exist but not systematized)",
+      "Risk & Resilience (F12 = 2.0 — fragile and exposed)",
+      "Structural Capital (F4 = 4.5 — governance backbone incomplete)"
+    ],
+    "insight": "CEN is deeply inhaling — absorbing wisdom, refining values, building conceptual richness — but barely exhaling into the world. The Resource Flow breath axis (F1↔F11) is chronically contracted (both D and E score −2 to −1), signaling that the organization is not converting its assets into sustainable flow. The Perception & Truth axis (F5↔F10) reveals the deepest tension: profound inner truth (F10 = 9.5) sits in near-silence externally (F5 = 2.0). This is the Quannex pattern of the Hidden Oracle — immense wisdom held private. The prescription is not to abandon depth, but to find the courage and structure to exhale it: communicate the mission, build the operational spine, pursue aligned funding, and close the perception-reality gap between co-founders."
+  },
+  "shadowPatterns": [
+    "Hidden Oracle: Extraordinary values and vision (F10 = 9.5) held in near-silence externally (F5 = 2.0)",
+    "Co-Founder Perception Gap: Dominique sees O3-O4, Esther sees O1 — unresolved divergence",
+    "Structural Vacuum: Strong values and vision with no operational container to hold them"
+  ],
+  "transformationPath": {
+    "highestLeverageAction": "Surface and heal the co-founder perception gap through structured dialogue using the dodecahedron as a shared language",
+    "strategicMandate": "Build the operational spine to contain and express the values that already exist",
+    "breathPrescription": "Exhale the mission — communicate it, structure it, fund it — so the world can receive what CEN already knows",
+    "targetCoherence": "From 3.5/10 overall toward 5.5/10 through structural consolidation and external presence"
+  },
+  "faces": [
+    { "id": 1, "name": "Financial Capital" },
+    { "id": 2, "name": "Intellectual Capital" },
+    { "id": 3, "name": "Human Capital" },
+    { "id": 4, "name": "Structural Capital" },
+    { "id": 5, "name": "Market Resonance" },
+    { "id": 6, "name": "Community" },
+    { "id": 7, "name": "Brand & Reputation" },
+    { "id": 8, "name": "Core Operations" },
+    { "id": 9, "name": "Regenerative Flow" },
+    { "id": 10, "name": "Foundational Values" },
+    { "id": 11, "name": "Funding Pipeline" },
+    { "id": 12, "name": "Risk & Resilience" }
+  ]
+}
