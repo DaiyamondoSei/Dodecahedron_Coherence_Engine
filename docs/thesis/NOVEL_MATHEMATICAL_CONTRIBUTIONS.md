@@ -686,7 +686,7 @@ spectral analysis as a prerequisite.
 | Organizational relevance | 🔄 Thesis phase | Test with real company data; do loop classifications match expert assessment? |
 | Predictive accuracy | 📊 Future work | Track organizations over time; does trajectory prediction match outcomes? |
 | Threshold calibration | ⚠️ Open question | Are 0.3 flicker threshold, 0.15 proximity range, 2.0 frozen threshold optimal? |
-| Attractor basin centers | ⚠️ Empirically chosen | 0.15, 0.35, 0.50, 0.70, 0.90 — could these be phi-derived? |
+| Attractor basin centers | ✅ φ-derived | Implementation uses φ⁻⁴ (Chaos), φ⁻³ (Survival), 0.5 (Structure), ψ₃ (Flow), ψ₄ (Radiance) — symmetric around 0.5. Earlier "empirically chosen" framing in this table was stale doc drift, corrected 2026-04-07. |
 
 ### Honest Scope of Novelty Claims
 

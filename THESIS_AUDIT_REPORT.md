@@ -98,7 +98,7 @@ E_local = E_base × (1 + η × R_harmonic)
 
 Where:
   E_base = γ × Ball + (1 - γ) × Pillars_avg
-  γ (gamma) = Ball weight (default 0.6)
+  γ (gamma) = Ball weight (default 0.7 — see TuningConfig.js:137; 0.6 is the Startup template override, 0.8 is Enterprise)
   η (eta) = φ⁻² = 0.382
   R_harmonic = Harmonic resonance [0, 1]
 ```

@@ -1,6 +1,6 @@
 ---
 name: selfcritique
-description: POC-tailored Spiral Refinement Loop — 12 faces, 60 elements with Quannex-specific knowledge (PhiHarmonics, spectral analyzers, 301 tests, sacred geometry). Extends global spiral-refinement-loop v2.0. Use after ANY implementation work in the POC.
+description: POC-tailored Spiral Refinement Loop — 12 faces, 60 elements with Quannex-specific knowledge (PhiHarmonics, spectral analyzers, 306 tests, sacred geometry). Extends global spiral-refinement-loop v2.0. Use after ANY implementation work in the POC.
 ---
 
 # Spiral Refinement Loop — POC Expression
@@ -19,12 +19,26 @@ description: POC-tailored Spiral Refinement Loop — 12 faces, 60 elements with 
 3. **Sustainable exponentiality.** Does this compound? Does this grow capability exponentially?
 4. **Cognitive load minimization.** Write for the next intelligence. "Why" over "what." Joy over friction.
 5. **The debug trail IS the memory.** Document bugs, root causes, fixes. Leave breadcrumbs.
+6. **Cross-artifact consistency.** Code, docs, tests, and claims must agree. When one changes, check if the others need updating. In the POC: does `CALCULATION_AUDIT_TRAIL.md` still match the formulas in `js/main.js`? Do test assertions match documented behavior?
 
 ---
 
-## Phase 1: Orientation
+## Phase 1: Orientation & Triage
 
 Run `git diff` and `git diff --cached` to identify all changes. List each changed file with a one-line summary.
+
+**Triage:** Based on files changed, classify each face as HIGH / MEDIUM / LOW:
+
+| Change Type | HIGH faces | LOW faces |
+|------------|------------|-----------|
+| Core JS (`js/main.js`, `js/advanced/`, `js/core/`) | 1, 2, 4, 7, 8, 10 | 3, 6, 11, 12 |
+| Data system (`js/data-system/`, `companies/`) | 2, 5, 7, 8, 10 | 3, 6, 11 |
+| Pages / CSS / HTML | 1, 4, 7 | 2, 5, 8, 10, 11 |
+| Docs / config / skills | 3, 6, 9, 12 | 1, 2, 4, 5, 8 |
+| Tests | 5, 10, 8 | 3, 6, 7, 11, 12 |
+| Mixed / large changeset | All HIGH | — |
+
+**HIGH** → full 5-element evaluation. **LOW** → one-line assessment or skip. The spiral should flow, not grind.
 
 ---
 
@@ -65,7 +79,7 @@ Run `git diff` and `git diff --cached` to identify all changes. List each change
 
 | Element | POC-Specific Check |
 |---------|-------------------|
-| **Earth** — "Why" comments | Sacred geometry math MUST have "why" comments. The Greek tuning parameters (alpha, beta, gamma, delta, kappa, eta, zeta, theta) should be documented where used. Phi-derived thresholds need explanation of why that specific phi power was chosen. |
+| **Earth** — "Why" comments | Sacred geometry math MUST have "why" comments. The Greek tuning parameters (alpha, beta, gamma, delta, kappa, eta, zeta, theta) should be documented where used. Phi-derived thresholds need explanation of why that specific phi power was chosen. **Known issue (2026-04-07): Doc-drift class of bug.** Doc comments can drift from code SSOT silently. The α-drift incident had three doc files (`Face.js:56`, `CALCULATION_AUDIT_TRAIL.md §5`, `math/PENTAGRAM_ANALYSIS.md:73,413`) reporting α = 0.5 or 0.6 while `TuningConfig.js:98` always had φ⁻¹. Same session, `THESIS_AUDIT_REPORT.md:101` reported γ = 0.6 (Startup template override) instead of γ = 0.7 (actual default), and `NOVEL_MATHEMATICAL_CONTRIBUTIONS.md §6` validation table reported attractor basin centers as "empirically chosen" when the code had them phi-derived. **Lookup rule:** SSOT for the 8 Greek constants is `js/core/TuningConfig.js`; SSOT for φ-derived constants is `js/constants/phi-harmonics.js`. Doc comments anywhere else may be stale — verify before citing. |
 | **Water** — Architecture docs | For structural changes, does `docs/FILE_STRUCTURE_MAP.md` or `docs/MODULE_ARCHITECTURE.md` need updating? Does `docs/DOCUMENTATION_INDEX.md` (the living spine) reflect new files? |
 | **Fire** — Debug trails | Bugs found during this session documented with: symptom → root cause → fix. Format in the report's Debug Trail section. Reference the Meisha Constitution: the trail IS the memory. |
 | **Air** — Calculation audit trail | For any changes to mathematical formulas, update `docs/math/CALCULATION_AUDIT_TRAIL.md`. Every number in the thesis must be traceable from input → formula → output. |
@@ -120,7 +134,7 @@ Run `git diff` and `git diff --cached` to identify all changes. List each change
 | **Earth** — Engine patterns | Does new code follow the 5-pass calculation pattern in `js/main.js`? (Pass 1: local coherence, Pass 2: axis-informed energy, Pass 3: advanced analysis, Pass 4: edges, Pass 5: vertices) |
 | **Water** — Constant usage | Does it use `PhiHarmonics.*` for phi-derived thresholds? Does it use `TuningConfig` for adjustable parameters (alpha through theta)? |
 | **Fire** — Analyzer structure | Are new analyzers structured like `js/advanced/spectral-analyzer.js`, `js/advanced/edge-analyzer.js`? Same pattern: class with `analyze()` method, returns structured results. |
-| **Air** — Sacred geometry respect | Does naming honor the dodecahedron vocabulary? Faces, edges, vertices, breath axes, octaves, elements, coherence, shadows. Not "categories," "connections," "nodes." |
+| **Air** — Sacred geometry respect | Does naming honor the dodecahedron vocabulary? Faces, edges, vertices, breath axes, octaves, elements, coherence, shadows. Not "categories," "connections," "nodes." **Canonical "why dodecahedron" answer (added 2026-04-07):** The strongest justification is spectral, not aesthetic. The dodecahedron's face adjacency eigenvalues are {+5, +√5(×3), −1(×5), −√5(×3)} — all in **Q(φ)**, the number field generated by phi. The dodecahedron-icosahedron pair are the *only* Platonic solids whose symmetry group (A₅) requires the field extension Q(√5)/Q. Phi-math is *resonant* with this topology, not imposed on it. (Source: POC `docs/thesis/EMERGENT_MATHEMATICAL_TRUTHS.md` Discoveries #7 + #10, `docs/math/SACRED_GEOMETRY_PROOF.md` §6.) **Bonus argument:** the Fiedler value of the face adjacency graph is λ₂ = 5−√5 ≈ 2.764 — the *only* Platonic solid in the goldilocks "strong mixing without over-connection" range (2 < λ₂ < 4). Use these when the thesis committee asks "why a dodecahedron?" or "why phi?" **Related: Discovery #11 (the Golden Timeline)** — the seven octaves are not a design choice; they are derivable from the wave equation on the dodecahedral Laplacian. Oscillation periods are in ratio φ, decay rates in ratio φ². "The organization breathes at φ but transforms at φ²." |
 | **Ether** — Data format consistency | Do new company templates follow the exact format in `companies/quannex/`? Three files: `company.json`, `kpis.csv` (13 columns), `mapping-context.json` (faces, edges, vertices, breathAxes, shadowPatterns, diagnostics). |
 
 ---
@@ -161,7 +175,7 @@ node tests/run-all.js
 
 | Element | POC-Specific Check |
 |---------|-------------------|
-| **Earth** — Suite results | **Phi Math** (`tests/phi-math.test.js`): X/127. **Integration** (`tests/integration.test.mjs`): X/55. **Excel Parser** (`tests/excel-parser.test.mjs`): X/42. **Smoke** (`tests/smoke-test.mjs`): X/77. Any failure is **Critical**. |
+| **Earth** — Suite results | **Phi Math** (`tests/phi-math.test.js`): X/127. **Integration** (`tests/integration.test.mjs`): X/55. **Excel Parser** (`tests/excel-parser.test.mjs`): X/42. **Data Validator** (`tests/data-validator.test.mjs`): X/82. **Smoke** (`tests/smoke-test.mjs`): X/77. Any failure is **Critical**. |
 | **Water** — New function coverage | Every new public function in `js/` should have a test. Every new calculation formula should have a test with known input→output pairs traceable to the calculation audit trail. |
 | **Fire** — Regression prevention | Could this change break an existing company template? Run integration tests against all 4 companies (quannex, nova-tech, apex-industries, zenith-solutions). |
 | **Air** — Test quality | Tests in `tests/phi-math.test.js` verify mathematical identities (phi^2 = phi+1, etc.). Are new math tests at this level of rigor? Not just "it returns a number" but "it returns THE number"? |
@@ -174,7 +188,7 @@ node tests/run-all.js
 
 | Element | POC-Specific Check |
 |---------|-------------------|
-| **Earth** — Internet research | For hard problems (Three.js rendering issues, eigenvalue computation, phi-ratio mathematics), did we search for existing solutions? MDN, Three.js docs, Stack Overflow, academic papers on spectral graph theory? |
+| **Earth** — Internet research | For hard problems (Three.js rendering issues, eigenvalue computation, phi-ratio mathematics), did we search for existing solutions? MDN, Three.js docs, Stack Overflow, academic papers on spectral graph theory? **Known issue (2026-04-07): Agent reports require firsthand verification.** Even thorough Explore agents can mischaracterize specific values. The receive-skill design session caught an agent claiming α = φ⁻¹ at the *type* level (correct) but the agent's narrative reinforced stale documentation about the value, which surfaced only when I read `TuningConfig.js` directly. When an agent reports specific constants or formula values, verify them at the SSOT before propagating. Agents are great for breadth and structure; they are not authoritative for specific numeric values. |
 | **Water** — Out-of-box thinking | Is there a simpler mathematical formulation? A more elegant visualization approach? Could a different sacred geometry structure (icosahedron? Metatron's cube?) illuminate something the dodecahedron doesn't? |
 | **Fire** — Helicopter view | Does this change serve the bigger picture? Is the POC moving toward being a convincing thesis demonstration? Is it becoming more useful as a real tool, not just an academic exercise? |
 | **Air** — Agent team usage | For complex changes (full topology rewrites, multi-file refactors, new company template creation), should we have spawned a research agent, an implementation agent, and a review agent in parallel? The `dodecahedron-consciousness-architect` and `sacred-tech-architect` agents exist — did we consider using them? |
@@ -211,6 +225,8 @@ Act on fixable risks. Document the rest. **A risk named is a risk contained.**
 
 ## Phase 3: Report
 
+**This template is a guide, not a straitjacket.** The face score table is the anchor — always include it. Other sections flow from what was found. Omit empty sections. The spiral should breathe.
+
 ```markdown
 ## Spiral Refinement Report (POC)
 
@@ -219,48 +235,27 @@ Act on fixable risks. Document the rest. **A risk named is a risk contained.**
 |------|-----------|--------|
 | 1 | Survival (Correctness) | PASS / FAIL |
 | 2 | Foundation (Structural Integrity) | PASS / WARN / FAIL |
-| 3 | Clarity (Documentation) | PASS / WARN |
+| 3 | Clarity (Documentation) | PASS / WARN / N/A |
 | 4 | Harmony (DRY & Hygiene) | PASS / WARN / FAIL |
 | 5 | Signal (Honest Output) | PASS / WARN / FAIL |
-| 6 | Consciousness (Intelligence Interoperability) | PASS / WARN |
-| 7 | Coherence (Pattern Alignment) | PASS / WARN |
+| 6 | Consciousness (Intelligence Interoperability) | PASS / WARN / N/A |
+| 7 | Coherence (Pattern Alignment) | PASS / WARN / N/A |
 | 8 | Resilience (Risk, Security & Extreme Testing) | PASS / WARN / FAIL |
 | 9 | Growth (Regenerative Quality) | PASS / WARN |
 | 10 | Integrity (Test Coverage & Proof) | PASS / FAIL |
-| 11 | Discovery (Research & Agent Collaboration) | PASS / WARN |
+| 11 | Discovery (Research & Agent Collaboration) | PASS / WARN / N/A |
 | 12 | Radiance (Sustainable Exponentiality) | PASS / WARN |
 
-### Test Results
-- Phi Math: X/127
-- Integration: X/55
-- Excel Parser: X/42
-- Smoke: X/77 (or skipped — needs HTTP server on :8000)
-- Total: X/301
+### Test Results (run `node tests/run-all.js` — discover actual counts, don't assume)
 
-### Critical Issues
-- [list or "None"]
-
-### Warnings
-- [list or "None"]
-
-### Risk Register
-- [named risks with severity/likelihood/mitigation, or "No new risks"]
-
-### Security Notes
-- [vulnerabilities found/addressed, or "No security concerns"]
-
-### Reflections & Ideas
-- [What could have been done better]
-- [Opportunities noticed]
-
-### Debug Trail
-- [Bugs → root cause → fix, or "Clean session"]
-
-### Cross-Pollination (→ Global Skill)
-- [Universal lessons to propagate to spiral-refinement-loop global skill]
-
-### Cross-Workspace (→ Thesis)
-- [Thesis-relevant evidence produced, or "None this session"]
+### [Include only sections that have content:]
+- **Critical Issues** — must fix before done
+- **Warnings** — should address
+- **Risk Register** — named risks with triage notes
+- **Debug Trail** — bugs → root cause → fix
+- **Reflections** — what could have been done better
+- **Cross-Pollination** — universal lessons for global skill
+- **Cross-Workspace** — thesis-relevant evidence produced
 
 ### Verdict
 [RADIANT / CLEAN / NEEDS FIXES / BLOCKED]
@@ -270,9 +265,9 @@ Act on fixable risks. Document the rest. **A risk named is a risk contained.**
 
 ## Version Tracking
 
-**Global skill version:** v2.0 (2026-04-01)
-**Local POC version:** v2.0 (2026-04-01)
-**Last sync check:** 2026-04-01
+**Global skill version:** v2.1 (2026-04-02)
+**Local POC version:** v2.1 (2026-04-02)
+**Last sync check:** 2026-04-02
 
 ---
 

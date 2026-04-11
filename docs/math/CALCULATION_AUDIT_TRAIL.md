@@ -333,7 +333,7 @@ s = α × (k₁ + k₂)/2 + (1 - α) × k₁ × k₂
 
 Where:
   k₁, k₂ = Two non-adjacent KPI scores (star pair)
-  α (alpha) = Synergy belief parameter (default 0.5)
+  α (alpha) = Synergy belief parameter (default φ⁻¹ ≈ 0.618 — see TuningConfig.js:98)
 ```
 
 ### Philosophy Behind Alpha
@@ -341,8 +341,15 @@ Where:
 | α Value | Meaning | Formula Behavior |
 |---------|---------|------------------|
 | α = 1.0 | Pure arithmetic | s = average (1+1=2) |
-| α = 0.5 | Balanced blend | Mix of average and product |
+| **α = φ⁻¹ ≈ 0.618 (default)** | **Golden synergy blend** | **61.8% arithmetic / 38.2% multiplicative** |
+| α = 0.5 | Symmetric blend | Equal mix of average and product |
 | α = 0.0 | Pure synergy | s = product (1×1=1, but 0.5×0.5=0.25) |
+
+> **Documentation alignment 2026-04-07:** Earlier revisions of this document
+> reported the default as 0.5; `math/PENTAGRAM_ANALYSIS.md` reported 0.6. Both
+> were stale doc drift. The SSOT in `js/core/TuningConfig.js:98` has been
+> `PHI_HARMONICS.PHI_INV_1` (≈ 0.618) throughout — no code change required.
+> The soul doc and the spectral identity argument both reference α = φ⁻¹.
 
 ### Implementation Reference
 

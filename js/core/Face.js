@@ -53,7 +53,8 @@
  *   Philosophy: α controls "synergy belief"
  *   - α = 1.0: Pure arithmetic mean (1+1=2)
  *   - α = 0.0: Pure multiplicative synergy (1+1=3 when both high)
- *   - α = 0.5 (default): Balanced blend
+ *   - α = φ⁻¹ ≈ 0.618 (default): Golden synergy blend
+ *     (61.8% arithmetic / 38.2% multiplicative — see TuningConfig.js:98 SSOT)
  *
  * INTERSECTION NODE FORMULA (calculateIntersectionNodes):
  * ────────────────────────────────────────────────────────

@@ -70,7 +70,7 @@ s_i = α × (k_a + k_b)/2 + (1-α) × (k_a × k_b)
 ```
 
 Where:
-- `α` = ALPHA tuning parameter (default 0.6)
+- `α` = ALPHA tuning parameter (default φ⁻¹ ≈ 0.618 — see `js/core/TuningConfig.js:98` SSOT)
 - `(k_a + k_b)/2` = arithmetic mean (central tendency)
 - `k_a × k_b` = geometric synergy (multiplicative relationship)
 
@@ -410,7 +410,7 @@ class Face {
   calculateStarPairs() {
     // Star pairs use α-blend of arithmetic mean and geometric synergy
     // Formula: s = α × (k₁+k₂)/2 + (1-α) × (k₁×k₂)
-    const alpha = this.tuning.ALPHA; // Default 0.6
+    const alpha = this.tuning.ALPHA; // Default φ⁻¹ ≈ 0.618 (TuningConfig.js:98)
     const connections = [[0, 2], [1, 3], [2, 4], [3, 0], [4, 1]];
 
     this.starPairs = connections.map(([i1, i2]) => {
