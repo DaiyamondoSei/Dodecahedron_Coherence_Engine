@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/kpi-database.schema.json",
   "$version": "2.0.0",
-  "$generatedAt": "2026-01-08T15:08:41.346Z",
+  "$generatedAt": "2026-04-15T12:41:52.550396Z",
   "$source": "CSV_KPI_Database.csv",
   "$philosophy": {
     "purpose": "Map of 12 organizational consciousness domains",
@@ -72,7 +72,7 @@
       "id": "F1.1",
       "name": "Months of Runway",
       "faceId": 1,
-      "faceName": "Deimantas",
+      "faceName": "Founder",
       "octave": "O1",
       "direction": "up",
       "weight": 1,

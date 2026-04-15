@@ -1,7 +1,24 @@
 # Quannex Documentation Index
 
-> *Last Updated: 2026-04-11*
+> *Last Updated: 2026-04-15*
 > *The Living Spine - Single Source of Truth for All Documentation*
+
+---
+
+## Recent: 420 Spiral Octave Songbook — Phase 4 Commitment (April 15, 2026)
+
+**Status: ✅ DELIVERED — Spiral Verdict: RADIANT 9.25/10**
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| Songbook Spec | `docs/SPIRAL_OCTAVE_SONGBOOK_SPEC.md` | Canonical methodology: 3 decision rules (Domain/Octave/Element), 5 worked BSC→420 mappings, paradigm reframe (measure→ask), prior-art lineage, glossary |
+| Songbook Artifact | `deliverables/POC_420_Songbook_Phase4_Commitment.xlsx` | 7-sheet CEN-facing commitment artifact for April 17 Phase 3 meeting |
+| Spiral Report | `spiral-reports/Songbook_Phase4_Commitment_Spiral_Report_2026-04-15.md` | 12/12 faces ≥ 9/10 full audit |
+| REFRENCE_MODELS Extract | `data/json/refrence_models_extracted.json` | 420 cells extracted from SpiralDashboard (canonical 420 template) |
+
+**Paradigm reframe:** *Conventional KPIs measure what is. Spiral Octave KPIs ask what is alive or asleep in each domain.* The 34 CEN BSC KPIs are embedded as the currently-active subset within the 420-cell framework; the 386 "silent strings" are dormant possibilities of attention, not required measurements.
+
+**Full CEN Reusable Workbook (Command Center + 12 Domain Control Panels + 420 Songbook + Spec)** committed for May 2026 delivery.
 
 ---
 
@@ -129,6 +146,16 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 | **[SOUL_OF_QUANNEX.md](SOUL_OF_QUANNEX.md)** | **THE entry point for future Claude** |
 | [README.md](README.md) | Entry point for humans |
 | [QUICK_START.md](QUICK_START.md) | 5-minute start |
+
+### Songbook & CEN Delivery (NEW — April 15, 2026)
+
+| Doc | Purpose |
+|-----|---------|
+| `docs/SPIRAL_OCTAVE_SONGBOOK_SPEC.md` | **Canonical Songbook methodology spec** — 3 decision rules, 5 worked examples, paradigm reframe, prior-art lineage, glossary |
+| `deliverables/POC_420_Songbook_Phase4_Commitment.xlsx` | Phase 4 commitment artifact for CEN April 17 meeting (7 sheets) |
+| `spiral-reports/Songbook_Phase4_Commitment_Spiral_Report_2026-04-15.md` | Full 12-face spiral audit (9.25/10 RADIANT) |
+
+---
 
 ### Geometry Reference (The Mathematical Soul)
 
