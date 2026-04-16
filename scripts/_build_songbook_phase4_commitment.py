@@ -305,9 +305,10 @@ def build_grid_preview(wb, cells_data):
     ws.row_dimensions[1].height = 28
     ws.merge_cells("A2:I2"); c = ws["A2"]
     c.value = ("Color key:  [Warm orange] F10 Foundational Values \u2014 CEN\u2019s loudest string (8/10)   "
-               "[Green] Worked example coordinate   [Blue] Active cells   [Gray] Dormant/silent")
-    c.font = fn(sz=9, italic=True, color=C["dark"]); c.alignment = al(h="left",v="center")
-    ws.row_dimensions[2].height = 16; r = 3
+               "[Green] Worked example coordinate   [Blue] Active cells   [Gray] Dormant/silent   "
+               "\u2022   Cell notation  [E,W,F,A,E] \u00d75  = all 5 elements (Earth, Water, Fire, Air, Ether) available at this (face \u00d7 octave) coordinate \u2014 each cell holds 5 elemental slots.")
+    c.font = fn(sz=9, italic=True, color=C["dark"]); c.alignment = al(h="left",v="center", wrap=True)
+    ws.row_dimensions[2].height = 32; r = 3
     # Header
     cell(ws,r,1,"Face",bold=True,bg=C["dcyan"],clr=C["white"],h="center")
     cell(ws,r,2,"Domain Name",bold=True,bg=C["dcyan"],clr=C["white"])
