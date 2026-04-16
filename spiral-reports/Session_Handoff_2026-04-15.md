@@ -16,7 +16,7 @@
 | REFRENCE_MODELS 420-cell extraction | `data/json/refrence_models_extracted.json` |
 | kpi-database faceName harmonization | `data/json/kpi-database.json` (all 12 → "Founder") |
 | 4 Python scripts | `scripts/_extract_refrence_models.py`, `_patch_kpi_database_facenames.py`, `_build_songbook_phase4_commitment.py`, `_update_command_center_phase4.py` |
-| Command center ripple | `CONTROL_PANEL.xlsx` — 5 sheets patched (CEN Deliverables, Thesis Evidence, Codebase Inventory, Session Log, Dashboard) |
+| Command center ripple | `CONTROL_PANEL_POC.xlsx` — 5 sheets patched (CEN Deliverables, Thesis Evidence, Codebase Inventory, Session Log, Dashboard). *Note 2026-04-15 post-commit: renamed from CONTROL_PANEL.xlsx to disambiguate from Thesis/BDQ control panels.* |
 | DOCUMENTATION_INDEX update | `docs/DOCUMENTATION_INDEX.md` |
 | Cross-workspace mirror | `Final Thesis/Thesis Work/Quannex Business Exports/` (both xlsx + spec) |
 | Memory entities | `CrossWorkspaceUpdate-Phase4-420Songbook-2026-04-15`, `Quannex-Discovery-Dimensional-Expansion-Pattern` |

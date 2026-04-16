@@ -1,4 +1,4 @@
-"""Patch POC/CONTROL_PANEL.xlsx — 5 sheets in one atomic pass.
+"""Patch POC/CONTROL_PANEL_POC.xlsx — 5 sheets in one atomic pass.
 
 Sentinel-row detection: finds insert points by column-A text match, NOT absolute row
 numbers, so schema drift doesn't break the patch.
@@ -23,7 +23,7 @@ except ImportError:
     sys.exit(1)
 
 BASE = Path(r"C:\Users\murau\OneDrive\Stalinis kompiuteris\POC")
-CP_PATH = BASE / "CONTROL_PANEL.xlsx"
+CP_PATH = BASE / "CONTROL_PANEL_POC.xlsx"
 TMP_PATH = BASE / "CONTROL_PANEL_staging.xlsx"
 
 DATED_NOTE = "2026-04-17: Phase 4 commitment artifact delivered (methodology + 5 worked examples). Full Songbook target May 2026."
@@ -88,7 +88,7 @@ def preflight_check() -> bool:
         wb.close()
         return True
     except PermissionError:
-        log("ERROR", f"CONTROL_PANEL.xlsx is open in Excel. Close it and re-run.")
+        log("ERROR", f"CONTROL_PANEL_POC.xlsx is open in Excel. Close it and re-run.")
         return False
     except FileNotFoundError:
         log("ERROR", f"Not found: {CP_PATH}")

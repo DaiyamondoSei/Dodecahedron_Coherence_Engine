@@ -29,7 +29,7 @@
 | Component | Location | Status |
 |-----------|----------|--------|
 | CEN Company Template | `companies/cen/` (company.json + kpis.csv + mapping-context.json) | ✅ First external client — Phase 2 frozen scores |
-| Control Panel | `CONTROL_PANEL.xlsx` (7 sheets) | ✅ 12-face tracking + CEN deliverables |
+| Control Panel | `CONTROL_PANEL_POC.xlsx` (7 sheets) | ✅ 12-face tracking + CEN deliverables (renamed from CONTROL_PANEL.xlsx to disambiguate from Thesis/BDQ panels) |
 
 **CEN:** First external validation partner (Conscious Enterprises Network). D+E average scores from April 7 questionnaires. Unlocks 3D visualization, shadow analysis, and live demo for Phase 3 validation (~April 17).
 
