@@ -147,13 +147,19 @@ See: [edge/EDGE_ARCHITECTURE.md](edge/EDGE_ARCHITECTURE.md) | [edge/SACRED_INQUI
 | [README.md](README.md) | Entry point for humans |
 | [QUICK_START.md](QUICK_START.md) | 5-minute start |
 
-### Songbook & CEN Delivery (NEW — April 15, 2026)
+### Songbook & CEN Delivery (April 15-16, 2026)
 
 | Doc | Purpose |
 |-----|---------|
-| `docs/SPIRAL_OCTAVE_SONGBOOK_SPEC.md` | **Canonical Songbook methodology spec** — 3 decision rules, 5 worked examples, paradigm reframe, prior-art lineage, glossary |
-| `deliverables/POC_420_Songbook_Phase4_Commitment.xlsx` | Phase 4 commitment artifact for CEN April 17 meeting (7 sheets) |
+| 🎯 `Final Thesis/Thesis Work/Quannex Business Exports/SONGBOOK_CONTINUATION_ENTRYPOINT.md` | **SINGLE ENTRY POINT** for continuing the Songbook build — from ANY workspace. Canonical paths, memory entities, build recipes, May milestone plan, common task recipes. Start here if resuming work. |
+| `docs/SPIRAL_OCTAVE_SONGBOOK_SPEC.md` | **Canonical methodology spec** — 3 decision rules, 5 worked examples, paradigm reframe, prior-art lineage, glossary (14 sections) |
+| `deliverables/POC_420_Songbook_Phase4_Commitment.xlsx` | Phase 4 commitment artifact for CEN April 17 meeting (7 sheets, v1.1) |
 | `spiral-reports/Songbook_Phase4_Commitment_Spiral_Report_2026-04-15.md` | Full 12-face spiral audit (9.25/10 RADIANT) |
+| `scripts/_build_songbook_phase4_commitment.py` | Xlsx generator (idempotent, reads refrence_models_extracted.json, supports `--spiral-report`) |
+| `scripts/_extract_refrence_models.py` | REFRENCE_MODELS → JSON extractor (420/420 cells) |
+| `scripts/_apply_cross_workspace_tracker_protocol.py` | Applies Cross-Workspace Tracker Row Protocol to Thesis_Control_Panel.xlsx (narrow, surgical) |
+| `scripts/_update_command_center_phase4.py` | POC CONTROL_PANEL_POC.xlsx 5-sheet ripple (sentinel-row detection, merged-cell safe) |
+| `data/json/refrence_models_extracted.json` | 420 cells extracted from SpiralDashboard canonical template |
 
 ---
 

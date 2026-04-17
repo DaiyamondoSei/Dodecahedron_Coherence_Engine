@@ -92,7 +92,7 @@ def build_cover(wb):
     c.font = fn(sz=18, bold=True, color=C["dcyan"]); c.alignment = al(h="center",v="center")
     ws.row_dimensions[1].height = 36
     ws.merge_cells("A2:G2"); c = ws["A2"]
-    c.value = "CEN Research-Partner Meeting  |  2026-04-17  |  Version 1.0  |  Date: 2026-04-15"
+    c.value = "CEN Research-Partner Meeting  |  2026-04-17  |  Version 1.1  |  Date: 2026-04-16"
     c.font = fn(sz=11, color=C["gray"]); c.alignment = al(h="center",v="center")
     ws.row_dimensions[2].height = 22
     r = 4
