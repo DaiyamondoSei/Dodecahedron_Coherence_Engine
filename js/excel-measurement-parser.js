@@ -257,21 +257,49 @@ class ExcelMeasurementParser {
         if (diagnostics.globalCoherence == null && diagnostics.maxPossible > 0) {
             diagnostics.globalCoherence = diagnostics.sumFaceEnergies / diagnostics.maxPossible;
         }
-        // AAG: Aspiration = avg(F10,F11,F12), Actuality = avg(F1,F2,F3)
-        if (diagnostics.aspirationEnergy == null) {
-            const aspFaces = [10, 11, 12].map(id => faceEnergyMap[id]).filter(e => e != null);
-            diagnostics.aspirationEnergy = aspFaces.length > 0
-                ? aspFaces.reduce((s, e) => s + e, 0) / aspFaces.length : null;
-        }
-        if (diagnostics.actualityEnergy == null) {
-            const actFaces = [1, 2, 3].map(id => faceEnergyMap[id]).filter(e => e != null);
-            diagnostics.actualityEnergy = actFaces.length > 0
-                ? actFaces.reduce((s, e) => s + e, 0) / actFaces.length : null;
-        }
-        if (diagnostics.aspirationActualityGap == null &&
-            diagnostics.aspirationEnergy != null && diagnostics.actualityEnergy != null &&
-            diagnostics.actualityEnergy !== 0) {
-            diagnostics.aspirationActualityGap = diagnostics.aspirationEnergy / diagnostics.actualityEnergy;
+        // AAG computation consolidated to POC/js/core/Diagnostics.js per W1 §6.2 (2026-05-21)
+        // See Lock #8.15 + CALCULATION_AUDIT_TRAIL.md §12 for the canonical formula.
+        // Note: this branch preserves the pre-consolidation semantic where null
+        // aspirationEnergy/actualityEnergy is set ONLY if not already populated
+        // (e.g., when parsed from Excel cells B11/B12), then AAG is derived from those.
+        const DiagnosticsMod = (typeof Diagnostics !== 'undefined') ? Diagnostics
+            : (typeof window !== 'undefined' ? window.Diagnostics : null);
+
+        if (DiagnosticsMod && (diagnostics.aspirationEnergy == null ||
+            diagnostics.actualityEnergy == null ||
+            diagnostics.aspirationActualityGap == null)) {
+            const aagResult = DiagnosticsMod.getAspirationActualityGap(faceEnergyMap);
+            if (diagnostics.aspirationEnergy == null) {
+                // Map returns 0 for empty group; preserve null sentinel when no aspiration faces
+                const aspHasData = [10, 11, 12].some(id => faceEnergyMap[id] != null);
+                diagnostics.aspirationEnergy = aspHasData ? aagResult.eAspiration : null;
+            }
+            if (diagnostics.actualityEnergy == null) {
+                const actHasData = [1, 2, 3].some(id => faceEnergyMap[id] != null);
+                diagnostics.actualityEnergy = actHasData ? aagResult.eActuality : null;
+            }
+            if (diagnostics.aspirationActualityGap == null &&
+                diagnostics.aspirationEnergy != null && diagnostics.actualityEnergy != null &&
+                diagnostics.actualityEnergy !== 0) {
+                diagnostics.aspirationActualityGap = aagResult.aag;
+            }
+        } else if (!DiagnosticsMod) {
+            // Fallback (pre-consolidation semantics preserved verbatim)
+            if (diagnostics.aspirationEnergy == null) {
+                const aspFaces = [10, 11, 12].map(id => faceEnergyMap[id]).filter(e => e != null);
+                diagnostics.aspirationEnergy = aspFaces.length > 0
+                    ? aspFaces.reduce((s, e) => s + e, 0) / aspFaces.length : null;
+            }
+            if (diagnostics.actualityEnergy == null) {
+                const actFaces = [1, 2, 3].map(id => faceEnergyMap[id]).filter(e => e != null);
+                diagnostics.actualityEnergy = actFaces.length > 0
+                    ? actFaces.reduce((s, e) => s + e, 0) / actFaces.length : null;
+            }
+            if (diagnostics.aspirationActualityGap == null &&
+                diagnostics.aspirationEnergy != null && diagnostics.actualityEnergy != null &&
+                diagnostics.actualityEnergy !== 0) {
+                diagnostics.aspirationActualityGap = diagnostics.aspirationEnergy / diagnostics.actualityEnergy;
+            }
         }
         // Dominant tension
         if (diagnostics.dominantTensionValue == null) {

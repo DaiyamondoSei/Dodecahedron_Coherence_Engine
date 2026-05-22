@@ -1,3 +1,7 @@
+> **⚠ SUPERSEDED 2026-05-21:** Content promoted to audit-trail-grade Section 13 in `POC/docs/math/CALCULATION_AUDIT_TRAIL.md`. This document preserved as historical reference; canonical spectral analysis math now lives in audit trail Section 13 which includes the dominantMode provenance investigation finding (the field in mapping-context.json templates is narrative scaffolding, NOT engine spectral output). Last-synced-to-audit-trail: 2026-05-21.
+
+---
+
 # Spectral Analysis Implementation
 
 > *How the Graph Laplacian Reveals Organizational Coherence*

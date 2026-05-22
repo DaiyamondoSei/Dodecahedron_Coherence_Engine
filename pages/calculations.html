@@ -107,6 +107,8 @@
 
     <!-- Excel report generation -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+    <!-- Diagnostics canonical module (W1 §6.2) — must load BEFORE excel-report-generator.js -->
+    <script src="../js/core/Diagnostics.js"></script>
     <script src="../js/excel-report-generator.js"></script>
 
     <script>

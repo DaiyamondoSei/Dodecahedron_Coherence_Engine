@@ -43,11 +43,13 @@
  * - Negative = downward spiral (degenerative, releasing)
  * - Formula: (avgEnergy - 0.5) × 2
  *
- * CHIRALITY (Sprint 4 Task 35):
- * - Clockwise vs counterclockwise energy rotation
- * - Uses cross-product-like calculation
- * - Counterclockwise = building (energy spiraling in)
- * - Clockwise = releasing (energy spiraling out)
+ * SEQUENCE CONCAVITY (renamed from CHIRALITY per Lock #8.19, sympy proof 2026-05-21):
+ * - Sympy verification proved formula simplifies to (f1-f2)(2·f2-f1-f3)/2
+ * - Formula is NOT cyclically symmetric NOR antisymmetric under reversal
+ * - Measures sequence concavity at f2 (peak/trough/flat), NOT rotational winding
+ * - Both ascending (0.1, 0.5, 0.9) AND descending (0.9, 0.5, 0.1) yield winding=0
+ * - Sign of result is unsigned-magnitude character (per Lock #8.22 test finding)
+ * - Output labels "clockwise"/"counterclockwise" preserved for backward-compat with mapping-context.json template values but reinterpret as concavity-sign indicator
  *
  * COHERENCE (0-1):
  * - How aligned are the 3 faces?
@@ -97,6 +99,7 @@ const _PHI = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI : (1 + Mat
 const _PHI_1 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_1 : 1 / _PHI;           // φ⁻¹ = 0.618
 const _PHI_2 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_2 : 1 / (_PHI * _PHI);  // φ⁻² = 0.382
 const _PHI_3 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_3 : _PHI_1 * _PHI_2;    // φ⁻³ = 0.236
+const _PHI_4 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PHI_4 : _PHI_2 * _PHI_2;    // φ⁻⁴ = 0.146 — Wall-band floor
 const _PSI_4 = (typeof PhiHarmonics !== 'undefined') ? PhiHarmonics.PSI_4 : 1 - _PHI_2 * _PHI_2; // 1−φ⁻⁴ = 0.854
 
 export class VertexAnalyzer {
@@ -194,7 +197,7 @@ export class VertexAnalyzer {
   }
 
   /**
-   * Sprint 4 Task 35: Calculate chirality (rotational direction)
+   * Sprint 4 Task 35: Calculate sequenceConcavity (rotational direction)
    *
    * Clockwise = energy flows in ascending order around the vertex
    * Counterclockwise = energy flows in descending order
@@ -202,10 +205,10 @@ export class VertexAnalyzer {
    * Uses cross product of energy vectors to determine handedness.
    *
    * @param {Array<Object>} faces - The 3 faces meeting at this vertex
-   * @returns {Object} { chirality: 'clockwise'|'counterclockwise'|'neutral', strength: 0-1 }
+   * @returns {Object} { sequenceConcavity: 'clockwise'|'counterclockwise'|'neutral', strength: 0-1 }
    */
-  calculateChirality(faces) {
-    if (faces.length !== 3) return { chirality: 'neutral', strength: 0 };
+  calculateSequenceConcavity(faces) {
+    if (faces.length !== 3) return { sequenceConcavity: 'neutral', strength: 0 };
 
     const [f1, f2, f3] = faces.map(f => f.faceEnergy);
 
@@ -217,12 +220,12 @@ export class VertexAnalyzer {
     // Normalize to -1 to 1 range
     const normalizedWinding = Math.max(-1, Math.min(1, winding * 10));
 
-    // Determine chirality
+    // Determine sequenceConcavity
     if (Math.abs(normalizedWinding) < 0.1) {
-      return { chirality: 'neutral', strength: 0, rawValue: normalizedWinding };
+      return { sequenceConcavity: 'neutral', strength: 0, rawValue: normalizedWinding };
     } else if (normalizedWinding > 0) {
       return {
-        chirality: 'counterclockwise',
+        sequenceConcavity: 'counterclockwise',
         strength: Math.abs(normalizedWinding),
         rawValue: normalizedWinding,
         label: 'Building (↺)',
@@ -230,7 +233,7 @@ export class VertexAnalyzer {
       };
     } else {
       return {
-        chirality: 'clockwise',
+        sequenceConcavity: 'clockwise',
         strength: Math.abs(normalizedWinding),
         rawValue: normalizedWinding,
         label: 'Releasing (↻)',
@@ -284,10 +287,33 @@ export class VertexAnalyzer {
   }
 
   /**
-   * Get health status based on coherence
+   * Get health status based on coherence + strength
+   *
+   * V13 PARADOX FIX (W1 spiral, 2026-05-22, audit §15 honest disclosure #6):
+   * Coherence alone is not sufficient — when all three faces share the
+   * logistic floor (e.g. CEN V13 = F4=F9=F10=0.1192), coherence reads
+   * 1.0 (faces identical) but strength sits at 0.0455 (φ⁻² × 0.1192).
+   * Labelling this "Harmonious" misfires — it is *coherence-of-shared-
+   * absence*, not actual harmony. The "Coherent-at-floor" label
+   * disambiguates: high alignment but no underlying energetic presence.
+   *
+   * Threshold: strength < φ⁻⁴ (≈ 0.146) is the audit's "Wall band" floor.
+   * Above the Wall, coherence-only classification stays valid.
+   *
+   * @param {number} coherence - Coherence at the vertex [0, 1]
+   * @param {number} [strength] - Vortex strength [0, 1]; optional for
+   *   backwards-compat with legacy callers that pass coherence alone.
+   * @returns {string} Health status label
    */
-  getHealthStatus(coherence) {
-    // φ-derived coherence health: PSI_4, φ⁻¹, φ⁻², φ⁻³
+  getHealthStatus(coherence, strength) {
+    // V13 paradox guard: high coherence at floor strength is shared-
+    // absence, not harmony. Only fires when strength is provided AND
+    // sits below the Wall floor (φ⁻⁴ ≈ 0.146).
+    if (typeof strength === 'number' && strength < _PHI_4 && coherence >= _PSI_4) {
+      return 'Coherent-at-floor';
+    }
+
+    // φ-derived coherence health ladder (unchanged for above-floor strength)
     if (coherence >= _PSI_4) return 'Harmonious';  // ≥ 0.854 (1−φ⁻⁴)
     if (coherence >= _PHI_1) return 'Balanced';     // ≥ 0.618 (φ⁻¹)
     if (coherence >= _PHI_2) return 'Unstable';     // ≥ 0.382 (φ⁻²)
@@ -391,9 +417,10 @@ export class VertexAnalyzer {
         coherence = activeBackendVertex.coherence;
         isLeverage = activeBackendVertex.isLeveragePoint;
 
-        // Re-derive presentation
+        // Re-derive presentation (V13 fix: pass strength to disambiguate
+        // coherence-of-shared-absence from real harmony — audit §15)
         vortexType = this.getVortexType(strength, direction);
-        healthStatus = this.getHealthStatus(coherence);
+        healthStatus = this.getHealthStatus(coherence, strength);
         color = this.getVortexColor(strength, direction, coherence);
       } else {
         // Fallback to local calculation
@@ -401,7 +428,8 @@ export class VertexAnalyzer {
         direction = this.calculateVortexDirection(convergingFaces);
         coherence = this.calculateCoherence(convergingFaces);
         vortexType = this.getVortexType(strength, direction);
-        healthStatus = this.getHealthStatus(coherence);
+        // V13 fix: pass strength to disambiguate floor-coherence from real harmony
+        healthStatus = this.getHealthStatus(coherence, strength);
         color = this.getVortexColor(strength, direction, coherence);
         isLeverage = this.isLeveragePoint(strength, coherence);
       }
@@ -414,8 +442,8 @@ export class VertexAnalyzer {
         csvInfo = this.csvData[csvId];
       }
 
-      // Sprint 4 Task 35: Calculate chirality
-      const chirality = this.calculateChirality(convergingFaces);
+      // Sprint 4 Task 35: Calculate sequenceConcavity
+      const sequenceConcavity = this.calculateSequenceConcavity(convergingFaces);
 
       vertexAnalyses.push({
         id: vertexDef.id,
@@ -432,10 +460,10 @@ export class VertexAnalyzer {
         isLeveragePoint: isLeverage,
         color: color,
         // Sprint 4 Task 35: Chirality data
-        chirality: chirality.chirality,
-        chiralityStrength: chirality.strength,
-        chiralityLabel: chirality.label || 'Neutral',
-        chiralityDescription: chirality.description || 'Balanced energy flow',
+        sequenceConcavity: sequenceConcavity.sequenceConcavity,
+        sequenceConcavityStrength: sequenceConcavity.strength,
+        sequenceConcavityLabel: sequenceConcavity.label || 'Neutral',
+        sequenceConcavityDescription: sequenceConcavity.description || 'Balanced energy flow',
         // Add narrative elements
         narrative: this.generateVertexNarrative(strength, direction, coherence, csvInfo ? csvInfo.archetype : vertexDef.archetype),
         // Flag source

@@ -18,6 +18,10 @@
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/shadow-overlay.css">
     <link rel="stylesheet" href="../css/data-integrity.css">
+    <!-- Witness Journey (Phase 1, 2026-05-16) — opt-in scroll-driven journey
+         from the still point outward through 4 layers to external view.
+         See docs/WITNESS_JOURNEY_REFERENCE.md for the full design. -->
+    <link rel="stylesheet" href="../css/witness-journey.css?v=20260518">
 </head>
 
 <body>
@@ -194,6 +198,76 @@
             <span class="keyboard-hint-desc">Show/hide this help</span>
         </div>
         <div class="keyboard-hints-footer">Press H or ESC to close</div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════════════════
+         WITNESS JOURNEY (Phase 1, 2026-05-16)
+         Opt-in scroll-driven journey: still point → faces → axes → edges → vertices → external.
+         Driven by js/dodec/witness-journey.js + js/dodec/journey/center-marker.js.
+         See docs/WITNESS_JOURNEY_REFERENCE.md for full design.
+         ════════════════════════════════════════════════════════════════════════════ -->
+
+    <!-- Phase-anchored text overlay (one phase visible at a time via [data-witness-phase]) -->
+    <div class="witness-overlay" id="witness-overlay" aria-live="polite">
+        <div class="witness-overlay-phase" data-phase="invitation">
+            <div class="witness-overlay-text visible">At the center, before all measurement.</div>
+            <div class="witness-overlay-subtext visible">↓ Scroll to begin</div>
+        </div>
+        <div class="witness-overlay-phase" data-phase="inside-faces">
+            <div class="witness-overlay-text visible">You are inside. These are your domains.</div>
+        </div>
+        <div class="witness-overlay-phase" data-phase="breath-axes">
+            <div class="witness-overlay-text visible">The polarities passing through.</div>
+        </div>
+        <div class="witness-overlay-phase" data-phase="edges">
+            <div class="witness-overlay-text visible">Every connection.</div>
+        </div>
+        <div class="witness-overlay-phase" data-phase="vertices">
+            <div class="witness-overlay-text visible">Where three domains converge.</div>
+        </div>
+    </div>
+
+    <!-- Exit-to-overview affordance (visible only when journey active) -->
+    <button class="witness-exit-button" id="witness-exit-button" type="button"
+            title="Exit to overview (Esc)" aria-label="Exit Witness Journey">
+        × Exit to overview
+    </button>
+
+    <!-- HUD entry link (visible in external view, hidden during journey).
+         Fallback affordance for users who don't notice the center marker. -->
+    <button class="witness-hud-link" id="witness-hud-link" type="button"
+            title="Enter Witness Journey (W)" aria-label="Begin Witness Journey">
+        Begin Witness Journey
+    </button>
+
+    <!-- Still-point proximity HUD (Phase 7) — small, secondary, never dominant. Honors non-measurability
+         by labeling the metric "still point proximity (estimated)" and flagging defaulted factors. -->
+    <div class="witness-stillpoint-hud" id="witness-stillpoint-hud" aria-live="polite">
+        <div class="witness-stillpoint-label">still point proximity (estimated)</div>
+        <div class="witness-stillpoint-score" id="witness-stillpoint-score">—</div>
+        <div class="witness-stillpoint-interpretation" id="witness-stillpoint-interpretation">awaiting data</div>
+        <div class="witness-stillpoint-confidence" id="witness-stillpoint-confidence" style="display:none"></div>
+        <div class="witness-stillpoint-invitation" id="witness-stillpoint-invitation"></div>
+        <div class="witness-stillpoint-factors" id="witness-stillpoint-factors"></div>
+    </div>
+
+    <!-- First-visit invitation overlay (one-time, localStorage-gated) -->
+    <div class="witness-first-visit" id="witness-first-visit" role="dialog"
+         aria-labelledby="witness-first-visit-message" aria-modal="true">
+        <div class="witness-first-visit-container">
+            <div class="witness-first-visit-message" id="witness-first-visit-message">
+                Some users prefer to meet their data from the inside.<br>
+                Would you like to begin at the Still Point?
+            </div>
+            <div class="witness-first-visit-buttons">
+                <button class="witness-first-visit-button primary" id="witness-first-visit-begin" type="button">
+                    Begin Journey
+                </button>
+                <button class="witness-first-visit-button" id="witness-first-visit-stay" type="button">
+                    Stay in overview
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Header -->
@@ -570,11 +644,14 @@
     <!-- Load breath analyzer first -->
     <script src="../js/breath-analyzer.js?v=20251207"></script>
 
+    <!-- Still-point proximity calculation (Phase 7 — must load before main.js so the engine analyzer can use it) -->
+    <script src="../js/ai/breath/still-point.js?v=20260518"></script>
+
     <!-- Load spectral analyzer (required for engine) -->
     <script src="../js/spectral-analyzer.js?v=20251207"></script>
 
     <!-- Main Quannex Engine (modules) -->
-    <script type="module" src="../js/main.js?v=20251207b"></script>
+    <script type="module" src="../js/main.js?v=20260517"></script>
     <script type="module" src="../js/company-loader.js?v=20251217"></script>
 
     <!-- Visualization Manager -->
@@ -636,6 +713,30 @@
 
     <!-- Phase 10: Interactive Tooltips (extracted Dec 17, 2025) -->
     <script src="../js/dodec/dodec-tooltips.js?v=20251217"></script>
+
+    <!-- Phase 11: Witness Journey (Phase 1: 2026-05-16 · Phase 2: 2026-05-17 · Phase 2.5: 2026-05-17) -->
+    <!-- State machine + scroll-driven camera + opt-in entry handlers -->
+    <script src="../js/dodec/witness-journey.js?v=20260518"></script>
+    <!-- Center marker: always-visible breathing sphere at (0,0,0), primary journey entry -->
+    <script src="../js/dodec/journey/center-marker.js?v=20260516"></script>
+    <!-- Face labels: sprite-based face name labels visible from inside (Phase 2) -->
+    <script src="../js/dodec/journey/face-labels.js?v=20260517d"></script>
+    <!-- Chamber mode: click a face label to enter its chamber (Phase 2.5 PoC) -->
+    <script src="../js/dodec/journey/chamber-mode.js?v=20260517c"></script>
+    <!-- Chamber particles: ambient drift inside chambers, status-derived behavior (Phase 2.6) -->
+    <script src="../js/dodec/journey/chamber-particles.js?v=20260517b"></script>
+    <!-- Corridors: 6 breath axes as glowing tubes radiating from still point (Phase 3 / v5) -->
+    <script src="../js/dodec/journey/corridors.js?v=20260517"></script>
+    <!-- Face opacity controller: drives face material opacity per journey phase (Phase 3 / v5) -->
+    <script src="../js/dodec/journey/face-opacity-controller.js?v=20260517"></script>
+    <!-- Doorways: 30 edge-portal rings for adjacent-chamber traversal (Phase 4 / v5) -->
+    <script src="../js/dodec/journey/doorways.js?v=20260517d"></script>
+    <!-- Junction nodes: 20 vertex confluence spheres + triadic chambers (Phase 5 / v5) -->
+    <script src="../js/dodec/journey/junction-nodes.js?v=20260517"></script>
+    <!-- Closing moment: outward camera dolly + T.S. Eliot quote on journey exit (Phase 6 / v5; Phase 8.5 fix 2026-05-18) -->
+    <script src="../js/dodec/journey/closing-moment.js?v=20260518"></script>
+    <!-- Still-point HUD wiring: polls engine state to populate the proximity display (Phase 7) -->
+    <script src="../js/dodec/journey/stillpoint-hud.js?v=20260518"></script>
 
     <!-- ═══════════════════════════════════════════════════════════════════════════
          ES MODULE: Advanced Visualization & Integration Layer
