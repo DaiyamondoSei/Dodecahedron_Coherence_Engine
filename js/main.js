@@ -1338,6 +1338,45 @@ export class DodecahedronEngine {
         this.spectralAnalysis = this.spectralAnalyzer.analyze(faceEnergies);
       }
 
+      // 4.1 Still-Point Proximity (Phase 7 — Witness Journey)
+      // Estimates how "centered" the organization currently is. Per spec
+      // BREATH_AXIS_REFERENCE.md §The Still Point Metric (lines 1166-1230):
+      // 4-factor weighted score (balance 0.25, coherence 0.30,
+      // stability 0.25 defaulted, presence 0.20 defaulted). Honest about
+      // which factors run on defaults via factors.{name}.real flag.
+      // Lazily loaded — module attaches to window.StillPoint in browser.
+      try {
+        const StillPoint = (typeof window !== 'undefined' && window.StillPoint)
+          ? window.StillPoint
+          : (typeof require === 'function' ? require('./ai/breath/still-point.js') : null);
+        if (StillPoint && typeof StillPoint.estimateStillPointProximity === 'function') {
+          const breathStateForProximity = this.breathAnalysis
+            ? { axes: this.breathAnalysis.axes || [] }
+            : { axes: [] };
+          // Compute (or retrieve cached) global coherence so the proximity
+          // analyzer gets a REAL coherence factor instead of the 0.5 default.
+          // Phase 8.5 fix (2026-05-18): the original code read
+          // `this._cachedGlobalCoherence` directly, which is undefined on
+          // first analyzer cycle (the cache is set later in getState/render
+          // path). Calling getGlobalCoherence() populates the cache as a
+          // side effect AND returns the value — lifts demo company's
+          // proximity confidence from 25% (1 of 4 real) to 55% (2 of 4 real)
+          // and removes one defaulted factor from the HUD honestly.
+          const globalCoherence = (typeof this.getGlobalCoherence === 'function')
+            ? this.getGlobalCoherence()
+            : this._cachedGlobalCoherence;
+          const coherenceForProximity = { global: globalCoherence };
+          this.stillPointAnalysis = StillPoint.estimateStillPointProximity(
+            breathStateForProximity,
+            coherenceForProximity,
+            null // history tracking not yet implemented; falls through to defaulted stability
+          );
+        }
+      } catch (e) {
+        Logger.warn('Engine', `Still-point analyzer unavailable: ${e.message}`);
+        this.stillPointAnalysis = null;
+      }
+
       // 4.5 Shadow Detection and Penalty Application
       // Shadow patterns (e.g., "Brittle Profit") apply penalties to face energies
       if (this.advancedEngine && this.advancedEngine.shadows) {
@@ -1796,6 +1835,37 @@ window.Quannex = {
    */
   getSpectralAnalysis() {
     return quannexEngine.spectralAnalysis;
+  },
+
+  /**
+   * Get still-point proximity analysis (Phase 7 — Witness Journey)
+   *
+   * Returns the organization's estimated proximity to the still point
+   * (the geometric/conceptual center where all 6 breath axes intersect).
+   * Per the framework: the still point itself cannot be measured (it IS
+   * the measurer); only PROXIMITY to it can be estimated.
+   *
+   * Return shape: {
+   *   score:           0..1 — weighted four-factor proximity estimate,
+   *   interpretation:  string — 5-level ladder ("Deeply centered" → "Far from center"),
+   *   invitation:      string — contemplative one-liner (recognition, not advice),
+   *   factors: {
+   *     balance:   { value, real: true|false },     // mean of 1 - |axis.ratio|
+   *     coherence: { value, real: true|false },     // global coherence
+   *     stability: { value, real: false (default) },// requires history tracking
+   *     presence:  { value, real: false (default) } // requires presence inference
+   *   },
+   *   weights: { balance: 0.25, coherence: 0.30, stability: 0.25, presence: 0.20 }
+   * }
+   *
+   * Honest defaults: stability and presence factors run on 0.5 by default
+   * because the underlying tracking infrastructure isn't yet built. The
+   * `.real` flag surfaces this transparently — never hide a defaulted factor.
+   *
+   * @returns {Object|null} StillPointAnalysis or null if not yet computed
+   */
+  getStillPointAnalysis() {
+    return quannexEngine.stillPointAnalysis || null;
   },
 
   /**

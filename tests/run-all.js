@@ -28,6 +28,11 @@ const SUITES = [
   { name: 'Integration (Engine)',   file: 'integration.test.mjs' },
   { name: 'Excel Parser Round-Trip', file: 'excel-parser.test.mjs' },
   { name: 'Data Validator',          file: 'data-validator.test.mjs' },
+  { name: 'Still-Point Proximity',  file: 'still-point.test.js' },
+  { name: 'AAG Diagnostic',          file: 'aag.test.js' },
+  { name: 'Spectral Analyzer',       file: 'spectral.test.js' },
+  { name: 'Edge Analyzer (Adv)',     file: 'edge-analyzer.test.mjs' },
+  { name: 'Vertex Analyzer (Adv)',   file: 'vertex-analyzer.test.mjs' },
   { name: 'Browser Smoke Test',     file: 'smoke-test.mjs', needsServer: true },
 ];
 

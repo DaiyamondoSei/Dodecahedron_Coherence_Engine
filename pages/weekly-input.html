@@ -107,6 +107,9 @@
     <script type="module" src="../js/company-loader.js"></script>
     <script type="module" src="../js/main.js"></script>
 
+    <!-- Diagnostics canonical module (W1 §6.2) — must load BEFORE excel-measurement-parser.js -->
+    <script src="../js/core/Diagnostics.js"></script>
+
     <!-- Measurement modules -->
     <script src="../js/excel-measurement-parser.js"></script>
     <script src="../js/measurement-store.js"></script>

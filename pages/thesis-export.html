@@ -88,6 +88,8 @@
     <!-- Dependencies -->
     <script src="../js/utils/logger.js"></script>
     <script src="../js/spectral-analyzer.js"></script>
+    <!-- Diagnostics canonical module (W1 §6.2) — required for AAG computation -->
+    <script src="../js/core/Diagnostics.js"></script>
 
     <!-- UX utilities -->
     <script src="../js/ux/back-navigation.js"></script>
@@ -355,13 +357,21 @@
     // SECTION D: Diagnostics (AAG + BAB + Dissonance)
     // ============================================================
     function renderDiagnostics(ef_wk0, ef_wk5, spectral) {
-        // AAG: Aspiration-Actuality Gap
-        const actuality_wk0 = (ef_wk0[0] + ef_wk0[1] + ef_wk0[2]) / 3;
-        const aspiration_wk0 = (ef_wk0[9] + ef_wk0[10] + ef_wk0[11]) / 3;
-        const actuality_wk5 = (ef_wk5[0] + ef_wk5[1] + ef_wk5[2]) / 3;
-        const aspiration_wk5 = (ef_wk5[9] + ef_wk5[10] + ef_wk5[11]) / 3;
-        const aag_wk0 = actuality_wk0 > 0 ? aspiration_wk0 / actuality_wk0 : 0;
-        const aag_wk5 = actuality_wk5 > 0 ? aspiration_wk5 / actuality_wk5 : 0;
+        // AAG computation consolidated to POC/js/core/Diagnostics.js per W1 §6.2 (2026-05-21)
+        // See Lock #8.15 + CALCULATION_AUDIT_TRAIL.md §12 for the canonical formula.
+        // Inputs ef_wk0 / ef_wk5 are 0-indexed 12-element vectors → convert to
+        // 1-indexed Face-like objects for the canonical API. Note: pre-consolidation
+        // here the divisor-zero sentinel was 0 (not null); we preserve display behavior
+        // by coercing null → 0 at the boundary (UI consumes .toFixed which would crash on null).
+        const facesFromVec = (v) => v.map((e, i) => ({ id: i + 1, faceEnergy: e }));
+        const aag_wk0_res = Diagnostics.getAspirationActualityGap(facesFromVec(ef_wk0));
+        const aag_wk5_res = Diagnostics.getAspirationActualityGap(facesFromVec(ef_wk5));
+        const actuality_wk0 = aag_wk0_res.eActuality;
+        const aspiration_wk0 = aag_wk0_res.eAspiration;
+        const actuality_wk5 = aag_wk5_res.eActuality;
+        const aspiration_wk5 = aag_wk5_res.eAspiration;
+        const aag_wk0 = aag_wk0_res.aag != null ? aag_wk0_res.aag : 0;
+        const aag_wk5 = aag_wk5_res.aag != null ? aag_wk5_res.aag : 0;
 
         // BAB from spectral
         const bab = spectral.diagnostics.beingActionBalance;

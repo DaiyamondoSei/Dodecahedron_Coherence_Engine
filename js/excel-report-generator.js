@@ -328,12 +328,23 @@ class ExcelReportGenerator {
         const sumEnergies = energies.reduce((s, e) => s + e, 0);
         const maxPossible = faces.length; // Assuming weight=1 per face in quick mode
 
-        // AAG: Aspiration (F10,F11,F12) vs Actuality (F1,F2,F3)
-        const aspirationFaces = [10, 11, 12];
-        const actualityFaces = [1, 2, 3];
-        const avgAspiration = this.avgFaceEnergy(faces, aspirationFaces);
-        const avgActuality = this.avgFaceEnergy(faces, actualityFaces);
-        const aag = avgActuality > 0 ? avgAspiration / avgActuality : null;
+        // AAG computation consolidated to POC/js/core/Diagnostics.js per W1 §6.2 (2026-05-21)
+        // See Lock #8.15 + CALCULATION_AUDIT_TRAIL.md §12 for the canonical formula.
+        // Falls back to local computation if Diagnostics module is not loaded (defensive).
+        const DiagnosticsMod = (typeof Diagnostics !== 'undefined') ? Diagnostics
+            : (typeof window !== 'undefined' ? window.Diagnostics : null);
+        let avgAspiration, avgActuality, aag;
+        if (DiagnosticsMod) {
+            const aagResult = DiagnosticsMod.getAspirationActualityGap(faces);
+            avgAspiration = aagResult.eAspiration;
+            avgActuality = aagResult.eActuality;
+            aag = aagResult.aag;
+        } else {
+            // Fallback (pre-consolidation semantics preserved verbatim)
+            avgAspiration = this.avgFaceEnergy(faces, [10, 11, 12]);
+            avgActuality = this.avgFaceEnergy(faces, [1, 2, 3]);
+            aag = avgActuality > 0 ? avgAspiration / avgActuality : null;
+        }
 
         const rows = [
             ['QUANNEX DIAGNOSTICS'],
