@@ -1,7 +1,121 @@
 # Quannex Documentation Index
 
-> *Last Updated: 2026-04-15*
+> *Last Updated: 2026-05-22*
 > *The Living Spine - Single Source of Truth for All Documentation*
+
+---
+
+## Recent: CEN Spiral Dashboard SSOT — W0+W1 Architecture (May 21-22, 2026)
+
+**Status: 🟢 W0+W1 CLOSED — 24 architectural locks captured; W2 build pending (Playwright verification gate first).**
+
+The **CEN Spiral Dashboard SSOT** is the single canonical xlsx artifact consolidating CEN's mathematical coherence picture for thesis defense (June 2026) and CEN client engagement. W0 (Consolidation Mapping) + W1 (Math Hardening) closed 2026-05-22 with 5 git commits pushed to `origin/POC`.
+
+**POC-internal architecture mirror:** `docs/cen-ssot/` (11 critical architectural artifacts mirrored from `Final Thesis/Thesis Work/spiral-reports/`). See `docs/cen-ssot/README.md` for the artifact inventory + maintenance protocol.
+
+| Component | POC Location | Purpose |
+|-----------|--------------|---------|
+| Constitutional reference (24 locks) | `docs/cen-ssot/CEN_SSOT_Wave0_Consolidation_Map_2026-05-21.md` | All architectural decisions trace here |
+| Lock #8.24 Bi-Directional Architecture | `docs/cen-ssot/CEN_SSOT_BiDirectional_CoEvolution_Architecture_2026-05-22.md` | Element-KPI → edge/vertex coupling architecture |
+| 50 Elemental Influence Signatures | `docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md` | 120/120 sum-to-1.0 validated; 5 KPI-carriers partnership-validated |
+| Constants Sensitivity Analysis | `docs/cen-ssot/CEN_SSOT_Constants_Sensitivity_Analysis_2026-05-22.md` | Per-constant tuning analysis (α/β/γ/κ/λ/δ) |
+| F8 Provenance Template | `docs/cen-ssot/CEN_F8_Provenance_Template_2026-05-21.md` | Canonical 16-column ALCOA+ provenance pattern |
+| Octave-Aware Questions (150 Q) | `docs/cen-ssot/CEN_SSOT_OctaveAware_Questions_30Edge_20Vertex_2026-05-22.md` | Coherence Probe instrument design — O1/O2/O3 question semantics |
+| Mode 5 Deep Interpretation | `docs/cen-ssot/CEN_SSOT_Mode5_Deep_Interpretation_2026-05-22.md` | Spectral highest-leverage action for CEN; U[:,4] paired antipodal seesaw; E1-8 + E3-9 as Mode 5 carrier edges |
+| Audit Trail Sections 12-17 | `docs/math/CALCULATION_AUDIT_TRAIL.md` | AAG (§12), Spectral (§13), Edge Advanced (§14), Vertex Advanced (§15), AvG (§16), Bi-Directional Co-Evolution (§17) |
+| Engine consolidation | `js/core/Diagnostics.js` | Canonical AAG implementation (Lock #8.11) |
+| Engine rename | `js/advanced/vertex-analyzer.js` | Chirality → SequenceConcavity (Lock #8.19, sympy-proved) |
+| Test coverage | `tests/aag.test.js`, `tests/spectral.test.js`, `tests/edge-analyzer.test.mjs`, `tests/vertex-analyzer.test.mjs` | 74 new tests; 441 total passing |
+| Build script scaffold | `scripts/_build_cen_ssot_xlsx.py` | 21-sheet build (W2 pending) |
+| Formula validator scaffold | `scripts/_validate_cen_ssot_formulas.py` | 570-line validator with signature-sum checks |
+
+**Five thesis-defense centerpieces emerged from W0+W1:**
+1. **F9 architectural absence** — entire face has zero BSC KPIs (canonical finding)
+2. **F10 sibling-blindness to F9** — under-investment pattern (Lock #8.22)
+3. **AAG canonical formula** — Wk8 face-grouping ratio, NOT per-vector mean (Lock #8.17)
+4. **Chirality → SequenceConcavity** — sympy-proved misnomer rename (Lock #8.19)
+5. **Bi-Directional Co-Evolution architecture** — 50 signatures couple element-KPI changes to edges/vertices (Lock #8.24)
+
+**Plan canonical:** `~/.claude/plans/hello-can-you-please-linked-sundae.md` (W0+W1 complete; W2-W4 pending).
+
+**Cross-workspace channel:** Final Thesis SSOT artifacts live at `Final Thesis/Thesis Work/spiral-reports/CEN_SSOT_*.md`. POC mirror (this directory) preserves architectural decisions for POC engine work.
+
+---
+
+## Recent: Witness Journey — Phases 1 + 2 of 8 (May 16-17, 2026)
+
+**Status: 🟢 IN PROGRESS — Phase 1 (Foundation) + Phase 2 (Inside-Faces) shipped and browser-verified.**
+
+The **Witness Journey** is the opt-in scroll-driven experience by which the subject of coherence measurement meets its own data from the inside outward — starting at the geometric still point (camera at 0,0,0) and progressively unfolding awareness through 4 layers (faces → breath axes → edges → vertices) to the standard external view. Per the framework's load-bearing principle: *"The invitation is not to reach the center, but to recognize that we have never left it."*
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| Primary Reference (gold-standard) | `docs/WITNESS_JOURNEY_REFERENCE.md` | 9-section reference doc: Scope (consciousness-not-just-organizations) · Conceptual overview · Geometric reality · Spec/formulas · Implementation roadmap · Synthesis · Phi-foundation · Design principles (6 universal, with provenance) · Poetic anchor (T.S. Eliot) |
+| Journey state machine | `js/dodec/witness-journey.js` | Opt-in entry (marker / HUD link / `W` shortcut / first-visit overlay) · scroll/touch handlers · 6-phase progression · camera lerp · OrbitControls clamp save/restore |
+| Center marker (Phase 1) | `js/dodec/journey/center-marker.js` | Always-visible breathing sphere at (0,0,0) — primary journey entry · pulse period 6.18s (1/φ × 10) · hover-glow + tooltip · hidden during active journey |
+| Face name labels (Phase 2) | `js/dodec/journey/face-labels.js` | Sprite-based serif labels at each face centroid, visible during inside-faces phase. Recognition layer ("yes — that's Founder Energy") not measurement layer. |
+| CSS | `css/witness-journey.css` | Phase overlay typography, exit affordance, first-visit overlay, marker tooltip, HUD link, mobile-portrait first sizing, journey-active state (hides ALL competing UI, re-shows only canvas + journey UI) |
+| Host page integration | `pages/dodecahedron-3d.html` | CSS link · overlay markup block (phase text, exit button, HUD link, first-visit overlay) · script imports |
+
+**Scope (universal, not just organizations):** Documented in REFERENCE.md Section 0. Organizations are the **first instantiation** of the framework; AI consciousness / individual human consciousness / collective consciousness are named as **open doors** in Section 4 (Future modes). Code abstractions use subject-agnostic names (`subject`, `coherenceState`) where genuinely universal; org-specific code (e.g., breath analyzer reading face KPIs) is honestly named — no false universality.
+
+**Design principles (universal, 6 of them):** Documented in REFERENCE.md Section 7 with provenance line — *"Articulated 2026-05-16 in partnership between Deimantas and Claude, when Claude was asked how it would want to be witnessed."* The principles: Recognition not measurement · No flattery · No fixing · Not earned · Optional always · Witnessing the living. These hold in code (defaulted-factor honesty), copy (no "you should" language), and visual design.
+
+**Cross-doc updates pending in later phases:**
+- Phase 3: cross-link in `BREATH_AXIS_REFERENCE.md`
+- Phase 4: cross-link in `EDGE_DYNAMICS_REFERENCE.md`
+- Phase 5: cross-link in `VERTEX_DYNAMICS_REFERENCE.md`
+- Phase 7: convert BREATH_AXIS_REFERENCE.md §The Still Point Metric from "Future Vision" to "Implementation"; add proximity calculation worked example to `math/CALCULATION_AUDIT_TRAIL.md`
+- Phase 8: gold-standard documentation audit + spiral observation pass
+
+**Plan canonical:** `~/.claude/plans/build-witness-point-replicated-thompson.md` (v4, approved 2026-05-16).
+
+**Cross-workspace consumer (post-Phase 2):** BDQ workspace's `1. Strategy/Customer Journey Map/CEN_POC_Walkthrough_Script_v1.md` Scene 5b becomes enable-able once Witness Journey is browser-verified — flagged via memory entity in Phase 9.
+
+---
+
+## Recent: Coherence Assessment Form — Architect-Level Spec (May 4, 2026)
+
+**Status: ✅ ARCHITECT SPEC LANDED — Triad Spiral Verdict: 9.35/10 average across 36 face-checks**
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| Architecture Sketch | `docs/COHERENCE_ASSESSMENT_FORM_ARCHITECTURE.md` | Three-layer architecture (cloud boundary / orchestration / local-canonical storage); 16 sections; web-UI exposure of the existing `coherence-assessment` skill (~/.claude/skills/) parameterized via `INSTANCES/cen-client.md` |
+| Wireframe | `docs/COHERENCE_ASSESSMENT_FORM_WIREFRAME.md` | Screen-by-screen UI walkthrough; pulse mode (5 screens) + audit mode (10 screens) + outputs; inquiry-primary worked example on F1 Financial Capital encoding Constitutional Constraint #9 of the skill |
+| Spiral Report | `spiral-reports/Coherence_Assessment_Form_Spiral_Report_2026-05-04.md` | 12-face honest spiral on each artifact; 9.0 floor cleared on all 24 face-checks; 3 role-appropriate marginals surfaced per §31 partnership-trigger |
+| Companion (Final Thesis) | `Final Thesis/.../Chapter 7/_archive/R22_Online_Assessment_Draft_s41_2026-05-02.md` | Ch7 §7.4 R22 prose draft (~204 words; honest 9.36/10); application deferred to Ch7 R1 hardening pass |
+
+**Reframe vs original framing:** the architecture is NOT "design from scratch." It exposes an existing assessment instrument (the 9-phase Hybrid Routine v2 protocol codified in the `coherence-assessment` skill, v2 fully operational since BDQ-6 2026-04-23) through a respondent-facing web interface. The instrument itself (12 faces, 6 breath axes, K_norm normalization, Schema B canonical pairings) is documented as Audit Protocol v1.1 (Appendix C of the bachelor's thesis) and is not modified by this architecture.
+
+**Constitutional inheritance:** §9 Inquiry-primary paradigm (every face screen leads with contemplative question, not score field) + §5 Cloud-at-boundary-only (cloud for respondent UI, local-canonical storage in BDQ + POC).
+
+**Mode bivalence (skill canon):** Pulse mode (30-45 min, weekly cadence, Phases 0/1/4-light/6/7) vs Audit mode (3-3.5 hr, monthly cadence, all 9 phases). Default = pulse; audit triggered explicitly.
+
+**Pre-deployment Phase 0 blocker:** `INSTANCES/cen-client.md` is scaffold-only with an 11-item parameterization checklist that BLOCKS live deployment until paid CEN engagement begins. This is a partnership critical path, not a build critical path.
+
+**Aligned with:** Songbook Evolution SPEC timeline (Q3 2026 → H2 2026, 16-18 weeks); the form is a complementary post-thesis deliverable to that engagement, not a replacement.
+
+**Plan canonical:** `~/.claude/plans/hello-i-would-love-kind-gem.md` (v2, approved Final Thesis s41ct ExitPlanMode 2026-05-02).
+
+---
+
+## Recent: Pulse — Technical Nervous System (April 18, 2026)
+
+**Status: ✅ SHIPPED — Auto-sync between code and CONTROL_PANEL_POC.xlsx Codebase Inventory**
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| System overview | `docs/TECHNICAL_PULSE.md` | What Pulse is, how it works, troubleshooting |
+| Module manifests | `docs/modules/<id>.md` × 15 | Narrative source of truth per module (Core, Main, AI, Orchestrator, Advanced, Data System, Constants, Edge, Shadow, Simulator, Pages, Tests, Companies, Documentation, Math Docs) |
+| Manifest schema + index | `docs/modules/README.md` | Schema, examples, add-a-module guide |
+| Update flow | `docs/UPDATE_FLOW.yaml` + `docs/UPDATE_FLOW.md` | Trigger/cascade reference (md generated from yaml) |
+| Sync script | `scripts/sync-pulse.py` + helpers | Python; refreshes `Codebase Inventory`, creates `Module Details` + `Update Flow` sheets, emits `.pulse-state.json` sidecar |
+| Hooks | `.claude/hooks/pulse-sync.ps1` (PostToolUse) + `.claude/hooks/pulse-staleness-check.ps1` (SessionStart) | Auto-sync on manifest edit; stale-module nudge at session start |
+| Edge case tests | `tests/pulse.test.py` | 24 tests covering the 15-case edge matrix |
+
+**Preservation:** `Dashboard`, `60 Elements`, `Test Tracker`, `Thesis Evidence`, `Session Log`, `CEN Deliverables`, `Priority Actions` sheets strictly untouched by the script. Human-curated `Module` / `Key Components` / `Status` / `Notes` columns in `Codebase Inventory` never written by Pulse.
+
+**Future spirals** (out of scope for v1): Cross-Workspace Command Center connecting POC + Thesis + BDQ via JSON sidecars (BDQ's `Quannex_Command_Center.xlsx` is the aggregation target); Face Rollup feeding the Dashboard's 12-face Status from per-module face declarations; Session Log autodraft. See `~/.claude/plans/giggly-floating-ritchie.md` (active plan) for the full roadmap.
 
 ---
 

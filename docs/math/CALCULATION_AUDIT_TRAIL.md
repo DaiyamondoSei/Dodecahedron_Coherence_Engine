@@ -1481,6 +1481,41 @@ for CEN at O1 = **5** (regional band, λ=6.0). Memory entry:
    dissonance=0.178`) as the regression fixture. The hand-authored value 10
    is documented historical narrative metadata, not a regression target.
 
+### Mode 5 Deep Interpretation for CEN (added 2026-05-22)
+
+The Section 13 worked example produces `dominantMode=5` for CEN at canonical
+O1 face energies (Lock #8.22). Mode 5 belongs to the regional cluster band
+(λ=6, multiplicity 5) — the geometrically "regional clusters of 3-5 faces"
+class per the eigenvalue interpretation table above.
+
+**Per Deimantas's question 2026-05-22:** *"the whole idea of the spectral
+decomposition is to have one single highest leverage action that would have
+the highest impact on harmonizing the geometry."* This sub-section documents
+the deep interpretation: what does Mode 5 actually point to operationally?
+
+**The U[:,4] eigenvector pattern** (from `js/spectral-analyzer.js:142-153`):
+- F3 + F8 carry coefficient **+0.470** each (Founder Energy + Operations)
+- F1 + F9 carry coefficient **−0.521** each (Financial Fragility + Regenerative)
+- 8 faces carry near-zero weight
+
+The mode encodes a **paired antipodal seesaw** between two non-adjacent same-sign face pairs. This is geometrically elegant — Mode 5 is not a random regional cluster but a structured 4-face pattern of two opposing same-sign pairs.
+
+**CEN's modal amplitude:** `a_5 = U[:,4]^T · E ≈ −0.0740` (computed from Lock #8.22 face energies). Sign reveals CEN opposes U[:,4]'s direction; F1's high energy (0.2563) dominates despite the eigenvector's symmetric structure.
+
+**Highest-leverage operationally-sensible prescription:** raise F3 (Founder Energy) AND F8 (Operations) together — they are spectrally coupled (identical +0.470 coefficient). Raising them jointly produces the largest reduction in |a_5|.
+
+**Bi-Directional implication — two highest-leverage Mode 5 carrier edges:**
+- **E1-8** (Operations-Finance Flow) — connects F1 (−0.521) ↔ F8 (+0.470)
+- **E3-9** (Human-Regenerative Coherence) — connects F3 (+0.470) ↔ F9 (−0.521)
+
+These are the only two edges in the 30-edge canonical set that carry **double-ended opposite-sign Mode 5 weight** — making them structurally the highest-leverage edge KPIs for Mode 5 harmonization.
+
+**Structurally elegant finding:** **Vertices cannot cleanly carry Mode 5** because Mode 5's same-sign high-magnitude pairs (F1+F9 negative; F3+F8 positive) are non-adjacent — the 3-face vertex geometry doesn't span them. This means Mode 5 is fundamentally an EDGE phenomenon, not a vertex phenomenon. Thesis-worthy observation.
+
+**Tier discipline:** The above is bachelor's-defensible — U[:,4] interpretation, single-action prescription, qualitative bi-directional projection. Master's-scope deferrals: quantitative 30-edge ranking via elemental-signature 10-tuples, sensitivity analysis, multi-mode integration, time-series spectral analysis.
+
+**Cross-reference:** Full Mode 5 deep interpretation document at `docs/cen-ssot/CEN_SSOT_Mode5_Deep_Interpretation_2026-05-22.md` (295 lines; mirrored from Final Thesis active build location).
+
 ---
 
 ## 14. Advanced Edge Formula — Relative Tension + KPI Health Blend (added 2026-05-21)
@@ -3023,6 +3058,32 @@ Bachelor's-defensible per tier discipline: applying the methodology (forward Pen
 > *For CEN: improving E7-11 donations (the edge bridging Brand × Funding) propagates predicted element shifts in F7 Brand (Water + Air) and F11 Funding (Earth + Water) per signature. CEN sees not just 'F8 is structurally weak' but 'these are the specific elemental movements that follow from each available action.'"*
 
 **Fifth thesis-defense centerpiece finding** alongside F9 (§13+§16), F10 sibling-blindness (§12), L8 Vertex V13 (§15), and F4+F12 third-pattern (§12 honest disclosure).
+
+### Octave-Aware Question Semantics (added 2026-05-22)
+
+The 50 Elemental Influence Signatures encode **math-layer coupling** (octave-invariant). But the **question layer** an edge or vertex represents shifts per octave — the strategic inquiry at O1 Survival is different from O2 Structure is different from O3 Relationships/Aspirational, even though the formula (e.g. E_edge = √(E_A × E_B)) stays identical.
+
+**Architectural framing** (per partnership-insight 2026-05-22, Deimantas):
+
+> *"Geometry in the first Octave and geometry in the second Octave would probably have some slight differences in terms of what kind of question is being answered by Edge or Vortex KPIs."*
+
+The QUESTION layer shifts per octave; the MATH stays invariant:
+
+| Octave | Question class | Edge inquiry example (E1-2 IP Monetization) | Vertex inquiry example (V13 L8) |
+|--------|----------------|--------------------------------------------|--------------------------------|
+| **O1 Survival** | Existence — *does this interface exist at all?* | "Does CEN have any conversion path from conceptual depth to cash that keeps lights on?" | "Is the triadic coherence at any survival-grade ground?" |
+| **O2 Structure** | Systematization — *is this interface organized into a repeatable system?* | "Is there a codified, repeatable monetization mechanism for CEN's IP — structured pipeline with documented stages?" | "Is the three-way junction held by an organizational form enduring beyond founder presence?" |
+| **O3 Relationships/Aspirational** | Forward expression — *does this interface attract connection, articulate aspiration?* | "Does CEN's monetization signal outward to the world that CEN sees coherence as the future of NGO sustainability?" | "Is the triadic coherence generating relational mass that pulls future possibility into present configuration?" |
+
+**Why this matters for SSOT Sheet 16 + Coherence Probe instrument:** Element-level KPI scoring depends on which question gets asked. A respondent scoring CEN's E1-2 IP Monetization at the O1-existence question lens captures very different signal than at the O3-aspirational lens. Without explicit octave-awareness in the instrument prompts, the score becomes ambiguous about which layer of organizational reality it describes.
+
+**150 question-formulations canonically documented** at `POC/docs/cen-ssot/CEN_SSOT_OctaveAware_Questions_30Edge_20Vertex_2026-05-22.md` (mirrored from Final Thesis active build location). Coverage: 30 edges × 3 octaves + 20 vertices × 3 octaves = 150 octave-specific questions. The 5 KPI-carrying entries (E2-10, E5-8, E7-11, E10-12, V13) receive detailed treatment; the 45 anticipatory entries are researcher-judgment drafts pending partnership-validation in W2 build.
+
+**Tier discipline:** This is QUESTION SEMANTICS, not mathematical adjustment. Pentagramic constants stay octave-invariant per Lock #8.24 + W1 closure. Octave-dependent constants are a master's-scope research direction (per Constants Sensitivity Analysis at `docs/cen-ssot/CEN_SSOT_Constants_Sensitivity_Analysis_2026-05-22.md`) — explicitly out of scope for this layer.
+
+**CEN-specific anchor:** The O3 Hidden Oracle pattern (F10 Sacred Ground = 9.5/10 deep values truth + F5 Mission in Silence = 2.0/10 near-zero external resonance) becomes inquiry-explicit at the O3 question lens: *"do we project what we are, into the world that needs it?"* The question makes the gap measurable, where without it the gap stays unspoken.
+
+**Cross-reference:** `docs/cen-ssot/CEN_SSOT_OctaveAware_Questions_30Edge_20Vertex_2026-05-22.md` for the canonical 150 questions + section-by-section octave-shift documentation.
 
 ### Versioning Notes
 
