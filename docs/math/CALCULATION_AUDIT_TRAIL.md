@@ -2897,6 +2897,53 @@ For each face F in {A, B} (edge) or {A, B, C} (vertex):
 
 Next pentagramic computation re-derives face energies from updated elements. Edge/vertex energies recompute. **Closed-loop forward math, partnership-mapped backward intervention.**
 
+### Constants as Bi-Directional Coupling Tuners (added 2026-05-22)
+
+Per partnership-insight 2026-05-22: *"Constants are basically the conceptual basis for the relationship between polar phases. We can either strengthen or release or lighten that relationship through the constants."*
+
+The bi-directional cascade isn't a single channel — it's a **multi-layer flow** where each canonical constant tunes a specific COUPLING STRENGTH at a specific propagation step:
+
+```
+Edge/Vertex KPI improvement (Δ)
+    ↓  via Elemental Influence Signature (Sheet 09 — this section's main content)
+Element shifts (Sheet 03, 60-element grid layer)
+    ↓  via Pentagramic formula — constants α, β, γ, κ each tune a coupling
+Face energy E_local (Sheet 04)
+    ↓  via Pass 2 axis-informed energy — constant δ tunes breath-axis polarity feedback
+Final face energy E_final (Sheet 06)
+    ↓
+Breath ratio = E_A/(E_A+E_B), polarity tension (Sheet 10)
+    ↓
+Spectral Δ vector, BAB, dissonance, Performance verdict (Sheet 14)
+```
+
+**Per-constant coupling-tuner role:**
+
+| Constant | Canonical | What it tunes in the bi-directional cascade |
+|---|:---:|---|
+| **α** (§5) | φ⁻¹ ≈ 0.618 | Star-pair arithmetic-vs-geometric balance within pentagram. Tunes how strongly the 5 elements of a face REINFORCE each other. Higher α = more additive; lower α = more multiplicative/interdependent. |
+| **β** (§5) | 0.5 | Symmetric averaging of adjacent star pairs into intersection nodes. Could be tuned asymmetrically; no CEN rationale found. |
+| **γ** (§2) | 0.7 | Local arithmetic-mean vs pentagram-pattern blend in C = γ·K̄ + (1−γ)·P. Tunes how much face energy reflects ELEMENT-MAGNITUDE vs PENTAGRAM-PATTERN. Lock #8.6 flagged γ ∈ [0.6, 0.8] as CEN-character sensitivity direction. |
+| **κ** (§2) | 4 | Logistic transformation sharpness. Tunes BAND-RESOLUTION of face energies. Per Constants Sensitivity Analysis 2026-05-22: κ has HIGHEST band-structure-defining impact among all constants (κ=2 erases all 9 Wall faces; κ=4 preserves the band narrative). |
+| **λ** (§1) | φ⁻³ ≈ 0.236 | CV-penalty in Global Coherence. Tunes how strongly inter-face VARIANCE pulls down the aggregate. Low CEN leverage (moderate CV). |
+| **δ** (§3) | 0.9 default / 0.95 CEN NGO | **Explicit polarity-coupling tuner.** δ=0.95 = 5% influence from opposing breath-pair face; δ=0.5 = strong coupling. CEN's NGO override at 0.95 honors values-mature-but-structurally-weak isolation (faces don't yet flow into each other). |
+
+**The full bi-directional cascade with constants in place:**
+
+When CEN takes an edge action (e.g., improve donations Δ on E7-11):
+1. Δ propagates to F7 + F11 elements via signature (Sheet 09)
+2. Elements update → α, β, γ, κ tune how the pentagramic re-derivation reads the new element configuration
+3. New face energy → δ tunes how much the OPPOSING breath-pair face (F1 for F11, F2 for F7) influences the final
+4. Final face energies → spectral Δ recomputes Mode dominance + Performance verdict (Sheet 14)
+5. Sheet 16 Dashboard view refreshes
+
+**Each constant is partnership-tunable** based on organizational character. For CEN canonical SSOT v1.0: δ=0.95 honors NGO-mode isolation; canonical α/β/γ/κ preserve thesis-defense band-classification narrative.
+
+**Cross-references:**
+- **Constants Sensitivity Analysis** (full per-constant exploration + joint-sensitivity worked example showing γ=0.65+κ=3 erases the band narrative): `Final Thesis/.../spiral-reports/CEN_SSOT_Constants_Sensitivity_Analysis_2026-05-22.md`
+- Lock #8.6 (constants with rationale tooltips + γ sensitivity flag)
+- Lock #8.20 sister-finding: stale `mapping-context.json:323-334` tuning block (α=0.4, κ=1.5) explains historical "CEN diagnostics" narrative-scaffolding readings (e.g., recorded globalCoherence=0.46 was likely computed at κ=1.5; canonical κ=4 produces different values)
+
 ### Pre-Validated CEN Signatures (Worked Examples)
 
 **Edge E7-11 (Brand & Reputation ↔ Funding Pipeline), carrying BSC.F4 Donation income:**
