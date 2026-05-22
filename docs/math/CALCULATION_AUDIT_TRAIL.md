@@ -865,6 +865,15 @@ to produce values around 0.76–0.81. They are DIFFERENT measurements of DIFFERE
 organizations. CEN-facing materials should cite only CEN's AAG; Quannex-internal
 materials cite the Quannex self-AAG.
 
+This naming-collision pattern (two distinct measurements sharing a label) is a
+**sister-pattern to Lock #8.20** (template `dominantMode` field as narrative
+scaffolding parallel-shaped to spectral eigenvalue output — see Section 13
+*Provenance Investigation* for the full forensic). Both Locks (#8.15 here +
+#8.20 in Section 13) reflect the same systemic discipline: when a field name
+gets reused across measurement contexts, the canonical engineering response is
+**rename one of them, add provenance fields, prevent silent substitution** —
+not "fix" one of the measurements to match the other.
+
 ### Honest Disclosure — Two different formulas have been called "AAG"
 
 Historically, Phase 2 Evidence Package (2026-04-11) used "AAG" terminology for a
@@ -1442,6 +1451,14 @@ an engine-computed eigenvalue index. The naming collision with the engine's
 [2..12]) created the appearance of a computed value, but the data type and
 generation path are different: this field is narrative metadata.
 
+**Partnership-locked as Lock #8.20** of CEN SSOT Consolidation Map: the
+template `dominantMode=10` (and its 4 siblings across the other companies) is
+a **narrative pointer to the spotlight FACE number** (CEN's `10` = F10
+Foundational Values), NOT a spectral eigenvalue index. Sister-pattern to the
+AAG/OVC mislabeling (Lock #8.15, Section 12). Canonical engine `dominantMode`
+for CEN at O1 = **5** (regional band, λ=6.0). Memory entry:
+`project_dominantmode_naming_collision.md`.
+
 **Recommendation for canonical going forward:**
 
 1. **Rename the template field** from `dominantMode` to `dominantFace` (or
@@ -1778,6 +1795,15 @@ none is treated as a stand-in for another.
   resolved to two distinct concepts. The BR triality is in the same
   spirit: surface the multiplicity, label cleanly, prevent silent
   substitution.
+- **Forward math vs backward intervention** (Section 17 — Lock #8.24).
+  Forward Pentagramic → Face → Edge/Vertex is algebraic and deterministic;
+  the *backward* path (Edge/Vertex KPI improvement → element shifts) is
+  **not algebraic inverse** (degenerate — `E_B = E_edge² / E_A` has
+  infinitely many element configurations behind any single face energy)
+  but **explicit methodology** via Elemental Influence Signatures. Same
+  *"surface the multiplicity, don't collapse it"* discipline: where naive
+  reading would expect one operation, the audit-trail discipline surfaces
+  multiple operations with explicit scope per direction.
 
 **Convention going forward:**
 
@@ -2037,6 +2063,17 @@ Lock #8.16, this is the **first vertex-anchored KPI** in the CEN BSC
 load-bearing for the thesis-defense argument that the dodecahedral
 topology *adds* analytical power that flat face-only scoring cannot
 capture.
+
+V13 is **also the first CEN vertex-KPI with a partnership-validated
+Elemental Influence Signature** per Lock #8.24 (Section 17,
+*Bi-Directional Co-Evolution Architecture*). The 15-tuple signature
+(5 elements × 3 faces, each face summing to 1.0) is pre-validated
+HIGH-confidence — three faces share Ether emphasis (0.30/0.55/0.50),
+encoding that values-articulation-in-PVM is fundamentally an Ether-level
+act of meaning-codification across structural/regenerative/values
+dimensions simultaneously. Forward computation (this section) gives the
+diagnostic state; backward intervention (Section 17) gives the actionable
+element-shift map.
 
 #### Canonical O1 face energies
 
@@ -2318,24 +2355,38 @@ mathematically grounded (achieved at distributions like {0, 0, 1} or
   reaching the clamp on extreme inputs.
 
 **6. "Harmonious" health label conflates two regimes — RESOLVED v1.1
-(2026-05-22).** The pre-fix label triggered off coherence ≥ ψ₄ alone, so
-V13 with identical-floor faces received "Harmonious" despite minimal
-strength — coherence-of-shared-absence reading as harmony. The W1 spiral
-applied the honest fix in `vertex-analyzer.js:getHealthStatus`: strength
-is now a second argument, and when `strength < φ⁻⁴` (≈ 0.146, the
-audit's "Wall band" floor) AND `coherence ≥ ψ₄`, the label becomes
-**`"Coherent-at-floor"`** rather than `"Harmonious"`. Above-floor
-strength keeps the original coherence-only ladder unchanged. Legacy
-single-argument callers continue to behave as before (strength
-`undefined` → guard skips → original ladder fires). For CEN V13 under
-canonical O1: coherence 1.000 + strength 0.0455 → `"Coherent-at-floor"`,
-distinguishing this dormant-vertex case from a genuine three-face
-harmony pattern. Test coverage added at
+(2026-05-22, per Lock #8.22).** The pre-fix label triggered off coherence
+≥ ψ₄ alone, so V13 with identical-floor faces received "Harmonious"
+despite minimal strength — coherence-of-shared-absence reading as
+harmony. The W1 spiral applied the honest fix in
+`vertex-analyzer.js:getHealthStatus`: strength is now a second argument,
+and when `strength < φ⁻⁴` (≈ 0.146, the audit's "Wall band" floor) AND
+`coherence ≥ ψ₄`, the label becomes **`"Coherent-at-floor"`** rather than
+`"Harmonious"`. Above-floor strength keeps the original coherence-only
+ladder unchanged. Legacy single-argument callers continue to behave as
+before (strength `undefined` → guard skips → original ladder fires). For
+CEN V13 under canonical O1: coherence 1.000 + strength 0.0455 →
+`"Coherent-at-floor"`, distinguishing this dormant-vertex case from a
+genuine three-face harmony pattern. Test coverage added at
 `tests/vertex-analyzer.test.mjs` §6 (3 new assertions: V13 paradox case,
 above-floor counter-case at [0.8, 0.8, 0.8], backward-compat 1-arg
 call). CEN `mapping-context.json` V13 entry carries no narrative
 `healthStatus` field (only `classification: "synergy_hub"` + `tooltip`);
 no narrative propagation required for this fix.
+
+**Sister-pattern note (Lock #8.22):** the "Harmonious" label was itself
+**narrative-scaffolding-only** — it triggered off a single threshold
+condition without sensitivity to the underlying strength regime,
+producing a misleading label that read as a real diagnostic. Parallel
+to the V8 `bermuda_triangle` classification at `mapping-context.json:186`
+(Test #7 above, Lock #8.22): the engine-computed V8 strength is 0.538
+(below φ⁻¹ = 0.618), so V8 is NOT a leverage point per the engine — the
+`bermuda_triangle` label is hand-authored narrative, not engine output.
+Both patterns share the same systemic flag: **labels at the
+vertex-narrative layer can drift from engine truth when only one
+condition is checked**. The v1.1 fix on `getHealthStatus` closes the V13
+case; the V8 label is preserved as documented narrative scaffolding per
+the test docstring.
 
 ---
 
@@ -2583,6 +2634,21 @@ octave, per the original Section 16 staging draft) would land at
 K_mean_60_all ≈ 0.1483 and AvG_all ≈ 0.0184 — in the "Faithful
 aggregation" band. The two scope readings answer different questions
 and MUST be reported with explicit scope labels.
+
+**Honest disclosure on the strict-O1 vs all-octave K_mean_60 distinction
+(per Lock #8.22):** Under strict-O1 normalization, the F4 + F12
+third-pattern surfaces. F4 Structural Capital reads at the floor (0.1192)
+because — exactly like F9 Regenerative and F10 Foundational Values — it
+has no O1-priority KPIs. F12 Risk & Resilience reads at Gate (0.1523)
+under the canonical O1 pentagramic computation, but its O1-evidence base
+is thin. Under strict-O1 scope (zero-filling O2/O3 cells per the
+canonical priority architecture), K_mean_60 = 0.0417 — the strict-O1
+reading. Under all-octave scope, K_mean_60_all = 0.1483 — both readings
+are mathematically correct; they answer **different questions**. The F4 +
+F12 third-pattern is part of the "fifth thesis-defense centerpiece
+finding" (cross-referenced in Section 17 versioning notes alongside F9,
+F10, V13, and the Bi-Directional architecture). Surface scope label with
+every AvG report; never substitute one scope for the other.
 
 ### Why This Matters — Catching "Healthy Aggregate Hiding Weak Detail"
 
@@ -2894,7 +2960,12 @@ Bachelor's-defensible per tier discipline: applying the methodology (forward Pen
 - Architecture design doc: `Final Thesis/Thesis Work/spiral-reports/CEN_SSOT_BiDirectional_CoEvolution_Architecture_2026-05-22.md`
 - 50 signatures table: `Final Thesis/Thesis Work/spiral-reports/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md`
 - Memory entry: `project_cen_ssot_bidirectional_architecture.md`
-- Consolidation Map Lock #8.24
+- **CEN SSOT Consolidation Map Locks:**
+  - **Lock #8.24** — Bi-Directional Co-Evolution Architecture (this section's anchor)
+  - **Lock #8.16** — Vertex V13 as first CEN vertex-KPI (L8 SDG-alignment); the V13 signature here is the worked example for vertex-layer intervention mapping
+  - **Lock #8.10** — Breath-axis projection/reception nature partition; underlies the elemental signature reading (Earth/Water/Fire/Air/Ether allocations correlate with the breath-axis nature of each face's role in the action)
+  - **Lock #8.9** — KPI uniqueness (each KPI lives in exactly ONE structural position — face XOR edge XOR vertex); preserves the signature scope rule (an edge KPI's signature touches the two face elements, NOT a third face)
+  - **Lock #8.5** — CEN SSOT data pipeline (34 BSC KPIs → Songbook v2.1 60-element mapping → pentagramic → face energies); the bi-directional architecture closes the loop the pipeline opens forward-only
 
 ### Thesis-Defense Framing
 
