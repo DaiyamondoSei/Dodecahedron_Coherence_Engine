@@ -2789,6 +2789,132 @@ interpretation ladder.
 
 ---
 
+## 17. Bi-Directional Co-Evolution — Elemental Influence Signatures (added 2026-05-22)
+
+### Conceptual Premise
+
+The forward calculation chain (Sections 1-16) is unidirectional: element-level KPIs → Pentagramic Coherence (§4-5) → face energies (§2) → edge/vertex energies (§7, §8, §14, §15). Deterministic, reproducible, auditable.
+
+But when an organization acts to improve an **Edge KPI** (e.g., bridging Brand × Funding via donations) or a **Vertex KPI** (e.g., adding SDG alignment to PVM at F4 ∩ F9 ∩ F10), the action affects underlying face-element values — and the **mathematical inverse is degenerate**. Algebra gives `E_B = E_edge² / E_A` from `E_A` and `E_edge`, but a face energy alone has infinitely many element configurations.
+
+Section 17 documents the **Bi-Directional Co-Evolution architecture** that closes the diagnostic-intervention loop without modifying forward math. Per Lock #8.24 of CEN SSOT Consolidation Map.
+
+### Mathematical Architecture
+
+**Forward (unchanged):**
+```
+elements[5] → Pentagramic(α=φ⁻¹, β=0.5, γ=0.7, κ=4) → face energy E_f
+12 face energies → Edge Energy √(E_A · E_B) + Vertex Vortex φ⁻¹·(σ/0.577) + φ⁻²·μ
+```
+
+**Backward intervention (NEW — explicit, not algebraic):**
+
+For each **Edge KPI** between faces A and B, declare an Elemental Influence Signature (10-tuple):
+```
+EdgeSignature(E_AB) = {
+  F_A: { Earth: w_AE, Water: w_AW, Fire: w_AF, Air: w_AA, Ether: w_AEt },
+  F_B: { Earth: w_BE, Water: w_BW, Fire: w_BF, Air: w_BA, Ether: w_BEt }
+}
+
+Constraint: ∑w_A = 1.0   AND   ∑w_B = 1.0
+Interpretation: probability distribution of where the action lands across that face's 5 elements
+```
+
+For each **Vertex KPI** at F_A ∩ F_B ∩ F_C, declare a Signature (15-tuple): 5-element weights per each of the 3 faces, each face summing to 1.0.
+
+**Update mechanic:** When KPI value changes by Δ:
+```
+For each face F in {A, B} (edge) or {A, B, C} (vertex):
+  For each element e in {Earth, Water, Fire, Air, Ether}:
+    F.k_e += Δ · w_Fe · scaling_factor
+```
+
+Next pentagramic computation re-derives face energies from updated elements. Edge/vertex energies recompute. **Closed-loop forward math, partnership-mapped backward intervention.**
+
+### Pre-Validated CEN Signatures (Worked Examples)
+
+**Edge E7-11 (Brand & Reputation ↔ Funding Pipeline), carrying BSC.F4 Donation income:**
+
+| Side | Earth | Water | Fire | Air | Ether |
+|---|:---:|:---:|:---:|:---:|:---:|
+| F7 Brand | 0.10 | 0.35 | 0.10 | 0.35 | 0.10 |
+| F11 Funding | 0.40 | 0.30 | 0.10 | 0.15 | 0.05 |
+
+**Reading:** When CEN improves donations:
+- F7 Brand: Water (donor relationships, reputation circulation) + Air (visibility, public connection)
+- F11 Funding: Earth (material revenue base) + Water (revenue circulation rhythm)
+
+**Vertex V13 (F4 Structural ∩ F9 Regenerative ∩ F10 Foundational Values), carrying BSC.L8 SDG alignment in PVM:**
+
+| Face | Earth | Water | Fire | Air | Ether |
+|---|:---:|:---:|:---:|:---:|:---:|
+| F4 Structural | 0.45 | 0.10 | 0.05 | 0.10 | 0.30 |
+| F9 Regenerative | 0.20 | 0.10 | 0.05 | 0.10 | 0.55 |
+| F10 Values | 0.05 | 0.05 | 0.05 | 0.35 | 0.50 |
+
+**Three-face triadic interpretation:** All three faces share Ether emphasis (0.30, 0.55, 0.50) — values-articulation-in-document IS fundamentally an Ether-level act of meaning-codification across structural/regenerative/values dimensions simultaneously. V13 is the FIRST vertex-KPI in CEN dataset per Lock #8.16.
+
+### All 50 CEN Signatures
+
+Full table for all 30 edges + 20 vertices lives at `Final Thesis/Thesis Work/spiral-reports/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md` (959 lines).
+
+**Validation:** 120/120 face-element weight distributions sum to exactly 1.0 (Python-verified, zero rounding issues).
+
+**Confidence distribution:**
+- 5 KPI-carrying signatures (E7-11, E2-10, E10-12, E5-8, V13) — HIGH (breath-axis cross-validated, partnership-validated for E7-11 + V13)
+- 45 anticipatory signatures (26 edges + 19 vertices without current CEN KPI) — MEDIUM (intervention-map placeholders for future KPI assignment)
+
+### Sensitivity Analysis Framework
+
+Signatures are RESEARCHER JUDGMENT. To preserve methodological integrity:
+
+1. **Transparency:** Signatures visible in Sheet 09 of the SSOT xlsx. Anyone can read what was assumed.
+2. **Reproducibility:** Each signature has documented rationale (per-face one-sentence explanation; breath-axis cross-validation).
+3. **Sensitivity testing:** Vary signatures by ±10% and observe predicted-shift sensitivity. Acceptance: predicted shifts directionally stable.
+4. **Partnership validation:** CEN co-founder review refines signatures based on lived organizational experience.
+
+### Honest Disclosure
+
+The Elemental Influence Signatures are NOT mathematically derived. They are partnership-validated researcher judgments documenting what specific organizational action would predictably touch in element-level terms. Same epistemological status as Songbook v2.1's element-tagging (which assigns each KPI to a (face, element, octave) coordinate based on researcher reading).
+
+Bachelor's-defensible per tier discipline: applying the methodology (forward Pentagramic + backward signature mapping) IS bachelor's scope. Deriving WHY specific weights are chosen (could they be phi-derived?) is master's-only future work.
+
+### Implementation Reference
+
+**SSOT xlsx Sheet 09 (Bi-Directional Intervention Map):**
+- Block A: Header
+- Block B: 30 edge signatures (Edge_ID + F_A + F_B + KPI flag + 10 weights + 2 sum-validation cells)
+- Block C: 20 vertex signatures (Vertex_ID + F_A + F_B + F_C + KPI flag + 15 weights + 3 sum-validation cells)
+- Block D: Action Simulator (user enters edge/vertex ID + Δ → predicted element shifts)
+- Block E: Honest disclosure
+
+**Validation gates:** All sum cells = 1.0 ± 1e-10; Action Simulator outputs valid element shifts in [0, 1] range.
+
+**Cross-references:**
+- Architecture design doc: `Final Thesis/Thesis Work/spiral-reports/CEN_SSOT_BiDirectional_CoEvolution_Architecture_2026-05-22.md`
+- 50 signatures table: `Final Thesis/Thesis Work/spiral-reports/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md`
+- Memory entry: `project_cen_ssot_bidirectional_architecture.md`
+- Consolidation Map Lock #8.24
+
+### Thesis-Defense Framing
+
+> *"The Spiral Dashboard architecture is bi-directional. Forward computation (Pentagramic → Face → Edge/Vertex) is mathematical derivation — deterministic, reproducible, auditable per Sections 1-16. Backward intervention (Edge/Vertex KPI improvement → Element shifts) is explicit methodological mapping — the Elemental Influence Signature per inter-face/triadic relationship.*
+>
+> *The BSC offers only forward direction — KPI values diagnose state. Improving an outcome metric in the BSC doesn't tell you which lower-level lever to pull. The Spiral Dashboard's bi-directional architecture closes the diagnostic-intervention loop. Any organization using the Spiral knows not only WHAT its state is but WHERE TO ACT.*
+>
+> *For CEN: improving E7-11 donations (the edge bridging Brand × Funding) propagates predicted element shifts in F7 Brand (Water + Air) and F11 Funding (Earth + Water) per signature. CEN sees not just 'F8 is structurally weak' but 'these are the specific elemental movements that follow from each available action.'"*
+
+**Fifth thesis-defense centerpiece finding** alongside F9 (§13+§16), F10 sibling-blindness (§12), L8 Vertex V13 (§15), and F4+F12 third-pattern (§12 honest disclosure).
+
+### Versioning Notes
+
+- **v1.0 (2026-05-22):** Architecture locked. CEN 50 signatures drafted (5 HIGH-confidence + 45 MEDIUM-confidence anticipatory). SSOT Sheet 09 designed. Thesis-defense framing established.
+- **Future v1.1:** Partnership-validation of all 50 signatures with CEN co-founders (currently only E7-11 + V13 partnership-validated; need review of E2-10, E10-12, E5-8 + anticipatory 45).
+- **Future v1.2:** Sensitivity testing harness (±10% variance, 100 perturbed sets, directional stability check).
+- **Future v2.0:** Cross-organizational signature comparison (when other clients onboard) — derive shared vs org-specific patterns; potentially extract phi-derived priors.
+
+---
+
 ## Appendix A: PHI-Derived Constants Summary
 
 | Constant | Value | Derivation | Used For |
@@ -3080,6 +3206,9 @@ When committee asks... | Open to...
 "How is Aspiration-Actuality Gap (AAG) computed?" | Section 12
 "Why does CEN's AAG differ from Quannex's self-AAG?" | Section 12 (separate measurements of separate orgs)
 "Wasn't AAG called something different earlier?" | Section 12 "Honest Disclosure" (Phase 2 mislabeling resolved)
+"How does CEN ACT on the dashboard? Not just diagnose?" | Section 17 (Bi-Directional Co-Evolution — Elemental Influence Signatures)
+"Is the math truly bi-directional, or just forward?" | Section 17 ("Forward = math; backward = explicit signatures; closed-loop")
+"Where does the Spiral close the loop BSC leaves open?" | Section 17 thesis-defense framing (diagnostic + intervention loop)
 "How is the Laplacian spectral analysis done?" | Section 13
 "What does the Δ vector reveal about CEN faces?" | Section 13 (Performing in Nature diagnostic)
 "Why was dominantMode=10 in mapping-context.json different from canonical?" | Section 13 (Provenance Investigation — narrative scaffolding, not engine output)
