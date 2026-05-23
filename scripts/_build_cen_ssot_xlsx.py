@@ -902,16 +902,285 @@ def build_sheet_02_raw_inputs(wb: Workbook):
 def build_sheet_03_normalization_60grid(wb: Workbook):
     """Sheet 03 Normalization_60Element_Grid — 12 × 5 × 3 = 180 cells.
 
-    The 60-element grid per face × 3 octaves. KPI placements per v3 Procedure C
-    (question-derived clustering). Silent cells zero-filled per zeroEnergy policy.
+    Three octave-blocks stacked vertically (O1 / O2 / O3). Each block is 12
+    faces × 5 elements = 60 cells. Per W2 Entry Checklist + plan §7.A.
 
-    Per Lock #8.9: per-cell normalization rationale comment (researcher choice
-    documented). Per Lock #8.3: KPIs live in EXACTLY ONE structural position
-    (face XOR edge XOR vertex; no 0.5-weight split).
+    Per Lock #8.11 + #8.29: KPI placements per Procedure C question-derived
+    clustering (29 face-KPIs across the 60 face-element cells; 31 silent at
+    each octave layer; 151 silent across all 180 cells; 29 active).
+
+    Per Lock #8.3: KPIs live in EXACTLY ONE structural position
+    (face XOR edge XOR vertex; no 0.5-weight split). The 4 edge-KPIs +
+    1 vertex-KPI from W06v3 do NOT appear in this grid (they live in
+    Sheets 07 Edges + 08 Vertices respectively).
+
+    Cell semantics:
+      - `=bsc_<id>_value` formula reference where KPI is canonically placed
+      - 0 literal where silent (per zeroEnergy policy)
+      - Light Blue formula cells for placed KPIs (Sheet 02 cascade target)
+
+    Downstream consumers:
+      - Sheet 04 Face_Calculations reads (row-of-5-elements per face per octave)
+        to feed pentagramic formula
+      - Sheet 13 Diagnostics reads the all-octave aggregate for K_mean_60 in AvG
+
+    Authority:
+      - W06v3 Procedure C placement table (POC/docs/cen-ssot/CEN_SSOT_W06v3_*)
+      - Lock #8.11 (Procedure C canonical)
+      - Lock #8.22 (Pure-O1 strict normalization)
+      - Lock #8.29 (34 BSC KPIs = sole math input)
     """
     ws = wb.create_sheet("03_Normalization_60Element_Grid")
     apply_brand_header(ws, 1, 1, 8,
-                       "60-Element Grid · 12 Faces × 5 Elements × 3 Octaves", bg=DEEP_TEAL, size=14)
+                       "60-Element Grid · 12 Faces × 5 Elements × 3 Octaves (180 cells)",
+                       bg=DEEP_TEAL, size=14)
+
+    # Per W06v3 face-KPI placement map: tuple = (named_range, face_id, element, octave)
+    # Octave: 1=O1, 2=O2, 3=O3. Edges/vertex KPIs (F4, C8, I3, L7, L8) NOT in this grid.
+    KPI_PLACEMENTS = [
+        # O1 layer — 11 face KPIs
+        ("bsc_f1_value", 1, "Earth", 1),
+        ("bsc_f2_value", 1, "Air", 1),
+        ("bsc_f3_value", 1, "Fire", 1),
+        ("bsc_f7_value", 1, "Ether", 1),
+        ("bsc_l4_value", 3, "Fire", 1),
+        ("bsc_i1_value", 4, "Earth", 1),
+        ("bsc_i2_value", 4, "Fire", 1),
+        ("bsc_i4_value", 4, "Air", 1),
+        ("bsc_c3_value", 5, "Earth", 1),
+        ("bsc_c1_value", 6, "Earth", 1),
+        ("bsc_i8_value", 12, "Water", 1),
+        # O2 layer — 14 face KPIs
+        ("bsc_f5_value", 11, "Water", 2),
+        ("bsc_f6_value", 1, "Water", 2),
+        ("bsc_f8_value", 1, "Earth", 2),
+        ("bsc_c2_value", 6, "Water", 2),
+        ("bsc_c4_value", 5, "Water", 2),
+        ("bsc_c5_value", 7, "Air", 2),
+        ("bsc_c6_value", 6, "Fire", 2),
+        ("bsc_i5_value", 8, "Water", 2),
+        ("bsc_i6_value", 5, "Fire", 2),
+        ("bsc_i7_value", 4, "Earth", 2),
+        ("bsc_i9_value", 10, "Air", 2),
+        ("bsc_l1_value", 3, "Earth", 2),
+        ("bsc_l2_value", 2, "Air", 2),
+        ("bsc_l3_value", 3, "Fire", 2),
+        # O3 layer — 4 face KPIs
+        ("bsc_c7_value", 5, "Earth", 3),
+        ("bsc_c9_value", 6, "Air", 3),
+        ("bsc_l5_value", 2, "Air", 3),
+        ("bsc_l6_value", 6, "Water", 3),
+    ]
+    assert len(KPI_PLACEMENTS) == 29, f"Expected 29 face-KPI placements, got {len(KPI_PLACEMENTS)}"
+
+    ELEMENTS = ["Earth", "Water", "Fire", "Air", "Ether"]
+    ELEMENT_COL = {"Earth": 2, "Water": 3, "Fire": 4, "Air": 5, "Ether": 6}
+
+    # Build placement-lookup: (face_id, element, octave) → named_range
+    placement_lookup = {(p[1], p[2], p[3]): p[0] for p in KPI_PLACEMENTS}
+
+    # Helper to build one octave block
+    def build_octave_block(start_row: int, octave_num: int, octave_name: str, header_color: str):
+        # Block header (merged row)
+        apply_brand_header(ws, start_row, 1, 7,
+                           f"Octave {octave_num} — {octave_name} ({len([p for p in KPI_PLACEMENTS if p[3] == octave_num])} active KPIs of 60 cells)",
+                           bg=header_color, size=11)
+
+        # Column headers row
+        ws.cell(row=start_row + 1, column=1, value="Face").font = Font(name="Calibri", size=10, bold=True)
+        ws.cell(row=start_row + 1, column=1).fill = PatternFill(
+            start_color=GRAY, end_color=GRAY, fill_type="solid")
+        for elem in ELEMENTS:
+            c = ws.cell(row=start_row + 1, column=ELEMENT_COL[elem], value=elem)
+            c.font = Font(name="Calibri", size=10, bold=True)
+            c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+            c.alignment = Alignment(horizontal="center")
+        sum_header = ws.cell(row=start_row + 1, column=7, value="Σ row")
+        sum_header.font = Font(name="Calibri", size=10, bold=True, italic=True)
+        sum_header.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        sum_header.alignment = Alignment(horizontal="center")
+
+        # 12 face rows
+        for face_id in range(1, 13):
+            row = start_row + 1 + face_id
+            # Face label
+            ws.cell(row=row, column=1, value=f"F{face_id}").font = Font(
+                name="Calibri", size=10, bold=True)
+
+            # 5 element cells
+            for elem in ELEMENTS:
+                col = ELEMENT_COL[elem]
+                key = (face_id, elem, octave_num)
+                if key in placement_lookup:
+                    named_range = placement_lookup[key]
+                    apply_formula_cell(ws, row, col, f"={named_range}")
+                    ws.cell(row=row, column=col).number_format = "0.00"
+                    ws.cell(row=row, column=col).alignment = Alignment(horizontal="center")
+                else:
+                    # Silent cell — literal 0 per zeroEnergy
+                    c = ws.cell(row=row, column=col, value=0)
+                    c.font = Font(name="Calibri", size=10, color="C0C0C0")
+                    c.alignment = Alignment(horizontal="center")
+                    c.number_format = "0.00"
+
+            # Row sum (Σ across 5 elements)
+            sum_col_letter_b = get_column_letter(2)
+            sum_col_letter_f = get_column_letter(6)
+            sum_cell = ws.cell(
+                row=row, column=7,
+                value=f"=SUM({sum_col_letter_b}{row}:{sum_col_letter_f}{row})"
+            )
+            sum_cell.font = Font(name="Calibri", size=10, italic=True, color="606060")
+            sum_cell.alignment = Alignment(horizontal="center")
+            sum_cell.number_format = "0.00"
+
+            # Define named range for this face's 5-element row at this octave
+            # Sheet 04 reads these to feed pentagramic formula.
+            row_range = f"'03_Normalization_60Element_Grid'!${sum_col_letter_b}${row}:${sum_col_letter_f}${row}"
+            add_defined_name(wb, f"cen_f{face_id}_o{octave_num}_elements", row_range)
+
+        # Block total row
+        total_row = start_row + 14
+        ws.cell(row=total_row, column=1, value="Σ all").font = Font(
+            name="Calibri", size=10, bold=True, italic=True)
+        for elem in ELEMENTS:
+            col = ELEMENT_COL[elem]
+            col_letter = get_column_letter(col)
+            sum_formula = f"=SUM({col_letter}{start_row + 2}:{col_letter}{start_row + 13})"
+            tc = ws.cell(row=total_row, column=col, value=sum_formula)
+            tc.font = Font(name="Calibri", size=10, italic=True, color="606060")
+            tc.fill = PatternFill(start_color="F0F0F0", end_color="F0F0F0", fill_type="solid")
+            tc.alignment = Alignment(horizontal="center")
+            tc.number_format = "0.00"
+        # Grand total
+        grand_total_cell = ws.cell(
+            row=total_row, column=7,
+            value=f"=SUM(G{start_row + 2}:G{start_row + 13})"
+        )
+        grand_total_cell.font = Font(name="Calibri", size=10, bold=True, color="404040")
+        grand_total_cell.fill = PatternFill(start_color="E0E0E0", end_color="E0E0E0", fill_type="solid")
+        grand_total_cell.alignment = Alignment(horizontal="center")
+        grand_total_cell.number_format = "0.00"
+        # Named range for octave-total (consumed by Sheet 13 AvG K_mean_60)
+        add_defined_name(wb, f"cen_o{octave_num}_grid_total",
+                          f"'03_Normalization_60Element_Grid'!$G${total_row}")
+
+    # Build the 3 octave blocks
+    # Block layout: header at row N, column headers at N+1, F1-F12 at N+2..N+13, total at N+14
+    build_octave_block(3, 1, "Survival (existence)", QUANTUM_PURPLE)        # rows 3-17 (15 rows)
+    build_octave_block(19, 2, "Structure (systematization)", QUANTUM_PURPLE)  # rows 19-33
+    build_octave_block(35, 3, "Relationships / Aspirational", QUANTUM_PURPLE) # rows 35-49
+
+    # ─────────────────────────────────────────────────────────
+    # Section D: Aggregate view — sum across all 3 octaves per cell (rows 52-64)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 51, 1, 7,
+                       "All-Octave Aggregate (Σ across O1+O2+O3 per cell — feeds Sheet 13 K_mean_60)",
+                       bg=DARK_NAVY, size=11)
+
+    # Column headers
+    ws.cell(row=52, column=1, value="Face").font = Font(name="Calibri", size=10, bold=True)
+    ws.cell(row=52, column=1).fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+    for elem in ELEMENTS:
+        c = ws.cell(row=52, column=ELEMENT_COL[elem], value=elem)
+        c.font = Font(name="Calibri", size=10, bold=True)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.alignment = Alignment(horizontal="center")
+    sum_h = ws.cell(row=52, column=7, value="Σ row")
+    sum_h.font = Font(name="Calibri", size=10, bold=True, italic=True)
+    sum_h.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+    sum_h.alignment = Alignment(horizontal="center")
+
+    # 12 face rows with aggregate formulas
+    for face_id in range(1, 13):
+        row = 52 + face_id
+        ws.cell(row=row, column=1, value=f"F{face_id}").font = Font(
+            name="Calibri", size=10, bold=True)
+        for elem in ELEMENTS:
+            col = ELEMENT_COL[elem]
+            col_letter = get_column_letter(col)
+            # O1 row = 5 + face_id (rows 5..16); O2 = 21 + face_id (rows 21..32);
+            # O3 = 37 + face_id (rows 37..48)
+            o1_row = 4 + face_id
+            o2_row = 20 + face_id
+            o3_row = 36 + face_id
+            formula = f"={col_letter}{o1_row}+{col_letter}{o2_row}+{col_letter}{o3_row}"
+            agg_cell = ws.cell(row=row, column=col, value=formula)
+            agg_cell.font = Font(name="Calibri", size=10, color="404040")
+            agg_cell.alignment = Alignment(horizontal="center")
+            agg_cell.number_format = "0.00"
+            agg_cell.fill = PatternFill(start_color="F0F8FF", end_color="F0F8FF", fill_type="solid")
+        # Row sum
+        sum_b = get_column_letter(2)
+        sum_f = get_column_letter(6)
+        rs = ws.cell(row=row, column=7, value=f"=SUM({sum_b}{row}:{sum_f}{row})")
+        rs.font = Font(name="Calibri", size=10, italic=True, color="606060")
+        rs.alignment = Alignment(horizontal="center")
+        rs.number_format = "0.00"
+
+    # Aggregate total + K_mean_60
+    agg_total_row = 65
+    ws.cell(row=agg_total_row, column=1, value="Σ all").font = Font(
+        name="Calibri", size=10, bold=True, italic=True)
+    for elem in ELEMENTS:
+        col = ELEMENT_COL[elem]
+        col_letter = get_column_letter(col)
+        ftotal = f"=SUM({col_letter}53:{col_letter}64)"
+        tc = ws.cell(row=agg_total_row, column=col, value=ftotal)
+        tc.font = Font(name="Calibri", size=10, italic=True, color="606060")
+        tc.fill = PatternFill(start_color="F0F0F0", end_color="F0F0F0", fill_type="solid")
+        tc.alignment = Alignment(horizontal="center")
+        tc.number_format = "0.00"
+    gtot = ws.cell(row=agg_total_row, column=7, value=f"=SUM(G53:G64)")
+    gtot.font = Font(name="Calibri", size=10, bold=True, color="404040")
+    gtot.fill = PatternFill(start_color="E0E0E0", end_color="E0E0E0", fill_type="solid")
+    gtot.alignment = Alignment(horizontal="center")
+    gtot.number_format = "0.00"
+    add_defined_name(wb, "cen_grid_total_all", f"'03_Normalization_60Element_Grid'!$G${agg_total_row}")
+
+    # K_mean_60 = total / 60 (feeds Sheet 13 AvG)
+    kmean_row = agg_total_row + 1
+    ws.cell(row=kmean_row, column=1, value="K_mean_60").font = Font(
+        name="Calibri", size=10, bold=True, color="0066CC")
+    ws.merge_cells(start_row=kmean_row, start_column=1, end_row=kmean_row, end_column=6)
+    apply_formula_cell(ws, kmean_row, 7, "=cen_grid_total_all/60")
+    ws.cell(row=kmean_row, column=7).number_format = "0.0000"
+    ws.cell(row=kmean_row, column=7).font = Font(
+        name="Calibri", size=11, bold=True, color="0066CC")
+    add_defined_name(wb, "cen_k_mean_60_all", f"'03_Normalization_60Element_Grid'!$G${kmean_row}")
+
+    # ─────────────────────────────────────────────────────────
+    # Footer: provenance + scope disclosure
+    # ─────────────────────────────────────────────────────────
+    footer_start = kmean_row + 2
+    apply_brand_header(ws, footer_start, 1, 7,
+                       "Authority + Scope Disclosure", bg=DARK_NAVY, size=11)
+    notes = [
+        "Authority: W06v3 Procedure C placement table (POC/docs/cen-ssot/CEN_SSOT_W06v3_34KPI_*)",
+        "                                       ",
+        "Scope per Lock #8.11: 29 face-KPIs occupy 29 of 180 cells (151 silent zero-fills). 4 edge-KPIs + 1 vertex-KPI live in Sheets 07/08 NOT in this grid.",
+        "Scope per Lock #8.22: O1 layer canonical baseline. Strict-O1 reading + s58 reading documented in Sheet 02; this grid follows s58 (matches Lock #8.22).",
+        "Scope per Lock #8.29: 34 BSC KPIs are sole math input. 4-vector (D/E/V_res) is reference-only in Sheet 10 — NOT in this formula cascade.",
+        "                                       ",
+        "Per-cell semantics: =bsc_<id>_value where placed; literal 0 where silent (zeroEnergy policy). Aggregate-row (rows 52-66) sums across O1+O2+O3 per cell.",
+        "                                       ",
+        "Named ranges defined: cen_f<n>_o<m>_elements (36 row ranges) consumed by Sheet 04 Face_Calculations; cen_o<m>_grid_total (3) per-octave sums; cen_k_mean_60_all consumed by Sheet 13 AvG diagnostic.",
+    ]
+    for offset, note in enumerate(notes, start=1):
+        c = ws.cell(row=footer_start + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=footer_start + offset, start_column=1,
+                       end_row=footer_start + offset, end_column=7)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 12
+    for col in ["B", "C", "D", "E", "F"]:
+        ws.column_dimensions[col].width = 11
+    ws.column_dimensions["G"].width = 12
+
+    # Freeze first 2 rows + first column for scrolling
+    ws.freeze_panes = "B4"
+
     return ws
 
 
