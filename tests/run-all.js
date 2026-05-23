@@ -31,6 +31,7 @@ const SUITES = [
   { name: 'Still-Point Proximity',  file: 'still-point.test.js' },
   { name: 'AAG Diagnostic',          file: 'aag.test.js' },
   { name: 'AvG Diagnostic',          file: 'avg.test.js' },
+  { name: 'Engine State Canonicality', file: 'engine-state-canonicality.test.mjs' },
   { name: 'Spectral Analyzer',       file: 'spectral.test.js' },
   { name: 'Edge Analyzer (Adv)',     file: 'edge-analyzer.test.mjs' },
   { name: 'Vertex Analyzer (Adv)',   file: 'vertex-analyzer.test.mjs' },
