@@ -1738,23 +1738,214 @@ def build_sheet_16_dashboard(wb: Workbook):
 def build_sheet_17_audit_crosslinks(wb: Workbook):
     """Sheet 17 Audit_Trail_Crosslinks — pointer to CALCULATION_AUDIT_TRAIL.md per cell type.
 
-    Each row maps a cell-type / section to its audit trail anchor:
-      Face calculation cells → audit trail §1-§4
-      Edge cells → §5
-      Vertex cells → §6
-      Axis cells → §7
-      Octave detection → Appendix C (Foundation Principle)
-      Global Coherence → §8
-      AAG → §12 + §16
-      Spectral Δ verdict → §13
-      Bi-Directional Intervention → §17 (Lock #8.24)
+    Reference sheet (metadata-only; no computation). Maps each SSOT calculation
+    layer to: audit trail section + POC code file:line + test file. Honors the
+    provenance-discipline goal of the SSOT (every computed cell traceable from
+    formula → math doc → engine code → test verification).
 
-    Authority: provenance discipline (every computed cell traceable to math doc).
+    Per POC documentation spine three-pillar trio:
+      1. CALCULATION_AUDIT_TRAIL.md — formulas + worked examples
+      2. QUANNEX_INTERPRETIVE_LAYER_DISCLOSURE.md — methodology disclosure
+      3. HYGIENE_PRINCIPLES.md — verification-discipline scaffolding
+
+    This sheet is the in-xlsx index pointing into the documentation spine.
     """
     ws = wb.create_sheet("17_Audit_Trail_Crosslinks")
     apply_brand_header(ws, 1, 1, 6,
-                       "Audit Trail Crosslinks · Cell-Type → Math Doc Section",
+                       "Audit Trail Crosslinks · Cell-Type → Math Doc Section + Code + Test",
                        bg=DEEP_TEAL, size=14)
+
+    # Column headers (row 3)
+    headers = [
+        "SSOT Layer",
+        "Sheet # / Block",
+        "Audit Trail Section",
+        "POC Code File:Line",
+        "Test File",
+        "Notes / Architectural Lock"
+    ]
+    for col_idx, header_text in enumerate(headers, start=1):
+        c = ws.cell(row=3, column=col_idx, value=header_text)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Mapping: (Layer, Sheet, Audit Section, Code, Test, Notes)
+    CROSSLINKS = [
+        # Foundation layer
+        ("MATH CONSTANTS",           "Sheet 01",
+         "Appendix A (PHI-Derived Constants)",
+         "js/constants/phi-harmonics.js + js/core/TuningConfig.js",
+         "tests/phi-math.test.js (127 tests)",
+         "Lock #8.6 pentagramic; Lock #8.32 kappa=phi^2 balancedMode"),
+        ("RAW INPUTS (34 BSC KPIs)", "Sheet 02",
+         "Section 1 (per-face element decomposition)",
+         "companies/cen/mapping-context.json (faces[].elements)",
+         "tests/engine-state-canonicality.test.mjs (Section 2)",
+         "Lock #8.29 sheet 02 = 34 BSC only; Lock #8.11 Procedure C"),
+        ("60-ELEMENT GRID",          "Sheet 03 (180 cells)",
+         "Section 1 (input layer per face per octave)",
+         "(grid is xlsx-only; reads Sheet 02 named ranges)",
+         "(structural test in canonicality Section 4)",
+         "Lock #8.11 + #8.22 Pure-O1 baseline"),
+        # Pentagramic chain
+        ("PENTAGRAMIC FORMULA",      "Sheet 04",
+         "Section 1-5 (K_bar, star pairs, intersection nodes, P, C, E_f)",
+         "js/main.js (recalculate, Pass 1-5) + js/core/Face.js",
+         "tests/integration.test.mjs (55 tests, real CSV→engine)",
+         "Lock #8.32 + #8.34 (kappa=phi^2; provisional pending kappa-band resolution)"),
+        ("STAR PAIRS (alpha=phi-1)", "Sheet 05 (Sheet 04 cols H-L embedded)",
+         "Section 2 (pentagram skip-pair formula)",
+         "js/main.js (Pass 2 axisInformedEnergy) + Face.starPairs",
+         "(integration tests cover)",
+         "Lock #8.6 alpha = phi^-1 canonical"),
+        ("BREATH FEEDBACK (Pass 2)", "Sheet 06",
+         "Section 3 (axis-informed energy E_final = delta*E_local + (1-delta)*E_opposing)",
+         "js/main.js (Pass 2) + 6 breath axis pairs (F1<->F11, etc.)",
+         "tests/integration.test.mjs",
+         "Lock #8.6 delta = 0.9 ≈ psi_5"),
+        # Geometric layers
+        ("EDGES (30 + advanced)",    "Sheet 07 + Sheet 08 ref",
+         "Sections 5 (core sqrt) + 14 (advanced relative-tension)",
+         "js/main.js (generateEdgesFromTopology) + js/advanced/edge-analyzer.js",
+         "tests/edge-analyzer.test.mjs (18 tests)",
+         "Lock #8.27 topology fix CLOSED; Lock #8.5 edges side-by-side"),
+        ("VERTICES (20)",            "Sheet 08",
+         "Sections 6 + 15 (sequence-concavity per Lock #8.19)",
+         "js/main.js (generateVerticesFromTopology) + js/advanced/vertex-analyzer.js",
+         "tests/vertex-analyzer.test.mjs (29 tests)",
+         "Lock #8.19 chirality→sequenceConcavity sympy proof; Lock #8.27 topology fix"),
+        ("BI-DIRECTIONAL (50 sigs)", "Sheet 09 (Lock #8.24)",
+         "Section 17 + sub-section 'Constants as Bi-Directional Coupling Tuners'",
+         "(50 signatures partnership-validated; CEN application docs)",
+         "(coverage via tests/integration.test.mjs)",
+         "Lock #8.24 Bi-Directional Co-Evolution architecture"),
+        ("BREATH AXES (6 polarities)", "Sheet 10",
+         "Section 7 (axis polarity + 4-vector inline per Lock #8.29)",
+         "js/main.js (6 axes F1<->F11, F2<->F7, F3<->F8, F4<->F9, F5<->F10, F6<->F12)",
+         "(integration tests cover)",
+         "Lock #8.29 4-vector inline (D/E/V_res_pre/V_res_post)"),
+        ("OCTAVE DETECTION (2 paths)", "Sheet 11",
+         "Appendix C (Path 1 threshold lookup + Path 2 Foundation Principle)",
+         "js/main.js (detectOrganizationalOctave) + octave-thresholds constants",
+         "tests/integration.test.mjs (octave assertions)",
+         "Foundation Principle (audit trail Appendix C)"),
+        # Aggregation + diagnostics
+        ("GLOBAL COHERENCE",         "Sheet 12",
+         "Section 1 (kappa * mu_E * (1 - lambda * CV_E))",
+         "js/main.js (getGlobalCoherence + getCoherenceDetail)",
+         "tests/integration.test.mjs + tests/phi-math.test.js",
+         "Lock #8.32 kappa choice affects post-amplifier value"),
+        ("AAG DIAGNOSTIC",           "Sheet 13",
+         "Section 12 (Aspiration-Actuality Gap = E_F10F11F12 / E_F1F2F3)",
+         "js/core/Diagnostics.js getAspirationActualityGap()",
+         "tests/aag.test.js (13 tests)",
+         "Lock #8.17 Wk8 canonical; AAG_O1 reading shifts with kappa per Section 5 Q1 of resolution analysis"),
+        ("AvG DIAGNOSTIC",           "Sheet 13",
+         "Section 16 (Apparent vs Granular Gap = |C_global - K_mean_60|)",
+         "js/core/Diagnostics.js getApparentGranularGap()",
+         "tests/avg.test.js (40 tests)",
+         "Lock #8.22 + #8.26 canonical phi-derived band thresholds (Faithful/Minor/Distortion/Severe)"),
+        ("SPECTRAL ANALYSIS",        "Sheet 14",
+         "Section 13 + Mode 5 Deep Interpretation sub-section",
+         "js/spectral-analyzer.js (Graph Laplacian L=D-A, eigenvalues, modal amps)",
+         "tests/spectral.test.js (18 tests)",
+         "Lock #8.20 dominantMode=narrative-pointer vs spectral output; Mode 5 = edge-phenomenon finding"),
+        ("FACE PROVENANCE (F8 template)", "Sheet 15",
+         "Section 6.6 + F8 Provenance Template doc",
+         "(traceability artifact; canonical 16-column ALCOA+ pattern)",
+         "(documentation discipline; no automated test)",
+         "F8 template canonical for face-by-face provenance chains"),
+        # Visualization + crosslinks
+        ("DASHBOARD VIEW",           "Sheet 16",
+         "(visualization; not a math derivation)",
+         "pages/dodecahedron-3d.html + js/dodec/journey/*",
+         "tests/smoke-test.mjs (77 checks)",
+         "Lock #8.2 CEN-authentic mirror naming; Lock #8.7 geometric verification CLEARED"),
+        ("THIS SHEET (Audit Crosslinks)", "Sheet 17",
+         "(meta-sheet; in-xlsx index into POC documentation spine)",
+         "scripts/_build_cen_ssot_xlsx.py build_sheet_17_audit_crosslinks()",
+         "(no automated test; structural inspection only)",
+         "POC docs spine: AUDIT_TRAIL + DISCLOSURE + HYGIENE three-pillar trio"),
+        ("ADVERSARIAL FINDINGS",     "Sheet 18 (Wave 3 placeholder)",
+         "(future Wave 3 work; not Session A scope)",
+         "(thesis-defense intellectual-skeptic stress-test)",
+         "(no test until adversarial pass complete)",
+         "Deferred to Wave 3"),
+        ("TEST COVERAGE MATRIX",     "Sheet 19",
+         "(meta-sheet; links Sheet cells to POC test file/case)",
+         "scripts/_build_cen_ssot_xlsx.py build_sheet_19_test_coverage_matrix()",
+         "(self-referential; reads test results from run-all.js output)",
+         "Test count today: 613/613 passing (zero failures)"),
+        # Documentation spine pillars
+        ("DOCS PILLAR 1 - Math",     "(documentation, not a sheet)",
+         "POC/docs/math/CALCULATION_AUDIT_TRAIL.md (~3300 lines)",
+         "(reference doc; every formula audit-trailed with worked examples)",
+         "(coverage = every test verifies a section's claims)",
+         "Three-pillar trio: this is the MATHEMATICAL RIGOR pillar"),
+        ("DOCS PILLAR 2 - Disclosure", "(documentation, not a sheet)",
+         "POC/docs/QUANNEX_INTERPRETIVE_LAYER_DISCLOSURE.md (~330 lines)",
+         "(methodology's mature self-honest scaffolding)",
+         "(Calibration Loop = falsifiability mechanism)",
+         "Three-pillar trio: this is the INTERPRETIVE DISCIPLINE pillar; Lock #8.30"),
+        ("DOCS PILLAR 3 - Hygiene",  "(documentation, not a sheet)",
+         "POC/docs/HYGIENE_PRINCIPLES.md (~330 lines)",
+         "(implementation verification-discipline scaffolding)",
+         "tests/engine-state-canonicality.test.mjs (55 tests OPERATIONALIZE this)",
+         "Three-pillar trio: this is the ENGINEERING DISCIPLINE pillar"),
+    ]
+
+    # Populate
+    for idx, (layer, sheet, audit_section, code_ref, test_ref, notes) in enumerate(CROSSLINKS, start=4):
+        ws.cell(row=idx, column=1, value=layer).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+        ws.cell(row=idx, column=2, value=sheet).font = Font(name="Calibri", size=10)
+        ws.cell(row=idx, column=3, value=audit_section).font = Font(name="Calibri", size=10, italic=True)
+        ws.cell(row=idx, column=4, value=code_ref).font = Font(name="Consolas", size=9, color="606060")
+        ws.cell(row=idx, column=5, value=test_ref).font = Font(name="Consolas", size=9, color="0066CC")
+        ws.cell(row=idx, column=6, value=notes).font = Font(name="Calibri", size=9, italic=True, color="606060")
+        # Light alternating row backgrounds for scannability
+        if idx % 2 == 0:
+            for col in range(1, 7):
+                ws.cell(row=idx, column=col).fill = PatternFill(
+                    start_color="F8F8F8", end_color="F8F8F8", fill_type="solid")
+
+    # Footer with the three-pillar trio reminder
+    footer_row = 4 + len(CROSSLINKS) + 2
+    apply_brand_header(ws, footer_row, 1, 6,
+                       "POC Documentation Spine — Three-Pillar Trio (W2 Session A 2026-05-23)",
+                       bg=DARK_NAVY, size=11)
+    notes_text = [
+        "Pillar 1 — Mathematical Rigor: POC/docs/math/CALCULATION_AUDIT_TRAIL.md",
+        "Pillar 2 — Interpretive Discipline: POC/docs/QUANNEX_INTERPRETIVE_LAYER_DISCLOSURE.md (Lock #8.30)",
+        "Pillar 3 — Engineering Discipline: POC/docs/HYGIENE_PRINCIPLES.md + tests/engine-state-canonicality.test.mjs",
+        "                                       ",
+        "Test infrastructure: 12 suites, 613 tests passing as of W2 Session A close 2026-05-23.",
+        "Build: `python scripts/_build_cen_ssot_xlsx.py --init` (21/21 sheets).",
+        "Cross-workspace: §31 protocol tracker rows in FT + BDQ + memory entity (POC W2 Session A delivery).",
+        "                                       ",
+        "Lock #8.24 Bi-Directional Co-Evolution: 50 Elemental Influence Signatures encode element-shift",
+        "predictions per edge/vertex KPI; closes diagnostic-intervention loop. Per Lock #8.24 + §17.",
+        "                                       ",
+        "OPEN finding (provisional pending fresh-context partnership-resolve): kappa-band coupling.",
+        "Resolution analysis at POC/docs/cen-ssot/CEN_SSOT_KappaBand_Resolution_Analysis_2026-05-23.md.",
+    ]
+    for offset, note in enumerate(notes_text, start=1):
+        c = ws.cell(row=footer_row + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=footer_row + offset, start_column=1,
+                       end_row=footer_row + offset, end_column=6)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 28
+    ws.column_dimensions["B"].width = 22
+    ws.column_dimensions["C"].width = 42
+    ws.column_dimensions["D"].width = 45
+    ws.column_dimensions["E"].width = 35
+    ws.column_dimensions["F"].width = 55
+
+    # Freeze header
+    ws.freeze_panes = "A4"
+
     return ws
 
 
