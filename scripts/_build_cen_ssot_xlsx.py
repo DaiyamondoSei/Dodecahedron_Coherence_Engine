@@ -1187,18 +1187,280 @@ def build_sheet_03_normalization_60grid(wb: Workbook):
 def build_sheet_04_face_calculations(wb: Workbook):
     """Sheet 04 Face_Calculations — pentagramic formula per face per octave.
 
-    Per Diagnostics.js-equivalent formula in cells:
-      F_face = κ · μ · (1 − λ · CV)  applied at element/face level with pentagram weights
+    THE HEART OF THE CASCADE. Reads Sheet 03 (60-element grid) per octave;
+    applies pentagramic coherence formula; produces 36 face energies
+    (12 faces × 3 octaves) that feed Sheets 06-16 downstream.
 
-    Defines named ranges `cen_f<n>_e_local_<oN>` for downstream sheets (Spectral,
-    Dashboard) to read. Light Blue formula cells throughout (read-only display).
+    Pentagramic formula (per CALCULATION_AUDIT_TRAIL.md §2-§5):
 
-    Authority: js/main.js (calculation engine) + audit trail §1-§4.
+      Step 1: K_bar = mean of 5 element values (Earth/Water/Fire/Air/Ether)
+      Step 2: Star pairs (pentagram skip pattern):
+                s_1 = alpha * (Earth + Fire)/2 + (1-alpha) * Earth * Fire
+                s_2 = alpha * (Water + Air)/2  + (1-alpha) * Water * Air
+                s_3 = alpha * (Fire + Ether)/2 + (1-alpha) * Fire * Ether
+                s_4 = alpha * (Air + Earth)/2  + (1-alpha) * Air * Earth
+                s_5 = alpha * (Ether + Water)/2 + (1-alpha) * Ether * Water
+                where alpha = phi^-1 (golden synergy blend)
+      Step 3: Intersection nodes (consecutive star-pair blend):
+                p_i = beta * s_i + (1-beta) * s_(i+1)  cycling
+                where beta = 0.5 (PHI_MIDPOINT, perfect symmetry)
+      Step 4: P = mean of 5 intersection nodes
+      Step 5: C_raw = gamma * K_bar + (1-gamma) * P  (pre-amplifier)
+                where gamma = 0.7 (70% internal / 30% relational)
+      Step 6: E_final = 1 / (1 + exp(-kappa * (C_raw - 0.5)))
+                where kappa = phi^2 = 2.618 (balancedMode canonical per Lock #8.32)
+
+    Lock #8.32 + #8.34 resolution: kappa = phi^2 = 2.618 is canonical
+    (NOT 4 which was pre-Lock-#8.32 enterpriseMode-rounded framing).
+    Lock #8.22 face energies (F1=0.2563, etc.) were computed with kappa=4;
+    they are now SUPERSEDED by Sheet 04's kappa=phi^2 outputs. This sheet
+    IS the new canonical baseline.
+
+    Defines 36 named ranges: cen_f<n>_o<m>_e_final (12 faces x 3 octaves).
+    Sheet 12 Global_Coherence + Sheet 13 Diagnostics + Sheet 14 Spectral
+    all reference these.
+
+    Authority:
+      - audit trail §1-§5 (pentagramic derivation)
+      - Lock #8.6 (constants alpha/beta/gamma canonical)
+      - Lock #8.22 (Pure-O1 strict-normalization input baseline)
+      - Lock #8.32 (kappa = phi^2 canonical, NOT 4)
+      - Lock #8.34 NEW (Lock #8.22 face energies superseded by Sheet 04
+        with kappa=phi^2 baseline; this sheet IS the new canonical)
     """
     ws = wb.create_sheet("04_Face_Calculations")
-    apply_brand_header(ws, 1, 1, 12,
+    apply_brand_header(ws, 1, 1, 22,
                        "Face Calculations — Pentagramic Coherence per Face per Octave",
                        bg=DEEP_TEAL, size=14)
+
+    # ─────────────────────────────────────────────────────────
+    # Column header (row 3) — full audit-trailability per face row
+    # ─────────────────────────────────────────────────────────
+    headers = [
+        "Face",         # A
+        "Earth",        # B
+        "Water",        # C
+        "Fire",         # D
+        "Air",          # E
+        "Ether",        # F
+        "K_bar",        # G — mean of 5 elements
+        "s1",           # H — Earth-Fire star pair
+        "s2",           # I — Water-Air star pair
+        "s3",           # J — Fire-Ether star pair
+        "s4",           # K — Air-Earth star pair
+        "s5",           # L — Ether-Water star pair
+        "p1",           # M — node beta-blend (s1,s2)
+        "p2",           # N — node (s2,s3)
+        "p3",           # O — node (s3,s4)
+        "p4",           # P — node (s4,s5)
+        "p5",           # Q — node (s5,s1)
+        "P_mean",       # R — mean of 5 p_i
+        "C_raw",        # S — gamma * K_bar + (1-gamma) * P_mean
+        "E_final",      # T — logistic-amplified canonical face energy
+        "Band",         # U — Wall / Gate / Membrane / Hemorrhage / Vortex
+        "Notes",        # V
+    ]
+    for col_idx, header_text in enumerate(headers, start=1):
+        c = ws.cell(row=3, column=col_idx, value=header_text)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=9, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Helper to build one octave block
+    def build_octave_block(start_row: int, octave_num: int, octave_name: str):
+        apply_brand_header(
+            ws, start_row, 1, 22,
+            f"Octave {octave_num} — {octave_name} "
+            f"(pentagramic: alpha=phi^-1, beta=0.5, gamma=0.7, kappa=phi^2)",
+            bg=QUANTUM_PURPLE, size=11
+        )
+
+        # 12 face rows
+        for face_id in range(1, 13):
+            row = start_row + face_id
+            elem_range = f"cen_f{face_id}_o{octave_num}_elements"
+
+            # Col A: Face label
+            ws.cell(row=row, column=1, value=f"F{face_id}").font = Font(
+                name="Calibri", size=10, bold=True
+            )
+
+            # Cols B-F: 5 element values (pulled from Sheet 03 via named range INDEX)
+            elements_idx = ["Earth", "Water", "Fire", "Air", "Ether"]
+            for elem_pos, elem_name in enumerate(elements_idx, start=1):
+                col = 1 + elem_pos  # B=2, C=3, D=4, E=5, F=6
+                apply_formula_cell(ws, row, col, f"=INDEX({elem_range},{elem_pos})")
+                ws.cell(row=row, column=col).number_format = "0.0000"
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal="center")
+
+            # Col G: K_bar = mean of 5 elements
+            apply_formula_cell(ws, row, 7, f"=AVERAGE(B{row}:F{row})")
+            ws.cell(row=row, column=7).number_format = "0.0000"
+            ws.cell(row=row, column=7).alignment = Alignment(horizontal="center")
+
+            # Cols H-L: 5 star pairs (pentagram skip pattern)
+            # s_1: Earth-Fire (B,D)
+            apply_formula_cell(ws, row, 8,
+                f"=alpha*((B{row}+D{row})/2)+(1-alpha)*B{row}*D{row}")
+            # s_2: Water-Air (C,E)
+            apply_formula_cell(ws, row, 9,
+                f"=alpha*((C{row}+E{row})/2)+(1-alpha)*C{row}*E{row}")
+            # s_3: Fire-Ether (D,F)
+            apply_formula_cell(ws, row, 10,
+                f"=alpha*((D{row}+F{row})/2)+(1-alpha)*D{row}*F{row}")
+            # s_4: Air-Earth (E,B)
+            apply_formula_cell(ws, row, 11,
+                f"=alpha*((E{row}+B{row})/2)+(1-alpha)*E{row}*B{row}")
+            # s_5: Ether-Water (F,C)
+            apply_formula_cell(ws, row, 12,
+                f"=alpha*((F{row}+C{row})/2)+(1-alpha)*F{row}*C{row}")
+            for col in range(8, 13):
+                ws.cell(row=row, column=col).number_format = "0.0000"
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal="center")
+
+            # Cols M-Q: 5 intersection nodes (consecutive s blend with beta=0.5)
+            # p_1 = beta*s_1 + (1-beta)*s_2
+            apply_formula_cell(ws, row, 13, f"=beta*H{row}+(1-beta)*I{row}")
+            # p_2 = beta*s_2 + (1-beta)*s_3
+            apply_formula_cell(ws, row, 14, f"=beta*I{row}+(1-beta)*J{row}")
+            # p_3 = beta*s_3 + (1-beta)*s_4
+            apply_formula_cell(ws, row, 15, f"=beta*J{row}+(1-beta)*K{row}")
+            # p_4 = beta*s_4 + (1-beta)*s_5
+            apply_formula_cell(ws, row, 16, f"=beta*K{row}+(1-beta)*L{row}")
+            # p_5 = beta*s_5 + (1-beta)*s_1 (cycling back)
+            apply_formula_cell(ws, row, 17, f"=beta*L{row}+(1-beta)*H{row}")
+            for col in range(13, 18):
+                ws.cell(row=row, column=col).number_format = "0.0000"
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal="center")
+
+            # Col R: P_mean = mean of 5 intersection nodes
+            apply_formula_cell(ws, row, 18, f"=AVERAGE(M{row}:Q{row})")
+            ws.cell(row=row, column=18).number_format = "0.0000"
+            ws.cell(row=row, column=18).alignment = Alignment(horizontal="center")
+
+            # Col S: C_raw = gamma * K_bar + (1-gamma) * P_mean
+            apply_formula_cell(ws, row, 19,
+                f"=gamma*G{row}+(1-gamma)*R{row}")
+            ws.cell(row=row, column=19).number_format = "0.0000"
+            ws.cell(row=row, column=19).alignment = Alignment(horizontal="center")
+
+            # Col T: E_final = logistic sensitivity amplifier (Lock #8.32 kappa=phi^2)
+            apply_formula_cell(ws, row, 20,
+                f"=1/(1+EXP(-kappa*(S{row}-0.5)))")
+            ws.cell(row=row, column=20).number_format = "0.0000"
+            ws.cell(row=row, column=20).alignment = Alignment(horizontal="center")
+            # Highlight E_final cell — this is the deliverable
+            ws.cell(row=row, column=20).font = Font(
+                name="Calibri", size=10, bold=True, color="0D7377"
+            )
+
+            # Col U: Band classification (compare against phi-derived thresholds)
+            # Wall: < phi^-4 (0.146)
+            # Gate: [phi^-4, phi^-2) = [0.146, 0.382)
+            # Membrane: [phi^-2, phi^-1) = [0.382, 0.618)
+            # Hemorrhage: [phi^-1, 0.854)
+            # Vortex: >= 0.854
+            apply_formula_cell(
+                ws, row, 21,
+                f'=IF(T{row}<phi_inv_4,"Wall",'
+                f'IF(T{row}<phi_inv_2,"Gate",'
+                f'IF(T{row}<phi_inv_1,"Membrane",'
+                f'IF(T{row}<0.854,"Hemorrhage","Vortex"))))'
+            )
+            ws.cell(row=row, column=21).alignment = Alignment(horizontal="center")
+            ws.cell(row=row, column=21).font = Font(
+                name="Calibri", size=10, italic=True, color="606060"
+            )
+
+            # Col V: Notes (empty by default; available for partnership annotations)
+            v_cell = ws.cell(row=row, column=22, value="")
+            v_cell.font = Font(name="Calibri", size=9, italic=True, color="808080")
+
+            # Define named range for E_final (this is what Sheet 12/13/14 consume)
+            add_defined_name(
+                wb,
+                f"cen_f{face_id}_o{octave_num}_e_final",
+                f"'04_Face_Calculations'!$T${row}"
+            )
+
+        # Block summary row (means + std + count below floor)
+        total_row = start_row + 14
+        ws.cell(row=total_row, column=1, value="Block").font = Font(
+            name="Calibri", size=10, bold=True, italic=True
+        )
+        ws.cell(row=total_row, column=19, value="mu_E:").font = Font(
+            name="Calibri", size=10, bold=True, italic=True, color="606060"
+        )
+        ws.cell(row=total_row, column=19).alignment = Alignment(horizontal="right")
+        # mu_E for this octave (mean of 12 face E_final)
+        mu_cell = ws.cell(
+            row=total_row, column=20,
+            value=f"=AVERAGE(T{start_row + 1}:T{start_row + 12})"
+        )
+        mu_cell.font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+        mu_cell.fill = PatternFill(start_color="E0F4F4", end_color="E0F4F4", fill_type="solid")
+        mu_cell.alignment = Alignment(horizontal="center")
+        mu_cell.number_format = "0.0000"
+        add_defined_name(
+            wb, f"cen_o{octave_num}_face_energy_mean",
+            f"'04_Face_Calculations'!$T${total_row}"
+        )
+
+    # Build 3 octave blocks (vertical spacing same as Sheet 03)
+    build_octave_block(3, 1, "Survival (existence)")         # rows 3-17
+    build_octave_block(19, 2, "Structure (systematization)")  # rows 19-33
+    build_octave_block(35, 3, "Relationships / Aspirational") # rows 35-49
+
+    # ─────────────────────────────────────────────────────────
+    # Section D: Authority + scope disclosure footer (rows 52+)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 51, 1, 22,
+                       "Authority + Lock #8.34 Resolution",
+                       bg=DARK_NAVY, size=11)
+    notes = [
+        "Authority: CALCULATION_AUDIT_TRAIL.md Sections 1-5 (pentagramic derivation + worked examples + per-constant rationale).",
+        "                                       ",
+        "Constants source: Sheet 01 Assumptions_Constants named ranges (alpha=phi^-1, beta=0.5, gamma=0.7, kappa=phi^2 per Lock #8.32 balancedMode canonical).",
+        "Element inputs: Sheet 03 Normalization_60Element_Grid cen_f<n>_o<m>_elements named ranges (per Procedure C v3 + Pure-O1 baseline).",
+        "                                       ",
+        "Lock #8.34 NEW (W2 Session A 2026-05-23): kappa=phi^2=2.618 canonical (NOT 4 which was pre-Lock-#8.32 enterpriseMode-rounded framing).",
+        "Lock #8.22 face energies (F1=0.2563, etc.) were computed with kappa=4 and are now SUPERSEDED by Sheet 04 kappa=phi^2 outputs.",
+        "Sheet 04 IS the new canonical baseline. Downstream sheets (12/13/14) consume cen_f<n>_o<m>_e_final from this sheet.",
+        "                                       ",
+        "Pentagramic skip pattern (s_i pairs): s1=Earth+Fire, s2=Water+Air, s3=Fire+Ether, s4=Air+Earth, s5=Ether+Water (canonical pentagram star).",
+        "Intersection nodes (p_i): p1=blend(s1,s2), p2=blend(s2,s3), p3=blend(s3,s4), p4=blend(s4,s5), p5=blend(s5,s1) cycling.",
+        "                                       ",
+        "Band thresholds (phi-derived from Sheet 01 named ranges):",
+        "  Wall: E_final < phi^-4 (0.1459); Gate: [phi^-4, phi^-2)=[0.146, 0.382);",
+        "  Membrane: [phi^-2, phi^-1)=[0.382, 0.618); Hemorrhage: [phi^-1, 0.854); Vortex: >= 0.854.",
+        "                                       ",
+        "Named ranges defined: cen_f<n>_o<m>_e_final (36 face-energy outputs); cen_o<m>_face_energy_mean (3 per-octave means).",
+        "These feed: Sheet 12 (Global Coherence kappa*mu*(1-lambda*CV)), Sheet 13 (AAG numerator/denominator + AvG cGlobal), Sheet 14 (Spectral modal amplitudes).",
+    ]
+    for offset, note in enumerate(notes, start=1):
+        c = ws.cell(row=51 + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=51 + offset, start_column=1,
+                       end_row=51 + offset, end_column=22)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 6
+    for col in ["B", "C", "D", "E", "F"]:
+        ws.column_dimensions[col].width = 9
+    ws.column_dimensions["G"].width = 9
+    for col in ["H", "I", "J", "K", "L"]:
+        ws.column_dimensions[col].width = 9
+    for col in ["M", "N", "O", "P", "Q"]:
+        ws.column_dimensions[col].width = 9
+    ws.column_dimensions["R"].width = 9
+    ws.column_dimensions["S"].width = 9
+    ws.column_dimensions["T"].width = 11  # E_final highlighted
+    ws.column_dimensions["U"].width = 12  # Band
+    ws.column_dimensions["V"].width = 30  # Notes
+
+    # Freeze top-3 + face column for scrolling readability
+    ws.freeze_panes = "B4"
+
     return ws
 
 
