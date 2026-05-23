@@ -176,7 +176,17 @@ async function testPage(path, label, checks = {}) {
   if (checks.hasIframes) {
     await test('Uses iframe architecture (sub-pages loaded)', async () => {
       const iframes = (html.match(/<iframe[^>]+src=["']([^"']+)["']/gi) || []);
-      assert(iframes.length >= 3, `Only ${iframes.length} iframes (expected >=3)`);
+      // Fix 2026-05-23 (W2 Session A Tier 1 closure batch): assertion was
+      // `>= 3` which contradicted the documented "thin iframe shell"
+      // architecture (line 226: demo.html is intentionally a SINGLE-iframe
+      // SHELL with one `#main-frame` that navigates via src-swapping on
+      // postMessage events). The original `>= 3` likely came from an
+      // abandoned multi-iframe layout intent. Test now matches the actual
+      // shell architecture: at least 1 iframe AND it must resolve.
+      // Same "silent-default-masquerading" pattern as Lock #8.27/#8.33
+      // engine bugs found earlier today; this test had been quietly
+      // failing for an unknown period (only surfaced when dev server up).
+      assert(iframes.length >= 1, `Only ${iframes.length} iframes (expected >=1 — shell architecture)`);
       // Verify each iframe src resolves
       const srcRe = /src=["']([^"']+)["']/i;
       for (const iframe of iframes) {
