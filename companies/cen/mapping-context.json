@@ -321,8 +321,26 @@
     "strategicMandate": "Build the operational and structural spine to contain and express CEN's exceptional values foundation",
     "breathPrescription": "Exhale the mission — communicate it externally, structure it internally, fund it systematically — so the world can receive what CEN already knows",
     "tuning": {
+      "perspective": "balanced",
+      "description": "Balanced mode — sacred geometry defaults (phi-derived). Refreshed 2026-05-23 per Lock #8.31/#8.32 from pre-W0 NGO/startup preset. Live engine now matches TuningConfig.balancedMode() canonical defaults. Original NGO preset (alpha=0.4, gamma=0.6, delta=0.95, kappa=1.5, eta=0.236, zeta=0.03, theta=0.5) preserved as `tuning_legacy_ngo` field below for historical reference per Never Delete Rule.",
+      "alpha": 0.6180339887498949,
+      "beta": 0.5,
+      "gamma": 0.7,
+      "delta": 0.9,
+      "kappa": 2.6180339887498949,
+      "eta": 0.3819660112501051,
+      "zeta": 0.06366100187501752,
+      "theta": 0.6180339887498949,
+      "provenance": {
+        "source": "POC/js/core/TuningConfig.js balancedMode (default constructor)",
+        "lockReferences": ["#8.6 (Pentagramic constants canonical)", "#8.31 (mapping-context.json refresh)", "#8.32 (kappa=phi^2 not 4)"],
+        "refreshDate": "2026-05-23",
+        "refreshSession": "W2 Session A Arc 2 → Arc 3 transition"
+      }
+    },
+    "tuning_legacy_ngo": {
       "perspective": "ngo",
-      "description": "Balanced perspective for early-stage NGO with strong values and operational gaps",
+      "description": "Original pre-W0 NGO/startup-like preset (frozen here per Never Delete Rule). Was operative until 2026-05-23 W2 Session A refresh. Maps to TuningConfig.startupMode() with kappa rounded to 1.5 from phi=1.618. Retained for historical reference and potential future per-company-archetype tuning re-introduction.",
       "alpha": 0.4,
       "beta": 0.5,
       "gamma": 0.6,
@@ -330,7 +348,8 @@
       "kappa": 1.5,
       "eta": 0.236,
       "zeta": 0.03,
-      "theta": 0.5
+      "theta": 0.5,
+      "archivedDate": "2026-05-23"
     }
   },
 

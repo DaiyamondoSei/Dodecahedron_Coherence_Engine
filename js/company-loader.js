@@ -151,9 +151,15 @@ async function switchCompany(companyId) {
         // Initialize Engine
         if (window.Quannex) {
             // Apply tuning parameters first (if available) for consistent coherence calculation
-            if (context.tuning && typeof window.Quannex.importTuning === 'function') {
-                Logger.info('CompanyLoader', `Applying tuning: ${context.tuning.perspective}`);
-                window.Quannex.importTuning(context.tuning);
+            // Lock #8.33 fix (2026-05-23): All 5 companies have tuning at `diagnostics.tuning`
+            // (nested), NOT top-level. Original `context.tuning` check found nothing → importTuning
+            // never fired → engine always used constructor default (or persisted prior state). This
+            // silently broke per-company tuning architecture for ~6 weeks. Supports BOTH paths for
+            // backward compat: nested-first (canonical), top-level (legacy/future).
+            const companyTuning = context.diagnostics?.tuning ?? context.tuning;
+            if (companyTuning && typeof window.Quannex.importTuning === 'function') {
+                Logger.info('CompanyLoader', `Applying tuning: ${companyTuning.perspective}`);
+                window.Quannex.importTuning(companyTuning);
             }
 
             await window.Quannex.initWithCompany({
