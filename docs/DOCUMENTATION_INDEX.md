@@ -12,6 +12,7 @@
 | Component | POC Location | Status |
 |-----------|--------------|--------|
 | `QUANNEX_INTERPRETIVE_LAYER_DISCLOSURE.md` | `docs/QUANNEX_INTERPRETIVE_LAYER_DISCLOSURE.md` | **NEW 2026-05-23** — 4 interpretive layers named (5-element / 12-face / spectral semantic overlay / 7-octave) + 3 Genesis responses + Calibration Loop as unifying falsifiability mechanism. Lock #8.30. |
+| `HYGIENE_PRINCIPLES.md` | `docs/HYGIENE_PRINCIPLES.md` | **NEW 2026-05-23 (third pillar of POC documentation spine)** — verification-discipline scaffolding sibling to Disclosure doc. Names silent-default-masquerading pattern across 3 worked-example bugs from today (Lock #8.27 + #8.33 + iframe assertion). Bayesian-shape epistemology connection to Calibration Loop. Practical verification-gates guidance for future engineers. Inheritance for every future Quannex client + thesis defense. ~330 lines. |
 | AvG canonical engine impl | `js/core/Diagnostics.js` `getApparentGranularGap()` | **NEW 2026-05-23** — zero-deps, dual export, 40 tests in `tests/avg.test.js`. Lock #8.26. |
 | Per-company tuning loader fix | `js/company-loader.js:154-165` | **NEW 2026-05-23** — fixes 6-week silent bug; `context.diagnostics?.tuning ?? context.tuning`. Lock #8.33. |
 | Engine topology generation fix | `js/main.js:648-690` | **NEW 2026-05-23** — generates edges/vertices unconditionally after `createFaces()`; closes Lock #8.27. |
