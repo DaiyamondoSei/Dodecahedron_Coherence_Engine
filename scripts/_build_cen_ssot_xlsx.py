@@ -615,18 +615,287 @@ def build_sheet_01_assumptions(wb: Workbook):
 
 
 def build_sheet_02_raw_inputs(wb: Workbook):
-    """Sheet 02 CEN_Raw_Inputs — 34 BSC KPIs + 4-vector face scores.
+    """Sheet 02 CEN_Raw_Inputs — 34 BSC KPIs (canonical math input layer).
 
-    Input layer. Per Lock #1.B: 34 KPIs are the math input; D/E/V_res_pre/V_res_post
-    are analytical-context (face-level perceptions, NOT canonical math inputs per Lock #8.7).
+    Per Lock #8.29 (2026-05-23 W2 partnership-decision): Sheet 02 holds 34 BSC
+    KPIs ONLY. 4-vector founder data (D/E/V_res_pre/V_res_post) lives inline in
+    Sheet 10 Breath_Axes per Lock #8.3 vector purity (researcher V_res layer is
+    parallel methodology, NOT math input).
 
-    Two blocks:
-      Block A: 34 BSC KPI table (id / label / face / octave / score / source-basis)
-      Block B: 4-vector face scores (12 faces × 4 vectors = 48 cells, analytical context only)
+    Per Lock #8.11 + #8.29: KPI placements via Procedure C (question-derived
+    clustering against canonical Songbook v2.1 inquiries). 29 face + 4 edge + 1
+    vertex (V13 = first vertex-KPI in CEN dataset) = 34 ✓.
+
+    Per Lock #8.22: O1 layer values from PureO1 canonical worked example.
+    Edge/vertex KPI values at O1/O2 marked TBD for partnership-validation in
+    Sheet 09 build (Bi-Directional layer per Lock #8.24). O2/O3 face-KPI values
+    are silent-zero placeholders until researcher normalization completes.
+
+    Source documents:
+      - POC/docs/cen-ssot/CEN_SSOT_W06v3_34KPI_QuestionDerived_Mapping_2026-05-21.md (placements)
+      - POC/docs/cen-ssot/CEN_SSOT_PureO1_Recomputation_2026-05-21.md §3 (O1 normalized values)
+
+    Defines 34 named ranges: `bsc_<id>_value` per KPI (e.g., `bsc_f1_value`,
+    `bsc_l8_value`). Downstream sheets (03 Normalization, 07/08 Edges/Vertices,
+    09 Bi-Directional) reference these.
     """
     ws = wb.create_sheet("02_CEN_Raw_Inputs")
-    apply_brand_header(ws, 1, 1, 8,
-                       "CEN Raw Inputs — 34 BSC KPIs + 4-Vector Context", bg=DEEP_TEAL, size=14)
+    apply_brand_header(ws, 1, 1, 11,
+                       "CEN Raw Inputs — 34 BSC KPIs (Procedure C canonical placements)",
+                       bg=DEEP_TEAL, size=14)
+
+    # Column headers (row 3)
+    headers = [
+        "#", "BSC ID", "KPI Name", "BSC Persp", "Tier", "Slot",
+        "Position", "Raw State", "Normalized [0,1]", "Norm Method", "Source"
+    ]
+    for col_idx, header_text in enumerate(headers, start=1):
+        c = ws.cell(row=3, column=col_idx, value=header_text)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Subsection header — Financial perspective (rows 4-12 = 9 KPIs F1-F8 + tier note)
+    apply_brand_header(ws, 4, 1, 11,
+                       "Financial Perspective — 8 KPIs (F1-F8)",
+                       bg=QUANTUM_PURPLE, size=10)
+
+    # The canonical 34 KPI table per W06v3 Procedure C mapping.
+    # Format: (row, num, bsc_id, name, persp, tier, slot, position, raw_state, normalized, norm_method, source, named_range)
+    # Where normalized is a number for O1 canonical values, None for TBD/silent.
+    KPI_ROWS = [
+        # F-series — Financial (8)
+        (5, 1, "F1", "Total annual revenue", "Financial", "O1", "Face",
+         "F1·Earth·O1", "£0 actual", 0.5, "target-progress",
+         "PureO1 §3 + Lock #8.22 / Songbook R5", "bsc_f1_value"),
+        (6, 2, "F2", "Certification revenue per client", "Financial", "O1", "Face",
+         "F1·Air·O1", "£0 (1 client)", 0.3, "target-progress",
+         "PureO1 §3 + Lock #8.22 / Songbook R6", "bsc_f2_value"),
+        (7, 3, "F3", "AI governance consulting revenue", "Financial", "O1", "Face",
+         "F1·Fire·O1", "£0 (silent)", 0.0, "zero-energy (silent)",
+         "PureO1 §3 + Lock #8.22 / Songbook R7", "bsc_f3_value"),
+        (8, 4, "F4", "Donation income / quarter", "Financial", "O2", "Edge",
+         "E7-11·O2", "TBD researcher", None, "edge KPI — partnership-validate",
+         "Lock #8.9 edge promotion / W06v3 line 173", "bsc_f4_value"),
+        (9, 5, "F5", "SCMS subscription revenue", "Financial", "O2", "Face",
+         "F11·Water·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 113 / Songbook R9", "bsc_f5_value"),
+        (10, 6, "F6", "Revenue per active member", "Financial", "O2", "Face",
+         "F1·Water·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 114 / Songbook R10", "bsc_f6_value"),
+        (11, 7, "F7", "Cost coverage ratio", "Financial", "O1", "Face",
+         "F1·Ether·O1", "~0% coverage", 0.5, "target-progress",
+         "PureO1 §3 + Lock #8.22 / Songbook R11", "bsc_f7_value"),
+        (12, 8, "F8", "Founder-borne infrastructure costs", "Financial", "O2", "Face",
+         "F1·Earth·O2", "TBD researcher", None, "O2 layer (Procedure C corrected from v2)",
+         "W06v3 line 116 / Songbook R12 / Lock #8.11", "bsc_f8_value"),
+    ]
+
+    apply_brand_header(ws, 13, 1, 11,
+                       "Customer Perspective — 9 KPIs (C1-C9)",
+                       bg=QUANTUM_PURPLE, size=10)
+    KPI_ROWS_C = [
+        (14, 9, "C1", "Active member count", "Customer", "O1", "Face",
+         "F6·Earth·O1", "300 total (researcher-est)", 0.4, "target-progress",
+         "PureO1 §3 + Lock #8.22 / Songbook R13", "bsc_c1_value"),
+        (15, 10, "C2", "Member engagement rate", "Customer", "O2", "Face",
+         "F6·Water·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 118 / Songbook R14", "bsc_c2_value"),
+        (16, 11, "C3", "Certified enterprise count", "Customer", "O1", "Face",
+         "F5·Earth·O1", "1 enterprise", 0.2, "target-progress",
+         "PureO1 §3 + Lock #8.22 / Songbook R15", "bsc_c3_value"),
+        (17, 12, "C4", "Cert renewal rate", "Customer", "O2", "Face",
+         "F5·Water·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 120 / Songbook R16", "bsc_c4_value"),
+        (18, 13, "C5", "NPS score", "Customer", "O2", "Face",
+         "F7·Air·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 121 / Songbook R17", "bsc_c5_value"),
+        (19, 14, "C6", "New member acquisition rate", "Customer", "O2", "Face",
+         "F6·Fire·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 122 / Songbook R18", "bsc_c6_value"),
+        (20, 15, "C7", "NGCLP students enrolled", "Customer", "O3", "Face",
+         "F5·Earth·O3", "0 (silent at O3)", 0.0, "zero-energy (silent)",
+         "W06v3 line 123 / Songbook R19 / Procedure C corrected", "bsc_c7_value"),
+        (21, 16, "C8", "AI governance consulting clients", "Customer", "O1", "Edge",
+         "E5-8·O1", "TBD edge-validate", None, "edge KPI — partnership-validate",
+         "Lock #8.9 edge promotion / W06v3 line 124", "bsc_c8_value"),
+        (22, 17, "C9", "Country representation in active members", "Customer", "O3", "Face",
+         "F6·Air·O3", "TBD researcher", None, "O3 layer — partnership-validate",
+         "W06v3 line 125 / Songbook R21", "bsc_c9_value"),
+    ]
+
+    apply_brand_header(ws, 23, 1, 11,
+                       "Intellectual Property Perspective — 9 KPIs (I1-I9)",
+                       bg=QUANTUM_PURPLE, size=10)
+    KPI_ROWS_I = [
+        (24, 18, "I1", "P&P Pack 0 policies", "IP", "O1", "Face",
+         "F4·Earth·O1", "0 of 4 (objective)", 0.0, "binary-presence (zero)",
+         "PureO1 §3 + Lock #8.22 / Songbook R22", "bsc_i1_value"),
+        (25, 19, "I2", "Certification governance policies", "IP", "O1", "Face",
+         "F4·Fire·O1", "0 of 3 (objective)", 0.0, "binary-presence (zero)",
+         "PureO1 §3 + Lock #8.22 / Songbook R23", "bsc_i2_value"),
+        (26, 20, "I3", "GDPR compliance gaps closed", "IP", "O1", "Edge",
+         "E10-12·O1", "TBD edge-validate", None, "edge KPI — partnership-validate",
+         "Lock #8.9 edge promotion / W06v3 line 128", "bsc_i3_value"),
+        (27, 21, "I4", "Cert independence mechanism", "IP", "O1", "Face",
+         "F4·Air·O1", "Absent (s58: partial)", 0.2, "target-progress (researcher-judged)",
+         "PureO1 §3 + Lock #8.22 (s58=0.2; STRICT=0.0)", "bsc_i4_value"),
+        (28, 22, "I5", "Cert time-to-completion", "IP", "O2", "Face",
+         "F8·Water·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 130 / Songbook R26", "bsc_i5_value"),
+        (29, 23, "I6", "AI engagement close rate", "IP", "O2", "Face",
+         "F5·Fire·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 131 / Songbook R27", "bsc_i6_value"),
+        (30, 24, "I7", "DMS adoption", "IP", "O2", "Face",
+         "F4·Earth·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 132 / Songbook R28", "bsc_i7_value"),
+        (31, 25, "I8", "Crisis response protocol", "IP", "O1", "Face",
+         "F12·Water·O1", "Absent (s58: partial)", 0.4, "target-progress (researcher-judged)",
+         "PureO1 §3 + Lock #8.22 (s58=0.4; STRICT=0.0)", "bsc_i8_value"),
+        (32, 26, "I9", "Vision/mission consistency", "IP", "O2", "Face",
+         "F10·Air·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 134 / Songbook R30", "bsc_i9_value"),
+    ]
+
+    apply_brand_header(ws, 33, 1, 11,
+                       "Learning & Growth Perspective — 8 KPIs (L1-L8)",
+                       bg=QUANTUM_PURPLE, size=10)
+    KPI_ROWS_L = [
+        (34, 27, "L1", "Compensated contributor count", "L&G", "O2", "Face",
+         "F3·Earth·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 135 / Songbook R31", "bsc_l1_value"),
+        (35, 28, "L2", "Knowledge transfer mechanisms", "L&G", "O2", "Face",
+         "F2·Air·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 136 / Songbook R32", "bsc_l2_value"),
+        (36, 29, "L3", "Onboarding documented + used", "L&G", "O2", "Face",
+         "F3·Fire·O2", "TBD researcher", None, "O2 layer — partnership-validate",
+         "W06v3 line 137 / Songbook R33", "bsc_l3_value"),
+        (37, 30, "L4", "Marketing capability operational", "L&G", "O1", "Face",
+         "F3·Fire·O1", "Absent (silent)", 0.0, "zero-energy (silent)",
+         "PureO1 §3 + Lock #8.22 (Procedure C corrected from F3·Air to F3·Fire)", "bsc_l4_value"),
+        (38, 31, "L5", "NGCLP curriculum delivered", "L&G", "O3", "Face",
+         "F2·Air·O3", "Silent at O3", 0.0, "zero-energy (silent)",
+         "W06v3 line 139 / Songbook R35 (Procedure C corrected from Fire to Air)",
+         "bsc_l5_value"),
+        (39, 32, "L6", "Volunteer programme operational", "L&G", "O3", "Face",
+         "F6·Water·O3", "TBD researcher", None, "O3 layer — partnership-validate",
+         "W06v3 line 140 / Songbook R36", "bsc_l6_value"),
+        (40, 33, "L7", "Peace Charter screening procedure", "L&G", "O2", "Edge",
+         "E2-10·O2", "TBD edge-validate", None, "edge KPI — partnership-validate",
+         "Lock #8.9 edge promotion / W06v3 line 141", "bsc_l7_value"),
+        (41, 34, "L8", "SDG alignment in PVM", "L&G", "O2", "Vertex",
+         "V13·O2 (F4∩F9∩F10)", "TBD vertex-validate", None,
+         "vertex KPI — partnership-validate (first vertex-KPI in CEN dataset)",
+         "Lock #8.10 + #8.11 NEW vertex promotion / W06v3 line 142", "bsc_l8_value"),
+    ]
+
+    ALL_ROWS = KPI_ROWS + KPI_ROWS_C + KPI_ROWS_I + KPI_ROWS_L
+    assert len(ALL_ROWS) == 34, f"Expected 34 KPIs, got {len(ALL_ROWS)}"
+
+    # Populate each row
+    for (row, num, bsc_id, name, persp, tier, slot, position, raw_state,
+         normalized, norm_method, source, named_range) in ALL_ROWS:
+
+        ws.cell(row=row, column=1, value=num).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=2, value=f"BSC.{bsc_id}").font = Font(
+            name="Consolas", size=10, bold=True)
+        ws.cell(row=row, column=3, value=name)
+        ws.cell(row=row, column=4, value=persp).alignment = Alignment(horizontal="center")
+
+        # Tier with color coding
+        tier_cell = ws.cell(row=row, column=5, value=tier)
+        tier_cell.alignment = Alignment(horizontal="center")
+        if tier == "O1":
+            tier_cell.fill = PatternFill(start_color="FFE4E1", end_color="FFE4E1",
+                                          fill_type="solid")
+            tier_cell.font = Font(name="Calibri", size=10, bold=True, color="C00000")
+        elif tier == "O2":
+            tier_cell.fill = PatternFill(start_color="FFF4E1", end_color="FFF4E1",
+                                          fill_type="solid")
+            tier_cell.font = Font(name="Calibri", size=10, bold=True, color="996600")
+        elif tier == "O3":
+            tier_cell.fill = PatternFill(start_color="E1F4E1", end_color="E1F4E1",
+                                          fill_type="solid")
+            tier_cell.font = Font(name="Calibri", size=10, bold=True, color="006600")
+
+        # Slot
+        slot_cell = ws.cell(row=row, column=6, value=slot)
+        slot_cell.alignment = Alignment(horizontal="center")
+        if slot == "Edge":
+            slot_cell.font = Font(name="Calibri", size=10, bold=True, color="0066CC")
+        elif slot == "Vertex":
+            slot_cell.font = Font(name="Calibri", size=10, bold=True, color="CC0066")
+
+        ws.cell(row=row, column=7, value=position).font = Font(
+            name="Consolas", size=10, color="404040")
+        ws.cell(row=row, column=8, value=raw_state).font = Font(
+            name="Calibri", size=10, italic=True, color="606060")
+
+        # Normalized value cell — Pale Yellow for editable researcher-judgment cells,
+        # since O1 values are partnership-locked but O2/O3 are TBD researcher-input.
+        if normalized is not None:
+            apply_editable_cell(ws, row, 9, normalized)
+            ws.cell(row=row, column=9).number_format = "0.00"
+            ws.cell(row=row, column=9).alignment = Alignment(horizontal="center")
+        else:
+            # TBD cell — show "—" but make editable for future input
+            apply_editable_cell(ws, row, 9, 0)  # default zero (silent) until validated
+            ws.cell(row=row, column=9).number_format = "0.00"
+            ws.cell(row=row, column=9).alignment = Alignment(horizontal="center")
+            ws.cell(row=row, column=9).font = Font(
+                name="Calibri", size=10, italic=True, color="999999")
+
+        ws.cell(row=row, column=10, value=norm_method).font = Font(
+            name="Calibri", size=9, italic=True, color="606060")
+        ws.cell(row=row, column=11, value=source).font = Font(
+            name="Consolas", size=8, color="808080")
+
+        # Named range pointing at column I (Normalized) of this row
+        add_defined_name(wb, named_range,
+                          f"'02_CEN_Raw_Inputs'!$I${row}")
+
+    # ─────────────────────────────────────────────────────────
+    # Footer (row 43+): authority + scope disclosure
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 43, 1, 11,
+                       "Authority + Scope Disclosure (Lock #8.29 + #8.22)",
+                       bg=DARK_NAVY, size=11)
+    notes = [
+        "Authority: W06v3 Procedure C question-derived KPI placements (POC/docs/cen-ssot/CEN_SSOT_W06v3_34KPI_QuestionDerived_Mapping_2026-05-21.md)",
+        "                                       ",
+        "Scope: 34 BSC KPIs = SOLE math input pipeline per Lock #8.29. 4-vector (D/E/V_res) lives in Sheet 10 (polarity only, NOT formula cascade).",
+        "                                       ",
+        "Per Lock #8.22 Pure-O1 canonical: 11 face-KPIs at O1 layer have values from researcher normalization per CEN Phase 2 frozen scores.",
+        "Per Lock #8.9: 4 edge-KPI promotions (BSC.C8/F4/I3/L7) — values pending partnership-validation in Sheet 09 build (Lock #8.24 Bi-Directional).",
+        "Per Lock #8.10 + #8.11: 1 vertex-KPI promotion (BSC.L8 → V13 = first vertex-KPI in CEN dataset) — value pending partnership-validation.",
+        "                                       ",
+        "Honest disclosure: O2/O3 face-KPI values currently zero-placeholder; await researcher normalization per Phase 2 frozen scores.",
+        "Honest disclosure: BSC.I4 (Cert independence) and BSC.I8 (Crisis response) at O1 use s58 researcher-judged values (0.2 / 0.4); STRICT alternative is 0.0 for both. Lock #8.22 canonical uses s58.",
+        "Honest disclosure: BSC.F8, BSC.L4, BSC.L5, BSC.C7 placements CHANGED from v2 per Procedure C Songbook canonical (see W06v3 §4).",
+        "                                       ",
+        "Naming convention: 34 named ranges defined as `bsc_<id>_value` (e.g., bsc_f1_value, bsc_l8_value). Downstream sheets reference these.",
+    ]
+    for offset, note in enumerate(notes, start=1):
+        c = ws.cell(row=43 + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=43 + offset, start_column=1, end_row=43 + offset, end_column=11)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 4
+    ws.column_dimensions["B"].width = 9
+    ws.column_dimensions["C"].width = 38
+    ws.column_dimensions["D"].width = 11
+    ws.column_dimensions["E"].width = 6
+    ws.column_dimensions["F"].width = 8
+    ws.column_dimensions["G"].width = 22
+    ws.column_dimensions["H"].width = 26
+    ws.column_dimensions["I"].width = 11
+    ws.column_dimensions["J"].width = 32
+    ws.column_dimensions["K"].width = 56
+
+    # Freeze top-3 header rows + KPI ID + KPI Name columns
+    ws.freeze_panes = "D4"
+
     return ws
 
 

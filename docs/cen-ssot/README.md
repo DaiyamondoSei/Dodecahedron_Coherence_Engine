@@ -53,6 +53,8 @@ These files are **snapshots as of 2026-05-22**. If Final Thesis updates a source
 | 10 | `CEN_SSOT_PureO1_Recomputation_2026-05-21.md` | Pure-O1 canonical face energies (Lock #8.22): 9 Wall + 3 Gate + 0 Membrane band | Canonical baseline for CEN; tests in `tests/cen-pure-o1.test.js` (future) |
 | 11 | `CEN_SSOT_W2_Entry_Checklist_2026-05-21.md` | Drop-in-ready W2 build entry checklist | Build script: `scripts/_build_cen_ssot_xlsx.py` |
 | 12 | `CEN_SSOT_Mode5_Deep_Interpretation_2026-05-22.md` | Mode 5 spectral deep interpretation — highest-leverage harmonization action for CEN; U[:,4] eigenvector analysis; bi-directional carrier-edge identification (E1-8 + E3-9) | Connects `js/spectral-analyzer.js:142-153` (U matrix) → bi-directional intervention design |
+| 13 | `CEN_SSOT_W06v3_34KPI_QuestionDerived_Mapping_2026-05-21.md` | 34 KPI canonical placements via Procedure C question-derived clustering (29 face + 4 edge + 1 vertex = 34 ✓); supersedes v1 + v2 mapping iterations | Sheet 02 CEN_Raw_Inputs canonical source per Lock #8.29; mirrored 2026-05-23 W2 Session A to support Sheet 02 build |
+| 14 | `W2_Arc2_LiveEngine_State_2026-05-23.md` | W2 Session A Arc 2 root-cause investigation — 3 issues identified (tuning path / methodology-layer gap / state-aggregation wiring); Locks #8.31 + #8.33 fix narratives | Origin doc for W2 Session A engine fixes; cross-references this directory's other artifacts |
 
 ---
 
