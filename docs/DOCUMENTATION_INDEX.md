@@ -1,7 +1,31 @@
 # Quannex Documentation Index
 
-> *Last Updated: 2026-05-22*
+> *Last Updated: 2026-05-23*
 > *The Living Spine - Single Source of Truth for All Documentation*
+
+---
+
+## Recent: CEN Spiral Dashboard SSOT — W2 Session A + Interpretive Layer Disclosure (May 23, 2026)
+
+**Status: 🟢 W2 Session A CLOSED — all 4 arcs complete + Tier 1 closure batch verified. Sessions B-D pending (~22-28h remaining).**
+
+| Component | POC Location | Status |
+|-----------|--------------|--------|
+| `QUANNEX_INTERPRETIVE_LAYER_DISCLOSURE.md` | `docs/QUANNEX_INTERPRETIVE_LAYER_DISCLOSURE.md` | **NEW 2026-05-23** — 4 interpretive layers named (5-element / 12-face / spectral semantic overlay / 7-octave) + 3 Genesis responses + Calibration Loop as unifying falsifiability mechanism. Lock #8.30. |
+| AvG canonical engine impl | `js/core/Diagnostics.js` `getApparentGranularGap()` | **NEW 2026-05-23** — zero-deps, dual export, 40 tests in `tests/avg.test.js`. Lock #8.26. |
+| Per-company tuning loader fix | `js/company-loader.js:154-165` | **NEW 2026-05-23** — fixes 6-week silent bug; `context.diagnostics?.tuning ?? context.tuning`. Lock #8.33. |
+| Engine topology generation fix | `js/main.js:648-690` | **NEW 2026-05-23** — generates edges/vertices unconditionally after `createFaces()`; closes Lock #8.27. |
+| `mapping-context.json` tuning refresh | `companies/cen/mapping-context.json` | **UPDATED 2026-05-23** — balancedMode canonical; legacy NGO preserved per Never Delete Rule. Lock #8.31. |
+| SSOT xlsx Sheets 01-03 | `scripts/_build_cen_ssot_xlsx.py` | **NEW 2026-05-23** — Sheet 01 Assumptions_Constants + Sheet 02 CEN_Raw_Inputs (34 BSC KPIs) + Sheet 03 Normalization_60Element_Grid (180 cells). 94 named ranges defined. |
+| Generated SSOT xlsx | `Final Thesis/Thesis Work/Quannex Business Exports/CEN_Spiral_Dashboard_SSOT_v1.0_2026-05-22.xlsx` | **UPDATED 2026-05-23** — 21/21 sheets built; Sheets 01-03 fully populated; Sheets 04-21 stubs for Sessions B-D. |
+| W2_Arc2 root-cause documentation | `docs/cen-ssot/W2_Arc2_LiveEngine_State_2026-05-23.md` | **NEW 2026-05-23** — 3 issues honestly named (tuning path / methodology-layer gap / state-aggregation gap) + closure narrative. |
+| W06v3 KPI mapping mirror | `docs/cen-ssot/CEN_SSOT_W06v3_34KPI_QuestionDerived_Mapping_2026-05-21.md` | **MIRRORED 2026-05-23** — Procedure C canonical placements (29 face + 4 edge + 1 vertex = 34). |
+
+**Nine new architectural locks captured in W2 Session A:** #8.25 (multi-session no MVP) · #8.26 (AvG canonical) · #8.27 (cross-verify path → CLOSED via topology fix) · #8.28 (LibreOffice headless) · #8.29 (Sheet 02 = 34 BSC only) · #8.30 (Disclosure doc location) · #8.31 (mapping-context tuning refresh) · #8.32 (κ=φ² clarification) · #8.33 (per-company tuning loader fix). Total architectural locks now: 33.
+
+**Plan canonical:** `~/.claude/plans/hello-can-you-please-linked-sundae.md` §14.A (W2 execution plan + Session A actual outcomes appendix).
+
+**Cross-workspace channel:** Final Thesis spiral-reports continues as active SSOT-build location; POC `docs/cen-ssot/` mirrors architectural decisions for POC engine-side reference.
 
 ---
 

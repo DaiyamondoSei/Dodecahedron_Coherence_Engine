@@ -24,7 +24,7 @@ These artifacts originated in Final Thesis spiral-reports (the active SSOT-build
 
 ## Snapshot semantics
 
-These files are **snapshots as of 2026-05-22**. If Final Thesis updates a source artifact (e.g., during active W2-W4 build), the POC mirror MAY diverge. Resolution protocol:
+These files are **snapshots rolled at: 2026-05-22 initial + 2026-05-23 W2 Session A additions** (W06v3 KPI mapping + W2_Arc2 root-cause investigation). If Final Thesis updates a source artifact (e.g., during active W2-W4 build), the POC mirror MAY diverge. Resolution protocol:
 
 | Question | Answer |
 |----------|--------|

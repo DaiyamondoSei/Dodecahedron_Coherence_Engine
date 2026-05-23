@@ -661,6 +661,23 @@ export class DodecahedronEngine {
     // Create Faces (use custom face config if provided)
     this.createFaces(company.faceConfig);
 
+    // Generate dodecahedral topology (edges + vertices) from faces.
+    // Lock #8.27 fix (W2 Session A, 2026-05-23): previously edges/vertices were
+    // only generated inside applyPreCalculatedResults() path (line 720+); when
+    // company data lacked `coherenceResults` (CEN's case), the recalculate()
+    // fallback path was taken which DOES NOT generate topology. Result: live
+    // engine state showed edgeCount=0, vertexCount=0 in both basic and advanced
+    // modes — appearing as a state-aggregation gap when actually a topology
+    // generation gap. Now generated unconditionally after createFaces() so all
+    // company-load paths produce the full 12-face / 30-edge / 20-vertex
+    // dodecahedral structure that getState() expects.
+    if (this.edges.length === 0) {
+      this.generateEdgesFromTopology();
+    }
+    if (this.vertices.length === 0) {
+      this.generateVerticesFromTopology();
+    }
+
     // Check if pre-calculated coherence results are available
     if (company.coherenceResults && company.coherenceResults.faces) {
       Logger.debug('Main3D', '📊 Using pre-calculated coherence results from orchestrator');
