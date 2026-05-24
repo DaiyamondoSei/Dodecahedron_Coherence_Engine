@@ -1839,23 +1839,330 @@ def build_sheet_12_global_coherence(wb: Workbook):
 
 
 def build_sheet_13_diagnostics(wb: Workbook):
-    """Sheet 13 Diagnostics_AAG_AvG — canonical AAG_O1=0.789 + AvG_O1=0.0882.
+    """Sheet 13 Diagnostics_AAG_AvG — canonical AAG (Wk8) + AvG (audit trail §16).
 
-    Per Lock #8.15: canonical AAG is Wk8 formula (Aspiration/Actuality face-grouping
-    ratio). The Phase 2 Evidence Package "AAG" is per-vector mean coherence
-    (mislabeled, rename to OVC). This sheet uses Wk8 canonical only.
+    Two diagnostic blocks:
 
-    Per Lock #8.14 + Sheet 16 design: AvG_O1 = 0.0882 (border of "Aggregation
-    distortion" — signals architectural blindness).
+    BLOCK A — AAG (Aspiration-Actuality Gap) per audit trail §12 + Lock #8.17:
+      AAG = E_Aspiration / E_Actuality
+      E_Actuality  = mean(E_F1, E_F2, E_F3)       [Financial+Conceptual+Human]
+      E_Aspiration = mean(E_F10, E_F11, E_F12)    [Values+Funding+Risk]
+      Per Lock #8.17: Wk8 canonical face-grouping ratio (NOT per-vector mean
+      coherence which was Phase 2 Evidence Package misnomer).
 
-    Honest disclosure per audit trail §12 + §16.
+      Interpretation bands (per audit trail §12):
+        AAG > 1.5      — "Critical: values without operational ground"
+        1.2 < AAG ≤ 1.5 — "Aspiring beyond capacity (Hidden Oracle pattern)"
+        0.8 ≤ AAG ≤ 1.2 — "Balanced — aspiration met by capacity"
+        AAG < 0.8      — "Actuality outpacing aspiration (under-claiming)"
 
-    Defines named ranges `cen_aag_o1` and `cen_avg_o1`.
+    BLOCK B — AvG (Apparent vs Granular Gap) per audit trail §16 + Lock #8.26:
+      AvG = |C_global_raw − K_mean_60|
+      where C_global_raw = Sheet 12 cen_global_coherence_raw_o1 (pre-amplifier)
+            K_mean_60     = Sheet 03 cen_k_mean_60_all
+      Both terms are kappa-independent (no amplifier). Apples-to-apples.
+
+      Band thresholds (phi-derived per audit trail §16):
+        AvG < phi^-6 (≈0.056)  — "Faithful aggregation"
+        phi^-6 ≤ AvG < phi^-5 (≈0.090) — "Minor compression artifact"
+        phi^-5 ≤ AvG < phi^-4 (≈0.146) — "Aggregation distortion"
+        AvG ≥ phi^-4 (≈0.146)  — "Severe aggregation distortion"
+
+    LOCK #8.35 NARRATIVE REFRAME ALIGNMENT:
+    Both AAG + AvG values shift at kappa=phi^2 baseline (vs kappa=4 v1).
+    The shift is methodologically meaningful but the structural finding
+    (architectural blindness lives at C_raw=0 evidence layer) is robust
+    across kappa choice. Same "absence of evidence != evidence of
+    catastrophe" principle applies — diagnostics are gentler at canonical
+    kappa, not less real.
+
+    Named ranges defined (8 total):
+      cen_aag_o1, cen_aag_o2, cen_aag_o3              — AAG per octave
+      cen_aag_actuality_o1, cen_aag_aspiration_o1     — AAG decomposition
+      cen_avg_o1, cen_avg_band                         — AvG canonical
+      cen_kpi_mean_60                                  — K_mean_60 alias
+
+    Authority:
+      - audit trail §12 (AAG canonical formula + interpretation bands)
+      - audit trail §16 (AvG canonical formula + phi-derived band thresholds)
+      - Lock #8.15 + #8.17 (Wk8 canonical AAG, NOT Phase 2 misnomer)
+      - Lock #8.26 (AvG Diagnostics.js implementation)
+      - Lock #8.35 (kappa=phi^2 canonical; gentle-amplifier methodological restraint)
+      - Sheet 04 cen_f<n>_o<m>_e_final (face energy inputs)
+      - Sheet 12 cen_global_coherence_raw_o1 (AvG numerator)
+      - Sheet 03 cen_k_mean_60_all (AvG denominator)
     """
     ws = wb.create_sheet("13_Diagnostics_AAG_AvG")
     apply_brand_header(ws, 1, 1, 8,
-                       "Diagnostics · AAG (Wk8 canonical) + AvG (strict-O1)",
+                       "Diagnostics — AAG (Wk8 canonical) + AvG (per audit trail §16)",
                        bg=DEEP_TEAL, size=14)
+
+    # ─────────────────────────────────────────────────────────
+    # BLOCK A — AAG per octave (rows 3-12)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 3, 1, 8,
+                       "Block A — AAG (Aspiration-Actuality Gap) per Octave",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    # Column headers (row 4)
+    aag_headers = [
+        "Octave",
+        "E_Actuality\n(F1+F2+F3)/3",
+        "E_Aspiration\n(F10+F11+F12)/3",
+        "AAG\n= Asp/Act",
+        "Band",
+        "Interpretation",
+        "Notes", "—"
+    ]
+    for col_idx, header_text in enumerate(aag_headers, start=1):
+        c = ws.cell(row=4, column=col_idx, value=header_text)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Per-octave AAG rows (5, 6, 7)
+    for row_offset, octave_num in enumerate([1, 2, 3]):
+        row = 5 + row_offset
+
+        # Col A: Octave label
+        ws.cell(row=row, column=1, value=f"O{octave_num}").font = Font(
+            name="Calibri", size=11, bold=True, color="0D7377")
+
+        # Col B: E_Actuality = mean(F1, F2, F3) for this octave
+        apply_formula_cell(
+            ws, row, 2,
+            f"=AVERAGE(cen_f1_o{octave_num}_e_final,"
+            f"cen_f2_o{octave_num}_e_final,"
+            f"cen_f3_o{octave_num}_e_final)"
+        )
+        ws.cell(row=row, column=2).number_format = "0.0000"
+        ws.cell(row=row, column=2).alignment = Alignment(horizontal="center")
+
+        # Col C: E_Aspiration = mean(F10, F11, F12) for this octave
+        apply_formula_cell(
+            ws, row, 3,
+            f"=AVERAGE(cen_f10_o{octave_num}_e_final,"
+            f"cen_f11_o{octave_num}_e_final,"
+            f"cen_f12_o{octave_num}_e_final)"
+        )
+        ws.cell(row=row, column=3).number_format = "0.0000"
+        ws.cell(row=row, column=3).alignment = Alignment(horizontal="center")
+
+        # Col D: AAG = E_Aspiration / E_Actuality (with /0 guard returning blank)
+        apply_formula_cell(ws, row, 4,
+                            f'=IF(B{row}>0,C{row}/B{row},"")')
+        ws.cell(row=row, column=4).number_format = "0.0000"
+        ws.cell(row=row, column=4).alignment = Alignment(horizontal="center")
+        # HEADLINE for AAG: bold + highlighted
+        ws.cell(row=row, column=4).font = Font(
+            name="Calibri", size=11, bold=True, color="0D7377")
+        ws.cell(row=row, column=4).fill = PatternFill(
+            start_color="E0F4F4", end_color="E0F4F4", fill_type="solid")
+
+        # Col E: Band classification per audit trail §12 thresholds
+        apply_formula_cell(
+            ws, row, 5,
+            f'=IF(D{row}="","N/A",'
+            f'IF(D{row}>1.5,"Critical",'
+            f'IF(D{row}>1.2,"Aspiring",'
+            f'IF(D{row}>=0.8,"Balanced","Under-claim"))))'
+        )
+        ws.cell(row=row, column=5).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=5).font = Font(
+            name="Calibri", size=10, italic=True, color="606060")
+
+        # Col F: Interpretation text per band
+        apply_formula_cell(
+            ws, row, 6,
+            f'=IF(D{row}="","(no face energy at this octave)",'
+            f'IF(D{row}>1.5,"Values without operational ground",'
+            f'IF(D{row}>1.2,"Aspiring beyond capacity (Hidden Oracle pattern)",'
+            f'IF(D{row}>=0.8,"Aspiration met by capacity","Actuality outpacing aspiration (under-claiming, latent capacity)"))))'
+        )
+        ws.cell(row=row, column=6).font = Font(
+            name="Calibri", size=9, italic=True, color="606060")
+
+        # Col G: Notes
+        note_text = ("Sheet 04 cen_f<n>_o1_e_final consumer (Lock #8.35 canonical baseline)"
+                     if octave_num == 1
+                     else f"O{octave_num} TBD — Sheet 02 BSC KPI values pending partnership-validation")
+        ws.cell(row=row, column=7, value=note_text).font = Font(
+            name="Calibri", size=9, italic=True, color="808080")
+
+        # Named ranges
+        add_defined_name(wb, f"cen_aag_actuality_o{octave_num}",
+                          f"'13_Diagnostics_AAG_AvG'!$B${row}")
+        add_defined_name(wb, f"cen_aag_aspiration_o{octave_num}",
+                          f"'13_Diagnostics_AAG_AvG'!$C${row}")
+        add_defined_name(wb, f"cen_aag_o{octave_num}",
+                          f"'13_Diagnostics_AAG_AvG'!$D${row}")
+
+    # AAG O1 headline highlight (rows 9-10)
+    apply_brand_header(ws, 9, 1, 8,
+                       "AAG O1 Headline (Wk8 canonical, Lock #8.17)",
+                       bg=DARK_NAVY, size=11)
+    ws.cell(row=10, column=1, value="CEN").font = Font(
+        name="Calibri", size=12, bold=True, color="0D7377")
+    ws.cell(row=10, column=2, value="AAG (O1):").font = Font(
+        name="Calibri", size=12, bold=True, color="0D7377")
+    apply_formula_cell(ws, 10, 3, f"=cen_aag_o1")
+    ws.cell(row=10, column=3).number_format = "0.0000"
+    ws.cell(row=10, column=3).font = Font(
+        name="Calibri", size=18, bold=True, color="0D7377")
+    ws.cell(row=10, column=3).fill = PatternFill(
+        start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+    ws.cell(row=10, column=3).alignment = Alignment(horizontal="center")
+    # Reference to band at row 5 (AAG_O1)
+    apply_formula_cell(ws, 10, 4, f"=E5")
+    ws.cell(row=10, column=4).font = Font(
+        name="Calibri", size=14, bold=True, italic=True, color="404040")
+    ws.cell(row=10, column=4).alignment = Alignment(horizontal="center")
+    ws.cell(row=10, column=4).fill = PatternFill(
+        start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+
+    # ─────────────────────────────────────────────────────────
+    # BLOCK B — AvG (Apparent vs Granular Gap) (rows 13-22)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 13, 1, 8,
+                       "Block B — AvG (Apparent vs Granular Gap) per audit trail §16",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    # Column headers (row 14)
+    avg_headers = [
+        "Scope",
+        "C_global_raw\n(pre-amp)",
+        "K_mean_60\n(KPI grid mean)",
+        "AvG\n= |C_raw - K|",
+        "Band",
+        "Interpretation",
+        "Notes", "—"
+    ]
+    for col_idx, header_text in enumerate(avg_headers, start=1):
+        c = ws.cell(row=14, column=col_idx, value=header_text)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Single AvG row (canonical strict-O1 scope per Lock #8.22 v2 baseline)
+    avg_row = 15
+    ws.cell(row=avg_row, column=1, value="O1 (canonical)").font = Font(
+        name="Calibri", size=11, bold=True, color="0D7377")
+
+    # Col B: C_global_raw from Sheet 12
+    apply_formula_cell(ws, avg_row, 2, f"=cen_global_coherence_raw_o1")
+    ws.cell(row=avg_row, column=2).number_format = "0.0000"
+    ws.cell(row=avg_row, column=2).alignment = Alignment(horizontal="center")
+
+    # Col C: K_mean_60 from Sheet 03
+    apply_formula_cell(ws, avg_row, 3, f"=cen_k_mean_60_all")
+    ws.cell(row=avg_row, column=3).number_format = "0.0000"
+    ws.cell(row=avg_row, column=3).alignment = Alignment(horizontal="center")
+
+    # Col D: AvG = |C_raw - K_mean_60|
+    apply_formula_cell(ws, avg_row, 4, f"=ABS(B{avg_row}-C{avg_row})")
+    ws.cell(row=avg_row, column=4).number_format = "0.0000"
+    ws.cell(row=avg_row, column=4).alignment = Alignment(horizontal="center")
+    ws.cell(row=avg_row, column=4).font = Font(
+        name="Calibri", size=11, bold=True, color="0D7377")
+    ws.cell(row=avg_row, column=4).fill = PatternFill(
+        start_color="E0F4F4", end_color="E0F4F4", fill_type="solid")
+
+    # Col E: Band per phi-derived thresholds (phi^-6, phi^-5, phi^-4)
+    # phi^-6 ≈ 0.0557, phi^-5 ≈ 0.0902, phi^-4 ≈ 0.1459
+    apply_formula_cell(
+        ws, avg_row, 5,
+        f'=IF(D{avg_row}<(1/phi^6),"Faithful",'
+        f'IF(D{avg_row}<(1/phi^5),"Minor",'
+        f'IF(D{avg_row}<phi_inv_4,"Distortion","Severe")))'
+    )
+    ws.cell(row=avg_row, column=5).alignment = Alignment(horizontal="center")
+    ws.cell(row=avg_row, column=5).font = Font(
+        name="Calibri", size=10, italic=True, color="606060")
+
+    # Col F: Interpretation
+    apply_formula_cell(
+        ws, avg_row, 6,
+        f'=IF(D{avg_row}<(1/phi^6),"Rollup honest to underlying detail",'
+        f'IF(D{avg_row}<(1/phi^5),"Acceptable compression; headline still representative",'
+        f'IF(D{avg_row}<phi_inv_4,"Rollup masking variance — investigate face contributions","Rollup disconnected from KPI detail — pair with granular evidence")))'
+    )
+    ws.cell(row=avg_row, column=6).font = Font(
+        name="Calibri", size=9, italic=True, color="606060")
+
+    # Col G: Notes
+    ws.cell(row=avg_row, column=7,
+            value="Lock #8.22 v2 baseline (κ=φ² canonical per Lock #8.35)"
+    ).font = Font(name="Calibri", size=9, italic=True, color="808080")
+
+    # Named ranges
+    add_defined_name(wb, "cen_avg_o1", f"'13_Diagnostics_AAG_AvG'!$D${avg_row}")
+    add_defined_name(wb, "cen_avg_band", f"'13_Diagnostics_AAG_AvG'!$E${avg_row}")
+    add_defined_name(wb, "cen_kpi_mean_60", f"'13_Diagnostics_AAG_AvG'!$C${avg_row}")
+
+    # AvG headline highlight (rows 17-18)
+    apply_brand_header(ws, 17, 1, 8,
+                       "AvG Headline (canonical, Lock #8.26 + #8.35)",
+                       bg=DARK_NAVY, size=11)
+    ws.cell(row=18, column=1, value="CEN").font = Font(
+        name="Calibri", size=12, bold=True, color="0D7377")
+    ws.cell(row=18, column=2, value="AvG (O1):").font = Font(
+        name="Calibri", size=12, bold=True, color="0D7377")
+    apply_formula_cell(ws, 18, 3, f"=cen_avg_o1")
+    ws.cell(row=18, column=3).number_format = "0.0000"
+    ws.cell(row=18, column=3).font = Font(
+        name="Calibri", size=18, bold=True, color="0D7377")
+    ws.cell(row=18, column=3).fill = PatternFill(
+        start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+    ws.cell(row=18, column=3).alignment = Alignment(horizontal="center")
+    apply_formula_cell(ws, 18, 4, f"=cen_avg_band")
+    ws.cell(row=18, column=4).font = Font(
+        name="Calibri", size=14, bold=True, italic=True, color="404040")
+    ws.cell(row=18, column=4).alignment = Alignment(horizontal="center")
+    ws.cell(row=18, column=4).fill = PatternFill(
+        start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+
+    # ─────────────────────────────────────────────────────────
+    # FOOTER — Authority + Lock #8.35 alignment
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 20, 1, 8,
+                       "Authority + Lock #8.35 Narrative-Reframe Alignment",
+                       bg=DARK_NAVY, size=11)
+    notes = [
+        "AAG formula: E_Aspiration / E_Actuality where Actuality=mean(F1,F2,F3), Aspiration=mean(F10,F11,F12).",
+        "AAG bands (audit trail §12): Critical >1.5; Aspiring 1.2-1.5; Balanced 0.8-1.2; Under-claim <0.8.",
+        "                                       ",
+        "AvG formula: |C_global_raw - K_mean_60| where both terms are kappa-INDEPENDENT (apples-to-apples).",
+        "AvG bands (audit trail §16): Faithful <phi^-6; Minor <phi^-5; Distortion <phi^-4; Severe >=phi^-4.",
+        "                                       ",
+        "Authority: audit trail §12 (AAG) + §16 (AvG); Lock #8.17 (AAG Wk8 canonical); Lock #8.26 (AvG Diagnostics.js);",
+        "  Lock #8.35 (kappa=phi^2 canonical via dodecahedral spectrum polarity ratio).",
+        "Inputs: Sheet 04 cen_f<n>_o<m>_e_final (AAG); Sheet 12 cen_global_coherence_raw_o1 + Sheet 03 cen_k_mean_60_all (AvG).",
+        "                                       ",
+        "LOCK #8.35 NARRATIVE-REFRAME ALIGNMENT:",
+        "Both AAG + AvG values shift at kappa=phi^2 baseline vs the kappa=4 v1 era (yesterday's pre-resolution).",
+        "Pre-Lock-#8.35 cited values: AAG_O1 ~0.789; AvG_O1 ~0.0882. At kappa=phi^2 these shift naturally via cascade.",
+        "The architectural-blindness MATH finding (Sheet 02 has TBD for most O2/O3 BSC KPIs → cascade limited) is ROBUST",
+        "across kappa choice. The diagnostic VALUES shift because the methodology is gentler at canonical kappa.",
+        "Per the gentle-amplifier principle: diagnostics are restrained, not less real.",
+        "                                       ",
+        "Named ranges defined (8 total): cen_aag_o{1,2,3}, cen_aag_actuality_o1, cen_aag_aspiration_o1,",
+        "  cen_avg_o1, cen_avg_band, cen_kpi_mean_60. Sheet 16 Dashboard consumes the headline aliases.",
+    ]
+    for offset, note in enumerate(notes, start=1):
+        c = ws.cell(row=20 + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=20 + offset, start_column=1,
+                       end_row=20 + offset, end_column=8)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 14
+    ws.column_dimensions["B"].width = 14
+    ws.column_dimensions["C"].width = 14
+    ws.column_dimensions["D"].width = 13
+    ws.column_dimensions["E"].width = 13
+    ws.column_dimensions["F"].width = 50
+    ws.column_dimensions["G"].width = 50
+
     return ws
 
 
