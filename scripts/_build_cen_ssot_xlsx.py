@@ -1602,18 +1602,239 @@ def build_sheet_11_octave_detection(wb: Workbook):
 
 
 def build_sheet_12_global_coherence(wb: Workbook):
-    """Sheet 12 Global_Coherence — κ · μ · (1 − λ · CV) of 12 face energies.
+    """Sheet 12 Global_Coherence — the SSOT's headline aggregate metric.
 
-    The headline aggregate metric. Defines named range `cen_global_coherence_o1`
-    (read by Sheet 16 Block B headline numbers).
+    Computes Global Coherence per octave from Sheet 04 face energies using
+    the audit trail §1 canonical formula:
 
-    Per Lock #8.8: math-only SSOT — no narrative interpretation here (interpretation
-    in companion Coherence Portrait).
+      Step 1: mu_E   = mean(12 face E_final at this octave)
+      Step 2: sigma_E = STDEV.P(12 face E_final at this octave)
+      Step 3: CV_E   = sigma_E / mu_E              (coefficient of variation)
+      Step 4: C_raw  = mu_E * (1 - lambda * CV_E)  (pre-amplifier; PRE-kappa)
+                       where lambda = phi^-3 (penalty for variance)
+      Step 5: C_amp  = 1 / (1 + exp(-kappa * (C_raw - 0.5)))
+                       (post-amplifier; logistic sensitivity, kappa = phi^2
+                        per Lock #8.35 spectral-derivation canonical)
+      Step 6: Band   = Wall/Gate/Membrane/Hemorrhage/Vortex (Sheet 04 thresholds)
+
+    DOUBLE-VALUE DISCIPLINE (per audit trail §16):
+      - C_raw is the PRE-amplifier canonical value consumed by Sheet 13 AvG
+        (must be apples-to-apples with K_mean_60 which has no amplifier)
+      - C_amp is the POST-amplifier headline value shown on Sheet 16 Dashboard
+      - BOTH are exposed via named ranges for downstream consumers
+
+    Lock #8.35 alignment: kappa = phi^2 is geometrically derived from the
+    dodecahedral Laplacian spectrum polarity ratio (5+sqrt(5))/(5-sqrt(5)).
+    The amplifier is the methodology's own gentle restraint, not arbitrary tuning.
+
+    Named ranges defined (12 total: 4 per octave x 3 octaves):
+      cen_o<m>_global_mu     — mu_E per octave
+      cen_o<m>_global_sigma  — sigma_E per octave
+      cen_o<m>_global_cv     — CV_E per octave
+      cen_o<m>_global_raw    — C_raw per octave (consumed by Sheet 13 AvG)
+      cen_o<m>_global_amp    — C_amp per octave (consumed by Sheet 16 Dashboard)
+    Plus headline shortcuts:
+      cen_global_coherence_o1     — alias for cen_o1_global_amp (headline)
+      cen_global_coherence_raw_o1 — alias for cen_o1_global_raw (AvG input)
+
+    Authority:
+      - audit trail §1 (Global Coherence canonical formula)
+      - Lock #8.35 (kappa = phi^2 spectral-derivation canonical)
+      - Lock #8.34 (Sheet 04 outputs are the new canonical baseline)
+      - Sheet 04 cen_f<n>_o<m>_e_final named ranges (input layer)
     """
     ws = wb.create_sheet("12_Global_Coherence")
-    apply_brand_header(ws, 1, 1, 6,
-                       "Global Coherence · C = κ · μ · (1 − λ · CV)",
+    apply_brand_header(ws, 1, 1, 8,
+                       "Global Coherence — Headline Aggregate Metric (per Octave)",
                        bg=DEEP_TEAL, size=14)
+
+    # ─────────────────────────────────────────────────────────
+    # Block A — Per-octave full calculation (rows 3-11)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 3, 1, 8,
+                       "Block A — Per-Octave Global Coherence Calculation",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    # Header row
+    headers = [
+        "Octave", "mu_E\n(mean)", "sigma_E\n(std)", "CV_E\n(coeff var)",
+        "C_raw\n(pre-amp)", "C_amp\n(post-kappa)", "Band", "Notes"
+    ]
+    for col_idx, header_text in enumerate(headers, start=1):
+        c = ws.cell(row=4, column=col_idx, value=header_text)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Sheet 04 face block T-column ranges per octave (from earlier build)
+    # O1 block: rows 4-15 in Sheet 04 → T4:T15
+    # O2 block: rows 20-31 → T20:T31
+    # O3 block: rows 36-47 → T36:T47
+    OCTAVE_SOURCE_RANGES = {
+        1: ("T4:T15", "Survival (existence) — feeds Sheet 13 AAG/AvG + Sheet 14 Spectral"),
+        2: ("T20:T31", "Structure (systematization)"),
+        3: ("T36:T47", "Relationships / Aspirational"),
+    }
+
+    for row_offset, (octave_num, (sheet04_range, note)) in enumerate(OCTAVE_SOURCE_RANGES.items()):
+        row = 5 + row_offset  # rows 5, 6, 7
+
+        # Col A: Octave label
+        ws.cell(row=row, column=1, value=f"O{octave_num}").font = Font(
+            name="Calibri", size=11, bold=True, color="0D7377")
+
+        # Col B: mu_E = mean of 12 face energies at this octave
+        apply_formula_cell(ws, row, 2, f"=AVERAGE('04_Face_Calculations'!{sheet04_range})")
+        ws.cell(row=row, column=2).number_format = "0.0000"
+        ws.cell(row=row, column=2).alignment = Alignment(horizontal="center")
+
+        # Col C: sigma_E = STDEVP (population) of 12 face energies
+        # NOTE: Use STDEVP (legacy syntax, no dot) for LibreOffice compatibility;
+        # STDEV.P (dotted Excel-newer syntax) returned #NAME? in LibreOffice eval.
+        # Both Excel + LibreOffice support STDEVP universally.
+        apply_formula_cell(ws, row, 3, f"=STDEVP('04_Face_Calculations'!{sheet04_range})")
+        ws.cell(row=row, column=3).number_format = "0.0000"
+        ws.cell(row=row, column=3).alignment = Alignment(horizontal="center")
+
+        # Col D: CV_E = sigma_E / mu_E (with divide-by-zero guard)
+        apply_formula_cell(ws, row, 4, f"=IF(B{row}>0,C{row}/B{row},0)")
+        ws.cell(row=row, column=4).number_format = "0.0000"
+        ws.cell(row=row, column=4).alignment = Alignment(horizontal="center")
+
+        # Col E: C_raw = mu_E * (1 - lambda * CV_E)  [pre-amplifier; PRE-kappa]
+        # NOTE: named range is `lambda` (not `lambda_cv`) per Sheet 01.
+        apply_formula_cell(ws, row, 5, f"=B{row}*(1-lambda*D{row})")
+        ws.cell(row=row, column=5).number_format = "0.0000"
+        ws.cell(row=row, column=5).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=5).font = Font(
+            name="Calibri", size=10, bold=True, color="404040")
+
+        # Col F: C_amp = 1/(1+EXP(-kappa*(C_raw-0.5)))  [post-amplifier]
+        apply_formula_cell(ws, row, 6, f"=1/(1+EXP(-kappa*(E{row}-0.5)))")
+        ws.cell(row=row, column=6).number_format = "0.0000"
+        ws.cell(row=row, column=6).alignment = Alignment(horizontal="center")
+        # Highlight C_amp — this is the headline number
+        ws.cell(row=row, column=6).font = Font(
+            name="Calibri", size=11, bold=True, color="0D7377")
+        ws.cell(row=row, column=6).fill = PatternFill(
+            start_color="E0F4F4", end_color="E0F4F4", fill_type="solid")
+
+        # Col G: Band (same classification as Sheet 04 col U)
+        apply_formula_cell(
+            ws, row, 7,
+            f'=IF(F{row}<phi_inv_4,"Wall",'
+            f'IF(F{row}<phi_inv_2,"Gate",'
+            f'IF(F{row}<phi_inv_1,"Membrane",'
+            f'IF(F{row}<0.854,"Hemorrhage","Vortex"))))'
+        )
+        ws.cell(row=row, column=7).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=7).font = Font(
+            name="Calibri", size=10, italic=True, color="606060")
+
+        # Col H: Notes
+        ws.cell(row=row, column=8, value=note).font = Font(
+            name="Calibri", size=9, italic=True, color="808080")
+
+        # Define named ranges
+        add_defined_name(wb, f"cen_o{octave_num}_global_mu",
+                          f"'12_Global_Coherence'!$B${row}")
+        add_defined_name(wb, f"cen_o{octave_num}_global_sigma",
+                          f"'12_Global_Coherence'!$C${row}")
+        add_defined_name(wb, f"cen_o{octave_num}_global_cv",
+                          f"'12_Global_Coherence'!$D${row}")
+        add_defined_name(wb, f"cen_o{octave_num}_global_raw",
+                          f"'12_Global_Coherence'!$E${row}")
+        add_defined_name(wb, f"cen_o{octave_num}_global_amp",
+                          f"'12_Global_Coherence'!$F${row}")
+
+    # Aliases for headline O1 number (Sheet 16 + Sheet 13 read these by short name)
+    add_defined_name(wb, "cen_global_coherence_o1",
+                      f"'12_Global_Coherence'!$F$5")
+    add_defined_name(wb, "cen_global_coherence_raw_o1",
+                      f"'12_Global_Coherence'!$E$5")
+
+    # ─────────────────────────────────────────────────────────
+    # Block B — O1 Headline Highlight (rows 10-13)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 10, 1, 8,
+                       "Block B — O1 Headline (Thesis-Defense + CEN-Client Marquee)",
+                       bg=DARK_NAVY, size=11)
+
+    # Row 11: HEADLINE
+    ws.cell(row=11, column=1, value="CEN").font = Font(
+        name="Calibri", size=12, bold=True, color="0D7377")
+    ws.cell(row=11, column=2, value="Global Coherence (O1):").font = Font(
+        name="Calibri", size=12, bold=True, color="0D7377")
+    ws.merge_cells(start_row=11, start_column=2, end_row=11, end_column=4)
+    apply_formula_cell(ws, 11, 5, f"=cen_global_coherence_o1")
+    ws.cell(row=11, column=5).number_format = "0.0000"
+    ws.cell(row=11, column=5).font = Font(
+        name="Calibri", size=18, bold=True, color="0D7377")
+    ws.cell(row=11, column=5).fill = PatternFill(
+        start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")  # PALE_YELLOW
+    ws.cell(row=11, column=5).alignment = Alignment(horizontal="center")
+    apply_formula_cell(ws, 11, 6, f'=IF(F5<phi_inv_4,"Wall",IF(F5<phi_inv_2,"Gate",IF(F5<phi_inv_1,"Membrane",IF(F5<0.854,"Hemorrhage","Vortex"))))')
+    ws.cell(row=11, column=6).font = Font(
+        name="Calibri", size=14, bold=True, italic=True, color="404040")
+    ws.cell(row=11, column=6).alignment = Alignment(horizontal="center")
+    ws.cell(row=11, column=6).fill = PatternFill(
+        start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+
+    # Row 12: pre-amp value for transparency
+    ws.cell(row=12, column=1, value="(pre-amp:").font = Font(
+        name="Calibri", size=10, italic=True, color="808080")
+    apply_formula_cell(ws, 12, 2, f"=cen_global_coherence_raw_o1")
+    ws.cell(row=12, column=2).number_format = "0.0000"
+    ws.cell(row=12, column=2).font = Font(
+        name="Calibri", size=10, italic=True, color="808080")
+    ws.cell(row=12, column=2).alignment = Alignment(horizontal="left")
+    ws.cell(row=12, column=3, value="— consumed by Sheet 13 AvG diagnostic)").font = Font(
+        name="Calibri", size=10, italic=True, color="808080")
+    ws.merge_cells(start_row=12, start_column=3, end_row=12, end_column=6)
+
+    # ─────────────────────────────────────────────────────────
+    # Footer — Authority + Provenance (rows 15+)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 15, 1, 8,
+                       "Authority + Provenance",
+                       bg=DARK_NAVY, size=11)
+    notes = [
+        "Formula: C = sigmoid(kappa * (mu * (1 - lambda * CV) - 0.5))   [post-amplifier]",
+        "Where: mu = mean(12 face E_final), sigma = STDEV.P, CV = sigma/mu, lambda = phi^-3 (variance penalty), kappa = phi^2 (Lock #8.35)",
+        "                                       ",
+        "Authority: audit trail §1 (Global Coherence canonical formula); Lock #8.35 (kappa = phi^2 from dodecahedral spectrum polarity ratio).",
+        "Input: Sheet 04 cen_f<n>_o<m>_e_final named ranges (T-column per octave block).",
+        "                                       ",
+        "Per Lock #8.35: kappa is geometrically derived from (5+sqrt(5))/(5-sqrt(5)) = phi^2.",
+        "Per Lock #8.34: Sheet 04 outputs at kappa=phi^2 are the canonical Lock #8.22 v2 baseline.",
+        "Per audit trail §16: C_raw (pre-amplifier) is consumed by Sheet 13 AvG for apples-to-apples comparison with K_mean_60 (which has no amplifier).",
+        "                                       ",
+        "Named ranges defined (15 total: 5 per octave × 3 octaves):",
+        "  cen_o<m>_global_{mu,sigma,cv,raw,amp} — full per-octave decomposition",
+        "  cen_global_coherence_o1 — headline alias (Sheet 16 Dashboard consumer)",
+        "  cen_global_coherence_raw_o1 — pre-amplifier alias (Sheet 13 AvG consumer)",
+        "                                       ",
+        "Honest disclosure: Lock #8.35 narrative-reframe applies here — the post-amplifier C_amp at kappa=phi^2",
+        "represents the methodology's geometrically-canonical reading. Earlier kappa=4 baselines produced higher",
+        "C_amp values (more amplified); the gentler kappa=phi^2 amplifier reflects methodological restraint",
+        "(absence of variance != evidence of high coherence).",
+    ]
+    for offset, note in enumerate(notes, start=1):
+        c = ws.cell(row=15 + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=15 + offset, start_column=1,
+                       end_row=15 + offset, end_column=8)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 10
+    ws.column_dimensions["B"].width = 12
+    ws.column_dimensions["C"].width = 12
+    ws.column_dimensions["D"].width = 12
+    ws.column_dimensions["E"].width = 13
+    ws.column_dimensions["F"].width = 14
+    ws.column_dimensions["G"].width = 13
+    ws.column_dimensions["H"].width = 50
+
     return ws
 
 
