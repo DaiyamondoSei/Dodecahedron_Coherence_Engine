@@ -1497,21 +1497,234 @@ def build_sheet_06_breath_feedback(wb: Workbook):
 
 
 def build_sheet_07_edges(wb: Workbook):
-    """Sheet 07 Edges — 30 canonical edges + 3 parallel-column formulas per Lock #8.5.
+    """Sheet 07 Edges — 30 canonical dodecahedral edges + Lock #8.5 parallel formulas.
 
-    Per edge (30 rows):
-      - Edge Energy: E_e = mean of face energies at both vertices
-      - Edge Tension: T_e = |E_face1 − E_face2|
-      - Advanced relative: R_e = (E_face1 / E_face2) symmetric ratio
+    Per audit trail §5 + §14, displays THREE parallel edge-metric formulas
+    side-by-side per Lock #8.5 (all three are valid analytical views):
 
-    Three formulas surfaced in parallel columns (Lock #8.5 — all three are valid
-    analytical views; no single "right" formula).
+      Col F: Edge Energy   E_e = sqrt(E_A * E_B)        [audit §5 canonical]
+      Col G: Edge Tension  T_e = |E_A - E_B|             [audit §5 simple]
+      Col H: Breath Ratio  BR  = E_A / (E_A + E_B)       [audit §5 share form]
+      Col I: Breath Ratio  BR_log = log(E_B/E_A) / log(phi)  [audit §14 log form, clamped ±2]
 
-    Authority: audit trail §5 (Edge dynamics) + 30-edge canonical list (s58).
+    30 edges per js/main.js:826-849 canonical fallback adjacency. Each face has
+    exactly 5 neighbors (5 × 12 / 2 = 30 unique edges).
+
+    Edge order matches the engine's generateEdgesFromTopology() output so that
+    E1..E30 references align between SSOT + live engine state (Lock #8.27 fix
+    ensures both are populated identically).
+
+    Named ranges defined (per edge × 4 metrics = 120 cells; key aliases):
+      cen_edge_<EID>_energy, cen_edge_<EID>_tension, cen_edge_<EID>_br_share,
+      cen_edge_<EID>_br_log  — per-edge metrics
+      cen_e1_8_energy alias    — Mode 5 carrier edge E1-8 (thesis spotlight)
+      cen_e3_9_energy alias    — Mode 5 carrier edge E3-9 (thesis spotlight)
+
+    Mode 5 carrier edges (per Sheet 14 spotlight + Q3 ANSWERED) highlighted.
+
+    Authority: audit trail §5 (canonical edge formula) + §14 (advanced log form);
+    Lock #8.5 (side-by-side display); main.js:826-849 (canonical 30-edge list);
+    Mode 5 finding (E1-8 + E3-9 carrier edges per Sheet 14).
     """
     ws = wb.create_sheet("07_Edges")
     apply_brand_header(ws, 1, 1, 10,
-                       "Edges · 30 Canonical Edge Interfaces", bg=DEEP_TEAL, size=14)
+                       "Edges — 30 canonical dodecahedral edges (Lock #8.5 side-by-side formulas)",
+                       bg=DEEP_TEAL, size=14)
+
+    # 30 canonical edges per main.js:826-849 fallback adjacency
+    # Each row: (E_id_num, face_a, face_b)
+    EDGES_30 = [
+        (1, 1, 2),  (2, 1, 6),  (3, 1, 7),  (4, 1, 8),  (5, 1, 10),
+        (6, 2, 3),  (7, 2, 6),  (8, 2, 10), (9, 2, 11),
+        (10, 3, 4), (11, 3, 6), (12, 3, 9), (13, 3, 11),
+        (14, 4, 5), (15, 4, 6), (16, 4, 7), (17, 4, 9),
+        (18, 5, 7), (19, 5, 8), (20, 5, 9), (21, 5, 12),
+        (22, 6, 7),
+        (23, 7, 8),
+        (24, 8, 10), (25, 8, 12),
+        (26, 9, 11), (27, 9, 12),
+        (28, 10, 11), (29, 10, 12),
+        (30, 11, 12),
+    ]
+    assert len(EDGES_30) == 30, f"Expected 30 edges, got {len(EDGES_30)}"
+
+    # Mode 5 carrier edges (from Sheet 14 spotlight + Q3 ANSWERED Mode 5 finding)
+    # E1-8 = F1-F8 = edge #4; E3-9 = F3-F9 = edge #12
+    MODE_5_CARRIER_EDGES = {4, 12}
+
+    # Header row
+    headers = ["#", "Edge ID", "Face A", "Face B",
+               "Description",
+               "Edge Energy\n√(E_A·E_B)",
+               "Edge Tension\n|E_A−E_B|",
+               "Breath Ratio\nE_A/(E_A+E_B)",
+               "Breath Ratio (log)\nlog(E_B/E_A)/log(φ)",
+               "Notes"]
+    for col_idx, header_text in enumerate(headers, start=1):
+        c = ws.cell(row=3, column=col_idx, value=header_text)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Per-edge rows
+    for i, (e_num, face_a, face_b) in enumerate(EDGES_30):
+        row = 4 + i
+        edge_id = f"E{e_num}"
+        face_pair_label = f"F{face_a}-F{face_b}"
+
+        # Col A: #
+        ws.cell(row=row, column=1, value=e_num).alignment = Alignment(horizontal="center")
+        # Col B: Edge ID
+        ws.cell(row=row, column=2, value=edge_id).font = Font(
+            name="Consolas", size=10, bold=True)
+        # Col C: Face A
+        ws.cell(row=row, column=3, value=f"F{face_a}").alignment = Alignment(horizontal="center")
+        # Col D: Face B
+        ws.cell(row=row, column=4, value=f"F{face_b}").alignment = Alignment(horizontal="center")
+        # Col E: Description
+        ws.cell(row=row, column=5, value=face_pair_label).font = Font(
+            name="Calibri", size=10, italic=True, color="606060")
+        ws.cell(row=row, column=5).alignment = Alignment(horizontal="center")
+
+        # Face energy named range references
+        ref_a = f"cen_f{face_a}_o1_e_final"
+        ref_b = f"cen_f{face_b}_o1_e_final"
+
+        # Col F: Edge Energy E_e = sqrt(E_A * E_B)
+        apply_formula_cell(ws, row, 6, f"=SQRT({ref_a}*{ref_b})")
+        ws.cell(row=row, column=6).number_format = "0.0000"
+        ws.cell(row=row, column=6).alignment = Alignment(horizontal="center")
+
+        # Col G: Edge Tension T_e = |E_A - E_B|
+        apply_formula_cell(ws, row, 7, f"=ABS({ref_a}-{ref_b})")
+        ws.cell(row=row, column=7).number_format = "0.0000"
+        ws.cell(row=row, column=7).alignment = Alignment(horizontal="center")
+
+        # Col H: Breath Ratio (share form) = E_A / (E_A + E_B)
+        apply_formula_cell(ws, row, 8, f"=IF({ref_a}+{ref_b}>0,{ref_a}/({ref_a}+{ref_b}),0)")
+        ws.cell(row=row, column=8).number_format = "0.0000"
+        ws.cell(row=row, column=8).alignment = Alignment(horizontal="center")
+
+        # Col I: Breath Ratio (log form) = log(E_B/E_A) / log(phi), clamped to [-2, +2]
+        apply_formula_cell(ws, row, 9,
+            f"=IF(AND({ref_a}>0,{ref_b}>0),MAX(-2,MIN(2,LN({ref_b}/{ref_a})/LN(phi))),0)")
+        ws.cell(row=row, column=9).number_format = "0.0000"
+        ws.cell(row=row, column=9).alignment = Alignment(horizontal="center")
+
+        # Col J: Notes (Mode 5 carrier highlight)
+        if e_num in MODE_5_CARRIER_EDGES:
+            ws.cell(row=row, column=10,
+                    value=f"⭐ Mode 5 carrier edge (Sheet 14 thesis-defense spotlight)"
+                    ).font = Font(name="Calibri", size=9, bold=True, italic=True, color="0D7377")
+            # Highlight entire row
+            for col in range(1, 11):
+                if col != 10:
+                    ws.cell(row=row, column=col).fill = PatternFill(
+                        start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+        else:
+            ws.cell(row=row, column=10, value="").font = Font(
+                name="Calibri", size=9, italic=True, color="808080")
+
+        # Named ranges per edge (per-edge metric aliases)
+        eid_lc = edge_id.lower()
+        add_defined_name(wb, f"cen_{eid_lc}_energy",   f"'07_Edges'!$F${row}")
+        add_defined_name(wb, f"cen_{eid_lc}_tension",  f"'07_Edges'!$G${row}")
+        add_defined_name(wb, f"cen_{eid_lc}_br_share", f"'07_Edges'!$H${row}")
+        add_defined_name(wb, f"cen_{eid_lc}_br_log",   f"'07_Edges'!$I${row}")
+
+        # Mode 5 carrier aliases (using F-pair notation for thesis-defense cross-reference)
+        if face_a == 1 and face_b == 8:
+            add_defined_name(wb, "cen_edge_e1_8_energy", f"'07_Edges'!$F${row}")
+            add_defined_name(wb, "cen_edge_e1_8_tension", f"'07_Edges'!$G${row}")
+        elif face_a == 3 and face_b == 9:
+            add_defined_name(wb, "cen_edge_e3_9_energy", f"'07_Edges'!$F${row}")
+            add_defined_name(wb, "cen_edge_e3_9_tension", f"'07_Edges'!$G${row}")
+
+    # ─────────────────────────────────────────────────────────
+    # Block B — Summary statistics (rows 35-40)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 35, 1, 10,
+                       "Block B — Summary Statistics (30 edges)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    ws.cell(row=36, column=1, value="Metric").font = Font(name="Calibri", size=10, bold=True)
+    ws.cell(row=36, column=2, value="Min").font = Font(name="Calibri", size=10, bold=True)
+    ws.cell(row=36, column=3, value="Max").font = Font(name="Calibri", size=10, bold=True)
+    ws.cell(row=36, column=4, value="Mean").font = Font(name="Calibri", size=10, bold=True)
+    ws.cell(row=36, column=5, value="StDev").font = Font(name="Calibri", size=10, bold=True)
+    for c in range(1, 6):
+        ws.cell(row=36, column=c).fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        ws.cell(row=36, column=c).alignment = Alignment(horizontal="center")
+
+    # Summary rows for each metric
+    summary_metrics = [
+        ("Edge Energy", "F"),
+        ("Edge Tension", "G"),
+        ("Breath Share", "H"),
+        ("Breath Log", "I"),
+    ]
+    for i, (label, col_letter) in enumerate(summary_metrics):
+        row = 37 + i
+        ws.cell(row=row, column=1, value=label).font = Font(
+            name="Calibri", size=10, italic=True, color="606060")
+        apply_formula_cell(ws, row, 2, f"=MIN({col_letter}4:{col_letter}33)")
+        apply_formula_cell(ws, row, 3, f"=MAX({col_letter}4:{col_letter}33)")
+        apply_formula_cell(ws, row, 4, f"=AVERAGE({col_letter}4:{col_letter}33)")
+        apply_formula_cell(ws, row, 5, f"=STDEVP({col_letter}4:{col_letter}33)")
+        for c in range(2, 6):
+            ws.cell(row=row, column=c).number_format = "0.0000"
+            ws.cell(row=row, column=c).alignment = Alignment(horizontal="center")
+
+    # Named ranges for summary
+    add_defined_name(wb, "cen_edges_energy_mean", "'07_Edges'!$D$37")
+    add_defined_name(wb, "cen_edges_tension_mean", "'07_Edges'!$D$38")
+
+    # ─────────────────────────────────────────────────────────
+    # Footer — Authority + Mode 5 carrier callout
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 43, 1, 10,
+                       "Authority + Mode 5 Carrier Edges (Sheet 14 spotlight)",
+                       bg=DARK_NAVY, size=11)
+    notes = [
+        "30 canonical dodecahedral edges per js/main.js:826-849 adjacency list.",
+        "Each face has exactly 5 neighbors; 5 × 12 / 2 = 30 unique face-pair edges.",
+        "Per Lock #8.5: 4 parallel-column formulas surfaced (Energy/Tension/Share/Log).",
+        "All four are valid analytical views per audit trail §5 + §14.",
+        "                                       ",
+        "MODE 5 CARRIER EDGES (Sheet 14 thesis-defense spotlight; highlighted rows):",
+        "  E4  = F1-F8 (Operations-Finance Flow):    F1=−0.521, F8=+0.470 in U[:,5]",
+        "  E12 = F3-F9 (Human-Regenerative Coherence): F3=+0.470, F9=−0.521 in U[:,5]",
+        "  Only edges with double-ended opposite-sign Mode 5 weight = highest-leverage",
+        "  intervention points per yesterday's Mode 5 deep interpretation finding.",
+        "                                       ",
+        "Authority: audit trail §5 (canonical edge formula) + §14 (advanced log form);",
+        "  Lock #8.5 (side-by-side formula display); Lock #8.35 (κ=φ² canonical baseline);",
+        "  Sheet 04 cen_f<n>_o1_e_final (face energy inputs); Sheet 14 Mode 5 finding.",
+        "                                       ",
+        "Named ranges: cen_e<N>_{energy,tension,br_share,br_log} per edge (120 total);",
+        "  cen_edge_e1_8_energy + cen_edge_e3_9_energy (Mode 5 carrier aliases);",
+        "  cen_edges_energy_mean + cen_edges_tension_mean (summary statistics).",
+    ]
+    for offset, note in enumerate(notes, start=1):
+        c = ws.cell(row=43 + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=43 + offset, start_column=1,
+                       end_row=43 + offset, end_column=10)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 4
+    ws.column_dimensions["B"].width = 7
+    ws.column_dimensions["C"].width = 6
+    ws.column_dimensions["D"].width = 6
+    ws.column_dimensions["E"].width = 9
+    ws.column_dimensions["F"].width = 12
+    ws.column_dimensions["G"].width = 12
+    ws.column_dimensions["H"].width = 14
+    ws.column_dimensions["I"].width = 16
+    ws.column_dimensions["J"].width = 48
+
+    ws.freeze_panes = "B4"
+
     return ws
 
 
