@@ -674,9 +674,9 @@ def build_sheet_02_raw_inputs(wb: Workbook):
         (7, 3, "F3", "AI governance consulting revenue", "Financial", "O1", "Face",
          "F1·Fire·O1", "£0 (silent)", 0.0, "zero-energy (silent)",
          "PureO1 §3 + Lock #8.22 / Songbook R7", "bsc_f3_value"),
-        (8, 4, "F4", "Donation income / quarter", "Financial", "O2", "Edge",
-         "E7-11·O2", "TBD researcher", None, "edge KPI — partnership-validate",
-         "Lock #8.9 edge promotion / W06v3 line 173", "bsc_f4_value"),
+        (8, 4, "F4", "Donation income / quarter", "Financial", "O2", "Face",
+         "F11·Fire·O2", "TBD researcher", None, "O2 layer — partnership-validate (REVERTED from E7-11 per Lock #8.36 geometric correction; E7-11 doesn't exist — F7+F11 are skew faces)",
+         "Songbook R8 (Reverted from Lock #8.11 edge promotion 2026-05-24 per Lock #8.36)", "bsc_f4_value"),
         (9, 5, "F5", "SCMS subscription revenue", "Financial", "O2", "Face",
          "F11·Water·O2", "TBD researcher", None, "O2 layer — partnership-validate",
          "W06v3 line 113 / Songbook R9", "bsc_f5_value"),
@@ -783,10 +783,10 @@ def build_sheet_02_raw_inputs(wb: Workbook):
         (40, 33, "L7", "Peace Charter screening procedure", "L&G", "O2", "Edge",
          "E2-10·O2", "TBD edge-validate", None, "edge KPI — partnership-validate",
          "Lock #8.9 edge promotion / W06v3 line 141", "bsc_l7_value"),
-        (41, 34, "L8", "SDG alignment in PVM", "L&G", "O2", "Vertex",
-         "V13·O2 (F4∩F9∩F10)", "TBD vertex-validate", None,
-         "vertex KPI — partnership-validate (first vertex-KPI in CEN dataset)",
-         "Lock #8.10 + #8.11 NEW vertex promotion / W06v3 line 142", "bsc_l8_value"),
+        (41, 34, "L8", "SDG alignment in PVM", "L&G", "O2", "Face",
+         "F10·Ether·O2", "TBD researcher", None,
+         "O2 layer — partnership-validate (REVERTED from V13 per Lock #8.36 geometric correction; F4+F9+F10 don't share a vertex — V13 actually F4+F5+F9. 3-face-spanning semantic preserved at interpretive disclosure layer.)",
+         "Songbook R38 (Reverted from Lock #8.11 vertex promotion 2026-05-24 per Lock #8.36)", "bsc_l8_value"),
     ]
 
     ALL_ROWS = KPI_ROWS + KPI_ROWS_C + KPI_ROWS_I + KPI_ROWS_L
@@ -965,13 +965,17 @@ def build_sheet_03_normalization_60grid(wb: Workbook):
         ("bsc_l1_value", 3, "Earth", 2),
         ("bsc_l2_value", 2, "Air", 2),
         ("bsc_l3_value", 3, "Fire", 2),
+        # Lock #8.36 reversions (2026-05-24): geometric-correction of Lock #8.11 promotions
+        # that were infeasible (E7-11 doesn't exist; V13 = F4+F5+F9 not F4+F9+F10):
+        ("bsc_f4_value", 11, "Fire", 2),    # F4 Donation income → F11 Fire O2 (Songbook R8 reversion)
+        ("bsc_l8_value", 10, "Ether", 2),   # L8 SDG alignment in PVM → F10 Ether O2 (Songbook R38 reversion)
         # O3 layer — 4 face KPIs
         ("bsc_c7_value", 5, "Earth", 3),
         ("bsc_c9_value", 6, "Air", 3),
         ("bsc_l5_value", 2, "Air", 3),
         ("bsc_l6_value", 6, "Water", 3),
     ]
-    assert len(KPI_PLACEMENTS) == 29, f"Expected 29 face-KPI placements, got {len(KPI_PLACEMENTS)}"
+    assert len(KPI_PLACEMENTS) == 31, f"Expected 31 face-KPI placements (post-Lock #8.36 reversions), got {len(KPI_PLACEMENTS)}"
 
     ELEMENTS = ["Earth", "Water", "Fire", "Air", "Ether"]
     ELEMENT_COL = {"Earth": 2, "Water": 3, "Fire": 4, "Air": 5, "Ether": 6}
@@ -1872,9 +1876,9 @@ def build_sheet_08_vertices(wb: Workbook):
         # Col N: Notes
         notes = []
         if v_num == 13:
-            notes.append("Lock #8.11 candidate (F4∩F5∩F9 — semantic mismatch from F4∩F9∩F10 in W06v3; needs reconciliation)")
+            notes.append("Lock #8.36 RESOLVED: V13 = F4+F5+F9 canonical; Lock #8.11 L8→V13 promotion retired (L8 reverted to F10 Ether O2; F4+F9+F10 don't share a vertex)")
         if v_num == 10:
-            notes.append("Lock #8.11 alternative (F3∩F4∩F9 closest to W06v3 'Structure+Regen+Values' intent)")
+            notes.append("Lock #8.36 RESOLVED: V10 = F3+F4+F9 canonical; was considered as L8 alternative; L8 now at F10 Ether O2 face per geometric-integrity reversion")
         ws.cell(row=row, column=14, value=" · ".join(notes) if notes else "").font = Font(
             name="Calibri", size=9, italic=True, color="808080" if not notes else "0D7377")
 
