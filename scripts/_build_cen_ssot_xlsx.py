@@ -2014,9 +2014,312 @@ def build_sheet_09_bidirectional(wb: Workbook):
     Authority: Lock #8.24 + POC/docs/math/CALCULATION_AUDIT_TRAIL.md §17.
     """
     ws = wb.create_sheet("09_Vertex_KPIs_BiDirectional")
-    apply_brand_header(ws, 1, 1, 12,
-                       "Vertex KPIs + Bi-Directional Intervention Map (Lock #8.24)",
-                       bg=MAGENTA_PINK, size=14)
+    apply_brand_header(ws, 1, 1, 14,
+                       "Bi-Directional Intervention Map (Lock #8.24 + Lock #8.36 corrections)",
+                       bg=DEEP_TEAL, size=14)
+
+    # Per-edge signatures source: docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md
+    # Post-Lock #8.36: 3 surviving HIGH-confidence edge-KPIs (E7-11 retired; V13 vertex-KPI retired).
+    # Equal-weight placeholder for anticipatory signatures (0.20 per element for edges; sum=1.00 per side).
+
+    # 30 canonical edges (same as Sheet 07)
+    EDGES_30 = [
+        (1, 1, 2),  (2, 1, 6),  (3, 1, 7),  (4, 1, 8),  (5, 1, 10),
+        (6, 2, 3),  (7, 2, 6),  (8, 2, 10), (9, 2, 11),
+        (10, 3, 4), (11, 3, 6), (12, 3, 9), (13, 3, 11),
+        (14, 4, 5), (15, 4, 6), (16, 4, 7), (17, 4, 9),
+        (18, 5, 7), (19, 5, 8), (20, 5, 9), (21, 5, 12),
+        (22, 6, 7),
+        (23, 7, 8),
+        (24, 8, 10), (25, 8, 12),
+        (26, 9, 11), (27, 9, 12),
+        (28, 10, 11), (29, 10, 12),
+        (30, 11, 12),
+    ]
+
+    # HIGH-confidence edge signatures (3 surviving post-Lock #8.36)
+    # Format: (edge_id_num, faceA_weights, faceB_weights, kpi_id, kpi_name, confidence_note)
+    # Weights: [Earth, Water, Fire, Air, Ether] sum to 1.0 per side
+    HIGH_EDGE_SIGNATURES = {
+        # E14 = F4-F5? No, E14 = (14, 4, 5). Need to match by face pair: F2-F10 = edge #8
+        8:  ([0.35, 0.10, 0.10, 0.15, 0.30], [0.25, 0.05, 0.05, 0.10, 0.55],
+             "BSC.L7", "Peace Charter screening (Ethical IP Score)", "HIGH (W06v3 pre-validated)"),
+        29: ([0.40, 0.05, 0.10, 0.10, 0.35], [0.50, 0.10, 0.10, 0.10, 0.20],
+             "BSC.I3", "GDPR compliance gaps closed (Ethical Resilience)", "HIGH (W06v3 pre-validated)"),
+        19: ([0.30, 0.20, 0.20, 0.25, 0.05], [0.30, 0.20, 0.35, 0.10, 0.05],
+             "BSC.C8", "AI governance consulting clients (Brand-Experience Coherence)", "HIGH (W06v3 pre-validated)"),
+    }
+    # Note: E2-10 = edge #8 (F2-F10); E10-12 = edge #29 (F10-F12); E5-8 = edge #19 (F5-F8)
+
+    # 20 canonical vertices (same as Sheet 08)
+    VERTICES_20 = [
+        (1,  [1, 2, 6]),  (2,  [1, 2, 10]), (3,  [1, 6, 7]),
+        (4,  [1, 7, 8]),  (5,  [1, 8, 10]),
+        (6,  [2, 3, 6]),  (7,  [2, 3, 11]), (8,  [2, 10, 11]),
+        (9,  [3, 4, 6]),  (10, [3, 4, 9]),  (11, [3, 9, 11]),
+        (12, [4, 5, 7]),  (13, [4, 5, 9]),  (14, [4, 6, 7]),
+        (15, [5, 7, 8]),  (16, [5, 8, 12]), (17, [5, 9, 12]),
+        (18, [8, 10, 12]),(19, [9, 11, 12]),(20, [10, 11, 12]),
+    ]
+    # Post-Lock #8.36: 0 HIGH-confidence vertex-KPIs (V13 retired; L8 reverted to F10 face).
+    # All 20 vertex signatures are anticipatory equal-weight placeholders (0.0667 per element).
+
+    # ─────────────────────────────────────────────────────────
+    # BLOCK A — Lock #8.36 reframe notice (rows 3-7)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 3, 1, 14,
+                       "Block A — Bi-Directional Architecture Status (post-Lock #8.36 maximum-integrity)",
+                       bg=QUANTUM_PURPLE, size=11)
+    status_notes = [
+        "Lock #8.24 Bi-Directional Co-Evolution: Forward math (elements→face→edge/vertex) unchanged;",
+        "  backward intervention via per-Edge 10-tuple + per-Vertex 15-tuple Elemental Influence Signatures.",
+        "                                       ",
+        "Post-Lock #8.36 KPI distribution: 31 face-KPIs + 3 edge-KPIs + 0 vertex-KPIs = 34 total.",
+        "HIGH-confidence edge signatures (3): E8 BSC.L7 (F2-F10), E29 BSC.I3 (F10-F12), E19 BSC.C8 (F5-F8).",
+        "Vertex-KPIs: ZERO at canonical mapping (V13 promotion retired; L8 reverted to F10 face).",
+        "Anticipatory signatures (47): MEDIUM-confidence equal-weight placeholders; source doc has researcher-drafted",
+        "  values pending partnership-validation at W3 adversarial pass.",
+    ]
+    for i, note in enumerate(status_notes, start=1):
+        c = ws.cell(row=3 + i, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=3 + i, start_column=1, end_row=3 + i, end_column=14)
+
+    # ─────────────────────────────────────────────────────────
+    # BLOCK B — Edge Signatures table (rows 13-44)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 13, 1, 14,
+                       "Block B — Edge Elemental Influence Signatures (30 edges × 10-tuple)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    edge_headers = ["#", "Edge", "Pair", "Side",
+                    "Earth", "Water", "Fire", "Air", "Ether", "Σ",
+                    "KPI", "KPI Name", "Confidence", "Notes"]
+    for col_idx, header_text in enumerate(edge_headers, start=1):
+        c = ws.cell(row=14, column=col_idx, value=header_text)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True)
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Per-edge signatures (2 rows per edge: faceA + faceB)
+    edge_row_start = 15
+    for i, (e_num, face_a, face_b) in enumerate(EDGES_30):
+        row_a = edge_row_start + i * 2
+        row_b = row_a + 1
+
+        # Get signature (high-confidence or anticipatory equal-weight)
+        if e_num in HIGH_EDGE_SIGNATURES:
+            sig_a, sig_b, kpi_id, kpi_name, conf = HIGH_EDGE_SIGNATURES[e_num]
+        else:
+            sig_a = sig_b = [0.20, 0.20, 0.20, 0.20, 0.20]  # equal-weight placeholder
+            kpi_id = "—"
+            kpi_name = "(no KPI; anticipatory)"
+            conf = "MEDIUM (anticipatory; source doc has researcher draft)"
+
+        for side_idx, (row, face_id, sig) in enumerate([(row_a, face_a, sig_a), (row_b, face_b, sig_b)]):
+            # Col A: # (only on first row)
+            if side_idx == 0:
+                ws.cell(row=row, column=1, value=e_num).alignment = Alignment(horizontal="center")
+                ws.cell(row=row, column=2, value=f"E{e_num}").font = Font(name="Consolas", size=10, bold=True)
+                ws.cell(row=row, column=3, value=f"F{face_a}-F{face_b}").font = Font(
+                    name="Calibri", size=10, italic=True, color="606060")
+                ws.cell(row=row, column=3).alignment = Alignment(horizontal="center")
+            # Col D: Side label
+            ws.cell(row=row, column=4, value=f"F{face_id}").font = Font(
+                name="Calibri", size=10, bold=True)
+            ws.cell(row=row, column=4).alignment = Alignment(horizontal="center")
+            # Cols E-I: 5 element weights
+            for j, val in enumerate(sig):
+                c = ws.cell(row=row, column=5+j, value=val)
+                c.number_format = "0.00"
+                c.alignment = Alignment(horizontal="center")
+                if e_num in HIGH_EDGE_SIGNATURES:
+                    c.font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+                else:
+                    c.font = Font(name="Calibri", size=10, color="808080")
+            # Col J: Sum (formula)
+            apply_formula_cell(ws, row, 10,
+                                f"=SUM(E{row}:I{row})")
+            ws.cell(row=row, column=10).number_format = "0.00"
+            ws.cell(row=row, column=10).alignment = Alignment(horizontal="center")
+            ws.cell(row=row, column=10).font = Font(
+                name="Calibri", size=9, italic=True, color="606060")
+
+            # Cols K-N: KPI metadata (only first row)
+            if side_idx == 0:
+                ws.cell(row=row, column=11, value=kpi_id).font = Font(
+                    name="Consolas", size=9, bold=True)
+                ws.cell(row=row, column=12, value=kpi_name).font = Font(
+                    name="Calibri", size=9, italic=True, color="606060")
+                ws.cell(row=row, column=13, value=conf).font = Font(
+                    name="Calibri", size=9, italic=True,
+                    color="0D7377" if "HIGH" in conf else "808080")
+                ws.cell(row=row, column=14, value="").font = Font(
+                    name="Calibri", size=9, italic=True, color="808080")
+
+            # Highlight HIGH-confidence rows
+            if e_num in HIGH_EDGE_SIGNATURES:
+                for col in range(1, 15):
+                    if not ws.cell(row=row, column=col).fill or ws.cell(row=row, column=col).fill.start_color.rgb == "00000000":
+                        ws.cell(row=row, column=col).fill = PatternFill(
+                            start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+
+    # ─────────────────────────────────────────────────────────
+    # BLOCK C — Vertex Signatures table (after edges; rows starting ~76)
+    # ─────────────────────────────────────────────────────────
+    vertex_block_start = edge_row_start + len(EDGES_30) * 2 + 2  # = 77
+    apply_brand_header(ws, vertex_block_start, 1, 14,
+                       "Block C — Vertex Elemental Influence Signatures (20 vertices × 15-tuple)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    vertex_headers = ["#", "Vertex", "Faces", "Side",
+                      "Earth", "Water", "Fire", "Air", "Ether", "Σ",
+                      "KPI", "KPI Name", "Confidence", "Notes"]
+    for col_idx, header_text in enumerate(vertex_headers, start=1):
+        c = ws.cell(row=vertex_block_start + 1, column=col_idx, value=header_text)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True)
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Per-vertex signatures (3 rows per vertex: faceA + faceB + faceC)
+    vertex_row_start = vertex_block_start + 2
+    for i, (v_num, face_ids) in enumerate(VERTICES_20):
+        row_base = vertex_row_start + i * 3
+        # All vertex signatures are anticipatory (equal-weight) post-Lock #8.36
+        sig = [0.20, 0.20, 0.20, 0.20, 0.20]
+        kpi_id = "—"
+        kpi_name = "(no KPI; anticipatory)"
+        conf = "MEDIUM (anticipatory; CEN has 0 vertex-KPIs per Lock #8.36)"
+        if v_num == 13:
+            kpi_name = "(V13 was Lock #8.11 L8 candidate; retired per Lock #8.36)"
+            conf = "MEDIUM (V13 = F4+F5+F9 ≠ L8 intent F4+F9+F10)"
+
+        for side_idx, face_id in enumerate(face_ids):
+            row = row_base + side_idx
+            # First row of vertex: # + V_ID + faces
+            if side_idx == 0:
+                ws.cell(row=row, column=1, value=v_num).alignment = Alignment(horizontal="center")
+                ws.cell(row=row, column=2, value=f"V{v_num}").font = Font(
+                    name="Consolas", size=10, bold=True)
+                faces_label = f"F{face_ids[0]}∩F{face_ids[1]}∩F{face_ids[2]}"
+                ws.cell(row=row, column=3, value=faces_label).font = Font(
+                    name="Calibri", size=9, italic=True, color="606060")
+                ws.cell(row=row, column=3).alignment = Alignment(horizontal="center")
+            # Col D: Side label
+            ws.cell(row=row, column=4, value=f"F{face_id}").font = Font(
+                name="Calibri", size=10, bold=True)
+            ws.cell(row=row, column=4).alignment = Alignment(horizontal="center")
+            # Cols E-I: 5 element weights
+            for j, val in enumerate(sig):
+                c = ws.cell(row=row, column=5+j, value=val)
+                c.number_format = "0.00"
+                c.alignment = Alignment(horizontal="center")
+                c.font = Font(name="Calibri", size=10, color="808080")
+            # Col J: Sum formula
+            apply_formula_cell(ws, row, 10, f"=SUM(E{row}:I{row})")
+            ws.cell(row=row, column=10).number_format = "0.00"
+            ws.cell(row=row, column=10).alignment = Alignment(horizontal="center")
+            ws.cell(row=row, column=10).font = Font(
+                name="Calibri", size=9, italic=True, color="606060")
+
+            # Cols K-N: KPI metadata (only first row)
+            if side_idx == 0:
+                ws.cell(row=row, column=11, value=kpi_id).font = Font(
+                    name="Consolas", size=9, bold=True)
+                ws.cell(row=row, column=12, value=kpi_name).font = Font(
+                    name="Calibri", size=9, italic=True, color="606060")
+                ws.cell(row=row, column=13, value=conf).font = Font(
+                    name="Calibri", size=9, italic=True, color="808080")
+                ws.cell(row=row, column=14, value="").font = Font(
+                    name="Calibri", size=9, italic=True, color="808080")
+
+            # V13 highlight (Lock #8.36 reframe marker)
+            if v_num == 13:
+                ws.cell(row=row, column=2).fill = PatternFill(
+                    start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+                ws.cell(row=row, column=12).fill = PatternFill(
+                    start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+
+    # ─────────────────────────────────────────────────────────
+    # BLOCK D — Validation summary
+    # ─────────────────────────────────────────────────────────
+    summary_row = vertex_row_start + 20 * 3 + 2
+    apply_brand_header(ws, summary_row, 1, 14,
+                       "Block D — Signature Validation Summary (all sums must = 1.00 per side)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    ws.cell(row=summary_row + 1, column=1, value="Total signatures:").font = Font(
+        name="Calibri", size=10, bold=True)
+    ws.cell(row=summary_row + 1, column=2, value="50 (30 edges + 20 vertices)").font = Font(
+        name="Calibri", size=10)
+    ws.cell(row=summary_row + 2, column=1, value="HIGH confidence:").font = Font(
+        name="Calibri", size=10, bold=True, color="0D7377")
+    ws.cell(row=summary_row + 2, column=2,
+            value="3 (post-Lock #8.36; E2-10, E10-12, E5-8 — all valid edges)").font = Font(
+        name="Calibri", size=10, color="0D7377")
+    ws.cell(row=summary_row + 3, column=1, value="MEDIUM confidence:").font = Font(
+        name="Calibri", size=10, bold=True, color="808080")
+    ws.cell(row=summary_row + 3, column=2,
+            value="47 (anticipatory equal-weight placeholders; partnership-validate at W3)").font = Font(
+        name="Calibri", size=10, color="808080")
+    ws.cell(row=summary_row + 4, column=1, value="Source doc:").font = Font(
+        name="Calibri", size=10, bold=True)
+    ws.cell(row=summary_row + 4, column=2,
+            value="docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md").font = Font(
+        name="Consolas", size=9, color="606060")
+
+    # ─────────────────────────────────────────────────────────
+    # Footer — Authority + Lock #8.24 + Lock #8.36
+    # ─────────────────────────────────────────────────────────
+    footer_row = summary_row + 6
+    apply_brand_header(ws, footer_row, 1, 14,
+                       "Authority + Lock #8.24 (Bi-Directional) + Lock #8.36 (Geometric reversion)",
+                       bg=DARK_NAVY, size=11)
+    notes = [
+        "Lock #8.24 Bi-Directional Co-Evolution Architecture:",
+        "  Forward math (Sheet 04 pentagramic) → face energies → edges/vertices (unchanged).",
+        "  Backward intervention: per-Edge 10-tuple + per-Vertex 15-tuple Elemental Influence Signatures encode",
+        "  how element-level KPI changes propagate. Sum per face = 1.00 (probability-like distribution).",
+        "                                       ",
+        "Lock #8.36 Geometric Reversion (this sheet reflects):",
+        "  • E7-11 (BSC.F4 promotion) RETIRED — F7 + F11 are skew faces, no edge exists.",
+        "    BSC.F4 reverted to F11 Fire O2 face placement (Songbook R8 canonical).",
+        "  • V13 (BSC.L8 promotion) RETIRED — V13 = F4∩F5∩F9 canonical, NOT F4∩F9∩F10 claimed.",
+        "    BSC.L8 reverted to F10 Ether O2 face placement (Songbook R38 canonical).",
+        "  • Post-correction: 31 face + 3 edge + 0 vertex = 34 KPIs (count preserved; placements pristine).",
+        "                                       ",
+        "ANTICIPATORY SIGNATURES (47 of 50):",
+        "  Equal-weight placeholders (0.20 per element). Source doc has researcher-drafted MEDIUM-confidence",
+        "  values; SSOT equal-weight is intentional honest baseline pending partnership-validation at W3",
+        "  adversarial pass. The full researcher-drafted values can be migrated when partnership-validated.",
+        "                                       ",
+        "ACTION SIMULATOR (deferred to Wave 3 follow-up):",
+        "  Per Lock #8.24 design: 'If KPI X shifts by ΔX, predicted face/edge/vertex shifts'. Requires the",
+        "  HIGH-confidence signatures + partnership-validated anticipatory signatures to be operationally",
+        "  meaningful. Scaffolded in this sheet's structure; computed cells added in Wave 3.",
+        "                                       ",
+        "Authority: audit trail §17 (Bi-Directional architecture) + Lock #8.24 + Lock #8.36 + source signatures doc.",
+    ]
+    for i, note in enumerate(notes, start=1):
+        c = ws.cell(row=footer_row + i, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=footer_row + i, start_column=1,
+                       end_row=footer_row + i, end_column=14)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 4
+    ws.column_dimensions["B"].width = 7
+    ws.column_dimensions["C"].width = 13
+    ws.column_dimensions["D"].width = 6
+    for col in ["E", "F", "G", "H", "I", "J"]:
+        ws.column_dimensions[col].width = 8
+    ws.column_dimensions["K"].width = 9
+    ws.column_dimensions["L"].width = 36
+    ws.column_dimensions["M"].width = 32
+    ws.column_dimensions["N"].width = 16
+
+    ws.freeze_panes = "B15"
+
     return ws
 
 
