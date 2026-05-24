@@ -2195,11 +2195,312 @@ def build_sheet_14_spectral(wb: Workbook):
       dissonance = 0.178 (engine) — NOT 0.38 (narrative scaffolding)
     """
     ws = wb.create_sheet("14_Spectral_Analysis")
-    apply_brand_header(ws, 1, 1, 12,
-                       "Sheet 14 — Spectral Analysis", bg=DARK_NAVY, size=16)
-    apply_brand_header(ws, 2, 1, 12,
-                       "Laplacian eigenvalue decomposition · Modal amplitudes · "
-                       "Δ vector · Performance verdict per face", bg=DEEP_TEAL)
+    apply_brand_header(ws, 1, 1, 14,
+                       "Sheet 14 — Spectral Analysis (Mode 5 thesis-defense centerpiece)",
+                       bg=DARK_NAVY, size=14)
+
+    # U matrix from POC/js/spectral-analyzer.js:142-153 (κ-independent, purely geometric)
+    # Eigenvalues per audit trail §13: {0, 5−√5 (×3), 6 (×5), 5+√5 (×3)}
+    # Multiplicities arranged as: m=1 DC + m=2-4 lower + m=5-9 mid + m=10-12 upper
+    U_MATRIX = [
+        # Mode:  1         2          3          4          5          6          7          8          9          10         11         12
+        [ 0.288675, -0.186471, -0.386147,  0.257136, -0.521268, -0.265553, -0.203798, -0.167723,  0.069018,  0.408617,  0.246300,  0.149560],  # F1
+        [ 0.288675,  0.280403, -0.175174,  0.375084,  0.002974,  0.585787, -0.215034, -0.153152,  0.061775, -0.415179,  0.071313,  0.269334],  # F2
+        [ 0.288675,  0.260394,  0.337664,  0.261109,  0.470089, -0.290634, -0.293337, -0.095398,  0.126758,  0.360460, -0.273373,  0.212922],  # F3
+        [ 0.288675, -0.218846,  0.443642,  0.072720,  0.044295, -0.031604,  0.106062,  0.019417, -0.634097, -0.070754,  0.459327,  0.184425],  # F4
+        [ 0.288675, -0.280403,  0.175174, -0.375084,  0.002974,  0.585787, -0.215034, -0.153152,  0.061775,  0.415179, -0.071313, -0.269334],  # F5
+        [ 0.288675, -0.160793,  0.096726,  0.463454, -0.049607,  0.021815,  0.046881,  0.622803,  0.153781, -0.060137, -0.054581, -0.493360],  # F6
+        [ 0.288675, -0.495024, -0.003698,  0.070265,  0.053517, -0.019812,  0.559225, -0.225947,  0.222766, -0.148674, -0.381520,  0.286946],  # F7
+        [ 0.288675, -0.260394, -0.337664, -0.261109,  0.470089, -0.290634, -0.293337, -0.095398,  0.126758, -0.360460,  0.273373, -0.212922],  # F8
+        [ 0.288675,  0.186471,  0.386147, -0.257136, -0.521268, -0.265553, -0.203798, -0.167723,  0.069018, -0.408617, -0.246300, -0.149560],  # F9
+        [ 0.288675,  0.218846, -0.443642, -0.072720,  0.044295, -0.031604,  0.106062,  0.019417, -0.634097,  0.070754, -0.459327, -0.184425],  # F10
+        [ 0.288675,  0.495024,  0.003698, -0.070265,  0.053517, -0.019812,  0.559225, -0.225947,  0.222766,  0.148674,  0.381520, -0.286946],  # F11
+        [ 0.288675,  0.160793, -0.096726, -0.463454, -0.049607,  0.021815,  0.046881,  0.622803,  0.153781,  0.060137,  0.054581,  0.493360],  # F12
+    ]
+    # Eigenvalues (per audit trail §13; π-derived constants via 5±√5 = 2(3-φ)/2(2+φ))
+    SQRT5_STR = "SQRT(5)"  # Excel formula
+    EIGENVALUES_EXCEL = [
+        "0",                # Mode 1 (DC)
+        "5-SQRT(5)", "5-SQRT(5)", "5-SQRT(5)",      # Modes 2-4 (lower band)
+        "6", "6", "6", "6", "6",                     # Modes 5-9 (mid band)
+        "5+SQRT(5)", "5+SQRT(5)", "5+SQRT(5)"        # Modes 10-12 (upper band)
+    ]
+    MODE_BAND_LABELS = [
+        "DC", "lower", "lower", "lower",
+        "mid (regional)", "mid", "mid", "mid", "mid",
+        "upper (local)", "upper", "upper"
+    ]
+
+    # ─────────────────────────────────────────────────────────
+    # Block B — Eigenvalue spectrum + Mode summary (rows 3-7)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 3, 1, 14,
+                       "Block B — Eigenvalue Spectrum (Lock #8.35: κ = (5+√5)/(5−√5) = φ² geometric derivation)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    # Row 4: Mode labels
+    ws.cell(row=4, column=1, value="Mode m:").font = Font(name="Calibri", size=10, bold=True)
+    for m in range(1, 13):
+        c = ws.cell(row=4, column=1+m, value=m)
+        c.font = Font(name="Calibri", size=10, bold=True)
+        c.alignment = Alignment(horizontal="center")
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+
+    # Row 5: Eigenvalue λ_m formulas
+    ws.cell(row=5, column=1, value="λ_m:").font = Font(name="Calibri", size=10, bold=True)
+    for m in range(1, 13):
+        col = 1 + m
+        apply_formula_cell(ws, 5, col, f"={EIGENVALUES_EXCEL[m-1]}")
+        ws.cell(row=5, column=col).number_format = "0.000"
+        ws.cell(row=5, column=col).alignment = Alignment(horizontal="center")
+
+    # Row 6: Band label
+    ws.cell(row=6, column=1, value="Band:").font = Font(name="Calibri", size=10, italic=True, color="606060")
+    for m in range(1, 13):
+        col = 1 + m
+        ws.cell(row=6, column=col, value=MODE_BAND_LABELS[m-1]).font = Font(
+            name="Calibri", size=9, italic=True, color="606060")
+        ws.cell(row=6, column=col).alignment = Alignment(horizontal="center")
+
+    # ─────────────────────────────────────────────────────────
+    # Block D — U eigenvector matrix (12×12) (rows 9-22)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 8, 1, 14,
+                       "Block D — Eigenvector Matrix U (12×12; κ-independent purely geometric)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    # Header row 9: column titles
+    ws.cell(row=9, column=1, value="Face").font = Font(name="Calibri", size=10, bold=True)
+    ws.cell(row=9, column=1).fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+    for m in range(1, 13):
+        c = ws.cell(row=9, column=1+m, value=f"U[:,{m}]")
+        c.font = Font(name="Calibri", size=10, bold=True)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.alignment = Alignment(horizontal="center")
+
+    # U matrix rows 10-21 (12 face rows)
+    for f_idx in range(12):
+        row = 10 + f_idx
+        ws.cell(row=row, column=1, value=f"F{f_idx+1}").font = Font(
+            name="Calibri", size=10, bold=True)
+        for m in range(12):
+            col = 2 + m
+            ws.cell(row=row, column=col, value=U_MATRIX[f_idx][m])
+            ws.cell(row=row, column=col).number_format = "0.000000"
+            ws.cell(row=row, column=col).alignment = Alignment(horizontal="center")
+            ws.cell(row=row, column=col).font = Font(name="Calibri", size=9, color="404040")
+        # Highlight Mode 5 column (col 6) for thesis-defense centerpiece
+        ws.cell(row=row, column=6).fill = PatternFill(
+            start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+        ws.cell(row=row, column=6).font = Font(name="Calibri", size=9, bold=True, color="0D7377")
+
+    # ─────────────────────────────────────────────────────────
+    # Block E — CEN face energy inputs (col 14, rows 10-21)
+    # ─────────────────────────────────────────────────────────
+    ws.cell(row=9, column=14, value="E_f (O1)").font = Font(
+        name="Calibri", size=10, bold=True, color="0D7377")
+    ws.cell(row=9, column=14).fill = PatternFill(
+        start_color="E0F4F4", end_color="E0F4F4", fill_type="solid")
+    ws.cell(row=9, column=14).alignment = Alignment(horizontal="center")
+    for f_idx in range(12):
+        row = 10 + f_idx
+        apply_formula_cell(ws, row, 14, f"=cen_f{f_idx+1}_o1_e_final")
+        ws.cell(row=row, column=14).number_format = "0.0000"
+        ws.cell(row=row, column=14).font = Font(
+            name="Calibri", size=10, bold=True, color="0D7377")
+        ws.cell(row=row, column=14).alignment = Alignment(horizontal="center")
+
+    # ─────────────────────────────────────────────────────────
+    # Block F — Modal amplitudes a_m = U[:,m]^T · E (row 23)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 23, 1, 14,
+                       "Block F — Modal Amplitudes a_m = U[:,m]^T · E (THE LOAD-BEARING COMPUTATION)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    # Row 24: header (already has mode 1-12 from row 4 layout convention)
+    ws.cell(row=24, column=1, value="a_m:").font = Font(name="Calibri", size=10, bold=True)
+    for m in range(1, 13):
+        col = 1 + m
+        U_col_letter = get_column_letter(1 + m)  # U column for mode m
+        # SUMPRODUCT(U_col_range, E_col_range)
+        formula = f"=SUMPRODUCT({U_col_letter}10:{U_col_letter}21,N10:N21)"
+        apply_formula_cell(ws, 24, col, formula)
+        ws.cell(row=24, column=col).number_format = "0.0000"
+        ws.cell(row=24, column=col).alignment = Alignment(horizontal="center")
+        # Highlight Mode 5 (col 6 = column index 6)
+        if m == 5:
+            ws.cell(row=24, column=col).fill = PatternFill(
+                start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+            ws.cell(row=24, column=col).font = Font(
+                name="Calibri", size=11, bold=True, color="0D7377")
+
+    # Row 25: |a_m| absolute values
+    ws.cell(row=25, column=1, value="|a_m|:").font = Font(name="Calibri", size=10, bold=True)
+    for m in range(1, 13):
+        col = 1 + m
+        col_letter = get_column_letter(col)
+        apply_formula_cell(ws, 25, col, f"=ABS({col_letter}24)")
+        ws.cell(row=25, column=col).number_format = "0.0000"
+        ws.cell(row=25, column=col).alignment = Alignment(horizontal="center")
+        if m == 5:
+            ws.cell(row=25, column=col).fill = PatternFill(
+                start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+            ws.cell(row=25, column=col).font = Font(
+                name="Calibri", size=11, bold=True, color="0D7377")
+
+    # Named ranges
+    add_defined_name(wb, "cen_modal_amplitudes",
+                      f"'14_Spectral_Analysis'!$B$24:$M$24")
+    add_defined_name(wb, "cen_a_5",
+                      f"'14_Spectral_Analysis'!$F$24")  # Mode 5 = column F
+
+    # ─────────────────────────────────────────────────────────
+    # Block G — Dominant Mode + Δ vector (rows 27-32)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 27, 1, 14,
+                       "Block G — Dominant Mode Identification (excluding DC mode 1)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    ws.cell(row=28, column=1, value="Max |a_m| (m≥2):").font = Font(
+        name="Calibri", size=10, bold=True)
+    apply_formula_cell(ws, 28, 2, f"=MAX(C25:M25)")  # Max from mode 2 to 12
+    ws.cell(row=28, column=2).number_format = "0.0000"
+    ws.cell(row=28, column=2).font = Font(name="Calibri", size=11, bold=True, color="0D7377")
+
+    ws.cell(row=29, column=1, value="Dominant Mode:").font = Font(
+        name="Calibri", size=10, bold=True)
+    apply_formula_cell(ws, 29, 2, f"=MATCH(B28,C25:M25,0)+1")  # +1 to adjust mode index (col C = mode 2)
+    ws.cell(row=29, column=2).font = Font(
+        name="Calibri", size=14, bold=True, color="0D7377")
+    ws.cell(row=29, column=2).fill = PatternFill(
+        start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+
+    # Dominant mode eigenvalue
+    ws.cell(row=30, column=1, value="Dominant λ:").font = Font(
+        name="Calibri", size=10, bold=True)
+    apply_formula_cell(ws, 30, 2, f"=INDEX(B5:M5,B29)")
+    ws.cell(row=30, column=2).number_format = "0.000"
+    ws.cell(row=30, column=2).font = Font(name="Calibri", size=10, bold=True, color="606060")
+
+    # Dominant mode band
+    ws.cell(row=31, column=1, value="Dominant Band:").font = Font(
+        name="Calibri", size=10, bold=True)
+    apply_formula_cell(ws, 31, 2, f"=INDEX(B6:M6,B29)")
+    ws.cell(row=31, column=2).font = Font(
+        name="Calibri", size=10, bold=True, italic=True, color="606060")
+
+    add_defined_name(wb, "cen_dominant_mode", f"'14_Spectral_Analysis'!$B$29")
+    add_defined_name(wb, "cen_dominant_lambda", f"'14_Spectral_Analysis'!$B$30")
+
+    # ─────────────────────────────────────────────────────────
+    # Block I — BAB Score + Dissonance Index (rows 33-37)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 33, 1, 14,
+                       "Block I — BAB Score (Being-Action Balance) + Dissonance Index",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    # BAB Score: mean(E for reception poles) / mean(E for projection poles)
+    # For Mode 5: reception = F1,F9 (negative coeff); projection = F3,F8 (positive coeff)
+    ws.cell(row=34, column=1, value="BAB Score (Mode 5):").font = Font(
+        name="Calibri", size=10, bold=True)
+    apply_formula_cell(ws, 34, 2,
+        "=AVERAGE(N10,N18)/AVERAGE(N12,N17)")  # F1+F9 (rows 10+18) / F3+F8 (rows 12+17)
+    ws.cell(row=34, column=2).number_format = "0.000"
+    ws.cell(row=34, column=2).font = Font(name="Calibri", size=11, bold=True, color="0D7377")
+    ws.cell(row=34, column=2).fill = PatternFill(
+        start_color="E0F4F4", end_color="E0F4F4", fill_type="solid")
+    ws.cell(row=34, column=3, value="= mean(E_F1, E_F9) / mean(E_F3, E_F8)  [reception/projection pole ratio]"
+            ).font = Font(name="Calibri", size=9, italic=True, color="606060")
+
+    # Dissonance Index: weighted by |Δ_f| · E_f / sum|Δ_f|
+    # Simplified version: just |a_5| as a proxy for Mode 5 dissonance
+    ws.cell(row=35, column=1, value="Dissonance Index:").font = Font(
+        name="Calibri", size=10, bold=True)
+    apply_formula_cell(ws, 35, 2, f"=cen_a_5")
+    ws.cell(row=35, column=2).number_format = "0.0000"
+    ws.cell(row=35, column=2).font = Font(name="Calibri", size=11, bold=True, color="0D7377")
+    ws.cell(row=35, column=3,
+            value="= a_5 (Mode 5 signed amplitude; sign reveals direction of dissonance)"
+           ).font = Font(name="Calibri", size=9, italic=True, color="606060")
+
+    add_defined_name(wb, "cen_bab_score", f"'14_Spectral_Analysis'!$B$34")
+    add_defined_name(wb, "cen_dissonance_index", f"'14_Spectral_Analysis'!$B$35")
+
+    # ─────────────────────────────────────────────────────────
+    # Block J — Mode 5 SPOTLIGHT (thesis-defense centerpiece) (rows 38-50)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 38, 1, 14,
+                       "Block J — Mode 5 Spotlight (thesis-defense centerpiece; survives κ resolution per Q3)",
+                       bg=DARK_NAVY, size=12)
+
+    spotlight_rows = [
+        ("Mode 5 eigenvalue λ_5 =", "=F5", "= 6 (mid band; regional cluster modes)"),
+        ("Mode 5 amplitude a_5 =", "=cen_a_5",
+         "(κ=φ² canonical baseline; was −0.07401 at κ=4 era; survived κ shift per Q3 ANSWERED)"),
+        ("Mode 5 |a_5| =", "=ABS(cen_a_5)",
+         "(magnitude shifted ~12% with κ; structural finding ROBUST)"),
+        ("Eigenvector U[:,5] pattern:", "",
+         "F3+F8 carry +0.470 each (PROJECTION poles); F1+F9 carry −0.521 each (RECEPTION poles); 8 faces near-zero"),
+        ("Highest-leverage prescription:", "",
+         "RAISE F3 + F8 PAIRED (spectrally coupled at +0.470)"),
+        ("Mode 5 carrier edges:", "",
+         "E1-8 (Ops-Finance Flow) + E3-9 (Human-Regenerative Coherence)"),
+        ("Mode 5 = EDGE phenomenon:", "",
+         "F1+F9 and F3+F8 same-sign pairs are non-adjacent; 3-face vertex geometry cannot span them"),
+    ]
+    for i, (label, formula, note) in enumerate(spotlight_rows):
+        row = 39 + i
+        ws.cell(row=row, column=1, value=label).font = Font(
+            name="Calibri", size=10, bold=True, color="0D7377")
+        if formula:
+            apply_formula_cell(ws, row, 2, formula)
+            ws.cell(row=row, column=2).number_format = "0.0000"
+            ws.cell(row=row, column=2).font = Font(
+                name="Calibri", size=11, bold=True, color="0D7377")
+            ws.cell(row=row, column=2).alignment = Alignment(horizontal="center")
+        if note:
+            ws.cell(row=row, column=3, value=note).font = Font(
+                name="Calibri", size=9, italic=True, color="606060")
+            ws.merge_cells(start_row=row, start_column=3, end_row=row, end_column=14)
+
+    # ─────────────────────────────────────────────────────────
+    # Footer — Authority + Lock #8.35 alignment
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 47, 1, 14,
+                       "Authority + Lock #8.35 Geometric Derivation Alignment",
+                       bg=DARK_NAVY, size=11)
+    notes = [
+        "Spectral analysis: Graph Laplacian L = D − A of dodecahedron (12-face graph; each face has 5 neighbors).",
+        "Eigenvalues: {0, 5−√5, 6, 5+√5} = {0, 2(3−φ), 6, 2(2+φ)} — deeply φ-connected.",
+        "Per Lock #8.35: κ = (5+√5)/(5−√5) = φ² = polarity ratio of dodecahedral spectrum extremes.",
+        "                                       ",
+        "Eigenvector matrix U is purely GEOMETRIC (κ-independent). Modal amplitudes a_m = U[:,m]^T · E depend on E.",
+        "U values verbatim from POC/js/spectral-analyzer.js:142-153 (engine canonical, 6-decimal precision).",
+        "                                       ",
+        "MODE 5 FINDING (Q3 ANSWERED 2026-05-24):",
+        "Mode 5 is CEN's dominant non-DC spectral mode at BOTH κ=4 AND κ=φ² baselines. Geometric structure",
+        "(paired antipodal seesaw F3+F8 vs F1+F9) is invariant; only magnitude shifts ~12% with κ (gentler at",
+        "canonical κ=φ²). All structural findings — highest-leverage prescription (raise F3+F8 paired), carrier",
+        "edges (E1-8 + E3-9), edge-phenomenon argument — hold VERBATIM at the canonical baseline.",
+        "                                       ",
+        "Named ranges defined: cen_modal_amplitudes (12-cell vector), cen_a_5 (Mode 5), cen_dominant_mode,",
+        "cen_dominant_lambda, cen_bab_score, cen_dissonance_index. Sheet 16 Dashboard consumes these.",
+        "                                       ",
+        "Authority: audit trail §13 (Spectral) + Mode 5 Deep Interpretation doc (ADDENDUM 2026-05-24 for",
+        "κ=φ² robustness) + Resolution Analysis §9 (Q3 ANSWERED) + Disclosure doc §6.5 (geometric derivation).",
+    ]
+    for offset, note in enumerate(notes, start=1):
+        c = ws.cell(row=47 + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=47 + offset, start_column=1,
+                       end_row=47 + offset, end_column=14)
+
+    # Column widths (12 mode columns + face label + E_f column)
+    ws.column_dimensions["A"].width = 18
+    for col_letter in ["B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"]:
+        ws.column_dimensions[col_letter].width = 10
+    ws.column_dimensions["N"].width = 12
+
     return ws
 
 
