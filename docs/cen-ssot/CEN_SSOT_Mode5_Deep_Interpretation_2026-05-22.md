@@ -292,4 +292,66 @@ Mode 5 is the *crown jewel* of CEN's spectral diagnostic — not because it is t
 
 ---
 
-*End of CEN SSOT Mode 5 Deep Interpretation, 2026-05-22.*
+## ADDENDUM — Mode 5 Robustness at κ=φ² Canonical (added 2026-05-24)
+
+### Context
+
+This document was originally computed using **κ=4 face energies** (Lock #8.22 v1 baseline: F1=0.2563, F2-F11=0.1192 Wall floor, F4/F5=0.1349, F6/F12=0.1523). Subsequently:
+
+- **2026-05-23 W2 Session A** discovered the κ-band coupling finding via hygiene-discipline verification of Sheet 04.
+- **2026-05-24 morning** resolved via **Option E (trust the geometry fully)**: κ=φ² is geometrically derived from the dodecahedral Laplacian spectrum polarity ratio (5+√5)/(5−√5) = φ² (Lock #8.35). New canonical face energies at κ=φ²: F1=0.3324, F2-F11=0.2127, F4/F5=0.2286, F6/F12=0.2453 (Lock #8.22 v2 baseline).
+
+The natural second-order question (Resolution Analysis §5 Q3): **Does Mode 5 remain CEN's dominant spectral mode at the new κ=φ² canonical baseline?**
+
+### Answer: YES — Mode 5 is geometrically robust across the κ shift
+
+Modal amplitudes computed analytically using U[:,4] (κ-independent, purely geometric):
+
+| Metric | κ=4 baseline (v1) | κ=φ² baseline (v2) | Change |
+|--------|-------------------|--------------------|--------|
+| **a_5** (signed) | −0.07401 | **−0.06488** | −0.00913 |
+| **\|a_5\|** (magnitude) | 0.07401 | **0.06488** | −12.3% |
+| **Dominant non-DC mode** | Mode 5 (λ=6, regional) | **Mode 5 (λ=6, regional)** | **PRESERVED** ✓ |
+| **Sign of a_5** | negative | negative | same |
+| **Modal ranking (top 5)** | 5, 10, 3, 11, 2 | **5, 10, 3, 11, 1** | top-4 preserved |
+
+### What this means — all structural findings HOLD VERBATIM at κ=φ²
+
+1. **The paired antipodal seesaw** (F3+F8 at +0.470 vs F1+F9 at −0.521 with 8 near-zero faces) is a property of U[:,4] — purely geometric, κ-independent. Same eigenvector, same structural pattern.
+2. **CEN's a_5 sign** stays negative (F1's energy dominance still over-rides F3+F8's positive contribution, just with gentler magnitudes).
+3. **Highest-leverage prescription** remains: **raise F3 + F8 paired** (they share the +0.470 coefficient, spectrally coupled). Per-unit sensitivity `d(a_5)/d(E_i) = U[i][4]` unchanged.
+4. **Carrier-edge identification** (E1-8 + E3-9 as the two Mode 5 carrier edges with double-ended opposite-sign weight) is identical.
+5. **Mode 5 = edge phenomenon (not vertex phenomenon)** — geometric argument holds regardless of κ.
+
+### Why the magnitude shifted ~12% (analytical explanation)
+
+The κ shift was **almost but not exactly uniform** across faces:
+- F1: +0.0761 (smallest; F1 had largest pre-shift C_raw=0.2336 where sigmoid steepness mattered most)
+- F2-F11: ~+0.0935 (most faces)
+- F4/F5/F6/F12: ~+0.0930-0.0937
+
+If the shift had been EXACTLY uniform (E_new = E_old + c·𝟙), all non-DC modal amplitudes would be **invariant** because non-DC eigenvectors are orthogonal to the all-ones vector U[:,0]. Since the shift was ~99% uniform with ~12% non-uniformity at F1, the modal amplitudes shifted slightly.
+
+**Verification of uniform-shift invariance:** Mode 0 (DC) amplitude shifted by exactly 0.31870 = mean_shift × √12 = 0.092 × 3.464 ✓ (matches analytical prediction precisely).
+
+### Methodological implication
+
+The ~12% magnitude reduction is consistent with the κ=φ² methodological-restraint principle from Lock #8.35: **the gentler amplifier produces gentler spectral tension readings while preserving the geometric structure.** CEN's "spectral tension" at κ=φ² is methodologically more restrained — not less real, just less amplified.
+
+This compounds with the architectural-blindness narrative reframe: the methodology refuses to overdramatize at the amplifier layer; the geometric findings (Mode 5 dominance, F3+F8 vs F1+F9 seesaw, E1-8/E3-9 carrier edges) live at the eigenvector layer which is purely geometric and unaffected.
+
+### What stays from this document
+
+**Sections 0-5 of this document are valid VERBATIM at κ=φ²** with one numerical update: substitute |a_5| ≈ 0.0649 wherever the document cites 0.0740. The interpretive content, the highest-leverage prescription, the carrier-edge identification, the bi-directional implications, the thesis-defense framing — all hold geometrically.
+
+### Cross-references
+
+- κ-band Resolution Analysis §9 (Option E + Lock #8.35) — `docs/cen-ssot/CEN_SSOT_KappaBand_Resolution_Analysis_2026-05-23.md`
+- Disclosure doc §6.5 (Geometric Derivation of κ) — `docs/QUANNEX_INTERPRETIVE_LAYER_DISCLOSURE.md`
+- Audit Trail §13 Spectral Derivation of κ=φ² sub-section — `docs/math/CALCULATION_AUDIT_TRAIL.md`
+- Memory: `project_kappa_band_coupling_finding_2026-05-23.md` (RESOLVED)
+- Memory: `project_cen_mode5_edge_phenomenon.md` (sister entry — Mode 5 finding survives κ=φ² resolution unchanged in structure)
+
+---
+
+*End of CEN SSOT Mode 5 Deep Interpretation, 2026-05-22. Addendum 2026-05-24.*

@@ -207,11 +207,31 @@ AvG_O1 = |C_global − K_mean_60_O1| was 0.0882 at κ=4 (per audit trail §16 + 
 
 Need to recompute and partnership-validate against the "near-Aggregation distortion border" interpretation.
 
-### Q3: Mode 5 spectral finding robustness
+### Q3: Mode 5 spectral finding robustness ✅ ANSWERED 2026-05-24
 
 The Mode 5 deep interpretation finding (CEN's dominant spectral mode is the regional cluster F3+F8 (+0.470) vs F1+F9 (−0.521); raise F3+F8 paired = highest-leverage action) was computed using κ=4 face energies. Does Mode 5 still emerge as dominant at κ=φ²?
 
-The spectral analysis works on face ENERGIES (post-sigmoid), so changing κ changes the modal amplitudes. Mode 5 may or may not remain dominant; if it does, the magnitude of |a_5| changes. Worth recomputing.
+**ANSWER: YES — Mode 5 is geometrically robust across the κ shift.**
+
+Computed analytically using U[:,4] (κ-independent, purely geometric) against both face-energy baselines:
+
+| Metric | κ=4 baseline | κ=φ² baseline | Change |
+|--------|--------------|---------------|--------|
+| **Dominant non-DC mode** | Mode 5 (λ=6) | **Mode 5 (λ=6)** | PRESERVED ✓ |
+| **\|a_5\| magnitude** | 0.07401 | 0.06488 | −12.3% |
+| **Sign of a_5** | negative | negative | same |
+| **Top-5 modal ranking** | 5, 10, 3, 11, 2 | 5, 10, 3, 11, 1 | top-4 preserved |
+
+The ~12% magnitude reduction reflects the κ=φ² methodological-restraint principle (gentler amplifier = gentler spectral tension reading, same geometric structure). All Mode 5 structural findings hold VERBATIM:
+
+- Paired antipodal seesaw (F3+F8 vs F1+F9) — eigenvector property, κ-independent
+- "Raise F3+F8 paired" prescription — sensitivity `d(a_5)/d(E_i) = U[i][4]` unchanged
+- Carrier-edge identification (E1-8 + E3-9) — geometric, unchanged
+- Mode 5 = edge phenomenon (not vertex) — geometric argument unchanged
+
+**Verification of uniform-shift invariance:** Mode 0 (DC) amplitude shifted by exactly 0.31870 = mean_shift × √12 (matches analytical prediction). Non-DC max shift: 0.00913 (small residual from non-uniformity at F1). Geometry working as designed.
+
+Mode 5 doc updated with addendum: `docs/cen-ssot/CEN_SSOT_Mode5_Deep_Interpretation_2026-05-22.md` ADDENDUM section. Yesterday's thesis-defense centerpiece finding gains stronger geometric grounding — the Mode 5 finding doesn't just survive the κ resolution; it **compounds with the geometric derivation** showing that BOTH the κ value AND the eigenvector structure are emergent from the dodecahedron's own spectrum.
 
 ### Q4: Bi-Directional architecture (Lock #8.24) robustness
 
