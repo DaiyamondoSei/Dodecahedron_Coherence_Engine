@@ -3318,8 +3318,264 @@ def build_sheet_16_dashboard(wb: Workbook):
                        "CEN Spiral Dashboard — Canonical Mathematical View",
                        bg=DARK_NAVY, size=18)
     apply_brand_header(ws, 2, 1, 11,
-                       "34 BSC KPIs → Pentagramic Coherence → 12 Faces × 3 Octaves (O1+O2+O3)",
+                       "34 BSC KPIs → Pentagramic Coherence → 12 Faces × 3 Octaves "
+                       "(Lock #8.35 κ=φ² canonical · Lock #8.36 geometric integrity)",
                        bg=DEEP_TEAL)
+
+    # ─────────────────────────────────────────────────────────
+    # BLOCK B — HEADLINE NUMBERS (rows 4-9)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 4, 1, 11,
+                       "🎯 HEADLINE METRICS (κ=φ² canonical baseline)",
+                       bg=QUANTUM_PURPLE, size=12)
+
+    # Block B headlines table
+    headlines = [
+        ("Global Coherence (O1)", "cen_global_coherence_o1", "0.0000",
+         "Gate/Membrane/Wall classification per phi-derived thresholds"),
+        ("AAG (Aspiration/Actuality)", "cen_aag_o1", "0.0000",
+         "Aspiration met by capacity? Balanced=0.8-1.2, Under-claim<0.8"),
+        ("AvG (Apparent vs Granular)", "cen_avg_o1", "0.0000",
+         "Rollup faithful to detail? Faithful<phi^-6, Severe>=phi^-4"),
+        ("Dominant Spectral Mode", "cen_dominant_mode", "0",
+         "Mode 5 = regional cluster band (λ=6); Mode 5 = thesis-defense centerpiece"),
+        ("BAB Score (Mode 5)", "cen_bab_score", "0.000",
+         "Reception/Projection pole ratio; >1 = absorbing more than projecting"),
+        ("Mode 5 amplitude |a_5|", "=ABS(cen_a_5)", "0.0000",
+         "Spectral tension magnitude; geometric structure κ-independent"),
+    ]
+    ws.cell(row=5, column=1, value="Metric").font = Font(name="Calibri", size=10, bold=True, color="000000")
+    ws.cell(row=5, column=4, value="Value").font = Font(name="Calibri", size=10, bold=True, color="000000")
+    ws.cell(row=5, column=6, value="Reading").font = Font(name="Calibri", size=10, bold=True, color="000000")
+    for col in [1, 4, 6]:
+        ws.cell(row=5, column=col).fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        ws.cell(row=5, column=col).alignment = Alignment(horizontal="center")
+    ws.merge_cells(start_row=5, start_column=1, end_row=5, end_column=3)
+    ws.merge_cells(start_row=5, start_column=4, end_row=5, end_column=5)
+    ws.merge_cells(start_row=5, start_column=6, end_row=5, end_column=11)
+
+    for i, (label, formula_ref, fmt, reading) in enumerate(headlines):
+        row = 6 + i
+        # Col A-C: Metric label (merged)
+        ws.cell(row=row, column=1, value=label).font = Font(
+            name="Calibri", size=11, bold=True, color="0D7377")
+        ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=3)
+        # Col D-E: Value (merged, big highlight)
+        if formula_ref.startswith("="):
+            apply_formula_cell(ws, row, 4, formula_ref)
+        else:
+            apply_formula_cell(ws, row, 4, f"={formula_ref}")
+        ws.cell(row=row, column=4).number_format = fmt
+        ws.cell(row=row, column=4).font = Font(
+            name="Calibri", size=14, bold=True, color="0D7377")
+        ws.cell(row=row, column=4).fill = PatternFill(
+            start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+        ws.cell(row=row, column=4).alignment = Alignment(horizontal="center")
+        ws.merge_cells(start_row=row, start_column=4, end_row=row, end_column=5)
+        # Col F-K: Reading text (merged)
+        ws.cell(row=row, column=6, value=reading).font = Font(
+            name="Calibri", size=10, italic=True, color="606060")
+        ws.merge_cells(start_row=row, start_column=6, end_row=row, end_column=11)
+
+    # ─────────────────────────────────────────────────────────
+    # BLOCK C — 12-Face Energy at a glance (rows 13-26)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 13, 1, 11,
+                       "🌀 12-Face Energy Map (O1 layer canonical)",
+                       bg=QUANTUM_PURPLE, size=12)
+
+    # Face metadata: id, name, customName-cen, anchor (W06v3 + CEN-authentic mirror)
+    FACE_INFO_12 = [
+        (1,  "F1",  "Financial Capital",          "Financial Fragility"),
+        (2,  "F2",  "Intellectual Capital",       "Conceptual Depth"),
+        (3,  "F3",  "Human Capital",              "Human Capital"),
+        (4,  "F4",  "Structural Capital",         "Governance Gap"),
+        (5,  "F5",  "Market Resonance",           "Mission in Silence"),
+        (6,  "F6",  "Community & Partners",       "Community Trust"),
+        (7,  "F7",  "Brand & Reputation",         "Quiet Credibility"),
+        (8,  "F8",  "Core Operations",            "Underdeveloped Engine"),
+        (9,  "F9",  "Regenerative Flow",          "Conscious Core"),
+        (10, "F10", "Foundational Values",        "Sacred Ground"),
+        (11, "F11", "Funding Pipeline",           "Dormant Pipeline"),
+        (12, "F12", "Risk & Resilience",          "Exposed Foundation"),
+    ]
+
+    # Header
+    face_headers = ["#", "Face", "IIRF Anchor", "CEN-Authentic Name",
+                    "E_final (O1)", "Band", "Notes"]
+    for col_idx, header_text in enumerate(face_headers, start=1):
+        c = ws.cell(row=14, column=col_idx, value=header_text)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    # Merge col 4 across cols 4-5 for CEN-Authentic Name; merge col 7 across cols 7-11 for Notes
+    ws.merge_cells(start_row=14, start_column=4, end_row=14, end_column=5)
+    ws.merge_cells(start_row=14, start_column=7, end_row=14, end_column=11)
+
+    # Per-face row
+    F9_F10_FACES = {9, 10}  # architectural-blindness highlight
+    for i, (face_id, face_label, iirf, cen_name) in enumerate(FACE_INFO_12):
+        row = 15 + i
+        ws.cell(row=row, column=1, value=face_id).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=2, value=face_label).font = Font(
+            name="Consolas", size=10, bold=True)
+        ws.cell(row=row, column=2).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=3, value=iirf).font = Font(
+            name="Calibri", size=10, color="404040")
+        ws.cell(row=row, column=4, value=cen_name).font = Font(
+            name="Calibri", size=10, italic=True, color="0D7377")
+        ws.merge_cells(start_row=row, start_column=4, end_row=row, end_column=5)
+
+        # Col F (=col 5 after the cen_name merge becomes col 6 in source... wait)
+        # Actually after merging col 4-5, the next data col is 6 (E_final), then 7 (Band), then 8+ for Notes
+        apply_formula_cell(ws, row, 6, f"=cen_f{face_id}_o1_e_final")
+        ws.cell(row=row, column=6).number_format = "0.0000"
+        ws.cell(row=row, column=6).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=6).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+
+        # Band classification
+        apply_formula_cell(
+            ws, row, 7,
+            f'=IF(F{row}<phi_inv_4,"Wall",'
+            f'IF(F{row}<phi_inv_2,"Gate",'
+            f'IF(F{row}<phi_inv_1,"Membrane",'
+            f'IF(F{row}<0.854,"Hemorrhage","Vortex"))))'
+        )
+        ws.cell(row=row, column=7).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=7).font = Font(name="Calibri", size=10, italic=True)
+
+        # Notes (Lock #8.36 corrections + architectural-blindness highlight)
+        note = ""
+        if face_id == 9:
+            note = "⚠ F9 architectural blindness (zero O1 BSC KPIs); Lock #8.36 thesis-defense centerpiece"
+        elif face_id == 10:
+            note = "⚠ F10 sibling-blindness (L8 + I9 are O2-tier; reverted from V13 promotion per Lock #8.36)"
+        elif face_id == 4:
+            note = "F4 third-pattern (3 O1 KPIs near-zero); Lock #8.22 finding"
+        elif face_id == 11:
+            note = "F11 + F4 reverted edge KPI: BSC.F4 → F11 Fire O2 per Lock #8.36"
+        elif face_id == 1:
+            note = "F1 highest face energy at canonical κ=φ² baseline (= 0.3324 = Gate)"
+        ws.cell(row=row, column=8, value=note).font = Font(
+            name="Calibri", size=9, italic=True, color="D946EF" if face_id in F9_F10_FACES else "606060")
+        ws.merge_cells(start_row=row, start_column=8, end_row=row, end_column=11)
+
+        # Highlight F9 + F10 (architectural blindness)
+        if face_id in F9_F10_FACES:
+            for col in range(1, 12):
+                ws.cell(row=row, column=col).fill = PatternFill(
+                    start_color="FFE4F0", end_color="FFE4F0", fill_type="solid")
+
+    # ─────────────────────────────────────────────────────────
+    # BLOCK D — Mode 5 Spotlight (rows 28-34)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 28, 1, 11,
+                       "⭐ Mode 5 Spotlight — Highest-Leverage Spectral Intervention (Lock #8.35 + Q3 ANSWERED)",
+                       bg=DARK_NAVY, size=12)
+
+    mode5_rows = [
+        ("Dominant Mode", "=cen_dominant_mode", "0", "Mode 5 (regional band, λ=6)"),
+        ("Mode 5 amplitude (signed)", "=cen_a_5", "0.0000",
+         "Negative sign = CEN opposes U[:,5] direction (F1's energy dominates)"),
+        ("Mode 5 amplitude |a_5|", "=ABS(cen_a_5)", "0.0000",
+         "Magnitude; was 0.0740 at κ=4 era → 0.0649 at κ=φ² (gentler reading)"),
+        ("U[:,5] structure", "",  "",
+         "F3+F8 carry +0.470 (PROJECTION poles); F1+F9 carry −0.521 (RECEPTION poles); 8 faces near-zero"),
+        ("Highest-leverage action", "", "",
+         "RAISE F3 + F8 PAIRED (spectrally coupled at +0.470)"),
+        ("Carrier edges (Mode 5)", "", "",
+         "E4 F1-F8 (Ops-Finance; Tension=0.1198 LARGEST) + E12 F3-F9 (Human-Regen; latent)"),
+    ]
+    for i, (label, formula, fmt, narrative) in enumerate(mode5_rows):
+        row = 29 + i
+        ws.cell(row=row, column=1, value=label).font = Font(
+            name="Calibri", size=10, bold=True, color="0D7377")
+        ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=3)
+        if formula:
+            apply_formula_cell(ws, row, 4, formula)
+            ws.cell(row=row, column=4).number_format = fmt
+            ws.cell(row=row, column=4).font = Font(
+                name="Calibri", size=12, bold=True, color="0D7377")
+            ws.cell(row=row, column=4).fill = PatternFill(
+                start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+            ws.cell(row=row, column=4).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=6, value=narrative).font = Font(
+            name="Calibri", size=10, italic=True, color="606060")
+        ws.merge_cells(start_row=row, start_column=6, end_row=row, end_column=11)
+
+    # ─────────────────────────────────────────────────────────
+    # BLOCK E — KPI Distribution + Lock #8.36 Status (rows 36-42)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 36, 1, 11,
+                       "📊 KPI Distribution + Lock #8.36 Geometric-Integrity Status",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    kpi_distribution = [
+        ("Face-KPIs",   "31", "BSC KPIs placed at face × element × octave coordinates"),
+        ("Edge-KPIs",   "3",  "BSC.L7→E2-10 + BSC.I3→E10-12 + BSC.C8→E5-8 (verified valid edges)"),
+        ("Vertex-KPIs", "0",  "Lock #8.36: V13 promotion retired; L8 reverted to F10 Ether O2"),
+        ("Total",       "34", "BSC count preserved across Lock #8.11 / Lock #8.36 corrections"),
+    ]
+    for i, (label, count, narrative) in enumerate(kpi_distribution):
+        row = 37 + i
+        ws.cell(row=row, column=1, value=label).font = Font(
+            name="Calibri", size=10, bold=True)
+        ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=3)
+        ws.cell(row=row, column=4, value=count).font = Font(
+            name="Calibri", size=14, bold=True, color="0D7377")
+        ws.cell(row=row, column=4).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=4).fill = PatternFill(
+            start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+        ws.merge_cells(start_row=row, start_column=4, end_row=row, end_column=5)
+        ws.cell(row=row, column=6, value=narrative).font = Font(
+            name="Calibri", size=10, italic=True, color="606060")
+        ws.merge_cells(start_row=row, start_column=6, end_row=row, end_column=11)
+
+    # ─────────────────────────────────────────────────────────
+    # BLOCK F — Integrity Attestation Footer (rows 43+)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 43, 1, 11,
+                       "✓ Integrity Attestation — POC Documentation Spine Three-Pillar Trio",
+                       bg=DARK_NAVY, size=12)
+    integrity_notes = [
+        "Pillar 1 — Mathematical Rigor: docs/math/CALCULATION_AUDIT_TRAIL.md (~3300 lines; every formula audit-trailed)",
+        "Pillar 2 — Interpretive Discipline: docs/QUANNEX_INTERPRETIVE_LAYER_DISCLOSURE.md (4 interpretive layers + Calibration Loop)",
+        "Pillar 3 — Engineering Discipline: docs/HYGIENE_PRINCIPLES.md (verification-discipline scaffolding)",
+        "                                       ",
+        "Key Architectural Locks reflected in this dashboard:",
+        "  Lock #8.35 — κ=φ² geometrically derived (dodecahedral spectrum polarity ratio)",
+        "  Lock #8.36 — Geometric reversion: BSC.F4→F11 Fire O2, BSC.L8→F10 Ether O2",
+        "  Lock #8.24 — Bi-Directional Co-Evolution (50 Elemental Influence Signatures, Sheet 09)",
+        "  Lock #8.27 — Engine topology generation closed (Playwright verified 2026-05-23)",
+        "  Lock #8.33 — Per-company tuning loader silent-bug fix (Playwright verified 2026-05-23)",
+        "                                       ",
+        "Test infrastructure: 613/613 tests passing (POC repo origin/POC).",
+        "Build script: scripts/_build_cen_ssot_xlsx.py --init (21/21 sheets).",
+        "                                       ",
+        "Source artifact: this xlsx at Final Thesis/Thesis Work/Quannex Business Exports/.",
+        "Mirror artifact: POC/docs/cen-ssot/ (architectural docs durable in POC for engine work).",
+        "Cross-references: detailed analytics in Sheets 12 (Global Coherence), 13 (Diagnostics),",
+        "  14 (Spectral Mode 5), 07 (30 Edges), 08 (20 Vertices), 09 (Bi-Directional Signatures).",
+    ]
+    for i, note in enumerate(integrity_notes, start=1):
+        c = ws.cell(row=43 + i, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=43 + i, start_column=1, end_row=43 + i, end_column=11)
+
+    # Set Sheet 16 as the ACTIVE sheet so file opens here
+    wb.active = wb.index(ws)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 6
+    ws.column_dimensions["B"].width = 7
+    ws.column_dimensions["C"].width = 28
+    ws.column_dimensions["D"].width = 14
+    ws.column_dimensions["E"].width = 14
+    ws.column_dimensions["F"].width = 12
+    ws.column_dimensions["G"].width = 11
+    for col in ["H", "I", "J", "K"]:
+        ws.column_dimensions[col].width = 11
+
     return ws
 
 
