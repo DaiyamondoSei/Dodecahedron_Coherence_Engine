@@ -1734,18 +1734,257 @@ def build_sheet_08_vertices(wb: Workbook):
     Per Lock #8.19: chirality → sequenceConcavity rename across all 5 company JSONs
     + vertex-analyzer.js + tests. This sheet uses the new name throughout.
 
-    Per vertex (20 rows):
-      - Vortex Strength: 1 − CV(face_energies_at_vertex)
-      - Direction: pentagonal winding signed value
-      - SequenceConcavity: (f1−f2)(2f2−f1−f3)/2 (NOT rotational winding; see Lock #8.19)
-      - Leverage detection: high-strength + extreme-direction flag
+    Per audit trail §6 + §15:
+      - Vortex Strength: φ^-1 · (sigma/0.577) + φ^-2 · μ
+      - Vortex Coherence: 1 - (avgPairwiseDiff / 0.667)
+      - SequenceConcavity: (f1-f2)(2*f2 - f1 - f3) / 2 (NOT rotational winding; Lock #8.19)
+      - Leverage flag: AND(strength > φ^-1, coherence < φ^-2)
 
-    Authority: audit trail §6 (Vertex dynamics) + js/advanced/vertex-analyzer.js.
+    20 canonical vertices per main.js:953-977 face-triplet adjacency.
+    Each vertex has exactly 3 faces meeting at it. 12 faces × 5/vertex (each
+    face borders 5 vertices) / 3 = 20 unique vertices.
+
+    ARCHITECTURAL FINDING SURFACED 2026-05-24:
+    Lock #8.11 W06v3 mapping documented BSC.L8 → V13 = F4∩F9∩F10
+    (Structure+Regenerative+Values). BUT main.js canonical V13 = [4,5,9]
+    (Structural+Market+Regenerative). The triplet F4+F9+F10 does NOT exist
+    as a vertex in the canonical dodecahedral topology — these three faces
+    don't share a common vertex.
+    Discovery: BSC.L8 → V_? mapping NEEDS RECONCILIATION. Closest geometric
+    matches: V10 = [3,4,9] (Human+Structural+Regenerative) or V13 = [4,5,9]
+    (Structural+Market+Regenerative). Neither perfectly matches the
+    Lock #8.11 semantic ("Structure+Regenerative+Values"). Partnership-
+    decision needed: pick closest geometric vertex OR reframe L8 placement.
+    Flagged here; Sheet 09 build will surface the decision.
+
+    Authority: audit trail §6 (Vortex dynamics) + §15 (SequenceConcavity);
+    Lock #8.19 (chirality rename sympy-proved); main.js:953-977 (canonical
+    20 vertices); Lock #8.11 (W06v3 mapping — V13 reconciliation needed).
     """
     ws = wb.create_sheet("08_Vertices")
-    apply_brand_header(ws, 1, 1, 10,
-                       "Vertices · 20 Vortex Vertices · SequenceConcavity (Lock #8.19)",
+    apply_brand_header(ws, 1, 1, 13,
+                       "Vertices — 20 canonical dodecahedral vertices (Lock #8.19 sequenceConcavity)",
                        bg=DEEP_TEAL, size=14)
+
+    # 20 canonical vertices per main.js:953-977 face-triplet adjacency
+    # Each row: (V_id_num, [face_a, face_b, face_c], zone_label)
+    VERTICES_20 = [
+        # NORTH POLAR (V1-V5): Face 1 meets its neighbors
+        (1,  [1, 2, 6],  "N-polar"),  # Financial + Intellectual + Community
+        (2,  [1, 2, 10], "N-polar"),  # Financial + Intellectual + Values
+        (3,  [1, 6, 7],  "N-polar"),  # Financial + Community + Brand
+        (4,  [1, 7, 8],  "N-polar"),  # Financial + Brand + Operations
+        (5,  [1, 8, 10], "N-polar"),  # Financial + Operations + Values
+        # EQUATORIAL (V6-V17)
+        (6,  [2, 3, 6],  "Equator"),  # Intellectual + Human + Community
+        (7,  [2, 3, 11], "Equator"),  # Intellectual + Human + Funding
+        (8,  [2, 10, 11],"Equator"),  # Intellectual + Values + Funding
+        (9,  [3, 4, 6],  "Equator"),  # Human + Structural + Community
+        (10, [3, 4, 9],  "Equator"),  # Human + Structural + Regenerative
+        (11, [3, 9, 11], "Equator"),  # Human + Regenerative + Funding
+        (12, [4, 5, 7],  "Equator"),  # Structural + Market + Brand
+        (13, [4, 5, 9],  "Equator"),  # Structural + Market + Regenerative ← Lock #8.11 candidate
+        (14, [4, 6, 7],  "Equator"),  # Structural + Community + Brand
+        (15, [5, 7, 8],  "Equator"),  # Market + Brand + Operations
+        (16, [5, 8, 12], "Equator"),  # Market + Operations + Risk
+        (17, [5, 9, 12], "Equator"),  # Market + Regenerative + Risk
+        # SOUTH POLAR (V18-V20): Face 12 meets its neighbors
+        (18, [8, 10, 12],"S-polar"),  # Operations + Values + Risk
+        (19, [9, 11, 12],"S-polar"),  # Regenerative + Funding + Risk
+        (20, [10, 11, 12],"S-polar"), # Values + Funding + Risk
+    ]
+    assert len(VERTICES_20) == 20, f"Expected 20 vertices, got {len(VERTICES_20)}"
+
+    # Header row
+    headers = ["#", "V_ID", "Zone", "F_a", "F_b", "F_c",
+               "E_a", "E_b", "E_c",
+               "Vortex\nStrength",
+               "Vortex\nCoherence",
+               "Sequence\nConcavity",
+               "Leverage?", "Notes"]
+    for col_idx, header_text in enumerate(headers, start=1):
+        c = ws.cell(row=3, column=col_idx, value=header_text)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Per-vertex rows
+    for i, (v_num, face_ids, zone) in enumerate(VERTICES_20):
+        row = 4 + i
+        v_id = f"V{v_num}"
+
+        # Col A: #
+        ws.cell(row=row, column=1, value=v_num).alignment = Alignment(horizontal="center")
+        # Col B: V_ID
+        ws.cell(row=row, column=2, value=v_id).font = Font(
+            name="Consolas", size=10, bold=True)
+        # Col C: Zone
+        ws.cell(row=row, column=3, value=zone).font = Font(
+            name="Calibri", size=9, italic=True, color="606060")
+        ws.cell(row=row, column=3).alignment = Alignment(horizontal="center")
+        # Col D, E, F: Face IDs
+        for j, fid in enumerate(face_ids):
+            ws.cell(row=row, column=4+j, value=f"F{fid}").alignment = Alignment(horizontal="center")
+
+        # Face energy named range references
+        ref_a = f"cen_f{face_ids[0]}_o1_e_final"
+        ref_b = f"cen_f{face_ids[1]}_o1_e_final"
+        ref_c = f"cen_f{face_ids[2]}_o1_e_final"
+
+        # Col G, H, I: Face energy values
+        for j, ref in enumerate([ref_a, ref_b, ref_c]):
+            apply_formula_cell(ws, row, 7+j, f"={ref}")
+            ws.cell(row=row, column=7+j).number_format = "0.0000"
+            ws.cell(row=row, column=7+j).alignment = Alignment(horizontal="center")
+
+        # Col J: Vortex Strength = phi^-1 * (sigma/0.577) + phi^-2 * mu
+        # mu = AVERAGE(E_a, E_b, E_c)
+        # sigma = STDEVP(E_a, E_b, E_c)
+        apply_formula_cell(ws, row, 10,
+            f"=phi_inv_1*(STDEVP({ref_a},{ref_b},{ref_c})/0.577)+"
+            f"phi_inv_2*AVERAGE({ref_a},{ref_b},{ref_c})")
+        ws.cell(row=row, column=10).number_format = "0.0000"
+        ws.cell(row=row, column=10).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=10).font = Font(
+            name="Calibri", size=10, bold=True, color="0D7377")
+
+        # Col K: Vortex Coherence = 1 - (avgPairwiseDiff / 0.667)
+        # avgPairwiseDiff = mean(|E_a-E_b|, |E_a-E_c|, |E_b-E_c|)
+        apply_formula_cell(ws, row, 11,
+            f"=1-((ABS({ref_a}-{ref_b})+ABS({ref_a}-{ref_c})+ABS({ref_b}-{ref_c}))/3)/0.667")
+        ws.cell(row=row, column=11).number_format = "0.0000"
+        ws.cell(row=row, column=11).alignment = Alignment(horizontal="center")
+
+        # Col L: Sequence Concavity = (f1-f2)(2*f2 - f1 - f3) / 2 (Lock #8.19 sympy-proved)
+        apply_formula_cell(ws, row, 12,
+            f"=({ref_a}-{ref_b})*(2*{ref_b}-{ref_a}-{ref_c})/2")
+        ws.cell(row=row, column=12).number_format = "0.0000"
+        ws.cell(row=row, column=12).alignment = Alignment(horizontal="center")
+
+        # Col M: Leverage flag = AND(strength > phi^-1, coherence < phi^-2)
+        # Reference J for strength + K for coherence
+        apply_formula_cell(ws, row, 13,
+            f'=IF(AND(J{row}>phi_inv_1,K{row}<phi_inv_2),"⚡","")')
+        ws.cell(row=row, column=13).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=13).font = Font(
+            name="Calibri", size=12, bold=True, color="D946EF")
+
+        # Col N: Notes
+        notes = []
+        if v_num == 13:
+            notes.append("Lock #8.11 candidate (F4∩F5∩F9 — semantic mismatch from F4∩F9∩F10 in W06v3; needs reconciliation)")
+        if v_num == 10:
+            notes.append("Lock #8.11 alternative (F3∩F4∩F9 closest to W06v3 'Structure+Regen+Values' intent)")
+        ws.cell(row=row, column=14, value=" · ".join(notes) if notes else "").font = Font(
+            name="Calibri", size=9, italic=True, color="808080" if not notes else "0D7377")
+
+        # Named ranges per vertex
+        add_defined_name(wb, f"cen_{v_id.lower()}_strength",  f"'08_Vertices'!$J${row}")
+        add_defined_name(wb, f"cen_{v_id.lower()}_coherence", f"'08_Vertices'!$K${row}")
+        add_defined_name(wb, f"cen_{v_id.lower()}_concavity", f"'08_Vertices'!$L${row}")
+
+        # Highlight Lock #8.11 candidate row
+        if v_num in (10, 13):
+            for col in range(1, 14):
+                ws.cell(row=row, column=col).fill = PatternFill(
+                    start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+
+    # ─────────────────────────────────────────────────────────
+    # Block B — Summary statistics + leverage count
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 25, 1, 14,
+                       "Block B — Summary Statistics + Leverage Point Detection",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    summary_rows = [
+        ("Vortex Strength",  "J"),
+        ("Vortex Coherence", "K"),
+        ("SeqConcavity",     "L"),
+    ]
+    ws.cell(row=26, column=1, value="Metric").font = Font(name="Calibri", size=10, bold=True)
+    ws.cell(row=26, column=2, value="Min").font = Font(name="Calibri", size=10, bold=True)
+    ws.cell(row=26, column=3, value="Max").font = Font(name="Calibri", size=10, bold=True)
+    ws.cell(row=26, column=4, value="Mean").font = Font(name="Calibri", size=10, bold=True)
+    ws.cell(row=26, column=5, value="StDev").font = Font(name="Calibri", size=10, bold=True)
+    for c in range(1, 6):
+        ws.cell(row=26, column=c).fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        ws.cell(row=26, column=c).alignment = Alignment(horizontal="center")
+
+    for i, (label, col_letter) in enumerate(summary_rows):
+        row = 27 + i
+        ws.cell(row=row, column=1, value=label).font = Font(
+            name="Calibri", size=10, italic=True, color="606060")
+        apply_formula_cell(ws, row, 2, f"=MIN({col_letter}4:{col_letter}23)")
+        apply_formula_cell(ws, row, 3, f"=MAX({col_letter}4:{col_letter}23)")
+        apply_formula_cell(ws, row, 4, f"=AVERAGE({col_letter}4:{col_letter}23)")
+        apply_formula_cell(ws, row, 5, f"=STDEVP({col_letter}4:{col_letter}23)")
+        for c in range(2, 6):
+            ws.cell(row=row, column=c).number_format = "0.0000"
+            ws.cell(row=row, column=c).alignment = Alignment(horizontal="center")
+
+    # Leverage count
+    ws.cell(row=31, column=1, value="Leverage Points Count:").font = Font(
+        name="Calibri", size=11, bold=True, color="0D7377")
+    apply_formula_cell(ws, 31, 2, '=COUNTIF(M4:M23,"⚡")')
+    ws.cell(row=31, column=2).font = Font(
+        name="Calibri", size=14, bold=True, color="D946EF")
+    ws.cell(row=31, column=2).alignment = Alignment(horizontal="center")
+    ws.cell(row=31, column=3, value="(leverage = strength > φ⁻¹ AND coherence < φ⁻²)"
+            ).font = Font(name="Calibri", size=9, italic=True, color="606060")
+
+    add_defined_name(wb, "cen_vertex_leverage_count", "'08_Vertices'!$B$31")
+
+    # ─────────────────────────────────────────────────────────
+    # Footer — Authority + Lock #8.11 reconciliation flag
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 33, 1, 14,
+                       "Authority + Lock #8.11 V13 Reconciliation Architectural Finding",
+                       bg=DARK_NAVY, size=11)
+    notes = [
+        "20 canonical dodecahedral vertices per js/main.js:953-977 face-triplet adjacency.",
+        "Each vertex = exactly 3 faces meeting at a single point. 12 faces × 5 vertices/face / 3 = 20 unique.",
+        "                                       ",
+        "Per Lock #8.19 (sympy-proved): chirality → sequenceConcavity rename. Formula =",
+        "  (f1 − f2)(2*f2 − f1 − f3) / 2 = sequence concavity at f2, NOT rotational winding.",
+        "                                       ",
+        "ARCHITECTURAL FINDING 2026-05-24 (surfaced during Sheet 08 build):",
+        "Lock #8.11 W06v3 KPI mapping documented BSC.L8 → V13 = F4∩F9∩F10 (Structure+Regen+Values).",
+        "BUT canonical V13 per main.js = F4∩F5∩F9 (Structural+Market+Regenerative).",
+        "The triplet F4+F9+F10 does NOT exist as a vertex in dodecahedral topology — those 3 faces",
+        "don't share a common vertex. The Lock #8.11 V13 mapping needs partnership-reconciliation.",
+        "                                       ",
+        "Closest geometric candidates (rows highlighted):",
+        "  V10 = F3+F4+F9 (Human+Structural+Regenerative) — geometric closest to 'Structure+Regen+Values'",
+        "  V13 = F4+F5+F9 (Structural+Market+Regenerative) — current Lock #8.11 vertex number",
+        "Neither perfectly matches semantic. Surfacing for partnership-decide.",
+        "                                       ",
+        "Authority: audit trail §6 (Vortex) + §15 (SequenceConcavity); Lock #8.19 (rename);",
+        "  main.js:953-977 (canonical 20 vertices); Lock #8.11 (V13 mapping needs reconciliation).",
+        "                                       ",
+        "Named ranges: cen_v<N>_{strength,coherence,concavity} per vertex; cen_vertex_leverage_count.",
+    ]
+    for offset, note in enumerate(notes, start=1):
+        c = ws.cell(row=33 + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=33 + offset, start_column=1,
+                       end_row=33 + offset, end_column=14)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 4
+    ws.column_dimensions["B"].width = 6
+    ws.column_dimensions["C"].width = 9
+    for col in ["D", "E", "F"]:
+        ws.column_dimensions[col].width = 5
+    for col in ["G", "H", "I"]:
+        ws.column_dimensions[col].width = 9
+    ws.column_dimensions["J"].width = 11
+    ws.column_dimensions["K"].width = 11
+    ws.column_dimensions["L"].width = 11
+    ws.column_dimensions["M"].width = 10
+    ws.column_dimensions["N"].width = 56
+
+    ws.freeze_panes = "B4"
+
     return ws
 
 
