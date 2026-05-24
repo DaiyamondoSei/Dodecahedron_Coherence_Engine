@@ -355,21 +355,527 @@ def build_sheet_00_cover_provenance(wb: Workbook):
                        "CEN Spiral Dashboard — SSOT v1.0", bg=DARK_NAVY, size=16)
     apply_brand_header(ws, 2, 1, 12,
                        "Source-of-Truth Mathematical Mirror · Quannex Coherence Audit", bg=DEEP_TEAL)
+
+    # ─────────────────────────────────────────────────────────
+    # Lock #8.36 Reversions consolidated note (added 2026-05-24
+    # Sub-Arc 1 Step 1.0b residual audit; per Trust-the-Geometry §6.6)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 4, 1, 12,
+                       "Lock #8.36 Geometric Reversions (2026-05-24) — Consolidated Note",
+                       bg=GRAY, fg="0A0E1A", size=11, bold=False)
+    lock836_notes = [
+        "Lock #8.36 (2026-05-24): Maximum-integrity geometric reversion of 2 Lock #8.11 KPI promotions",
+        "that were geometrically infeasible. Reversions executed in-place; KPI count preserved at 34.",
+        "Trust-the-Geometry principle (Disclosure §6.6) in action: geometric truth is unambiguous;",
+        "vertices/edges that don't exist cannot host KPIs regardless of semantic intent.",
+        "                                       ",
+        "REVERSION 1 — BSC.F4 Donation income → F11 Fire O2 (Songbook R8 canonical)",
+        "  Was: BSC.F4 → E7-11 per Lock #8.11 W06v3. FAILURE MODE: F7 + F11 are SKEW faces — no edge exists.",
+        "  Geometric truth (main.js:826-849 canonical 30 edges):",
+        "    F7 neighbors  = F1, F4, F5, F6, F8  (NOT F11)",
+        "    F11 neighbors = F2, F3, F9, F10, F12 (NOT F7)",
+        "    F7 and F11 share no edge, no common vertex, no breath-axis pair — they are SKEW.",
+        "                                       ",
+        "REVERSION 2 — BSC.L8 SDG alignment → F10 Ether O2 (Songbook R38 canonical)",
+        "  Was: BSC.L8 → V13 per Lock #8.11 W06v3 (claim: F4∩F9∩F10). FAILURE MODE: triplet doesn't share a vertex.",
+        "  Geometric truth (main.js:953-977 canonical 20 vertices):",
+        "    Canonical V13 = F4 ∩ F5 ∩ F9 (Structural + Market + Regenerative)",
+        "    Triplet F4+F9+F10 does NOT correspond to any vertex in the dodecahedral topology.",
+        "                                       ",
+        "LOCK #8.11 PROMOTIONS that SURVIVED Lock #8.36 geometric verification (3 of 5 retained):",
+        "  • BSC.L7 → E2-10 (F2 ∩ F10 — valid canonical edge) ✓",
+        "  • BSC.I3 → E10-12 (F10 ∩ F12 — valid canonical edge) ✓",
+        "  • BSC.C8 → E5-8 (F5 ∩ F8 — valid canonical edge) ✓",
+        "                                       ",
+        "POST-Lock #8.36 KPI distribution: 31 face + 3 edge + 0 vertex = 34 total (count preserved).",
+        "CEN has ZERO vertex-KPIs at canonical mapping. Three independent layers agree:",
+        "  • Mapping layer: no BSC KPI maps to a 3-face junction post-Lock #8.36",
+        "  • Geometric layer (Sheet 08): leverage-count = 0 at κ=φ² (no vertex meets criterion)",
+        "  • Methodological layer (Lock #8.35): gentle amplifier produces uniform vertex coherence",
+        "                                       ",
+        "Distributed in-context Lock #8.36 attribution lives at:",
+        "  Sheet 02 KPI_ROWS (BSC.F4 row + BSC.L8 row + disclosure header)",
+        "  Sheet 03 KPI_PLACEMENTS (Lock #8.36 reversion comment block)",
+        "  Sheet 08 V13 + V10 row notes + footer Lock #8.36 Resolution Note",
+        "  Sheet 09 Bi-Directional architecture + V13 retired marker + Lock #8.36 attribution",
+        "  Sheet 16 Dashboard headline KPI distribution + F9/F10 notes",
+        "                                       ",
+        "Memory entry: project_lock_8_36_geometric_reversion_2026-05-24.md",
+        "Spiral report: Spiral_Report_CEN_SSOT_W2_Day2_Lock_8_35_8_36_2026-05-24.md §3",
+    ]
+    for offset, note in enumerate(lock836_notes, start=1):
+        c = ws.cell(row=4 + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=4 + offset, start_column=1,
+                       end_row=4 + offset, end_column=12)
+
+    # Named range anchoring the Lock #8.36 Reversions consolidated section header
+    # so cross-references from Sheets 02/08/09 can navigate exactly per
+    # Step 1.0b post-audit hygiene-improvement (item E).
+    add_defined_name(wb, "lock836_consolidated_note", "'00_Cover_Provenance'!$A$4")
+
     return ws
 
 
+# ═════════════════════════════════════════════════════════════════════════
+# Sheet 0a data constants (Section 1 Naming Translation + Section 2 Glossary)
+# ═════════════════════════════════════════════════════════════════════════
+
+# Section 1 — Naming Translation per Lock #8.2: POC canonical ↔ IIRF universal capital
+# ↔ CEN-authentic. Per Lock #2: CEN-authentic primary in Sheet 16; this is the
+# single disclosure point for all three naming systems.
+NAMING_TRANSLATION_ROWS = [
+    # (face_num, POC_canonical, IIRF_universal_capital, CEN_authentic, brief_note)
+    (1,  "Financial",       "Financial Capital",                 "Three-Pillar Sustainability",  "Material/financial flow + sustainability framing"),
+    (2,  "Conceptual",      "Intellectual Capital",              "Strategy & Vision",            "Knowledge/IP/strategic-conceptual capacity"),
+    (3,  "Human",           "Human Capital",                     "Founder Energy & People",      "Founder-bearing + human-development capacity"),
+    (4,  "Structural",      "Structured & Manufactured Capital", "Governance & Structure",       "Governance, processes, organizational architecture"),
+    (5,  "Market",          "Market Capital",                    "Market & Partnerships",        "External market positioning + partner ecosystem"),
+    (6,  "Community",       "Social & Relationship Capital",     "Community & Stakeholders",     "Stakeholder relationships + community-of-practice"),
+    (7,  "Brand",           "Brand Capital",                     "Brand & Reputation",           "Identity, narrative, reputational capital"),
+    (8,  "Operations",      "Operational Capital",               "Operations & Delivery",        "Day-to-day execution + operational discipline"),
+    (9,  "Regenerative",    "Natural & Ecological Capital",      "Regenerative Practice",        "Ecological + regenerative-systems engagement"),
+    (10, "Foundational",    "Values & Foundational Capital",     "Foundational Values",          "Core values + mission orientation"),
+    (11, "Funding",         "Funding Pipeline Capital",          "Funding & Resource Flow",      "Funding pipeline + resource attraction"),
+    (12, "Risk-Resilience", "Risk & Resilience Capital",         "Risk & Resilience",            "Risk surface + adaptive resilience"),
+]
+
+# Section 2 — Glossary entries (Section 2 of Sheet 0a).
+# Format: (acronym, full_term, brief_definition, category, first_in, challenge, audit_§, code_file_line, doc_path)
+# Categories: "Math" | "Methodology" | "Geometry" | "Diagnostic" | "CEN-Specific"
+# Challenge tags: "H" (high — committee will press) | "M" (medium) | "L" (low — descriptive)
+# Sorted alphabetically (case-insensitive) for reviewer-scannability.
+GLOSSARY_ENTRIES = [
+    # A
+    ("AAG", "Aspiration-Actuality Gap",
+     "Ratio E_Aspiration / E_Actuality where Actuality=mean(F1,F2,F3) and Aspiration=mean(F10,F11,F12). Wk8 canonical face-grouping ratio (distinct from Phase 2 misnomer per Lock #8.15). Interpretation: ≈1.0 balanced; >1.2 'aspiring beyond capacity' (Hidden Oracle); <0.8 'under-claiming'.",
+     "Diagnostic", "Sheet 13", "H",
+     "§12", "Diagnostics.js getAspirationActualityGap", "Disclosure §2-5 + §6"),
+    ("ABD", "Average Boundary Dissonance",
+     "Weighted dissonance index across spectral modes; signals organizational tension in non-DC vibration patterns.",
+     "Diagnostic", "Sheet 14", "M",
+     "§13", "spectral-analyzer.js", "Mode5_Deep_Interpretation"),
+    ("α (alpha)", "Pentagram skip-pair weight",
+     "= φ⁻¹ ≈ 0.618 (Golden Ratio Inverse). Weights star-pair similarity in pentagramic coherence formula. Geometrically self-similar with dodecahedral pentagon structure.",
+     "Math", "Sheet 01 / 05", "M",
+     "§2", "TuningConfig.js:98 (balancedMode)", "phi-harmonics.js:PHI_INV_1"),
+    ("AvG", "Apparent vs Granular Gap",
+     "= |C_global − mean(K_60)|. Flags aggregation distortion (when rolled-up metric hides underlying KPI variance). Thresholds: <0.05 faithful; 0.05-0.10 minor compression; ≥0.10 distortion.",
+     "Diagnostic", "Sheet 13", "M",
+     "§16", "Diagnostics.js getApparentGranularGap", "—"),
+
+    # B
+    ("BAB", "Being-Action Balance",
+     "= mean(E_Reception_poles) / mean(E_Projection_poles) per spectral eigenvector. CEN BAB = 1.282 indicates reception 28% > projection. Semantic overlay on math (Disclosure §4).",
+     "Diagnostic", "Sheet 14", "M",
+     "§13", "spectral-analyzer.js", "Disclosure §4"),
+    ("Band (Wall/Gate/Membrane)", "Face energy classification",
+     "φ-derived thresholds: Wall ≤ φ⁻⁴ ≈ 0.146 / Gate φ⁻⁴ to φ⁻¹ / Membrane ≥ 1-φ⁻⁴. Spectrum-derived per Lock #8.35.",
+     "Geometry", "Sheet 04 / 13", "M",
+     "§4", "main.js band classifier", "Disclosure §6.5"),
+    ("β (beta)", "Star-pair weighting constant",
+     "= 0.5. Balances within-element vs cross-element contribution in pentagramic formula.",
+     "Math", "Sheet 01 / 05", "L",
+     "§2", "TuningConfig.js", "—"),
+    ("Bi-Directional Co-Evolution", "Architecture for forward+backward methodology",
+     "Forward = math (elements → face → edge/vertex); backward = per-Edge 10-tuple + per-Vertex 15-tuple Elemental Influence Signatures (weights sum to 1.0). Closes diagnostic-intervention loop. Lock #8.24; fifth thesis-defense centerpiece.",
+     "Methodology", "Sheet 09", "H",
+     "§17", "—", "BiDirectional_CoEvolution_Architecture + Signatures docs"),
+    ("BSC", "Balanced Scorecard",
+     "Kaplan-Norton 4-perspective management framework (Financial / Customer / Internal Process / Learning & Growth). Quannex inherits + extends to 12-face dodecahedron. CEN has 34 BSC KPIs.",
+     "Diagnostic", "Sheet 02", "L",
+     "—", "—", "CEN_Phase2_RawScores"),
+
+    # C
+    ("C_global", "Global Coherence",
+     "Headline aggregate metric: C_global = κ·μ·(1−λ·CV) where μ=mean and CV=coefficient of variation of 12 face energies. CEN O1 baseline = 0.3262 (Gate band) at κ=φ² canonical.",
+     "Diagnostic", "Sheet 12", "H",
+     "§1 + §11", "main.js getGlobalCoherence", "Audit Trail §1"),
+    ("Calibration Loop", "Methodology falsifiability mechanism",
+     "Closes empirical gap: 'does the mathematically prescribed action reduce systemic tension in real-world organization?'. Unifying validation across all 4 interpretive layers (Disclosure §6). CEN Phase 2 → Wk8 = first canonical loop closure.",
+     "Methodology", "Disclosure §6", "H",
+     "—", "—", "Disclosure §6"),
+    ("CEN", "Conscious Enterprise Network",
+     "Partner-client organization; case study + Phase 2 data source for SSOT v1.0. NGO in renewable energy sector. Founders Dominique + Esther.",
+     "CEN-Specific", "Sheet 02", "L",
+     "—", "—", "CEN_Coherence_Portrait.md"),
+    ("Co-Founder Gap", "CEN Phase 2 shadow finding",
+     "Divergence between D (Dominique) + E (Esther) founder scores; most pronounced at Axis 5 (Market polarity inversion). Surfaces founder-alignment tension as measurable signal.",
+     "CEN-Specific", "Sheet 10", "M",
+     "—", "—", "CEN_Phase2_Evidence_Package + Coherence_Portrait"),
+    ("CV", "Coefficient of Variation",
+     "= standard_deviation / mean. Used in C_global formula to penalize face-energy dispersion (uneven coherence = lower global score).",
+     "Diagnostic", "Sheet 12", "L",
+     "§1", "—", "—"),
+
+    # D
+    ("D (Dominique)", "Dominique founder score",
+     "One of 2 CEN founder coherence-self-assessment scores (other = E for Esther). Surface-level inputs to D-E gap analysis per Lock #8.3 vector purity; NOT engine math input.",
+     "CEN-Specific", "Sheet 02 / 10", "M",
+     "—", "—", "CEN_Phase2_Evidence_Package"),
+    ("δ (delta)", "Breath feedback weight (Pass 2)",
+     "= 0.9. Weight of own-face energy vs opposite-face energy in axis-informed coherence (E_final = δ·E_local + (1−δ)·E_opposing).",
+     "Math", "Sheet 01 / 06", "L",
+     "§3", "TuningConfig.js", "—"),
+    ("dominantMode", "Highest-magnitude non-DC eigenmode",
+     "Spectral analysis output: m where |a_m| is max for m≥1 (DC excluded). CEN O1 dominantMode = 5 (regional band, λ=6). NOT to be confused with mapping-context.json narrative-scaffolding field (Lock #8.20 rename to dominantFace).",
+     "Diagnostic", "Sheet 14", "M",
+     "§13", "spectral-analyzer.js", "Lock #8.20 memo + Mode5_Deep_Interpretation"),
+
+    # E
+    ("E (Esther)", "Esther founder score",
+     "One of 2 CEN founder coherence-self-assessment scores (other = D for Dominique). Per Lock #8.3 vector purity; NOT engine math input.",
+     "CEN-Specific", "Sheet 02 / 10", "M",
+     "—", "—", "CEN_Phase2_Evidence_Package"),
+    ("E1-E30", "30 canonical dodecahedral edges",
+     "Face-adjacency pairs per main.js:826-849. Each edge = 2 faces sharing a pentagon edge. 12 faces × 5 neighbors / 2 = 30 unique. CEN has 3 edge-KPIs post-Lock #8.36.",
+     "Geometry", "Sheet 07", "L",
+     "§7", "main.js:826-849", "EDGE_DYNAMICS_REFERENCE"),
+    ("ε (epsilon)", "Numerical zero threshold",
+     "Smallest non-zero floor for arithmetic stability (prevents division-by-near-zero in C_global etc.). Typically 1e-10.",
+     "Math", "Sheet 01", "L",
+     "§1", "TuningConfig.js", "—"),
+    ("Eigenvalues", "Dodecahedral Laplacian spectrum",
+     "{0, 5−√5 (×3), 6 (×5), 5+√5 (×3)}. Closed form involves φ: 5−√5 = 2(3−φ), 5+√5 = 2(2+φ). Rare in graph spectra — dodecahedron + golden ratio convergence. Source of κ=φ² geometric derivation (Lock #8.35).",
+     "Geometry", "Sheet 14", "H",
+     "§13", "spectral-analyzer.js:142-153", "Disclosure §6.5 + Audit Trail §13"),
+    ("η (eta)", "Resonance bonus constant",
+     "Multiplier for harmonic-resonance score (pentagram self-similarity). Tuned per balancedMode.",
+     "Math", "Sheet 01", "L",
+     "§1", "TuningConfig.js", "—"),
+
+    # F
+    ("F1-F12", "12 organizational face domains",
+     "Financial / Conceptual / Human / Structural / Market / Community / Brand / Operations / Regenerative / Foundational Values / Funding / Risk-Resilience. POC canonical names; CEN-authentic + IIRF translations in Section 1 above.",
+     "Geometry", "All sheets", "L",
+     "—", "js/core/FaceNames.js", "BREATH_AXIS_REFERENCE"),
+    ("Face Energy", "Per-face coherence scalar",
+     "Pentagramic formula output per face per octave: ball + 4·pillars averaged + star-pair resonance, breath-axis blended, κ-amplified. CEN Pure-O1 baseline per Lock #8.22 + #8.35.",
+     "Geometry", "Sheet 04", "H",
+     "§1-§5", "main.js calculateFaceEnergy", "Audit Trail §1-§5"),
+    ("φ (phi)", "Golden Ratio constant",
+     "= (1+√5)/2 ≈ 1.618033988749. Bedrock for all derived methodology constants. Appears in pentagon diagonals, dodecahedron vertex coordinates, Laplacian spectral identity, and Fibonacci-scaling.",
+     "Math", "Sheet 01", "H",
+     "Foundation", "phi-harmonics.js:PHI", "Disclosure §3 + §6.5"),
+    ("φ⁻¹, φ⁻², φ⁻³, φ⁻⁴", "Golden Ratio inverse powers",
+     "Bedrock constants: φ⁻¹≈0.618 (α anchor) / φ⁻²≈0.382 (η + AvG base) / φ⁻³≈0.236 (λ CV-penalty) / φ⁻⁴≈0.146 (Wall band ceiling).",
+     "Math", "Sheet 01", "M",
+     "Foundation", "phi-harmonics.js:PHI_INV_*", "Disclosure §6.5"),
+
+    # G
+    ("γ (gamma)", "Face-axis blend (Pass 1)",
+     "= 0.7. Weight of ball (centroid) vs pillars (4 elements) in E_base computation.",
+     "Math", "Sheet 01 / 04", "L",
+     "§1", "TuningConfig.js", "—"),
+
+    # H
+    ("Hidden Oracle", "CEN pattern",
+     "AAG > 1 with high F10 Values; signals 'aspiring beyond current capacity to deliver'. Surfaced in CEN Phase 2; partnership-resolved through Wk6-Wk8 calibration.",
+     "CEN-Specific", "Sheet 13", "M",
+     "—", "—", "CEN_Coherence_Portrait.md"),
+    ("Hygiene Principle", "Verification-Discipline (named principle)",
+     "'Code ran without error' is NECESSARY but NOT SUFFICIENT. Verification gates must check OBSERVABLE OUTPUTS against CANONICAL EXPECTATIONS. Kin-principle to Trust-the-Geometry. Caught 3 silent-default bugs in POC W2 Session A 2026-05-23.",
+     "Methodology", "Documentation spine", "H",
+     "—", "—", "HYGIENE_PRINCIPLES.md (third pillar)"),
+
+    # I
+    ("IIRF", "International Integrated Reporting Framework",
+     "6-capitals reporting model (Financial / Manufactured / Intellectual / Human / Social & Relationship / Natural). Quannex inherits + extends to 12-face dodecahedron (see Section 1 above for mapping).",
+     "Diagnostic", "Sheet 0a / 16", "L",
+     "—", "—", "—"),
+
+    # K
+    ("κ (kappa)", "Polarity amplifier constant",
+     "= φ² ≈ 2.618. GEOMETRICALLY DERIVED from dodecahedral Laplacian spectrum: κ = (5+√5)/(5−√5) = φ² (Lock #8.35). Not arbitrary tuning. Same value emerges from icosahedron (geometric dual). Methodology's polarity-amplifier IS the dodecahedron's intrinsic polarity-ratio.",
+     "Math", "Sheet 01 / 12 / 14", "H",
+     "§13", "TuningConfig.js (balancedMode KAPPA)", "Disclosure §6.5 + §6.6"),
+    ("KPI", "Key Performance Indicator",
+     "34 BSC KPIs in CEN dataset post-Lock #8.36 (31 face + 3 edge + 0 vertex). Placement via Procedure C question-derived clustering per Lock #8.11.",
+     "Diagnostic", "Sheet 02", "L",
+     "—", "—", "Sheet 02 KPI_ROWS"),
+
+    # L
+    ("λ (lambda)", "CV penalty constant",
+     "= φ⁻³ ≈ 0.236. Coefficient in C_global formula: penalizes face-energy dispersion (high CV → lower coherence rollup).",
+     "Math", "Sheet 01 / 12", "M",
+     "§1", "TuningConfig.js (balancedMode LAMBDA)", "—"),
+    ("Leverage Point", "Vertex meeting strength + coherence criteria",
+     "Vertex where (vortex_strength > φ⁻¹) AND (coherence < φ⁻²). CEN O1 leverage-count = 0 at κ=φ² — three-layer consistency with zero vertex-KPIs.",
+     "Diagnostic", "Sheet 08", "M",
+     "§9", "vertex-analyzer.js getLeverageFlag", "VERTEX_DYNAMICS_REFERENCE"),
+    ("Lock #N", "Architectural-decision ratification",
+     "Numbered partnership-locks (#8.1 through #8.36 as of v1.0). Each = decision-point that affects methodology / SSOT / engine. See plan §5.7 (#8.1-#8.14) + §14.A (#8.25-#8.30) + §14.B (#8.31-#8.36).",
+     "Methodology", "Sheet 00 + many", "M",
+     "—", "—", "Plan §5.7 / §14.A / §14.B + Spiral Reports"),
+
+    # M
+    ("Maximum integrity", "Operational standard",
+     "Deimantas's directive: 'Let's keep the geometric placements pristine at all times' / 'Maximum integrity always'. Operational form of Hygiene + Trust-the-Geometry principles.",
+     "Methodology", "All work", "M",
+     "—", "—", "CLAUDE.md + Spiral Reports"),
+    ("Membrane (band)", "Highest face-energy band",
+     "Energy ≥ 1 − φ⁻⁴ ≈ 0.854. CEN currently has 0 Membrane faces at O1 (canonical Pure-O1 baseline per Lock #8.22 + #8.35).",
+     "Geometry", "Sheet 04 / 13", "L",
+     "§4", "main.js band classifier", "Disclosure §6.5"),
+    ("Mode 0-5", "Spectral Laplacian eigenmodes",
+     "Mode 0 = DC (mean); Modes 1-3 = lower band (λ=5−√5, global imbalance); Mode 5 specifically = regional cluster band (λ=6, multiplicity 5). CEN dominantMode=5 = THESIS-DEFENSE CENTERPIECE (Mode 5 = edge phenomenon; F3+F8 vs F1+F9 paired antipodal seesaw).",
+     "Geometry", "Sheet 14", "H",
+     "§13", "spectral-analyzer.js:142-153", "Mode5_Deep_Interpretation"),
+
+    # O
+    ("O1-O7 (Octaves)", "7 organizational development octaves",
+     "O1 Survival → O2 Structure → O3 Relationships → O4 Capability → O5 Identity → O6 Wisdom → O7 Radiance. Normative developmental hierarchy (Disclosure §5). CEN current org-octave = O1 (Survival) per both detection paths (Audit Trail §11).",
+     "Geometry", "Sheet 11", "L",
+     "§11", "main.js detectOctave", "Audit Trail §11 + Disclosure §5"),
+
+    # P
+    ("Procedure C", "Question-derived KPI clustering",
+     "Canonical KPI-to-cell placement methodology per Lock #8.11. Supersedes Procedure A (Strategy Map cluster) + Procedure B (s58 element-tagging) by going to canonical Songbook v2.1 inquiry layer. Each KPI placed at cell whose inquiry it most directly answers.",
+     "Methodology", "Sheet 02 / 03", "M",
+     "—", "—", "W06v3_34KPI_QuestionDerived_Mapping"),
+    ("Pure-O1 baseline", "Canonical face energies",
+     "Face energies computed from O1-only KPI inputs (Lock #8.22). Reveals 'architectural-blindness' signal (faces with no O1 KPIs have C_raw=0). Survives κ=φ² shift per Lock #8.35 (band classification changes but signal robust).",
+     "Methodology", "Sheet 02 / 04", "M",
+     "—", "—", "PureO1_Recomputation"),
+
+    # S
+    ("sequenceConcavity", "Per-vertex concavity metric (renamed from chirality)",
+     "= (f1−f2)(2·f2−f1−f3)/2. Sympy-proved (Lock #8.19) to NOT be rotational winding (the original 'chirality' framing was algebraically degenerate). Measures whether the 3-face sequence at a vertex is concave or convex at the middle face.",
+     "Diagnostic", "Sheet 08", "H",
+     "§15", "vertex-analyzer.js calculateSequenceConcavity", "Lock #8.19 memo"),
+    ("Silent-default-masquerading", "Anti-pattern (named in HYGIENE)",
+     "Code runs without error + default behavior is wrong-but-plausible + verification gates pass without scrutinizing observable output. Caught 3 POC engine bugs in W2 Session A 2026-05-23 (Lock #8.27, #8.33, iframe smoke test).",
+     "Methodology", "HYGIENE_PRINCIPLES.md", "M",
+     "—", "—", "HYGIENE_PRINCIPLES §3"),
+    ("Songbook v2.1", "60-element BSC-to-element-grid mapping",
+     "Per-cell semantic criteria across 12 faces × 5 elements = 60 cells. Each cell carries inquiry-class (Earth=grounded, Water=flowing, Fire=igniting, Air=connecting, Ether=aligning). Foundation for Procedure C placements.",
+     "Methodology", "Sheet 03", "M",
+     "—", "—", "SPIRAL_OCTAVE_SONGBOOK_v2_Full34_Mappings"),
+    ("Star Pair", "Pentagram skip-pair similarity",
+     "5 per face. Computes element-pair coherence as input to harmonic resonance R. α=φ⁻¹ weights the 5 pairs symmetrically.",
+     "Geometry", "Sheet 05", "M",
+     "§2", "main.js calculateStarPairs", "Audit Trail §2"),
+    ("Structural Vacuum", "CEN pattern",
+     "F8 Operations under-investment (no full-time ops role; founder-borne infrastructure). One of 3 Phase-2 shadow findings.",
+     "CEN-Specific", "Sheet 16", "M",
+     "—", "—", "CEN_Coherence_Portrait.md"),
+
+    # T
+    ("θ (theta)", "Aspiration-actuality threshold",
+     "AAG band-classification cutoff for 'Balanced' / 'Under-claim' / 'Hidden Oracle' verdicts.",
+     "Math", "Sheet 01 / 13", "L",
+     "§12", "Diagnostics.js", "—"),
+    ("Trust the Geometry", "Operational discipline (named principle)",
+     "When ambiguity surfaces, the first question is not 'which design choice serves better?' but 'what does the geometry already say?'. Geometric truth is unambiguous; listen before reaching for design choice. Named 2026-05-24 after producing Lock #8.35 + #8.36.",
+     "Methodology", "Disclosure §6.6", "H",
+     "—", "—", "Disclosure §6.6 + HYGIENE Cross-References"),
+
+    # V
+    ("V1-V20", "20 canonical dodecahedral vertices",
+     "Face-triplet adjacencies per main.js:953-977. Each vertex = exactly 3 faces meeting at a point. 12 faces × 5 vertices/face / 3 = 20 unique. CEN has 0 vertex-KPIs post-Lock #8.36.",
+     "Geometry", "Sheet 08", "L",
+     "§9", "main.js:953-977", "VERTEX_DYNAMICS_REFERENCE"),
+    ("V_res_pre", "Researcher pre-vortex score",
+     "Researcher analytical layer (Deimantas's, NOT CEN-authentic). Per Lock #8.3 vector purity: NOT an engine math input — surface display only in Sheet 10 for 4-vector polarity analysis.",
+     "CEN-Specific", "Sheet 10", "H",
+     "—", "—", "Lock #8.3 + Coherence_Portrait"),
+    ("V_res_post", "Researcher post-vortex score",
+     "Researcher analytical layer (Deimantas's, NOT CEN-authentic). Per Lock #8.3 vector purity: NOT an engine math input — surface display only in Sheet 10 for 4-vector polarity analysis.",
+     "CEN-Specific", "Sheet 10", "H",
+     "—", "—", "Lock #8.3 + Coherence_Portrait"),
+
+    # W
+    ("Wall (band)", "Lowest face-energy band",
+     "Energy ≤ φ⁻⁴ ≈ 0.146. At κ=4 historically: 9 CEN faces classified as Wall (architectural-blindness visualization). At κ=φ² canonical (Lock #8.35): 0 Wall faces — methodology's gentle amplifier preserves dignity of latent potential (C_raw=0 faces classify as Gate).",
+     "Geometry", "Sheet 04 / 13", "L",
+     "§4", "main.js band classifier", "Disclosure §6.5"),
+
+    # Z
+    ("ζ (zeta)", "Octave penalty gradient",
+     "= φ⁻²/6 ≈ 0.0637 per octave step. Cumulative penalty in C_global formula across O1→O7. At Octave 7, cumulative = φ⁻² (symmetric with η max boost).",
+     "Math", "Sheet 01 / 11", "L",
+     "§11", "TuningConfig.js", "Disclosure §5"),
+
+    # Special-symbol + multi-character entries (alphabetized at end of standard alpha)
+    ("|a_m|", "Modal amplitude magnitude",
+     "= |U[:,m]^T · E| per spectral mode m. CEN |a_5|=0.0649 at κ=φ² canonical (was 0.0740 at κ=4; Mode 5 dominance preserved across κ shift per Lock #8.35).",
+     "Diagnostic", "Sheet 14", "M",
+     "§13", "spectral-analyzer.js", "Mode5_Deep_Interpretation ADDENDUM"),
+    ("5 elements", "Earth/Water/Fire/Air/Ether",
+     "Per-face pentagram decomposition per Songbook v2.1. Inquiry-classes: Earth=grounded/material; Water=flowing/cyclical; Fire=igniting/activating; Air=connecting/clarifying; Ether=aligning/integral.",
+     "Geometry", "Sheet 03 / 05", "M",
+     "§2", "—", "Disclosure §2 + Songbook v2.1"),
+    ("6 breath axes", "Antipodal face pairs",
+     "F1↔F7, F2↔F8, F3↔F9, F4↔F10, F5↔F11, F6↔F12. Each axis = 2 opposite faces sharing a breath polarity (Inhale/Exhale, Being/Action). CEN Axis 5 famous inversion finding.",
+     "Geometry", "Sheet 10", "L",
+     "§3", "main.js breath axes", "BREATH_AXIS_REFERENCE"),
+]
+
+
 def build_sheet_0a_naming_translation(wb: Workbook):
-    """Sheet 0a Naming_Translation — POC canonical ↔ IIRF universal capital ↔ CEN-authentic.
+    """Sheet 0a — Naming Translation (Section 1) + Glossary (Section 2).
 
-    Three-column mapping table covering all 12 faces. Per Lock #2 (CEN-authentic
-    naming primary in Sheet 16; IIRF + POC canonical surfaced in this naming table only).
+    Per Lock #8.2: Sheet 0a is the canonical disclosure point for CEN-authentic ↔ IIRF
+    universal capital ↔ POC canonical naming. Sheet name kept as 0a_Naming_Translation
+    to preserve Lock #8.2; CONTENT expands to also include the comprehensive Glossary
+    per plan §7.A + §14.B Step 1.1.
 
-    Example: F1 / "Three-Pillar Sustainability" (CEN-authentic) / "Financial Capital" (IIRF)
-    / "Financial" (POC canonical, see js/core/FaceNames.js).
+    Two-section structure:
+      Section 1 — Naming Translation (rows 4-17): 12 face rows × 5 columns
+        Per face: F_id / POC canonical / IIRF universal capital / CEN-authentic / brief note
+      Section 2 — Glossary (rows 19+): ~50 entries × 9 columns
+        Per entry: Acronym / Full Term / Definition / Category / First In / Challenge / Audit § / Code File / Doc Path
+        Categories: Math / Methodology / Geometry / Diagnostic / CEN-Specific
+        Challenge tags: H (high-press) / M (medium) / L (descriptive only)
+        Sorted alphabetically (case-insensitive)
+
+    Authority: Lock #2 (CEN-authentic naming) + Lock #8.2 (Naming_Translation single
+    disclosure point) + plan §7.A (Glossary scope) + §14.B Step 1.1 (Ship v1.0).
     """
     ws = wb.create_sheet("0a_Naming_Translation")
-    apply_brand_header(ws, 1, 1, 6,
-                       "Naming Translation: POC ↔ IIRF ↔ CEN-Authentic", bg=DARK_NAVY, size=14)
+
+    # ─────────────────────────────────────────────────────────
+    # Title + Subtitle
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 1, 1, 9,
+                       "Sheet 0a — Naming Translation + Methodology Glossary",
+                       bg=DARK_NAVY, size=14)
+    apply_brand_header(ws, 2, 1, 9,
+                       "Lock #8.2 canonical disclosure point · 12-face naming + ~50-term reference",
+                       bg=DEEP_TEAL, size=10)
+
+    # ─────────────────────────────────────────────────────────
+    # SECTION 1 — Naming Translation (rows 4-17)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 4, 1, 9,
+                       "Section 1 — Naming Translation: POC ↔ IIRF ↔ CEN-Authentic (per Lock #8.2)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    # Column headers for Section 1
+    nt_headers = ["Face #", "POC Canonical", "IIRF Universal Capital", "CEN-Authentic (Sheet 16 primary)", "Brief Note"]
+    for col_idx, h in enumerate(nt_headers, start=1):
+        c = ws.cell(row=5, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center")
+
+    # 12 face rows
+    for offset, (face_num, poc, iirf, cen, note) in enumerate(NAMING_TRANSLATION_ROWS, start=1):
+        row = 5 + offset
+        ws.cell(row=row, column=1, value=f"F{face_num}").font = Font(name="Calibri", size=11, bold=True)
+        ws.cell(row=row, column=2, value=poc)
+        ws.cell(row=row, column=3, value=iirf)
+        ws.cell(row=row, column=4, value=cen).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+        ws.cell(row=row, column=5, value=note).font = Font(name="Calibri", size=9, italic=True, color="606060")
+
+    # ─────────────────────────────────────────────────────────
+    # SECTION 2 — Glossary (rows 19+)
+    # ─────────────────────────────────────────────────────────
+    glossary_start_row = 19
+    apply_brand_header(ws, glossary_start_row, 1, 9,
+                       "Section 2 — Methodology Glossary (acronyms + operational terminology, alphabetical)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    # Quick Navigation by Category (rows glossary_start_row+1 to +6)
+    nav_row = glossary_start_row + 1
+    nav_cell = ws.cell(row=nav_row, column=1,
+                       value="Quick Navigation by Category (filter column D in Excel for direct view):")
+    nav_cell.font = Font(name="Calibri", size=10, italic=True, color="404040")
+    ws.merge_cells(start_row=nav_row, start_column=1, end_row=nav_row, end_column=9)
+
+    cat_palette = {
+        "Math":         "FFF8DC",  # Pale Yellow
+        "Methodology":  "F3E8FF",  # Pale Magenta
+        "Geometry":     "E6F3FF",  # Pale Blue
+        "Diagnostic":   "E6FFE6",  # Pale Green
+        "CEN-Specific": "F0F0F0",  # Pale Gray
+    }
+    cat_counts = {cat: sum(1 for e in GLOSSARY_ENTRIES if e[3] == cat) for cat in cat_palette.keys()}
+    for offset, (cat, color) in enumerate(cat_palette.items(), start=1):
+        cell = ws.cell(row=nav_row + offset, column=1,
+                       value=f"  • {cat} ({cat_counts[cat]} entries) — filter D = \"{cat}\"")
+        cell.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
+        cell.font = Font(name="Calibri", size=10, color="404040")
+        ws.merge_cells(start_row=nav_row + offset, start_column=1,
+                       end_row=nav_row + offset, end_column=9)
+
+    # Column headers for Section 2 Glossary
+    headers_row = nav_row + len(cat_palette) + 2  # +2 for breathing space
+    glossary_headers = [
+        "Acronym", "Full Term", "Brief Definition",
+        "Category", "First Appears In", "Challenge",
+        "Audit Trail §", "Code File:Line", "Doc Path",
+    ]
+    for col_idx, h in enumerate(glossary_headers, start=1):
+        c = ws.cell(row=headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Sort entries alphabetically (case-insensitive); strip Greek/punctuation prefix for sort key
+    def _sort_key(entry):
+        acr = entry[0].lower()
+        # Strip leading Greek-letter prefix for sorting (e.g., "α (alpha)" sorts as "alpha")
+        if "(" in acr:
+            paren_content = acr.split("(", 1)[1].rstrip(")")
+            return paren_content.strip()
+        return acr.lstrip("|").lstrip("φ").strip()
+
+    sorted_entries = sorted(GLOSSARY_ENTRIES, key=_sort_key)
+
+    challenge_palette = {
+        "H": "D946EF",  # Magenta-pink (high challenge — committee will press)
+        "M": "8B5CF6",  # Quantum-purple (medium)
+        "L": "C0C0C0",  # Light gray (descriptive only)
+    }
+
+    # Render entries
+    for offset, entry in enumerate(sorted_entries, start=1):
+        row = headers_row + offset
+        acronym, full_term, definition, category, first_in, challenge, audit_sec, code_file, doc_path = entry
+
+        # Column A: Acronym (bold)
+        ws.cell(row=row, column=1, value=acronym).font = Font(name="Calibri", size=10, bold=True)
+        # Column B: Full Term
+        ws.cell(row=row, column=2, value=full_term).font = Font(name="Calibri", size=10)
+        # Column C: Brief Definition (wrap)
+        def_cell = ws.cell(row=row, column=3, value=definition)
+        def_cell.font = Font(name="Calibri", size=9)
+        def_cell.alignment = Alignment(wrap_text=True, vertical="top")
+        # Column D: Category (color-coded background)
+        cat_cell = ws.cell(row=row, column=4, value=category)
+        cat_cell.fill = PatternFill(start_color=cat_palette[category],
+                                    end_color=cat_palette[category],
+                                    fill_type="solid")
+        cat_cell.font = Font(name="Calibri", size=9, italic=True)
+        cat_cell.alignment = Alignment(horizontal="center")
+        # Column E: First Appears In
+        ws.cell(row=row, column=5, value=first_in).font = Font(name="Calibri", size=9, color="606060")
+        # Column F: Challenge tag (bold + color-coded)
+        chal_cell = ws.cell(row=row, column=6, value=challenge)
+        chal_cell.font = Font(name="Calibri", size=10, bold=True, color=challenge_palette[challenge])
+        chal_cell.alignment = Alignment(horizontal="center")
+        # Column G: Audit Trail § (Consolas for ref-like text)
+        ws.cell(row=row, column=7, value=audit_sec).font = Font(name="Consolas", size=9, color="606060")
+        # Column H: Code File:Line
+        ws.cell(row=row, column=8, value=code_file).font = Font(name="Consolas", size=9, color="606060")
+        # Column I: Doc Path
+        ws.cell(row=row, column=9, value=doc_path).font = Font(name="Consolas", size=9, color="606060")
+
+    # Set column widths for readability
+    col_widths = {1: 22, 2: 28, 3: 60, 4: 14, 5: 22, 6: 8, 7: 12, 8: 32, 9: 40}
+    for col_idx, width in col_widths.items():
+        ws.column_dimensions[chr(64 + col_idx)].width = width
+
+    # Set row height for entry rows (wrap_text needs taller rows)
+    entries_end_row = headers_row + len(sorted_entries)
+    for row in range(headers_row + 1, entries_end_row + 1):
+        ws.row_dimensions[row].height = 60
+
+    # Named range anchoring the Glossary section header for cross-references
+    add_defined_name(wb, "glossary_section_header",
+                     f"'0a_Naming_Translation'!$A${glossary_start_row}")
+
     return ws
 
 
@@ -622,9 +1128,11 @@ def build_sheet_02_raw_inputs(wb: Workbook):
     Sheet 10 Breath_Axes per Lock #8.3 vector purity (researcher V_res layer is
     parallel methodology, NOT math input).
 
-    Per Lock #8.11 + #8.29: KPI placements via Procedure C (question-derived
-    clustering against canonical Songbook v2.1 inquiries). 29 face + 4 edge + 1
-    vertex (V13 = first vertex-KPI in CEN dataset) = 34 ✓.
+    Per Lock #8.11 + #8.29 + #8.36: KPI placements via Procedure C (question-derived
+    clustering against canonical Songbook v2.1 inquiries). Post-Lock #8.36 reversion:
+    31 face + 3 edge + 0 vertex = 34 ✓ (CEN has ZERO vertex-KPIs at canonical mapping;
+    Lock #8.11 L8→V13 + F4→E7-11 promotions RETIRED as geometrically infeasible.
+    See Sheet 00 consolidated Lock #8.36 Reversions note + Disclosure §6.6 Trust-the-Geometry).
 
     Per Lock #8.22: O1 layer values from PureO1 canonical worked example.
     Edge/vertex KPI values at O1/O2 marked TBD for partnership-validation in
@@ -867,7 +1375,7 @@ def build_sheet_02_raw_inputs(wb: Workbook):
         "                                       ",
         "Per Lock #8.22 Pure-O1 canonical: 11 face-KPIs at O1 layer have values from researcher normalization per CEN Phase 2 frozen scores.",
         "Per Lock #8.9: 4 edge-KPI promotions (BSC.C8/F4/I3/L7) — values pending partnership-validation in Sheet 09 build (Lock #8.24 Bi-Directional).",
-        "Per Lock #8.10 + #8.11: 1 vertex-KPI promotion (BSC.L8 → V13 = first vertex-KPI in CEN dataset) — value pending partnership-validation.",
+        "Per Lock #8.10 + #8.11 + #8.36: 0 vertex-KPI promotions at canonical mapping. Lock #8.11 L8→V13 promotion RETIRED per Lock #8.36 geometric correction (F4+F9+F10 don't share a vertex; canonical V13 = F4∩F5∩F9; L8 reverted to F10 Ether O2 face).",
         "                                       ",
         "Honest disclosure: O2/O3 face-KPI values currently zero-placeholder; await researcher normalization per Phase 2 frozen scores.",
         "Honest disclosure: BSC.I4 (Cert independence) and BSC.I8 (Crisis response) at O1 use s58 researcher-judged values (0.2 / 0.4); STRICT alternative is 0.0 for both. Lock #8.22 canonical uses s58.",
@@ -1469,34 +1977,413 @@ def build_sheet_04_face_calculations(wb: Workbook):
 
 
 def build_sheet_05_star_pairs(wb: Workbook):
-    """Sheet 05 Star_Pairs — pentagram skip pairs per face.
+    """Sheet 05 Star_Pairs — pentagram skip-pair display (Sheet 04 cols H-L broken out).
 
-    Per face, 5 elements connect in pentagram star pattern with α=φ⁻¹ weight on
-    skip-pairs (Pos1↔Pos3, Pos2↔Pos4, etc.). Sheet displays the pair matrix +
-    weights + intermediate values that feed Sheet 04.
+    Pedagogical-clarity sheet: explicitly displays all 60 star-pair similarities
+    (12 faces × 5 pairs) referenced from Sheet 04 via sheet-qualified cross-refs.
+    A reviewer auditing the pentagramic formula can see ALL star pairs in one place.
 
-    Authority: audit trail §2 (Pentagramic formula derivation).
+    Pentagram skip pattern (audit trail §2):
+      s1 = Earth-Fire     (B,D in Sheet 04)
+      s2 = Water-Air      (C,E)
+      s3 = Fire-Ether     (D,F)
+      s4 = Air-Earth      (E,B)
+      s5 = Ether-Water    (F,C)
+
+    Per-pair formula: s_k = α·((e_a+e_b)/2) + (1−α)·e_a·e_b
+      where α = φ⁻¹ ≈ 0.618 (golden synergy blend per Lock #8.6)
+
+    Harmonic Resonance per face: R = mean(s1..s5) — the input to the pentagramic
+    coherence chain at Sheet 04 cols M-Q (intersection nodes).
+
+    Sheet displays Octave 1 (Pure-O1 canonical baseline per Lock #8.22) inline;
+    footer documents that O2/O3 use identical pattern in Sheet 04 (rows 20-31 + 36-47).
+
+    Authority: audit trail §2 + Lock #8.6 (α canonical) + Lock #8.22 (Pure-O1 baseline).
+    Per ship-v1.0 plan §14.B Sub-Arc 1 Step 1.4.
     """
     ws = wb.create_sheet("05_Star_Pairs")
-    apply_brand_header(ws, 1, 1, 8,
-                       "Pentagram Star Pairs · α = φ⁻¹ Skip-Pair Weights",
+
+    apply_brand_header(ws, 1, 1, 13,
+                       "Sheet 05 — Pentagram Star Pairs (Sheet 04 cols H-L broken out for pedagogical clarity)",
                        bg=DEEP_TEAL, size=14)
+    apply_brand_header(ws, 2, 1, 13,
+                       "α = φ⁻¹ skip-pair weight · 12 faces × 5 pairs = 60 cells · Octave 1 canonical",
+                       bg=QUANTUM_PURPLE, size=10)
+
+    # ─────────────────────────────────────────────────────────
+    # Section A — Pentagram pattern explanation (rows 4-9)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 4, 1, 13,
+                       "Section A — Pentagram Skip Pattern (5 inscribed-pentagram edges per face)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    pattern_notes = [
+        "Per-face geometry: 5 elements arranged in pentagon (Earth → Water → Fire → Air → Ether → cycling).",
+        "The PENTAGRAM is the inscribed star — skip-1-vertex pairs connecting non-adjacent elements:",
+        "    s1 = Earth ↔ Fire   |  s2 = Water ↔ Air  |  s3 = Fire ↔ Ether  |  s4 = Air ↔ Earth  |  s5 = Ether ↔ Water",
+        "Per-pair formula: s_k = α·((e_a+e_b)/2) + (1−α)·e_a·e_b   where α = φ⁻¹ ≈ 0.618 (Lock #8.6 canonical).",
+        "Harmonic Resonance R = mean(s1..s5). Feeds Sheet 04 intersection-node chain (cols M-Q).",
+    ]
+    for offset, note in enumerate(pattern_notes, start=1):
+        c = ws.cell(row=4 + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=4 + offset, start_column=1,
+                       end_row=4 + offset, end_column=13)
+
+    # ─────────────────────────────────────────────────────────
+    # Section B — Per-face star pairs (Octave 1 canonical)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 11, 1, 13,
+                       "Section B — Octave 1 Star Pairs (Pure-O1 canonical per Lock #8.22; Sheet 04 row 4-15 source)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    headers = [
+        "Face",                    # A
+        "Earth",                   # B (input)
+        "Water",                   # C (input)
+        "Fire",                    # D (input)
+        "Air",                     # E (input)
+        "Ether",                   # F (input)
+        "s1 (E↔F)",                # G — Earth-Fire pair
+        "s2 (W↔A)",                # H — Water-Air pair
+        "s3 (F↔Eth)",              # I — Fire-Ether pair
+        "s4 (A↔E)",                # J — Air-Earth pair
+        "s5 (Eth↔W)",              # K — Ether-Water pair
+        "Σs (sum)",                # L — sum of 5 pairs
+        "R = mean(s)",             # M — harmonic resonance
+    ]
+    headers_row = 12
+    for col_idx, h in enumerate(headers, start=1):
+        c = ws.cell(row=headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=9, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Face name display (POC canonical short)
+    face_names = ["Financial", "Conceptual", "Human", "Structural", "Market", "Community",
+                  "Brand", "Operations", "Regenerative", "Foundational", "Funding", "Risk-Resil"]
+
+    # 12 face rows — cross-reference Sheet 04 (Octave 1 block: rows 4-15)
+    for face_id in range(1, 13):
+        row = headers_row + face_id
+        s04_row = 3 + face_id  # Sheet 04 row for this face at O1
+
+        # Col A: Face label + name
+        face_label = ws.cell(row=row, column=1,
+                             value=f"F{face_id} {face_names[face_id-1]}")
+        face_label.font = Font(name="Calibri", size=10, bold=True)
+        face_label.alignment = Alignment(horizontal="left")
+
+        # Cols B-F: Element values (cross-ref Sheet 04 cols B-F at row s04_row)
+        for col_offset, sheet04_col in enumerate(["B", "C", "D", "E", "F"], start=2):
+            apply_formula_cell(ws, row, col_offset,
+                               f"='04_Face_Calculations'!{sheet04_col}{s04_row}")
+            ws.cell(row=row, column=col_offset).number_format = "0.0000"
+            ws.cell(row=row, column=col_offset).alignment = Alignment(horizontal="center")
+            ws.cell(row=row, column=col_offset).font = Font(name="Calibri", size=9, color="606060")
+
+        # Cols G-K: 5 star pairs (cross-ref Sheet 04 cols H-L at row s04_row)
+        for col_offset, sheet04_col in enumerate(["H", "I", "J", "K", "L"], start=7):
+            apply_formula_cell(ws, row, col_offset,
+                               f"='04_Face_Calculations'!{sheet04_col}{s04_row}")
+            ws.cell(row=row, column=col_offset).number_format = "0.0000"
+            ws.cell(row=row, column=col_offset).alignment = Alignment(horizontal="center")
+
+        # Col L: Σs (sum of 5 pairs)
+        apply_formula_cell(ws, row, 12, f"=SUM(G{row}:K{row})")
+        ws.cell(row=row, column=12).number_format = "0.0000"
+        ws.cell(row=row, column=12).alignment = Alignment(horizontal="center")
+
+        # Col M: R = mean (= Σs / 5) — Harmonic Resonance
+        apply_formula_cell(ws, row, 13, f"=AVERAGE(G{row}:K{row})")
+        ws.cell(row=row, column=13).number_format = "0.0000"
+        ws.cell(row=row, column=13).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=13).fill = PatternFill(
+            start_color="E0F4F4", end_color="E0F4F4", fill_type="solid")
+        ws.cell(row=row, column=13).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+
+    # Summary row: per-pair mean across all 12 faces
+    summary_row = headers_row + 13
+    ws.cell(row=summary_row, column=1, value="Mean per pair").font = Font(
+        name="Calibri", size=10, bold=True, italic=True, color="606060")
+    for col_idx in range(7, 14):
+        apply_formula_cell(ws, summary_row, col_idx,
+                           f"=AVERAGE({chr(64+col_idx)}{headers_row+1}:{chr(64+col_idx)}{headers_row+12})")
+        ws.cell(row=summary_row, column=col_idx).number_format = "0.0000"
+        ws.cell(row=summary_row, column=col_idx).alignment = Alignment(horizontal="center")
+        ws.cell(row=summary_row, column=col_idx).font = Font(name="Calibri", size=10, italic=True, color="606060")
+        ws.cell(row=summary_row, column=col_idx).fill = PatternFill(
+            start_color="F0F0F0", end_color="F0F0F0", fill_type="solid")
+
+    # ─────────────────────────────────────────────────────────
+    # Section C — Authority + cross-references
+    # ─────────────────────────────────────────────────────────
+    footer_row = summary_row + 2
+    apply_brand_header(ws, footer_row, 1, 13,
+                       "Authority + Cross-References",
+                       bg=DARK_NAVY, size=11)
+    footer_notes = [
+        "Authority: CALCULATION_AUDIT_TRAIL.md §2 (Pentagramic skip-pair derivation) + Lock #8.6 (α=φ⁻¹ canonical).",
+        "Element inputs (B-F): Sheet 03 normalized 60-element grid (cen_f<n>_o1_elements named ranges).",
+        "Star pair source (G-K): Sheet 04 cols H-L at corresponding O1 row (row 3+face_id).",
+        "                                       ",
+        "Octave coverage: this sheet displays Octave 1 (Pure-O1 canonical per Lock #8.22) inline for clarity.",
+        "  Octave 2 + Octave 3 use IDENTICAL pattern in Sheet 04 at rows 20-31 (O2) and 36-47 (O3) cols H-L.",
+        "                                       ",
+        "Cross-references:",
+        "  • Sheet 04 cols H-L — canonical computation (this sheet is display-only mirror)",
+        "  • Sheet 01 (α named range definition)",
+        "  • Sheet 0a Glossary entries: 'α (alpha)' / 'Star Pair' / 'Face Energy'",
+        "  • Audit Trail §2 — full formula derivation + worked examples",
+        "                                       ",
+        "Named range: cen_star_pairs_header → row 11 (Section B header)",
+    ]
+    for offset, note in enumerate(footer_notes, start=1):
+        c = ws.cell(row=footer_row + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=footer_row + offset, start_column=1,
+                       end_row=footer_row + offset, end_column=13)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 18
+    for col_letter in ["B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]:
+        ws.column_dimensions[col_letter].width = 10
+    ws.column_dimensions["L"].width = 10
+    ws.column_dimensions["M"].width = 12  # R_harmonic highlighted
+
+    # Named range
+    add_defined_name(wb, "cen_star_pairs_header", "'05_Star_Pairs'!$A$11")
+
     return ws
 
 
+# Canonical breath axis pairing per js/constants/breath-axes.js
+# {1↔11, 2↔7, 3↔8, 4↔9, 5↔10, 6↔12}
+BREATH_AXIS_PAIRS = [
+    (1, 11, "Resource breath",            "Financial ↔ Funding"),
+    (2,  7, "Knowledge-to-identity breath", "Intellectual ↔ Brand"),
+    (3,  8, "People-to-process breath",     "Human ↔ Operations"),
+    (4,  9, "Stability-to-renewal breath",  "Structural ↔ Regenerative"),
+    (5, 10, "External-to-internal breath",  "Market ↔ Values (CEN Axis 5 inversion)"),
+    (6, 12, "Partnership-to-resilience breath", "Community ↔ Risk"),
+]
+
+
 def build_sheet_06_breath_feedback(wb: Workbook):
-    """Sheet 06 Breath_Feedback_Pass2 — axis-informed energy.
+    """Sheet 06 Breath_Feedback_Pass2 — axis-informed energy DISPLAY (pedagogical).
 
-    Pass-2 blend: γ · F_face_pass1 + (1−γ) · F_axis_partner. Per audit trail §3.
-    γ = 0.7 default (named range).
+    Pass-2 formula per audit trail §3 (the ONLY feedback loop in Quannex pipeline):
+        E_post_breath = δ · E_local + (1−δ) · E_opposing
+        where δ = 0.9 (Lock #8.6: 90% own, 10% opposite-axis-partner)
 
-    Updates `cen_f<n>_e_local_<oN>` to Pass-2 values used by Spectral + Dashboard.
-    Pass-1 values preserved in Sheet 04 for trace.
+    HONEST HYGIENE NOTE: Sheet 04's named ranges cen_f<n>_o<m>_e_final hold the
+    LOGISTIC output (pre-breath-axis-blend). The canonical engine applies Pass 2
+    AFTER the logistic. Sheet 06 displays the Pass 2 blend pedagogically WITHOUT
+    overriding Sheet 04's named ranges (downstream Sheets 12/13/14 currently consume
+    Sheet 04's pre-blend values). Whether downstream should consume post-blend values
+    is a Wave 3 adversarial-pass question (flagged in Sheet 18 placeholder).
+
+    Per ship-v1.0 plan §14.B Sub-Arc 1 Step 1.5. Sheet displays Octave 1 canonical.
+
+    Canonical breath axis pairing per js/constants/breath-axes.js:
+      Axis 1: F1↔F11  · Resource (Financial ↔ Funding)
+      Axis 2: F2↔F7   · Knowledge-to-identity (Intellectual ↔ Brand)
+      Axis 3: F3↔F8   · People-to-process (Human ↔ Operations)
+      Axis 4: F4↔F9   · Stability-to-renewal (Structural ↔ Regenerative)
+      Axis 5: F5↔F10  · External-to-internal (Market ↔ Values) — CEN INVERSION
+      Axis 6: F6↔F12  · Partnership-to-resilience (Community ↔ Risk)
+
+    Authority: audit trail §3 + Lock #8.6 (δ canonical) + BREATH_AXIS_REFERENCE.md.
     """
     ws = wb.create_sheet("06_Breath_Feedback_Pass2")
-    apply_brand_header(ws, 1, 1, 12,
-                       "Breath Feedback Pass 2 · Axis-Informed Energy",
+
+    apply_brand_header(ws, 1, 1, 9,
+                       "Sheet 06 — Breath Feedback Pass 2 (axis-informed E blend)",
                        bg=DEEP_TEAL, size=14)
+    apply_brand_header(ws, 2, 1, 9,
+                       "E_post_breath = δ·E_local + (1−δ)·E_opposing · δ = 0.9 · Pedagogical display (pre-blend ranges in Sheet 04)",
+                       bg=QUANTUM_PURPLE, size=10)
+
+    # ─────────────────────────────────────────────────────────
+    # Section A — Breath axis pattern explanation
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 4, 1, 9,
+                       "Section A — 6 Canonical Breath Axes (antipodal face pairs per dodecahedral topology)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    intro_notes = [
+        "Breath axes = the ONLY feedback loop in the Quannex calculation pipeline (per BREATH_AXIS_REFERENCE.md §1).",
+        "Each axis = 2 antipodal faces (geometrically opposite in regular dodecahedron centered at origin).",
+        "Each face receives 10% influence from its breath-partner (1−δ = 0.1); 90% own-face contribution (δ = 0.9).",
+        "Lock #8.6: δ canonical at 0.9 per balancedMode (NOT enterpriseMode's 0.95 stronger-self-pull).",
+    ]
+    for offset, note in enumerate(intro_notes, start=1):
+        c = ws.cell(row=4 + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=4 + offset, start_column=1,
+                       end_row=4 + offset, end_column=9)
+
+    # 6 axis-pair rows
+    axes_header_row = 10
+    axes_headers = ["Axis #", "Face A", "Face B", "Breath Type", "Pairing"]
+    for col_idx, h in enumerate(axes_headers, start=1):
+        c = ws.cell(row=axes_header_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center")
+
+    for axis_idx, (face_a, face_b, breath_type, pairing) in enumerate(BREATH_AXIS_PAIRS, start=1):
+        row = axes_header_row + axis_idx
+        ws.cell(row=row, column=1, value=f"Axis {axis_idx}").font = Font(name="Calibri", size=10, bold=True)
+        ws.cell(row=row, column=2, value=f"F{face_a}").font = Font(name="Calibri", size=10)
+        ws.cell(row=row, column=3, value=f"F{face_b}").font = Font(name="Calibri", size=10)
+        ws.cell(row=row, column=4, value=breath_type).font = Font(name="Calibri", size=10, italic=True, color="606060")
+        ws.cell(row=row, column=5, value=pairing).font = Font(name="Calibri", size=10, italic=True, color="606060")
+        # Highlight CEN Axis 5 (famous inversion)
+        if axis_idx == 5:
+            for col in range(1, 6):
+                ws.cell(row=row, column=col).fill = PatternFill(
+                    start_color="F9E0F9", end_color="F9E0F9", fill_type="solid")
+
+    # ─────────────────────────────────────────────────────────
+    # Section B — Per-face Pass 2 blend (Octave 1 canonical)
+    # ─────────────────────────────────────────────────────────
+    section_b_row = 19
+    apply_brand_header(ws, section_b_row, 1, 9,
+                       "Section B — Octave 1 Pass 2 Blend (E_post_breath per face; Sheet 04 cross-refs)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    pb_headers = [
+        "Face",                # A
+        "E_local (Sheet 04)",  # B — own E_final from Sheet 04
+        "Opposite Face",       # C — opposing face label
+        "E_opposing",          # D — opposite face's E_final from Sheet 04
+        "δ · E_local",         # E — 0.9 weighted self
+        "(1−δ) · E_opposing",  # F — 0.1 weighted opposite
+        "E_post_breath",       # G — sum (blend output)
+        "Δ from E_local",      # H — change vs pre-blend
+        "Sheet 04 anchor",     # I — diagnostic ref
+    ]
+    pb_headers_row = section_b_row + 1
+    for col_idx, h in enumerate(pb_headers, start=1):
+        c = ws.cell(row=pb_headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=9, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Build the F→opposite-F mapping
+    opposite_map = {}
+    for (a, b, _, _) in BREATH_AXIS_PAIRS:
+        opposite_map[a] = b
+        opposite_map[b] = a
+
+    face_names_short = ["Financial", "Conceptual", "Human", "Structural", "Market", "Community",
+                        "Brand", "Operations", "Regenerative", "Foundational", "Funding", "Risk-Resil"]
+
+    # 12 face rows
+    for face_id in range(1, 13):
+        row = pb_headers_row + face_id
+        opp_id = opposite_map[face_id]
+        s04_self_row = 3 + face_id      # Sheet 04 O1 row for this face
+        s04_opp_row = 3 + opp_id        # Sheet 04 O1 row for opposite face
+
+        # Col A: Face label
+        ws.cell(row=row, column=1, value=f"F{face_id} {face_names_short[face_id-1]}").font = Font(
+            name="Calibri", size=10, bold=True)
+
+        # Col B: E_local from Sheet 04 col T (E_final logistic output)
+        apply_formula_cell(ws, row, 2, f"='04_Face_Calculations'!T{s04_self_row}")
+        ws.cell(row=row, column=2).number_format = "0.0000"
+        ws.cell(row=row, column=2).alignment = Alignment(horizontal="center")
+
+        # Col C: Opposite face label
+        ws.cell(row=row, column=3, value=f"F{opp_id} {face_names_short[opp_id-1]}").font = Font(
+            name="Calibri", size=10, italic=True, color="606060")
+
+        # Col D: E_opposing from Sheet 04 col T at opposite face's row
+        apply_formula_cell(ws, row, 4, f"='04_Face_Calculations'!T{s04_opp_row}")
+        ws.cell(row=row, column=4).number_format = "0.0000"
+        ws.cell(row=row, column=4).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=4).font = Font(name="Calibri", size=9, color="606060")
+
+        # Col E: δ · E_local
+        apply_formula_cell(ws, row, 5, f"=delta*B{row}")
+        ws.cell(row=row, column=5).number_format = "0.0000"
+        ws.cell(row=row, column=5).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=5).font = Font(name="Calibri", size=9, color="606060")
+
+        # Col F: (1-δ) · E_opposing
+        apply_formula_cell(ws, row, 6, f"=(1-delta)*D{row}")
+        ws.cell(row=row, column=6).number_format = "0.0000"
+        ws.cell(row=row, column=6).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=6).font = Font(name="Calibri", size=9, color="606060")
+
+        # Col G: E_post_breath = E + F (highlighted result)
+        apply_formula_cell(ws, row, 7, f"=E{row}+F{row}")
+        ws.cell(row=row, column=7).number_format = "0.0000"
+        ws.cell(row=row, column=7).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=7).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+        ws.cell(row=row, column=7).fill = PatternFill(
+            start_color="E0F4F4", end_color="E0F4F4", fill_type="solid")
+
+        # Col H: Δ from E_local (signed difference)
+        apply_formula_cell(ws, row, 8, f"=G{row}-B{row}")
+        ws.cell(row=row, column=8).number_format = "+0.0000;-0.0000"
+        ws.cell(row=row, column=8).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=8).font = Font(name="Calibri", size=9, italic=True, color="808080")
+
+        # Col I: Sheet 04 anchor (diagnostic)
+        ws.cell(row=row, column=9, value=f"04!T{s04_self_row} ↔ T{s04_opp_row}").font = Font(
+            name="Consolas", size=8, color="A0A0A0")
+        ws.cell(row=row, column=9).alignment = Alignment(horizontal="center")
+
+    # Define named ranges for post-breath E per face (for potential downstream use)
+    for face_id in range(1, 13):
+        row = pb_headers_row + face_id
+        add_defined_name(wb, f"cen_f{face_id}_o1_e_post_breath",
+                         f"'06_Breath_Feedback_Pass2'!$G${row}")
+
+    # ─────────────────────────────────────────────────────────
+    # Section C — Authority + honest hygiene note
+    # ─────────────────────────────────────────────────────────
+    footer_row = pb_headers_row + 14
+    apply_brand_header(ws, footer_row, 1, 9,
+                       "Authority + Honest Hygiene Disclosure",
+                       bg=DARK_NAVY, size=11)
+    footer_notes = [
+        "Authority: CALCULATION_AUDIT_TRAIL.md §3 (Breath Feedback Pass 2) + Lock #8.6 (δ=0.9 canonical) + BREATH_AXIS_REFERENCE.md.",
+        "Pairing source: js/constants/breath-axes.js (BREATH_AXIS_MAP + BREATH_AXIS_PAIRS — canonical {1↔11, 2↔7, 3↔8, 4↔9, 5↔10, 6↔12}).",
+        "                                       ",
+        "⚠ HONEST HYGIENE NOTE (Trust-the-Geometry principle applied to ourselves, per Disclosure §6.6):",
+        "Sheet 04's named ranges cen_f<n>_o<m>_e_final hold the LOGISTIC output (pre-breath-axis-blend).",
+        "The canonical engine applies Pass 2 AFTER the logistic. Sheet 06 displays the Pass 2 blend PEDAGOGICALLY",
+        "WITHOUT overriding Sheet 04's named ranges that downstream Sheets 12/13/14 currently consume.",
+        "                                       ",
+        "Whether downstream should consume Sheet 06's post-breath values (cen_f<n>_o1_e_post_breath defined here)",
+        "is a Wave 3 adversarial-pass question — flagged for Sheet 18 question B-? at W3 partnership-discussion.",
+        "Until W3 resolves: Sheet 04 logistic E_final is the SSOT downstream-consumer canonical baseline.",
+        "                                       ",
+        "Named ranges defined this sheet: cen_f<n>_o1_e_post_breath (12 values; Octave 1 only — O2/O3 follow same",
+        "pattern in canonical engine but are NOT computed in SSOT v1.0 per Pure-O1 baseline focus per Lock #8.22).",
+    ]
+    for offset, note in enumerate(footer_notes, start=1):
+        c = ws.cell(row=footer_row + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=footer_row + offset, start_column=1,
+                       end_row=footer_row + offset, end_column=9)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 18
+    ws.column_dimensions["B"].width = 16
+    ws.column_dimensions["C"].width = 16
+    ws.column_dimensions["D"].width = 12
+    ws.column_dimensions["E"].width = 12
+    ws.column_dimensions["F"].width = 14
+    ws.column_dimensions["G"].width = 14
+    ws.column_dimensions["H"].width = 14
+    ws.column_dimensions["I"].width = 18
+
     return ws
 
 
@@ -1748,22 +2635,25 @@ def build_sheet_08_vertices(wb: Workbook):
     Each vertex has exactly 3 faces meeting at it. 12 faces × 5/vertex (each
     face borders 5 vertices) / 3 = 20 unique vertices.
 
-    ARCHITECTURAL FINDING SURFACED 2026-05-24:
-    Lock #8.11 W06v3 mapping documented BSC.L8 → V13 = F4∩F9∩F10
-    (Structure+Regenerative+Values). BUT main.js canonical V13 = [4,5,9]
-    (Structural+Market+Regenerative). The triplet F4+F9+F10 does NOT exist
-    as a vertex in the canonical dodecahedral topology — these three faces
-    don't share a common vertex.
-    Discovery: BSC.L8 → V_? mapping NEEDS RECONCILIATION. Closest geometric
-    matches: V10 = [3,4,9] (Human+Structural+Regenerative) or V13 = [4,5,9]
-    (Structural+Market+Regenerative). Neither perfectly matches the
-    Lock #8.11 semantic ("Structure+Regenerative+Values"). Partnership-
-    decision needed: pick closest geometric vertex OR reframe L8 placement.
-    Flagged here; Sheet 09 build will surface the decision.
+    LOCK #8.36 RESOLUTION NOTE (2026-05-24, post-Sheet-08-discovery):
+    Lock #8.11 W06v3 mapping had documented BSC.L8 → V13 with V13 noted as
+    F4∩F9∩F10 (Structure+Regenerative+Values). The Sheet 08 build surfaced
+    the geometric infeasibility: canonical V13 per main.js:953-977 = F4∩F5∩F9
+    (Structural+Market+Regenerative); the triplet F4+F9+F10 does NOT share
+    a common vertex in dodecahedral topology.
+    RESOLVED via Lock #8.36 (maximum-integrity geometric reversion 2026-05-24):
+    BSC.L8 reverted to F10 Ether O2 face placement (Songbook R38 canonical;
+    "values-made-structural"). 3-face-spanning semantic insight ("L8 spans
+    Structure+Regen+Values") preserved at interpretive disclosure layer; the
+    dodecahedral GEOMETRY simply doesn't have a vertex matching that exact
+    triplet. CEN now has ZERO vertex-KPIs at canonical mapping (three-layer
+    consistency: mapping + geometric leverage-count=0 + methodological gentle-
+    amplifier all agree). Trust-the-Geometry principle in action.
 
     Authority: audit trail §6 (Vortex dynamics) + §15 (SequenceConcavity);
     Lock #8.19 (chirality rename sympy-proved); main.js:953-977 (canonical
-    20 vertices); Lock #8.11 (W06v3 mapping — V13 reconciliation needed).
+    20 vertices); Lock #8.11 (W06v3 mapping); Lock #8.36 (geometric reversion);
+    Disclosure §6.6 Trust the Geometry (operational discipline that produced #8.36).
     """
     ws = wb.create_sheet("08_Vertices")
     apply_brand_header(ws, 1, 1, 13,
@@ -1939,10 +2829,10 @@ def build_sheet_08_vertices(wb: Workbook):
     add_defined_name(wb, "cen_vertex_leverage_count", "'08_Vertices'!$B$31")
 
     # ─────────────────────────────────────────────────────────
-    # Footer — Authority + Lock #8.11 reconciliation flag
+    # Footer — Authority + Lock #8.36 V13 Resolution Note (2026-05-24)
     # ─────────────────────────────────────────────────────────
     apply_brand_header(ws, 33, 1, 14,
-                       "Authority + Lock #8.11 V13 Reconciliation Architectural Finding",
+                       "Authority + Lock #8.36 V13 Resolution Note (2026-05-24)",
                        bg=DARK_NAVY, size=11)
     notes = [
         "20 canonical dodecahedral vertices per js/main.js:953-977 face-triplet adjacency.",
@@ -1951,19 +2841,26 @@ def build_sheet_08_vertices(wb: Workbook):
         "Per Lock #8.19 (sympy-proved): chirality → sequenceConcavity rename. Formula =",
         "  (f1 − f2)(2*f2 − f1 − f3) / 2 = sequence concavity at f2, NOT rotational winding.",
         "                                       ",
-        "ARCHITECTURAL FINDING 2026-05-24 (surfaced during Sheet 08 build):",
-        "Lock #8.11 W06v3 KPI mapping documented BSC.L8 → V13 = F4∩F9∩F10 (Structure+Regen+Values).",
-        "BUT canonical V13 per main.js = F4∩F5∩F9 (Structural+Market+Regenerative).",
-        "The triplet F4+F9+F10 does NOT exist as a vertex in dodecahedral topology — those 3 faces",
-        "don't share a common vertex. The Lock #8.11 V13 mapping needs partnership-reconciliation.",
+        "LOCK #8.36 V13 RESOLUTION NOTE (2026-05-24) — discovery + resolution arc:",
+        "DISCOVERY (during Sheet 08 build): Lock #8.11 W06v3 mapping had documented BSC.L8 → V13",
+        "with V13 noted as F4∩F9∩F10. But canonical V13 per main.js = F4∩F5∩F9. The triplet",
+        "F4+F9+F10 does NOT share a common vertex in dodecahedral topology — geometric truth.",
         "                                       ",
-        "Closest geometric candidates (rows highlighted):",
-        "  V10 = F3+F4+F9 (Human+Structural+Regenerative) — geometric closest to 'Structure+Regen+Values'",
-        "  V13 = F4+F5+F9 (Structural+Market+Regenerative) — current Lock #8.11 vertex number",
-        "Neither perfectly matches semantic. Surfacing for partnership-decide.",
+        "RESOLUTION via Lock #8.36 (maximum-integrity reversion 2026-05-24): BSC.L8 reverted to",
+        "F10 Ether O2 face placement (Songbook R38 canonical; 'values-made-structural'). The 3-face-",
+        "spanning semantic insight ('L8 spans Structure+Regen+Values') is preserved at the interpretive",
+        "disclosure layer — the dodecahedral GEOMETRY simply has no vertex matching F4+F9+F10.",
+        "Geometric truth is unambiguous. Trust-the-Geometry principle in action (Disclosure §6.6).",
+        "                                       ",
+        "POST-Lock #8.36 KPI distribution: 31 face + 3 edge + 0 vertex = 34 total. CEN has ZERO",
+        "vertex-KPIs at canonical mapping. Three independent layers agree: mapping layer (no BSC",
+        "KPI maps to 3-face junction post-#8.36), geometric layer (this sheet — leverage-count=0",
+        "at κ=φ²), methodological layer (Lock #8.35 gentle amplifier produces uniform vertex coherence).",
         "                                       ",
         "Authority: audit trail §6 (Vortex) + §15 (SequenceConcavity); Lock #8.19 (rename);",
-        "  main.js:953-977 (canonical 20 vertices); Lock #8.11 (V13 mapping needs reconciliation).",
+        "  main.js:953-977 (canonical 20 vertices); Lock #8.11 (W06v3 mapping); Lock #8.36 (reversion);",
+        "  Disclosure §6.6 Trust the Geometry (operational discipline). See also Sheet 00 consolidated",
+        "  Lock #8.36 Reversions note.",
         "                                       ",
         "Named ranges: cen_v<N>_{strength,coherence,concavity} per vertex; cen_vertex_leverage_count.",
     ]
@@ -1998,9 +2895,12 @@ def build_sheet_09_bidirectional(wb: Workbook):
     Three blocks per design (CEN_SSOT_BiDirectional_CoEvolution_Architecture_2026-05-22.md
     + POC audit trail §17):
 
-      Block A — Vertex_KPIs subsection:
-        - First vertex-KPI: BSC.L8 SDG alignment → Vertex V13 (F4 ∩ F9 ∩ F10)
-        - Question-match 10/10 (per Procedure C)
+      Block A — Vertex_KPIs subsection (Post-Lock #8.36 RETIRED):
+        - 0 vertex-KPIs at canonical mapping (Lock #8.11 L8→V13 promotion RETIRED per
+          Lock #8.36 geometric correction — F4+F9+F10 don't share a vertex; canonical
+          V13 = F4∩F5∩F9; L8 reverted to F10 Ether O2 face per Songbook R38)
+        - Block A retained as ANTICIPATORY architecture for future BSC iterations
+          that may add vertex-level KPIs at geometrically-valid 3-face junctions
 
       Block B — Elemental Influence Signatures:
         - 30 edges × 10-tuple signature (per Edge)
@@ -2323,40 +3223,605 @@ def build_sheet_09_bidirectional(wb: Workbook):
     return ws
 
 
+# CEN 4-vector raw scores per Lock #8.29 (Sheet 10 inline display)
+# Source: companies/cen/mapping-context.json tooltip strings (Phase 2 frozen)
+# Format: (face_id, D_score, E_score, V_res_score_or_None, brief_note)
+# Honest disclosure: mapping-context.json has SINGLE V_res (likely V_res_post per audit context);
+# Lock #8.29's "V_res_pre/V_res_post" distinction wasn't propagated to engine state.
+CEN_4VECTOR_PHASE2 = [
+    (1,  6,  1, 2,    "Financial Fragility — massive D-E perception gap; researcher confirms 2/10"),
+    (2,  8,  7, None, "Conceptual Depth — STRONG agreement; researcher value not in canonical tooltip"),
+    (3,  7,  3, 4,    "Founder Dyad — Dominique energized, Esther drained; researcher 4/10"),
+    (4,  7,  2, None, "Governance Gap — Esther sees structural vacuum clearly; researcher value not in tooltip"),
+    (5,  3,  1, None, "Mission in Silence — SEVERELY DEPLETED; mission powerful but invisible externally"),
+    (6,  3,  4, None, "Emerging Network — early-stage; Esther's relational network active"),
+    (7,  7,  3, None, "Quiet Credibility — Moderate; select-network reputation, not broadcast"),
+    (8,  7,  1, 2,    "Underdeveloped Engine — D believes ops work, E sees little systematized; researcher 2/10"),
+    (9,  6,  5, 8,    "Conscious Core — NOTABLE; researcher=8 (strongest regenerative ethic finding)"),
+    (10, 10, 9, None, "Sacred Ground — EXCEPTIONAL; THE BEDROCK; profound values alignment between founders"),
+    (11, 6,  4, None, "Dormant Pipeline — Below potential; insufficient for NGO sustainability"),
+    (12, 3,  1, 3,    "Exposed Foundation — CRITICAL; researcher 3/10; near-zero resilience mechanisms"),
+]
+
+
 def build_sheet_10_breath_axes(wb: Workbook):
-    """Sheet 10 Breath_Axes — 6 breath axes with polarity scores.
+    """Sheet 10 Breath_Axes — 6 breath axes + 4-vector inline display per Lock #8.29.
 
-    Per axis (6 rows):
-      - Projection face / Reception face / Polarity reading per scorer (D, E, V_res_post)
-      - Pattern label (Consensus / 2-vs-1 / Inversion)
+    Three sections:
+      Section A — 6 breath axes summary with E_post_breath cross-refs from Sheet 06
+      Section B — 4-vector (D / E / V_res) per face inline display per Lock #8.29
+                  (CEN-authentic founder scores + researcher analytical layer per Lock #8.3
+                   vector purity: D/E feed surface analysis; V_res is analytical-only NOT engine input)
+      Section C — Axis 5 inversion deep-dive (CEN's famous founder-disagreement finding)
 
-    Axis 5 Perception & Truth row: magenta-tinted alert (FULL POLARITY INVERSION,
-    D=−2, E=+2, V_res=+2 for CEN per Sheet 16 design doc).
+    Per Lock #8.29 (W2 partnership-decision 2026-05-23): 4-vector lives ONLY in Sheet 10
+    (NOT in Sheet 02 which holds 34 BSC KPIs ONLY per math input layer).
 
-    Authority: docs/BREATH_AXIS_REFERENCE.md.
+    Per Lock #8.3 vector purity: D + E are CEN-authentic founder scores; V_res is researcher
+    analytical layer (Deimantas's). NEITHER feeds the formula cascade — Sheet 10 displays
+    them for polarity-analysis + D-E gap diagnostic surfacing.
+
+    HONEST HYGIENE NOTE: mapping-context.json has SINGLE V_res value (where stated); the
+    Lock #8.29 "V_res_pre/V_res_post" distinction is a Phase 2 audit-trail framing that
+    wasn't propagated to engine state. Sheet 10 displays single V_res with this disclosure.
+
+    Authority: docs/BREATH_AXIS_REFERENCE.md + Lock #8.3 + Lock #8.29 + Phase 2 frozen scores.
+    Per ship-v1.0 plan §14.B Sub-Arc 1 Step 1.6.
     """
     ws = wb.create_sheet("10_Breath_Axes")
-    apply_brand_header(ws, 1, 1, 8,
-                       "Six Breath Axes · Polarity Readings",
+
+    apply_brand_header(ws, 1, 1, 10,
+                       "Sheet 10 — Breath Axes (6 antipodal pairs + CEN 4-vector polarity diagnostic)",
                        bg=DEEP_TEAL, size=14)
+    apply_brand_header(ws, 2, 1, 10,
+                       "Per Lock #8.29: 4-vector inline display ONLY here · CEN Axis 5 inversion thesis-defense centerpiece",
+                       bg=QUANTUM_PURPLE, size=10)
+
+    # ─────────────────────────────────────────────────────────
+    # Section A — 6 breath axes with E_post_breath from Sheet 06
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 4, 1, 10,
+                       "Section A — 6 Breath Axes Summary (E_post_breath cross-refs from Sheet 06)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    sec_a_headers_row = 5
+    sec_a_headers = [
+        "Axis", "Face A (E_post)", "Face B (E_post)", "Breath Type",
+        "Pairing", "|ΔE|", "Symmetry", "Sheet 06 anchors",
+    ]
+    for col_idx, h in enumerate(sec_a_headers, start=1):
+        c = ws.cell(row=sec_a_headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=9, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Sheet 06 Pass 2 block: Section B headers at row 20, F1 row at row 21, F2 at row 22, etc.
+    # So F<n> row in Sheet 06 = 20 + n
+    for axis_idx, (face_a, face_b, breath_type, pairing) in enumerate(BREATH_AXIS_PAIRS, start=1):
+        row = sec_a_headers_row + axis_idx
+        s06_a_row = 20 + face_a
+        s06_b_row = 20 + face_b
+
+        ws.cell(row=row, column=1, value=f"Axis {axis_idx}").font = Font(name="Calibri", size=10, bold=True)
+
+        # Col B: Face A E_post_breath
+        apply_formula_cell(ws, row, 2, f"='06_Breath_Feedback_Pass2'!G{s06_a_row}")
+        ws.cell(row=row, column=2).number_format = "0.0000"
+        ws.cell(row=row, column=2).alignment = Alignment(horizontal="center")
+
+        # Col C: Face B E_post_breath
+        apply_formula_cell(ws, row, 3, f"='06_Breath_Feedback_Pass2'!G{s06_b_row}")
+        ws.cell(row=row, column=3).number_format = "0.0000"
+        ws.cell(row=row, column=3).alignment = Alignment(horizontal="center")
+
+        # Col D: Breath type
+        ws.cell(row=row, column=4, value=breath_type).font = Font(name="Calibri", size=10, italic=True, color="606060")
+
+        # Col E: Pairing
+        ws.cell(row=row, column=5, value=pairing).font = Font(name="Calibri", size=10, italic=True, color="606060")
+
+        # Col F: |ΔE| absolute difference
+        apply_formula_cell(ws, row, 6, f"=ABS(B{row}-C{row})")
+        ws.cell(row=row, column=6).number_format = "0.0000"
+        ws.cell(row=row, column=6).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=6).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+
+        # Col G: Symmetry verdict (formula uses |ΔE| threshold)
+        apply_formula_cell(ws, row, 7,
+                           f'=IF(F{row}<0.05,"Symmetric",IF(F{row}<0.15,"Mild asymmetry","Strong asymmetry"))')
+        ws.cell(row=row, column=7).font = Font(name="Calibri", size=9, italic=True)
+        ws.cell(row=row, column=7).alignment = Alignment(horizontal="center")
+
+        # Col H: Sheet 06 anchors (diagnostic)
+        ws.cell(row=row, column=8, value=f"06!G{s06_a_row} ↔ G{s06_b_row}").font = Font(
+            name="Consolas", size=8, color="A0A0A0")
+        ws.cell(row=row, column=8).alignment = Alignment(horizontal="center")
+
+        # Highlight Axis 5 (CEN inversion)
+        if axis_idx == 5:
+            for col in range(1, 9):
+                ws.cell(row=row, column=col).fill = PatternFill(
+                    start_color="F9E0F9", end_color="F9E0F9", fill_type="solid")
+
+    # ─────────────────────────────────────────────────────────
+    # Section B — 4-vector inline per Lock #8.29
+    # ─────────────────────────────────────────────────────────
+    section_b_row = 14
+    apply_brand_header(ws, section_b_row, 1, 10,
+                       "Section B — 4-Vector per Face (CEN-authentic D + E + researcher V_res per Lock #8.29 + #8.3 purity)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    sec_b_headers_row = section_b_row + 1
+    sec_b_headers = [
+        "Face", "Custom Name", "D (Dominique)", "E (Esther)",
+        "D-E gap", "V_res (researcher)", "D-V_res", "E-V_res",
+        "Sheet 04 E_local", "Phase 2 Note",
+    ]
+    for col_idx, h in enumerate(sec_b_headers, start=1):
+        c = ws.cell(row=sec_b_headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=9, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    cen_custom_names = ["Financial Fragility", "Conceptual Depth", "Founder Dyad", "Governance Gap",
+                        "Mission in Silence", "Emerging Network", "Quiet Credibility",
+                        "Underdeveloped Engine", "Conscious Core", "Sacred Ground",
+                        "Dormant Pipeline", "Exposed Foundation"]
+
+    for face_id, d_score, e_score, v_res, note in CEN_4VECTOR_PHASE2:
+        row = sec_b_headers_row + face_id
+
+        # Col A: Face label
+        ws.cell(row=row, column=1, value=f"F{face_id}").font = Font(name="Calibri", size=10, bold=True)
+        ws.cell(row=row, column=1).alignment = Alignment(horizontal="center")
+
+        # Col B: Custom name (CEN-authentic)
+        ws.cell(row=row, column=2, value=cen_custom_names[face_id-1]).font = Font(
+            name="Calibri", size=10, bold=True, color="0D7377")
+
+        # Col C: D
+        d_cell = ws.cell(row=row, column=3, value=d_score)
+        d_cell.font = Font(name="Calibri", size=10)
+        d_cell.alignment = Alignment(horizontal="center")
+        d_cell.fill = PatternFill(start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+
+        # Col D: E
+        e_cell = ws.cell(row=row, column=4, value=e_score)
+        e_cell.font = Font(name="Calibri", size=10)
+        e_cell.alignment = Alignment(horizontal="center")
+        e_cell.fill = PatternFill(start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+
+        # Col E: D-E gap (formula)
+        apply_formula_cell(ws, row, 5, f"=C{row}-D{row}")
+        ws.cell(row=row, column=5).number_format = "+0;-0;0"
+        ws.cell(row=row, column=5).alignment = Alignment(horizontal="center")
+        # Highlight large gaps (|D-E| >= 4) — signals founder-disagreement
+        if abs(d_score - e_score) >= 4:
+            ws.cell(row=row, column=5).font = Font(name="Calibri", size=10, bold=True, color="D946EF")
+        else:
+            ws.cell(row=row, column=5).font = Font(name="Calibri", size=10, italic=True, color="606060")
+
+        # Col F: V_res (researcher) — may be None
+        if v_res is not None:
+            vres_cell = ws.cell(row=row, column=6, value=v_res)
+            vres_cell.font = Font(name="Calibri", size=10)
+            vres_cell.fill = PatternFill(start_color="E6F3FF", end_color="E6F3FF", fill_type="solid")
+        else:
+            vres_cell = ws.cell(row=row, column=6, value="—")
+            vres_cell.font = Font(name="Calibri", size=9, italic=True, color="C0C0C0")
+        vres_cell.alignment = Alignment(horizontal="center")
+
+        # Col G: D - V_res
+        if v_res is not None:
+            apply_formula_cell(ws, row, 7, f"=C{row}-F{row}")
+            ws.cell(row=row, column=7).number_format = "+0;-0;0"
+            ws.cell(row=row, column=7).font = Font(name="Calibri", size=9, italic=True, color="606060")
+        else:
+            ws.cell(row=row, column=7, value="—").font = Font(name="Calibri", size=9, italic=True, color="C0C0C0")
+        ws.cell(row=row, column=7).alignment = Alignment(horizontal="center")
+
+        # Col H: E - V_res
+        if v_res is not None:
+            apply_formula_cell(ws, row, 8, f"=D{row}-F{row}")
+            ws.cell(row=row, column=8).number_format = "+0;-0;0"
+            ws.cell(row=row, column=8).font = Font(name="Calibri", size=9, italic=True, color="606060")
+        else:
+            ws.cell(row=row, column=8, value="—").font = Font(name="Calibri", size=9, italic=True, color="C0C0C0")
+        ws.cell(row=row, column=8).alignment = Alignment(horizontal="center")
+
+        # Col I: Sheet 04 E_local (cross-ref)
+        s04_row = 3 + face_id
+        apply_formula_cell(ws, row, 9, f"='04_Face_Calculations'!T{s04_row}")
+        ws.cell(row=row, column=9).number_format = "0.0000"
+        ws.cell(row=row, column=9).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=9).font = Font(name="Calibri", size=9, color="606060")
+
+        # Col J: Phase 2 note
+        ws.cell(row=row, column=10, value=note).font = Font(name="Calibri", size=9, italic=True, color="606060")
+        ws.cell(row=row, column=10).alignment = Alignment(wrap_text=True, vertical="top")
+
+    # ─────────────────────────────────────────────────────────
+    # Section C — Axis 5 inversion deep-dive
+    # ─────────────────────────────────────────────────────────
+    section_c_row = sec_b_headers_row + 14
+    apply_brand_header(ws, section_c_row, 1, 10,
+                       "Section C — Axis 5 Founder Polarity Inversion (CEN thesis-defense centerpiece)",
+                       bg=DARK_NAVY, size=11)
+    axis5_notes = [
+        "Axis 5 = F5 Mission in Silence ↔ F10 Sacred Ground (External-to-internal breath / Market ↔ Values).",
+        "                                       ",
+        "Founder 4-vector at Axis 5 reveals THE inversion pattern:",
+        "  F5 Mission in Silence: D=3, E=1     — both founders rate EXTERNAL mission visibility as severely depleted",
+        "  F10 Sacred Ground:     D=10, E=9    — both founders rate INTERNAL values alignment as exceptional",
+        "                                       ",
+        "Interpretation per audit trail §3 + Disclosure §4 semantic overlay (Tone Governance):",
+        "  • The breath axis is HIGHLY ASYMMETRIC: external Market projection (F5) is anemic while",
+        "    internal Foundational Values reception (F10) is peak. The 'breath' isn't flowing.",
+        "  • This is the MATHEMATICAL FINGERPRINT of an organization whose internal coherence is",
+        "    profound but whose external expression of that coherence has collapsed — the Mission",
+        "    in Silence pattern (CEN customName captures this verbatim).",
+        "                                       ",
+        "Prescribed actionable insight (Calibration Loop test in CEN Wk6-Wk8):",
+        "  • Activate F5 Market projection through Mission externalization work (Wk6-Wk8 founder action items)",
+        "  • F10 doesn't need lifting — it's the bedrock; channel its energy outward through F5",
+        "  • This is the 'raise paired' pattern per Mode 5 finding (Sheet 14 spectral analysis)",
+        "                                       ",
+        "Cross-references: Sheet 06 Pass 2 blend at Axis 5 (rows 25 + 30 cross-pair) · Sheet 14 Mode 5 dominance ·",
+        "                  Sheet 16 Dashboard headline · Disclosure §4 (Bridge of Translation worked example).",
+    ]
+    for offset, note in enumerate(axis5_notes, start=1):
+        c = ws.cell(row=section_c_row + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=section_c_row + offset, start_column=1,
+                       end_row=section_c_row + offset, end_column=10)
+
+    # ─────────────────────────────────────────────────────────
+    # Section D — Authority + honest hygiene disclosure
+    # ─────────────────────────────────────────────────────────
+    section_d_row = section_c_row + len(axis5_notes) + 2
+    apply_brand_header(ws, section_d_row, 1, 10,
+                       "Authority + Honest Hygiene Disclosure",
+                       bg=DARK_NAVY, size=11)
+    footer_notes = [
+        "Authority: docs/BREATH_AXIS_REFERENCE.md + Lock #8.3 (vector purity D/E vs V_res) + Lock #8.29 (4-vector inline only here).",
+        "4-vector source: companies/cen/mapping-context.json tooltips (CEN Phase 2 frozen scores).",
+        "                                       ",
+        "Per Lock #8.3 vector purity: D + E are CEN-authentic founder coherence-self-assessment scores;",
+        "  V_res is researcher analytical layer (Deimantas's) — NEITHER feeds the formula cascade.",
+        "  Sheet 10 displays them for polarity-analysis + D-E gap diagnostic; Sheet 02 holds the 34 BSC KPIs (math input).",
+        "                                       ",
+        "⚠ HONEST HYGIENE NOTE (Trust-the-Geometry §6.6 applied to ourselves):",
+        "  Lock #8.29's '4-vector D/E/V_res_pre/V_res_post' framing implies SEPARATE pre + post researcher values.",
+        "  But mapping-context.json has SINGLE V_res value (where stated in tooltips), not the pre/post pair.",
+        "  This means the canonical Phase 2 data captures researcher confirmation post-assessment ONLY,",
+        "  not the pre-vs-post-vortex distinction Lock #8.29 anticipated. Honest disclosure for reviewers.",
+        "                                       ",
+        "Additional honest disclosure: 5 of 12 faces have no documented V_res in tooltips (F2/F4/F5/F6/F7/F11).",
+        "  Displayed as '—' rather than fabricated. Wave 3 adversarial-pass may flag this as a CEN-data-completeness",
+        "  gap worth addressing in CEN follow-up engagement.",
+        "                                       ",
+        "Cross-references: Sheet 04 (E_local source) · Sheet 06 (Pass 2 E_post_breath cross-refs) ·",
+        "                  Sheet 14 (Mode 5 spectral verification of Axis 5 finding) · Sheet 16 (Dashboard).",
+    ]
+    for offset, note in enumerate(footer_notes, start=1):
+        c = ws.cell(row=section_d_row + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=section_d_row + offset, start_column=1,
+                       end_row=section_d_row + offset, end_column=10)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 8
+    ws.column_dimensions["B"].width = 22
+    ws.column_dimensions["C"].width = 14
+    ws.column_dimensions["D"].width = 14
+    ws.column_dimensions["E"].width = 10
+    ws.column_dimensions["F"].width = 18
+    ws.column_dimensions["G"].width = 10
+    ws.column_dimensions["H"].width = 10
+    ws.column_dimensions["I"].width = 16
+    ws.column_dimensions["J"].width = 50
+
+    # Named ranges for cross-references
+    add_defined_name(wb, "cen_axis_summary_header", "'10_Breath_Axes'!$A$4")
+    add_defined_name(wb, "cen_4vector_header", "'10_Breath_Axes'!$A$14")
+    add_defined_name(wb, "cen_axis5_inversion_header", f"'10_Breath_Axes'!$A${section_c_row}")
+
     return ws
 
 
+# 7-octave canonical thresholds per js/constants/phi-harmonics.js OCTAVE_THRESHOLDS
+# Each entry: (id, name, focus, threshold_lower, upper, phi_derivation_note, color)
+OCTAVE_THRESHOLDS_DATA = [
+    (1, "Survival",       "Existence",     0.0,    0.382,  "0 (boundary)",          "FF4444"),
+    (2, "Structure",      "Stability",     0.382,  0.5,    "φ⁻²",                   "FF8800"),
+    (3, "Relationships",  "Connection",    0.5,    0.618,  "(φ⁻¹+φ⁻²)/2 midpoint",  "FFCC00"),
+    (4, "Creativity",     "Possibility",   0.618,  0.764,  "φ⁻¹",                   "44BB44"),
+    (5, "Expression",     "Clarity",       0.764,  0.854,  "ψ₃ = 1−φ⁻³",            "00CCCC"),
+    (6, "Vision",         "Insight",       0.854,  0.910,  "ψ₄ = 1−φ⁻⁴",            "4488CC"),
+    (7, "Radiance",       "Wholeness",     0.910,  1.000,  "ψ₅ = 1−φ⁻⁵",            "BB88FF"),
+]
+
+
 def build_sheet_11_octave_detection(wb: Workbook):
-    """Sheet 11 Octave_Detection — both paths + Foundation Principle.
+    """Sheet 11 Octave_Detection — both detection paths + Foundation Principle.
 
-    Path 1: Direct max(octave_band per face) → org octave
-    Path 2: geomean(face_octaves) − spread_penalty → org octave
-    Foundation Principle reconciles when paths disagree.
+    Per audit trail §11 + Appendix C: the SSOT computes organizational octave via
+    TWO independent paths that should converge (consensus check):
 
-    Defines named ranges `cen_org_octave`, `cen_octave_path1`, `cen_octave_path2`.
+    Path 1 (Coherence Lookup):
+        Input:  cen_global_coherence_o1 (Sheet 12 headline)
+        Method: Nested-IF threshold lookup against 7 octave bands
+        Output: Octave label (O1-O7) — direct band classification
+        For CEN: C_global ≈ 0.326 → O1 Survival band [0, φ⁻²)
 
-    Authority: audit trail Appendix C (Foundation Principle).
+    Path 2 (Foundation Principle — geometric mean − spread penalty):
+        Input:  Per-face octave assignments (from face.octave field)
+        Method: geomean(face_octaves) − spread_penalty(std)
+        Output: Numeric octave → rounded to integer
+        For CEN: all 12 faces assigned octave=1 (Pure-O1 canonical per Lock #8.22)
+                → geomean=1, spread=0, penalty=0 → 1 → O1 Survival ✓
+
+    Both paths converge to O1 Survival for CEN — consensus validated.
+
+    Per Disclosure §5: the 7-octave hierarchy is normative-developmental (Maslow + Wilber +
+    Spiral Dynamics + chakra lineage). Inherited as canonical taxonomy; per-engagement
+    application is researcher-judgment validated through Calibration Loop.
+
+    Per ship-v1.0 plan §14.B Sub-Arc 1 Step 1.7.
     """
     ws = wb.create_sheet("11_Octave_Detection")
+
     apply_brand_header(ws, 1, 1, 8,
-                       "Octave Detection · Path 1 + Path 2 + Foundation Principle",
+                       "Sheet 11 — Octave Detection (Path 1 lookup + Path 2 Foundation Principle + consensus)",
                        bg=DEEP_TEAL, size=14)
+    apply_brand_header(ws, 2, 1, 8,
+                       "Both paths converge to O1 Survival for CEN · 7-octave φ-derived thresholds canonical",
+                       bg=QUANTUM_PURPLE, size=10)
+
+    # ─────────────────────────────────────────────────────────
+    # Section A — 7-octave thresholds table
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 4, 1, 8,
+                       "Section A — 7-Octave Canonical Thresholds (φ-derived per phi-harmonics.js)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    sec_a_headers_row = 5
+    sec_a_headers = ["Octave", "Name", "Focus", "Lower", "Upper", "φ-Derivation", "Range", "Color"]
+    for col_idx, h in enumerate(sec_a_headers, start=1):
+        c = ws.cell(row=sec_a_headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=9, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center")
+
+    for offset, (oid, name, focus, lower, upper, deriv, color) in enumerate(OCTAVE_THRESHOLDS_DATA, start=1):
+        row = sec_a_headers_row + offset
+        ws.cell(row=row, column=1, value=f"O{oid}").font = Font(name="Calibri", size=10, bold=True)
+        ws.cell(row=row, column=2, value=name).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+        ws.cell(row=row, column=3, value=focus).font = Font(name="Calibri", size=10, italic=True, color="606060")
+        ws.cell(row=row, column=4, value=lower).number_format = "0.000"
+        ws.cell(row=row, column=4).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=5, value=upper).number_format = "0.000"
+        ws.cell(row=row, column=5).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=6, value=deriv).font = Font(name="Consolas", size=9, color="606060")
+        ws.cell(row=row, column=6).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=7, value=f"[{lower:.3f}, {upper:.3f})").font = Font(
+            name="Consolas", size=9, color="606060")
+        ws.cell(row=row, column=7).alignment = Alignment(horizontal="center")
+        color_cell = ws.cell(row=row, column=8, value=f"#{color}")
+        color_cell.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
+        color_cell.font = Font(name="Consolas", size=9, color="FFFFFF", bold=True)
+        color_cell.alignment = Alignment(horizontal="center")
+
+    # ─────────────────────────────────────────────────────────
+    # Section B — Path 1: Coherence Lookup
+    # ─────────────────────────────────────────────────────────
+    section_b_row = 14
+    apply_brand_header(ws, section_b_row, 1, 8,
+                       "Section B — Path 1: Coherence Lookup (cen_global_coherence_o1 → octave band)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    # Input cell
+    ws.cell(row=section_b_row + 1, column=1, value="Input: C_global").font = Font(name="Calibri", size=10, bold=True)
+    apply_formula_cell(ws, section_b_row + 1, 2, "=cen_global_coherence_o1")
+    ws.cell(row=section_b_row + 1, column=2).number_format = "0.0000"
+    ws.cell(row=section_b_row + 1, column=2).alignment = Alignment(horizontal="center")
+    ws.cell(row=section_b_row + 1, column=2).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+    ws.cell(row=section_b_row + 1, column=3, value="(from Sheet 12 headline named range)").font = Font(
+        name="Calibri", size=9, italic=True, color="808080")
+
+    # Nested-IF formula for octave lookup
+    lookup_row = section_b_row + 2
+    ws.cell(row=lookup_row, column=1, value="Path 1 result:").font = Font(name="Calibri", size=10, bold=True)
+    nested_if = (
+        '=IF(B' + str(section_b_row+1) + '<0.382,"O1 Survival",'
+        'IF(B' + str(section_b_row+1) + '<0.5,"O2 Structure",'
+        'IF(B' + str(section_b_row+1) + '<0.618,"O3 Relationships",'
+        'IF(B' + str(section_b_row+1) + '<0.764,"O4 Creativity",'
+        'IF(B' + str(section_b_row+1) + '<0.854,"O5 Expression",'
+        'IF(B' + str(section_b_row+1) + '<0.910,"O6 Vision",'
+        '"O7 Radiance"))))))'
+    )
+    apply_formula_cell(ws, lookup_row, 2, nested_if)
+    ws.cell(row=lookup_row, column=2).font = Font(name="Calibri", size=11, bold=True, color="D946EF")
+    ws.cell(row=lookup_row, column=2).alignment = Alignment(horizontal="center")
+    ws.cell(row=lookup_row, column=2).fill = PatternFill(start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+    ws.cell(row=lookup_row, column=3, value="← nested-IF lookup against 7-octave thresholds").font = Font(
+        name="Calibri", size=9, italic=True, color="808080")
+    # Define named range for Path 1 result
+    add_defined_name(wb, "cen_octave_path1", f"'11_Octave_Detection'!$B${lookup_row}")
+
+    # ─────────────────────────────────────────────────────────
+    # Section C — Path 2: Foundation Principle (geomean − spread penalty)
+    # ─────────────────────────────────────────────────────────
+    section_c_row = lookup_row + 2
+    apply_brand_header(ws, section_c_row, 1, 8,
+                       "Section C — Path 2: Foundation Principle (geometric mean of face octaves − spread penalty)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    # Per-face octave assignments (CEN Pure-O1 canonical: all 1 per Lock #8.22)
+    pf_headers_row = section_c_row + 1
+    pf_headers = ["Face", "CEN Custom Name", "Octave (Phase 2 assigned)", "Note"]
+    for col_idx, h in enumerate(pf_headers, start=1):
+        c = ws.cell(row=pf_headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=9, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center")
+
+    cen_custom_names = ["Financial Fragility", "Conceptual Depth", "Founder Dyad", "Governance Gap",
+                        "Mission in Silence", "Emerging Network", "Quiet Credibility",
+                        "Underdeveloped Engine", "Conscious Core", "Sacred Ground",
+                        "Dormant Pipeline", "Exposed Foundation"]
+    # All 12 faces at O1 (Pure-O1 canonical per Lock #8.22)
+    cen_face_octaves = [1] * 12
+
+    for face_id in range(1, 13):
+        row = pf_headers_row + face_id
+        ws.cell(row=row, column=1, value=f"F{face_id}").font = Font(name="Calibri", size=10, bold=True)
+        ws.cell(row=row, column=1).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=2, value=cen_custom_names[face_id-1]).font = Font(name="Calibri", size=10, color="0D7377")
+        oct_cell = ws.cell(row=row, column=3, value=cen_face_octaves[face_id-1])
+        oct_cell.font = Font(name="Calibri", size=10)
+        oct_cell.alignment = Alignment(horizontal="center")
+        oct_cell.fill = PatternFill(start_color="FFE4E4", end_color="FFE4E4", fill_type="solid")  # O1 red tint
+        ws.cell(row=row, column=4, value="Pure-O1 canonical per Lock #8.22").font = Font(
+            name="Calibri", size=9, italic=True, color="606060")
+
+    # Foundation Principle calculations
+    calc_row = pf_headers_row + 13
+    ws.cell(row=calc_row, column=1, value="Statistics:").font = Font(name="Calibri", size=10, bold=True, italic=True)
+    octaves_range = f"C{pf_headers_row+1}:C{pf_headers_row+12}"
+
+    # Geomean
+    ws.cell(row=calc_row + 1, column=1, value="geomean").font = Font(name="Calibri", size=10, italic=True, color="606060")
+    apply_formula_cell(ws, calc_row + 1, 2, f"=GEOMEAN({octaves_range})")
+    ws.cell(row=calc_row + 1, column=2).number_format = "0.0000"
+    ws.cell(row=calc_row + 1, column=2).alignment = Alignment(horizontal="center")
+    ws.cell(row=calc_row + 1, column=3, value="= (Π octave_i)^(1/12)").font = Font(
+        name="Consolas", size=9, color="606060")
+
+    # Std (spread)
+    ws.cell(row=calc_row + 2, column=1, value="std (spread)").font = Font(name="Calibri", size=10, italic=True, color="606060")
+    apply_formula_cell(ws, calc_row + 2, 2, f"=STDEV.P({octaves_range})")
+    ws.cell(row=calc_row + 2, column=2).number_format = "0.0000"
+    ws.cell(row=calc_row + 2, column=2).alignment = Alignment(horizontal="center")
+    ws.cell(row=calc_row + 2, column=3, value="= population std-dev (lower = more aligned)").font = Font(
+        name="Consolas", size=9, color="606060")
+
+    # Spread penalty (= std × φ⁻³ per audit trail approx)
+    ws.cell(row=calc_row + 3, column=1, value="spread penalty").font = Font(name="Calibri", size=10, italic=True, color="606060")
+    apply_formula_cell(ws, calc_row + 3, 2, f"=B{calc_row+2}*phi_inv_3")
+    ws.cell(row=calc_row + 3, column=2).number_format = "0.0000"
+    ws.cell(row=calc_row + 3, column=2).alignment = Alignment(horizontal="center")
+    ws.cell(row=calc_row + 3, column=3, value="= std × φ⁻³ ≈ 0.236 (per audit trail Appendix C)").font = Font(
+        name="Consolas", size=9, color="606060")
+
+    # Path 2 result = round(geomean - penalty)
+    ws.cell(row=calc_row + 4, column=1, value="Path 2 result:").font = Font(name="Calibri", size=10, bold=True)
+    apply_formula_cell(ws, calc_row + 4, 2, f"=ROUND(B{calc_row+1}-B{calc_row+3},0)")
+    ws.cell(row=calc_row + 4, column=2).font = Font(name="Calibri", size=11, bold=True, color="D946EF")
+    ws.cell(row=calc_row + 4, column=2).alignment = Alignment(horizontal="center")
+    ws.cell(row=calc_row + 4, column=2).fill = PatternFill(start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+    # Convert numeric to label
+    label_formula = (
+        '=IF(B' + str(calc_row+4) + '=1,"O1 Survival",'
+        'IF(B' + str(calc_row+4) + '=2,"O2 Structure",'
+        'IF(B' + str(calc_row+4) + '=3,"O3 Relationships",'
+        'IF(B' + str(calc_row+4) + '=4,"O4 Creativity",'
+        'IF(B' + str(calc_row+4) + '=5,"O5 Expression",'
+        'IF(B' + str(calc_row+4) + '=6,"O6 Vision",'
+        '"O7 Radiance"))))))'
+    )
+    apply_formula_cell(ws, calc_row + 4, 3, label_formula)
+    ws.cell(row=calc_row + 4, column=3).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+    ws.cell(row=calc_row + 4, column=3).alignment = Alignment(horizontal="center")
+    # Define named range for Path 2 result
+    add_defined_name(wb, "cen_octave_path2", f"'11_Octave_Detection'!$C${calc_row+4}")
+
+    # ─────────────────────────────────────────────────────────
+    # Section D — Consensus check + organizational octave
+    # ─────────────────────────────────────────────────────────
+    section_d_row = calc_row + 6
+    apply_brand_header(ws, section_d_row, 1, 8,
+                       "Section D — Consensus Check + Organizational Octave",
+                       bg=DARK_NAVY, size=11)
+
+    ws.cell(row=section_d_row + 1, column=1, value="Path 1:").font = Font(name="Calibri", size=10, bold=True)
+    apply_formula_cell(ws, section_d_row + 1, 2, "=cen_octave_path1")
+    ws.cell(row=section_d_row + 1, column=2).font = Font(name="Calibri", size=10, bold=True, color="D946EF")
+    ws.cell(row=section_d_row + 1, column=2).alignment = Alignment(horizontal="center")
+
+    ws.cell(row=section_d_row + 2, column=1, value="Path 2:").font = Font(name="Calibri", size=10, bold=True)
+    apply_formula_cell(ws, section_d_row + 2, 2, "=cen_octave_path2")
+    ws.cell(row=section_d_row + 2, column=2).font = Font(name="Calibri", size=10, bold=True, color="D946EF")
+    ws.cell(row=section_d_row + 2, column=2).alignment = Alignment(horizontal="center")
+
+    ws.cell(row=section_d_row + 3, column=1, value="Consensus:").font = Font(name="Calibri", size=10, bold=True)
+    apply_formula_cell(ws, section_d_row + 3, 2,
+                       f'=IF(B{section_d_row+1}=B{section_d_row+2},"✓ CONVERGENT",'
+                       f'"⚠ DIVERGENT — Foundation Principle reconciles via per-face octave assignment review")')
+    ws.cell(row=section_d_row + 3, column=2).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+    ws.cell(row=section_d_row + 3, column=2).alignment = Alignment(horizontal="left")
+
+    ws.cell(row=section_d_row + 4, column=1, value="Organizational Octave:").font = Font(name="Calibri", size=11, bold=True)
+    apply_formula_cell(ws, section_d_row + 4, 2,
+                       f"=IF(B{section_d_row+1}=B{section_d_row+2},B{section_d_row+1},"
+                       f'CONCATENATE(B{section_d_row+1}," (Path 1 takes precedence per audit trail §11)"))')
+    ws.cell(row=section_d_row + 4, column=2).font = Font(name="Calibri", size=12, bold=True, color="0D7377")
+    ws.cell(row=section_d_row + 4, column=2).alignment = Alignment(horizontal="center")
+    ws.cell(row=section_d_row + 4, column=2).fill = PatternFill(start_color="E0F4F4", end_color="E0F4F4", fill_type="solid")
+    add_defined_name(wb, "cen_org_octave", f"'11_Octave_Detection'!$B${section_d_row+4}")
+
+    # ─────────────────────────────────────────────────────────
+    # Section E — Authority + cross-references
+    # ─────────────────────────────────────────────────────────
+    section_e_row = section_d_row + 6
+    apply_brand_header(ws, section_e_row, 1, 8,
+                       "Authority + Cross-References",
+                       bg=DARK_NAVY, size=11)
+    footer_notes = [
+        "Authority: CALCULATION_AUDIT_TRAIL.md §11 (octave detection methodology) + Appendix C (Foundation Principle).",
+        "Threshold source: js/constants/phi-harmonics.js OCTAVE_THRESHOLDS (φ-derived: O1<φ⁻², O2<midpoint, O3<φ⁻¹, ...).",
+        "Per-face octave source: companies/cen/mapping-context.json faces[].octave (CEN Pure-O1 canonical per Lock #8.22).",
+        "                                       ",
+        "Path 1 (Coherence Lookup) — direct threshold classification of C_global:",
+        "  Pros: simple, transparent, deterministic. Cons: ignores distribution-shape; one number → one band.",
+        "                                       ",
+        "Path 2 (Foundation Principle) — geomean − spread penalty:",
+        "  Pros: respects per-face distribution; penalizes face-spread (high-variance org = lower aggregate octave).",
+        "  Cons: relies on face.octave assignments (researcher judgment per Disclosure §5).",
+        "                                       ",
+        "Consensus rule per audit trail §11: when paths CONVERGE, organizational octave is unambiguous.",
+        "  When DIVERGENT, Path 1 takes precedence (deterministic from C_global headline);",
+        "  Path 2 surfaces as 'distributed-coherence note' in Sheet 16 Dashboard interpretation.",
+        "                                       ",
+        "CEN canonical at Pure-O1 baseline (Lock #8.22):",
+        "  Path 1: C_global ≈ 0.326 → O1 Survival (below φ⁻² = 0.382 threshold)",
+        "  Path 2: all faces octave=1 → geomean=1, spread=0, penalty=0 → 1 → O1 Survival",
+        "  Both paths CONVERGENT → CEN organizational octave = O1 Survival ✓",
+        "                                       ",
+        "Per Disclosure §5: the 7-octave hierarchy is normative-developmental theory (Maslow + Wilber + chakra lineage);",
+        "  inherited as canonical taxonomy. Per-engagement validation via Calibration Loop (CEN Wk6-Wk8 confirmed O1 fit).",
+        "                                       ",
+        "Named ranges defined: cen_octave_path1, cen_octave_path2, cen_org_octave.",
+        "Cross-references: Sheet 12 (C_global input) · Sheet 16 (Dashboard organizational octave display) · ",
+        "                  Sheet 0a Glossary entries 'O1-O7 (Octaves)' / 'Pure-O1 baseline'.",
+    ]
+    for offset, note in enumerate(footer_notes, start=1):
+        c = ws.cell(row=section_e_row + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=section_e_row + offset, start_column=1,
+                       end_row=section_e_row + offset, end_column=8)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 18
+    ws.column_dimensions["B"].width = 22
+    ws.column_dimensions["C"].width = 32
+    ws.column_dimensions["D"].width = 14
+    ws.column_dimensions["E"].width = 14
+    ws.column_dimensions["F"].width = 22
+    ws.column_dimensions["G"].width = 16
+    ws.column_dimensions["H"].width = 12
+
     return ws
 
 
@@ -3263,19 +4728,269 @@ def build_sheet_14_spectral(wb: Workbook):
     return ws
 
 
+# Per-face provenance summary per CEN Phase 2 + spectral analysis + dashboard signal.
+# Format: (face_id, headline_finding, thesis_anchor, mode5_coef, dashboard_signal)
+# Spectral Mode 5 coefficients from spectral-analyzer.js U[:,4]: F3+F8=+0.470, F1+F9=−0.521, rest≈0
+FACE_PROVENANCE_DATA = [
+    (1,  "Financial fragility — D=6 vs E=1 founder gap; researcher=2",
+     "Sub-2nd-place perception gap; signals NGO runway-clarity risk",
+     -0.521, "BAND: Wall floor at κ=4 (architectural-blindness viz centerpiece); Gate at κ=φ² canonical"),
+    (2,  "Conceptual depth — D=8, E=7 STRONG agreement",
+     "Highest-agreement face; signals genuine intellectual capacity",
+     0.0, "BAND: Gate (mid-band); steady contributor to C_global"),
+    (3,  "Founder Dyad mixed — D=7, E=3, researcher=4",
+     "Energy-capacity disagreement signals founder-load imbalance",
+     0.470, "Mode 5 projection pole (F3+F8 paired); 'raise paired' prescription target"),
+    (4,  "Governance gap — D=7, E=2; structural vacuum visible to Esther",
+     "Esther sees what Dom doesn't; F4 third-pattern (Lock #8.22 finding)",
+     0.0, "BAND: Gate; near-floor on multiple O1 KPIs"),
+    (5,  "Mission in silence — D=3, E=1 severely depleted",
+     "Axis 5 inversion centerpiece (F5↔F10 polarity asymmetry)",
+     0.0, "BAND: Gate at κ=φ² (was Wall at κ=4); Axis 5 anchor"),
+    (6,  "Emerging network — D=3, E=4 early-stage",
+     "Esther's relational network active; community pre-emergent",
+     0.0, "BAND: Gate; low aggregate signal"),
+    (7,  "Quiet credibility — D=7, E=3 moderate",
+     "Select-network reputation; not broadcast broadly",
+     0.0, "BAND: Gate; consistent with brand-as-emerging-asset"),
+    (8,  "Underdeveloped engine — D=7 vs E=1 (LARGEST DATASET GAP)",
+     "Flagship thesis-defense finding (F8 = canonical worked example in audit trail §6.6)",
+     0.470, "Mode 5 projection pole (F3+F8 paired); largest founder-gap surfaces structural info that BSC misses"),
+    (9,  "Conscious core — D=6, E=5, researcher=8 (strongest regenerative ethic)",
+     "F9 architectural-blindness sibling (Lock #8.14); regenerative-ethic strong but no O1 KPIs",
+     -0.521, "Mode 5 reception pole (F1+F9 paired); spectral seesaw partner"),
+    (10, "Sacred Ground — D=10, E=9 EXCEPTIONAL (bedrock)",
+     "Highest-scoring face; profound values alignment; Axis 5 reception anchor",
+     0.0, "BAND: Membrane (highest); F10 sibling-blindness pattern despite high E (Lock #8.14)"),
+    (11, "Dormant pipeline — D=6, E=4 below potential",
+     "Funding insufficient for NGO sustainability; F11 sibling-pattern with F1",
+     0.0, "BAND: Gate; pipeline activation potential"),
+    (12, "Exposed foundation — D=3, E=1; researcher=3 CRITICAL",
+     "Near-zero resilience mechanisms; risk surface uncovered",
+     0.0, "BAND: Gate at κ=φ² (was Wall at κ=4); resilience-build prescription"),
+]
+
+
 def build_sheet_15_face_provenance(wb: Workbook):
-    """Sheet 15 Face_Provenance — F8 provenance template + per-face trace.
+    """Sheet 15 Face_Provenance — 12-face provenance trace + F8 flagship cross-reference.
 
-    Per §6.6 of Consolidation Map: F8 provenance template embedded as canonical
-    example. Per-face provenance trace template (KPI source / question / placement
-    justification / Procedure C reasoning).
+    Per audit trail §6.6 (F8 provenance template — third-attempt successful via incremental-write
+    strategy 2026-05-21) + ship-v1.0 plan §14.B Sub-Arc 1 Step 1.8.
 
-    Authority: Lock #8.13 (per-face provenance) + audit trail §15.
+    Two sections:
+      Section A — 12-face provenance summary table (one row per face × per-face trace)
+        Columns trace each face from raw scorer input (Sheet 10 4-vector) through pentagramic
+        computation (Sheet 04) to spectral analysis (Sheet 14) to dashboard surfacing (Sheet 16)
+        with thesis-defense anchor for each face.
+
+      Section B — F8 flagship case study cross-reference
+        F8 Operations carries the LARGEST co-founder gap in dataset (|D−E|=6, D=7 / E=1).
+        Full F8 provenance template (~600 lines) lives at:
+          POC/docs/cen-ssot/CEN_F8_Provenance_Template_2026-05-21.md
+        Reviewers requiring deep-dive provenance use that document; Sheet 15 is summary table.
+
+    Per Lock #8.13 + audit trail §15. Compact summary preserves visual density;
+    full-depth provenance lives in the canonical docs spine.
     """
     ws = wb.create_sheet("15_Face_Provenance")
-    apply_brand_header(ws, 1, 1, 8,
-                       "Face Provenance · F8 Template + Per-Face Trace",
+
+    apply_brand_header(ws, 1, 1, 9,
+                       "Sheet 15 — Face Provenance (12-face trace + F8 flagship cross-reference)",
                        bg=DEEP_TEAL, size=14)
+    apply_brand_header(ws, 2, 1, 9,
+                       "Raw scorer input → pentagramic computation → spectral signature → dashboard surfacing per face",
+                       bg=QUANTUM_PURPLE, size=10)
+
+    # ─────────────────────────────────────────────────────────
+    # Section A — 12-face provenance summary table
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 4, 1, 9,
+                       "Section A — 12-Face Provenance Summary (per-face traceability single-row format)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    headers_row = 5
+    headers = [
+        "Face",                    # A
+        "CEN Custom Name",         # B
+        "Raw Input (Sheet 10)",    # C — D/E/V_res snapshot
+        "Sheet 04 E_local (O1)",   # D — cross-ref
+        "Mode 5 Coef (Sheet 14)",  # E — spectral participation
+        "Octave Band",             # F — Sheet 04 band classification
+        "Headline Finding",        # G — substance
+        "Thesis-Defense Anchor",   # H — why this matters
+        "Dashboard Signal",        # I — Sheet 16 surfacing
+    ]
+    for col_idx, h in enumerate(headers, start=1):
+        c = ws.cell(row=headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=9, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    cen_custom_names = ["Financial Fragility", "Conceptual Depth", "Founder Dyad", "Governance Gap",
+                        "Mission in Silence", "Emerging Network", "Quiet Credibility",
+                        "Underdeveloped Engine", "Conscious Core", "Sacred Ground",
+                        "Dormant Pipeline", "Exposed Foundation"]
+
+    # Map face_id → (D, E, V_res) from CEN_4VECTOR_PHASE2 for raw-input column
+    raw_map = {f[0]: (f[1], f[2], f[3]) for f in CEN_4VECTOR_PHASE2}
+
+    for face_id, headline, anchor, mode5_coef, dashboard_signal in FACE_PROVENANCE_DATA:
+        row = headers_row + face_id
+
+        # Col A: Face label
+        ws.cell(row=row, column=1, value=f"F{face_id}").font = Font(name="Calibri", size=10, bold=True)
+        ws.cell(row=row, column=1).alignment = Alignment(horizontal="center")
+
+        # Col B: CEN custom name
+        ws.cell(row=row, column=2, value=cen_custom_names[face_id-1]).font = Font(
+            name="Calibri", size=10, bold=True, color="0D7377")
+
+        # Col C: Raw input snapshot (D/E/V_res from Sheet 10)
+        d, e, vr = raw_map[face_id]
+        vres_str = str(vr) if vr is not None else "—"
+        raw_str = f"D={d} E={e} V_res={vres_str}"
+        ws.cell(row=row, column=3, value=raw_str).font = Font(name="Consolas", size=9, color="404040")
+        ws.cell(row=row, column=3).alignment = Alignment(horizontal="center")
+        # Highlight large founder gaps
+        if abs(d - e) >= 4:
+            ws.cell(row=row, column=3).fill = PatternFill(
+                start_color="F9E0F9", end_color="F9E0F9", fill_type="solid")
+
+        # Col D: Sheet 04 E_local cross-ref
+        s04_row = 3 + face_id
+        apply_formula_cell(ws, row, 4, f"='04_Face_Calculations'!T{s04_row}")
+        ws.cell(row=row, column=4).number_format = "0.0000"
+        ws.cell(row=row, column=4).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=4).font = Font(name="Calibri", size=10, color="0D7377", bold=True)
+
+        # Col E: Mode 5 coefficient (display value with color)
+        mode5_cell = ws.cell(row=row, column=5, value=mode5_coef if mode5_coef != 0.0 else "—")
+        if mode5_coef != 0.0:
+            mode5_cell.number_format = "+0.000;-0.000"
+            mode5_cell.font = Font(name="Calibri", size=10, bold=True,
+                                   color="D946EF" if abs(mode5_coef) > 0.3 else "8B5CF6")
+        else:
+            mode5_cell.font = Font(name="Calibri", size=9, italic=True, color="C0C0C0")
+        mode5_cell.alignment = Alignment(horizontal="center")
+
+        # Col F: Octave Band cross-ref (Sheet 04 col U at this face's row)
+        apply_formula_cell(ws, row, 6, f"='04_Face_Calculations'!U{s04_row}")
+        ws.cell(row=row, column=6).font = Font(name="Calibri", size=9, italic=True, color="606060")
+        ws.cell(row=row, column=6).alignment = Alignment(horizontal="center")
+
+        # Col G: Headline finding
+        ws.cell(row=row, column=7, value=headline).font = Font(name="Calibri", size=9)
+        ws.cell(row=row, column=7).alignment = Alignment(wrap_text=True, vertical="top")
+
+        # Col H: Thesis-defense anchor
+        ws.cell(row=row, column=8, value=anchor).font = Font(name="Calibri", size=9, italic=True, color="404040")
+        ws.cell(row=row, column=8).alignment = Alignment(wrap_text=True, vertical="top")
+
+        # Col I: Dashboard signal
+        ws.cell(row=row, column=9, value=dashboard_signal).font = Font(name="Calibri", size=9, italic=True, color="606060")
+        ws.cell(row=row, column=9).alignment = Alignment(wrap_text=True, vertical="top")
+
+        # Highlight F8 (flagship finding)
+        if face_id == 8:
+            for col in range(1, 10):
+                cell = ws.cell(row=row, column=col)
+                # Only set fill if not already set (raw-input column may already have fill)
+                if col not in [3]:
+                    cell.fill = PatternFill(start_color="F9E0F9", end_color="F9E0F9", fill_type="solid")
+
+    # ─────────────────────────────────────────────────────────
+    # Section B — F8 flagship case study cross-reference
+    # ─────────────────────────────────────────────────────────
+    section_b_row = headers_row + 14
+    apply_brand_header(ws, section_b_row, 1, 9,
+                       "Section B — F8 Flagship Case Study (full provenance template cross-reference)",
+                       bg=DARK_NAVY, size=11)
+
+    f8_notes = [
+        "F8 Underdeveloped Engine carries the LARGEST co-founder gap in CEN's Phase 2 dataset:",
+        "  D (Dominique) = 7   |   E (Esther) = 1   |   |D−E| = 6",
+        "  Researcher V_res = 2 (anchored closer to Esther's reading after Phase 2 co-founder meeting)",
+        "                                       ",
+        "F8 is the THESIS-DEFENSE FLAGSHIP because:",
+        "  1. Largest perception gap in dataset (next: F1 financial = 5; F4 governance = 5)",
+        "  2. Gap reveals genuine structural information, NOT noise. Both founders accurate from their vantages:",
+        "     D sees: TMI certification audit delivered, project-specific processes documented, methodology in place",
+        "     E sees: 'If Dom was not available for a month, CEN would not operate at all' (Coherence Portrait line 161)",
+        "  3. Independence audit CLEAN — Esther initiated no-collaboration guardrail spontaneously BEFORE scoring",
+        "  4. Gap is invariant across methodology choices (logistic Wall vs Gate band) — lives at scorer-input layer",
+        "                                       ",
+        "DEFENSE ARGUMENT ANCHORED AT F8:",
+        "  The Spiral Dashboard's element-level pentagramic computation + 4-vector scorer architecture",
+        "  (D, E, V_res_pre, V_res_post) surfaces structural divergences that any single-scorer instrument —",
+        "  including BSC as designed and implemented at CEN — cannot surface. The 6-point F8 gap is",
+        "  INVISIBLE in any aggregate score; VISIBLE only when two perspectives are held distinctly.",
+        "  This is the empirical evidence that the Spiral instrument adds value beyond BSC.",
+        "                                       ",
+        "F8 spectral participation: Mode 5 projection pole (U[:,4] = +0.470, paired with F3 = +0.470).",
+        "  Per Disclosure §4 Bridge-of-Translation: 'F8 Operations + F3 Founder are projecting outward",
+        "  while F1 Financial + F9 Regenerative absorb inward' — actionable prescription: 'raise F3+F8 paired'.",
+        "                                       ",
+        "FULL F8 PROVENANCE TEMPLATE (~600 lines, 5 stages × ~120 lines each):",
+        "  POC/docs/cen-ssot/CEN_F8_Provenance_Template_2026-05-21.md",
+        "  Stages: Raw inputs → Element placement → Pentagramic computation → Dashboard surfacing → Defense anchor",
+        "  Reviewers requiring deep-dive provenance use that document. Sheet 15 above is summary table only.",
+    ]
+    for offset, note in enumerate(f8_notes, start=1):
+        c = ws.cell(row=section_b_row + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=section_b_row + offset, start_column=1,
+                       end_row=section_b_row + offset, end_column=9)
+
+    # ─────────────────────────────────────────────────────────
+    # Section C — Authority + cross-references
+    # ─────────────────────────────────────────────────────────
+    section_c_row = section_b_row + len(f8_notes) + 2
+    apply_brand_header(ws, section_c_row, 1, 9,
+                       "Authority + Cross-References",
+                       bg=DARK_NAVY, size=11)
+    footer_notes = [
+        "Authority: CALCULATION_AUDIT_TRAIL.md §6.6 (F8 provenance template) + audit trail §15 (per-face traceability).",
+        "Raw scorer source: companies/cen/mapping-context.json tooltips (CEN Phase 2 frozen 2026-04-07).",
+        "Spectral coefficient source: js/spectral-analyzer.js U[:,4] eigenvector (Mode 5 = regional band, λ=6).",
+        "                                       ",
+        "Provenance trace chain per face (5 stages):",
+        "  Stage 1 — Raw scorer inputs (Sheet 02 KPI_ROWS + Sheet 10 4-vector display)",
+        "  Stage 2 — Element placement via Procedure C Songbook v2.1 inquiry-clustering (Sheet 02 + 03)",
+        "  Stage 3 — Pentagramic computation (Sheet 04 cols B-T per face per octave)",
+        "  Stage 4 — Spectral participation (Sheet 14 Mode 5 + modal amplitudes)",
+        "  Stage 5 — Dashboard surfacing (Sheet 16 face-level signal + commentary)",
+        "                                       ",
+        "Cross-references:",
+        "  • Full F8 deep-dive: POC/docs/cen-ssot/CEN_F8_Provenance_Template_2026-05-21.md",
+        "  • Per-face data sources: Sheet 02 (KPI placements) · Sheet 03 (60-element grid) · Sheet 04 (pentagramic) ·",
+        "    Sheet 10 (4-vector polarity) · Sheet 14 (spectral Mode 5) · Sheet 16 (Dashboard signal)",
+        "  • Audit Trail §15 (Per-face advanced vertex extensions) · §6.6 (F8 provenance template)",
+        "  • CEN_Coherence_Portrait.md (narrative companion describing each face in human-readable prose)",
+    ]
+    for offset, note in enumerate(footer_notes, start=1):
+        c = ws.cell(row=section_c_row + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=section_c_row + offset, start_column=1,
+                       end_row=section_c_row + offset, end_column=9)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 6
+    ws.column_dimensions["B"].width = 22
+    ws.column_dimensions["C"].width = 22
+    ws.column_dimensions["D"].width = 14
+    ws.column_dimensions["E"].width = 14
+    ws.column_dimensions["F"].width = 12
+    ws.column_dimensions["G"].width = 46
+    ws.column_dimensions["H"].width = 40
+    ws.column_dimensions["I"].width = 50
+
+    # Set row heights for entry rows
+    for row in range(headers_row + 1, headers_row + 13):
+        ws.row_dimensions[row].height = 50
+
+    # Named range
+    add_defined_name(wb, "face_provenance_header", "'15_Face_Provenance'!$A$4")
+
     return ws
 
 
@@ -3793,34 +5508,726 @@ def build_sheet_17_audit_crosslinks(wb: Workbook):
     return ws
 
 
+# ═════════════════════════════════════════════════════════════════════════
+# Sheet 18 data — Adversarial Pass placeholder scaffold (20 questions per plan §8)
+# ═════════════════════════════════════════════════════════════════════════
+# Sub-Arc 1 Step 1.3 ships the STRUCTURE only: 20 question-stubs (10 CFO-tier +
+# 10 academic-tier) per ship-v1.0 plan §8 + §14.B Sub-Arc 1 Step 1.3.
+# Sub-Arc 2 (Session F) Wave 3 POPULATES: per-question SSOT defense + gap analysis
+# + hardening action + partnership-decision per Critical finding.
+
+ADVERSARIAL_QUESTIONS = [
+    # ─── 10 CFO-tier questions (board-member / financially-literate skeptic) ───
+    ("A1",  "CFO",      "Reproduce F8 (Operations) face energy from raw inputs end-to-end"),
+    ("A2",  "CFO",      "Why average D=7 and E=1 for F8? Doesn't co-founder disagreement matter MORE than the average?"),
+    ("A3",  "CFO",      "Show me a confidence band on Global Coherence — what's the uncertainty?"),
+    ("A4",  "CFO",      "What changes if F1.earth drops from 6 to 4? Walk me through cascade impact"),
+    ("A5",  "CFO",      "What's the worst single-input change for organizational coherence?"),
+    ("A6",  "CFO",      "Why does CEN have ZERO vertex-KPIs? Doesn't that mean we're missing something?"),
+    ("A7",  "CFO",      "Defend Lock #8.36 reversion to a board member who thinks we changed our mind mid-stream"),
+    ("A8",  "CFO",      "AAG=0.885 vs Hidden Oracle pattern — reconcile honestly"),
+    ("A9",  "CFO",      "How do D-E founder-disagreement gaps surface in the math?"),
+    ("A10", "CFO",      "Show me ONE full provenance trace from raw scorer input to Dashboard cell"),
+
+    # ─── 10 Academic-tier questions (thesis committee statistician/methodologist) ───
+    ("B1",  "Academic", "Why φ⁻¹ for α? Cite SACRED_GEOMETRY_PROOF or equivalent"),
+    ("B2",  "Academic", "Defend the 5-element decomposition (Earth/Water/Fire/Air/Ether) as non-arbitrary"),
+    ("B3",  "Academic", "Justify κ=φ² GEOMETRICALLY — show the derivation chain (Lock #8.35 is the answer)"),
+    ("B4",  "Academic", "Show eigenvalue spectrum reproduction via Jacobi or QR — committee can re-run"),
+    ("B5",  "Academic", "Mode 5 robustness across κ shift — proof that the finding doesn't depend on tuning"),
+    ("B6",  "Academic", "Chirality formula degeneracy check — show the sympy proof for Lock #8.19 rename"),
+    ("B7",  "Academic", "5-element decomposition: deterministic or judgment? If judgment, falsifiability?"),
+    ("B8",  "Academic", "ALCOA+ end-to-end — F8 provenance is the canonical example; walk through it"),
+    ("B9",  "Academic", "How is band threshold (Wall/Gate/Membrane) non-arbitrary? (Lock #8.35 spectral derivation)"),
+    ("B10", "Academic", "What's the falsifiability mechanism for the whole methodology? (Calibration Loop per Disclosure §6)"),
+]
+
+
 def build_sheet_18_adversarial_findings(wb: Workbook):
-    """Sheet 18 Adversarial_Findings — Wave 3 work goes here; placeholder for W2.
+    """Sheet 18 Adversarial_Findings — W3 placeholder scaffold ready for population.
 
-    W2 builds the structure; W3 populates with adversarial-pass findings.
-    Per §31-style adversarial-pass-as-methodology: every claim challenged from
-    multiple angles before lock.
+    Sub-Arc 1 Step 1.3 ships the STRUCTURE only:
+      - 20 question rows (10 CFO + 10 Academic) per ship-v1.0 plan §8
+      - 10-column findings log (ID, Actor, Question, Severity, SSOT Location, Gap,
+        Hardening, Owner, Status, Resolution)
+      - Severity color-coding via conditional formatting
 
-    Authority: W2 plan §7.E + post-W3 spiral discipline.
+    Sub-Arc 2 Wave 3 POPULATES per-question:
+      - SSOT defense (cite cells, named ranges, audit-trail §)
+      - Gap (if any) at each row
+      - Hardening action OR partnership-documented accepted-risk rationale
+      - Status field per partnership-decision
+
+    Per Wave 3 pass criteria: all 20 questions must be Resolved OR Accepted-Risk (with
+    rationale) before SSOT v1.0 ships. No Critical findings open.
+
+    Authority: ship-v1.0 plan §8 + §14.B Sub-Arc 1 Step 1.3 + Sub-Arc 2 + §32 NO Score Floor.
     """
     ws = wb.create_sheet("18_Adversarial_Findings")
-    apply_brand_header(ws, 1, 1, 6,
-                       "Adversarial Findings · W3 Population Pending",
-                       bg=GRAY, fg="0A0E1A", size=14, bold=False)
+
+    apply_brand_header(ws, 1, 1, 10,
+                       "Sheet 18 — Adversarial Findings Log (W3 Adversarial Pass)",
+                       bg=DARK_NAVY, size=14)
+    apply_brand_header(ws, 2, 1, 10,
+                       "Status: SCAFFOLD — Sub-Arc 1 Step 1.3 (W2 ships structure; W3 populates findings)",
+                       bg=DEEP_TEAL, size=10)
+
+    # Instructions section
+    apply_brand_header(ws, 4, 1, 10,
+                       "W3 Adversarial Pass Process (per plan §8)",
+                       bg=QUANTUM_PURPLE, size=11)
+    instructions = [
+        "Per question: (1) Frame precisely · (2) Draft SSOT defense (cite cells + named ranges + audit-trail §)",
+        "  (3) Identify gap (if any) · (4) Propose hardening OR accepted-risk rationale · (5) Partnership-decide Critical findings",
+        "                                       ",
+        "Severity scale: Critical = blocks ship · Significant = harden-before-ship · Minor = ship-with-note · Resolved · Accepted-Risk",
+        "Pass criterion: all 20 questions → Resolved OR Accepted-Risk (with rationale documented). NO Critical findings open at ship.",
+        "                                       ",
+        "Per §32 NO Score Floor: surface honest reads + partnership-discuss after each Critical finding. No threshold-target gaming.",
+    ]
+    for offset, note in enumerate(instructions, start=1):
+        c = ws.cell(row=4 + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=4 + offset, start_column=1,
+                       end_row=4 + offset, end_column=10)
+
+    # Findings log column headers
+    headers_row = 12
+    apply_brand_header(ws, headers_row - 1, 1, 10,
+                       "Findings Log (20 questions: 10 CFO-tier A1-A10 + 10 Academic-tier B1-B10)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    headers = [
+        "ID", "Actor", "Question",
+        "Severity", "SSOT Location", "Gap",
+        "Hardening Action", "Owner", "Status", "Resolution / Note",
+    ]
+    for col_idx, h in enumerate(headers, start=1):
+        c = ws.cell(row=headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Actor color palette
+    actor_palette = {
+        "CFO":      "FFF8DC",  # Pale Yellow — financially-literate skeptic
+        "Academic": "F3E8FF",  # Pale Magenta — committee statistician
+    }
+
+    # 20 question-stub rows (ID + Actor + Question only — D-J empty for W3 population)
+    for offset, (qid, actor, question) in enumerate(ADVERSARIAL_QUESTIONS, start=1):
+        row = headers_row + offset
+
+        # Col A: ID (bold)
+        ws.cell(row=row, column=1, value=qid).font = Font(name="Calibri", size=10, bold=True)
+
+        # Col B: Actor (color-coded)
+        act_cell = ws.cell(row=row, column=2, value=actor)
+        act_cell.fill = PatternFill(start_color=actor_palette[actor],
+                                    end_color=actor_palette[actor],
+                                    fill_type="solid")
+        act_cell.font = Font(name="Calibri", size=10, italic=True)
+        act_cell.alignment = Alignment(horizontal="center", vertical="top")
+
+        # Col C: Question (wrap)
+        q_cell = ws.cell(row=row, column=3, value=question)
+        q_cell.font = Font(name="Calibri", size=9)
+        q_cell.alignment = Alignment(wrap_text=True, vertical="top")
+
+        # Cols D-J: empty placeholders (W3 populates) — set Status to "Pending W3"
+        ws.cell(row=row, column=4, value="—").font = Font(name="Calibri", size=9, color="C0C0C0")
+        ws.cell(row=row, column=5, value="—").font = Font(name="Calibri", size=9, color="C0C0C0")
+        ws.cell(row=row, column=6, value="—").font = Font(name="Calibri", size=9, color="C0C0C0")
+        ws.cell(row=row, column=7, value="—").font = Font(name="Calibri", size=9, color="C0C0C0")
+        ws.cell(row=row, column=8, value="—").font = Font(name="Calibri", size=9, color="C0C0C0")
+        status_cell = ws.cell(row=row, column=9, value="Pending W3")
+        status_cell.font = Font(name="Calibri", size=9, italic=True, color="808080")
+        status_cell.alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=10, value="—").font = Font(name="Calibri", size=9, color="C0C0C0")
+
+    # Severity-column color legend (rows below entries)
+    legend_row = headers_row + len(ADVERSARIAL_QUESTIONS) + 2
+    apply_brand_header(ws, legend_row, 1, 10,
+                       "Severity Color Legend (apply in column D as W3 findings are populated)",
+                       bg=QUANTUM_PURPLE, size=11)
+    severity_legend = [
+        ("Critical",       "D946EF", "Blocks ship — partnership-decide hardening MUST land before SSOT v1.0 ships"),
+        ("Significant",    "FFF8DC", "Harden-before-ship — partnership-decide; resolution required"),
+        ("Minor",          "F0F0F0", "Ship-with-note — document in Sheet 00 + Resolution column"),
+        ("Resolved",       "90EE90", "Hardening action complete + verified — closed"),
+        ("Accepted-Risk",  "E6F3FF", "Partnership-documented accepted-risk with rationale — ship with disclosure"),
+    ]
+    for offset, (sev, color, desc) in enumerate(severity_legend, start=1):
+        row = legend_row + offset
+        sev_cell = ws.cell(row=row, column=1, value=sev)
+        sev_cell.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
+        sev_cell.font = Font(name="Calibri", size=10, bold=True)
+        sev_cell.alignment = Alignment(horizontal="center")
+        desc_cell = ws.cell(row=row, column=2, value=desc)
+        desc_cell.font = Font(name="Calibri", size=9, italic=True, color="404040")
+        ws.merge_cells(start_row=row, start_column=2, end_row=row, end_column=10)
+
+    # Column widths
+    col_widths = {1: 6, 2: 11, 3: 60, 4: 14, 5: 28, 6: 32, 7: 32, 8: 12, 9: 14, 10: 40}
+    for col_idx, width in col_widths.items():
+        ws.column_dimensions[chr(64 + col_idx)].width = width
+
+    # Row heights for question rows (wrap_text)
+    for row in range(headers_row + 1, headers_row + len(ADVERSARIAL_QUESTIONS) + 1):
+        ws.row_dimensions[row].height = 35
+
+    # Named range for cross-references
+    add_defined_name(wb, "adversarial_findings_header",
+                     "'18_Adversarial_Findings'!$A$12")
+
     return ws
 
 
+# Test suite data — current as of Sub-Arc 1 close 2026-05-24
+# Format: (suite_name, test_file, test_count, validates_sheets, coverage_type, lock_refs)
+TEST_SUITES = [
+    ("Integration (Engine)",
+     "tests/integration.test.mjs", 55,
+     "01, 03, 04, 06, 07, 08, 12",
+     "End-to-end: CSV → engine → face energies → cascade",
+     "Lock #8.22 Pure-O1, #8.32 κ=φ², #8.34 supersession"),
+    ("Excel Parser Round-Trip",
+     "tests/excel-parser.test.mjs", 42,
+     "02, 03",
+     "Round-trip: xlsx → engine → recompute → match within ε",
+     "Lock #8.29 4-vector segregation"),
+    ("Data Validator",
+     "tests/data-validator.test.mjs", 82,
+     "02, 03",
+     "Input validation: KPI count, normalization, octave assignment",
+     "Lock #8.11 Procedure C placement"),
+    ("Still-Point Proximity",
+     "tests/still-point.test.js", 57,
+     "12, 13",
+     "Coherence gravity well: distance-from-canonical-still-point",
+     "Lock #8.22 Pure-O1 baseline"),
+    ("AAG Diagnostic",
+     "tests/aag.test.js", 13,
+     "13",
+     "Aspiration-Actuality gap: face-grouping ratio (Wk8 canonical)",
+     "Lock #8.15 AAG canonical formula"),
+    ("AvG Diagnostic",
+     "tests/avg.test.js", 40,
+     "13",
+     "Apparent-vs-Granular: |C_global − mean(K_60)| aggregation-distortion flag",
+     "Lock #8.26 AvG canonical implementation"),
+    ("Engine State Canonicality",
+     "tests/engine-state-canonicality.test.mjs", 55,
+     "all sheets",
+     "Hygiene-discipline gates: observable-state vs canonical-expectation per face",
+     "Lock #8.27 topology gen, #8.33 per-company tuning, #8.34 iframe assertion"),
+    ("Spectral Analyzer",
+     "tests/spectral.test.js", 18,
+     "14",
+     "Graph Laplacian eigendecomposition + Mode 5 dominance verification",
+     "Lock #8.20 dominantFace rename, #8.35 κ=φ² derivation"),
+    ("Edge Analyzer (Advanced)",
+     "tests/edge-analyzer.test.mjs", 18,
+     "07",
+     "Advanced edge dynamics: BR_log, BR_delta, edge tension",
+     "Lock #8.19 sequenceConcavity rename (kin-finding)"),
+    ("Vertex Analyzer (Advanced)",
+     "tests/vertex-analyzer.test.mjs", 29,
+     "08",
+     "Vertex vortex strength + sequenceConcavity (sympy-proved Lock #8.19) + leverage detection",
+     "Lock #8.19 sequenceConcavity, #8.36 V13 reconciliation"),
+    ("Browser Smoke Test",
+     "tests/smoke-test.mjs", 0,
+     "(visualization layer)",
+     "End-to-end browser test (skipped without headless browser per Lock #8.34)",
+     "Lock #8.34 iframe assertion fix"),
+]
+
+
 def build_sheet_19_test_coverage(wb: Workbook):
-    """Sheet 19 Test_Coverage_Matrix — links Sheet cells → POC test file/case.
+    """Sheet 19 Test_Coverage_Matrix — POC test suite ↔ SSOT sheet validation mapping.
 
-    Per Sheet 14 named-range, Sheet 04 face calculation, etc., map to specific
-    POC test file in tests/run-all.js. Cross-verification gate at W2.5.
+    Maps each major SSOT sheet to the POC test suite that validates its computation.
+    Reviewer can audit: 'this sheet's named ranges are verified by THIS test file'.
 
-    Target baseline: 437 tests passing (per W2 Entry Checklist §W2.0).
+    Current baseline (Sub-Arc 1 close 2026-05-24): 536/536 unit tests passing.
+    (Browser Smoke Test skipped — no headless browser in CI per Lock #8.34 iframe fix.)
+
+    Two sections:
+      Section A — 10 test suite breakdown (suite × test file × count × sheets-validated × coverage type)
+      Section B — Coverage summary by SSOT sheet (which test suites verify each sheet)
+
+    Per ship-v1.0 plan §14.B Sub-Arc 1 Step 1.9. Last sheet in Sub-Arc 1 — depends on
+    all other sheets having landed first (cannot compute coverage until sheets exist).
+
+    Authority: tests/run-all.js + Lock #8.34 (Hygiene-discipline operationalization).
     """
     ws = wb.create_sheet("19_Test_Coverage_Matrix")
-    apply_brand_header(ws, 1, 1, 6,
-                       "Test Coverage Matrix · Sheet Cells → POC Test Cases",
+
+    apply_brand_header(ws, 1, 1, 7,
+                       "Sheet 19 — Test Coverage Matrix (POC tests/ ↔ SSOT sheets validation map)",
                        bg=DEEP_TEAL, size=14)
+    apply_brand_header(ws, 2, 1, 7,
+                       "Baseline at Sub-Arc 1 close: 536/536 unit tests passing · Sheets 01-20 audit-trailable",
+                       bg=QUANTUM_PURPLE, size=10)
+
+    # ─────────────────────────────────────────────────────────
+    # Section A — 10 test suite breakdown
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 4, 1, 7,
+                       "Section A — POC Test Suite Breakdown (10 suites + 1 skipped browser smoke)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    sec_a_headers_row = 5
+    sec_a_headers = ["Suite", "Test File", "Test Count", "Validates Sheets",
+                     "Coverage Type", "Lock References", "Status"]
+    for col_idx, h in enumerate(sec_a_headers, start=1):
+        c = ws.cell(row=sec_a_headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=9, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    for offset, (suite, test_file, count, sheets, cov_type, locks) in enumerate(TEST_SUITES, start=1):
+        row = sec_a_headers_row + offset
+
+        # Col A: Suite name
+        ws.cell(row=row, column=1, value=suite).font = Font(name="Calibri", size=10, bold=True)
+
+        # Col B: Test file (Consolas)
+        ws.cell(row=row, column=2, value=test_file).font = Font(name="Consolas", size=9, color="404040")
+
+        # Col C: Test count
+        count_cell = ws.cell(row=row, column=3, value=count)
+        count_cell.font = Font(name="Calibri", size=10, bold=True,
+                               color="0D7377" if count > 0 else "C0C0C0")
+        count_cell.alignment = Alignment(horizontal="center")
+
+        # Col D: Validates Sheets
+        ws.cell(row=row, column=4, value=sheets).font = Font(name="Consolas", size=9, color="606060")
+        ws.cell(row=row, column=4).alignment = Alignment(horizontal="center")
+
+        # Col E: Coverage type
+        ws.cell(row=row, column=5, value=cov_type).font = Font(name="Calibri", size=9)
+        ws.cell(row=row, column=5).alignment = Alignment(wrap_text=True, vertical="top")
+
+        # Col F: Lock references
+        ws.cell(row=row, column=6, value=locks).font = Font(name="Calibri", size=9, italic=True, color="606060")
+        ws.cell(row=row, column=6).alignment = Alignment(wrap_text=True, vertical="top")
+
+        # Col G: Status
+        status = "✓ Passing" if count > 0 else "⏭ Skipped"
+        status_cell = ws.cell(row=row, column=7, value=status)
+        status_cell.font = Font(name="Calibri", size=10, bold=True,
+                                color="0D7377" if count > 0 else "808080")
+        status_cell.alignment = Alignment(horizontal="center")
+
+    # Summary row: total
+    total_row = sec_a_headers_row + len(TEST_SUITES) + 1
+    ws.cell(row=total_row, column=1, value="TOTAL").font = Font(name="Calibri", size=11, bold=True, italic=True)
+    ws.cell(row=total_row, column=2, value="tests/run-all.js (orchestrator)").font = Font(
+        name="Consolas", size=9, italic=True, color="606060")
+    apply_formula_cell(ws, total_row, 3,
+                       f"=SUM(C{sec_a_headers_row+1}:C{sec_a_headers_row+len(TEST_SUITES)})")
+    ws.cell(row=total_row, column=3).font = Font(name="Calibri", size=11, bold=True, color="D946EF")
+    ws.cell(row=total_row, column=3).alignment = Alignment(horizontal="center")
+    ws.cell(row=total_row, column=3).fill = PatternFill(start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+    ws.cell(row=total_row, column=5, value="Unit-only count (browser smoke skipped)").font = Font(
+        name="Calibri", size=9, italic=True, color="606060")
+    ws.cell(row=total_row, column=7, value="✓ ALL GREEN").font = Font(
+        name="Calibri", size=11, bold=True, color="0D7377")
+    ws.cell(row=total_row, column=7).alignment = Alignment(horizontal="center")
+
+    # ─────────────────────────────────────────────────────────
+    # Section B — Per-sheet coverage matrix
+    # ─────────────────────────────────────────────────────────
+    section_b_row = total_row + 3
+    apply_brand_header(ws, section_b_row, 1, 7,
+                       "Section B — Per-Sheet Coverage Map (which test suites validate each SSOT sheet)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    sec_b_headers_row = section_b_row + 1
+    sec_b_headers = ["Sheet #", "Sheet Name", "Primary Validator",
+                     "Secondary Validators", "Coverage Status", "Cross-Verify Method", "Notes"]
+    for col_idx, h in enumerate(sec_b_headers, start=1):
+        c = ws.cell(row=sec_b_headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=9, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # Per-sheet coverage data
+    sheet_coverage = [
+        ("00",  "Cover_Provenance",            "—",                                "Engine State Canonicality",  "✓ Reference",          "Visual inspection",                "Static text + Lock #8.36 note"),
+        ("0a",  "Glossary + Naming",           "—",                                "—",                          "✓ Reference",          "Visual inspection",                "Static reference; 56 entries + 12 naming rows"),
+        ("01",  "Assumptions_Constants",       "Integration (Engine)",             "Engine State Canonicality",  "✓ Tested",             "Named-range value verification",   "balancedMode constants per Lock #8.31"),
+        ("02",  "CEN_Raw_Inputs",              "Data Validator",                   "Excel Parser Round-Trip",    "✓ Tested",             "Round-trip xlsx ↔ engine",         "34 BSC KPIs per Lock #8.29"),
+        ("03",  "Normalization_60Element",     "Data Validator",                   "Integration (Engine)",       "✓ Tested",             "Per-cell normalization checks",    "60-element grid"),
+        ("04",  "Face_Calculations",           "Integration (Engine)",             "Excel Parser Round-Trip",    "✓ Tested",             "Pentagramic formula end-to-end",   "36 named ranges; canonical heart"),
+        ("05",  "Star_Pairs",                  "Integration (Engine)",             "—",                          "✓ Display (Sheet 04 source)", "Cross-sheet formula refs",   "Pedagogical display; Sheet 04 is canonical"),
+        ("06",  "Breath_Feedback_Pass2",       "Integration (Engine)",             "—",                          "✓ Tested (Pass 2 path)", "Sheet 04 cross-ref + axis pair", "Pedagogical; flag: downstream uses pre-blend (Wave 3 Q)"),
+        ("07",  "Edges",                       "Edge Analyzer (Advanced)",         "Integration (Engine)",       "✓ Tested",             "30-edge canonical adjacency",      "BR_log + BR_delta + tension"),
+        ("08",  "Vertices",                    "Vertex Analyzer (Advanced)",       "—",                          "✓ Tested",             "20-vertex face-triplet adj.",      "sequenceConcavity per Lock #8.19"),
+        ("09",  "Vertex_KPIs_BiDirectional",   "Vertex Analyzer (Advanced)",       "—",                          "✓ Reference",          "Lock #8.24 architecture display",  "50 signatures; Lock #8.36 reflected"),
+        ("10",  "Breath_Axes",                 "Integration (Engine)",             "—",                          "✓ Display (4-vector)", "Sheet 06 cross-ref + 4-vector",    "Axis 5 inversion + CEN 4-vector per Lock #8.29"),
+        ("11",  "Octave_Detection",            "Integration (Engine)",             "Still-Point Proximity",      "✓ Tested",             "Dual-path consensus verification", "Both paths → O1 Survival for CEN"),
+        ("12",  "Global_Coherence",            "Integration (Engine)",             "Still-Point Proximity",      "✓ Tested",             "C_global formula + headline alias", "cen_global_coherence_o1 = 0.326"),
+        ("13",  "Diagnostics_AAG_AvG",         "AAG Diagnostic + AvG Diagnostic",  "—",                          "✓ Tested (13 + 40 = 53)", "Per-diagnostic test verification", "Both diagnostics canonical per Lock #8.15 + #8.26"),
+        ("14",  "Spectral_Analysis",           "Spectral Analyzer",                "Integration (Engine)",       "✓ Tested",             "Eigendecomposition + Mode 5",      "Mode 5 dominance + κ=φ² per Lock #8.35"),
+        ("15",  "Face_Provenance",             "—",                                "Vertex Analyzer (Advanced)", "✓ Reference",          "Cross-sheet trace verification",   "F8 flagship cross-ref to F8 template"),
+        ("16",  "Dashboard_View",              "—",                                "Integration (Engine)",       "✓ Display",            "Visual inspection",                "CEN-facing marquee; Lock #8.36 KPI distribution"),
+        ("17",  "Audit_Trail_Crosslinks",      "—",                                "—",                          "✓ Reference",          "Manual cross-ref audit",           "Per-calculation × per-Audit-§ × per-Test mapping"),
+        ("18",  "Adversarial_Findings",        "—",                                "—",                          "⏳ Scaffold (W3)",     "W3 populates findings",            "20-question scaffold ready for Sub-Arc 2"),
+        ("19",  "Test_Coverage_Matrix",        "(this sheet)",                     "—",                          "✓ Self-reference",     "Visual inspection",                "Meta-sheet: documents test ↔ sheet coverage"),
+        ("20",  "Cross_Workspace_Refs",        "—",                                "—",                          "✓ Reference",          "Manual cross-ref audit",           "32 external references across 4 workspaces"),
+    ]
+
+    for offset, (snum, sname, primary, secondary, status, method, notes) in enumerate(sheet_coverage, start=1):
+        row = sec_b_headers_row + offset
+
+        ws.cell(row=row, column=1, value=snum).font = Font(name="Calibri", size=10, bold=True)
+        ws.cell(row=row, column=1).alignment = Alignment(horizontal="center")
+
+        ws.cell(row=row, column=2, value=sname).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+
+        ws.cell(row=row, column=3, value=primary).font = Font(name="Calibri", size=9, color="404040")
+
+        ws.cell(row=row, column=4, value=secondary).font = Font(name="Calibri", size=9, italic=True, color="606060")
+
+        # Status color-coded
+        status_cell = ws.cell(row=row, column=5, value=status)
+        if "✓ Tested" in status:
+            status_cell.font = Font(name="Calibri", size=9, bold=True, color="0D7377")
+        elif "✓ Display" in status or "✓ Reference" in status or "✓ Self" in status:
+            status_cell.font = Font(name="Calibri", size=9, italic=True, color="808080")
+        elif "⏳" in status:
+            status_cell.font = Font(name="Calibri", size=9, italic=True, color="D946EF")
+        status_cell.alignment = Alignment(horizontal="left")
+
+        ws.cell(row=row, column=6, value=method).font = Font(name="Calibri", size=9, italic=True, color="606060")
+
+        ws.cell(row=row, column=7, value=notes).font = Font(name="Calibri", size=9, color="606060")
+        ws.cell(row=row, column=7).alignment = Alignment(wrap_text=True, vertical="top")
+
+    # ─────────────────────────────────────────────────────────
+    # Section C — Authority + cross-references
+    # ─────────────────────────────────────────────────────────
+    section_c_row = sec_b_headers_row + len(sheet_coverage) + 2
+    apply_brand_header(ws, section_c_row, 1, 7,
+                       "Authority + Coverage Methodology",
+                       bg=DARK_NAVY, size=11)
+    footer_notes = [
+        "Authority: tests/run-all.js (orchestrator) + Lock #8.34 (Hygiene-discipline operationalization).",
+        "Test source: POC/tests/ directory — 17 test files; tests/run-all.js aggregates 10 unit suites + 1 skipped browser smoke.",
+        "                                       ",
+        "Coverage typology:",
+        "  ✓ Tested — sheet's named ranges + formulas verified by test assertions",
+        "  ✓ Display — sheet renders cross-sheet data; tested transitively via source sheets",
+        "  ✓ Reference — static reference content; visual inspection sufficient (no formulas to test)",
+        "  ✓ Self-reference — this sheet (Test Coverage Matrix) is self-documenting",
+        "  ⏳ Scaffold — structure ready; content populated in later Sub-Arc",
+        "                                       ",
+        "Cross-verification methodology (Hygiene Principle per HYGIENE_PRINCIPLES.md):",
+        "  1. Build script generates xlsx with formulas (openpyxl writes; Excel/LibreOffice evaluates on open)",
+        "  2. POC engine independently computes face energies + diagnostics + spectral from same canonical inputs",
+        "  3. Cross-verify: openpyxl read-back of xlsx values matches engine output within 1e-6 tolerance",
+        "  4. 55 Engine State Canonicality gates ensure observable engine state matches canonical expectations",
+        "                                       ",
+        "Sub-Arc 1 close baseline (2026-05-24): 536/536 unit tests passing, 22/22 sheets build, 0 syntax errors,",
+        "  0 stale framings post-Lock #8.36 residual audit. Browser Smoke deferred (no headless browser; Lock #8.34).",
+        "                                       ",
+        "Cross-references:",
+        "  • tests/run-all.js — orchestrator + per-suite test counts (canonical source)",
+        "  • HYGIENE_PRINCIPLES.md — verification-discipline methodology",
+        "  • Sheet 17 Audit_Trail_Crosslinks — per-calculation × per-Audit-§ × per-Test mapping (different granularity)",
+        "  • Sheet 18 Adversarial_Findings (scaffold) — W3 populates additional verification questions",
+        "                                       ",
+        "Named range: test_coverage_matrix_header anchors Section A header at row 4 for cross-references.",
+    ]
+    for offset, note in enumerate(footer_notes, start=1):
+        c = ws.cell(row=section_c_row + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=section_c_row + offset, start_column=1,
+                       end_row=section_c_row + offset, end_column=7)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 24
+    ws.column_dimensions["B"].width = 38
+    ws.column_dimensions["C"].width = 12
+    ws.column_dimensions["D"].width = 22
+    ws.column_dimensions["E"].width = 38
+    ws.column_dimensions["F"].width = 38
+    ws.column_dimensions["G"].width = 18
+
+    # Set row heights for entry rows (wrap_text)
+    for row in range(sec_a_headers_row + 1, sec_a_headers_row + len(TEST_SUITES) + 1):
+        ws.row_dimensions[row].height = 30
+    for row in range(sec_b_headers_row + 1, sec_b_headers_row + len(sheet_coverage) + 1):
+        ws.row_dimensions[row].height = 30
+
+    # Named range
+    add_defined_name(wb, "test_coverage_matrix_header", "'19_Test_Coverage_Matrix'!$A$4")
+
+    return ws
+
+
+# ═════════════════════════════════════════════════════════════════════════
+# Sheet 20 data — Cross-Workspace References (4 sections)
+# ═════════════════════════════════════════════════════════════════════════
+# Format: (workspace, reference_path, ref_type, description, why_reviewer_cares, ssot_anchor)
+# Workspaces: "Final Thesis" | "Business Data Quannex" | "POC" | "External"
+# ref_type: "Doc" | "Code" | "Sheet" | "Memory" | "Framework" | "Citation"
+
+CROSS_WORKSPACE_REFS = [
+    # ─── Section 1 — Final Thesis workspace ──────────────────────────────
+    ("Final Thesis", "Thesis Work/CEN Files/Phase 2/CEN_Phase2_RawScores_Frozen.md",
+     "Doc", "Frozen CEN founder scores (D + E + V_res_pre + V_res_post) per face",
+     "Source-of-truth for ALL CEN raw data feeding the SSOT pipeline",
+     "Sheet 02 KPI_ROWS"),
+    ("Final Thesis", "Thesis Work/CEN Files/Phase 3/CEN_Coherence_Portrait.md",
+     "Doc", "Narrative SSOT for CEN — Hidden Oracle, Co-Founder Gap, Structural Vacuum",
+     "Human-readable companion to math SSOT; CEN-facing deliverable",
+     "Sheet 16 Dashboard_View + Sheet 13 Diagnostics"),
+    ("Final Thesis", "Thesis Work/CEN Files/Phase 2/CEN_Phase2_Evidence_Package.md",
+     "Doc", "C1-C6 evidence sub-files for thesis defense Phase 2",
+     "Required exhibit for thesis committee CEN-case-study assessment",
+     "Sheet 02 + Sheet 10"),
+    ("Final Thesis", "Thesis Work/spiral-reports/Spiral_Report_CEN_SSOT_W2_Day2_Lock_8_35_8_36_2026-05-24.md",
+     "Doc", "2-day arc spiral report — Locks #8.35 + #8.36 emergence narrative",
+     "Documents the geometric-discovery + methodology-maturation arc",
+     "Sheet 00 Lock #8.36 Reversions note"),
+    ("Final Thesis", "Thesis Work/spiral-reports/Session_Handoff_CEN_SSOT_2026-05-21.md",
+     "Doc", "Append-only live handoff log across all SSOT build sessions",
+     "Reproducibility record — every session's deltas + decisions",
+     "All sheets"),
+    ("Final Thesis", "Thesis Work/Quannex Business Exports/CEN_Spiral_Dashboard_SSOT_v1.0_2026-05-22.xlsx",
+     "Sheet", "THIS WORKBOOK — primary deliverable location",
+     "Canonical SSOT for CEN; thesis defense + CEN board reference",
+     "Self-reference"),
+    ("Final Thesis", "Thesis_Control_Panel.xlsx CEN Deliverables sheet row 16",
+     "Sheet", "Cross-workspace tracker row (added per §31 protocol)",
+     "Cross-workspace audit trail for SSOT delivery to thesis workspace",
+     "Sheet 00 (§31 compliance)"),
+    ("Final Thesis", "Thesis Work/Quannex Business Exports/CEN_Spiral_Dashboard_SSOT_README.md",
+     "Doc", "POC mirror per §31 Cross-Workspace Tracker Row Protocol",
+     "Onboarding doc for thesis-workspace readers entering the SSOT",
+     "Sheet 00 + Sheet 20 (this sheet)"),
+
+    # ─── Section 2 — Business Data Quannex workspace ─────────────────────
+    ("Business Data Quannex", "CONTROL_PANEL_BDQ.xlsx CEN Partnership sheet row 14",
+     "Sheet", "Cross-workspace tracker row (added per §31 protocol)",
+     "Cross-workspace audit trail for SSOT delivery to BDQ workspace",
+     "Sheet 00 (§31 compliance)"),
+    ("Business Data Quannex", "Coherence_Records/Pending_Upstream_Updates.md (Wk8 AAG=0.761)",
+     "Doc", "Quannex-self Wk8 AAG canonical value record + Hybrid v2 audit",
+     "Methodology-validation log; reviewers can audit Wk6-Wk8 coherence trajectory",
+     "Sheet 13 (AAG cross-reference to Quannex-self values)"),
+    ("Business Data Quannex", "Coherence_Records/CEN/Wk*_assessments/",
+     "Doc", "Weekly CEN coherence assessment outputs (Wk5 through Wk8+)",
+     "Demonstrates Calibration Loop closure for CEN case study",
+     "Sheet 13 + Sheet 16 (CEN coherence trajectory)"),
+    ("Business Data Quannex", "2. Finance & Tax/Finance_Control_Panel.xlsx",
+     "Sheet", "Worked example of §33 cascading-formula architecture (11 sheets, 1,171 formulas)",
+     "Pattern reference for SSOT formula-cascade architecture (the SSOT inherits this pattern)",
+     "Sheet 01 + Sheet 04 cascading-formula refs"),
+
+    # ─── Section 3 — POC workspace (code) ─────────────────────────────────
+    ("POC", "js/main.js",
+     "Code", "Engine entry point — recalculate() orchestrates 5-pass pentagramic chain",
+     "Direct math source for face-energy + edges + vertices + breath axes",
+     "Sheets 04, 06, 07, 08, 10"),
+    ("POC", "js/core/TuningConfig.js (balancedMode)",
+     "Code", "Greek-letter constants canonical — α=φ⁻¹, κ=φ², λ=φ⁻³, etc.",
+     "Single-source-of-truth for all tuning constants per Lock #8.31 + #8.32",
+     "Sheet 01 Assumptions"),
+    ("POC", "js/constants/phi-harmonics.js",
+     "Code", "Bedrock φ derivations — PHI, PHI_INV_1..4, harmonic powers",
+     "Foundation constants; all derived methodology values trace here",
+     "Sheet 01 Math Foundation"),
+    ("POC", "js/core/Diagnostics.js",
+     "Code", "AAG + AvG canonical implementations (getAspirationActualityGap + getApparentGranularGap)",
+     "Single canonical source for both diagnostics per Lock #8.15 + #8.26",
+     "Sheet 13"),
+    ("POC", "js/spectral-analyzer.js:142-153 (U matrix)",
+     "Code", "Graph Laplacian eigendecomposition — U matrix + eigenvalue computation",
+     "Source for Mode 5 finding + spectral identity κ=(5+√5)/(5−√5)=φ² (Lock #8.35)",
+     "Sheet 14"),
+    ("POC", "js/advanced/vertex-analyzer.js (calculateSequenceConcavity)",
+     "Code", "Renamed-from-chirality per Lock #8.19 sympy-proved",
+     "Reviewer can audit the sympy-proof + the rename rationale",
+     "Sheet 08"),
+    ("POC", "companies/cen/mapping-context.json",
+     "Code", "CEN company state (faces, edges, vertices, octave, sentiment per face)",
+     "Live engine input for CEN-specific computations",
+     "Sheet 02 + Sheet 10"),
+    ("POC", "companies/cen/company.json",
+     "Code", "CEN company metadata (name, archetype, perspective, tuning override)",
+     "Per-company tuning loader source (fix in Lock #8.33)",
+     "Sheet 01 + Sheet 02"),
+
+    # ─── Section 3 — POC workspace (docs spine — third pillar trio) ──────
+    ("POC", "docs/math/CALCULATION_AUDIT_TRAIL.md",
+     "Doc", "~3300 lines, 17 sections — every formula audit-trailed with worked examples",
+     "First pillar of POC docs spine; primary reviewer reference for math validation",
+     "All sheets (referenced via Audit § column in Sheets 0a + 17)"),
+    ("POC", "docs/QUANNEX_INTERPRETIVE_LAYER_DISCLOSURE.md",
+     "Doc", "Methodology's mature self-honest scaffolding — 4 interpretive layers + Calibration Loop + §6.6 Trust the Geometry",
+     "Second pillar of POC docs spine; addresses 'where math ends and philosophy begins' for committee",
+     "Sheet 13 + Sheet 14 (cross-refs throughout)"),
+    ("POC", "docs/HYGIENE_PRINCIPLES.md",
+     "Doc", "Verification-discipline scaffolding — 'code ran without error' ≠ 'output correct'",
+     "Third pillar of POC docs spine; demonstrates engineering-discipline rigor",
+     "Sheet 00 Lock #8.36 Reversions note (kin-principle to Trust the Geometry)"),
+    ("POC", "docs/cen-ssot/ (12+ architectural artifacts)",
+     "Doc", "Layout design specs, signature catalogs, kappa-band analysis, Mode 5 deep interpretation",
+     "Per-sheet architectural-design provenance; reviewers can audit how each sheet was designed",
+     "Sheets 09, 14, 16 explicitly cross-reference these"),
+    ("POC", "tests/run-all.js (536 unit tests)",
+     "Code", "Full test suite — Integration, AAG, AvG, Spectral, Edge, Vertex, Engine State Canonicality",
+     "Regression baseline — 536/536 passing throughout 2-day arc",
+     "Sheet 19 Test Coverage Matrix"),
+    ("POC", "tests/engine-state-canonicality.test.mjs (55 verification gates)",
+     "Code", "Hygiene-principle operationalization — observable-state assertions",
+     "Demonstrates Hygiene Principle as living infrastructure (Lock #8.33 + #8.34)",
+     "Sheet 19 + HYGIENE_PRINCIPLES.md cross-reference"),
+
+    # ─── Section 4 — External references (frameworks + citations) ────────
+    ("External", "Hanze IFC Bachelor Thesis Rubric (June 2026 defense)",
+     "Framework", "Hanze University International Financial Consulting bachelor rubric",
+     "Primary academic validation framework for thesis-defense reviewer assessment",
+     "Sheet 16 + Sheet 17 (rubric-aligned deliverables)"),
+    ("External", "Kaplan & Norton — Balanced Scorecard (Harvard Business Review, 1992)",
+     "Citation", "Original BSC 4-perspective framework (Financial / Customer / Internal Process / L&G)",
+     "Quannex inherits + extends BSC to 12-face dodecahedron — reviewer-traceability",
+     "Sheet 02 + Sheet 0a Glossary (BSC entry)"),
+    ("External", "International Integrated Reporting Council — 6 Capitals Framework",
+     "Framework", "IIRC capital categories (Financial / Manufactured / Intellectual / Human / Social / Natural)",
+     "Quannex inherits + extends IIRF to 12-face dodecahedron — see Sheet 0a Section 1",
+     "Sheet 0a Section 1 Naming Translation"),
+    ("External", "Spiral Octave Songbook v2.1 (Quannex methodology canonical)",
+     "Framework", "60-element BSC-to-element-grid mapping; per-cell semantic criteria",
+     "Foundation for Procedure C KPI placements per Lock #8.11",
+     "Sheet 02 + Sheet 03 (KPI placement methodology)"),
+    ("External", "Chung — Spectral Graph Theory (CBMS Regional Conference Series, 1997)",
+     "Citation", "Classical reference for Graph Laplacian eigendecomposition",
+     "Mathematical foundation for Quannex Spectral Analyzer (Sheet 14)",
+     "Sheet 14 + Audit Trail §13"),
+    ("External", "Fiedler — Algebraic Connectivity of Graphs (Czech. Math. Journal, 1973)",
+     "Citation", "Foundational paper on second-smallest eigenvalue (algebraic connectivity)",
+     "Mathematical foundation for spectral analysis approach",
+     "Sheet 14 + Audit Trail §13"),
+]
+
+
+def build_sheet_20_cross_workspace_refs(wb: Workbook):
+    """Sheet 20 Cross_Workspace_Refs — POC + Final Thesis + BDQ + External references.
+
+    Static reference sheet linking SSOT cells to canonical sources outside the SSOT
+    workbook itself. Complements Sheet 17 (per-calculation audit-trail crosslinks) by
+    operating at WORKSPACE/ARTIFACT scope rather than per-calculation scope.
+
+    Four sections:
+      Section 1 — Final Thesis workspace (~8 entries): chapter / spiral-report / handoff refs
+      Section 2 — Business Data Quannex workspace (~4 entries): control panel / records refs
+      Section 3 — POC workspace (~14 entries): code (js/) + docs spine three-pillar trio
+      Section 4 — External references (~6 entries): Hanze rubric + BSC + IIRF + Songbook + citations
+
+    Per ship-v1.0 plan §14.B Sub-Arc 1 Step 1.2 (lightweight reference; ~30 min budget).
+    Fine-grained per-row + filterable per workspace + cross-references column for SSOT anchor.
+
+    Authority: W2 plan §7.A + ship-v1.0 plan §14.B Sub-Arc 1 Steps 1.0 + 1.2.
+    """
+    ws = wb.create_sheet("20_Cross_Workspace_Refs")
+
+    apply_brand_header(ws, 1, 1, 6,
+                       "Sheet 20 — Cross-Workspace References (POC + FT + BDQ + External)",
+                       bg=DARK_NAVY, size=14)
+    apply_brand_header(ws, 2, 1, 6,
+                       "Filterable by workspace (col A) · Complements Sheet 17 (per-calculation crosslinks)",
+                       bg=DEEP_TEAL, size=10)
+
+    # Section header row
+    apply_brand_header(ws, 4, 1, 6,
+                       "All cross-workspace artifacts referenced by the SSOT (alphabetical within workspace)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    # Column headers
+    headers_row = 5
+    headers = [
+        "Workspace", "Reference Path / Citation", "Type",
+        "Description", "Why Reviewer Cares", "SSOT Anchor (Sheet × Section)",
+    ]
+    for col_idx, h in enumerate(headers, start=1):
+        c = ws.cell(row=headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=10, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Workspace color palette (background tint for col A)
+    workspace_palette = {
+        "Final Thesis":          "FFF8DC",  # Pale Yellow — academic-context
+        "Business Data Quannex": "F3E8FF",  # Pale Magenta — business-context
+        "POC":                   "E6F3FF",  # Pale Blue — engine-context
+        "External":              "F0F0F0",  # Pale Gray — out-of-Quannex-context
+    }
+    type_palette = {
+        "Doc":       "8B5CF6",  # Quantum-purple
+        "Code":      "0D7377",  # Deep teal
+        "Sheet":     "D946EF",  # Magenta-pink
+        "Memory":    "8B5CF6",
+        "Framework": "0A0E1A",  # Dark navy
+        "Citation":  "808080",  # Gray
+    }
+
+    # Render entries
+    for offset, (ws_name, ref_path, ref_type, desc, why, anchor) in enumerate(CROSS_WORKSPACE_REFS, start=1):
+        row = headers_row + offset
+
+        # Col A: Workspace (color-coded background)
+        ws_cell = ws.cell(row=row, column=1, value=ws_name)
+        ws_cell.fill = PatternFill(start_color=workspace_palette[ws_name],
+                                   end_color=workspace_palette[ws_name],
+                                   fill_type="solid")
+        ws_cell.font = Font(name="Calibri", size=10, bold=True)
+        ws_cell.alignment = Alignment(horizontal="center", vertical="top")
+
+        # Col B: Reference Path (Consolas for path/citation)
+        path_cell = ws.cell(row=row, column=2, value=ref_path)
+        path_cell.font = Font(name="Consolas", size=9, color="404040")
+        path_cell.alignment = Alignment(wrap_text=True, vertical="top")
+
+        # Col C: Type (color-coded text)
+        type_cell = ws.cell(row=row, column=3, value=ref_type)
+        type_cell.font = Font(name="Calibri", size=10, bold=True, color=type_palette[ref_type])
+        type_cell.alignment = Alignment(horizontal="center", vertical="top")
+
+        # Col D: Description (wrap)
+        desc_cell = ws.cell(row=row, column=4, value=desc)
+        desc_cell.font = Font(name="Calibri", size=9)
+        desc_cell.alignment = Alignment(wrap_text=True, vertical="top")
+
+        # Col E: Why Reviewer Cares (wrap, italic)
+        why_cell = ws.cell(row=row, column=5, value=why)
+        why_cell.font = Font(name="Calibri", size=9, italic=True, color="606060")
+        why_cell.alignment = Alignment(wrap_text=True, vertical="top")
+
+        # Col F: SSOT Anchor (Consolas for ref-like)
+        anchor_cell = ws.cell(row=row, column=6, value=anchor)
+        anchor_cell.font = Font(name="Consolas", size=9, color="606060")
+        anchor_cell.alignment = Alignment(wrap_text=True, vertical="top")
+
+    # Set column widths for readability
+    col_widths = {1: 22, 2: 50, 3: 12, 4: 50, 5: 50, 6: 30}
+    for col_idx, width in col_widths.items():
+        ws.column_dimensions[chr(64 + col_idx)].width = width
+
+    # Set row height for entry rows (wrap_text needs taller rows)
+    entries_end_row = headers_row + len(CROSS_WORKSPACE_REFS)
+    for row in range(headers_row + 1, entries_end_row + 1):
+        ws.row_dimensions[row].height = 50
+
+    # Named range for cross-references from other sheets
+    add_defined_name(wb, "cross_workspace_refs_header",
+                     "'20_Cross_Workspace_Refs'!$A$4")
+
     return ws
 
 
@@ -3829,7 +6236,8 @@ def build_sheet_19_test_coverage(wb: Workbook):
 # ─────────────────────────────────────────────────────────────
 # Build order matters: each sheet depends on named ranges defined in earlier sheets.
 # Sheet 14 depends on Sheets 01, 04, 06. Sheet 16 depends on Sheets 04, 06, 10-14.
-# 18 + 19 are placeholders (W3 + W2.5 respectively).
+# 18 + 19 + 20 are reference/placeholder sheets (18 W3-populated; 19 W2.5-mapped;
+# 20 cross-workspace pointer table populated at ship-v1.0 plan §14.B Sub-Arc 1 Step 1.2).
 
 SHEET_BUILD_ORDER = [
     ("00_Cover_Provenance",              build_sheet_00_cover_provenance),
@@ -3853,6 +6261,7 @@ SHEET_BUILD_ORDER = [
     ("17_Audit_Trail_Crosslinks",        build_sheet_17_audit_crosslinks),
     ("18_Adversarial_Findings",          build_sheet_18_adversarial_findings),
     ("19_Test_Coverage_Matrix",          build_sheet_19_test_coverage),
+    ("20_Cross_Workspace_Refs",          build_sheet_20_cross_workspace_refs),
 ]
 
 

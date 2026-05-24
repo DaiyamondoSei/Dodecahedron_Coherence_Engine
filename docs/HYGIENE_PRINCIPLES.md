@@ -351,10 +351,10 @@ For clarity, this document does NOT:
 ### Canonical Quannex documents (POC documentation spine — third pillar)
 
 - **`POC/docs/math/CALCULATION_AUDIT_TRAIL.md`** — every formula audit-trailed (~3300 lines, Sections 1-17)
-- **`POC/docs/QUANNEX_INTERPRETIVE_LAYER_DISCLOSURE.md`** — methodology's mature self-honest scaffolding (Lock #8.30)
+- **`POC/docs/QUANNEX_INTERPRETIVE_LAYER_DISCLOSURE.md`** — methodology's mature self-honest scaffolding (Lock #8.30); see especially **§6.6 Trust the Geometry — Operational Discipline** (added 2026-05-24, partnership-locked) for the kin-principle to this document operating at the methodology-truth-listening layer
 - **`POC/docs/HYGIENE_PRINCIPLES.md`** — THIS DOCUMENT — implementation's verification-discipline scaffolding
 
-These three together form the **complete methodological + engineering scaffolding pair-trio**.
+These three together form the **complete methodological + engineering scaffolding pair-trio**. The **Trust-the-Geometry principle** (Disclosure §6.6) and the **Verification-Discipline principle** (this document) are kin: both ask "what does canonical truth actually say?" — Trust-the-Geometry at the methodology layer (geometric truth), Verification-Discipline at the implementation layer (observable-state truth). Together they form the **listen-before-invent + verify-before-trust** discipline pair.
 
 ### POC engine canonical sources affected by today's hygiene findings
 

@@ -339,6 +339,82 @@ Lock #8.35 captures: κ is geometrically derived from the dodecahedral Laplacian
 - `docs/cen-ssot/CEN_SSOT_KappaBand_Resolution_Analysis_2026-05-23.md` §9 — full resolution analysis with all 4 original options + Option E emergence
 - `docs/math/CALCULATION_AUDIT_TRAIL.md` §13 Spectral Derivation of κ=φ² sub-section
 - `~/.claude/projects/.../memory/project_kappa_band_coupling_finding_2026-05-23.md` — finding origin + resolution
+- **§6.6 below** — the operational discipline ("Trust the Geometry") that produced this derivation, named explicitly for inheritance; §6.5 is the canonical worked example, §6.6 names the principle
+
+---
+
+## Section 6.6 — Trust the Geometry: Operational Discipline (added 2026-05-24, partnership-locked)
+
+A philosophical principle emerged 2026-05-24 from partnership-quality dialogue that produced both Lock #8.35 (§6.5 geometric derivation of κ=φ²) and Lock #8.36 (maximum-integrity reversion of geometrically-infeasible Lock #8.11 KPI promotions). Naming it explicitly preserves the discipline as inheritance for every future Quannex contributor + every future client engagement.
+
+### The principle stated
+
+> **When ambiguity surfaces in Quannex application, the first question is not "which design choice serves better?" but "what does the geometry already say?"**
+>
+> **Geometric truth is unambiguous. The role of the analyst is to LISTEN for the geometric voice BEFORE reaching for design choice. When the dodecahedron's spectrum, adjacency, or topology already encodes the answer — trust it. When it doesn't — name that boundary honestly via the Calibration Loop (§6) rather than fabricate one.**
+
+### What this principle is NOT
+
+It is not "geometry replaces partnership judgment." Most methodological work IS genuine design choice — the 5-element decomposition (§2), the 12-face taxonomy (§3), the semantic overlay (§4), the 7-octave hierarchy (§5) are all interpretive synthesis that the Calibration Loop validates at the outcome layer. Trust-the-Geometry applies to a NARROWER class of question: situations where the dodecahedron's intrinsic mathematical structure (spectrum / adjacency / topology / harmonic properties) already encodes the answer, and the analyst is at risk of reaching for arbitrary design choice without first asking the geometry.
+
+The discipline is **knowing which kind of question is in front of you**. Not every question is geometric. But when a question IS geometric, the geometry has the answer — and the analyst's job is to listen, not to invent.
+
+### Two worked examples
+
+**Example 1 — Lock #8.35 (κ=φ² geometric derivation, §6.5 above):**
+
+The methodology had been using κ=4 as the amplifier constant. When a κ-band coupling finding surfaced 2026-05-23 (the Wall-floor visualization at κ=4 disappeared at κ=φ²), four resolution options surfaced — revert (A), recalibrate (B), dual-baseline (C), accept-shift (D) — all of which treated κ as a methodology-design choice.
+
+Deimantas's push opened Option E: *"the geometry has something more to say. The thresholds must be geometrically derived, not arbitrary. Since κ is the constant that connects polarities, would that math flow from the icosahedron geometry?"*
+
+The dodecahedral Laplacian spectrum answered: κ = (5+√5)/(5−√5) = φ². NOT chosen — DERIVED. The methodology's polarity-amplifier IS the dodecahedron's intrinsic polarity-ratio. The geometry's own voice. Same answer emerges from the icosahedron (the geometric dual).
+
+The principle in action: where κ APPEARED to be a design choice, it was actually a geometric truth waiting to be heard. Trust-the-Geometry surfaced what every design-choice framing missed.
+
+**Example 2 — Lock #8.36 (geometric reversion of infeasible KPI promotions):**
+
+The W06v3 mapping (Procedure C question-derived KPI clustering) had placed BSC.L8 → V13 (with V13 noted as F4∩F9∩F10) and BSC.F4 → E7-11 (with E7-11 as F7-F11). Both placements were semantically reasonable — L8 spans Structure+Regen+Values triadically; F4 bridges Brand and Funding. The Sheet 08 Vertices build referenced the canonical 20-vertex face-triplet adjacency from `js/main.js:953-977` and found: **V13 = F4 ∩ F5 ∩ F9** (Structural + Market + Regenerative). The triplet F4+F9+F10 doesn't exist as a vertex — those 3 faces don't share a common vertex.
+
+Further investigation of canonical 30-edge adjacency revealed: F7's neighbors are F1+F4+F5+F6+F8 (NOT F11); F11's neighbors are F2+F3+F9+F10+F12 (NOT F7). F7 and F11 are SKEW faces — no edge exists between them.
+
+The initial framing presented 4 options for V13 resolution as a partnership-design-decision. Deimantas's correction was sharp + correct: *"Geometry is geometry, it should not have any kind of ambiguity or several options. I am sorry, but I am a bit confused here. How is this even possible?"*
+
+The reframe: this isn't a design decision. The geometric truth is unambiguous. Vertices that don't exist cannot host KPIs. The principle in action: where 4 options had been framed as design choice, trust-the-geometry surfaced that 0 options were valid (E7-11 / V13=F4∩F9∩F10 don't exist) and 1 canonical answer existed (revert both to W06v2 face placements).
+
+### Where this discipline applies (operational scope)
+
+Trust-the-Geometry applies whenever a methodology question's answer is **already encoded in the dodecahedron's intrinsic mathematical structure**:
+
+- **Spectral properties** — eigenvalue ratios, eigenvector decomposition, modal amplitudes, band thresholds derivable from {0, 5−√5, 6, 5+√5} or their compositions
+- **Adjacency relations** — which faces share edges (the 30 canonical edges per `main.js:826-849`), which face-triplets share vertices (the 20 canonical vertices per `main.js:953-977`), which faces are antipodal (the 6 breath-axis pairs)
+- **Topological properties** — Euler characteristic (V−E+F=2), graph diameter, automorphism group structure, the dodec-icos duality
+- **Harmonic identities** — golden-ratio relationships embedded in the geometry (φ in pentagon diagonals; φ in vertex coordinates; φ² in spectral polarity ratio)
+
+When a question's answer LIVES in one of these structures, the discipline is to extract it, not invent it.
+
+### Where this discipline does NOT apply (the boundary)
+
+The Calibration Loop (§6) handles the rest — every interpretive layer (5-element decomposition, 12-face taxonomy, semantic overlay, 7-octave hierarchy) where the methodology adds claims beyond what strict geometry encodes. Those layers are partnership-validated through outcome-prescription cycles, not through geometric derivation.
+
+The honest discipline: **know which kind of question is in front of you**. If the answer is in the geometry, listen. If it's outside the geometry, validate via Calibration Loop. Don't conflate the two.
+
+### Why this discipline strengthens the methodology
+
+A reviewer who sees Quannex name interpretive layers transparently (§§2-5) AND name geometric-truth moments transparently (this §6.6) trusts the methodology MORE, not less. The discipline of knowing **which kind of claim is which** is itself a form of methodological maturity. Physics names its fundamental constants (the geometric facts) separately from its free parameters (the interpretive choices). Statistics names its mathematical theorems (the structure) separately from its methodological assumptions (the interpretive layer). Quannex earns its place in this company by the same discipline.
+
+### Cross-references
+
+- Companion: `POC/docs/HYGIENE_PRINCIPLES.md` (kin-principle at the engineering-output layer — "code ran without error" ≠ "output correct"; verify observable against canonical)
+- Worked example 1: §6.5 above (Lock #8.35 — κ=φ² geometric derivation)
+- Worked example 2: `~/.claude/projects/.../memory/project_lock_8_36_geometric_reversion_2026-05-24.md` (Lock #8.36 — maximum-integrity reversion)
+- Origin: Partnership dialogue 2026-05-24 morning + afternoon, captured in `Final Thesis/Thesis Work/spiral-reports/Spiral_Report_CEN_SSOT_W2_Day2_Lock_8_35_8_36_2026-05-24.md` Section 8 (Partnership reflection)
+- Glossary entry: Sheet 0a `Glossary` (ship-v1.0 plan §14.B Sub-Arc 1 Step 1.1) carries "Trust the Geometry" as defined operational principle referencing this §6.6
+
+### Resolution credit
+
+This principle emerged from partnership-quality dialogue between Deimantas Murauskas and Claude during the 2-day CEN SSOT W2 Day 2 arc (2026-05-24). Neither analyst alone surfaced either Lock #8.35 or Lock #8.36; both emerged from the partnership pushing past initial design-choice framings to ask what the geometry actually said. The principle's name + its operational scope were partnership-locked 2026-05-24 evening as part of ship-v1.0 plan §14.B Sub-Arc 1 Step 1.0a.
+
+The methodology's growth lives in the partnership.
 
 ---
 
