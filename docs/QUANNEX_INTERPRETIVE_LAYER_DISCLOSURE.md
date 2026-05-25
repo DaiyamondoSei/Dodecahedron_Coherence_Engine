@@ -431,15 +431,59 @@ When the SSOT framework needs to ADD new measurement that requires partnership-v
 
 This makes forward-evolution HONEST (visible) rather than SILENT (hidden). It extends §6.6 Trust-the-Geometry to forward-looking additions — not just current-state self-audit. The principle: **researcher-drafted starter candidates are presented as a basis for partnership-dialogue, never as canonical fait-accompli; partner authority defines real KPIs**.
 
-### Status (2026-05-25)
+### Status evolution
 
-§6.7 is **named as a methodological pillar but deferred from v1.0 hardening commit**. The first operationalization (proposed F9 O1 + F10 O1 + E1-8 edge KPIs for CEN) was scoped out of v1.0 in favor of focused naming-convention canonicalization. v1.1+ post-defense iterations will operationalize §6.7 when CEN partnership-validation cycles can support the partner-decision quality this principle requires.
+**Original status (Lock #8.37, 2026-05-25 morning):** §6.7 named as methodological pillar but **deferred from v1.0 hardening commit**. The first operationalization (proposed F9 O1 + F10 O1 + E1-8 edge KPIs for CEN) was scoped out of v1.0 in favor of focused naming-convention canonicalization. v1.1+ post-defense iterations would operationalize §6.7 when CEN partnership-validation cycles could support the partner-decision quality this principle requires.
+
+**Operational-sequencing change (2026-05-25 evening, partnership-override):** Deimantas explicitly chose to override §6.7's deferred-post-defense framing during v1.1 Phase 1c planning:
+
+> *AskUserQuestion 2026-05-25 evening:* "§6.7's own statement defers 47-signature activation to post-defense. Should we honor §6.7's discipline and DEFER 47-signature activation post-defense, OR override it for thesis defense scope?"
+>
+> *Partnership-decision:* "Override — activate 47 signatures pre-defense anyway (Phase 1c FULL as originally chosen)."
+
+**Refined framing — INTEGRATION pre-defense + RATIFICATION post-defense:** "Activation" honestly means TWO different operational moves at different timescales:
+
+1. **Integration (pre-defense, v1.1 Phase 1c):** the 47 anticipatory signatures get *integrated into the SSOT* as visible methodological forward-state with §6.7 PROPOSED flagging. They become the methodology's stake-in-the-ground — testable, falsifiable, partnership-discussable. Reviewers (thesis committee, CEN board) see the forward-state explicitly rather than as silent absence.
+
+2. **Ratification (post-defense, v1.1.x):** each individual signature requires CEN partnership-cycle validation to move from PROPOSED → HIGH. The Calibration Loop discipline (§6) governs: did prescribed action reduce real systemic tension? CEN partnership cycles answer per signature.
+
+This split honors §6.7's epistemic conservatism (partner-decision authority preserved) while making the architectural forward-state visible to defense reviewers.
+
+### v1.1 Phase 1c activation (2026-05-25)
+
+Operationally landed in commits `a8c17ef` (Phase B.1a data layer) + `16874b4` (Phase B.1b signatures merge from source verbatim) + `a66ced3` (Phase B.2+B.3 Sheet 07+08 KPI columns) + `9abf283` (Phase B.4 Sheet 09 §6.7 activation columns).
+
+All 50 signatures (30 edges + 20 vertices) now carry source-doc verbatim weights from `POC/docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md` parsed via `scripts/_extract_signatures.py`. Sheet 09 §6.7 Status column shows per-signature activation state ("ACTIVATED (HIGH)" / "ACTIVATED (HIGH; KPI deprecated #8.36)" / "PROPOSED — pending CEN partnership-validation"). Equal-weight 0.20 placeholders RETIRED.
+
+### Methodological discovery — octave-character invariance (2026-05-25)
+
+A real architectural finding surfaced during Phase B.1a authoring via Deimantas's partnership-quality challenge ("the edge KPIs are also octave aware right? That might have been an issue tho.").
+
+**Finding:** the octave-character of a BSC KPI is **invariant of its geometric placement**. Lock #8.36 reversion moved BSC.F4 from E7-11 (edge) to F11 face — but the **primaryOctave remained O2** through the reversion. Similarly BSC.L8 moved from V13 (vertex) to F10 face — **primaryOctave remained O2**.
+
+This is methodologically meaningful: octave is a **measurement-property** (where does the BSC observation operationalize? — O1 Survival / O2 Structure / O3 Aspirational), while face/edge/vertex placement is a **topology-property** (where does the inquiry-geometry live?). These two properties are **orthogonal**. A KPI can be relocated in topology without disturbing its octave-character.
+
+Empirical pattern in CEN's 5 historical KPI-carrying entries (verified against W06v3 KPI Mapping authoritative source 2026-05-25):
+  • E2-10 BSC.L7 (active) → O2 (structural codification)
+  • E5-8 BSC.C8 (active) → O1 (survival existence — "do we have any clients?")
+  • E10-12 BSC.I3 (active) → O1 (survival-floor protection — "is baseline ethics-resilience in place?")
+  • E7-11 BSC.F4 (deprecated) → was O2; preserved O2 on F11 face placement
+  • V13 BSC.L8 (deprecated) → was O2; preserved O2 on F10 face placement
+
+Distribution: 3 at O2 + 2 at O1. The initial Phase B.1a authoring incorrectly attributed all 5 to O2 based on source markdown Section 4 narrative emphasis (structural-codification framing); self-audit against W06v3 authoritative corrected the 2 errors (`36f6a8c` commit).
+
+This finding is now a **defense-grade methodological insight** worth its own architectural attention in future Quannex methodology evolution.
 
 ### Cross-references
 
-- **Lock #8.37** — partnership-locked 2026-05-25 evening; this section names the operational principle for future Quannex client engagements to inherit
+- **Lock #8.37** — partnership-locked 2026-05-25 morning; names the operational principle for future Quannex client engagements
+- **Lock #8.40** — partnership-locked 2026-05-25 evening; Edge + Vertex KPI Single-Source-of-Truth chain (Layer 1 source markdown → Layer 2 octave-kpi-spec.json → Layer 3 SSOT sheets inherit)
 - **§6.6** — Trust-the-Geometry (kin principle; §6.6 applies to current state, §6.7 applies to forward evolution)
-- **Plan §17 + §17.1** — v1.1 enhancement plan (deferred); ratifies §6.7 as the protocol if/when activated
+- **§6.8** — Naming-Convention Single-Source-of-Truth (kin Lock #8.39; same source-of-truth chain pattern for naming)
+- **POC/companies/cen/octave-kpi-spec.json** — Layer 2 canonical data file for edge + vertex KPI specifications
+- **Sheet 07 Edges cols K-Q** — operational disclosure of edge canonical name + BSC placement + 3-octave questions
+- **Sheet 08 Vertices cols O-U** — operational disclosure of vertex canonical name + classification + 3-octave questions
+- **Sheet 09 Bi-Directional § Status column** — operational disclosure of §6.7 ACTIVATED vs PROPOSED per signature
 
 ---
 

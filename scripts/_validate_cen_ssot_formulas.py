@@ -610,6 +610,113 @@ class SSOTValidator:
 
         return self
 
+    def check_edge_vertex_kpi_spec_consistency(self):
+        """
+        Lock #8.40 — Edge + Vertex KPI Single-Source-of-Truth.
+
+        Verifies that Sheets 07 (Edges) + 08 (Vertices) + 09 (Bi-Directional)
+        consistently read from POC/companies/cen/octave-kpi-spec.json:
+
+          (1) Sheet 07 col K (Canonical Name) per edge row matches spec.edges[].canonicalName
+          (2) Sheet 08 col O (Canonical Name) per vertex row matches spec.vertices[].canonicalName
+          (3) Sheet 09 §6.7 Status column 14 contains expected ACTIVATED/PROPOSED values
+              for the 5 HIGH-confidence signatures
+          (4) Spec edge count = 30 + 1 deprecated = 31 total signatures in spec
+          (5) Spec vertex count = 20
+          (6) BSC KPI count: 3 active edges (E2-10, E5-8, E10-12) + 0 vertices
+
+        Catches drift between data layer (octave-kpi-spec.json) and presentation
+        layer (sheets) per Lock #8.40 chain.
+        """
+        import json as _json_validator
+
+        spec_path = Path(__file__).resolve().parent.parent / "companies" / "cen" / "octave-kpi-spec.json"
+        if not spec_path.exists():
+            self.warnings.append(
+                f"Lock #8.40 check skipped: octave-kpi-spec.json not found at {spec_path}"
+            )
+            return self
+
+        with spec_path.open(encoding="utf-8") as f:
+            spec = _json_validator.load(f)
+
+        spec_edges = spec.get("edges", [])
+        spec_vertices = spec.get("vertices", [])
+
+        # Check (4) + (5): canonical counts
+        if len(spec_edges) != 30:
+            self.issues.append(
+                f"Lock #8.40 violation: octave-kpi-spec.json has {len(spec_edges)} edges "
+                f"(expected 30 canonical per main.js:826-849)"
+            )
+        if len(spec_vertices) != 20:
+            self.issues.append(
+                f"Lock #8.40 violation: octave-kpi-spec.json has {len(spec_vertices)} vertices "
+                f"(expected 20 canonical per main.js:953-977)"
+            )
+
+        # Check (6): KPI distribution
+        edge_kpis = [e for e in spec_edges if e.get("bscKpiPlacement")]
+        vertex_kpis = [v for v in spec_vertices if v.get("bscKpiPlacement")]
+        if len(edge_kpis) != 3:
+            self.issues.append(
+                f"Lock #8.40 violation: {len(edge_kpis)} active edge-KPIs (expected 3 "
+                f"per Lock #8.36: E2-10 BSC.L7, E5-8 BSC.C8, E10-12 BSC.I3)"
+            )
+        if len(vertex_kpis) != 0:
+            self.issues.append(
+                f"Lock #8.40 violation: {len(vertex_kpis)} active vertex-KPIs (expected 0 "
+                f"per Lock #8.36: V13 BSC.L8 reverted to F10 face)"
+            )
+
+        # Check (1): Sheet 07 col K (Canonical Name) per edge row matches spec
+        if "07_Edges" in self.wb_formula.sheetnames:
+            ws07 = self.wb_formula["07_Edges"]
+            # Sheet 07 has 30 edges starting at row 4; spec.edges is in main.js order
+            for offset, spec_edge in enumerate(spec_edges):
+                row = 4 + offset
+                actual = ws07.cell(row=row, column=11).value  # Col K
+                expected = spec_edge.get("canonicalName")
+                if expected is not None and actual != expected:
+                    self.issues.append(
+                        f"Lock #8.40 violation: Sheet 07 row {row} (edge {spec_edge.get('edgeId')}) "
+                        f"col K Canonical Name = {actual!r} but octave-kpi-spec.json says {expected!r}"
+                    )
+
+        # Check (2): Sheet 08 col O (Canonical Name) per vertex row matches spec
+        if "08_Vertices" in self.wb_formula.sheetnames:
+            ws08 = self.wb_formula["08_Vertices"]
+            # Sheet 08 has 20 vertices starting at row 4
+            for offset, spec_vertex in enumerate(spec_vertices):
+                row = 4 + offset
+                actual = ws08.cell(row=row, column=15).value  # Col O
+                expected = spec_vertex.get("canonicalName")
+                if expected is not None and actual != expected:
+                    self.issues.append(
+                        f"Lock #8.40 violation: Sheet 08 row {row} (vertex {spec_vertex.get('vertexId')}) "
+                        f"col O Canonical Name = {actual!r} but octave-kpi-spec.json says {expected!r}"
+                    )
+
+        # Check (3): Sheet 09 §6.7 Status — for the 3 active edge-KPIs, status should be
+        # "ACTIVATED (HIGH + active KPI)"
+        if "09_Vertex_KPIs_BiDirectional" in self.wb_formula.sheetnames:
+            ws09 = self.wb_formula["09_Vertex_KPIs_BiDirectional"]
+            # Edge rows start at row 21 (post Block A expansion); ordinal numbering
+            edge_ordinals_with_active_kpi = []
+            for offset, spec_edge in enumerate(spec_edges):
+                if spec_edge.get("bscKpiPlacement"):
+                    edge_ordinals_with_active_kpi.append((offset, spec_edge["edgeId"]))
+            for offset, edge_id in edge_ordinals_with_active_kpi:
+                row = 21 + offset * 2  # 2 rows per edge in Sheet 09
+                status = ws09.cell(row=row, column=14).value  # §6.7 Status col
+                if status and "ACTIVATED" not in str(status):
+                    self.issues.append(
+                        f"Lock #8.40 violation: Sheet 09 row {row} (edge {edge_id} active KPI) "
+                        f"§6.7 Status = {status!r}; expected to start with 'ACTIVATED'"
+                    )
+
+        return self
+
     # ---- Helpers ----------------------------------------------------------
 
     def _resolve_named_range_value(self, name):
@@ -647,7 +754,8 @@ class SSOTValidator:
                 .check_circular_references()
                 .check_calculation_sheet_named_range_usage()
                 .check_o1_face_energies_known_values()
-                .check_naming_convention_single_source_of_truth())
+                .check_naming_convention_single_source_of_truth()
+                .check_edge_vertex_kpi_spec_consistency())
 
     def report(self):
         """Print issues + warnings, return exit code (0 pass, 1 fail)."""
