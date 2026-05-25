@@ -5683,9 +5683,17 @@ def build_sheet_18_adversarial_findings(wb: Workbook):
     return ws
 
 
-# Test suite data — current as of Sub-Arc 1 close 2026-05-24
+# Test suite data — current as of Sub-Arc 1 close 2026-05-24 + W1 fix 2026-05-25
 # Format: (suite_name, test_file, test_count, validates_sheets, coverage_type, lock_refs)
+# NOTE: PHI Math Constants suite added 2026-05-25 (W1 fix) — was missing from
+# Sub-Arc 1 list due to truncated test-output read; full count 127+55+42+82+57+
+# 13+40+55+18+18+29+0 = 536 ✓ reconciles with run-all.js authoritative total.
 TEST_SUITES = [
+    ("PHI Math Constants",
+     "tests/phi-math.test.js", 127,
+     "01",
+     "PHI constants + golden-ratio identities (φ²=φ+1) + normalization math",
+     "Lock #8.6 phi-derived canonical; foundation for all downstream constants"),
     ("Integration (Engine)",
      "tests/integration.test.mjs", 55,
      "01, 03, 04, 06, 07, 08, 12",
