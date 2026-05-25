@@ -224,8 +224,8 @@ EDGES = [
         "bscKpiPlacement": {
             "kpiId": "BSC.C8",
             "kpiName": "AI governance consulting clients",
-            "primaryOctave": "O2",
-            "primaryOctaveRationale": "Structural codification of consulting practice — 'Is the AI governance consulting practice codified into repeatable delivery — documented methodology, structured engagement flow, measurable client outcomes?' (source line 505)",
+            "primaryOctave": "O1",
+            "primaryOctaveRationale": "Survival-existence — measures whether CEN has any market-tested operational output AT ALL (active consulting clients). Per W06v3 KPI Mapping line 176: 'Does market feedback transform into operational improvements?' maps to closed consulting clients as the market-operations feedback loop. Authoritative octave placement = O1 (not O2 as initially assumed from Section 4 structural framing).",
             "kpiCategoryBsc": "C (Customer/Stakeholder perspective)",
         },
     },
@@ -340,8 +340,8 @@ EDGES = [
         "bscKpiPlacement": {
             "kpiId": "BSC.I3",
             "kpiName": "GDPR compliance gaps closed",
-            "primaryOctave": "O2",
-            "primaryOctaveRationale": "Structural codification of values-protective systems — 'Are values-coherent resilience protocols codified — GDPR compliance gaps closed, structured ethics review, documented values-protective systems (BSC.I3)?' (source line 491)",
+            "primaryOctave": "O1",
+            "primaryOctaveRationale": "Survival-floor protection — 'Do our values transform into resilience during a crisis?' maps to baseline values-protective infrastructure (GDPR compliance, basic ethical safeguards). Per W06v3 KPI Mapping line 175: BSC.I3 measures whether CEN has minimum-viable ethics-failure protection (structural fragility floor). Authoritative octave placement = O1 (not O2 as initially assumed from Section 4 structural-codification framing).",
             "kpiCategoryBsc": "I (Internal Process perspective)",
         },
     },
@@ -557,6 +557,7 @@ VERTICES = [
 DEPRECATED_ENTRIES = [
     {
         "edgeId": "E7-11",
+        "faceA": 7, "faceB": 11,
         "deprecation_status": "Lock #8.36 reversion (2026-05-24): geometrically infeasible — F7+F11 are skew faces; no pentagon edge between them per main.js:826-849 canonical adjacency",
         "originalBscKpiPlacement_pre_Lock_8_36": {
             "kpiId": "BSC.F4",
@@ -579,7 +580,63 @@ DEPRECATED_ENTRIES = [
 ]
 
 
+def _inherit_narrative_labels(entries, face_lookup, has_c=False):
+    """Lock #8.39 source-of-truth discipline: REPLACE hardcoded faceANarrative/
+    faceBNarrative/faceCNarrative fields with values READ from mapping-context.json
+    narrativeLabel field at build time.
+
+    The fields keep the same names (clean reading experience) but their VALUES
+    are sourced from the data layer canonical store. Future updates to
+    narrativeLabel in mapping-context.json auto-propagate to this JSON on
+    next rebuild — no inline updates needed.
+
+    Verbatim-cross-check: validates that any pre-existing hardcoded narrative
+    value matches mapping-context.json before overwriting; flags any
+    divergence honestly via _narrative_source field.
+    """
+    for entry in entries:
+        face_a_id = entry.get("faceA")
+        face_b_id = entry.get("faceB")
+        face_c_id = entry.get("faceC") if has_c else None
+
+        # Cross-check pre-hardcoded values against source-of-truth (catches drift)
+        for key, face_id in [("faceANarrative", face_a_id), ("faceBNarrative", face_b_id),
+                             ("faceCNarrative", face_c_id)]:
+            if face_id is None:
+                continue
+            hardcoded = entry.get(key)
+            from_data_layer = face_lookup.get(face_id)
+            if hardcoded and from_data_layer and hardcoded != from_data_layer:
+                # Drift detected — preserve honest disclosure
+                entry[f"_{key}_drift_finding"] = (
+                    f"Hardcoded {key} {hardcoded!r} ≠ mapping-context.json "
+                    f"narrativeLabel {from_data_layer!r}. Using mapping-context.json "
+                    f"per Lock #8.39 source-of-truth discipline."
+                )
+            entry[key] = from_data_layer  # Always use data-layer value
+
+        # Mark this entry as inherited (audit trail)
+        entry["_narrativeLabels_source"] = (
+            "POC/companies/cen/mapping-context.json narrativeLabel field "
+            "(Lock #8.39 source-of-truth; read at build time)"
+        )
+
+
 def main():
+    # Lock #8.39 source-of-truth: READ narrative labels from mapping-context.json
+    # instead of hardcoding. If the data layer changes (e.g., v1.1.x CEN partnership-
+    # ratifies refined narrative labels), this JSON auto-inherits on next rebuild.
+    cen_mc_path = Path(__file__).resolve().parent.parent / "companies" / "cen" / "mapping-context.json"
+    with cen_mc_path.open(encoding="utf-8") as f:
+        cen_mc = json.load(f)
+    face_narrative_lookup = {
+        face["id"]: face.get("narrativeLabel")
+        for face in cen_mc.get("faces", [])
+    }
+    _inherit_narrative_labels(EDGES, face_narrative_lookup, has_c=False)
+    _inherit_narrative_labels(VERTICES, face_narrative_lookup, has_c=True)
+    _inherit_narrative_labels(DEPRECATED_ENTRIES, face_narrative_lookup, has_c=False)
+
     data = {
         "version": "1.0",
         "company": "cen",
@@ -604,17 +661,39 @@ def main():
         ),
         "canonical_edge_count": 30,
         "canonical_vertex_count": 20,
-        "kpi_distribution": "3 edge-KPIs all at O2 (E2-10 BSC.L7 + E5-8 BSC.C8 + E10-12 BSC.I3) + 0 vertex-KPIs",
+        "kpi_distribution": "3 edge-KPIs at mixed octaves: E2-10 BSC.L7 @ O2 + E5-8 BSC.C8 @ O1 + E10-12 BSC.I3 @ O1. 0 vertex-KPIs post-Lock #8.36.",
         "octave_aware_kpi_placement_note": (
             "Edge + vertex KPIs are OCTAVE-AWARE per partnership-finding 2026-05-25: each "
             "KPI placement carries a primaryOctave coordinate (O1 Survival / O2 Structure / "
             "O3 Relationships-Aspirational). The same edge/vertex generates 3 distinct octave-"
             "specific questions (o1Question/o2Question/o3Question) per Lock #8.24 octave-aware "
-            "inquiry architecture; the BSC KPI itself operationally measures at the primaryOctave. "
-            "Empirical observation: all 5 historical KPI-carrying entries (4 edges + 1 vertex pre-"
-            "Lock #8.36) live at O2 Structure octave — consistent with the methodological pattern "
-            "that 17 of 34 BSC KPIs naturally cluster at O2 per W0.6 v3 mapping (BSC's natural "
-            "register is structural codification)."
+            "inquiry architecture; the BSC KPI itself operationally measures at the primaryOctave "
+            "per W06v3 KPI Mapping doc authoritative attribution. "
+            "Empirical pattern across 5 historical KPI-carrying entries (verified against "
+            "W06v3 lines 173-176 + 156): "
+            "  • E2-10 BSC.L7 Peace Charter screening procedure → O2 (Structure: codified screen) "
+            "  • E5-8 BSC.C8 AI governance consulting clients → O1 (Survival: do we have any clients?) "
+            "  • E10-12 BSC.I3 GDPR compliance gaps closed → O1 (Survival: baseline ethics-resilience floor) "
+            "  • E7-11 BSC.F4 Donation income/quarter → O2 [deprecated per Lock #8.36; preserved face placement octave] "
+            "  • V13 BSC.L8 SDG alignment in PVM → O2 [deprecated per Lock #8.36; preserved face placement octave] "
+            "Distribution: 3 at O2 (structural codification) + 2 at O1 (survival-floor existence). "
+            "Methodological insight: Lock #8.36 reversion preserved OCTAVE-CHARACTER when face-"
+            "placement geometric infeasibility forced relocation — BSC.F4 was O2 on E7-11 → still "
+            "O2 on F11 Fire; BSC.L8 was O2 on V13 → still O2 on F10 Ether. **The octave-character "
+            "of a KPI is invariant of its geometric placement.** A real architectural insight: "
+            "octave is a measurement-property (where does the BSC observation operationalize?), "
+            "while face/edge/vertex placement is a topology-property (where does the inquiry-"
+            "geometry live?). These two properties are orthogonal."
+        ),
+        "octave_attribution_correction_2026_05_25": (
+            "Initial Phase B.1a author (commit a8c17ef) assigned all 5 KPIs to O2 based on "
+            "source markdown Section 4 detailed treatments' structural-codification framing. "
+            "Deimantas's partnership-quality challenge ('the edge KPIs are also octave aware right? "
+            "That might have been an issue tho.') prompted authoritative verification against W06v3 "
+            "KPI Mapping doc — which revealed 2 of 5 attributions were wrong: BSC.C8 (E5-8) "
+            "actually O1; BSC.I3 (E10-12) actually O1. Corrected in this follow-up. Lesson: "
+            "Section 4 narrative emphasis ≠ authoritative octave placement; W06v3 is the source-"
+            "of-truth column for octave attribution per Lock #8.40 chain."
         ),
         "kpi_placement_schema": {
             "kpiId": "BSC.<letter><number> identifier (F=Financial, I=Internal Process, C=Customer/Stakeholder, L=Learning & Growth per Kaplan-Norton 4 perspectives)",
