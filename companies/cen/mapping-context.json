@@ -11,7 +11,6 @@
     {
       "id": 1,
       "baseName": "Financial Capital",
-      "customName": "Financial Fragility",
       "icon": "💰",
       "octave": 1,
       "tooltip": "CRITICAL: D=6, E=1 — massive perception gap; researcher confirms 2/10. No runway clarity.",
@@ -25,12 +24,12 @@
       },
       "appendixEClusterName": "Three-Pillar Sustainability",
       "iircAnchor": "Financial Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Financial Fragility"
     },
     {
       "id": 2,
       "baseName": "Intellectual Capital",
-      "customName": "Conceptual Depth",
       "icon": "💡",
       "octave": 3,
       "tooltip": "STRONG: D=8, E=7 — agreement that ideas and frameworks are genuinely developed",
@@ -44,12 +43,12 @@
       },
       "appendixEClusterName": "Programs Engine",
       "iircAnchor": "Intellectual Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Conceptual Depth"
     },
     {
       "id": 3,
       "baseName": "Human Capital",
-      "customName": "Founder Dyad",
       "icon": "👥",
       "octave": 2,
       "tooltip": "Mixed: D=7, E=3 — Dominique energized, Esther drained. Researcher confirms 4/10.",
@@ -63,12 +62,12 @@
       },
       "appendixEClusterName": "Team and Energy",
       "iircAnchor": "Human Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Founder Dyad"
     },
     {
       "id": 4,
       "baseName": "Structural Capital",
-      "customName": "Governance Gap",
       "icon": "🏛️",
       "octave": 1,
       "tooltip": "WEAK: D=7, E=2 — Esther sees the structural vacuum clearly; docs and protocols incomplete",
@@ -82,12 +81,12 @@
       },
       "appendixEClusterName": "Operational Discipline",
       "iircAnchor": "Manufactured Capital (adapted to Structural Capital for CEN organisational form)",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Governance Gap"
     },
     {
       "id": 5,
       "baseName": "Market Resonance",
-      "customName": "Mission in Silence",
       "icon": "📊",
       "octave": 1,
       "tooltip": "SEVERELY DEPLETED: D=3, E=1. Mission is powerful but nearly invisible externally.",
@@ -101,12 +100,12 @@
       },
       "appendixEClusterName": "Coaching Market Fit",
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Mission in Silence"
     },
     {
       "id": 6,
       "baseName": "Community",
-      "customName": "Emerging Network",
       "icon": "🤝",
       "octave": 1,
       "tooltip": "Early-stage: D=3, E=4 — some community presence, especially Esther's relational network",
@@ -120,12 +119,12 @@
       },
       "appendixEClusterName": "Membership Belonging",
       "iircAnchor": "Social and Relationship Capital (aliased to Community Capital where appropriate)",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Emerging Network"
     },
     {
       "id": 7,
       "baseName": "Brand & Reputation",
-      "customName": "Quiet Credibility",
       "icon": "⭐",
       "octave": 2,
       "tooltip": "Moderate: D=7, E=3. Reputation exists in select networks but not broadcast broadly.",
@@ -139,12 +138,12 @@
       },
       "appendixEClusterName": "Field Voice",
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Quiet Credibility"
     },
     {
       "id": 8,
       "baseName": "Core Operations",
-      "customName": "Underdeveloped Engine",
       "icon": "⚙️",
       "octave": 1,
       "tooltip": "WEAK: D=7, E=1. Dominique believes ops work; Esther sees little systematized. Researcher: 2/10.",
@@ -158,12 +157,12 @@
       },
       "appendixEClusterName": "Field-Shaping Aspiration",
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Underdeveloped Engine"
     },
     {
       "id": 9,
       "baseName": "Regenerative Flow",
-      "customName": "Conscious Core",
       "icon": "♻️",
       "octave": 2,
       "tooltip": "NOTABLE: D=6, E=5, researcher=8. Strong regenerative ethic — most agreed-upon strength beyond values.",
@@ -177,12 +176,12 @@
       },
       "appendixEClusterName": "Ecological Embedding",
       "iircAnchor": "Natural Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Conscious Core"
     },
     {
       "id": 10,
       "baseName": "Foundational Values",
-      "customName": "Sacred Ground",
       "icon": "🎯",
       "octave": 4,
       "tooltip": "EXCEPTIONAL: D=10, E=9. The bedrock of CEN — profound values alignment between both founders.",
@@ -196,12 +195,12 @@
       },
       "appendixEClusterName": "Conscious-Leadership Identity",
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Sacred Ground"
     },
     {
       "id": 11,
       "baseName": "Funding Pipeline",
-      "customName": "Dormant Pipeline",
       "icon": "💎",
       "octave": 2,
       "tooltip": "Below potential: D=6, E=4. Some effort but insufficient for NGO sustainability needs.",
@@ -215,12 +214,12 @@
       },
       "appendixEClusterName": "Funding Inflow",
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Dormant Pipeline"
     },
     {
       "id": 12,
       "baseName": "Risk & Resilience",
-      "customName": "Exposed Foundation",
       "icon": "🛡️",
       "octave": 1,
       "tooltip": "CRITICAL: D=3, E=1. Researcher confirms 3/10. Near-zero resilience mechanisms.",
@@ -234,7 +233,8 @@
       },
       "appendixEClusterName": "Compliance and Continuity",
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Exposed Foundation"
     }
   ],
   "edges": [

@@ -11,7 +11,6 @@
     {
       "id": 1,
       "baseName": "Financial Capital",
-      "customName": "Burning Runway",
       "icon": "💰",
       "octave": 1,
       "tooltip": "CRITICAL: $28K cash, $67K burn = 4.2 months to survive",
@@ -25,12 +24,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Financial Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Burning Runway"
     },
     {
       "id": 2,
       "baseName": "Intellectual Capital",
-      "customName": "AI Innovation Core",
       "icon": "💡",
       "octave": 2,
       "tooltip": "Strong: AI technology genuinely works - 52 hrs/week on IP development",
@@ -44,12 +43,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Intellectual Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "AI Innovation Core"
     },
     {
       "id": 3,
       "baseName": "Human Capital",
-      "customName": "Exhausted Founders",
       "icon": "👥",
       "octave": 1,
       "tooltip": "CRITICAL: 4.2 hrs sleep, energy 3.5/10 - founders in survival mode",
@@ -63,12 +62,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Human Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Exhausted Founders"
     },
     {
       "id": 4,
       "baseName": "Structural Capital",
-      "customName": "Incomplete Foundation",
       "icon": "🏛️",
       "octave": 1,
       "tooltip": "Only 45% legal registration complete - everything in founders' heads",
@@ -82,12 +81,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Manufactured Capital (adapted to Structural Capital for CEN organisational form)",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Incomplete Foundation"
     },
     {
       "id": 5,
       "baseName": "Market Resonance",
-      "customName": "Market Invisibility",
       "icon": "📊",
       "octave": 1,
       "tooltip": "WEAK: 142 website visitors/week, zero customers after 6 months",
@@ -101,12 +100,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Market Invisibility"
     },
     {
       "id": 6,
       "baseName": "Community & Partners",
-      "customName": "Nascent Network",
       "icon": "🤝",
       "octave": 1,
       "tooltip": "Building: Some early advisor relationships forming",
@@ -120,12 +119,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Social and Relationship Capital (aliased to Community Capital where appropriate)",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Nascent Network"
     },
     {
       "id": 7,
       "baseName": "Brand & Reputation",
-      "customName": "Invisible Brand",
       "icon": "⭐",
       "octave": 1,
       "tooltip": "Non-existent: Brand has no market presence yet",
@@ -139,12 +138,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Invisible Brand"
     },
     {
       "id": 8,
       "baseName": "Core Operations",
-      "customName": "Unstable Platform",
       "icon": "⚙️",
       "octave": 1,
       "tooltip": "CONCERNING: 87.5% uptime - customers expect 99%+",
@@ -158,12 +157,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Unstable Platform"
     },
     {
       "id": 9,
       "baseName": "Regenerative Flow",
-      "customName": "Survival Choices",
       "icon": "♻️",
       "octave": 1,
       "tooltip": "Minimal: Making choices for survival, not regeneration",
@@ -177,12 +176,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Natural Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Survival Choices"
     },
     {
       "id": 10,
       "baseName": "Foundational Values",
-      "customName": "Mission Clarity",
       "icon": "🎯",
       "octave": 2,
       "tooltip": "SOLID: 4.2/5 mission clarity despite chaos - clear purpose",
@@ -196,12 +195,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Mission Clarity"
     },
     {
       "id": 11,
       "baseName": "Funding Pipeline",
-      "customName": "Desperate Pursuit",
       "icon": "💎",
       "octave": 1,
       "tooltip": "Active: 18 hrs/week outreach, 2 investor conversations active",
@@ -215,12 +214,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Desperate Pursuit"
     },
     {
       "id": 12,
       "baseName": "Risk & Resilience",
-      "customName": "Fragile System",
       "icon": "🛡️",
       "octave": 1,
       "tooltip": "CRITICAL: Single point of failure everywhere - no redundancy",
@@ -234,7 +233,8 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Fragile System"
     }
   ],
   "edges": [

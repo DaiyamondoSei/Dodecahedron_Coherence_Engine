@@ -196,7 +196,7 @@ The math gave the geometric finding. The semantics gave the action.
 When applying Quannex to a new organization:
 
 - **The math always works** — feed face energies to the Spectral Analyzer, get eigenvector decomposition, get modal amplitudes, get dominant modes. This is automated and reproducible.
-- **The semantic overlay must be applied per organization** — the projection/reception poles for THAT organization's dominant mode need to be translated into THAT organization's operational language (their face customNames, their cultural vocabulary, their priorities).
+- **The semantic overlay must be applied per organization** — the projection/reception poles for THAT organization's dominant mode need to be translated into THAT organization's operational language (their face narrativeLabels, their cultural vocabulary, their priorities).
 - **The Calibration Loop must close** — the prescribed action (e.g., "raise F3+F8 paired") must be tested against the organization's reality. If the prescription reduces systemic tension over time, the semantic translation is validated. If not, the translation needs refinement (or the math is revealing a deeper finding the semantics aren't yet capturing).
 
 The semantic overlay is **the place where mathematics meets human meaning**. Owning this transparently is what separates Quannex from black-box organizational analytics.
@@ -447,7 +447,7 @@ This makes forward-evolution HONEST (visible) rather than SILENT (hidden). It ex
 
 ### The Principle
 
-Every name used in the methodology — face names, capital names, customNames, cluster names, polarity labels — has a **single canonical source-of-truth**. The methodology's sheets, reports, and downstream artifacts INHERIT from that source; they never INVENT inline. When a sheet shows a name, a reviewer must be able to trace it back to its source-of-truth file with no ambiguity.
+Every name used in the methodology — face names, capital names, narrativeLabels, cluster names, polarity labels — has a **single canonical source-of-truth**. The methodology's sheets, reports, and downstream artifacts INHERIT from that source; they never INVENT inline. When a sheet shows a name, a reviewer must be able to trace it back to its source-of-truth file with no ambiguity.
 
 This is methodological hygiene: when the same conceptual entity has different names in different sheets, the methodology's clarity erodes for the reviewer. Lock #8.39 closes that erosion by establishing the source-of-truth chain explicitly.
 
@@ -466,14 +466,17 @@ Layer 2 — Per-company face data (CEN-specific or Quannex-self-specific etc.)
   ↓ Source: POC/companies/<company-id>/mapping-context.json (faces[] array per face_id)
   ↓ Fields:
   ↓   - baseName: inherits from Layer 1 (engine-canonical)
-  ↓   - customName: per-company current-state diagnostic label (Phase 2 snapshot)
+  ↓   - narrativeLabel: per-company Phase 2 narrative storytelling device (v1.0.1
+  ↓                     rename from customName; lives in Sheet 21 §A narrative
+  ↓                     paragraphs only, NOT in measurement tables — see v1.0.1
+  ↓                     architectural refinement at end of this §6.8)
   ↓   - iircAnchor: IIRC universal capital (populated for F1+F2+F3+F4+F6+F9 only;
   ↓                 null for F5+F7+F8+F10+F11+F12 polarity faces)
   ↓   - architectureLayer: "IIRC universal capital" or "Organisation-authentic polarity"
   ↓   - appendixEClusterName: CEN-Authentic Cluster Name (CEN populated from Appendix E
   ↓                           §E.3.1; other companies null/pending until they have their
   ↓                           own equivalent of Appendix E)
-  ↓ Example: CEN F1 baseName="Financial Capital" / customName="Financial Fragility" /
+  ↓ Example: CEN F1 baseName="Financial Capital" / narrativeLabel="Financial Fragility" /
   ↓          iircAnchor="Financial Capital" / appendixEClusterName="Three-Pillar Sustainability"
 
 Layer 3 — SSOT sheet renderings (inherit from Layer 2; never invent)
@@ -481,7 +484,9 @@ Layer 3 — SSOT sheet renderings (inherit from Layer 2; never invent)
   ↓ Discipline: every sheet that shows a face name READS from mapping-context.json
   ↓             at build time; NO hardcoded inline name lists.
   ↓ Example: Sheet 0a NAMING_TRANSLATION reads appendixEClusterName field at runtime;
-  ↓          Sheet 16 FACE_INFO_12 reads customName + iircAnchor at runtime.
+  ↓          Sheet 16 FACE_INFO_12 reads baseName + iircAnchor at runtime
+  ↓          (post-v1.0.1: narrativeLabel REMOVED from Sheet 16 measurement table;
+  ↓          relocated to Sheet 21 §A narrative paragraphs where storytelling belongs).
 ```
 
 ### The Six-Plus-Six Canonical Architecture (per Appendix E §E.3.1 line 71)
@@ -512,22 +517,23 @@ The breath-axis pairing structure makes the methodological richness visible:
 - F5↔F10 (org-authentic Market ↔ org-authentic Values) — External-internal axis (both polarities paired)
 - F6↔F12 (IIRC Social-and-Relationship ↔ org-authentic Risk-Resilience) — Partnership-resilience axis
 
-### Two-Layer CEN Naming Distinction
+### Three-Layer CEN Naming Distinction (post-v1.0.1 refinement)
 
-For CEN specifically, there are TWO legitimately different "CEN-authentic" naming layers that the SSOT discloses explicitly to avoid conflation:
+For CEN specifically, there are THREE legitimately different naming layers that the SSOT discloses explicitly to avoid conflation:
 
-| Layer | What it labels | Source field | Property | Example (F1) |
-|---|---|---|---|---|
-| **CEN-Authentic Cluster Name** | CEN organisational DOMAIN category (what the face IS in CEN's structural taxonomy) | `mapping-context.json` `appendixEClusterName` field (sourced from Appendix E §E.3.1) | **Timeless** (CEN's enduring organisational architecture) | "Three-Pillar Sustainability" |
-| **CEN Current-State Reading** | CEN CURRENT-STATE diagnostic reading (what the face READS AS at this Phase 2 moment in time) | `mapping-context.json` `customName` field (Phase 2 organisational snapshot) | **Moment-in-time** (snapshot of current organisational psychology) | "Financial Fragility" |
+| Layer | What it labels | Source field | Property | Where it lives in SSOT | Example (F1) |
+|---|---|---|---|---|---|
+| **Face Base Name** | Engine-canonical face identity (universal across all Quannex companies) | engine `breath-axes.js` (DOMAIN_NAMES) → `mapping-context.json` `baseName` field | **Universal** (same across all companies; inherited from Thesis Ch3 §3.5) | Sheet 16 main 12-face table col 3 | "Financial Capital" |
+| **CEN-Authentic Cluster Name** | CEN organisational DOMAIN category (what the face IS in CEN's structural taxonomy) | `mapping-context.json` `appendixEClusterName` field (sourced from Appendix E §E.3.1) | **Timeless** (CEN's enduring organisational architecture) | Sheet 0a NAMING_TRANSLATION CEN col | "Three-Pillar Sustainability" |
+| **CEN Narrative Label** | Phase 2 narrative storytelling device (what poetic/emotional name CEN's organisational psychology takes right now) | `mapping-context.json` `narrativeLabel` field (v1.0.1 rename from `customName`) | **Moment-in-time storytelling device** (not a measurement; not a diagnostic reading; a literary compression for narrative use) | Sheet 21 §A narrative paragraphs only (NOT Sheet 16 main measurement table) | "Financial Fragility" |
 
-Both layers are valid. They describe different things and are explicitly labeled as such in Sheet 0a (CEN-Authentic Cluster Name) and Sheet 16 Dashboard_View (CEN Current-State Reading). Cross-reference footnotes in both sheets point to the other layer.
+All three layers are valid. v1.0.1 architectural refinement (2026-05-25 evening): the CEN Narrative Label was relocated OUT of Sheet 16 main 12-face measurement table (where it had been competing visually with measurement data and the "Current-State Reading" framing was overstating what these poetic labels actually are) INTO Sheet 21 §A Coherence Story narrative paragraphs (where storytelling devices belong).
 
 ### Why This Matters
 
-A thesis defense reviewer or CEN board member opening the SSOT must be able to trace any face/capital name back to its source with no ambiguity. Without Lock #8.39, sheets can drift — one sheet calls F3 "Founder Dyad" (current-state), another invents "Human Capital" (duplicate base name; broken), a third uses "Team and Energy" (Appendix E cluster name). The reviewer can't tell which is canonical or how they relate.
+A thesis defense reviewer or CEN board member opening the SSOT must be able to trace any face/capital name back to its source with no ambiguity. Without Lock #8.39, sheets can drift — one sheet calls F3 "Founder Dyad" (narrative storytelling), another invents "Human Capital" (duplicate base name; broken), a third uses "Team and Energy" (Appendix E cluster name). The reviewer can't tell which is canonical or how they relate.
 
-Lock #8.39 closes the drift by making the source-of-truth chain explicit: **Thesis Appendix E §E.3.1 → mapping-context.json (appendixEClusterName + customName + iircAnchor + architectureLayer fields) → engine breath-axes.js (base names) → SSOT sheets inherit at build time → reviewers can trace every name back to its source file:line.**
+Lock #8.39 closes the drift by making the source-of-truth chain explicit: **Thesis Appendix E §E.3.1 → mapping-context.json (appendixEClusterName + narrativeLabel + iircAnchor + architectureLayer fields) → engine breath-axes.js (base names) → SSOT sheets inherit at build time → reviewers can trace every name back to its source file:line.**
 
 ### Inheritance Pattern for Future Quannex Client Engagements
 
@@ -535,7 +541,7 @@ When a new organisation becomes a Quannex client, their workflow is:
 
 1. **Inherit Layer 1 (engine-canonical face base names)** — universal across all companies; no per-org work needed
 2. **Author Layer 2 per-company fields** in `POC/companies/<org-id>/mapping-context.json`:
-   - `customName` per face (current-state diagnostic for this client)
+   - `narrativeLabel` per face (Phase 2 storytelling device for this client; lives in Sheet 21 §A only)
    - `appendixEClusterName` per face (organisational domain category; requires the client's own equivalent of CEN's Appendix E — the client's structural-taxonomy authoring work)
    - `iircAnchor` + `architectureLayer` — INHERITED methodological constants (same for all orgs per dodecahedron's structure)
 3. **Build SSOT** using same `_build_cen_ssot_xlsx.py`-pattern script — sheets auto-inherit per-company values from the data layer; never invent inline
@@ -544,12 +550,13 @@ This makes the methodology REPRODUCIBLE across clients: same engine, same dodeca
 
 ### Cross-References
 
-- **Lock #8.39** — partnership-locked 2026-05-25 evening as part of v1.0 hardening commit; canonical source-of-truth for naming convention single-source-of-truth
+- **Lock #8.39** — partnership-locked 2026-05-25 evening as part of v1.0 hardening commit; canonical source-of-truth for naming convention single-source-of-truth. v1.0.1 architectural refinement (same day): customName → narrativeLabel rename + Sheet 16 main table cleanup (relocate narrative labels to Sheet 21 §A only).
 - **Appendix E §E.3.1** — `Final Thesis/Thesis Work/Assignments/Research/Assignment Research Parts Reports - Chapters/Appendix E/Appendix E - LEADING.md` lines 75-90 (CEN cluster table) + line 71 (six-plus-six architecture declaration)
 - **§6.6** — Trust-the-Geometry (kin principle; both §6.6 and §6.8 apply to methodological taxonomy clarity, just at different layers: §6.6 = spectrum/topology; §6.8 = naming)
 - **§6.7** — Honest Forward-Evolution (kin principle; §6.8 + §6.7 together govern HOW Quannex names + adds measurement honestly)
-- **Sheet 0a Naming_Translation** — operational disclosure point for the six-plus-six architecture + IIRC adaptation footnotes + cross-ref to Sheet 16 for current-state layer
-- **Sheet 16 Dashboard_View** — operational disclosure point for CEN Current-State Reading layer + cross-ref to Sheet 0a for timeless cluster-name layer
+- **Sheet 0a Naming_Translation** — operational disclosure point for the six-plus-six architecture + IIRC adaptation footnotes + cross-ref to Sheet 21 §A for narrative label layer
+- **Sheet 16 Dashboard_View** — operational disclosure point for engine-canonical Face Base Name + IIRC Anchor layers; cross-refs Sheet 0a (timeless cluster) + Sheet 21 §A (narrative labels)
+- **Sheet 21 Coherence Story §A** — canonical home for CEN Narrative Label storytelling device (post-v1.0.1 relocation; "Financial Fragility", "Founder Dyad", "Sacred Ground", etc. embedded in narrative paragraphs where literary compression serves the reader)
 
 ### The Methodology's Growth
 

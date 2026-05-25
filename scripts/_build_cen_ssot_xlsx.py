@@ -917,11 +917,15 @@ def build_sheet_0a_naming_translation(wb: Workbook):
     # Cross-reference footnote pointing to Sheet 16 for current-state diagnostic layer
     xref_row = footnote_start_row + len(iirc_anchor_footnotes) + 2
     xref_text = (
-        "↗ See Sheet 16 Dashboard_View for CEN Current-State Reading (Phase 2 diagnostic snapshot from "
-        "mapping-context.json customName field). The two CEN naming layers are complementary: "
+        "↗ See Sheet 21 Coherence Story §A narrative paragraphs for CEN Narrative Labels "
+        "(Phase 2 storytelling devices — 'Financial Fragility', 'Founder Dyad', 'Sacred Ground', etc.; "
+        "from mapping-context.json narrativeLabel field; v1.0.1 relocated from prior Sheet 16 placement "
+        "to where storytelling belongs). The three CEN naming layers are complementary: "
         "CEN-Authentic Cluster Name (this Sheet 0a column) = TIMELESS organizational identity from Appendix E; "
-        "CEN Current-State Reading (Sheet 16 column) = Phase 2 diagnostic snapshot. Lock #8.39 single-source-of-truth: "
-        "both layers READ from mapping-context.json (appendixEClusterName + customName fields)."
+        "CEN Narrative Label (Sheet 21 §A) = Phase 2 storytelling device; "
+        "Face Base Name + IIRC Anchor (Sheet 16) = engine-canonical + cited-authority measurement layer. "
+        "Lock #8.39 single-source-of-truth: all three READ from mapping-context.json "
+        "(appendixEClusterName + narrativeLabel + iircAnchor fields) or breath-axes.js (baseName)."
     )
     ws.cell(row=xref_row, column=1, value=xref_text).font = Font(
         name="Calibri", size=9, italic=True, color="606060")
@@ -3688,7 +3692,7 @@ def build_sheet_10_breath_axes(wb: Workbook):
         "    internal Foundational Values reception (F10) is peak. The 'breath' isn't flowing.",
         "  • This is the MATHEMATICAL FINGERPRINT of an organization whose internal coherence is",
         "    profound but whose external expression of that coherence has collapsed — the Mission",
-        "    in Silence pattern (CEN customName captures this verbatim).",
+        "    in Silence pattern (CEN narrativeLabel 'Mission in Silence' captures this verbatim — see Sheet 21 §A).",
         "                                       ",
         "Prescribed actionable insight (Calibration Loop test in CEN Wk6-Wk8):",
         "  • Activate F5 Market projection through Mission externalization work (Wk6-Wk8 founder action items)",
@@ -5590,11 +5594,17 @@ def build_sheet_16_dashboard(wb: Workbook):
     # Face metadata loaded from POC/companies/cen/mapping-context.json per Lock #8.39
     # (Naming-Convention Single-Source-of-Truth). Fields read per face:
     #   baseName               → Face Base Name (Quannex canonical from breath-axes.js)
-    #   customName             → CEN Current-State Reading (Phase 2 diagnostic)
     #   iircAnchor             → IIRC capital (F1+F2+F3+F4+F6+F9 only; None for polarities)
     #   architectureLayer      → "IIRC universal capital" or "Organisation-authentic polarity"
-    # CEN-Authentic Cluster Name (Appendix E §E.3.1) lives in Sheet 0a — see cross-ref
-    # below the face table.
+    # v1.0.1 refactor (2026-05-25): narrativeLabel field (formerly customName) is
+    # NOT read here — narrative labels belong in Sheet 21 Coherence Story §A paragraphs,
+    # not in Sheet 16 main measurement table. Architectural cleanup per partnership-
+    # decided observation: poetic labels were visually competing with measurement data;
+    # cleaner = labels live where storytelling lives (Sheet 21), measurements live
+    # where the dashboard lives (Sheet 16).
+    # CEN-Authentic Cluster Name (Appendix E §E.3.1) lives in Sheet 0a (timeless layer)
+    # CEN Narrative Label (Phase 2 storytelling device) lives in Sheet 21 §A paragraphs
+    # — see cross-ref below the face table.
     import json as _json_for_sheet16
     cen_mc_path_s16 = POC_ROOT / "companies" / "cen" / "mapping-context.json"
     with cen_mc_path_s16.open(encoding="utf-8") as _f:
@@ -5605,7 +5615,6 @@ def build_sheet_16_dashboard(wb: Workbook):
     for face_id in range(1, 13):
         f = _face_dict.get(face_id, {})
         base_name = f.get("baseName", f"F{face_id}")
-        custom_name = f.get("customName", "(pending)")
         iirc_anchor = f.get("iircAnchor")  # None for polarity faces
         # Strip the adaptation parenthetical for the column display (footnote in Sheet 0a has full text)
         if iirc_anchor and "(adapted" in iirc_anchor:
@@ -5618,41 +5627,36 @@ def build_sheet_16_dashboard(wb: Workbook):
             iirc_anchor_display = iirc_anchor
         else:
             iirc_anchor_display = "n/a — CEN-authentic polarity"
-        FACE_INFO_12.append((face_id, f"F{face_id}", base_name, custom_name, iirc_anchor_display))
+        FACE_INFO_12.append((face_id, f"F{face_id}", base_name, iirc_anchor_display))
 
-    # Header — explicit column positions matching data layout exactly (fixes pre-existing
-    # column-alignment bug where original enumerate loop misaligned with data merges).
-    # Data row column layout (must match):
-    #   col 1: face_id  · col 2: face_label  · col 3: base_name
-    #   col 4-5 (merged): CEN current-state reading
-    #   col 6: E_final formula  · col 7: Band formula  · col 8: IIRC anchor
-    #   col 9-11 (merged): Notes
+    # Header — explicit column positions matching data layout exactly. Sheet 16 main
+    # 12-face measurement table (v1.0.1 cleaner column layout after narrativeLabel removal):
+    #   col 1: # · col 2: Face · col 3: Base Name · col 4: IIRC Anchor
+    #   col 5: E_final · col 6: Band · col 7-11 (merged): Notes
     header_specs = [
         (1, "#"),
         (2, "Face"),
         (3, "Face Base Name (Quannex canonical)"),
-        (4, "CEN Current-State Reading (mapping-context.json Phase 2 diagnostic)"),  # merged 4-5
-        (6, "E_final (O1)"),
-        (7, "Band"),
-        (8, "IIRC Anchor"),
-        (9, "Notes"),  # merged 9-11
+        (4, "IIRC Anchor"),
+        (5, "E_final (O1)"),
+        (6, "Band"),
+        (7, "Notes"),  # merged 7-11
     ]
     for col, header_text in header_specs:
         c = ws.cell(row=14, column=col, value=header_text)
         c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
         c.font = Font(name="Calibri", size=10, bold=True, color="000000")
         c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-    # Col 4-5 merged for CEN Current-State Reading; col 9-11 merged for Notes
-    ws.merge_cells(start_row=14, start_column=4, end_row=14, end_column=5)
-    ws.merge_cells(start_row=14, start_column=9, end_row=14, end_column=11)
+    # Col 7-11 merged for Notes
+    ws.merge_cells(start_row=14, start_column=7, end_row=14, end_column=11)
     # Fill merged-empty cells with header style for visual continuity
-    for empty_col in [5, 10, 11]:
+    for empty_col in [8, 9, 10, 11]:
         c = ws.cell(row=14, column=empty_col)
         c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
 
     # Per-face row
     F9_F10_FACES = {9, 10}  # architectural-blindness highlight
-    for i, (face_id, face_label, base_name, cen_name, iirc_anchor_display) in enumerate(FACE_INFO_12):
+    for i, (face_id, face_label, base_name, iirc_anchor_display) in enumerate(FACE_INFO_12):
         row = 15 + i
         ws.cell(row=row, column=1, value=face_id).alignment = Alignment(horizontal="center")
         ws.cell(row=row, column=2, value=face_label).font = Font(
@@ -5660,36 +5664,33 @@ def build_sheet_16_dashboard(wb: Workbook):
         ws.cell(row=row, column=2).alignment = Alignment(horizontal="center")
         ws.cell(row=row, column=3, value=base_name).font = Font(
             name="Calibri", size=10, color="404040")
-        ws.cell(row=row, column=4, value=cen_name).font = Font(
-            name="Calibri", size=10, italic=True, color="0D7377")
-        ws.merge_cells(start_row=row, start_column=4, end_row=row, end_column=5)
 
-        # Col 6: E_final (O1)
-        apply_formula_cell(ws, row, 6, f"=cen_f{face_id}_o1_e_final")
-        ws.cell(row=row, column=6).number_format = "0.0000"
-        ws.cell(row=row, column=6).alignment = Alignment(horizontal="center")
-        ws.cell(row=row, column=6).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
-
-        # Col 7: Band classification
-        apply_formula_cell(
-            ws, row, 7,
-            f'=IF(F{row}<phi_inv_4,"Wall",'
-            f'IF(F{row}<phi_inv_2,"Gate",'
-            f'IF(F{row}<phi_inv_1,"Membrane",'
-            f'IF(F{row}<0.854,"Hemorrhage","Vortex"))))'
-        )
-        ws.cell(row=row, column=7).alignment = Alignment(horizontal="center")
-        ws.cell(row=row, column=7).font = Font(name="Calibri", size=10, italic=True)
-
-        # Col 8: IIRC Anchor (NEW — populated for F1+F2+F3+F4+F6+F9 only; "n/a — CEN-authentic polarity" for others)
-        iirc_cell = ws.cell(row=row, column=8, value=iirc_anchor_display)
+        # Col 4: IIRC Anchor (populated for F1+F2+F3+F4+F6+F9 only; "n/a — CEN-authentic polarity" for others)
+        iirc_cell = ws.cell(row=row, column=4, value=iirc_anchor_display)
         if "n/a" in iirc_anchor_display:
             iirc_cell.font = Font(name="Calibri", size=9, italic=True, color="8B5CF6")
         else:
             iirc_cell.font = Font(name="Calibri", size=10, color="0D7377")
         iirc_cell.alignment = Alignment(horizontal="center", wrap_text=True)
 
-        # Col 9-11: Notes (merged) (Lock #8.36 corrections + architectural-blindness highlight)
+        # Col 5: E_final (O1)
+        apply_formula_cell(ws, row, 5, f"=cen_f{face_id}_o1_e_final")
+        ws.cell(row=row, column=5).number_format = "0.0000"
+        ws.cell(row=row, column=5).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=5).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+
+        # Col 6: Band classification
+        apply_formula_cell(
+            ws, row, 6,
+            f'=IF(E{row}<phi_inv_4,"Wall",'
+            f'IF(E{row}<phi_inv_2,"Gate",'
+            f'IF(E{row}<phi_inv_1,"Membrane",'
+            f'IF(E{row}<0.854,"Hemorrhage","Vortex"))))'
+        )
+        ws.cell(row=row, column=6).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=6).font = Font(name="Calibri", size=10, italic=True)
+
+        # Col 7-11: Notes (merged) (Lock #8.36 corrections + architectural-blindness highlight)
         note = ""
         if face_id == 9:
             note = "⚠ F9 architectural blindness (zero O1 BSC KPIs); Lock #8.36 thesis-defense centerpiece"
@@ -5701,9 +5702,9 @@ def build_sheet_16_dashboard(wb: Workbook):
             note = "F11 + F4 reverted edge KPI: BSC.F4 → F11 Fire O2 per Lock #8.36"
         elif face_id == 1:
             note = "F1 highest face energy at canonical κ=φ² baseline (= 0.3324 = Gate)"
-        ws.cell(row=row, column=9, value=note).font = Font(
+        ws.cell(row=row, column=7, value=note).font = Font(
             name="Calibri", size=9, italic=True, color="D946EF" if face_id in F9_F10_FACES else "606060")
-        ws.merge_cells(start_row=row, start_column=9, end_row=row, end_column=11)
+        ws.merge_cells(start_row=row, start_column=7, end_row=row, end_column=11)
 
         # Highlight F9 + F10 (architectural blindness)
         if face_id in F9_F10_FACES:
@@ -5712,11 +5713,16 @@ def build_sheet_16_dashboard(wb: Workbook):
                     start_color="FFE4F0", end_color="FFE4F0", fill_type="solid")
 
     # Cross-reference footnote (compact, fits in row 27 gap between table and Block D Mode 5 Spotlight)
-    # Points to Sheet 0a for the TIMELESS CEN-Authentic Cluster Name layer (Appendix E §E.3.1).
+    # Points reviewers to BOTH: Sheet 0a for the TIMELESS CEN-Authentic Cluster Name layer
+    # (Appendix E §E.3.1) AND Sheet 21 §A narrative paragraphs for the CEN Narrative Label
+    # layer (Phase 2 storytelling device; formerly customName field, renamed narrativeLabel
+    # in v1.0.1 + relocated out of this measurement table to where storytelling belongs).
     s16_xref_row = 27  # single-row gap between face table (ends row 26) and Block D (row 28)
     s16_xref_text = (
-        "↗ Two CEN naming layers (Lock #8.39): THIS column = CEN Current-State Reading (Phase 2 diagnostic, mapping-context.json customName); "
-        "Sheet 0a column = CEN-Authentic Cluster Name (timeless, Appendix E §E.3.1). "
+        "↗ Three CEN naming layers (Lock #8.39): THIS sheet = Face Base Name (Quannex canonical) + IIRC Anchor (cited authority); "
+        "Sheet 0a = CEN-Authentic Cluster Name (timeless organisational identity, Appendix E §E.3.1); "
+        "Sheet 21 §A = CEN Narrative Labels (Phase 2 storytelling device — 'Financial Fragility', 'Founder Dyad', 'Sacred Ground', etc.; "
+        "from mapping-context.json narrativeLabel field; v1.0.1 relocated here from prior Sheet 16 placement). "
         "IIRC Anchor populated for F1+F2+F3+F4+F6+F9 only; F5+F7+F8+F10+F11+F12 = 6 CEN-authentic polarities. * marks IIRC adaptation footnoted in Sheet 0a."
     )
     ws.cell(row=s16_xref_row, column=1, value=s16_xref_text).font = Font(
@@ -7251,6 +7257,7 @@ def build_sheet_21_coherence_story(wb: Workbook):
         ("CEN'S COHERENCE STORY:", "An NGO whose values exceed its capacity to externalize them yet — bedrock intact, projection collapsed, founder-load uneven, regenerative ethic strong but unmeasured at O1. The math reveals it; the prescription is paired-raise (F3+F8) + Mission externalization (Axis 5) + founder-load distribution (F8). The methodology + the partnership grow together."),
         ("v1.0 HONEST SCOPE DISCLOSURES:", "(a) Sheet 09 Bi-Directional Influence Signatures: 3 partnership-validated HIGH-confidence + 47 anticipatory placeholders (equal-weight researcher drafts) flagged transparently per Wave 3 partnership-decision; (b) Plan §7.A originally specified 3 provenance sheets (15a Face + 15b Edge + 15c Vertex = 62 rows total); v1.0 ships ONE consolidated Sheet 15 Face_Provenance (12 rows) + this Section D F8 trail as the canonical worked-example template; edge + vertex provenance lives as columns within Sheets 07 + 08; full 30/20-row dedicated templates deferred to v1.1; (c) Plan §7.J Companion Narrative md retired by Lock #8.8 (W0 partnership-decision: Coherence Portrait already serves the narrative; SSOT stays math-pristine). These are honest-as-disclosed boundaries, not hidden corners."),
         ("v1.0 HARDENING — Lock #8.39 NAMING SSOT:", "Naming-convention canonicalization landed as in-place v1.0 hardening commit (2026-05-25 evening, partnership-confirmed via aggressive AskUserQuestion). 7 divergences closed: (A) Sheet 0a POC col F2 'Conceptual' → 'Intellectual' (engine-canonical); (B+C+D) Sheet 0a NAMING_TRANSLATION restructured into 6+6 visual grouping per Appendix E §E.3.1 line 71: IIRC universal capitals (F1+F2+F3+F4+F6+F9) above + CEN-authentic polarities (F5+F7+F8+F10+F11+F12) below, with adaptation footnotes at F4 (Manufactured→Structural), F6 (Social-and-Relationship→Community alias), F9 (Natural Capital anchor); (E) Sheet 16 'IIRF anchor' column renamed → 'Face Base Name (Quannex canonical)' + new 'IIRC Anchor' column populated only for 6 IIRC-anchor faces; (F) Sheet 16 F3+F6 customName drift auto-fixed by reading from mapping-context.json; (G) two-layer CEN naming made explicit — Sheet 0a 'CEN-Authentic Cluster Name (Appendix E §E.3.1)' = timeless + Sheet 16 'CEN Current-State Reading (mapping-context.json Phase 2 diagnostic)' = current-state; cross-references both sheets. Deeper architectural fix: mapping-context.json extended with appendixEClusterName + iircAnchor + architectureLayer fields per face (ALL 5 companies; CEN populated from Appendix E source-of-truth; others null/pending). Lock #8.39 elevated to Disclosure §6.8 as 8th methodological pillar."),
+        ("v1.0.1 REFACTOR — customName → narrativeLabel + Sheet 16 cleanup:", "Architectural observation surfaced 2026-05-25 evening (partnership-pause): the customName field in mapping-context.json held POETIC NARRATIVE LABELS ('Sacred Ground', 'Founder Dyad', 'Financial Fragility', etc.) which are STORYTELLING devices, NOT measurements. Placing them in Sheet 16 Dashboard (a measurement table) created visual competition between data + interpretation, and the 'Current-State Reading' framing overstated what they are. v1.0.1 honestly relocates: (1) mapping-context.json field 'customName' → 'narrativeLabel' across all 5 companies (60/60 face entries); (2) Sheet 16 main 12-face measurement table loses the narrativeLabel column entirely — cleaner column layout: # · Face · Base Name · IIRC Anchor · E_final · Band · Notes (7 visible cols, no visual competition between measurement + interpretation); (3) Sheet 21 §A narrative paragraphs (which ALREADY embed narrative labels inline as storytelling text) remain canonical storytelling location; (4) Cross-ref footnotes in Sheets 0a + 16 updated to point to Sheet 21 §A for narrative labels. THREE CEN naming layers now cleanly separated: Face Base Name (engine-canonical, Sheet 16) + CEN-Authentic Cluster Name (timeless organisational identity, Appendix E §E.3.1, Sheet 0a) + CEN Narrative Label (Phase 2 storytelling device, Sheet 21 §A). The honest framing the architecture earned through self-audit."),
     ]
     for offset, (label, content) in enumerate(is_isnt_rows, start=1):
         row = sec_e_row + offset

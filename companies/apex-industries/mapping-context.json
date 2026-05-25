@@ -11,7 +11,6 @@
     {
       "id": 1,
       "baseName": "Financial Capital",
-      "customName": "Abundant Resources",
       "icon": "💰",
       "octave": 6,
       "tooltip": "MASTERED: $142M reserves, $450M revenue, 22% margin - generational wealth",
@@ -25,12 +24,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Financial Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Abundant Resources"
     },
     {
       "id": 2,
       "baseName": "Intellectual Capital",
-      "customName": "Living Knowledge",
       "icon": "💡",
       "octave": 7,
       "tooltip": "TRANSCENDENT: 14 breakthroughs/quarter, 4.8 code quality - knowledge as legacy",
@@ -44,12 +43,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Intellectual Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Living Knowledge"
     },
     {
       "id": 3,
       "baseName": "Human Capital",
-      "customName": "Flourishing People",
       "icon": "👥",
       "octave": 7,
       "tooltip": "RADIANT: 7.8 hrs sleep, 8.2 energy, 4.7 joy, 92% mindfulness practice",
@@ -63,12 +62,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Human Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Flourishing People"
     },
     {
       "id": 4,
       "baseName": "Structural Capital",
-      "customName": "Evolved Governance",
       "icon": "🏛️",
       "octave": 6,
       "tooltip": "EXCELLENT: 98% framework maturity, 97% ethics compliance - structures that breathe",
@@ -82,12 +81,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Manufactured Capital (adapted to Structural Capital for CEN organisational form)",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Evolved Governance"
     },
     {
       "id": 5,
       "baseName": "Market Resonance",
-      "customName": "Market Leadership",
       "icon": "📊",
       "octave": 6,
       "tooltip": "INFLUENTIAL: 8,500 weekly engagement, 38 awards, shaping industry standards",
@@ -101,12 +100,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Market Leadership"
     },
     {
       "id": 6,
       "baseName": "Community & Partners",
-      "customName": "Living Ecosystem",
       "icon": "🤝",
       "octave": 7,
       "tooltip": "RADIANT: 14 strategic partnerships, 4.9 harmony, ecosystem prototype",
@@ -120,12 +119,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Social and Relationship Capital (aliased to Community Capital where appropriate)",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Living Ecosystem"
     },
     {
       "id": 7,
       "baseName": "Brand & Reputation",
-      "customName": "Archetypal Brand",
       "icon": "⭐",
       "octave": 6,
       "tooltip": "LEGENDARY: Harvard case studies, Davos keynotes, industry benchmark",
@@ -139,12 +138,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Archetypal Brand"
     },
     {
       "id": 8,
       "baseName": "Core Operations",
-      "customName": "Operational Mastery",
       "icon": "⚙️",
       "octave": 7,
       "tooltip": "TRANSCENDENT: 99.97% uptime, 52 velocity, 4.8 quality - work as art",
@@ -158,12 +157,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Operational Mastery"
     },
     {
       "id": 9,
       "baseName": "Regenerative Flow",
-      "customName": "Planetary Healing",
       "icon": "♻️",
       "octave": 7,
       "tooltip": "RADIANT: 100% carbon-negative, 92% regenerative practices - healing the Earth",
@@ -177,12 +176,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Natural Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Planetary Healing"
     },
     {
       "id": 10,
       "baseName": "Foundational Values",
-      "customName": "Living Wisdom",
       "icon": "🎯",
       "octave": 7,
       "tooltip": "RADIANT: 4.9 mission alignment, 4.9 foundational wisdom - values as being",
@@ -196,12 +195,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Living Wisdom"
     },
     {
       "id": 11,
       "baseName": "Funding Pipeline",
-      "customName": "Sacred Capital Flow",
       "icon": "💎",
       "octave": 6,
       "tooltip": "ABUNDANT: Self-funding growth, investors seek them, capital as gift",
@@ -215,12 +214,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Sacred Capital Flow"
     },
     {
       "id": 12,
       "baseName": "Risk & Resilience",
-      "customName": "Antifragile Fortress",
       "icon": "🛡️",
       "octave": 7,
       "tooltip": "TRANSCENDENT: 96% risk management, 4.9 antifragility - stronger from chaos",
@@ -234,7 +233,8 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Antifragile Fortress"
     }
   ],
   "edges": [

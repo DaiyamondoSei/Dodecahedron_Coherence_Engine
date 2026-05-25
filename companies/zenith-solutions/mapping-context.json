@@ -11,7 +11,6 @@
     {
       "id": 1,
       "baseName": "Financial Capital",
-      "customName": "Growth Capital",
       "icon": "💰",
       "octave": 4,
       "tooltip": "STRONG: $6.2M cash, 14.8 months runway, investor confidence high",
@@ -25,12 +24,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Financial Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Growth Capital"
     },
     {
       "id": 2,
       "baseName": "Intellectual Capital",
-      "customName": "Innovation Engine",
       "icon": "💡",
       "octave": 4,
       "tooltip": "EXCELLENT: 14 R&D breakthroughs/quarter, 4.3 code quality, 42 velocity",
@@ -44,12 +43,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Intellectual Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Innovation Engine"
     },
     {
       "id": 3,
       "baseName": "Human Capital",
-      "customName": "Stretched Team",
       "icon": "👥",
       "octave": 3,
       "tooltip": "STRAINED: 45 people from 12 in 8 months, founder sleep improving (5.8 hrs)",
@@ -63,12 +62,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Human Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Stretched Team"
     },
     {
       "id": 4,
       "baseName": "Structural Capital",
-      "customName": "Catching-Up Governance",
       "icon": "🏛️",
       "octave": 3,
       "tooltip": "LAGGING: 78% framework, 72% docs - governance catching up to growth",
@@ -82,12 +81,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Manufactured Capital (adapted to Structural Capital for CEN organisational form)",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Catching-Up Governance"
     },
     {
       "id": 5,
       "baseName": "Market Resonance",
-      "customName": "Market Momentum",
       "icon": "📊",
       "octave": 4,
       "tooltip": "STRONG: 4,200 weekly visitors, 18 media mentions, selling hard",
@@ -101,12 +100,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Market Momentum"
     },
     {
       "id": 6,
       "baseName": "Community & Partners",
-      "customName": "Strategic Ecosystem",
       "icon": "🤝",
       "octave": 4,
       "tooltip": "EXCELLENT: 8 strategic partnerships, 28% network growth rate, 4.5 stakeholder trust",
@@ -120,12 +119,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Social and Relationship Capital (aliased to Community Capital where appropriate)",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Strategic Ecosystem"
     },
     {
       "id": 7,
       "baseName": "Brand & Reputation",
-      "customName": "Rising Brand",
       "icon": "⭐",
       "octave": 4,
       "tooltip": "STRONG: 4.5 pitch deck, 4.6 story clarity, 14 content creation hrs/week",
@@ -139,12 +138,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Rising Brand"
     },
     {
       "id": 8,
       "baseName": "Core Operations",
-      "customName": "Operational Excellence",
       "icon": "⚙️",
       "octave": 4,
       "tooltip": "EXCELLENT: 99.4% uptime, 9 features/month, but support stretched thin",
@@ -158,12 +157,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Operational Excellence"
     },
     {
       "id": 9,
       "baseName": "Regenerative Flow",
-      "customName": "Sustainability Gap",
       "icon": "♻️",
       "octave": 2,
       "tooltip": "WEAK: Only 55% carbon footprint awareness - growth > sustainability",
@@ -177,12 +176,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": "Natural Capital",
-      "architectureLayer": "IIRC universal capital"
+      "architectureLayer": "IIRC universal capital",
+      "narrativeLabel": "Sustainability Gap"
     },
     {
       "id": 10,
       "baseName": "Foundational Values",
-      "customName": "Purpose Alignment",
       "icon": "🎯",
       "octave": 4,
       "tooltip": "SOLID: 4.4/5 mission clarity despite growth chaos",
@@ -196,12 +195,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Purpose Alignment"
     },
     {
       "id": 11,
       "baseName": "Funding Pipeline",
-      "customName": "Investor Confidence",
       "icon": "💎",
       "octave": 5,
       "tooltip": "EXCELLENT: 4.2/5 pipeline quality, Series A closed, Series B conversations starting",
@@ -215,12 +214,12 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Investor Confidence"
     },
     {
       "id": 12,
       "baseName": "Risk & Resilience",
-      "customName": "Growing Fortress",
       "icon": "🛡️",
       "octave": 3,
       "tooltip": "DEVELOPING: 3.3/5 crisis planning, but improving systems and redundancy",
@@ -234,7 +233,8 @@
       },
       "appendixEClusterName": null,
       "iircAnchor": null,
-      "architectureLayer": "Organisation-authentic polarity"
+      "architectureLayer": "Organisation-authentic polarity",
+      "narrativeLabel": "Growing Fortress"
     }
   ],
   "edges": [

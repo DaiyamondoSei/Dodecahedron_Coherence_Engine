@@ -527,14 +527,17 @@ class SSOTValidator:
 
         Verifies that face names in SSOT sheets MATCH mapping-context.json
         per face. Closes the silent-default-masquerading pattern surfaced
-        2026-05-25 (Sheet 16 had hardcoded customNames that drifted from
-        mapping-context.json — F3 'Human Capital' duplicate, F6 'Community
-        Trust' invented; Sheet 0a had 11/12 ad-hoc CEN labels not matching
-        Appendix E §E.3.1 source).
+        2026-05-25.
+
+        v1.0.1 refactor (2026-05-25): the `customName` field was renamed to
+        `narrativeLabel` (it holds poetic storytelling devices, not
+        measurements) and RELOCATED out of Sheet 16 main 12-face measurement
+        table. Sheet 21 §A narrative paragraphs are now the canonical home.
 
         Checks:
-          (1) Sheet 16 FACE_INFO_12 customName column (row 15-26, col 4)
-              must match mapping-context.json customName per face_id.
+          (1) REGRESSION: Sheet 16 main table col 4 must NOT contain narrative
+              labels (col 4 is now IIRC Anchor, not narrativeLabel; this catches
+              accidental reintroduction of poetic labels into measurement table).
           (2) Sheet 0a NAMING_TRANSLATION CEN-Authentic Cluster Name column
               (col 5 in restructured layout, rows 8-13 IIRC + 16-21 polarity)
               must match mapping-context.json appendixEClusterName per face_id.
@@ -554,8 +557,8 @@ class SSOTValidator:
         with cen_mc_path.open(encoding="utf-8") as f:
             mc_data = _json_validator.load(f)
 
-        expected_customnames = {
-            face["id"]: face.get("customName")
+        expected_narrative_labels = {
+            face["id"]: face.get("narrativeLabel")
             for face in mc_data.get("faces", [])
         }
         expected_cluster_names = {
@@ -563,18 +566,22 @@ class SSOTValidator:
             for face in mc_data.get("faces", [])
         }
 
-        # Check 1: Sheet 16 customName column (col 4) for rows 15-26 (12 faces)
+        # Check 1: REGRESSION — narrative labels should NOT appear in Sheet 16
+        # main 12-face measurement table. Col 4 is now IIRC Anchor (post-v1.0.1).
+        # If any cell in col 4 (rows 15-26) matches a known narrativeLabel,
+        # the v1.0.1 refactor was undone — flag it.
         if "16_Dashboard_View" in self.wb_formula.sheetnames:
             ws16 = self.wb_formula["16_Dashboard_View"]
+            known_narrative_labels = {v for v in expected_narrative_labels.values() if v}
             for offset in range(12):
                 face_id = offset + 1
                 row = 15 + offset
                 actual = ws16.cell(row=row, column=4).value
-                expected = expected_customnames.get(face_id)
-                if expected is not None and actual != expected:
+                if actual in known_narrative_labels:
                     self.issues.append(
-                        f"Lock #8.39 violation: Sheet 16 F{face_id} customName "
-                        f"= {actual!r} but mapping-context.json says {expected!r}"
+                        f"Lock #8.39 v1.0.1 REGRESSION: Sheet 16 F{face_id} col 4 contains "
+                        f"narrativeLabel {actual!r} — col 4 is reserved for IIRC Anchor "
+                        f"post-v1.0.1. Narrative labels belong in Sheet 21 §A only."
                     )
 
         # Check 2: Sheet 0a CEN-Authentic Cluster Name column (col 5) per face_id
