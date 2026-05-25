@@ -3,7 +3,7 @@
   "company": "cen",
   "lock": "#8.40 — Edge + Vertex KPI Single-Source-of-Truth",
   "authority": "Researcher draft (Deimantas + Claude, 2026-05-22 partnership-validated)",
-  "phase": "B.1a (questions + BSC placements; signatures added in B.1b)",
+  "phase": "B.1b (signatures merged from BiDirectional Signatures source markdown)",
   "source_documents": [
     "POC/docs/cen-ssot/CEN_SSOT_OctaveAware_Questions_30Edge_20Vertex_2026-05-22.md (primary)",
     "POC/docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md (signatures — Phase B.1b)",
@@ -36,7 +36,32 @@
       "o2Question": "Is there a codified, repeatable monetization mechanism for CEN's IP — a structured pipeline from concept to revenue with documented stages?",
       "o3Question": "Does CEN's intellectual capital attract forward-looking funders and partners who recognize the conceptual depth as future-shaping value? Does the IP project a field-presence that pulls aligned resources?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F1": {
+          "earth": 0.3,
+          "water": 0.15,
+          "fire": 0.3,
+          "air": 0.15,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F2": {
+          "earth": 0.25,
+          "water": 0.1,
+          "fire": 0.4,
+          "air": 0.2,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F1": null,
+        "F2": null
+      },
+      "signatureSharedRationale": "Fire dominant on both — converting knowledge into revenue (and vice versa) is capability-ignition. F1 Earth secondary (revenue materializes); F2 Air secondary (knowledge is communicated outward as monetizable IP).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E1-6",
@@ -50,7 +75,32 @@
       "o2Question": "Is community engagement organized into systematic resource flow (membership tiers, contribution mechanisms, structured exchanges)? Is the give-and-take measurable and intentional?",
       "o3Question": "Does CEN's community signal forward as a generative ecosystem where the network's relational density attracts future investment, partnerships, and field-influence?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F1": {
+          "earth": 0.3,
+          "water": 0.45,
+          "fire": 0.05,
+          "air": 0.1,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F6": {
+          "earth": 0.2,
+          "water": 0.5,
+          "fire": 0.05,
+          "air": 0.15,
+          "ether": 0.1,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F1": null,
+        "F6": null
+      },
+      "signatureSharedRationale": "Water dominant on both — community investment flow IS circulation between resource base and network. Earth significant on F1 (material flow). Air on F6 (relational communication).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E1-7",
@@ -64,7 +114,32 @@
       "o2Question": "Is brand-finance communication systematized — does CEN have a reliable pipeline from credibility events to financial conversions (press → donor calls; mention → grant invite)?",
       "o3Question": "Does CEN's reputation projects far enough into the world that mission-aligned funders are arriving unbidden, attracted by field-resonance the brand carries?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F1": {
+          "earth": 0.25,
+          "water": 0.2,
+          "fire": 0.1,
+          "air": 0.35,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F7": {
+          "earth": 0.1,
+          "water": 0.3,
+          "fire": 0.05,
+          "air": 0.5,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F1": null,
+        "F7": null
+      },
+      "signatureSharedRationale": "Air dominant on both — financial story projection IS communication. F7 leans even more Air-heavy (brand IS communication). F1 Earth and Water moderate (revenue base + revenue circulation underpin the story).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E1-8",
@@ -78,7 +153,32 @@
       "o2Question": "Are CEN's operational systems codified into a unit-economics structure — cost-per-output documented, revenue-per-engagement tracked, conversion ratios measured?",
       "o3Question": "Does CEN's operational capacity project field-leadership — does the way we deliver embody the future of how mission-driven NGOs should operate?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F1": {
+          "earth": 0.5,
+          "water": 0.2,
+          "fire": 0.15,
+          "air": 0.1,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F8": {
+          "earth": 0.45,
+          "water": 0.15,
+          "fire": 0.25,
+          "air": 0.1,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F1": null,
+        "F8": null
+      },
+      "signatureSharedRationale": "Earth dominant on both — operations-finance is the materiality axis (cash flows enable operational delivery; operations consume cash materially). F1 Water secondary (revenue rhythm). F8 Fire secondary (operations require ignition fuel).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E1-10",
@@ -92,7 +192,32 @@
       "o2Question": "Are CEN's capital allocation decisions filtered through codified values-check (a budget that explicitly maps spending to PVM categories)? Is there structural alignment between purpose and purchase?",
       "o3Question": "Does CEN's capital projection signal a regenerative-investing model that attracts mission-aligned capital and influences how the broader NGO field allocates resources?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F1": {
+          "earth": 0.25,
+          "water": 0.1,
+          "fire": 0.1,
+          "air": 0.15,
+          "ether": 0.4,
+          "sum": 1.0
+        },
+        "F10": {
+          "earth": 0.2,
+          "water": 0.05,
+          "fire": 0.05,
+          "air": 0.15,
+          "ether": 0.55,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F1": null,
+        "F10": null
+      },
+      "signatureSharedRationale": "Ether dominant on both — \"values-viability tension\" is fundamentally a meaning-alignment question (can CEN's resource decisions stay values-coherent?). F10 leans most Ether-heavy. F1 Earth secondary (material capital decisions). High tension edge (0.60 in mapping-context.json) reflects current values-money strain.",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E2-3",
@@ -106,7 +231,32 @@
       "o2Question": "Is intellectual capital codified enough that knowledge can flow between founders (and beyond them) via structured protocols rather than founder-presence?",
       "o3Question": "Is the founder dyad articulating a future-vision that resonates beyond themselves — does shared intellectual capital project into the field as inspirational thought-leadership?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F2": {
+          "earth": 0.2,
+          "water": 0.2,
+          "fire": 0.1,
+          "air": 0.45,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F3": {
+          "earth": 0.15,
+          "water": 0.3,
+          "fire": 0.1,
+          "air": 0.4,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F2": null,
+        "F3": null
+      },
+      "signatureSharedRationale": "Air dominant on both — sharing frameworks across founders IS communication. F3 Water secondary (relational quality of the dyad mediates knowledge transfer). F2 Earth moderate (knowledge codification supports transfer).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E2-6",
@@ -120,7 +270,32 @@
       "o2Question": "Is teaching systematized — curricula, programs, learning artifacts that codify CEN's frameworks for community absorption?",
       "o3Question": "Does CEN's knowledge generate field-resonance — does the community become a teaching multiplier, carrying CEN's frameworks into wider relational networks?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F2": {
+          "earth": 0.2,
+          "water": 0.4,
+          "fire": 0.1,
+          "air": 0.25,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F6": {
+          "earth": 0.1,
+          "water": 0.5,
+          "fire": 0.1,
+          "air": 0.25,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F2": null,
+        "F6": null
+      },
+      "signatureSharedRationale": "Water dominant on both — teaching IS knowledge-circulation. Air secondary on both (communication channel). F2 Earth moderate (codified curriculum as material). Significant in F6 because community absorbs and re-circulates.",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E2-10",
@@ -140,7 +315,31 @@
         "primaryOctaveRationale": "Structural codification — 'Is values-alignment filtering codified into a Peace Charter screening procedure (BSC.L7) — a documented, repeatable check before any major IP commitment?' (source line 477)",
         "kpiCategoryBsc": "L (Learning & Growth perspective)"
       },
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F2": {
+          "earth": 0.35,
+          "water": 0.1,
+          "fire": 0.1,
+          "air": 0.15,
+          "ether": 0.3,
+          "sum": 1.0
+        },
+        "F10": {
+          "earth": 0.25,
+          "water": 0.05,
+          "fire": 0.05,
+          "air": 0.1,
+          "ether": 0.55,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "HIGH",
+      "signatureRationale": {
+        "F2": "Earth dominates (a screening PROCEDURE is a codified protocol — material methodology that grounds knowledge in a checkable form). Ether heavy secondary (Peace Charter alignment carries values-meaning into intellectual capital). Air partial (the screening is communicated to staff as a knowledge artifact). Water/Fire light — circulation and ignition are not the primary touch; the act is structural-codifying.",
+        "F10": "Ether dominates (Peace Charter IS values articulation; screening through it activates deep values alignment). Earth secondary (the procedure becomes a codified instance of values — values made structural). Air light (values communication happens but is not the primary touch). Water and Fire trace — the screening itself doesn't circulate values relationally or ignite new values capability; it grounds and articulates."
+      },
+      "signatureSourceSection": 2
     },
     {
       "edgeId": "E2-11",
@@ -154,7 +353,32 @@
       "o2Question": "Is there a structured pipeline from intellectual capital to grant applications — IP-mapped to funder priorities, codified pitch material per funding opportunity?",
       "o3Question": "Does CEN's intellectual generosity (open frameworks, freely-shared models) build field-presence that attracts mission-aligned capital seeking generative-knowledge partners?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F2": {
+          "earth": 0.25,
+          "water": 0.1,
+          "fire": 0.15,
+          "air": 0.2,
+          "ether": 0.3,
+          "sum": 1.0
+        },
+        "F11": {
+          "earth": 0.35,
+          "water": 0.2,
+          "fire": 0.15,
+          "air": 0.15,
+          "ether": 0.15,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F2": null,
+        "F11": null
+      },
+      "signatureSharedRationale": "F2 Ether dominant (mission-aligned funding is meaning-coherence; IP that attracts the RIGHT funders). F11 Earth dominant (funding IS material capital). Asymmetry reflects the bridge between meaning (F2-Ether) and material (F11-Earth).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E3-4",
@@ -168,7 +392,32 @@
       "o2Question": "Are governance structures (roles, decision-rights, succession plans) codified enough that the founder dyad's energy is held by the form?",
       "o3Question": "Does CEN's governance form project forward as a model — does it embody the future of how conscious-leadership organizations should structure themselves?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F3": {
+          "earth": 0.4,
+          "water": 0.25,
+          "fire": 0.1,
+          "air": 0.15,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F4": {
+          "earth": 0.55,
+          "water": 0.15,
+          "fire": 0.05,
+          "air": 0.15,
+          "ether": 0.1,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F3": null,
+        "F4": null
+      },
+      "signatureSharedRationale": "Earth dominant on both — structure IS material grounding for people. F3 Water secondary (founder-pair dynamics as flow). F4 Earth-heavier (structures are inherently Earth-grounded codifications).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E3-6",
@@ -182,7 +431,32 @@
       "o2Question": "Is community engagement organized — relationships managed via systems (CRM, regular check-ins, structured collaboration formats)?",
       "o3Question": "Does CEN's founder-community relationship pattern signal field-leadership in regenerative-relational practice — a way of being-with-network that others want to learn from?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F3": {
+          "earth": 0.15,
+          "water": 0.55,
+          "fire": 0.1,
+          "air": 0.15,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F6": {
+          "earth": 0.15,
+          "water": 0.55,
+          "fire": 0.05,
+          "air": 0.2,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F3": null,
+        "F6": null
+      },
+      "signatureSharedRationale": "Water dominant on both — founder-community is fundamentally relational-emotional flow. Air secondary on F6 (community articulation). Earth light on both (some material aspect of founder presence in community).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E3-9",
@@ -196,7 +470,32 @@
       "o2Question": "Are regenerative-people practices codified into how CEN treats its team — explicit wellbeing protocols, regenerative time-use structures, conscious leadership practices?",
       "o3Question": "Does CEN's regenerative people-treatment project forward as a cultural template for how conscious-leadership NGOs handle the human dimension?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F3": {
+          "earth": 0.15,
+          "water": 0.2,
+          "fire": 0.15,
+          "air": 0.1,
+          "ether": 0.4,
+          "sum": 1.0
+        },
+        "F9": {
+          "earth": 0.1,
+          "water": 0.15,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.55,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F3": null,
+        "F9": null
+      },
+      "signatureSharedRationale": "Ether dominant on both — regenerative ethic expressed in how people are treated is meaning-coherence. F3 Water and Fire secondary (relational flow + people-energy). F9 Ether-heaviest (regenerative essence).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E3-11",
@@ -210,7 +509,32 @@
       "o2Question": "Is the founder-to-funder pipeline systematized — codified outreach process, structured discovery conversations, documented funder qualification?",
       "o3Question": "Does founder energy resonate into the funder field strongly enough that aligned philanthropic capital is arriving unbidden, drawn by the founders' future-vision?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F3": {
+          "earth": 0.1,
+          "water": 0.2,
+          "fire": 0.45,
+          "air": 0.2,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F11": {
+          "earth": 0.3,
+          "water": 0.15,
+          "fire": 0.4,
+          "air": 0.1,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F3": null,
+        "F11": null
+      },
+      "signatureSharedRationale": "Fire dominant on both — founder passion igniting funder interest IS transformational energy. F3 Water secondary (relational quality with potential funders). F11 Earth secondary (the funding that materializes).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E4-5",
@@ -224,7 +548,32 @@
       "o2Question": "Are CEN's governance and messaging structures aligned — does the form support a coherent voice (consistent style guide, codified key messages, structured communication cadence)?",
       "o3Question": "Does CEN's structural integrity project forward into the field via a public voice — does the way CEN is organized show up in how it speaks, in a way that resonates with future-aspiring audiences?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F4": {
+          "earth": 0.3,
+          "water": 0.1,
+          "fire": 0.1,
+          "air": 0.45,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F5": {
+          "earth": 0.2,
+          "water": 0.1,
+          "fire": 0.15,
+          "air": 0.5,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F4": null,
+        "F5": null
+      },
+      "signatureSharedRationale": "Air dominant on both — structural clarity supports coherent market message. F4 Earth secondary (structures are codified). F5 Earth and Fire moderate (market acceptance materializes; market presence ignites).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E4-6",
@@ -238,7 +587,32 @@
       "o2Question": "Is the partnership onboarding process codified into a low-friction structured flow (templates, decision rights, intake protocols)?",
       "o3Question": "Does CEN's partnership architecture project a future-of-NGO model where governance form enables relational ecosystem-building rather than blocking it?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F4": {
+          "earth": 0.55,
+          "water": 0.15,
+          "fire": 0.05,
+          "air": 0.15,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F6": {
+          "earth": 0.4,
+          "water": 0.3,
+          "fire": 0.05,
+          "air": 0.15,
+          "ether": 0.1,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F4": null,
+        "F6": null
+      },
+      "signatureSharedRationale": "Earth dominant on both — partnership agreements ARE codified structure. F6 Water secondary (relational flow underlying partnerships). Air moderate on both (formalized communication).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E4-7",
@@ -252,7 +626,32 @@
       "o2Question": "Is governance-brand integrity codified — explicit operating principles that ensure brand promise matches structural reality?",
       "o3Question": "Does CEN's structural-reputational coherence signal field-leadership integrity that future-aspiring stakeholders recognize as a benchmark?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F4": {
+          "earth": 0.3,
+          "water": 0.1,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.4,
+          "sum": 1.0
+        },
+        "F7": {
+          "earth": 0.15,
+          "water": 0.2,
+          "fire": 0.05,
+          "air": 0.2,
+          "ether": 0.4,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F4": null,
+        "F7": null
+      },
+      "signatureSharedRationale": "Ether dominant on both — structural integrity reinforcing brand authenticity IS meaning-coherence. F4 Earth secondary (codification of integrity). F7 Air and Water moderate (brand communication + relational reputation).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E4-9",
@@ -266,7 +665,32 @@
       "o2Question": "Are regenerative-governance practices codified into auditable structures — documented decision rights, regenerative-impact protocols, transparent reporting?",
       "o3Question": "Does CEN's regenerative-governance form project forward as a future-model for impact-aligned investment — a structure that aspirational capital recognizes as the next-generation of NGO form?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F4": {
+          "earth": 0.4,
+          "water": 0.05,
+          "fire": 0.2,
+          "air": 0.1,
+          "ether": 0.25,
+          "sum": 1.0
+        },
+        "F9": {
+          "earth": 0.15,
+          "water": 0.1,
+          "fire": 0.2,
+          "air": 0.05,
+          "ether": 0.5,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F4": null,
+        "F9": null
+      },
+      "signatureSharedRationale": "F4 Earth dominant (regenerative structures are codified). Ether secondary (regenerative principles embodied in structure). F9 Ether dominant (regenerative essence). Fire on both (transformation energy).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E5-7",
@@ -280,7 +704,32 @@
       "o2Question": "Are perception and reputation managed through codified systems — measured awareness metrics, structured PR cadence, brand-consistency protocols?",
       "o3Question": "Does CEN's market-reputation interface project a coherent field-presence — is what we claim what people see, in a way that signals our aspirational direction?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F5": {
+          "earth": 0.15,
+          "water": 0.2,
+          "fire": 0.1,
+          "air": 0.4,
+          "ether": 0.15,
+          "sum": 1.0
+        },
+        "F7": {
+          "earth": 0.1,
+          "water": 0.25,
+          "fire": 0.1,
+          "air": 0.4,
+          "ether": 0.15,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F5": null,
+        "F7": null
+      },
+      "signatureSharedRationale": "Air dominant on both — both faces are projection-domain communication. Water secondary (relational circulation of reputation). Ether moderate (perception-reputation alignment carries meaning).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E5-8",
@@ -300,7 +749,31 @@
         "primaryOctaveRationale": "Survival-existence — measures whether CEN has any market-tested operational output AT ALL (active consulting clients). Per W06v3 KPI Mapping line 176: 'Does market feedback transform into operational improvements?' maps to closed consulting clients as the market-operations feedback loop. Authoritative octave placement = O1 (not O2 as initially assumed from Section 4 structural framing).",
         "kpiCategoryBsc": "C (Customer/Stakeholder perspective)"
       },
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F5": {
+          "earth": 0.3,
+          "water": 0.2,
+          "fire": 0.2,
+          "air": 0.25,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F8": {
+          "earth": 0.3,
+          "water": 0.2,
+          "fire": 0.35,
+          "air": 0.1,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "HIGH",
+      "signatureRationale": {
+        "F5": "Earth heaviest (a counted client = material market acceptance, a tangible market-fit data point). Air strong secondary (clients arrive via market communication; the act of acquiring clients includes outward articulation of what CEN offers). Water and Fire moderate (relational client-flow + capability-ignition of consulting practice). Ether light — clients are primarily a market-presence signal, not a transcendent-meaning signal.",
+        "F8": "Fire dominates (each client engagement = capability-ignition for the operational engine; delivery requires firing up consulting infrastructure, scheduling, expert deployment). Earth strong secondary (each delivered engagement materializes operational tangibility). Water moderate (client engagement creates operational flow). Air light (some communication coordination). Ether light — consulting delivery is operational work, not meaning-laden."
+      },
+      "signatureSourceSection": 2
     },
     {
       "edgeId": "E5-9",
@@ -314,7 +787,32 @@
       "o2Question": "Are regenerative practices systematically communicated to market audiences (regenerative case studies, structured impact reports, codified storytelling)?",
       "o3Question": "Does CEN's regenerative ethic resonate into the market as field-leadership — is CEN known as a voice shaping the future of regenerative organizational practice?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F5": {
+          "earth": 0.15,
+          "water": 0.4,
+          "fire": 0.1,
+          "air": 0.3,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F9": {
+          "earth": 0.05,
+          "water": 0.3,
+          "fire": 0.1,
+          "air": 0.15,
+          "ether": 0.4,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F5": null,
+        "F9": null
+      },
+      "signatureSharedRationale": "F5 Water dominant (audience-reach flow), Air secondary (visibility). F9 Ether dominant (regenerative ethic as meaning), Water secondary (regenerative practices that circulate).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E5-12",
@@ -328,7 +826,32 @@
       "o2Question": "Are crisis-communication and reputation-protection codified into resilience protocols — structured response mechanisms, trust-bank cultivation systems?",
       "o3Question": "Does CEN's market resonance project a trust-density that aspirational stakeholders recognize as future-resilient — a brand that future challenges will not break?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F5": {
+          "earth": 0.2,
+          "water": 0.4,
+          "fire": 0.1,
+          "air": 0.25,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F12": {
+          "earth": 0.4,
+          "water": 0.35,
+          "fire": 0.05,
+          "air": 0.1,
+          "ether": 0.1,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F5": null,
+        "F12": null
+      },
+      "signatureSharedRationale": "F5 Water dominant (diversified market base = flow stability). F12 Earth dominant (resilience IS structural), Water secondary (revenue flow stability). Air on F5 (market visibility supports resilience).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E6-7",
@@ -342,7 +865,32 @@
       "o2Question": "Is community-to-brand amplification organized — ambassador programs, structured advocacy support, codified community-comms?",
       "o3Question": "Does CEN's community project the brand into the field as a future-shaping movement — does the network's collective voice signal a direction the field is moving toward?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F6": {
+          "earth": 0.15,
+          "water": 0.3,
+          "fire": 0.05,
+          "air": 0.45,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F7": {
+          "earth": 0.1,
+          "water": 0.25,
+          "fire": 0.05,
+          "air": 0.55,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F6": null,
+        "F7": null
+      },
+      "signatureSharedRationale": "Air dominant on both — community ambassadors ARE communication amplifiers. Water secondary (relational circulation of brand). Both faces lean projection-side toward Air.",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E7-8",
@@ -356,7 +904,32 @@
       "o2Question": "Is brand-operations alignment codified — documented service-level commitments, quality control linked to brand promise, measured delivery-vs-promise gaps?",
       "o3Question": "Does CEN's brand-operations coherence project forward as a future-leadership model — does the way we deliver embody the next-generation of mission-driven operational excellence?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F7": {
+          "earth": 0.1,
+          "water": 0.2,
+          "fire": 0.3,
+          "air": 0.3,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F8": {
+          "earth": 0.35,
+          "water": 0.15,
+          "fire": 0.4,
+          "air": 0.05,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F7": null,
+        "F8": null
+      },
+      "signatureSharedRationale": "F8 Fire dominant (operational delivery IS capability-ignition). Earth strong secondary (material delivery). F7 Fire and Air balanced (brand promise carried in both transformation and projection).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E8-10",
@@ -370,7 +943,32 @@
       "o2Question": "Are regenerative-operational practices codified into how work happens daily (working time conventions, sustainable pace structures, regenerative check-ins)?",
       "o3Question": "Does CEN's operational regenerativeness project forward as a future-model — a way of working that aspirational organizations want to adopt?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F8": {
+          "earth": 0.3,
+          "water": 0.4,
+          "fire": 0.15,
+          "air": 0.05,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F10": {
+          "earth": 0.2,
+          "water": 0.25,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.35,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F8": null,
+        "F10": null
+      },
+      "signatureSharedRationale": "F8 Water dominant (values lived in daily operational rhythm). Earth secondary (material practice). F10 Ether dominant (values-essence), Water secondary (the embodied practice carrying values).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E8-12",
@@ -384,7 +982,32 @@
       "o2Question": "Is operational resilience codified into structured systems (documented SOPs, cross-trained capability, backup protocols, structured crisis response)?",
       "o3Question": "Does CEN's operational design project forward as a future-resilient organizational model — built for the conditions that will shape the next decade of mission-driven work?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F8": {
+          "earth": 0.35,
+          "water": 0.2,
+          "fire": 0.2,
+          "air": 0.2,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F12": {
+          "earth": 0.45,
+          "water": 0.2,
+          "fire": 0.1,
+          "air": 0.2,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F8": null,
+        "F12": null
+      },
+      "signatureSharedRationale": "Earth dominant on both — operational systems build resilience through codified protocols + material redundancy. Air secondary (information-flow that supports resilience). Water moderate (operational rhythm stability).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E9-11",
@@ -398,7 +1021,32 @@
       "o2Question": "Are regenerative-mission and funding-pipeline structurally connected — codified pathways from regenerative work to mission-aligned grant opportunities?",
       "o3Question": "Does CEN's regenerative mission attract aspirational philanthropic capital seeking to invest in future-shaping regenerative-leadership models?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F9": {
+          "earth": 0.2,
+          "water": 0.1,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.5,
+          "sum": 1.0
+        },
+        "F11": {
+          "earth": 0.45,
+          "water": 0.2,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.15,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F9": null,
+        "F11": null
+      },
+      "signatureSharedRationale": "F9 Ether dominant (regenerative essence attracts mission-aligned funding via meaning-coherence). F11 Earth dominant (funding materializes). Asymmetry: regeneration is meaning, funding is material — they meet at Earth-Ether bridge.",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E9-12",
@@ -412,7 +1060,32 @@
       "o2Question": "Are regenerative resilience practices codified — structured ways that regenerative principles become organizational shock-absorption?",
       "o3Question": "Does CEN's regenerative-resilience pattern project field-leadership — does CEN model a future where regenerative practice IS the resilience strategy?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F9": {
+          "earth": 0.1,
+          "water": 0.2,
+          "fire": 0.25,
+          "air": 0.1,
+          "ether": 0.35,
+          "sum": 1.0
+        },
+        "F12": {
+          "earth": 0.4,
+          "water": 0.2,
+          "fire": 0.2,
+          "air": 0.1,
+          "ether": 0.1,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F9": null,
+        "F12": null
+      },
+      "signatureSharedRationale": "F9 Ether dominant (regenerative ethic provides resilient meaning anchor). F12 Earth dominant (resilience structures). Fire on both (transformation through regenerative practice builds resilient capacity).",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E10-11",
@@ -426,7 +1099,32 @@
       "o2Question": "Is values-to-funder communication systematized — codified pitch material that articulates values, structured funder-fit assessment, documented mission-alignment scoring?",
       "o3Question": "Does CEN's values projection attract aspirational philanthropic capital that explicitly wants to fund the future-shaping vision CEN embodies?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F10": {
+          "earth": 0.15,
+          "water": 0.1,
+          "fire": 0.05,
+          "air": 0.4,
+          "ether": 0.3,
+          "sum": 1.0
+        },
+        "F11": {
+          "earth": 0.4,
+          "water": 0.2,
+          "fire": 0.1,
+          "air": 0.25,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F10": null,
+        "F11": null
+      },
+      "signatureSharedRationale": "F10 Air dominant (values articulated outward to funders), Ether secondary (deep meaning). F11 Earth dominant (funding materializes through alignment), Air secondary (the message that wins funders). High tension edge (0.45) reflects current gap between values clarity and funding traction.",
+      "signatureSourceSection": 3
     },
     {
       "edgeId": "E10-12",
@@ -446,7 +1144,31 @@
         "primaryOctaveRationale": "Survival-floor protection — 'Do our values transform into resilience during a crisis?' maps to baseline values-protective infrastructure (GDPR compliance, basic ethical safeguards). Per W06v3 KPI Mapping line 175: BSC.I3 measures whether CEN has minimum-viable ethics-failure protection (structural fragility floor). Authoritative octave placement = O1 (not O2 as initially assumed from Section 4 structural-codification framing).",
         "kpiCategoryBsc": "I (Internal Process perspective)"
       },
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F10": {
+          "earth": 0.4,
+          "water": 0.05,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.35,
+          "sum": 1.0
+        },
+        "F12": {
+          "earth": 0.5,
+          "water": 0.1,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.2,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "HIGH",
+      "signatureRationale": {
+        "F10": "Earth dominates (GDPR closure = material policies, codified procedures, technical implementations — values made structural). Ether heavy secondary (the choice to honor data privacy IS values-in-action; closing gaps is values-coherence with respect-for-persons). Fire partial (compliance implementation requires capability ignition). Air and Water light — communication and circulation are secondary; the core act is codification + values alignment.",
+        "F12": "Earth dominates (resilience built through GDPR closure is primarily structural — material protections, legal containers, technical controls). Ether secondary (the protection is meaning-aligned: protecting people because we value them). Water, Fire, Air light — GDPR compliance is not primarily about circulation, ignition, or communication; it is about structural fortification."
+      },
+      "signatureSourceSection": 2
     },
     {
       "edgeId": "E11-12",
@@ -460,7 +1182,32 @@
       "o2Question": "Is funding diversification systematized — codified across funder types (grants, donations, consulting), diversification ratios tracked, structured fund-mix targets?",
       "o3Question": "Does CEN's funding architecture project forward as a future-resilient model — multiple aligned capital streams supporting the aspirational mission, not just keeping the lights on?",
       "bscKpiPlacement": null,
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F11": {
+          "earth": 0.45,
+          "water": 0.35,
+          "fire": 0.05,
+          "air": 0.1,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F12": {
+          "earth": 0.4,
+          "water": 0.4,
+          "fire": 0.05,
+          "air": 0.1,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F11": null,
+        "F12": null
+      },
+      "signatureSharedRationale": "Earth dominant on both — diversified funding builds material resilience. Water heavy secondary on both — diversification IS funding-rhythm circulation. The two faces are tightly coupled materially.",
+      "signatureSourceSection": 3
     }
   ],
   "vertices": [
@@ -478,7 +1225,41 @@
       "faceANarrative": "Financial Fragility",
       "faceBNarrative": "Conceptual Depth",
       "faceCNarrative": "Founder Dyad",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F1": {
+          "earth": 0.3,
+          "water": 0.2,
+          "fire": 0.3,
+          "air": 0.15,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F2": {
+          "earth": 0.25,
+          "water": 0.15,
+          "fire": 0.3,
+          "air": 0.25,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F3": {
+          "earth": 0.2,
+          "water": 0.3,
+          "fire": 0.3,
+          "air": 0.15,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F1": null,
+        "F2": null,
+        "F3": null
+      },
+      "signatureSharedRationale": "Fire dominant across all three — converting knowledge + people into resources is capability-ignition triadic work. F1 Earth secondary (material output). F2 Air secondary (knowledge projection). F3 Water secondary (relational quality).",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V2",
@@ -494,7 +1275,41 @@
       "faceANarrative": "Financial Fragility",
       "faceBNarrative": "Founder Dyad",
       "faceCNarrative": "Governance Gap",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F1": {
+          "earth": 0.45,
+          "water": 0.25,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F3": {
+          "earth": 0.35,
+          "water": 0.3,
+          "fire": 0.1,
+          "air": 0.15,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F4": {
+          "earth": 0.55,
+          "water": 0.15,
+          "fire": 0.05,
+          "air": 0.15,
+          "ether": 0.1,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F1": null,
+        "F3": null,
+        "F4": null
+      },
+      "signatureSharedRationale": "Earth dominant across all three — structure-people-resources is the materiality triad. F3 Water secondary (relational sustainability of structure). F4 Earth-heaviest (codified structure).",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V3",
@@ -510,7 +1325,41 @@
       "faceANarrative": "Financial Fragility",
       "faceBNarrative": "Governance Gap",
       "faceCNarrative": "Mission in Silence",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F1": {
+          "earth": 0.35,
+          "water": 0.2,
+          "fire": 0.15,
+          "air": 0.2,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F4": {
+          "earth": 0.4,
+          "water": 0.1,
+          "fire": 0.1,
+          "air": 0.3,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F5": {
+          "earth": 0.2,
+          "water": 0.2,
+          "fire": 0.15,
+          "air": 0.4,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F1": null,
+        "F4": null,
+        "F5": null
+      },
+      "signatureSharedRationale": "Triangle where three weak faces converge. F4 Earth + Air balanced (structure for market clarity). F5 Air dominant (market message). F1 Earth (financial base). Air thread runs across faces.",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V4",
@@ -526,7 +1375,41 @@
       "faceANarrative": "Financial Fragility",
       "faceBNarrative": "Mission in Silence",
       "faceCNarrative": "Emerging Network",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F1": {
+          "earth": 0.3,
+          "water": 0.4,
+          "fire": 0.1,
+          "air": 0.15,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F5": {
+          "earth": 0.2,
+          "water": 0.35,
+          "fire": 0.1,
+          "air": 0.3,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F6": {
+          "earth": 0.15,
+          "water": 0.5,
+          "fire": 0.05,
+          "air": 0.25,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F1": null,
+        "F5": null,
+        "F6": null
+      },
+      "signatureSharedRationale": "Water dominant across all three — community-market-finance is fundamentally relational circulation. F5 Air secondary (market communication). F1 Earth secondary (material base).",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V5",
@@ -542,7 +1425,41 @@
       "faceANarrative": "Financial Fragility",
       "faceBNarrative": "Conceptual Depth",
       "faceCNarrative": "Emerging Network",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F1": {
+          "earth": 0.3,
+          "water": 0.3,
+          "fire": 0.2,
+          "air": 0.15,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F2": {
+          "earth": 0.2,
+          "water": 0.3,
+          "fire": 0.2,
+          "air": 0.25,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F6": {
+          "earth": 0.1,
+          "water": 0.5,
+          "fire": 0.1,
+          "air": 0.25,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F1": null,
+        "F2": null,
+        "F6": null
+      },
+      "signatureSharedRationale": "Water dominant across all three — knowledge-finance flowing through community is relational circulation. Earth, Fire on F1+F2 balance the IP-monetization channel.",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V6",
@@ -558,7 +1475,41 @@
       "faceANarrative": "Conceptual Depth",
       "faceBNarrative": "Founder Dyad",
       "faceCNarrative": "Underdeveloped Engine",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F2": {
+          "earth": 0.3,
+          "water": 0.15,
+          "fire": 0.3,
+          "air": 0.2,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F3": {
+          "earth": 0.2,
+          "water": 0.25,
+          "fire": 0.4,
+          "air": 0.1,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F8": {
+          "earth": 0.35,
+          "water": 0.15,
+          "fire": 0.4,
+          "air": 0.05,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F2": null,
+        "F3": null,
+        "F8": null
+      },
+      "signatureSharedRationale": "Fire dominant across all three — channeling intellectual strength into systematized operations IS capability-ignition. F2 Earth secondary (codified knowledge). F8 Earth secondary (material operational deliverables).",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V7",
@@ -574,7 +1525,41 @@
       "faceANarrative": "Founder Dyad",
       "faceBNarrative": "Governance Gap",
       "faceCNarrative": "Conscious Core",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F3": {
+          "earth": 0.25,
+          "water": 0.25,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.3,
+          "sum": 1.0
+        },
+        "F4": {
+          "earth": 0.45,
+          "water": 0.1,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.25,
+          "sum": 1.0
+        },
+        "F9": {
+          "earth": 0.1,
+          "water": 0.2,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.5,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F3": null,
+        "F4": null,
+        "F9": null
+      },
+      "signatureSharedRationale": "F9 Ether dominant (regenerative essence). F4 Earth dominant (codified structure). F3 Ether and Water moderate (founder values lived relationally). Triadic synergy: structure + people + regeneration meets at Earth-Ether bridge.",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V8",
@@ -590,7 +1575,41 @@
       "faceANarrative": "Governance Gap",
       "faceBNarrative": "Mission in Silence",
       "faceCNarrative": "Sacred Ground",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F4": {
+          "earth": 0.4,
+          "water": 0.1,
+          "fire": 0.05,
+          "air": 0.25,
+          "ether": 0.2,
+          "sum": 1.0
+        },
+        "F5": {
+          "earth": 0.15,
+          "water": 0.15,
+          "fire": 0.1,
+          "air": 0.45,
+          "ether": 0.15,
+          "sum": 1.0
+        },
+        "F10": {
+          "earth": 0.1,
+          "water": 0.05,
+          "fire": 0.05,
+          "air": 0.3,
+          "ether": 0.5,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F4": null,
+        "F5": null,
+        "F10": null
+      },
+      "signatureSharedRationale": "The \"exceptional values trapped by structural gap\" pattern. F10 Ether dominant (values truth). F5 Air dominant (market visibility — what's missing). F4 Earth dominant (structures to carry values into market). Air thread runs across F4-F5-F10 — the communication infrastructure is the missing bridge.",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V9",
@@ -606,7 +1625,41 @@
       "faceANarrative": "Mission in Silence",
       "faceBNarrative": "Emerging Network",
       "faceCNarrative": "Dormant Pipeline",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F5": {
+          "earth": 0.2,
+          "water": 0.3,
+          "fire": 0.1,
+          "air": 0.35,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F6": {
+          "earth": 0.15,
+          "water": 0.45,
+          "fire": 0.05,
+          "air": 0.3,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F11": {
+          "earth": 0.4,
+          "water": 0.3,
+          "fire": 0.1,
+          "air": 0.15,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F5": null,
+        "F6": null,
+        "F11": null
+      },
+      "signatureSharedRationale": "Water dominant on F5+F6 (community-market flow). F11 Earth dominant (funding materializes). Air secondary across the triad (communication enables flow).",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V10",
@@ -622,7 +1675,41 @@
       "faceANarrative": "Conceptual Depth",
       "faceBNarrative": "Emerging Network",
       "faceCNarrative": "Quiet Credibility",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F2": {
+          "earth": 0.2,
+          "water": 0.2,
+          "fire": 0.1,
+          "air": 0.4,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F6": {
+          "earth": 0.1,
+          "water": 0.4,
+          "fire": 0.05,
+          "air": 0.4,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F7": {
+          "earth": 0.1,
+          "water": 0.25,
+          "fire": 0.05,
+          "air": 0.5,
+          "ether": 0.1,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F2": null,
+        "F6": null,
+        "F7": null
+      },
+      "signatureSharedRationale": "Air dominant across all three — intellectual depth amplifying community and brand is fundamentally projection-communication work. F6 Water secondary (relational flow). The synergy hub leverages Air as the connector across faces.",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V11",
@@ -638,7 +1725,41 @@
       "faceANarrative": "Conceptual Depth",
       "faceBNarrative": "Quiet Credibility",
       "faceCNarrative": "Underdeveloped Engine",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F2": {
+          "earth": 0.25,
+          "water": 0.15,
+          "fire": 0.2,
+          "air": 0.35,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F7": {
+          "earth": 0.15,
+          "water": 0.2,
+          "fire": 0.15,
+          "air": 0.45,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F8": {
+          "earth": 0.4,
+          "water": 0.15,
+          "fire": 0.35,
+          "air": 0.05,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F2": null,
+        "F7": null,
+        "F8": null
+      },
+      "signatureSharedRationale": "F2+F7 Air dominant (knowledge-brand consistency in messaging). F8 Earth + Fire dominant (operational delivery materializes). The triad routes meaning through projection into delivery.",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V12",
@@ -654,7 +1775,41 @@
       "faceANarrative": "Founder Dyad",
       "faceBNarrative": "Underdeveloped Engine",
       "faceCNarrative": "Conscious Core",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F3": {
+          "earth": 0.2,
+          "water": 0.3,
+          "fire": 0.2,
+          "air": 0.1,
+          "ether": 0.2,
+          "sum": 1.0
+        },
+        "F8": {
+          "earth": 0.3,
+          "water": 0.3,
+          "fire": 0.25,
+          "air": 0.05,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F9": {
+          "earth": 0.1,
+          "water": 0.3,
+          "fire": 0.1,
+          "air": 0.05,
+          "ether": 0.45,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F3": null,
+        "F8": null,
+        "F9": null
+      },
+      "signatureSharedRationale": "Water across all three — daily regenerative work IS flow. F9 Ether dominant (regenerative essence). F3 Water secondary (founders living it). F8 Earth secondary (operational material practice).",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V13",
@@ -679,7 +1834,40 @@
       "faceANarrative": "Governance Gap",
       "faceBNarrative": "Conscious Core",
       "faceCNarrative": "Sacred Ground",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F4": {
+          "earth": 0.45,
+          "water": 0.1,
+          "fire": 0.05,
+          "air": 0.1,
+          "ether": 0.3,
+          "sum": 1.0
+        },
+        "F9": {
+          "earth": 0.2,
+          "water": 0.1,
+          "fire": 0.05,
+          "air": 0.1,
+          "ether": 0.55,
+          "sum": 1.0
+        },
+        "F10": {
+          "earth": 0.05,
+          "water": 0.05,
+          "fire": 0.05,
+          "air": 0.35,
+          "ether": 0.5,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "HIGH",
+      "signatureRationale": {
+        "F4": "Earth dominates (the PVM IS a structural document; codifying SDGs adds material text to a governance artifact). Ether heavy secondary (the act of committing to SDGs in PVM is meaning-laden structure). Water/Fire/Air light because the artifact addition is primarily codification, not flow/ignition/communication at the structural face.",
+        "F9": "Ether dominates (SDGs ARE ecological-regenerative commitment articulated; the deep meaning of regenerative ethics is what's being added). Earth secondary (SDG framework brings codified taxonomy into the regenerative face). Water/Fire/Air light.",
+        "F10": "Ether dominates (values articulation = transcendent purpose). Air heavy secondary (PVM IS the communication vehicle of values; SDG inclusion projects values outward). Earth/Water/Fire light because values are primarily about meaning and projection, not material-base or circulation."
+      },
+      "signatureSourceSection": 1
     },
     {
       "vertexId": "V14",
@@ -695,7 +1883,41 @@
       "faceANarrative": "Mission in Silence",
       "faceBNarrative": "Sacred Ground",
       "faceCNarrative": "Dormant Pipeline",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F5": {
+          "earth": 0.2,
+          "water": 0.15,
+          "fire": 0.1,
+          "air": 0.5,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F10": {
+          "earth": 0.1,
+          "water": 0.05,
+          "fire": 0.05,
+          "air": 0.3,
+          "ether": 0.5,
+          "sum": 1.0
+        },
+        "F11": {
+          "earth": 0.4,
+          "water": 0.25,
+          "fire": 0.05,
+          "air": 0.25,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F5": null,
+        "F10": null,
+        "F11": null
+      },
+      "signatureSharedRationale": "The \"world-class values, minimal market or funding\" paradox. F5 Air dominant (the missing market visibility). F10 Ether dominant (values truth). F11 Earth dominant (the missing funding materialization). The Air thread across F5+F10+F11 reveals communication-projection as the systemic intervention point.",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V15",
@@ -711,7 +1933,41 @@
       "faceANarrative": "Emerging Network",
       "faceBNarrative": "Quiet Credibility",
       "faceCNarrative": "Dormant Pipeline",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F6": {
+          "earth": 0.1,
+          "water": 0.45,
+          "fire": 0.05,
+          "air": 0.35,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F7": {
+          "earth": 0.1,
+          "water": 0.3,
+          "fire": 0.05,
+          "air": 0.5,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F11": {
+          "earth": 0.4,
+          "water": 0.3,
+          "fire": 0.05,
+          "air": 0.2,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F6": null,
+        "F7": null,
+        "F11": null
+      },
+      "signatureSharedRationale": "Community-brand-funding pathway. F6 Water dominant (community-relational warmth). F7 Air dominant (brand projection). F11 Earth dominant (funding materializes). Water + Air thread enables material funding outcome.",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V16",
@@ -727,7 +1983,41 @@
       "faceANarrative": "Quiet Credibility",
       "faceBNarrative": "Underdeveloped Engine",
       "faceCNarrative": "Exposed Foundation",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F7": {
+          "earth": 0.15,
+          "water": 0.25,
+          "fire": 0.1,
+          "air": 0.45,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F8": {
+          "earth": 0.35,
+          "water": 0.2,
+          "fire": 0.3,
+          "air": 0.1,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F12": {
+          "earth": 0.45,
+          "water": 0.2,
+          "fire": 0.05,
+          "air": 0.2,
+          "ether": 0.1,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F7": null,
+        "F8": null,
+        "F12": null
+      },
+      "signatureSharedRationale": "F7 Air (brand projection). F8 Earth + Fire (operational delivery). F12 Earth dominant (resilience structure). Triad routes reputation through reliable operations into resilience.",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V17",
@@ -743,7 +2033,41 @@
       "faceANarrative": "Underdeveloped Engine",
       "faceBNarrative": "Conscious Core",
       "faceCNarrative": "Exposed Foundation",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F8": {
+          "earth": 0.3,
+          "water": 0.3,
+          "fire": 0.25,
+          "air": 0.05,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F9": {
+          "earth": 0.15,
+          "water": 0.25,
+          "fire": 0.1,
+          "air": 0.05,
+          "ether": 0.45,
+          "sum": 1.0
+        },
+        "F12": {
+          "earth": 0.4,
+          "water": 0.3,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.1,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F8": null,
+        "F9": null,
+        "F12": null
+      },
+      "signatureSharedRationale": "F8 Water + Earth (regenerative operations in daily practice). F9 Ether dominant (regenerative essence). F12 Earth dominant (resilience structure). Water threads the regenerative practice across operations and resilience.",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V18",
@@ -759,7 +2083,41 @@
       "faceANarrative": "Conscious Core",
       "faceBNarrative": "Sacred Ground",
       "faceCNarrative": "Exposed Foundation",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F9": {
+          "earth": 0.1,
+          "water": 0.15,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.55,
+          "sum": 1.0
+        },
+        "F10": {
+          "earth": 0.1,
+          "water": 0.05,
+          "fire": 0.05,
+          "air": 0.15,
+          "ether": 0.65,
+          "sum": 1.0
+        },
+        "F12": {
+          "earth": 0.45,
+          "water": 0.2,
+          "fire": 0.1,
+          "air": 0.1,
+          "ether": 0.15,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F9": null,
+        "F10": null,
+        "F12": null
+      },
+      "signatureSharedRationale": "The \"brittle vessel\" pattern — strong values + regeneration but zero resilience. F9+F10 Ether dominant (meaning + values). F12 Earth dominant (the missing material protection). Ether-heavy on F9+F10 quantifies the meaning-saturation; Earth-heavy on F12 names the material-grounding gap.",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V19",
@@ -775,7 +2133,41 @@
       "faceANarrative": "Sacred Ground",
       "faceBNarrative": "Dormant Pipeline",
       "faceCNarrative": "Exposed Foundation",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F10": {
+          "earth": 0.1,
+          "water": 0.05,
+          "fire": 0.05,
+          "air": 0.25,
+          "ether": 0.55,
+          "sum": 1.0
+        },
+        "F11": {
+          "earth": 0.45,
+          "water": 0.25,
+          "fire": 0.1,
+          "air": 0.15,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F12": {
+          "earth": 0.45,
+          "water": 0.2,
+          "fire": 0.1,
+          "air": 0.15,
+          "ether": 0.1,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F10": null,
+        "F11": null,
+        "F12": null
+      },
+      "signatureSharedRationale": "\"Values alone cannot compensate for weak pipeline and zero resilience\" — F10 Ether dominant (values truth). F11+F12 Earth dominant (the missing material funding + material resilience structures). The Ether-Earth asymmetry reveals the gap: meaning is rich, materiality is starved.",
+      "signatureSourceSection": 4
     },
     {
       "vertexId": "V20",
@@ -791,7 +2183,41 @@
       "faceANarrative": "Quiet Credibility",
       "faceBNarrative": "Dormant Pipeline",
       "faceCNarrative": "Exposed Foundation",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature15Tuple": {
+        "F7": {
+          "earth": 0.15,
+          "water": 0.25,
+          "fire": 0.1,
+          "air": 0.45,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F11": {
+          "earth": 0.45,
+          "water": 0.25,
+          "fire": 0.05,
+          "air": 0.2,
+          "ether": 0.05,
+          "sum": 1.0
+        },
+        "F12": {
+          "earth": 0.5,
+          "water": 0.2,
+          "fire": 0.05,
+          "air": 0.15,
+          "ether": 0.1,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "PROPOSED",
+      "signatureRationale": {
+        "F7": null,
+        "F11": null,
+        "F12": null
+      },
+      "signatureSharedRationale": "F7 Air (brand projection attracting funders). F11 Earth dominant (funding materializes). F12 Earth dominant (resilience builds materially). The triad converts brand visibility into material funding and material resilience.",
+      "signatureSourceSection": 4
     }
   ],
   "deprecated_entries": [
@@ -817,7 +2243,39 @@
       "o1Question": "Are donations arriving at any minimum survival-flow level — is the reputation-to-funding channel alive at all?",
       "o2Question": "Is donation generation systematized — codified donor cultivation pipeline, structured giving programs, measurable conversion from reputation events to donation income?",
       "o3Question": "Does CEN's reputation project field-leadership strong enough that aligned philanthropic capital is arriving as field-investment — donors recognizing CEN as the future of conscious-leadership NGOs?",
-      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)"
+      "_narrativeLabels_source": "POC/companies/cen/mapping-context.json narrativeLabel field (Lock #8.39 source-of-truth; read at build time)",
+      "signature10Tuple": {
+        "F7": {
+          "earth": 0.1,
+          "water": 0.35,
+          "fire": 0.1,
+          "air": 0.35,
+          "ether": 0.1,
+          "sum": 1.0
+        },
+        "F11": {
+          "earth": 0.4,
+          "water": 0.3,
+          "fire": 0.1,
+          "air": 0.15,
+          "ether": 0.05,
+          "sum": 1.0
+        }
+      },
+      "signatureConfidence": "HIGH",
+      "signatureRationale": {
+        "F7": "Water (donor-relationship circulation) + Air (visibility/articulation that brings donors in) carry the heavy weight. Donations grow reputation primarily through relational circulation and projected story. Earth, Fire, Ether are light because the act of receiving donations doesn't substantially shift brand codification, ignition capability, or transcendent purpose.",
+        "F11": "Earth dominates (material revenue base — donations ARE money landing in the account). Water secondary (revenue rhythm and circulation through the funding pipeline). Air partial (the act of soliciting and reporting donations involves communication). Fire and Ether light because donations don't directly ignite new funding capability or alter deep purpose."
+      },
+      "signatureSourceSection": 1
     }
-  ]
+  ],
+  "signatures_source_document": "POC/docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md (parsed verbatim 2026-05-25 Phase B.1b)",
+  "signatures_summary": {
+    "total_signatures": 51,
+    "high_confidence_count": 5,
+    "proposed_count": 46,
+    "high_confidence_note": "HIGH = Sections 1-2 of source (pre-validated signatures with full rationale + breath-axis cross-validation). 5 HIGH entries: E7-11 (deprecated per Lock #8.36 but signature HIGH), V13 (deprecated per Lock #8.36 but signature HIGH), E2-10, E10-12, E5-8.",
+    "proposed_note": "PROPOSED = Sections 3-4 of source (anticipatory signatures; brief rationale; no CEN KPI). If CEN later adds a KPI at these edges/vertices, the signature predicts the intervention-distribution. Per §6.7 Honest Forward-Evolution: ratification of these = post-defense CEN partnership cycle work."
+  }
 }
