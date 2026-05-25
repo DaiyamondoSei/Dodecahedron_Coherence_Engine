@@ -2642,9 +2642,21 @@ def build_sheet_07_edges(wb: Workbook):
     Mode 5 finding (E1-8 + E3-9 carrier edges per Sheet 14).
     """
     ws = wb.create_sheet("07_Edges")
-    apply_brand_header(ws, 1, 1, 10,
-                       "Edges — 30 canonical dodecahedral edges (Lock #8.5 side-by-side formulas)",
+    apply_brand_header(ws, 1, 1, 17,
+                       "Edges — 30 canonical dodecahedral edges (Lock #8.5 math + Lock #8.40 KPI specifications)",
                        bg=DEEP_TEAL, size=14)
+
+    # Lock #8.40 — load octave-kpi-spec.json at build time (single-source-of-truth)
+    # Per-edge spec includes: canonicalName, baseQuestion, o1/o2/o3 questions,
+    # bscKpiPlacement (with primaryOctave), signature confidence.
+    # If JSON file missing or edge not found, falls back gracefully with "(pending)".
+    import json as _json_for_sheet07
+    spec_path_s07 = POC_ROOT / "companies" / "cen" / "octave-kpi-spec.json"
+    edge_spec_by_id = {}
+    if spec_path_s07.exists():
+        with spec_path_s07.open(encoding="utf-8") as _f:
+            _spec_s07 = _json_for_sheet07.load(_f)
+        edge_spec_by_id = {e["edgeId"]: e for e in _spec_s07.get("edges", [])}
 
     # 30 canonical edges per main.js:826-849 fallback adjacency
     # Each row: (E_id_num, face_a, face_b)
@@ -2667,19 +2679,28 @@ def build_sheet_07_edges(wb: Workbook):
     # E1-8 = F1-F8 = edge #4; E3-9 = F3-F9 = edge #12
     MODE_5_CARRIER_EDGES = {4, 12}
 
-    # Header row
+    # Header row — cols A-J unchanged (math); cols K-Q NEW (Lock #8.40 KPI specifications)
     headers = ["#", "Edge ID", "Face A", "Face B",
                "Description",
                "Edge Energy\n√(E_A·E_B)",
                "Edge Tension\n|E_A−E_B|",
                "Breath Ratio\nE_A/(E_A+E_B)",
                "Breath Ratio (log)\nlog(E_B/E_A)/log(φ)",
-               "Notes"]
+               "Notes",
+               # Lock #8.40 columns from octave-kpi-spec.json (Phase B.2)
+               "Canonical Name",
+               "BSC KPI\n(primaryOctave)",
+               "Signature\nConfidence",
+               "Base Question",
+               "O1 Question\n(Survival)",
+               "O2 Question\n(Structure)",
+               "O3 Question\n(Aspirational)"]
     for col_idx, header_text in enumerate(headers, start=1):
         c = ws.cell(row=3, column=col_idx, value=header_text)
         c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
         c.font = Font(name="Calibri", size=10, bold=True, color="000000")
         c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    ws.row_dimensions[3].height = 45  # Tall header to fit wrapped text
 
     # Per-edge rows
     for i, (e_num, face_a, face_b) in enumerate(EDGES_30):
@@ -2731,14 +2752,79 @@ def build_sheet_07_edges(wb: Workbook):
             ws.cell(row=row, column=10,
                     value=f"⭐ Mode 5 carrier edge (Sheet 14 thesis-defense spotlight)"
                     ).font = Font(name="Calibri", size=9, bold=True, italic=True, color="0D7377")
-            # Highlight entire row
-            for col in range(1, 11):
+            # Highlight entire row (cols 1-17 to include new Lock #8.40 cols)
+            for col in range(1, 18):
                 if col != 10:
                     ws.cell(row=row, column=col).fill = PatternFill(
                         start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
         else:
             ws.cell(row=row, column=10, value="").font = Font(
                 name="Calibri", size=9, italic=True, color="808080")
+
+        # ─────────────────────────────────────────────────────────
+        # Lock #8.40 columns K-Q — read from octave-kpi-spec.json
+        # ─────────────────────────────────────────────────────────
+        # Lookup by face-pair edge ID (E<a>-<b> format used in spec)
+        spec_edge_id = f"E{face_a}-{face_b}"
+        spec_entry = edge_spec_by_id.get(spec_edge_id)
+
+        if spec_entry:
+            # Col K: Canonical Name
+            ws.cell(row=row, column=11, value=spec_entry.get("canonicalName", "(pending)")).font = Font(
+                name="Calibri", size=10, bold=True, color="0D7377")
+            ws.cell(row=row, column=11).alignment = Alignment(
+                horizontal="left", vertical="top", wrap_text=True)
+
+            # Col L: BSC KPI + Octave (or "—" if no KPI)
+            bsc = spec_entry.get("bscKpiPlacement")
+            if bsc:
+                bsc_display = f"{bsc['kpiId']} @ {bsc['primaryOctave']}\n({bsc.get('kpiName', '')})"
+                bsc_cell = ws.cell(row=row, column=12, value=bsc_display)
+                bsc_cell.font = Font(name="Calibri", size=9, bold=True, color="D946EF")
+            else:
+                bsc_cell = ws.cell(row=row, column=12, value="—")
+                bsc_cell.font = Font(name="Calibri", size=9, italic=True, color="808080")
+            bsc_cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+            # Col M: Signature Confidence
+            conf = spec_entry.get("signatureConfidence", "—")
+            conf_cell = ws.cell(row=row, column=13, value=conf)
+            if conf == "HIGH":
+                conf_cell.font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+            else:
+                conf_cell.font = Font(name="Calibri", size=9, italic=True, color="8B5CF6")
+            conf_cell.alignment = Alignment(horizontal="center", vertical="center")
+
+            # Col N: Base Question
+            ws.cell(row=row, column=14, value=spec_entry.get("baseQuestion", "")).font = Font(
+                name="Calibri", size=9, italic=True, color="404040")
+            ws.cell(row=row, column=14).alignment = Alignment(
+                horizontal="left", vertical="top", wrap_text=True)
+
+            # Col O: O1 Question
+            ws.cell(row=row, column=15, value=spec_entry.get("o1Question", "")).font = Font(
+                name="Calibri", size=9, color="606060")
+            ws.cell(row=row, column=15).alignment = Alignment(
+                horizontal="left", vertical="top", wrap_text=True)
+
+            # Col P: O2 Question
+            ws.cell(row=row, column=16, value=spec_entry.get("o2Question", "")).font = Font(
+                name="Calibri", size=9, color="606060")
+            ws.cell(row=row, column=16).alignment = Alignment(
+                horizontal="left", vertical="top", wrap_text=True)
+
+            # Col Q: O3 Question
+            ws.cell(row=row, column=17, value=spec_entry.get("o3Question", "")).font = Font(
+                name="Calibri", size=9, color="606060")
+            ws.cell(row=row, column=17).alignment = Alignment(
+                horizontal="left", vertical="top", wrap_text=True)
+        else:
+            # Edge not in spec — shouldn't happen for canonical 30 but graceful fallback
+            ws.cell(row=row, column=11, value="(spec missing)").font = Font(
+                name="Calibri", size=9, italic=True, color="D946EF")
+
+        # Set row height to fit wrapped questions (75pt fits ~5 lines per cell)
+        ws.row_dimensions[row].height = 75
 
         # Named ranges per edge (per-edge metric aliases)
         eid_lc = edge_id.lower()
@@ -2826,7 +2912,7 @@ def build_sheet_07_edges(wb: Workbook):
         ws.merge_cells(start_row=43 + offset, start_column=1,
                        end_row=43 + offset, end_column=10)
 
-    # Column widths
+    # Column widths — cols A-J unchanged (math); K-Q sized for Lock #8.40 spec data
     ws.column_dimensions["A"].width = 4
     ws.column_dimensions["B"].width = 7
     ws.column_dimensions["C"].width = 6
@@ -2836,9 +2922,16 @@ def build_sheet_07_edges(wb: Workbook):
     ws.column_dimensions["G"].width = 12
     ws.column_dimensions["H"].width = 14
     ws.column_dimensions["I"].width = 16
-    ws.column_dimensions["J"].width = 48
+    ws.column_dimensions["J"].width = 35      # Notes (slightly narrower to make room)
+    ws.column_dimensions["K"].width = 28      # Canonical Name
+    ws.column_dimensions["L"].width = 22      # BSC KPI + Octave
+    ws.column_dimensions["M"].width = 11      # Signature Confidence
+    ws.column_dimensions["N"].width = 40      # Base Question
+    ws.column_dimensions["O"].width = 60      # O1 Question
+    ws.column_dimensions["P"].width = 60      # O2 Question
+    ws.column_dimensions["Q"].width = 60      # O3 Question
 
-    ws.freeze_panes = "B4"
+    ws.freeze_panes = "F4"  # Freeze leftmost identity cols (A-E) for horizontal scroll readability
 
     return ws
 
@@ -2880,9 +2973,21 @@ def build_sheet_08_vertices(wb: Workbook):
     Disclosure §6.6 Trust the Geometry (operational discipline that produced #8.36).
     """
     ws = wb.create_sheet("08_Vertices")
-    apply_brand_header(ws, 1, 1, 13,
-                       "Vertices — 20 canonical dodecahedral vertices (Lock #8.19 sequenceConcavity)",
+    apply_brand_header(ws, 1, 1, 21,
+                       "Vertices — 20 canonical dodecahedral vertices (Lock #8.19 sequenceConcavity + Lock #8.40 KPI specifications)",
                        bg=DEEP_TEAL, size=14)
+
+    # Lock #8.40 — load octave-kpi-spec.json at build time (single-source-of-truth)
+    # Per-vertex spec: canonicalName, classification, o1/o2/o3 questions, signature
+    # confidence. Vertices have no baseQuestion field (unlike edges); octave questions
+    # are the canonical inquiry surface.
+    import json as _json_for_sheet08
+    spec_path_s08 = POC_ROOT / "companies" / "cen" / "octave-kpi-spec.json"
+    vertex_spec_by_id = {}
+    if spec_path_s08.exists():
+        with spec_path_s08.open(encoding="utf-8") as _f:
+            _spec_s08 = _json_for_sheet08.load(_f)
+        vertex_spec_by_id = {v["vertexId"]: v for v in _spec_s08.get("vertices", [])}
 
     # 20 canonical vertices per main.js:953-977 face-triplet adjacency
     # Each row: (V_id_num, [face_a, face_b, face_c], zone_label)
@@ -2913,18 +3018,27 @@ def build_sheet_08_vertices(wb: Workbook):
     ]
     assert len(VERTICES_20) == 20, f"Expected 20 vertices, got {len(VERTICES_20)}"
 
-    # Header row
+    # Header row — cols A-N unchanged (math); cols O-U NEW (Lock #8.40 KPI specifications)
     headers = ["#", "V_ID", "Zone", "F_a", "F_b", "F_c",
                "E_a", "E_b", "E_c",
                "Vortex\nStrength",
                "Vortex\nCoherence",
                "Sequence\nConcavity",
-               "Leverage?", "Notes"]
+               "Leverage?", "Notes",
+               # Lock #8.40 columns from octave-kpi-spec.json (Phase B.3)
+               "Canonical Name",
+               "Classification",
+               "BSC KPI\n(primaryOctave)",
+               "Signature\nConfidence",
+               "O1 Question\n(Survival)",
+               "O2 Question\n(Structure)",
+               "O3 Question\n(Aspirational)"]
     for col_idx, header_text in enumerate(headers, start=1):
         c = ws.cell(row=3, column=col_idx, value=header_text)
         c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
         c.font = Font(name="Calibri", size=10, bold=True, color="000000")
         c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    ws.row_dimensions[3].height = 45  # Tall header to fit wrapped text
 
     # Per-vertex rows
     for i, (v_num, face_ids, zone) in enumerate(VERTICES_20):
@@ -3001,9 +3115,84 @@ def build_sheet_08_vertices(wb: Workbook):
         add_defined_name(wb, f"cen_{v_id.lower()}_coherence", f"'08_Vertices'!$K${row}")
         add_defined_name(wb, f"cen_{v_id.lower()}_concavity", f"'08_Vertices'!$L${row}")
 
-        # Highlight Lock #8.11 candidate row
+        # ─────────────────────────────────────────────────────────
+        # Lock #8.40 columns O-U — read from octave-kpi-spec.json
+        # ─────────────────────────────────────────────────────────
+        spec_entry = vertex_spec_by_id.get(v_id)
+
+        if spec_entry:
+            # Col O: Canonical Name
+            ws.cell(row=row, column=15, value=spec_entry.get("canonicalName", "(pending)")).font = Font(
+                name="Calibri", size=10, bold=True, color="0D7377")
+            ws.cell(row=row, column=15).alignment = Alignment(
+                horizontal="left", vertical="top", wrap_text=True)
+
+            # Col P: Classification (synergy_hub / bermuda_triangle / hotspot / null)
+            cls = spec_entry.get("classification")
+            cls_display = cls if cls else "—"
+            cls_cell = ws.cell(row=row, column=16, value=cls_display)
+            if cls:
+                cls_cell.font = Font(name="Calibri", size=9, italic=True, color="8B5CF6")
+            else:
+                cls_cell.font = Font(name="Calibri", size=9, italic=True, color="808080")
+            cls_cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+            # Col Q: BSC KPI + Octave (or "—" if no KPI; V13 historically had BSC.L8 but
+            # reverted by Lock #8.36; show "— (was BSC.L8 @ O2 pre-Lock #8.36)" for traceability)
+            bsc = spec_entry.get("bscKpiPlacement")
+            pre_lock_bsc = spec_entry.get("_pre_Lock_8_36_bscKpiPlacement")
+            if bsc:
+                bsc_display = f"{bsc['kpiId']} @ {bsc['primaryOctave']}\n({bsc.get('kpiName', '')})"
+                bsc_color = "D946EF"
+                bsc_bold = True
+            elif pre_lock_bsc:
+                bsc_display = f"— (was {pre_lock_bsc['kpiId']} @ {pre_lock_bsc['primaryOctave']} pre-Lock #8.36; reverted to {pre_lock_bsc.get('post_Lock_8_36_canonical_placement', 'face placement')})"
+                bsc_color = "8B5CF6"
+                bsc_bold = False
+            else:
+                bsc_display = "—"
+                bsc_color = "808080"
+                bsc_bold = False
+            bsc_cell = ws.cell(row=row, column=17, value=bsc_display)
+            bsc_cell.font = Font(name="Calibri", size=9, bold=bsc_bold, italic=not bsc_bold, color=bsc_color)
+            bsc_cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+            # Col R: Signature Confidence
+            conf = spec_entry.get("signatureConfidence", "—")
+            conf_cell = ws.cell(row=row, column=18, value=conf)
+            if conf == "HIGH":
+                conf_cell.font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+            else:
+                conf_cell.font = Font(name="Calibri", size=9, italic=True, color="8B5CF6")
+            conf_cell.alignment = Alignment(horizontal="center", vertical="center")
+
+            # Col S: O1 Question
+            ws.cell(row=row, column=19, value=spec_entry.get("o1Question", "")).font = Font(
+                name="Calibri", size=9, color="606060")
+            ws.cell(row=row, column=19).alignment = Alignment(
+                horizontal="left", vertical="top", wrap_text=True)
+
+            # Col T: O2 Question
+            ws.cell(row=row, column=20, value=spec_entry.get("o2Question", "")).font = Font(
+                name="Calibri", size=9, color="606060")
+            ws.cell(row=row, column=20).alignment = Alignment(
+                horizontal="left", vertical="top", wrap_text=True)
+
+            # Col U: O3 Question
+            ws.cell(row=row, column=21, value=spec_entry.get("o3Question", "")).font = Font(
+                name="Calibri", size=9, color="606060")
+            ws.cell(row=row, column=21).alignment = Alignment(
+                horizontal="left", vertical="top", wrap_text=True)
+        else:
+            ws.cell(row=row, column=15, value="(spec missing)").font = Font(
+                name="Calibri", size=9, italic=True, color="D946EF")
+
+        # Set row height to fit wrapped questions (75pt fits ~5 lines per cell)
+        ws.row_dimensions[row].height = 75
+
+        # Highlight Lock #8.11 candidate row (extended to cols 1-21 for Lock #8.40 cols)
         if v_num in (10, 13):
-            for col in range(1, 14):
+            for col in range(1, 22):
                 ws.cell(row=row, column=col).fill = PatternFill(
                     start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
 
@@ -3103,7 +3292,7 @@ def build_sheet_08_vertices(wb: Workbook):
         ws.merge_cells(start_row=33 + offset, start_column=1,
                        end_row=33 + offset, end_column=14)
 
-    # Column widths
+    # Column widths — cols A-N unchanged (math + zone + leverage); O-U sized for Lock #8.40
     ws.column_dimensions["A"].width = 4
     ws.column_dimensions["B"].width = 6
     ws.column_dimensions["C"].width = 9
@@ -3115,9 +3304,16 @@ def build_sheet_08_vertices(wb: Workbook):
     ws.column_dimensions["K"].width = 11
     ws.column_dimensions["L"].width = 11
     ws.column_dimensions["M"].width = 10
-    ws.column_dimensions["N"].width = 56
+    ws.column_dimensions["N"].width = 40       # Notes (slightly narrower)
+    ws.column_dimensions["O"].width = 32       # Canonical Name
+    ws.column_dimensions["P"].width = 16       # Classification
+    ws.column_dimensions["Q"].width = 28       # BSC KPI + Octave
+    ws.column_dimensions["R"].width = 11       # Signature Confidence
+    ws.column_dimensions["S"].width = 60       # O1 Question
+    ws.column_dimensions["T"].width = 60       # O2 Question
+    ws.column_dimensions["U"].width = 60       # O3 Question
 
-    ws.freeze_panes = "B4"
+    ws.freeze_panes = "G4"  # Freeze leftmost identity cols (A-F: #/V_ID/Zone/3-face IDs)
 
     return ws
 
