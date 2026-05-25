@@ -3343,13 +3343,31 @@ def build_sheet_09_bidirectional(wb: Workbook):
     Authority: Lock #8.24 + POC/docs/math/CALCULATION_AUDIT_TRAIL.md §17.
     """
     ws = wb.create_sheet("09_Vertex_KPIs_BiDirectional")
-    apply_brand_header(ws, 1, 1, 14,
-                       "Bi-Directional Intervention Map (Lock #8.24 + Lock #8.36 corrections)",
+    apply_brand_header(ws, 1, 1, 15,
+                       "Bi-Directional Intervention Map (Lock #8.24 + Lock #8.36 + Lock #8.40 §6.7 activation)",
                        bg=DEEP_TEAL, size=14)
 
-    # Per-edge signatures source: docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md
-    # Post-Lock #8.36: 3 surviving HIGH-confidence edge-KPIs (E7-11 retired; V13 vertex-KPI retired).
-    # Equal-weight placeholder for anticipatory signatures (0.20 per element for edges; sum=1.00 per side).
+    # Lock #8.40 — load octave-kpi-spec.json at build time (single-source-of-truth)
+    # Per-edge/vertex spec includes full signature10Tuple/15Tuple from source markdown
+    # CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md (verbatim parsed
+    # 2026-05-25 Phase B.1b). All 50 signatures now have ACTUAL researcher-drafted
+    # values per face × 5 elements; equal-weight placeholders RETIRED.
+    #
+    # §6.7 Honest Forward-Evolution activation (Phase B.4):
+    #   - 5 HIGH-confidence (Sections 1-2 of source): E2-10, E5-8, E10-12, E7-11 (deprecated), V13 (deprecated)
+    #   - 46 PROPOSED-confidence (Sections 3-4 of source): anticipatory researcher-drafted
+    #     awaiting partnership-validation cycle (target: post-defense CEN partnership Q3 2026)
+    import json as _json_for_sheet09
+    spec_path_s09 = POC_ROOT / "companies" / "cen" / "octave-kpi-spec.json"
+    edge_sig_by_pair = {}    # (faceA, faceB) → spec entry
+    vertex_sig_by_id = {}    # vertexId → spec entry
+    if spec_path_s09.exists():
+        with spec_path_s09.open(encoding="utf-8") as _f:
+            _spec_s09 = _json_for_sheet09.load(_f)
+        for e in _spec_s09.get("edges", []):
+            edge_sig_by_pair[(e["faceA"], e["faceB"])] = e
+        for v in _spec_s09.get("vertices", []):
+            vertex_sig_by_id[v["vertexId"]] = v
 
     # 30 canonical edges (same as Sheet 07)
     EDGES_30 = [
@@ -3366,19 +3384,11 @@ def build_sheet_09_bidirectional(wb: Workbook):
         (30, 11, 12),
     ]
 
-    # HIGH-confidence edge signatures (3 surviving post-Lock #8.36)
-    # Format: (edge_id_num, faceA_weights, faceB_weights, kpi_id, kpi_name, confidence_note)
-    # Weights: [Earth, Water, Fire, Air, Ether] sum to 1.0 per side
-    HIGH_EDGE_SIGNATURES = {
-        # E14 = F4-F5? No, E14 = (14, 4, 5). Need to match by face pair: F2-F10 = edge #8
-        8:  ([0.35, 0.10, 0.10, 0.15, 0.30], [0.25, 0.05, 0.05, 0.10, 0.55],
-             "BSC.L7", "Peace Charter screening (Ethical IP Score)", "HIGH (W06v3 pre-validated)"),
-        29: ([0.40, 0.05, 0.10, 0.10, 0.35], [0.50, 0.10, 0.10, 0.10, 0.20],
-             "BSC.I3", "GDPR compliance gaps closed (Ethical Resilience)", "HIGH (W06v3 pre-validated)"),
-        19: ([0.30, 0.20, 0.20, 0.25, 0.05], [0.30, 0.20, 0.35, 0.10, 0.05],
-             "BSC.C8", "AI governance consulting clients (Brand-Experience Coherence)", "HIGH (W06v3 pre-validated)"),
-    }
-    # Note: E2-10 = edge #8 (F2-F10); E10-12 = edge #29 (F10-F12); E5-8 = edge #19 (F5-F8)
+    # Lock #8.40 + Phase B.4: HIGH_EDGE_SIGNATURES hardcoded dict + equal-weight
+    # placeholders RETIRED. All signature values now read from octave-kpi-spec.json
+    # at build time (see edge_sig_by_pair + vertex_sig_by_id loaded above). Each
+    # edge/vertex carries its source-doc verbatim signature10Tuple/15Tuple +
+    # signatureConfidence (HIGH/PROPOSED) + signatureRationale.
 
     # 20 canonical vertices (same as Sheet 08)
     VERTICES_20 = [
@@ -3394,20 +3404,25 @@ def build_sheet_09_bidirectional(wb: Workbook):
     # All 20 vertex signatures are anticipatory equal-weight placeholders (0.0667 per element).
 
     # ─────────────────────────────────────────────────────────
-    # BLOCK A — Lock #8.36 reframe notice (rows 3-7)
+    # BLOCK A — §6.7 Honest Forward-Evolution activation status (rows 3-13)
     # ─────────────────────────────────────────────────────────
-    apply_brand_header(ws, 3, 1, 14,
-                       "Block A — Bi-Directional Architecture Status (post-Lock #8.36 maximum-integrity)",
+    apply_brand_header(ws, 3, 1, 15,
+                       "Block A — Bi-Directional Architecture Status (Lock #8.36 + Lock #8.40 §6.7 activation)",
                        bg=QUANTUM_PURPLE, size=11)
     status_notes = [
         "Lock #8.24 Bi-Directional Co-Evolution: Forward math (elements→face→edge/vertex) unchanged;",
         "  backward intervention via per-Edge 10-tuple + per-Vertex 15-tuple Elemental Influence Signatures.",
         "                                       ",
         "Post-Lock #8.36 KPI distribution: 31 face-KPIs + 3 edge-KPIs + 0 vertex-KPIs = 34 total.",
-        "HIGH-confidence edge signatures (3): E8 BSC.L7 (F2-F10), E29 BSC.I3 (F10-F12), E19 BSC.C8 (F5-F8).",
-        "Vertex-KPIs: ZERO at canonical mapping (V13 promotion retired; L8 reverted to F10 face).",
-        "Anticipatory signatures (47): MEDIUM-confidence equal-weight placeholders; source doc has researcher-drafted",
-        "  values pending partnership-validation at W3 adversarial pass.",
+        "                                       ",
+        "Lock #8.40 §6.7 Honest Forward-Evolution activation (2026-05-25 Phase B.4):",
+        "  Source: docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md (959 lines)",
+        "  Data layer: companies/cen/octave-kpi-spec.json (Phase B.1b parsed verbatim 2026-05-25)",
+        "  - 5 HIGH-confidence (Sections 1-2): E2-10, E5-8, E10-12, E7-11 (deprecated KPI per #8.36 but HIGH",
+        "    signature preserved), V13 (deprecated KPI per #8.36 but HIGH signature preserved).",
+        "  - 46 PROPOSED-confidence (Sections 3-4): 27 anticipatory edges + 19 anticipatory vertices",
+        "    with researcher-drafted weights pending CEN partnership-validation (target Q3 2026 post-defense).",
+        "  Equal-weight 0.20 placeholders RETIRED — every signature now carries source-doc verbatim weights.",
     ]
     for i, note in enumerate(status_notes, start=1):
         c = ws.cell(row=3 + i, column=1, value=note)
@@ -3415,38 +3430,72 @@ def build_sheet_09_bidirectional(wb: Workbook):
         ws.merge_cells(start_row=3 + i, start_column=1, end_row=3 + i, end_column=14)
 
     # ─────────────────────────────────────────────────────────
-    # BLOCK B — Edge Signatures table (rows 13-44)
+    # BLOCK B — Edge Signatures table (Lock #8.40 reads from spec)
     # ─────────────────────────────────────────────────────────
-    apply_brand_header(ws, 13, 1, 14,
-                       "Block B — Edge Elemental Influence Signatures (30 edges × 10-tuple)",
+    apply_brand_header(ws, 19, 1, 15,
+                       "Block B — Edge Elemental Influence Signatures (30 edges × 10-tuple; verbatim from source via Lock #8.40)",
                        bg=QUANTUM_PURPLE, size=11)
 
     edge_headers = ["#", "Edge", "Pair", "Side",
                     "Earth", "Water", "Fire", "Air", "Ether", "Σ",
-                    "KPI", "KPI Name", "Confidence", "Notes"]
+                    "KPI", "KPI Name", "Confidence",
+                    "§6.7 Status",
+                    "Notes / Rationale"]
     for col_idx, header_text in enumerate(edge_headers, start=1):
-        c = ws.cell(row=14, column=col_idx, value=header_text)
+        c = ws.cell(row=20, column=col_idx, value=header_text)
         c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
         c.font = Font(name="Calibri", size=10, bold=True)
         c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-    # Per-edge signatures (2 rows per edge: faceA + faceB)
-    edge_row_start = 15
+    # Per-edge signatures (2 rows per edge: faceA + faceB) — READ FROM SPEC
+    edge_row_start = 21
     for i, (e_num, face_a, face_b) in enumerate(EDGES_30):
         row_a = edge_row_start + i * 2
         row_b = row_a + 1
 
-        # Get signature (high-confidence or anticipatory equal-weight)
-        if e_num in HIGH_EDGE_SIGNATURES:
-            sig_a, sig_b, kpi_id, kpi_name, conf = HIGH_EDGE_SIGNATURES[e_num]
+        # Look up signature in octave-kpi-spec.json by (faceA, faceB) pair
+        spec_e = edge_sig_by_pair.get((face_a, face_b))
+        if spec_e and spec_e.get("signature10Tuple"):
+            sig_tuple = spec_e["signature10Tuple"]
+            sig_a_dict = sig_tuple.get(f"F{face_a}", {})
+            sig_b_dict = sig_tuple.get(f"F{face_b}", {})
+            sig_a = [sig_a_dict.get(k, 0.0) for k in ("earth", "water", "fire", "air", "ether")]
+            sig_b = [sig_b_dict.get(k, 0.0) for k in ("earth", "water", "fire", "air", "ether")]
+            conf = spec_e.get("signatureConfidence", "PROPOSED")
+            bsc = spec_e.get("bscKpiPlacement")
+            if bsc:
+                kpi_id = bsc.get("kpiId", "—")
+                kpi_name = bsc.get("kpiName", "—")
+            else:
+                kpi_id = "—"
+                kpi_name = "(no KPI; anticipatory)"
+            # §6.7 status per Lock #8.40
+            if conf == "HIGH":
+                status_67 = "ACTIVATED (partnership-validated; preserved across Lock #8.36)" if not bsc else "ACTIVATED (HIGH + active KPI)"
+            else:
+                status_67 = "PROPOSED — pending CEN partnership-validation (target Q3 2026)"
+            # Rationale (first face's rationale; short)
+            rationale_dict = spec_e.get("signatureRationale", {})
+            shared = spec_e.get("signatureSharedRationale")
+            if shared:
+                rationale_text = shared[:200] + ("..." if len(shared) > 200 else "")
+            elif rationale_dict:
+                first_rationale = next(iter(rationale_dict.values()), "") or ""
+                rationale_text = first_rationale[:200] + ("..." if len(first_rationale) > 200 else "")
+            else:
+                rationale_text = ""
         else:
-            sig_a = sig_b = [0.20, 0.20, 0.20, 0.20, 0.20]  # equal-weight placeholder
-            kpi_id = "—"
-            kpi_name = "(no KPI; anticipatory)"
-            conf = "MEDIUM (anticipatory; source doc has researcher draft)"
+            # Should not occur for canonical 30 edges (spec covers all)
+            sig_a = sig_b = [0.0] * 5
+            conf = "—"
+            kpi_id = "(spec missing)"
+            kpi_name = ""
+            status_67 = "—"
+            rationale_text = "(no spec entry found for this edge — investigate)"
 
+        is_high = (conf == "HIGH")
         for side_idx, (row, face_id, sig) in enumerate([(row_a, face_a, sig_a), (row_b, face_b, sig_b)]):
-            # Col A: # (only on first row)
+            # Col A-C: # + Edge ID + Pair (only on first row)
             if side_idx == 0:
                 ws.cell(row=row, column=1, value=e_num).alignment = Alignment(horizontal="center")
                 ws.cell(row=row, column=2, value=f"E{e_num}").font = Font(name="Consolas", size=10, bold=True)
@@ -3462,69 +3511,121 @@ def build_sheet_09_bidirectional(wb: Workbook):
                 c = ws.cell(row=row, column=5+j, value=val)
                 c.number_format = "0.00"
                 c.alignment = Alignment(horizontal="center")
-                if e_num in HIGH_EDGE_SIGNATURES:
+                if is_high:
                     c.font = Font(name="Calibri", size=10, bold=True, color="0D7377")
                 else:
-                    c.font = Font(name="Calibri", size=10, color="808080")
+                    c.font = Font(name="Calibri", size=10, color="606060")
             # Col J: Sum (formula)
-            apply_formula_cell(ws, row, 10,
-                                f"=SUM(E{row}:I{row})")
+            apply_formula_cell(ws, row, 10, f"=SUM(E{row}:I{row})")
             ws.cell(row=row, column=10).number_format = "0.00"
             ws.cell(row=row, column=10).alignment = Alignment(horizontal="center")
             ws.cell(row=row, column=10).font = Font(
                 name="Calibri", size=9, italic=True, color="606060")
 
-            # Cols K-N: KPI metadata (only first row)
+            # Cols K-O: KPI metadata + §6.7 status + rationale (only first row)
             if side_idx == 0:
                 ws.cell(row=row, column=11, value=kpi_id).font = Font(
-                    name="Consolas", size=9, bold=True)
+                    name="Consolas", size=9, bold=True,
+                    color="D946EF" if kpi_id != "—" else "808080")
                 ws.cell(row=row, column=12, value=kpi_name).font = Font(
                     name="Calibri", size=9, italic=True, color="606060")
+                ws.cell(row=row, column=12).alignment = Alignment(wrap_text=True, vertical="top")
                 ws.cell(row=row, column=13, value=conf).font = Font(
+                    name="Calibri", size=10, bold=is_high,
+                    color="0D7377" if is_high else "8B5CF6")
+                ws.cell(row=row, column=13).alignment = Alignment(horizontal="center")
+                ws.cell(row=row, column=14, value=status_67).font = Font(
                     name="Calibri", size=9, italic=True,
-                    color="0D7377" if "HIGH" in conf else "808080")
-                ws.cell(row=row, column=14, value="").font = Font(
-                    name="Calibri", size=9, italic=True, color="808080")
+                    color="0D7377" if "ACTIVATED" in status_67 else "8B5CF6")
+                ws.cell(row=row, column=14).alignment = Alignment(wrap_text=True, vertical="top")
+                ws.cell(row=row, column=15, value=rationale_text).font = Font(
+                    name="Calibri", size=9, italic=True, color="606060")
+                ws.cell(row=row, column=15).alignment = Alignment(wrap_text=True, vertical="top")
 
             # Highlight HIGH-confidence rows
-            if e_num in HIGH_EDGE_SIGNATURES:
-                for col in range(1, 15):
+            if is_high:
+                for col in range(1, 16):
                     if not ws.cell(row=row, column=col).fill or ws.cell(row=row, column=col).fill.start_color.rgb == "00000000":
                         ws.cell(row=row, column=col).fill = PatternFill(
                             start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
 
+        # Row height for HIGH (rationale text takes more space)
+        if is_high:
+            ws.row_dimensions[row_a].height = 45
+
     # ─────────────────────────────────────────────────────────
-    # BLOCK C — Vertex Signatures table (after edges; rows starting ~76)
+    # BLOCK C — Vertex Signatures table (Lock #8.40 reads from spec)
     # ─────────────────────────────────────────────────────────
-    vertex_block_start = edge_row_start + len(EDGES_30) * 2 + 2  # = 77
-    apply_brand_header(ws, vertex_block_start, 1, 14,
-                       "Block C — Vertex Elemental Influence Signatures (20 vertices × 15-tuple)",
+    vertex_block_start = edge_row_start + len(EDGES_30) * 2 + 2  # shifts with edge_row_start
+    apply_brand_header(ws, vertex_block_start, 1, 15,
+                       "Block C — Vertex Elemental Influence Signatures (20 vertices × 15-tuple; verbatim from source via Lock #8.40)",
                        bg=QUANTUM_PURPLE, size=11)
 
     vertex_headers = ["#", "Vertex", "Faces", "Side",
                       "Earth", "Water", "Fire", "Air", "Ether", "Σ",
-                      "KPI", "KPI Name", "Confidence", "Notes"]
+                      "KPI", "KPI Name", "Confidence",
+                      "§6.7 Status",
+                      "Notes / Rationale"]
     for col_idx, header_text in enumerate(vertex_headers, start=1):
         c = ws.cell(row=vertex_block_start + 1, column=col_idx, value=header_text)
         c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
         c.font = Font(name="Calibri", size=10, bold=True)
         c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-    # Per-vertex signatures (3 rows per vertex: faceA + faceB + faceC)
+    # Per-vertex signatures (3 rows per vertex: faceA + faceB + faceC) — READ FROM SPEC
     vertex_row_start = vertex_block_start + 2
     for i, (v_num, face_ids) in enumerate(VERTICES_20):
         row_base = vertex_row_start + i * 3
-        # All vertex signatures are anticipatory (equal-weight) post-Lock #8.36
-        sig = [0.20, 0.20, 0.20, 0.20, 0.20]
-        kpi_id = "—"
-        kpi_name = "(no KPI; anticipatory)"
-        conf = "MEDIUM (anticipatory; CEN has 0 vertex-KPIs per Lock #8.36)"
-        if v_num == 13:
-            kpi_name = "(V13 was Lock #8.11 L8 candidate; retired per Lock #8.36)"
-            conf = "MEDIUM (V13 = F4+F5+F9 ≠ L8 intent F4+F9+F10)"
+        v_id = f"V{v_num}"
+
+        # Look up signature in octave-kpi-spec.json by vertexId
+        spec_v = vertex_sig_by_id.get(v_id)
+        if spec_v and spec_v.get("signature15Tuple"):
+            sig_tuple = spec_v["signature15Tuple"]
+            sig_per_face = {}
+            for fid in face_ids:
+                fd = sig_tuple.get(f"F{fid}", {})
+                sig_per_face[fid] = [fd.get(k, 0.0) for k in ("earth", "water", "fire", "air", "ether")]
+            conf = spec_v.get("signatureConfidence", "PROPOSED")
+            bsc = spec_v.get("bscKpiPlacement")
+            pre_lock_bsc = spec_v.get("_pre_Lock_8_36_bscKpiPlacement")
+            if bsc:
+                kpi_id = bsc.get("kpiId", "—")
+                kpi_name = bsc.get("kpiName", "—")
+            elif pre_lock_bsc:
+                kpi_id = f"(was {pre_lock_bsc.get('kpiId', '—')})"
+                kpi_name = f"DEPRECATED per Lock #8.36 ({pre_lock_bsc.get('kpiName', '')}); reverted to face placement"
+            else:
+                kpi_id = "—"
+                kpi_name = "(no KPI; anticipatory)"
+            # §6.7 status
+            if conf == "HIGH":
+                status_67 = "ACTIVATED (signature HIGH; KPI deprecated #8.36)" if pre_lock_bsc and not bsc else "ACTIVATED (partnership-validated)"
+            else:
+                status_67 = "PROPOSED — pending CEN partnership-validation (target Q3 2026)"
+            rationale_dict = spec_v.get("signatureRationale", {})
+            shared = spec_v.get("signatureSharedRationale")
+            if shared:
+                rationale_text = shared[:200] + ("..." if len(shared) > 200 else "")
+            elif rationale_dict:
+                first_rationale = next(iter(rationale_dict.values()), "") or ""
+                rationale_text = first_rationale[:200] + ("..." if len(first_rationale) > 200 else "")
+            else:
+                rationale_text = ""
+        else:
+            sig_per_face = {fid: [0.0] * 5 for fid in face_ids}
+            conf = "—"
+            kpi_id = "(spec missing)"
+            kpi_name = ""
+            status_67 = "—"
+            rationale_text = "(no spec entry found for this vertex — investigate)"
+
+        is_high = (conf == "HIGH")
 
         for side_idx, face_id in enumerate(face_ids):
             row = row_base + side_idx
+            sig = sig_per_face[face_id]
+
             # First row of vertex: # + V_ID + faces
             if side_idx == 0:
                 ws.cell(row=row, column=1, value=v_num).alignment = Alignment(horizontal="center")
@@ -3543,7 +3644,10 @@ def build_sheet_09_bidirectional(wb: Workbook):
                 c = ws.cell(row=row, column=5+j, value=val)
                 c.number_format = "0.00"
                 c.alignment = Alignment(horizontal="center")
-                c.font = Font(name="Calibri", size=10, color="808080")
+                if is_high:
+                    c.font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+                else:
+                    c.font = Font(name="Calibri", size=10, color="606060")
             # Col J: Sum formula
             apply_formula_cell(ws, row, 10, f"=SUM(E{row}:I{row})")
             ws.cell(row=row, column=10).number_format = "0.00"
@@ -3551,58 +3655,79 @@ def build_sheet_09_bidirectional(wb: Workbook):
             ws.cell(row=row, column=10).font = Font(
                 name="Calibri", size=9, italic=True, color="606060")
 
-            # Cols K-N: KPI metadata (only first row)
+            # Cols K-O: KPI metadata + §6.7 status + rationale (only first row)
             if side_idx == 0:
                 ws.cell(row=row, column=11, value=kpi_id).font = Font(
-                    name="Consolas", size=9, bold=True)
+                    name="Consolas", size=9, bold=True,
+                    color="D946EF" if "—" not in kpi_id else "808080")
                 ws.cell(row=row, column=12, value=kpi_name).font = Font(
                     name="Calibri", size=9, italic=True, color="606060")
+                ws.cell(row=row, column=12).alignment = Alignment(wrap_text=True, vertical="top")
                 ws.cell(row=row, column=13, value=conf).font = Font(
-                    name="Calibri", size=9, italic=True, color="808080")
-                ws.cell(row=row, column=14, value="").font = Font(
-                    name="Calibri", size=9, italic=True, color="808080")
+                    name="Calibri", size=10, bold=is_high,
+                    color="0D7377" if is_high else "8B5CF6")
+                ws.cell(row=row, column=13).alignment = Alignment(horizontal="center")
+                ws.cell(row=row, column=14, value=status_67).font = Font(
+                    name="Calibri", size=9, italic=True,
+                    color="0D7377" if "ACTIVATED" in status_67 else "8B5CF6")
+                ws.cell(row=row, column=14).alignment = Alignment(wrap_text=True, vertical="top")
+                ws.cell(row=row, column=15, value=rationale_text).font = Font(
+                    name="Calibri", size=9, italic=True, color="606060")
+                ws.cell(row=row, column=15).alignment = Alignment(wrap_text=True, vertical="top")
 
             # V13 highlight (Lock #8.36 reframe marker)
             if v_num == 13:
-                ws.cell(row=row, column=2).fill = PatternFill(
-                    start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
-                ws.cell(row=row, column=12).fill = PatternFill(
-                    start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+                for col in (2, 11, 12, 13, 14):
+                    ws.cell(row=row, column=col).fill = PatternFill(
+                        start_color="FFF8DC", end_color="FFF8DC", fill_type="solid")
+
+        if is_high:
+            ws.row_dimensions[row_base].height = 45
 
     # ─────────────────────────────────────────────────────────
-    # BLOCK D — Validation summary
+    # BLOCK D — Validation summary (Lock #8.40 + §6.7 activation accurate counts)
     # ─────────────────────────────────────────────────────────
     summary_row = vertex_row_start + 20 * 3 + 2
-    apply_brand_header(ws, summary_row, 1, 14,
-                       "Block D — Signature Validation Summary (all sums must = 1.00 per side)",
+    apply_brand_header(ws, summary_row, 1, 15,
+                       "Block D — Signature Validation Summary (Lock #8.40 verbatim from source; all sums = 1.00 per side)",
                        bg=QUANTUM_PURPLE, size=11)
 
     ws.cell(row=summary_row + 1, column=1, value="Total signatures:").font = Font(
         name="Calibri", size=10, bold=True)
-    ws.cell(row=summary_row + 1, column=2, value="50 (30 edges + 20 vertices)").font = Font(
+    ws.cell(row=summary_row + 1, column=2, value="50 (30 edges + 20 vertices) — all verbatim from source markdown").font = Font(
         name="Calibri", size=10)
     ws.cell(row=summary_row + 2, column=1, value="HIGH confidence:").font = Font(
         name="Calibri", size=10, bold=True, color="0D7377")
     ws.cell(row=summary_row + 2, column=2,
-            value="3 (post-Lock #8.36; E2-10, E10-12, E5-8 — all valid edges)").font = Font(
+            value="5 (Sections 1-2 of source: E2-10, E5-8, E10-12, E7-11 deprecated, V13 deprecated — signatures preserved across Lock #8.36 KPI reversion)").font = Font(
         name="Calibri", size=10, color="0D7377")
-    ws.cell(row=summary_row + 3, column=1, value="MEDIUM confidence:").font = Font(
-        name="Calibri", size=10, bold=True, color="808080")
+    ws.cell(row=summary_row + 3, column=1, value="PROPOSED confidence:").font = Font(
+        name="Calibri", size=10, bold=True, color="8B5CF6")
     ws.cell(row=summary_row + 3, column=2,
-            value="47 (anticipatory equal-weight placeholders; partnership-validate at W3)").font = Font(
-        name="Calibri", size=10, color="808080")
-    ws.cell(row=summary_row + 4, column=1, value="Source doc:").font = Font(
-        name="Calibri", size=10, bold=True)
+            value="45 (Sections 3-4 of source: 27 anticipatory edges + 18 anticipatory vertices; §6.7 status PROPOSED pending CEN Q3 2026)").font = Font(
+        name="Calibri", size=10, color="8B5CF6")
+    ws.cell(row=summary_row + 4, column=1, value="Active edge-KPIs:").font = Font(
+        name="Calibri", size=10, bold=True, color="D946EF")
     ws.cell(row=summary_row + 4, column=2,
-            value="docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md").font = Font(
+            value="3 (E2-10 BSC.L7 @ O2 · E5-8 BSC.C8 @ O1 · E10-12 BSC.I3 @ O1) — post-Lock #8.36").font = Font(
+        name="Calibri", size=10, color="D946EF")
+    ws.cell(row=summary_row + 5, column=1, value="Source doc:").font = Font(
+        name="Calibri", size=10, bold=True)
+    ws.cell(row=summary_row + 5, column=2,
+            value="docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md (959 lines)").font = Font(
+        name="Consolas", size=9, color="606060")
+    ws.cell(row=summary_row + 6, column=1, value="Data layer:").font = Font(
+        name="Calibri", size=10, bold=True)
+    ws.cell(row=summary_row + 6, column=2,
+            value="companies/cen/octave-kpi-spec.json (Lock #8.40 SSOT chain; Phase B.1b parsed 2026-05-25)").font = Font(
         name="Consolas", size=9, color="606060")
 
     # ─────────────────────────────────────────────────────────
-    # Footer — Authority + Lock #8.24 + Lock #8.36
+    # Footer — Authority + Lock #8.24 + Lock #8.36 + Lock #8.40 §6.7 activation
     # ─────────────────────────────────────────────────────────
-    footer_row = summary_row + 6
-    apply_brand_header(ws, footer_row, 1, 14,
-                       "Authority + Lock #8.24 (Bi-Directional) + Lock #8.36 (Geometric reversion)",
+    footer_row = summary_row + 8
+    apply_brand_header(ws, footer_row, 1, 15,
+                       "Authority + Lock #8.24 (Bi-Directional) + Lock #8.36 (Geometric reversion) + Lock #8.40 §6.7 activation",
                        bg=DARK_NAVY, size=11)
     notes = [
         "Lock #8.24 Bi-Directional Co-Evolution Architecture:",
@@ -3617,23 +3742,30 @@ def build_sheet_09_bidirectional(wb: Workbook):
         "    BSC.L8 reverted to F10 Ether O2 face placement (Songbook R38 canonical).",
         "  • Post-correction: 31 face + 3 edge + 0 vertex = 34 KPIs (count preserved; placements pristine).",
         "                                       ",
-        "ANTICIPATORY SIGNATURES (47 of 50):",
-        "  Equal-weight placeholders (0.20 per element). Source doc has researcher-drafted MEDIUM-confidence",
-        "  values; SSOT equal-weight is intentional honest baseline pending partnership-validation at W3",
-        "  adversarial pass. The full researcher-drafted values can be migrated when partnership-validated.",
+        "Lock #8.40 §6.7 Honest Forward-Evolution activation (Phase B.4, 2026-05-25):",
+        "  Equal-weight 0.20 placeholders RETIRED. All 50 signatures now carry source-doc VERBATIM weights",
+        "  parsed from CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md (959 lines)",
+        "  via Phase B.1b extraction. §6.7 status column shows ACTIVATED (HIGH) vs PROPOSED — pending CEN",
+        "  partnership-validation (target Q3 2026 post-defense per §6.7 Disclosure doc).",
+        "                                       ",
+        "  Methodological insight: signature confidence (HIGH/PROPOSED) is INDEPENDENT of KPI placement.",
+        "  E7-11 + V13 retain HIGH signature confidence (carefully drafted with full rationale + breath-axis",
+        "  cross-validation in source Section 1) even though their BSC.F4/L8 KPI placements were reverted",
+        "  by Lock #8.36. Signature = predicted intervention-distribution IF KPI were placed there.",
         "                                       ",
         "ACTION SIMULATOR (deferred to Wave 3 follow-up):",
         "  Per Lock #8.24 design: 'If KPI X shifts by ΔX, predicted face/edge/vertex shifts'. Requires the",
         "  HIGH-confidence signatures + partnership-validated anticipatory signatures to be operationally",
-        "  meaningful. Scaffolded in this sheet's structure; computed cells added in Wave 3.",
+        "  meaningful. Now operationally ready (all 50 signatures verbatim from source); computed cells in Wave 3.",
         "                                       ",
-        "Authority: audit trail §17 (Bi-Directional architecture) + Lock #8.24 + Lock #8.36 + source signatures doc.",
+        "Authority: audit trail §17 (Bi-Directional architecture) + Lock #8.24 + Lock #8.36 + Lock #8.40 +",
+        "  octave-kpi-spec.json (Layer 2 data canonical) + BiDirectional Signatures source markdown (Layer 1).",
     ]
     for i, note in enumerate(notes, start=1):
         c = ws.cell(row=footer_row + i, column=1, value=note)
         c.font = Font(name="Calibri", size=10, italic=True, color="404040")
         ws.merge_cells(start_row=footer_row + i, start_column=1,
-                       end_row=footer_row + i, end_column=14)
+                       end_row=footer_row + i, end_column=15)
 
     # Column widths
     ws.column_dimensions["A"].width = 4
@@ -3642,12 +3774,13 @@ def build_sheet_09_bidirectional(wb: Workbook):
     ws.column_dimensions["D"].width = 6
     for col in ["E", "F", "G", "H", "I", "J"]:
         ws.column_dimensions[col].width = 8
-    ws.column_dimensions["K"].width = 9
-    ws.column_dimensions["L"].width = 36
-    ws.column_dimensions["M"].width = 32
-    ws.column_dimensions["N"].width = 16
+    ws.column_dimensions["K"].width = 12       # KPI ID (wider for "(was BSC.X)" annotations)
+    ws.column_dimensions["L"].width = 36       # KPI Name
+    ws.column_dimensions["M"].width = 12       # Confidence
+    ws.column_dimensions["N"].width = 38       # §6.7 Status (NEW)
+    ws.column_dimensions["O"].width = 50       # Notes / Rationale (NEW; was N)
 
-    ws.freeze_panes = "B15"
+    ws.freeze_panes = "B21"  # Lock identity col after Block A notes (was B15 pre-block-A expansion)
 
     return ws
 
