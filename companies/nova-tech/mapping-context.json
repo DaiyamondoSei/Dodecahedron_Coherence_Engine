@@ -7,7 +7,6 @@
   "archetype": "startup",
   "dominantBreathName": "The Breath of Viability",
   "mode": "quick",
-
   "faces": [
     {
       "id": 1,
@@ -17,7 +16,16 @@
       "octave": 1,
       "tooltip": "CRITICAL: $28K cash, $67K burn = 4.2 months to survive",
       "sentiment": 0.08,
-      "elements": { "earth": 0.15, "water": 0.10, "fire": 0.60, "air": 0.20, "ether": 0.12 }
+      "elements": {
+        "earth": 0.15,
+        "water": 0.1,
+        "fire": 0.6,
+        "air": 0.2,
+        "ether": 0.12
+      },
+      "appendixEClusterName": null,
+      "iircAnchor": "Financial Capital",
+      "architectureLayer": "IIRC universal capital"
     },
     {
       "id": 2,
@@ -27,7 +35,16 @@
       "octave": 2,
       "tooltip": "Strong: AI technology genuinely works - 52 hrs/week on IP development",
       "sentiment": 0.65,
-      "elements": { "earth": 0.45, "water": 0.35, "fire": 0.70, "air": 0.55, "ether": 0.48 }
+      "elements": {
+        "earth": 0.45,
+        "water": 0.35,
+        "fire": 0.7,
+        "air": 0.55,
+        "ether": 0.48
+      },
+      "appendixEClusterName": null,
+      "iircAnchor": "Intellectual Capital",
+      "architectureLayer": "IIRC universal capital"
     },
     {
       "id": 3,
@@ -37,7 +54,16 @@
       "octave": 1,
       "tooltip": "CRITICAL: 4.2 hrs sleep, energy 3.5/10 - founders in survival mode",
       "sentiment": 0.12,
-      "elements": { "earth": 0.20, "water": 0.15, "fire": 0.55, "air": 0.18, "ether": 0.22 }
+      "elements": {
+        "earth": 0.2,
+        "water": 0.15,
+        "fire": 0.55,
+        "air": 0.18,
+        "ether": 0.22
+      },
+      "appendixEClusterName": null,
+      "iircAnchor": "Human Capital",
+      "architectureLayer": "IIRC universal capital"
     },
     {
       "id": 4,
@@ -47,7 +73,16 @@
       "octave": 1,
       "tooltip": "Only 45% legal registration complete - everything in founders' heads",
       "sentiment": 0.18,
-      "elements": { "earth": 0.25, "water": 0.20, "fire": 0.30, "air": 0.22, "ether": 0.15 }
+      "elements": {
+        "earth": 0.25,
+        "water": 0.2,
+        "fire": 0.3,
+        "air": 0.22,
+        "ether": 0.15
+      },
+      "appendixEClusterName": null,
+      "iircAnchor": "Manufactured Capital (adapted to Structural Capital for CEN organisational form)",
+      "architectureLayer": "IIRC universal capital"
     },
     {
       "id": 5,
@@ -57,7 +92,16 @@
       "octave": 1,
       "tooltip": "WEAK: 142 website visitors/week, zero customers after 6 months",
       "sentiment": 0.06,
-      "elements": { "earth": 0.10, "water": 0.08, "fire": 0.15, "air": 0.12, "ether": 0.10 }
+      "elements": {
+        "earth": 0.1,
+        "water": 0.08,
+        "fire": 0.15,
+        "air": 0.12,
+        "ether": 0.1
+      },
+      "appendixEClusterName": null,
+      "iircAnchor": null,
+      "architectureLayer": "Organisation-authentic polarity"
     },
     {
       "id": 6,
@@ -67,7 +111,16 @@
       "octave": 1,
       "tooltip": "Building: Some early advisor relationships forming",
       "sentiment": 0.15,
-      "elements": { "earth": 0.22, "water": 0.28, "fire": 0.25, "air": 0.30, "ether": 0.20 }
+      "elements": {
+        "earth": 0.22,
+        "water": 0.28,
+        "fire": 0.25,
+        "air": 0.3,
+        "ether": 0.2
+      },
+      "appendixEClusterName": null,
+      "iircAnchor": "Social and Relationship Capital (aliased to Community Capital where appropriate)",
+      "architectureLayer": "IIRC universal capital"
     },
     {
       "id": 7,
@@ -76,8 +129,17 @@
       "icon": "⭐",
       "octave": 1,
       "tooltip": "Non-existent: Brand has no market presence yet",
-      "sentiment": 0.10,
-      "elements": { "earth": 0.15, "water": 0.12, "fire": 0.20, "air": 0.18, "ether": 0.16 }
+      "sentiment": 0.1,
+      "elements": {
+        "earth": 0.15,
+        "water": 0.12,
+        "fire": 0.2,
+        "air": 0.18,
+        "ether": 0.16
+      },
+      "appendixEClusterName": null,
+      "iircAnchor": null,
+      "architectureLayer": "Organisation-authentic polarity"
     },
     {
       "id": 8,
@@ -87,7 +149,16 @@
       "octave": 1,
       "tooltip": "CONCERNING: 87.5% uptime - customers expect 99%+",
       "sentiment": 0.35,
-      "elements": { "earth": 0.40, "water": 0.30, "fire": 0.55, "air": 0.35, "ether": 0.32 }
+      "elements": {
+        "earth": 0.4,
+        "water": 0.3,
+        "fire": 0.55,
+        "air": 0.35,
+        "ether": 0.32
+      },
+      "appendixEClusterName": null,
+      "iircAnchor": null,
+      "architectureLayer": "Organisation-authentic polarity"
     },
     {
       "id": 9,
@@ -96,8 +167,17 @@
       "icon": "♻️",
       "octave": 1,
       "tooltip": "Minimal: Making choices for survival, not regeneration",
-      "sentiment": 0.20,
-      "elements": { "earth": 0.25, "water": 0.22, "fire": 0.28, "air": 0.24, "ether": 0.35 }
+      "sentiment": 0.2,
+      "elements": {
+        "earth": 0.25,
+        "water": 0.22,
+        "fire": 0.28,
+        "air": 0.24,
+        "ether": 0.35
+      },
+      "appendixEClusterName": null,
+      "iircAnchor": "Natural Capital",
+      "architectureLayer": "IIRC universal capital"
     },
     {
       "id": 10,
@@ -107,7 +187,16 @@
       "octave": 2,
       "tooltip": "SOLID: 4.2/5 mission clarity despite chaos - clear purpose",
       "sentiment": 0.52,
-      "elements": { "earth": 0.48, "water": 0.42, "fire": 0.45, "air": 0.50, "ether": 0.58 }
+      "elements": {
+        "earth": 0.48,
+        "water": 0.42,
+        "fire": 0.45,
+        "air": 0.5,
+        "ether": 0.58
+      },
+      "appendixEClusterName": null,
+      "iircAnchor": null,
+      "architectureLayer": "Organisation-authentic polarity"
     },
     {
       "id": 11,
@@ -117,7 +206,16 @@
       "octave": 1,
       "tooltip": "Active: 18 hrs/week outreach, 2 investor conversations active",
       "sentiment": 0.32,
-      "elements": { "earth": 0.30, "water": 0.28, "fire": 0.50, "air": 0.38, "ether": 0.25 }
+      "elements": {
+        "earth": 0.3,
+        "water": 0.28,
+        "fire": 0.5,
+        "air": 0.38,
+        "ether": 0.25
+      },
+      "appendixEClusterName": null,
+      "iircAnchor": null,
+      "architectureLayer": "Organisation-authentic polarity"
     },
     {
       "id": 12,
@@ -127,77 +225,773 @@
       "octave": 1,
       "tooltip": "CRITICAL: Single point of failure everywhere - no redundancy",
       "sentiment": 0.15,
-      "elements": { "earth": 0.20, "water": 0.18, "fire": 0.22, "air": 0.25, "ether": 0.18 }
+      "elements": {
+        "earth": 0.2,
+        "water": 0.18,
+        "fire": 0.22,
+        "air": 0.25,
+        "ether": 0.18
+      },
+      "appendixEClusterName": null,
+      "iircAnchor": null,
+      "architectureLayer": "Organisation-authentic polarity"
     }
   ],
-
   "edges": [
-    { "id": "E1-2", "faceIds": [1, 2], "emergentName": "IP Funding Crisis", "elementalNature": "Fire", "theQuestion": "How does our capital transform into valuable knowledge?", "tension": 0.57 },
-    { "id": "E1-6", "faceIds": [1, 6], "emergentName": "Network Capital Gap", "elementalNature": "Water", "theQuestion": "How does capital flow to and from our community in a healthy way?", "tension": 0.07 },
-    { "id": "E1-7", "faceIds": [1, 7], "emergentName": "Invisible Brand Bridge", "elementalNature": "Air", "theQuestion": "How do we communicate our financial value and story?", "tension": 0.02 },
-    { "id": "E1-8", "faceIds": [1, 8], "emergentName": "Operations Underfunded", "elementalNature": "Earth", "theQuestion": "How is our capital grounded in real, tangible operational work?", "tension": 0.27 },
-    { "id": "E1-10", "faceIds": [1, 10], "emergentName": "Values vs Survival", "elementalNature": "Ether", "theQuestion": "How does our capital serve the highest purpose of regeneration?", "tension": 0.44 },
-    { "id": "E2-3", "faceIds": [2, 3], "emergentName": "Brilliance Burnout", "elementalNature": "Air", "theQuestion": "How do our people's minds connect to create shared knowledge?", "tension": 0.53 },
-    { "id": "E2-6", "faceIds": [2, 6], "emergentName": "IP Sharing Potential", "elementalNature": "Water", "theQuestion": "How does our knowledge flow to our community? (Teaching)", "tension": 0.50 },
-    { "id": "E2-7", "faceIds": [2, 7], "emergentName": "Hidden Innovation", "elementalNature": "Air", "theQuestion": "Does our brand story match our intellectual substance?", "tension": 0.55 },
-    { "id": "E2-10", "faceIds": [2, 10], "emergentName": "Purpose-Driven Innovation", "elementalNature": "Earth", "theQuestion": "Is our knowledge grounded in and aligned with our core values?", "tension": 0.13 },
-    { "id": "E2-11", "faceIds": [2, 11], "emergentName": "IP as Pitch Asset", "elementalNature": "Ether", "theQuestion": "Does our knowledge serve the highest purpose of regeneration?", "tension": 0.33 },
-    { "id": "E3-4", "faceIds": [3, 4], "emergentName": "Chaos Without Structure", "elementalNature": "Earth", "theQuestion": "How is our human energy grounded and supported by our structures?", "tension": 0.06 },
-    { "id": "E3-6", "faceIds": [3, 6], "emergentName": "Isolated Founders", "elementalNature": "Water", "theQuestion": "What is the emotional flow and quality of our human relationships?", "tension": 0.03 },
-    { "id": "E3-8", "faceIds": [3, 8], "emergentName": "Burnout Engine", "elementalNature": "Fire", "theQuestion": "Does our human energy sustainably fuel our operations?", "tension": 0.23 },
-    { "id": "E3-9", "faceIds": [3, 9], "emergentName": "Survival vs Values", "elementalNature": "Ether", "theQuestion": "How does our humanity serve and express our highest values?", "tension": 0.08 },
-    { "id": "E3-11", "faceIds": [3, 11], "emergentName": "Desperate Pitch Energy", "elementalNature": "Fire", "theQuestion": "How does our human passion transform into the energy that attracts resources?", "tension": 0.20 },
-    { "id": "E4-5", "faceIds": [4, 5], "emergentName": "Structure-Market Gap", "elementalNature": "Air", "theQuestion": "Do our structures help or hinder the clarity of our public message?", "tension": 0.12 },
-    { "id": "E4-6", "faceIds": [4, 6], "emergentName": "Informal Partnerships", "elementalNature": "Earth", "theQuestion": "Are our partnerships grounded in clear, stable, formal agreements?", "tension": 0.03 },
-    { "id": "E4-7", "faceIds": [4, 7], "emergentName": "Undocumented Brand", "elementalNature": "Ether", "theQuestion": "Does our structure embody the highest integrity of our brand?", "tension": 0.08 },
-    { "id": "E4-9", "faceIds": [4, 9], "emergentName": "Structure for Survival", "elementalNature": "Fire", "theQuestion": "Can our structure transform to meet the needs of due diligence?", "tension": 0.02 },
-    { "id": "E4-10", "faceIds": [4, 10], "emergentName": "Values Need Structure", "elementalNature": "Ether", "theQuestion": "Does our governance embody our deepest values?", "tension": 0.34 },
-    { "id": "E5-6", "faceIds": [5, 6], "emergentName": "Silent Community", "elementalNature": "Water", "theQuestion": "Is there healthy flow between our market presence and community?", "tension": 0.09 },
-    { "id": "E5-7", "faceIds": [5, 7], "emergentName": "Market Void", "elementalNature": "Ether", "theQuestion": "Does our market resonance serve the highest purpose of our brand's truth?", "tension": 0.04 },
-    { "id": "E5-8", "faceIds": [5, 8], "emergentName": "Product Without Users", "elementalNature": "Fire", "theQuestion": "Does our market feedback transform into operational improvements?", "tension": 0.29 },
-    { "id": "E5-9", "faceIds": [5, 9], "emergentName": "Market-Values Disconnect", "elementalNature": "Water", "theQuestion": "Is there a healthy flow of conversation between our market and community?", "tension": 0.14 },
-    { "id": "E5-10", "faceIds": [5, 10], "emergentName": "Truth Without Audience", "elementalNature": "Ether", "theQuestion": "Does our market perception align with our inner truth?", "tension": 0.46 },
-    { "id": "E5-11", "faceIds": [5, 11], "emergentName": "Fundraising Without Story", "elementalNature": "Air", "theQuestion": "Does our market clarity attract aligned funding?", "tension": 0.26 },
-    { "id": "E5-12", "faceIds": [5, 12], "emergentName": "Invisible Fragility", "elementalNature": "Water", "theQuestion": "Is our brand a source of resilient, trust-based flow during a crisis?", "tension": 0.09 },
-    { "id": "E6-7", "faceIds": [6, 7], "emergentName": "Network-Brand Gap", "elementalNature": "Air", "theQuestion": "Do we clearly communicate our brand's power to potential funders?", "tension": 0.05 },
-    { "id": "E6-11", "faceIds": [6, 11], "emergentName": "Network to Funding", "elementalNature": "Water", "theQuestion": "Does our network generate funding opportunities?", "tension": 0.17 },
-    { "id": "E7-8", "faceIds": [7, 8], "emergentName": "Product Without Brand", "elementalNature": "Fire", "theQuestion": "Does our brand promise transform into operational excellence?", "tension": 0.25 },
-    { "id": "E7-11", "faceIds": [7, 11], "emergentName": "Pitch Without Identity", "elementalNature": "Air", "theQuestion": "Does our brand story attract aligned capital?", "tension": 0.22 },
-    { "id": "E7-12", "faceIds": [7, 12], "emergentName": "Brand Fragility", "elementalNature": "Fire", "theQuestion": "Is our brand a source of resilience in crisis?", "tension": 0.05 },
-    { "id": "E8-9", "faceIds": [8, 9], "emergentName": "Operations vs Values", "elementalNature": "Water", "theQuestion": "Is there healthy regenerative flow in our operations?", "tension": 0.15 },
-    { "id": "E8-10", "faceIds": [8, 10], "emergentName": "Purpose-Driven Ops", "elementalNature": "Water", "theQuestion": "Is there a healthy flow of regenerative practice within our operations?", "tension": 0.17 },
-    { "id": "E8-12", "faceIds": [8, 12], "emergentName": "Operational Fragility", "elementalNature": "Air", "theQuestion": "Does operational clarity inform and reduce systemic risk?", "tension": 0.20 },
-    { "id": "E9-10", "faceIds": [9, 10], "emergentName": "Values Grounding", "elementalNature": "Ether", "theQuestion": "Is our regenerative impulse grounded in our core values?", "tension": 0.32 },
-    { "id": "E9-11", "faceIds": [9, 11], "emergentName": "Survival vs Regeneration", "elementalNature": "Earth", "theQuestion": "Is our regenerative impulse grounded in our core values?", "tension": 0.12 },
-    { "id": "E9-12", "faceIds": [9, 12], "emergentName": "Fragile Choices", "elementalNature": "Fire", "theQuestion": "Does our regenerative practice transform into greater systemic resilience?", "tension": 0.05 },
-    { "id": "E10-11", "faceIds": [10, 11], "emergentName": "Values Pitch Alignment", "elementalNature": "Air", "theQuestion": "Do we clearly communicate our values to our capital partners?", "tension": 0.20 },
-    { "id": "E10-12", "faceIds": [10, 12], "emergentName": "Values Under Pressure", "elementalNature": "Fire", "theQuestion": "Do our values transform into resilience during a crisis?", "tension": 0.37 },
-    { "id": "E11-12", "faceIds": [11, 12], "emergentName": "Pipeline Fragility", "elementalNature": "Water", "theQuestion": "Does a healthy funding pipeline create a flow of resilience?", "tension": 0.17 }
+    {
+      "id": "E1-2",
+      "faceIds": [
+        1,
+        2
+      ],
+      "emergentName": "IP Funding Crisis",
+      "elementalNature": "Fire",
+      "theQuestion": "How does our capital transform into valuable knowledge?",
+      "tension": 0.57
+    },
+    {
+      "id": "E1-6",
+      "faceIds": [
+        1,
+        6
+      ],
+      "emergentName": "Network Capital Gap",
+      "elementalNature": "Water",
+      "theQuestion": "How does capital flow to and from our community in a healthy way?",
+      "tension": 0.07
+    },
+    {
+      "id": "E1-7",
+      "faceIds": [
+        1,
+        7
+      ],
+      "emergentName": "Invisible Brand Bridge",
+      "elementalNature": "Air",
+      "theQuestion": "How do we communicate our financial value and story?",
+      "tension": 0.02
+    },
+    {
+      "id": "E1-8",
+      "faceIds": [
+        1,
+        8
+      ],
+      "emergentName": "Operations Underfunded",
+      "elementalNature": "Earth",
+      "theQuestion": "How is our capital grounded in real, tangible operational work?",
+      "tension": 0.27
+    },
+    {
+      "id": "E1-10",
+      "faceIds": [
+        1,
+        10
+      ],
+      "emergentName": "Values vs Survival",
+      "elementalNature": "Ether",
+      "theQuestion": "How does our capital serve the highest purpose of regeneration?",
+      "tension": 0.44
+    },
+    {
+      "id": "E2-3",
+      "faceIds": [
+        2,
+        3
+      ],
+      "emergentName": "Brilliance Burnout",
+      "elementalNature": "Air",
+      "theQuestion": "How do our people's minds connect to create shared knowledge?",
+      "tension": 0.53
+    },
+    {
+      "id": "E2-6",
+      "faceIds": [
+        2,
+        6
+      ],
+      "emergentName": "IP Sharing Potential",
+      "elementalNature": "Water",
+      "theQuestion": "How does our knowledge flow to our community? (Teaching)",
+      "tension": 0.5
+    },
+    {
+      "id": "E2-7",
+      "faceIds": [
+        2,
+        7
+      ],
+      "emergentName": "Hidden Innovation",
+      "elementalNature": "Air",
+      "theQuestion": "Does our brand story match our intellectual substance?",
+      "tension": 0.55
+    },
+    {
+      "id": "E2-10",
+      "faceIds": [
+        2,
+        10
+      ],
+      "emergentName": "Purpose-Driven Innovation",
+      "elementalNature": "Earth",
+      "theQuestion": "Is our knowledge grounded in and aligned with our core values?",
+      "tension": 0.13
+    },
+    {
+      "id": "E2-11",
+      "faceIds": [
+        2,
+        11
+      ],
+      "emergentName": "IP as Pitch Asset",
+      "elementalNature": "Ether",
+      "theQuestion": "Does our knowledge serve the highest purpose of regeneration?",
+      "tension": 0.33
+    },
+    {
+      "id": "E3-4",
+      "faceIds": [
+        3,
+        4
+      ],
+      "emergentName": "Chaos Without Structure",
+      "elementalNature": "Earth",
+      "theQuestion": "How is our human energy grounded and supported by our structures?",
+      "tension": 0.06
+    },
+    {
+      "id": "E3-6",
+      "faceIds": [
+        3,
+        6
+      ],
+      "emergentName": "Isolated Founders",
+      "elementalNature": "Water",
+      "theQuestion": "What is the emotional flow and quality of our human relationships?",
+      "tension": 0.03
+    },
+    {
+      "id": "E3-8",
+      "faceIds": [
+        3,
+        8
+      ],
+      "emergentName": "Burnout Engine",
+      "elementalNature": "Fire",
+      "theQuestion": "Does our human energy sustainably fuel our operations?",
+      "tension": 0.23
+    },
+    {
+      "id": "E3-9",
+      "faceIds": [
+        3,
+        9
+      ],
+      "emergentName": "Survival vs Values",
+      "elementalNature": "Ether",
+      "theQuestion": "How does our humanity serve and express our highest values?",
+      "tension": 0.08
+    },
+    {
+      "id": "E3-11",
+      "faceIds": [
+        3,
+        11
+      ],
+      "emergentName": "Desperate Pitch Energy",
+      "elementalNature": "Fire",
+      "theQuestion": "How does our human passion transform into the energy that attracts resources?",
+      "tension": 0.2
+    },
+    {
+      "id": "E4-5",
+      "faceIds": [
+        4,
+        5
+      ],
+      "emergentName": "Structure-Market Gap",
+      "elementalNature": "Air",
+      "theQuestion": "Do our structures help or hinder the clarity of our public message?",
+      "tension": 0.12
+    },
+    {
+      "id": "E4-6",
+      "faceIds": [
+        4,
+        6
+      ],
+      "emergentName": "Informal Partnerships",
+      "elementalNature": "Earth",
+      "theQuestion": "Are our partnerships grounded in clear, stable, formal agreements?",
+      "tension": 0.03
+    },
+    {
+      "id": "E4-7",
+      "faceIds": [
+        4,
+        7
+      ],
+      "emergentName": "Undocumented Brand",
+      "elementalNature": "Ether",
+      "theQuestion": "Does our structure embody the highest integrity of our brand?",
+      "tension": 0.08
+    },
+    {
+      "id": "E4-9",
+      "faceIds": [
+        4,
+        9
+      ],
+      "emergentName": "Structure for Survival",
+      "elementalNature": "Fire",
+      "theQuestion": "Can our structure transform to meet the needs of due diligence?",
+      "tension": 0.02
+    },
+    {
+      "id": "E4-10",
+      "faceIds": [
+        4,
+        10
+      ],
+      "emergentName": "Values Need Structure",
+      "elementalNature": "Ether",
+      "theQuestion": "Does our governance embody our deepest values?",
+      "tension": 0.34
+    },
+    {
+      "id": "E5-6",
+      "faceIds": [
+        5,
+        6
+      ],
+      "emergentName": "Silent Community",
+      "elementalNature": "Water",
+      "theQuestion": "Is there healthy flow between our market presence and community?",
+      "tension": 0.09
+    },
+    {
+      "id": "E5-7",
+      "faceIds": [
+        5,
+        7
+      ],
+      "emergentName": "Market Void",
+      "elementalNature": "Ether",
+      "theQuestion": "Does our market resonance serve the highest purpose of our brand's truth?",
+      "tension": 0.04
+    },
+    {
+      "id": "E5-8",
+      "faceIds": [
+        5,
+        8
+      ],
+      "emergentName": "Product Without Users",
+      "elementalNature": "Fire",
+      "theQuestion": "Does our market feedback transform into operational improvements?",
+      "tension": 0.29
+    },
+    {
+      "id": "E5-9",
+      "faceIds": [
+        5,
+        9
+      ],
+      "emergentName": "Market-Values Disconnect",
+      "elementalNature": "Water",
+      "theQuestion": "Is there a healthy flow of conversation between our market and community?",
+      "tension": 0.14
+    },
+    {
+      "id": "E5-10",
+      "faceIds": [
+        5,
+        10
+      ],
+      "emergentName": "Truth Without Audience",
+      "elementalNature": "Ether",
+      "theQuestion": "Does our market perception align with our inner truth?",
+      "tension": 0.46
+    },
+    {
+      "id": "E5-11",
+      "faceIds": [
+        5,
+        11
+      ],
+      "emergentName": "Fundraising Without Story",
+      "elementalNature": "Air",
+      "theQuestion": "Does our market clarity attract aligned funding?",
+      "tension": 0.26
+    },
+    {
+      "id": "E5-12",
+      "faceIds": [
+        5,
+        12
+      ],
+      "emergentName": "Invisible Fragility",
+      "elementalNature": "Water",
+      "theQuestion": "Is our brand a source of resilient, trust-based flow during a crisis?",
+      "tension": 0.09
+    },
+    {
+      "id": "E6-7",
+      "faceIds": [
+        6,
+        7
+      ],
+      "emergentName": "Network-Brand Gap",
+      "elementalNature": "Air",
+      "theQuestion": "Do we clearly communicate our brand's power to potential funders?",
+      "tension": 0.05
+    },
+    {
+      "id": "E6-11",
+      "faceIds": [
+        6,
+        11
+      ],
+      "emergentName": "Network to Funding",
+      "elementalNature": "Water",
+      "theQuestion": "Does our network generate funding opportunities?",
+      "tension": 0.17
+    },
+    {
+      "id": "E7-8",
+      "faceIds": [
+        7,
+        8
+      ],
+      "emergentName": "Product Without Brand",
+      "elementalNature": "Fire",
+      "theQuestion": "Does our brand promise transform into operational excellence?",
+      "tension": 0.25
+    },
+    {
+      "id": "E7-11",
+      "faceIds": [
+        7,
+        11
+      ],
+      "emergentName": "Pitch Without Identity",
+      "elementalNature": "Air",
+      "theQuestion": "Does our brand story attract aligned capital?",
+      "tension": 0.22
+    },
+    {
+      "id": "E7-12",
+      "faceIds": [
+        7,
+        12
+      ],
+      "emergentName": "Brand Fragility",
+      "elementalNature": "Fire",
+      "theQuestion": "Is our brand a source of resilience in crisis?",
+      "tension": 0.05
+    },
+    {
+      "id": "E8-9",
+      "faceIds": [
+        8,
+        9
+      ],
+      "emergentName": "Operations vs Values",
+      "elementalNature": "Water",
+      "theQuestion": "Is there healthy regenerative flow in our operations?",
+      "tension": 0.15
+    },
+    {
+      "id": "E8-10",
+      "faceIds": [
+        8,
+        10
+      ],
+      "emergentName": "Purpose-Driven Ops",
+      "elementalNature": "Water",
+      "theQuestion": "Is there a healthy flow of regenerative practice within our operations?",
+      "tension": 0.17
+    },
+    {
+      "id": "E8-12",
+      "faceIds": [
+        8,
+        12
+      ],
+      "emergentName": "Operational Fragility",
+      "elementalNature": "Air",
+      "theQuestion": "Does operational clarity inform and reduce systemic risk?",
+      "tension": 0.2
+    },
+    {
+      "id": "E9-10",
+      "faceIds": [
+        9,
+        10
+      ],
+      "emergentName": "Values Grounding",
+      "elementalNature": "Ether",
+      "theQuestion": "Is our regenerative impulse grounded in our core values?",
+      "tension": 0.32
+    },
+    {
+      "id": "E9-11",
+      "faceIds": [
+        9,
+        11
+      ],
+      "emergentName": "Survival vs Regeneration",
+      "elementalNature": "Earth",
+      "theQuestion": "Is our regenerative impulse grounded in our core values?",
+      "tension": 0.12
+    },
+    {
+      "id": "E9-12",
+      "faceIds": [
+        9,
+        12
+      ],
+      "emergentName": "Fragile Choices",
+      "elementalNature": "Fire",
+      "theQuestion": "Does our regenerative practice transform into greater systemic resilience?",
+      "tension": 0.05
+    },
+    {
+      "id": "E10-11",
+      "faceIds": [
+        10,
+        11
+      ],
+      "emergentName": "Values Pitch Alignment",
+      "elementalNature": "Air",
+      "theQuestion": "Do we clearly communicate our values to our capital partners?",
+      "tension": 0.2
+    },
+    {
+      "id": "E10-12",
+      "faceIds": [
+        10,
+        12
+      ],
+      "emergentName": "Values Under Pressure",
+      "elementalNature": "Fire",
+      "theQuestion": "Do our values transform into resilience during a crisis?",
+      "tension": 0.37
+    },
+    {
+      "id": "E11-12",
+      "faceIds": [
+        11,
+        12
+      ],
+      "emergentName": "Pipeline Fragility",
+      "elementalNature": "Water",
+      "theQuestion": "Does a healthy funding pipeline create a flow of resilience?",
+      "tension": 0.17
+    }
   ],
-
   "vertices": [
-    { "id": "V1", "faceIds": [1, 2, 3], "emergentName": "Brilliant Burnout Triangle", "vortexStrength": 0.45, "classification": "bermuda_triangle", "tooltip": "CRITICAL: Strong IP (0.65) vs exhausted founders (0.12) vs no cash (0.08)", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 1.0, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V2", "faceIds": [1, 3, 4], "emergentName": "Structural Survival Point", "vortexStrength": 0.08, "classification": "neutral", "tooltip": "All three faces struggling at survival level", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V3", "faceIds": [1, 4, 5], "emergentName": "Market Structure Gap", "vortexStrength": 0.10, "classification": "neutral", "tooltip": "Market invisibility compounds structural weakness", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.11, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V4", "faceIds": [1, 5, 6], "emergentName": "Community Capital Void", "vortexStrength": 0.07, "classification": "neutral", "tooltip": "Weak across all three survival dimensions", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V5", "faceIds": [1, 2, 6], "emergentName": "Innovation Without Support", "vortexStrength": 0.40, "classification": "hotspot", "tooltip": "Strong IP isolated from funding and community", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 1.0, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V6", "faceIds": [2, 3, 8], "emergentName": "Burnout Engine Vertex", "vortexStrength": 0.35, "classification": "bermuda_triangle", "tooltip": "CRITICAL: Founders pouring energy into IP at expense of health", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 1.0, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V7", "faceIds": [3, 4, 9], "emergentName": "Survival Values Junction", "vortexStrength": 0.08, "classification": "neutral", "tooltip": "Trying to maintain values while surviving", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V8", "faceIds": [4, 5, 10], "emergentName": "Hidden Mission Point", "vortexStrength": 0.35, "classification": "hotspot", "tooltip": "Strong values (0.52) but invisible to market (0.06)", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.348, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V9", "faceIds": [5, 6, 11], "emergentName": "Pipeline Visibility Gap", "vortexStrength": 0.18, "classification": "neutral", "tooltip": "Fundraising without market presence", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V10", "faceIds": [2, 6, 7], "emergentName": "IP Brand Network", "vortexStrength": 0.42, "classification": "hotspot", "tooltip": "Strong IP (0.65) completely invisible externally", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 1.0, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V11", "faceIds": [2, 7, 8], "emergentName": "Product Without Story", "vortexStrength": 0.38, "classification": "hotspot", "tooltip": "Working product but no brand narrative", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 1.0, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V12", "faceIds": [3, 8, 9], "emergentName": "Exhausted Operations", "vortexStrength": 0.15, "classification": "neutral", "tooltip": "Operations running on founder fumes", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.437, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V13", "faceIds": [4, 9, 10], "emergentName": "Values Structure Gap", "vortexStrength": 0.26, "classification": "hotspot", "tooltip": "Clear values but uncodified structure", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V14", "faceIds": [5, 10, 11], "emergentName": "Mission Funding Bridge", "vortexStrength": 0.35, "classification": "hotspot", "tooltip": "Strong mission (0.52) could attract aligned investors if visible", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 1.0, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V15", "faceIds": [6, 7, 11], "emergentName": "Network Pitch Junction", "vortexStrength": 0.15, "classification": "neutral", "tooltip": "Building investor relationships slowly", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V16", "faceIds": [7, 8, 12], "emergentName": "Product Stability Point", "vortexStrength": 0.15, "classification": "neutral", "tooltip": "87.5% uptime threatening credibility", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.562, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V17", "faceIds": [8, 9, 12], "emergentName": "Operational Survival", "vortexStrength": 0.12, "classification": "neutral", "tooltip": "Operations barely maintaining", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V18", "faceIds": [9, 10, 12], "emergentName": "Values Resilience Point", "vortexStrength": 0.25, "classification": "neutral", "tooltip": "Values providing some psychological resilience", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 1.0, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V19", "faceIds": [10, 11, 12], "emergentName": "Mission Survival Triangle", "vortexStrength": 0.28, "classification": "hotspot", "tooltip": "Can mission clarity attract the funding needed to survive?", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V20", "faceIds": [7, 11, 12], "emergentName": "Pitch Survival Point", "vortexStrength": 0.18, "classification": "neutral", "tooltip": "3.5/5 pitch deck quality - potential", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.429, "sequenceConcavityLabel": "Releasing" }
+    {
+      "id": "V1",
+      "faceIds": [
+        1,
+        2,
+        3
+      ],
+      "emergentName": "Brilliant Burnout Triangle",
+      "vortexStrength": 0.45,
+      "classification": "bermuda_triangle",
+      "tooltip": "CRITICAL: Strong IP (0.65) vs exhausted founders (0.12) vs no cash (0.08)",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 1.0,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V2",
+      "faceIds": [
+        1,
+        3,
+        4
+      ],
+      "emergentName": "Structural Survival Point",
+      "vortexStrength": 0.08,
+      "classification": "neutral",
+      "tooltip": "All three faces struggling at survival level",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V3",
+      "faceIds": [
+        1,
+        4,
+        5
+      ],
+      "emergentName": "Market Structure Gap",
+      "vortexStrength": 0.1,
+      "classification": "neutral",
+      "tooltip": "Market invisibility compounds structural weakness",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.11,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V4",
+      "faceIds": [
+        1,
+        5,
+        6
+      ],
+      "emergentName": "Community Capital Void",
+      "vortexStrength": 0.07,
+      "classification": "neutral",
+      "tooltip": "Weak across all three survival dimensions",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V5",
+      "faceIds": [
+        1,
+        2,
+        6
+      ],
+      "emergentName": "Innovation Without Support",
+      "vortexStrength": 0.4,
+      "classification": "hotspot",
+      "tooltip": "Strong IP isolated from funding and community",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 1.0,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V6",
+      "faceIds": [
+        2,
+        3,
+        8
+      ],
+      "emergentName": "Burnout Engine Vertex",
+      "vortexStrength": 0.35,
+      "classification": "bermuda_triangle",
+      "tooltip": "CRITICAL: Founders pouring energy into IP at expense of health",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 1.0,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V7",
+      "faceIds": [
+        3,
+        4,
+        9
+      ],
+      "emergentName": "Survival Values Junction",
+      "vortexStrength": 0.08,
+      "classification": "neutral",
+      "tooltip": "Trying to maintain values while surviving",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V8",
+      "faceIds": [
+        4,
+        5,
+        10
+      ],
+      "emergentName": "Hidden Mission Point",
+      "vortexStrength": 0.35,
+      "classification": "hotspot",
+      "tooltip": "Strong values (0.52) but invisible to market (0.06)",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.348,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V9",
+      "faceIds": [
+        5,
+        6,
+        11
+      ],
+      "emergentName": "Pipeline Visibility Gap",
+      "vortexStrength": 0.18,
+      "classification": "neutral",
+      "tooltip": "Fundraising without market presence",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V10",
+      "faceIds": [
+        2,
+        6,
+        7
+      ],
+      "emergentName": "IP Brand Network",
+      "vortexStrength": 0.42,
+      "classification": "hotspot",
+      "tooltip": "Strong IP (0.65) completely invisible externally",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 1.0,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V11",
+      "faceIds": [
+        2,
+        7,
+        8
+      ],
+      "emergentName": "Product Without Story",
+      "vortexStrength": 0.38,
+      "classification": "hotspot",
+      "tooltip": "Working product but no brand narrative",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 1.0,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V12",
+      "faceIds": [
+        3,
+        8,
+        9
+      ],
+      "emergentName": "Exhausted Operations",
+      "vortexStrength": 0.15,
+      "classification": "neutral",
+      "tooltip": "Operations running on founder fumes",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.437,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V13",
+      "faceIds": [
+        4,
+        9,
+        10
+      ],
+      "emergentName": "Values Structure Gap",
+      "vortexStrength": 0.26,
+      "classification": "hotspot",
+      "tooltip": "Clear values but uncodified structure",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V14",
+      "faceIds": [
+        5,
+        10,
+        11
+      ],
+      "emergentName": "Mission Funding Bridge",
+      "vortexStrength": 0.35,
+      "classification": "hotspot",
+      "tooltip": "Strong mission (0.52) could attract aligned investors if visible",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 1.0,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V15",
+      "faceIds": [
+        6,
+        7,
+        11
+      ],
+      "emergentName": "Network Pitch Junction",
+      "vortexStrength": 0.15,
+      "classification": "neutral",
+      "tooltip": "Building investor relationships slowly",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V16",
+      "faceIds": [
+        7,
+        8,
+        12
+      ],
+      "emergentName": "Product Stability Point",
+      "vortexStrength": 0.15,
+      "classification": "neutral",
+      "tooltip": "87.5% uptime threatening credibility",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.562,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V17",
+      "faceIds": [
+        8,
+        9,
+        12
+      ],
+      "emergentName": "Operational Survival",
+      "vortexStrength": 0.12,
+      "classification": "neutral",
+      "tooltip": "Operations barely maintaining",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V18",
+      "faceIds": [
+        9,
+        10,
+        12
+      ],
+      "emergentName": "Values Resilience Point",
+      "vortexStrength": 0.25,
+      "classification": "neutral",
+      "tooltip": "Values providing some psychological resilience",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 1.0,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V19",
+      "faceIds": [
+        10,
+        11,
+        12
+      ],
+      "emergentName": "Mission Survival Triangle",
+      "vortexStrength": 0.28,
+      "classification": "hotspot",
+      "tooltip": "Can mission clarity attract the funding needed to survive?",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V20",
+      "faceIds": [
+        7,
+        11,
+        12
+      ],
+      "emergentName": "Pitch Survival Point",
+      "vortexStrength": 0.18,
+      "classification": "neutral",
+      "tooltip": "3.5/5 pitch deck quality - potential",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.429,
+      "sequenceConcavityLabel": "Releasing"
+    }
   ],
-
   "breathAxes": [
     {
       "axis": 1,
@@ -272,7 +1066,6 @@
       "interpretation": "Both dimensions equally weak - no network, no resilience"
     }
   ],
-
   "shadowPatterns": [
     {
       "id": "death-spiral",
@@ -280,7 +1073,12 @@
       "suppressed": "Cash hemorrhage + exhausted founders + zero revenue = existential crisis",
       "integrated": "Phoenix Rising - Using crisis as catalyst for radical focus and breakthrough",
       "severity": "critical",
-      "involvedFaces": [1, 3, 5, 8],
+      "involvedFaces": [
+        1,
+        3,
+        5,
+        8
+      ],
       "prescription": "Choose: Either get revenue in 30 days OR close fundraising in 60 days. No middle path."
     },
     {
@@ -289,7 +1087,11 @@
       "suppressed": "Brilliant technology completely invisible to market",
       "integrated": "Visible Genius - Technology that speaks for itself through market presence",
       "severity": "significant",
-      "involvedFaces": [2, 5, 7],
+      "involvedFaces": [
+        2,
+        5,
+        7
+      ],
       "prescription": "Shift 20% of IP development time to market visibility. Demo or die."
     },
     {
@@ -298,11 +1100,14 @@
       "suppressed": "Founders sacrificing health for output",
       "integrated": "Sustainable Intensity - Peak performance through recovery cycles",
       "severity": "critical",
-      "involvedFaces": [2, 3, 8],
+      "involvedFaces": [
+        2,
+        3,
+        8
+      ],
       "prescription": "Non-negotiable: 6 hours sleep minimum. Exhausted founders make bad decisions."
     }
   ],
-
   "diagnostics": {
     "globalCoherence": 0.23,
     "beingActionBalance": 2.9,
@@ -324,27 +1129,122 @@
       "theta": 0.5
     }
   },
-
   "kpis": {
-    "face1": [{ "id": "F1.1", "name": "Months of Runway", "value": 0.42, "target": 12, "unit": "months" }],
-    "face2": [{ "id": "L2.1", "name": "IP Development Hours/Week", "value": 52, "target": 40, "unit": "hours" }],
-    "face3": [{ "id": "L1.1", "name": "Founder Energy Level", "value": 3.5, "target": 7.0, "unit": "scale 1-10" }],
-    "face4": [{ "id": "S1.1", "name": "Legal Registration Complete", "value": 0.45, "target": 1.0, "unit": "percent" }],
-    "face5": [{ "id": "P1.1", "name": "Weekly Website Visitors", "value": 142, "target": 1000, "unit": "visitors" }],
-    "face6": [{ "id": "S2.1", "name": "Active Advisor Relationships", "value": 2, "target": 5, "unit": "advisors" }],
-    "face7": [{ "id": "P2.1", "name": "Brand Recognition", "value": 0, "target": 2.0, "unit": "scale 1-5" }],
-    "face8": [{ "id": "P3.1", "name": "Platform Uptime", "value": 0.875, "target": 0.99, "unit": "percent" }],
-    "face9": [{ "id": "E1.1", "name": "Regenerative Choices Tracked", "value": 0, "target": 3.0, "unit": "tracked" }],
-    "face10": [{ "id": "L3.1", "name": "Mission Clarity Score", "value": 4.2, "target": 4.5, "unit": "scale 1-5" }],
-    "face11": [{ "id": "F1.2", "name": "Active Investor Conversations", "value": 2, "target": 5, "unit": "conversations" }],
-    "face12": [{ "id": "R1.1", "name": "Single Point of Failure Count", "value": 5, "target": 0, "unit": "SPOFs" }]
+    "face1": [
+      {
+        "id": "F1.1",
+        "name": "Months of Runway",
+        "value": 0.42,
+        "target": 12,
+        "unit": "months"
+      }
+    ],
+    "face2": [
+      {
+        "id": "L2.1",
+        "name": "IP Development Hours/Week",
+        "value": 52,
+        "target": 40,
+        "unit": "hours"
+      }
+    ],
+    "face3": [
+      {
+        "id": "L1.1",
+        "name": "Founder Energy Level",
+        "value": 3.5,
+        "target": 7.0,
+        "unit": "scale 1-10"
+      }
+    ],
+    "face4": [
+      {
+        "id": "S1.1",
+        "name": "Legal Registration Complete",
+        "value": 0.45,
+        "target": 1.0,
+        "unit": "percent"
+      }
+    ],
+    "face5": [
+      {
+        "id": "P1.1",
+        "name": "Weekly Website Visitors",
+        "value": 142,
+        "target": 1000,
+        "unit": "visitors"
+      }
+    ],
+    "face6": [
+      {
+        "id": "S2.1",
+        "name": "Active Advisor Relationships",
+        "value": 2,
+        "target": 5,
+        "unit": "advisors"
+      }
+    ],
+    "face7": [
+      {
+        "id": "P2.1",
+        "name": "Brand Recognition",
+        "value": 0,
+        "target": 2.0,
+        "unit": "scale 1-5"
+      }
+    ],
+    "face8": [
+      {
+        "id": "P3.1",
+        "name": "Platform Uptime",
+        "value": 0.875,
+        "target": 0.99,
+        "unit": "percent"
+      }
+    ],
+    "face9": [
+      {
+        "id": "E1.1",
+        "name": "Regenerative Choices Tracked",
+        "value": 0,
+        "target": 3.0,
+        "unit": "tracked"
+      }
+    ],
+    "face10": [
+      {
+        "id": "L3.1",
+        "name": "Mission Clarity Score",
+        "value": 4.2,
+        "target": 4.5,
+        "unit": "scale 1-5"
+      }
+    ],
+    "face11": [
+      {
+        "id": "F1.2",
+        "name": "Active Investor Conversations",
+        "value": 2,
+        "target": 5,
+        "unit": "conversations"
+      }
+    ],
+    "face12": [
+      {
+        "id": "R1.1",
+        "name": "Single Point of Failure Count",
+        "value": 5,
+        "target": 0,
+        "unit": "SPOFs"
+      }
+    ]
   },
-
   "metadata": {
     "createdAt": "2024-12-05",
     "version": "1.0.0",
     "source": "template",
     "lastModified": "2024-12-05",
     "notes": "Seed-stage AI startup in critical survival mode. 4.2 months runway, exhausted founders, brilliant tech but invisible to market. Classic Death Spiral pattern requiring immediate intervention."
-  }
+  },
+  "lock_8_39_naming_provenance": "Lock #8.39 (Naming-Convention SSOT): appendixEClusterName values for this company are PENDING — no Appendix E equivalent has been authored yet for this organisation. iircAnchor + architectureLayer are inherited methodological constants from the dodecahedron's structure (per CEN's Appendix E line 71)."
 }

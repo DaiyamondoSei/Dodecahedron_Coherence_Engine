@@ -418,6 +418,147 @@ The methodology's growth lives in the partnership.
 
 ---
 
+## Section 6.7 — Honest Forward-Evolution: PROPOSED Measurement Methodology (added 2026-05-25, Lock #8.37; deferred operationalization)
+
+### The Principle
+
+When the SSOT framework needs to ADD new measurement that requires partnership-validation by a client (e.g., adding O1 KPIs at architecturally-blind faces, adding edge-KPIs at spectrally-derived high-leverage edges), the protocol is:
+
+1. **Flag the addition** as `confidence="PROPOSED — pending [partner] partnership-validation [target-date]"` in the data layer
+2. **Ship with dual-display math** — the PROPOSED-shape cascade alongside the partner-validated baseline, so reviewers see both
+3. **Document the addition** in the relevant SSOT disclosure sheet (e.g., Sheet 21 §E v1.X disclosure entry)
+4. **Ratify via partner-final KPI** in the subsequent v1.X.1 release
+
+This makes forward-evolution HONEST (visible) rather than SILENT (hidden). It extends §6.6 Trust-the-Geometry to forward-looking additions — not just current-state self-audit. The principle: **researcher-drafted starter candidates are presented as a basis for partnership-dialogue, never as canonical fait-accompli; partner authority defines real KPIs**.
+
+### Status (2026-05-25)
+
+§6.7 is **named as a methodological pillar but deferred from v1.0 hardening commit**. The first operationalization (proposed F9 O1 + F10 O1 + E1-8 edge KPIs for CEN) was scoped out of v1.0 in favor of focused naming-convention canonicalization. v1.1+ post-defense iterations will operationalize §6.7 when CEN partnership-validation cycles can support the partner-decision quality this principle requires.
+
+### Cross-references
+
+- **Lock #8.37** — partnership-locked 2026-05-25 evening; this section names the operational principle for future Quannex client engagements to inherit
+- **§6.6** — Trust-the-Geometry (kin principle; §6.6 applies to current state, §6.7 applies to forward evolution)
+- **Plan §17 + §17.1** — v1.1 enhancement plan (deferred); ratifies §6.7 as the protocol if/when activated
+
+---
+
+## Section 6.8 — Naming-Convention Single-Source-of-Truth (added 2026-05-25, Lock #8.39)
+
+### The Principle
+
+Every name used in the methodology — face names, capital names, customNames, cluster names, polarity labels — has a **single canonical source-of-truth**. The methodology's sheets, reports, and downstream artifacts INHERIT from that source; they never INVENT inline. When a sheet shows a name, a reviewer must be able to trace it back to its source-of-truth file with no ambiguity.
+
+This is methodological hygiene: when the same conceptual entity has different names in different sheets, the methodology's clarity erodes for the reviewer. Lock #8.39 closes that erosion by establishing the source-of-truth chain explicitly.
+
+### The Source-of-Truth Chain
+
+The 12-face naming architecture is organized in three layers, each with an unambiguous source:
+
+```
+Layer 1 — Face base names (engine-canonical, universal across companies)
+  ↓ Source: POC/js/constants/breath-axes.js (DOMAIN_NAMES + breath-axis pairings)
+  ↓        + POC/js/constants/kpi-constants.js (DOMAIN_NAMES constant)
+  ↓ Inherits FROM: Thesis Chapter 3 §3.5 (six-plus-six canonical architecture statement)
+  ↓ Example: F1 = "Financial Capital" (universal; same for CEN, Quannex-self, all companies)
+
+Layer 2 — Per-company face data (CEN-specific or Quannex-self-specific etc.)
+  ↓ Source: POC/companies/<company-id>/mapping-context.json (faces[] array per face_id)
+  ↓ Fields:
+  ↓   - baseName: inherits from Layer 1 (engine-canonical)
+  ↓   - customName: per-company current-state diagnostic label (Phase 2 snapshot)
+  ↓   - iircAnchor: IIRC universal capital (populated for F1+F2+F3+F4+F6+F9 only;
+  ↓                 null for F5+F7+F8+F10+F11+F12 polarity faces)
+  ↓   - architectureLayer: "IIRC universal capital" or "Organisation-authentic polarity"
+  ↓   - appendixEClusterName: CEN-Authentic Cluster Name (CEN populated from Appendix E
+  ↓                           §E.3.1; other companies null/pending until they have their
+  ↓                           own equivalent of Appendix E)
+  ↓ Example: CEN F1 baseName="Financial Capital" / customName="Financial Fragility" /
+  ↓          iircAnchor="Financial Capital" / appendixEClusterName="Three-Pillar Sustainability"
+
+Layer 3 — SSOT sheet renderings (inherit from Layer 2; never invent)
+  ↓ Source: POC/scripts/_build_cen_ssot_xlsx.py (sheet build functions)
+  ↓ Discipline: every sheet that shows a face name READS from mapping-context.json
+  ↓             at build time; NO hardcoded inline name lists.
+  ↓ Example: Sheet 0a NAMING_TRANSLATION reads appendixEClusterName field at runtime;
+  ↓          Sheet 16 FACE_INFO_12 reads customName + iircAnchor at runtime.
+```
+
+### The Six-Plus-Six Canonical Architecture (per Appendix E §E.3.1 line 71)
+
+The 12-face dodecahedron has TWO distinct layers, not one homogenous set:
+
+**6 IIRC Universal Capitals (cited authority — Integrated Reporting Framework):**
+- F1 = Financial Capital
+- F2 = Intellectual Capital
+- F3 = Human Capital
+- F4 = Manufactured Capital → **adapted to "Structural Capital"** for CEN organisational form (CEN has no manufacturing; F4 maps to systems, governance, structural infrastructure; per Appendix E §E.3.1 line 71 + Coherence Portrait §3 line 99)
+- F6 = Social and Relationship Capital → **aliased to "Community Capital"** for CEN context (Appendix E §E.3.1 line 71: "referred to as Community Capital where appropriate")
+- F9 = Natural Capital → anchored by Cluster 6 "Ecological Embedding" (Appendix E §E.3.1 line 84). Quannex "Regenerative Flow" framing aligns with IIRC's Natural Capital definition + extends with explicit process-orientation.
+
+**6 Organisation-Authentic Polarities (CEN-emergent; first instantiated by CEN's KPI clustering, then promoted to engine-canonical for inheritance by future client engagements):**
+- F5 = Market Resonance (paired via Axis 5 with F10)
+- F7 = Brand & Reputation (paired via Axis 2 with F2)
+- F8 = Core Operations (paired via Axis 3 with F3)
+- F10 = Foundational Values (paired via Axis 5 with F5)
+- F11 = Funding Pipeline (paired via Axis 1 with F1)
+- F12 = Risk & Resilience (paired via Axis 6 with F6)
+
+The breath-axis pairing structure makes the methodological richness visible:
+- F1↔F11 (IIRC Financial ↔ org-authentic Funding) — Resource flow axis
+- F2↔F7 (IIRC Intellectual ↔ org-authentic Brand) — Knowledge-identity axis
+- F3↔F8 (IIRC Human ↔ org-authentic Operations) — People-process axis
+- F4↔F9 (IIRC Structural ↔ IIRC Natural) — Stability-renewal axis (both IIRC capitals paired)
+- F5↔F10 (org-authentic Market ↔ org-authentic Values) — External-internal axis (both polarities paired)
+- F6↔F12 (IIRC Social-and-Relationship ↔ org-authentic Risk-Resilience) — Partnership-resilience axis
+
+### Two-Layer CEN Naming Distinction
+
+For CEN specifically, there are TWO legitimately different "CEN-authentic" naming layers that the SSOT discloses explicitly to avoid conflation:
+
+| Layer | What it labels | Source field | Property | Example (F1) |
+|---|---|---|---|---|
+| **CEN-Authentic Cluster Name** | CEN organisational DOMAIN category (what the face IS in CEN's structural taxonomy) | `mapping-context.json` `appendixEClusterName` field (sourced from Appendix E §E.3.1) | **Timeless** (CEN's enduring organisational architecture) | "Three-Pillar Sustainability" |
+| **CEN Current-State Reading** | CEN CURRENT-STATE diagnostic reading (what the face READS AS at this Phase 2 moment in time) | `mapping-context.json` `customName` field (Phase 2 organisational snapshot) | **Moment-in-time** (snapshot of current organisational psychology) | "Financial Fragility" |
+
+Both layers are valid. They describe different things and are explicitly labeled as such in Sheet 0a (CEN-Authentic Cluster Name) and Sheet 16 Dashboard_View (CEN Current-State Reading). Cross-reference footnotes in both sheets point to the other layer.
+
+### Why This Matters
+
+A thesis defense reviewer or CEN board member opening the SSOT must be able to trace any face/capital name back to its source with no ambiguity. Without Lock #8.39, sheets can drift — one sheet calls F3 "Founder Dyad" (current-state), another invents "Human Capital" (duplicate base name; broken), a third uses "Team and Energy" (Appendix E cluster name). The reviewer can't tell which is canonical or how they relate.
+
+Lock #8.39 closes the drift by making the source-of-truth chain explicit: **Thesis Appendix E §E.3.1 → mapping-context.json (appendixEClusterName + customName + iircAnchor + architectureLayer fields) → engine breath-axes.js (base names) → SSOT sheets inherit at build time → reviewers can trace every name back to its source file:line.**
+
+### Inheritance Pattern for Future Quannex Client Engagements
+
+When a new organisation becomes a Quannex client, their workflow is:
+
+1. **Inherit Layer 1 (engine-canonical face base names)** — universal across all companies; no per-org work needed
+2. **Author Layer 2 per-company fields** in `POC/companies/<org-id>/mapping-context.json`:
+   - `customName` per face (current-state diagnostic for this client)
+   - `appendixEClusterName` per face (organisational domain category; requires the client's own equivalent of CEN's Appendix E — the client's structural-taxonomy authoring work)
+   - `iircAnchor` + `architectureLayer` — INHERITED methodological constants (same for all orgs per dodecahedron's structure)
+3. **Build SSOT** using same `_build_cen_ssot_xlsx.py`-pattern script — sheets auto-inherit per-company values from the data layer; never invent inline
+
+This makes the methodology REPRODUCIBLE across clients: same engine, same dodecahedron, same disciplines, different per-client values cleanly populated in the data layer.
+
+### Cross-References
+
+- **Lock #8.39** — partnership-locked 2026-05-25 evening as part of v1.0 hardening commit; canonical source-of-truth for naming convention single-source-of-truth
+- **Appendix E §E.3.1** — `Final Thesis/Thesis Work/Assignments/Research/Assignment Research Parts Reports - Chapters/Appendix E/Appendix E - LEADING.md` lines 75-90 (CEN cluster table) + line 71 (six-plus-six architecture declaration)
+- **§6.6** — Trust-the-Geometry (kin principle; both §6.6 and §6.8 apply to methodological taxonomy clarity, just at different layers: §6.6 = spectrum/topology; §6.8 = naming)
+- **§6.7** — Honest Forward-Evolution (kin principle; §6.8 + §6.7 together govern HOW Quannex names + adds measurement honestly)
+- **Sheet 0a Naming_Translation** — operational disclosure point for the six-plus-six architecture + IIRC adaptation footnotes + cross-ref to Sheet 16 for current-state layer
+- **Sheet 16 Dashboard_View** — operational disclosure point for CEN Current-State Reading layer + cross-ref to Sheet 0a for timeless cluster-name layer
+
+### The Methodology's Growth
+
+§6.8 emerged from a partnership-quality dialogue in which Deimantas surfaced the silent-discrepancy that 11 of 12 Sheet 0a "CEN-authentic" entries were ad-hoc descriptive labels not matching Appendix E source. The audit revealed not just one missing field but a deeper architectural gap: `mapping-context.json` only ever had ONE field per face (`customName`) for "CEN-authentic" naming, forcing diagnostic readings into a slot that also needed to hold cluster identity. The fix wasn't to rename columns — the fix was to extend the data layer so both naming layers can live with proper labels.
+
+The methodology grew. The data architecture grew. The disclosure grew to name the new pillar. That growth lives in the partnership.
+
+---
+
 ## Section 7 — What This Document Does NOT Do
 
 For clarity, this document does NOT:

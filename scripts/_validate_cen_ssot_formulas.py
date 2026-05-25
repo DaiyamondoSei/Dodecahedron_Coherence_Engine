@@ -521,6 +521,88 @@ class SSOTValidator:
                 )
         return self
 
+    def check_naming_convention_single_source_of_truth(self):
+        """
+        Lock #8.39 — Naming-Convention Single-Source-of-Truth.
+
+        Verifies that face names in SSOT sheets MATCH mapping-context.json
+        per face. Closes the silent-default-masquerading pattern surfaced
+        2026-05-25 (Sheet 16 had hardcoded customNames that drifted from
+        mapping-context.json — F3 'Human Capital' duplicate, F6 'Community
+        Trust' invented; Sheet 0a had 11/12 ad-hoc CEN labels not matching
+        Appendix E §E.3.1 source).
+
+        Checks:
+          (1) Sheet 16 FACE_INFO_12 customName column (row 15-26, col 4)
+              must match mapping-context.json customName per face_id.
+          (2) Sheet 0a NAMING_TRANSLATION CEN-Authentic Cluster Name column
+              (col 5 in restructured layout, rows 8-13 IIRC + 16-21 polarity)
+              must match mapping-context.json appendixEClusterName per face_id.
+
+        Source-of-truth: POC/companies/cen/mapping-context.json faces[] array.
+        """
+        import json as _json_validator
+
+        # Load the canonical mapping-context.json source-of-truth
+        cen_mc_path = Path(__file__).resolve().parent.parent / "companies" / "cen" / "mapping-context.json"
+        if not cen_mc_path.exists():
+            self.warnings.append(
+                f"Lock #8.39 check skipped: mapping-context.json not found at {cen_mc_path}"
+            )
+            return self
+
+        with cen_mc_path.open(encoding="utf-8") as f:
+            mc_data = _json_validator.load(f)
+
+        expected_customnames = {
+            face["id"]: face.get("customName")
+            for face in mc_data.get("faces", [])
+        }
+        expected_cluster_names = {
+            face["id"]: face.get("appendixEClusterName")
+            for face in mc_data.get("faces", [])
+        }
+
+        # Check 1: Sheet 16 customName column (col 4) for rows 15-26 (12 faces)
+        if "16_Dashboard_View" in self.wb_formula.sheetnames:
+            ws16 = self.wb_formula["16_Dashboard_View"]
+            for offset in range(12):
+                face_id = offset + 1
+                row = 15 + offset
+                actual = ws16.cell(row=row, column=4).value
+                expected = expected_customnames.get(face_id)
+                if expected is not None and actual != expected:
+                    self.issues.append(
+                        f"Lock #8.39 violation: Sheet 16 F{face_id} customName "
+                        f"= {actual!r} but mapping-context.json says {expected!r}"
+                    )
+
+        # Check 2: Sheet 0a CEN-Authentic Cluster Name column (col 5) per face_id
+        # Sheet 0a rows are not 1:1 with face_id due to IIRC/polarity grouping;
+        # need to scan and match face_id from col 1
+        if "0a_Naming_Translation" in self.wb_formula.sheetnames:
+            ws0a = self.wb_formula["0a_Naming_Translation"]
+            # Scan rows 8-21 for face entries (col 1 = "F<n>", col 5 = CEN cluster name)
+            for row in range(8, 22):
+                col1 = ws0a.cell(row=row, column=1).value
+                if not (isinstance(col1, str) and col1.startswith("F")):
+                    continue
+                try:
+                    face_id = int(col1[1:])
+                except ValueError:
+                    continue
+                if face_id < 1 or face_id > 12:
+                    continue
+                actual = ws0a.cell(row=row, column=5).value
+                expected = expected_cluster_names.get(face_id)
+                if expected is not None and actual != expected:
+                    self.issues.append(
+                        f"Lock #8.39 violation: Sheet 0a F{face_id} appendixEClusterName "
+                        f"= {actual!r} but mapping-context.json says {expected!r}"
+                    )
+
+        return self
+
     # ---- Helpers ----------------------------------------------------------
 
     def _resolve_named_range_value(self, name):
@@ -557,7 +639,8 @@ class SSOTValidator:
                 .check_signature_sums()
                 .check_circular_references()
                 .check_calculation_sheet_named_range_usage()
-                .check_o1_face_energies_known_values())
+                .check_o1_face_energies_known_values()
+                .check_naming_convention_single_source_of_truth())
 
     def report(self):
         """Print issues + warnings, return exit code (0 pass, 1 fail)."""

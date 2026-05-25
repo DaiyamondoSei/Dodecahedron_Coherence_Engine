@@ -7,7 +7,6 @@
   "archetype": "ngo",
   "dominantBreathName": "The Breath of Viability",
   "mode": "quick",
-
   "faces": [
     {
       "id": 1,
@@ -17,7 +16,16 @@
       "octave": 1,
       "tooltip": "CRITICAL: D=6, E=1 — massive perception gap; researcher confirms 2/10. No runway clarity.",
       "sentiment": 0.35,
-      "elements": { "earth": 0.35, "water": 0.28, "fire": 0.25, "air": 0.40, "ether": 0.42 }
+      "elements": {
+        "earth": 0.35,
+        "water": 0.28,
+        "fire": 0.25,
+        "air": 0.4,
+        "ether": 0.42
+      },
+      "appendixEClusterName": "Three-Pillar Sustainability",
+      "iircAnchor": "Financial Capital",
+      "architectureLayer": "IIRC universal capital"
     },
     {
       "id": 2,
@@ -27,7 +35,16 @@
       "octave": 3,
       "tooltip": "STRONG: D=8, E=7 — agreement that ideas and frameworks are genuinely developed",
       "sentiment": 0.75,
-      "elements": { "earth": 0.60, "water": 0.50, "fire": 0.65, "air": 0.75, "ether": 0.70 }
+      "elements": {
+        "earth": 0.6,
+        "water": 0.5,
+        "fire": 0.65,
+        "air": 0.75,
+        "ether": 0.7
+      },
+      "appendixEClusterName": "Programs Engine",
+      "iircAnchor": "Intellectual Capital",
+      "architectureLayer": "IIRC universal capital"
     },
     {
       "id": 3,
@@ -36,8 +53,17 @@
       "icon": "👥",
       "octave": 2,
       "tooltip": "Mixed: D=7, E=3 — Dominique energized, Esther drained. Researcher confirms 4/10.",
-      "sentiment": 0.50,
-      "elements": { "earth": 0.45, "water": 0.35, "fire": 0.55, "air": 0.55, "ether": 0.45 }
+      "sentiment": 0.5,
+      "elements": {
+        "earth": 0.45,
+        "water": 0.35,
+        "fire": 0.55,
+        "air": 0.55,
+        "ether": 0.45
+      },
+      "appendixEClusterName": "Team and Energy",
+      "iircAnchor": "Human Capital",
+      "architectureLayer": "IIRC universal capital"
     },
     {
       "id": 4,
@@ -47,7 +73,16 @@
       "octave": 1,
       "tooltip": "WEAK: D=7, E=2 — Esther sees the structural vacuum clearly; docs and protocols incomplete",
       "sentiment": 0.45,
-      "elements": { "earth": 0.50, "water": 0.35, "fire": 0.40, "air": 0.45, "ether": 0.52 }
+      "elements": {
+        "earth": 0.5,
+        "water": 0.35,
+        "fire": 0.4,
+        "air": 0.45,
+        "ether": 0.52
+      },
+      "appendixEClusterName": "Operational Discipline",
+      "iircAnchor": "Manufactured Capital (adapted to Structural Capital for CEN organisational form)",
+      "architectureLayer": "IIRC universal capital"
     },
     {
       "id": 5,
@@ -56,8 +91,17 @@
       "icon": "📊",
       "octave": 1,
       "tooltip": "SEVERELY DEPLETED: D=3, E=1. Mission is powerful but nearly invisible externally.",
-      "sentiment": 0.20,
-      "elements": { "earth": 0.20, "water": 0.18, "fire": 0.22, "air": 0.20, "ether": 0.20 }
+      "sentiment": 0.2,
+      "elements": {
+        "earth": 0.2,
+        "water": 0.18,
+        "fire": 0.22,
+        "air": 0.2,
+        "ether": 0.2
+      },
+      "appendixEClusterName": "Coaching Market Fit",
+      "iircAnchor": null,
+      "architectureLayer": "Organisation-authentic polarity"
     },
     {
       "id": 6,
@@ -67,7 +111,16 @@
       "octave": 1,
       "tooltip": "Early-stage: D=3, E=4 — some community presence, especially Esther's relational network",
       "sentiment": 0.35,
-      "elements": { "earth": 0.35, "water": 0.42, "fire": 0.30, "air": 0.35, "ether": 0.35 }
+      "elements": {
+        "earth": 0.35,
+        "water": 0.42,
+        "fire": 0.3,
+        "air": 0.35,
+        "ether": 0.35
+      },
+      "appendixEClusterName": "Membership Belonging",
+      "iircAnchor": "Social and Relationship Capital (aliased to Community Capital where appropriate)",
+      "architectureLayer": "IIRC universal capital"
     },
     {
       "id": 7,
@@ -76,8 +129,17 @@
       "icon": "⭐",
       "octave": 2,
       "tooltip": "Moderate: D=7, E=3. Reputation exists in select networks but not broadcast broadly.",
-      "sentiment": 0.50,
-      "elements": { "earth": 0.45, "water": 0.40, "fire": 0.50, "air": 0.50, "ether": 0.55 }
+      "sentiment": 0.5,
+      "elements": {
+        "earth": 0.45,
+        "water": 0.4,
+        "fire": 0.5,
+        "air": 0.5,
+        "ether": 0.55
+      },
+      "appendixEClusterName": "Field Voice",
+      "iircAnchor": null,
+      "architectureLayer": "Organisation-authentic polarity"
     },
     {
       "id": 8,
@@ -86,8 +148,17 @@
       "icon": "⚙️",
       "octave": 1,
       "tooltip": "WEAK: D=7, E=1. Dominique believes ops work; Esther sees little systematized. Researcher: 2/10.",
-      "sentiment": 0.40,
-      "elements": { "earth": 0.40, "water": 0.30, "fire": 0.42, "air": 0.38, "ether": 0.38 }
+      "sentiment": 0.4,
+      "elements": {
+        "earth": 0.4,
+        "water": 0.3,
+        "fire": 0.42,
+        "air": 0.38,
+        "ether": 0.38
+      },
+      "appendixEClusterName": "Field-Shaping Aspiration",
+      "iircAnchor": null,
+      "architectureLayer": "Organisation-authentic polarity"
     },
     {
       "id": 9,
@@ -97,7 +168,16 @@
       "octave": 2,
       "tooltip": "NOTABLE: D=6, E=5, researcher=8. Strong regenerative ethic — most agreed-upon strength beyond values.",
       "sentiment": 0.55,
-      "elements": { "earth": 0.50, "water": 0.58, "fire": 0.50, "air": 0.52, "ether": 0.62 }
+      "elements": {
+        "earth": 0.5,
+        "water": 0.58,
+        "fire": 0.5,
+        "air": 0.52,
+        "ether": 0.62
+      },
+      "appendixEClusterName": "Ecological Embedding",
+      "iircAnchor": "Natural Capital",
+      "architectureLayer": "IIRC universal capital"
     },
     {
       "id": 10,
@@ -107,7 +187,16 @@
       "octave": 4,
       "tooltip": "EXCEPTIONAL: D=10, E=9. The bedrock of CEN — profound values alignment between both founders.",
       "sentiment": 0.95,
-      "elements": { "earth": 0.85, "water": 0.80, "fire": 0.75, "air": 0.90, "ether": 0.95 }
+      "elements": {
+        "earth": 0.85,
+        "water": 0.8,
+        "fire": 0.75,
+        "air": 0.9,
+        "ether": 0.95
+      },
+      "appendixEClusterName": "Conscious-Leadership Identity",
+      "iircAnchor": null,
+      "architectureLayer": "Organisation-authentic polarity"
     },
     {
       "id": 11,
@@ -116,8 +205,17 @@
       "icon": "💎",
       "octave": 2,
       "tooltip": "Below potential: D=6, E=4. Some effort but insufficient for NGO sustainability needs.",
-      "sentiment": 0.50,
-      "elements": { "earth": 0.45, "water": 0.40, "fire": 0.50, "air": 0.55, "ether": 0.52 }
+      "sentiment": 0.5,
+      "elements": {
+        "earth": 0.45,
+        "water": 0.4,
+        "fire": 0.5,
+        "air": 0.55,
+        "ether": 0.52
+      },
+      "appendixEClusterName": "Funding Inflow",
+      "iircAnchor": null,
+      "architectureLayer": "Organisation-authentic polarity"
     },
     {
       "id": 12,
@@ -126,78 +224,774 @@
       "icon": "🛡️",
       "octave": 1,
       "tooltip": "CRITICAL: D=3, E=1. Researcher confirms 3/10. Near-zero resilience mechanisms.",
-      "sentiment": 0.20,
-      "elements": { "earth": 0.22, "water": 0.20, "fire": 0.18, "air": 0.20, "ether": 0.20 }
+      "sentiment": 0.2,
+      "elements": {
+        "earth": 0.22,
+        "water": 0.2,
+        "fire": 0.18,
+        "air": 0.2,
+        "ether": 0.2
+      },
+      "appendixEClusterName": "Compliance and Continuity",
+      "iircAnchor": null,
+      "architectureLayer": "Organisation-authentic polarity"
     }
   ],
-
   "edges": [
-    { "id": "E1-2", "faceIds": [1, 2], "emergentName": "Knowledge-Resource Bridge", "elementalNature": "Fire", "theQuestion": "How does CEN's conceptual richness translate into sustainable financial flow?", "tension": 0.40 },
-    { "id": "E1-6", "faceIds": [1, 6], "emergentName": "Community Investment Flow", "elementalNature": "Water", "theQuestion": "Is community engagement generating resources or consuming them?", "tension": 0.00 },
-    { "id": "E1-7", "faceIds": [1, 7], "emergentName": "Brand-Finance Bridge", "elementalNature": "Air", "theQuestion": "Does CEN's reputation support financial sustainability?", "tension": 0.15 },
-    { "id": "E1-8", "faceIds": [1, 8], "emergentName": "Operations-Finance Flow", "elementalNature": "Earth", "theQuestion": "Are operations grounded in financial reality?", "tension": 0.05 },
-    { "id": "E1-10", "faceIds": [1, 10], "emergentName": "Values-Viability Tension", "elementalNature": "Ether", "theQuestion": "Does CEN's values foundation translate into financial viability?", "tension": 0.60 },
-    { "id": "E2-3", "faceIds": [2, 3], "emergentName": "Knowledge-Human Integration", "elementalNature": "Air", "theQuestion": "Are the intellectual frameworks carried and shared across both founders?", "tension": 0.25 },
-    { "id": "E2-6", "faceIds": [2, 6], "emergentName": "Knowledge-Community Flow", "elementalNature": "Water", "theQuestion": "Is CEN's knowledge flowing into the community it serves?", "tension": 0.40 },
-    { "id": "E2-7", "faceIds": [2, 7], "emergentName": "Substance-Story Bridge", "elementalNature": "Air", "theQuestion": "Does CEN's intellectual depth show up in its external communications?", "tension": 0.25 },
-    { "id": "E2-10", "faceIds": [2, 10], "emergentName": "Wisdom-Values Foundation", "elementalNature": "Earth", "theQuestion": "Is CEN's knowledge grounded in and aligned with its core values?", "tension": 0.20 },
-    { "id": "E2-11", "faceIds": [2, 11], "emergentName": "IP-Funding Channel", "elementalNature": "Ether", "theQuestion": "Does CEN's intellectual capital attract aligned grant funding?", "tension": 0.25 },
-    { "id": "E3-4", "faceIds": [3, 4], "emergentName": "Founder-Structure Interface", "elementalNature": "Earth", "theQuestion": "Do CEN's structures support or drain its human capital?", "tension": 0.05 },
-    { "id": "E3-6", "faceIds": [3, 6], "emergentName": "Founder-Community Relationship", "elementalNature": "Water", "theQuestion": "What is the emotional quality of CEN's relationships with its community?", "tension": 0.15 },
-    { "id": "E3-8", "faceIds": [3, 8], "emergentName": "Being-Doing Balance", "elementalNature": "Fire", "theQuestion": "Does human energy sustainably fuel CEN's operations?", "tension": 0.00 },
-    { "id": "E3-9", "faceIds": [3, 9], "emergentName": "Human-Regenerative Coherence", "elementalNature": "Ether", "theQuestion": "Are CEN's regenerative values expressed in how it treats its people?", "tension": 0.05 },
-    { "id": "E3-11", "faceIds": [3, 11], "emergentName": "Founder-Funder Resonance", "elementalNature": "Fire", "theQuestion": "Does the founders' energy and passion attract aligned funders?", "tension": 0.00 },
-    { "id": "E4-5", "faceIds": [4, 5], "emergentName": "Structure-Market Bridge", "elementalNature": "Air", "theQuestion": "Does CEN's structural clarity support a coherent public message?", "tension": 0.25 },
-    { "id": "E4-6", "faceIds": [4, 6], "emergentName": "Governance-Partnership Foundation", "elementalNature": "Earth", "theQuestion": "Are CEN's partnerships grounded in clear, formalized governance?", "tension": 0.10 },
-    { "id": "E4-7", "faceIds": [4, 7], "emergentName": "Structural-Brand Integrity", "elementalNature": "Ether", "theQuestion": "Does CEN's structural integrity reinforce its brand authenticity?", "tension": 0.05 },
-    { "id": "E4-9", "faceIds": [4, 9], "emergentName": "Form-Regeneration Bridge", "elementalNature": "Fire", "theQuestion": "Are CEN's governance structures built on regenerative principles?", "tension": 0.10 },
-    { "id": "E4-10", "faceIds": [4, 10], "emergentName": "Governance-Values Alignment", "elementalNature": "Ether", "theQuestion": "Do CEN's governance structures fully embody its stated values?", "tension": 0.50 },
-    { "id": "E5-6", "faceIds": [5, 6], "emergentName": "Market-Community Flow", "elementalNature": "Water", "theQuestion": "Is there healthy flow between CEN's market presence and community?", "tension": 0.15 },
-    { "id": "E5-7", "faceIds": [5, 7], "emergentName": "Perception-Reputation Bridge", "elementalNature": "Ether", "theQuestion": "Does CEN's reputation support broader market recognition?", "tension": 0.30 },
-    { "id": "E5-8", "faceIds": [5, 8], "emergentName": "Market-Operations Feedback", "elementalNature": "Fire", "theQuestion": "Does market feedback shape CEN's operational priorities?", "tension": 0.20 },
-    { "id": "E5-9", "faceIds": [5, 9], "emergentName": "Perception-Regeneration Bridge", "elementalNature": "Water", "theQuestion": "Does CEN's regenerative ethic reach its intended audiences?", "tension": 0.35 },
-    { "id": "E5-10", "faceIds": [5, 10], "emergentName": "Perception-Truth Chasm", "elementalNature": "Ether", "theQuestion": "Why is CEN's external perception (2/10) so far from its inner truth (9.5/10)?", "tension": 0.75 },
-    { "id": "E5-11", "faceIds": [5, 11], "emergentName": "Visibility-Funding Link", "elementalNature": "Air", "theQuestion": "Does CEN's external visibility attract aligned grant opportunities?", "tension": 0.30 },
-    { "id": "E5-12", "faceIds": [5, 12], "emergentName": "Market-Resilience Bridge", "elementalNature": "Water", "theQuestion": "Would greater market presence increase organizational resilience?", "tension": 0.00 },
-    { "id": "E6-7", "faceIds": [6, 7], "emergentName": "Community-Brand Amplification", "elementalNature": "Air", "theQuestion": "Does CEN's community become ambassadors for its brand?", "tension": 0.15 },
-    { "id": "E6-11", "faceIds": [6, 11], "emergentName": "Network-Funding Pipeline", "elementalNature": "Water", "theQuestion": "Does CEN's community network generate funding introductions?", "tension": 0.00 },
-    { "id": "E7-8", "faceIds": [7, 8], "emergentName": "Brand-Operations Coherence", "elementalNature": "Fire", "theQuestion": "Does CEN's brand promise match its operational delivery?", "tension": 0.10 },
-    { "id": "E7-11", "faceIds": [7, 11], "emergentName": "Reputation-Funding Attraction", "elementalNature": "Air", "theQuestion": "Does CEN's reputation attract aligned philanthropic capital?", "tension": 0.00 },
-    { "id": "E7-12", "faceIds": [7, 12], "emergentName": "Brand-Resilience Bridge", "elementalNature": "Fire", "theQuestion": "Is CEN's reputation a source of resilience in uncertain times?", "tension": 0.30 },
-    { "id": "E8-9", "faceIds": [8, 9], "emergentName": "Operations-Regeneration Flow", "elementalNature": "Water", "theQuestion": "Are CEN's daily operations genuinely regenerative?", "tension": 0.15 },
-    { "id": "E8-10", "faceIds": [8, 10], "emergentName": "Operations-Values Integrity", "elementalNature": "Water", "theQuestion": "Do CEN's operations fully embody its foundational values?", "tension": 0.55 },
-    { "id": "E8-12", "faceIds": [8, 12], "emergentName": "Operational Resilience", "elementalNature": "Air", "theQuestion": "Do CEN's operational systems build organizational resilience?", "tension": 0.20 },
-    { "id": "E9-10", "faceIds": [9, 10], "emergentName": "Regenerative-Values Embodiment", "elementalNature": "Ether", "theQuestion": "Is CEN's regenerative practice the expression of its deepest values?", "tension": 0.40 },
-    { "id": "E9-11", "faceIds": [9, 11], "emergentName": "Regenerative-Funding Alignment", "elementalNature": "Earth", "theQuestion": "Does CEN's regenerative mission attract mission-aligned funding?", "tension": 0.05 },
-    { "id": "E9-12", "faceIds": [9, 12], "emergentName": "Regenerative Resilience", "elementalNature": "Fire", "theQuestion": "Does CEN's regenerative practice transform into greater systemic resilience?", "tension": 0.35 },
-    { "id": "E10-11", "faceIds": [10, 11], "emergentName": "Values-Funding Alignment", "elementalNature": "Air", "theQuestion": "Does CEN clearly communicate its values to potential funders?", "tension": 0.45 },
-    { "id": "E10-12", "faceIds": [10, 12], "emergentName": "Values-Resilience Foundation", "elementalNature": "Fire", "theQuestion": "Do CEN's values transform into organizational resilience under pressure?", "tension": 0.75 },
-    { "id": "E11-12", "faceIds": [11, 12], "emergentName": "Funding-Resilience Flow", "elementalNature": "Water", "theQuestion": "Does a healthy funding pipeline create organizational resilience?", "tension": 0.30 }
+    {
+      "id": "E1-2",
+      "faceIds": [
+        1,
+        2
+      ],
+      "emergentName": "Knowledge-Resource Bridge",
+      "elementalNature": "Fire",
+      "theQuestion": "How does CEN's conceptual richness translate into sustainable financial flow?",
+      "tension": 0.4
+    },
+    {
+      "id": "E1-6",
+      "faceIds": [
+        1,
+        6
+      ],
+      "emergentName": "Community Investment Flow",
+      "elementalNature": "Water",
+      "theQuestion": "Is community engagement generating resources or consuming them?",
+      "tension": 0.0
+    },
+    {
+      "id": "E1-7",
+      "faceIds": [
+        1,
+        7
+      ],
+      "emergentName": "Brand-Finance Bridge",
+      "elementalNature": "Air",
+      "theQuestion": "Does CEN's reputation support financial sustainability?",
+      "tension": 0.15
+    },
+    {
+      "id": "E1-8",
+      "faceIds": [
+        1,
+        8
+      ],
+      "emergentName": "Operations-Finance Flow",
+      "elementalNature": "Earth",
+      "theQuestion": "Are operations grounded in financial reality?",
+      "tension": 0.05
+    },
+    {
+      "id": "E1-10",
+      "faceIds": [
+        1,
+        10
+      ],
+      "emergentName": "Values-Viability Tension",
+      "elementalNature": "Ether",
+      "theQuestion": "Does CEN's values foundation translate into financial viability?",
+      "tension": 0.6
+    },
+    {
+      "id": "E2-3",
+      "faceIds": [
+        2,
+        3
+      ],
+      "emergentName": "Knowledge-Human Integration",
+      "elementalNature": "Air",
+      "theQuestion": "Are the intellectual frameworks carried and shared across both founders?",
+      "tension": 0.25
+    },
+    {
+      "id": "E2-6",
+      "faceIds": [
+        2,
+        6
+      ],
+      "emergentName": "Knowledge-Community Flow",
+      "elementalNature": "Water",
+      "theQuestion": "Is CEN's knowledge flowing into the community it serves?",
+      "tension": 0.4
+    },
+    {
+      "id": "E2-7",
+      "faceIds": [
+        2,
+        7
+      ],
+      "emergentName": "Substance-Story Bridge",
+      "elementalNature": "Air",
+      "theQuestion": "Does CEN's intellectual depth show up in its external communications?",
+      "tension": 0.25
+    },
+    {
+      "id": "E2-10",
+      "faceIds": [
+        2,
+        10
+      ],
+      "emergentName": "Wisdom-Values Foundation",
+      "elementalNature": "Earth",
+      "theQuestion": "Is CEN's knowledge grounded in and aligned with its core values?",
+      "tension": 0.2
+    },
+    {
+      "id": "E2-11",
+      "faceIds": [
+        2,
+        11
+      ],
+      "emergentName": "IP-Funding Channel",
+      "elementalNature": "Ether",
+      "theQuestion": "Does CEN's intellectual capital attract aligned grant funding?",
+      "tension": 0.25
+    },
+    {
+      "id": "E3-4",
+      "faceIds": [
+        3,
+        4
+      ],
+      "emergentName": "Founder-Structure Interface",
+      "elementalNature": "Earth",
+      "theQuestion": "Do CEN's structures support or drain its human capital?",
+      "tension": 0.05
+    },
+    {
+      "id": "E3-6",
+      "faceIds": [
+        3,
+        6
+      ],
+      "emergentName": "Founder-Community Relationship",
+      "elementalNature": "Water",
+      "theQuestion": "What is the emotional quality of CEN's relationships with its community?",
+      "tension": 0.15
+    },
+    {
+      "id": "E3-8",
+      "faceIds": [
+        3,
+        8
+      ],
+      "emergentName": "Being-Doing Balance",
+      "elementalNature": "Fire",
+      "theQuestion": "Does human energy sustainably fuel CEN's operations?",
+      "tension": 0.0
+    },
+    {
+      "id": "E3-9",
+      "faceIds": [
+        3,
+        9
+      ],
+      "emergentName": "Human-Regenerative Coherence",
+      "elementalNature": "Ether",
+      "theQuestion": "Are CEN's regenerative values expressed in how it treats its people?",
+      "tension": 0.05
+    },
+    {
+      "id": "E3-11",
+      "faceIds": [
+        3,
+        11
+      ],
+      "emergentName": "Founder-Funder Resonance",
+      "elementalNature": "Fire",
+      "theQuestion": "Does the founders' energy and passion attract aligned funders?",
+      "tension": 0.0
+    },
+    {
+      "id": "E4-5",
+      "faceIds": [
+        4,
+        5
+      ],
+      "emergentName": "Structure-Market Bridge",
+      "elementalNature": "Air",
+      "theQuestion": "Does CEN's structural clarity support a coherent public message?",
+      "tension": 0.25
+    },
+    {
+      "id": "E4-6",
+      "faceIds": [
+        4,
+        6
+      ],
+      "emergentName": "Governance-Partnership Foundation",
+      "elementalNature": "Earth",
+      "theQuestion": "Are CEN's partnerships grounded in clear, formalized governance?",
+      "tension": 0.1
+    },
+    {
+      "id": "E4-7",
+      "faceIds": [
+        4,
+        7
+      ],
+      "emergentName": "Structural-Brand Integrity",
+      "elementalNature": "Ether",
+      "theQuestion": "Does CEN's structural integrity reinforce its brand authenticity?",
+      "tension": 0.05
+    },
+    {
+      "id": "E4-9",
+      "faceIds": [
+        4,
+        9
+      ],
+      "emergentName": "Form-Regeneration Bridge",
+      "elementalNature": "Fire",
+      "theQuestion": "Are CEN's governance structures built on regenerative principles?",
+      "tension": 0.1
+    },
+    {
+      "id": "E4-10",
+      "faceIds": [
+        4,
+        10
+      ],
+      "emergentName": "Governance-Values Alignment",
+      "elementalNature": "Ether",
+      "theQuestion": "Do CEN's governance structures fully embody its stated values?",
+      "tension": 0.5
+    },
+    {
+      "id": "E5-6",
+      "faceIds": [
+        5,
+        6
+      ],
+      "emergentName": "Market-Community Flow",
+      "elementalNature": "Water",
+      "theQuestion": "Is there healthy flow between CEN's market presence and community?",
+      "tension": 0.15
+    },
+    {
+      "id": "E5-7",
+      "faceIds": [
+        5,
+        7
+      ],
+      "emergentName": "Perception-Reputation Bridge",
+      "elementalNature": "Ether",
+      "theQuestion": "Does CEN's reputation support broader market recognition?",
+      "tension": 0.3
+    },
+    {
+      "id": "E5-8",
+      "faceIds": [
+        5,
+        8
+      ],
+      "emergentName": "Market-Operations Feedback",
+      "elementalNature": "Fire",
+      "theQuestion": "Does market feedback shape CEN's operational priorities?",
+      "tension": 0.2
+    },
+    {
+      "id": "E5-9",
+      "faceIds": [
+        5,
+        9
+      ],
+      "emergentName": "Perception-Regeneration Bridge",
+      "elementalNature": "Water",
+      "theQuestion": "Does CEN's regenerative ethic reach its intended audiences?",
+      "tension": 0.35
+    },
+    {
+      "id": "E5-10",
+      "faceIds": [
+        5,
+        10
+      ],
+      "emergentName": "Perception-Truth Chasm",
+      "elementalNature": "Ether",
+      "theQuestion": "Why is CEN's external perception (2/10) so far from its inner truth (9.5/10)?",
+      "tension": 0.75
+    },
+    {
+      "id": "E5-11",
+      "faceIds": [
+        5,
+        11
+      ],
+      "emergentName": "Visibility-Funding Link",
+      "elementalNature": "Air",
+      "theQuestion": "Does CEN's external visibility attract aligned grant opportunities?",
+      "tension": 0.3
+    },
+    {
+      "id": "E5-12",
+      "faceIds": [
+        5,
+        12
+      ],
+      "emergentName": "Market-Resilience Bridge",
+      "elementalNature": "Water",
+      "theQuestion": "Would greater market presence increase organizational resilience?",
+      "tension": 0.0
+    },
+    {
+      "id": "E6-7",
+      "faceIds": [
+        6,
+        7
+      ],
+      "emergentName": "Community-Brand Amplification",
+      "elementalNature": "Air",
+      "theQuestion": "Does CEN's community become ambassadors for its brand?",
+      "tension": 0.15
+    },
+    {
+      "id": "E6-11",
+      "faceIds": [
+        6,
+        11
+      ],
+      "emergentName": "Network-Funding Pipeline",
+      "elementalNature": "Water",
+      "theQuestion": "Does CEN's community network generate funding introductions?",
+      "tension": 0.0
+    },
+    {
+      "id": "E7-8",
+      "faceIds": [
+        7,
+        8
+      ],
+      "emergentName": "Brand-Operations Coherence",
+      "elementalNature": "Fire",
+      "theQuestion": "Does CEN's brand promise match its operational delivery?",
+      "tension": 0.1
+    },
+    {
+      "id": "E7-11",
+      "faceIds": [
+        7,
+        11
+      ],
+      "emergentName": "Reputation-Funding Attraction",
+      "elementalNature": "Air",
+      "theQuestion": "Does CEN's reputation attract aligned philanthropic capital?",
+      "tension": 0.0
+    },
+    {
+      "id": "E7-12",
+      "faceIds": [
+        7,
+        12
+      ],
+      "emergentName": "Brand-Resilience Bridge",
+      "elementalNature": "Fire",
+      "theQuestion": "Is CEN's reputation a source of resilience in uncertain times?",
+      "tension": 0.3
+    },
+    {
+      "id": "E8-9",
+      "faceIds": [
+        8,
+        9
+      ],
+      "emergentName": "Operations-Regeneration Flow",
+      "elementalNature": "Water",
+      "theQuestion": "Are CEN's daily operations genuinely regenerative?",
+      "tension": 0.15
+    },
+    {
+      "id": "E8-10",
+      "faceIds": [
+        8,
+        10
+      ],
+      "emergentName": "Operations-Values Integrity",
+      "elementalNature": "Water",
+      "theQuestion": "Do CEN's operations fully embody its foundational values?",
+      "tension": 0.55
+    },
+    {
+      "id": "E8-12",
+      "faceIds": [
+        8,
+        12
+      ],
+      "emergentName": "Operational Resilience",
+      "elementalNature": "Air",
+      "theQuestion": "Do CEN's operational systems build organizational resilience?",
+      "tension": 0.2
+    },
+    {
+      "id": "E9-10",
+      "faceIds": [
+        9,
+        10
+      ],
+      "emergentName": "Regenerative-Values Embodiment",
+      "elementalNature": "Ether",
+      "theQuestion": "Is CEN's regenerative practice the expression of its deepest values?",
+      "tension": 0.4
+    },
+    {
+      "id": "E9-11",
+      "faceIds": [
+        9,
+        11
+      ],
+      "emergentName": "Regenerative-Funding Alignment",
+      "elementalNature": "Earth",
+      "theQuestion": "Does CEN's regenerative mission attract mission-aligned funding?",
+      "tension": 0.05
+    },
+    {
+      "id": "E9-12",
+      "faceIds": [
+        9,
+        12
+      ],
+      "emergentName": "Regenerative Resilience",
+      "elementalNature": "Fire",
+      "theQuestion": "Does CEN's regenerative practice transform into greater systemic resilience?",
+      "tension": 0.35
+    },
+    {
+      "id": "E10-11",
+      "faceIds": [
+        10,
+        11
+      ],
+      "emergentName": "Values-Funding Alignment",
+      "elementalNature": "Air",
+      "theQuestion": "Does CEN clearly communicate its values to potential funders?",
+      "tension": 0.45
+    },
+    {
+      "id": "E10-12",
+      "faceIds": [
+        10,
+        12
+      ],
+      "emergentName": "Values-Resilience Foundation",
+      "elementalNature": "Fire",
+      "theQuestion": "Do CEN's values transform into organizational resilience under pressure?",
+      "tension": 0.75
+    },
+    {
+      "id": "E11-12",
+      "faceIds": [
+        11,
+        12
+      ],
+      "emergentName": "Funding-Resilience Flow",
+      "elementalNature": "Water",
+      "theQuestion": "Does a healthy funding pipeline create organizational resilience?",
+      "tension": 0.3
+    }
   ],
-
   "vertices": [
-    { "id": "V1", "faceIds": [1, 2, 3], "emergentName": "Knowledge-Capital-Human Hub", "vortexStrength": 0.25, "classification": "hotspot", "tooltip": "Strong knowledge and human energy but financial fragility creates tension", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.40, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V2", "faceIds": [1, 3, 4], "emergentName": "Resource-People-Structure Point", "vortexStrength": 0.10, "classification": "neutral", "tooltip": "Where financial uncertainty meets human energy and structural gaps", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V3", "faceIds": [1, 4, 5], "emergentName": "Finance-Structure-Market Triangle", "vortexStrength": 0.20, "classification": "hotspot", "tooltip": "CAUTION: Three weak faces converge — financial, structural, market gap", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V4", "faceIds": [1, 5, 6], "emergentName": "Finance-Market-Community Point", "vortexStrength": 0.15, "classification": "neutral", "tooltip": "Where financial need meets market silence and community warmth", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.30, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V5", "faceIds": [1, 2, 6], "emergentName": "Knowledge-Finance-Community", "vortexStrength": 0.15, "classification": "neutral", "tooltip": "Intellectual richness and community warmth orbiting financial fragility", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.28, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V6", "faceIds": [2, 3, 8], "emergentName": "Knowledge-Human-Operations", "vortexStrength": 0.18, "classification": "neutral", "tooltip": "Strong intellectual capital not yet channeled into systematized operations", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.35, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V7", "faceIds": [3, 4, 9], "emergentName": "Founder-Structure-Regeneration", "vortexStrength": 0.10, "classification": "synergy_hub", "tooltip": "Where founders' regenerative values could build structural coherence", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V8", "faceIds": [4, 5, 10], "emergentName": "Structure-Market-Values Triad", "vortexStrength": 0.28, "classification": "bermuda_triangle", "tooltip": "CRITICAL: Exceptional values (9.5) trapped by structural gap and market silence", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.75, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V9", "faceIds": [5, 6, 11], "emergentName": "Market-Community-Pipeline", "vortexStrength": 0.20, "classification": "hotspot", "tooltip": "CAUTION: Funding pipeline and market both weak despite community presence", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.35, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V10", "faceIds": [2, 6, 7], "emergentName": "Knowledge-Community-Brand", "vortexStrength": 0.10, "classification": "synergy_hub", "tooltip": "Where CEN's intellectual depth could amplify community and brand", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V11", "faceIds": [2, 7, 8], "emergentName": "Knowledge-Brand-Operations", "vortexStrength": 0.15, "classification": "neutral", "tooltip": "Intellectual strength not yet grounding into brand consistency and operations", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.25, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V12", "faceIds": [3, 8, 9], "emergentName": "Founder-Operations-Regeneration", "vortexStrength": 0.15, "classification": "neutral", "tooltip": "Where daily work aligns with regenerative values — potential coherence point", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V13", "faceIds": [4, 9, 10], "emergentName": "Structure-Regeneration-Values", "vortexStrength": 0.25, "classification": "synergy_hub", "tooltip": "OPPORTUNITY: If structure improves, CEN's values and regenerative flow can fully express", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.50, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V14", "faceIds": [5, 10, 11], "emergentName": "Market-Values-Funding Paradox", "vortexStrength": 0.38, "classification": "bermuda_triangle", "tooltip": "CRITICAL: World-class values (9.5) generating minimal market or funding traction (2.0/5.0)", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 1.0, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V15", "faceIds": [6, 7, 11], "emergentName": "Community-Brand-Funding", "vortexStrength": 0.15, "classification": "neutral", "tooltip": "Where community warmth and brand could unlock funding relationships", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V16", "faceIds": [7, 8, 12], "emergentName": "Brand-Operations-Resilience", "vortexStrength": 0.10, "classification": "neutral", "tooltip": "Brand and operations at mid-level; resilience severely depleted", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" },
-    { "id": "V17", "faceIds": [8, 9, 12], "emergentName": "Operations-Regeneration-Resilience", "vortexStrength": 0.18, "classification": "neutral", "tooltip": "Regenerative flow present but operations and resilience need development", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.42, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V18", "faceIds": [9, 10, 12], "emergentName": "Regeneration-Values-Resilience", "vortexStrength": 0.38, "classification": "hotspot", "tooltip": "CAUTION: Strong values and regeneration (9.5/5.5) but zero resilience (2.0) — brittle vessel", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.65, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V19", "faceIds": [10, 11, 12], "emergentName": "Values-Pipeline-Resilience", "vortexStrength": 0.30, "classification": "hotspot", "tooltip": "CAUTION: Values alone (9.5) cannot compensate for weak pipeline (5.0) and zero resilience (2.0)", "sequenceConcavity": "clockwise", "sequenceConcavityStrength": 0.60, "sequenceConcavityLabel": "Releasing" },
-    { "id": "V20", "faceIds": [7, 11, 12], "emergentName": "Brand-Funding-Fortress", "vortexStrength": 0.15, "classification": "neutral", "tooltip": "Moderate brand and funding have not yet built resilience structures", "sequenceConcavity": "neutral", "sequenceConcavityStrength": 0, "sequenceConcavityLabel": "Neutral" }
+    {
+      "id": "V1",
+      "faceIds": [
+        1,
+        2,
+        3
+      ],
+      "emergentName": "Knowledge-Capital-Human Hub",
+      "vortexStrength": 0.25,
+      "classification": "hotspot",
+      "tooltip": "Strong knowledge and human energy but financial fragility creates tension",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.4,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V2",
+      "faceIds": [
+        1,
+        3,
+        4
+      ],
+      "emergentName": "Resource-People-Structure Point",
+      "vortexStrength": 0.1,
+      "classification": "neutral",
+      "tooltip": "Where financial uncertainty meets human energy and structural gaps",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V3",
+      "faceIds": [
+        1,
+        4,
+        5
+      ],
+      "emergentName": "Finance-Structure-Market Triangle",
+      "vortexStrength": 0.2,
+      "classification": "hotspot",
+      "tooltip": "CAUTION: Three weak faces converge — financial, structural, market gap",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V4",
+      "faceIds": [
+        1,
+        5,
+        6
+      ],
+      "emergentName": "Finance-Market-Community Point",
+      "vortexStrength": 0.15,
+      "classification": "neutral",
+      "tooltip": "Where financial need meets market silence and community warmth",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.3,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V5",
+      "faceIds": [
+        1,
+        2,
+        6
+      ],
+      "emergentName": "Knowledge-Finance-Community",
+      "vortexStrength": 0.15,
+      "classification": "neutral",
+      "tooltip": "Intellectual richness and community warmth orbiting financial fragility",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.28,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V6",
+      "faceIds": [
+        2,
+        3,
+        8
+      ],
+      "emergentName": "Knowledge-Human-Operations",
+      "vortexStrength": 0.18,
+      "classification": "neutral",
+      "tooltip": "Strong intellectual capital not yet channeled into systematized operations",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.35,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V7",
+      "faceIds": [
+        3,
+        4,
+        9
+      ],
+      "emergentName": "Founder-Structure-Regeneration",
+      "vortexStrength": 0.1,
+      "classification": "synergy_hub",
+      "tooltip": "Where founders' regenerative values could build structural coherence",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V8",
+      "faceIds": [
+        4,
+        5,
+        10
+      ],
+      "emergentName": "Structure-Market-Values Triad",
+      "vortexStrength": 0.28,
+      "classification": "bermuda_triangle",
+      "tooltip": "CRITICAL: Exceptional values (9.5) trapped by structural gap and market silence",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.75,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V9",
+      "faceIds": [
+        5,
+        6,
+        11
+      ],
+      "emergentName": "Market-Community-Pipeline",
+      "vortexStrength": 0.2,
+      "classification": "hotspot",
+      "tooltip": "CAUTION: Funding pipeline and market both weak despite community presence",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.35,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V10",
+      "faceIds": [
+        2,
+        6,
+        7
+      ],
+      "emergentName": "Knowledge-Community-Brand",
+      "vortexStrength": 0.1,
+      "classification": "synergy_hub",
+      "tooltip": "Where CEN's intellectual depth could amplify community and brand",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V11",
+      "faceIds": [
+        2,
+        7,
+        8
+      ],
+      "emergentName": "Knowledge-Brand-Operations",
+      "vortexStrength": 0.15,
+      "classification": "neutral",
+      "tooltip": "Intellectual strength not yet grounding into brand consistency and operations",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.25,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V12",
+      "faceIds": [
+        3,
+        8,
+        9
+      ],
+      "emergentName": "Founder-Operations-Regeneration",
+      "vortexStrength": 0.15,
+      "classification": "neutral",
+      "tooltip": "Where daily work aligns with regenerative values — potential coherence point",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V13",
+      "faceIds": [
+        4,
+        9,
+        10
+      ],
+      "emergentName": "Structure-Regeneration-Values",
+      "vortexStrength": 0.25,
+      "classification": "synergy_hub",
+      "tooltip": "OPPORTUNITY: If structure improves, CEN's values and regenerative flow can fully express",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.5,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V14",
+      "faceIds": [
+        5,
+        10,
+        11
+      ],
+      "emergentName": "Market-Values-Funding Paradox",
+      "vortexStrength": 0.38,
+      "classification": "bermuda_triangle",
+      "tooltip": "CRITICAL: World-class values (9.5) generating minimal market or funding traction (2.0/5.0)",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 1.0,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V15",
+      "faceIds": [
+        6,
+        7,
+        11
+      ],
+      "emergentName": "Community-Brand-Funding",
+      "vortexStrength": 0.15,
+      "classification": "neutral",
+      "tooltip": "Where community warmth and brand could unlock funding relationships",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V16",
+      "faceIds": [
+        7,
+        8,
+        12
+      ],
+      "emergentName": "Brand-Operations-Resilience",
+      "vortexStrength": 0.1,
+      "classification": "neutral",
+      "tooltip": "Brand and operations at mid-level; resilience severely depleted",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    },
+    {
+      "id": "V17",
+      "faceIds": [
+        8,
+        9,
+        12
+      ],
+      "emergentName": "Operations-Regeneration-Resilience",
+      "vortexStrength": 0.18,
+      "classification": "neutral",
+      "tooltip": "Regenerative flow present but operations and resilience need development",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.42,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V18",
+      "faceIds": [
+        9,
+        10,
+        12
+      ],
+      "emergentName": "Regeneration-Values-Resilience",
+      "vortexStrength": 0.38,
+      "classification": "hotspot",
+      "tooltip": "CAUTION: Strong values and regeneration (9.5/5.5) but zero resilience (2.0) — brittle vessel",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.65,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V19",
+      "faceIds": [
+        10,
+        11,
+        12
+      ],
+      "emergentName": "Values-Pipeline-Resilience",
+      "vortexStrength": 0.3,
+      "classification": "hotspot",
+      "tooltip": "CAUTION: Values alone (9.5) cannot compensate for weak pipeline (5.0) and zero resilience (2.0)",
+      "sequenceConcavity": "clockwise",
+      "sequenceConcavityStrength": 0.6,
+      "sequenceConcavityLabel": "Releasing"
+    },
+    {
+      "id": "V20",
+      "faceIds": [
+        7,
+        11,
+        12
+      ],
+      "emergentName": "Brand-Funding-Fortress",
+      "vortexStrength": 0.15,
+      "classification": "neutral",
+      "tooltip": "Moderate brand and funding have not yet built resilience structures",
+      "sequenceConcavity": "neutral",
+      "sequenceConcavityStrength": 0,
+      "sequenceConcavityLabel": "Neutral"
+    }
   ],
-
   "breathAxes": [
     {
       "axis": 1,
@@ -207,7 +1001,7 @@
       "breathName": "The Breath of Viability",
       "projectionQuestion": "Is CEN actively building a funding pipeline to sustain its mission?",
       "receptionQuestion": "Does CEN have the financial foundation to exist and operate?",
-      "currentRatio": 0.70,
+      "currentRatio": 0.7,
       "status": "Contracted",
       "interpretation": "D scores F1=6/F11=6 (balanced but mid-low); E scores F1=1/F11=4 (severe deficit). Researcher confirms both at 2. Resource flow is chronically contracted — not enough coming in or actively pursued at the scale needed."
     },
@@ -272,7 +1066,6 @@
       "interpretation": "F6 avg 3.5 vs F12 avg 2.0. D=−1/E=−1 on this axis. Some community exists (3.5) but resilience is nearly absent (2.0). The network is not yet translating into protection."
     }
   ],
-
   "shadowPatterns": [
     {
       "id": "hidden-oracle",
@@ -280,7 +1073,12 @@
       "suppressed": "Profound values and wisdom (F10=9.5) held in near-silence externally (F5=2.0)",
       "integrated": "Visible Wisdom — Deep truth expressed with clarity, courage, and reach",
       "severity": "critical",
-      "involvedFaces": [5, 10, 2, 7],
+      "involvedFaces": [
+        5,
+        10,
+        2,
+        7
+      ],
       "prescription": "Systematically translate CEN's values language into external communications — one piece of content per week, one partnership conversation per month"
     },
     {
@@ -289,7 +1087,13 @@
       "suppressed": "Dominique scores overall 7/10 (optimistic visionary), Esther scores 3/10 (grounded realist) — unresolved divergence in organizational reality",
       "integrated": "Integrated Dyad — Two perspectives as complementary instruments of organizational clarity",
       "severity": "critical",
-      "involvedFaces": [1, 3, 4, 8, 12],
+      "involvedFaces": [
+        1,
+        3,
+        4,
+        8,
+        12
+      ],
       "prescription": "Use the dodecahedron visualization as a shared language to surface, honor, and integrate both perspectives into a single organizational diagnosis"
     },
     {
@@ -298,7 +1102,12 @@
       "suppressed": "Exceptional values and vision (F10=9.5, F9=5.5) with no operational container to hold and express them (F4=4.5, F8=4.0)",
       "integrated": "Sacred Structure — Governance and operations as the physical expression of values",
       "severity": "significant",
-      "involvedFaces": [4, 8, 9, 10],
+      "involvedFaces": [
+        4,
+        8,
+        9,
+        10
+      ],
       "prescription": "Build one governance document and one operational protocol per month — treat each as a living embodiment of CEN's values"
     },
     {
@@ -307,11 +1116,14 @@
       "suppressed": "F12=2.0 — the organization has no meaningful protection against disruption, departure, or funding failure",
       "integrated": "Resilient Mission — Structures and systems that allow the mission to survive individual setbacks",
       "severity": "significant",
-      "involvedFaces": [12, 1, 11],
+      "involvedFaces": [
+        12,
+        1,
+        11
+      ],
       "prescription": "Document critical institutional knowledge, diversify funding relationships, and create a simple continuity plan within 90 days"
     }
   ],
-
   "diagnostics": {
     "globalCoherence": 0.46,
     "beingActionBalance": 1.25,
@@ -327,13 +1139,17 @@
       "beta": 0.5,
       "gamma": 0.7,
       "delta": 0.9,
-      "kappa": 2.6180339887498949,
+      "kappa": 2.618033988749895,
       "eta": 0.3819660112501051,
-      "zeta": 0.06366100187501752,
+      "zeta": 0.06366100187501753,
       "theta": 0.6180339887498949,
       "provenance": {
         "source": "POC/js/core/TuningConfig.js balancedMode (default constructor)",
-        "lockReferences": ["#8.6 (Pentagramic constants canonical)", "#8.31 (mapping-context.json refresh)", "#8.32 (kappa=phi^2 not 4)"],
+        "lockReferences": [
+          "#8.6 (Pentagramic constants canonical)",
+          "#8.31 (mapping-context.json refresh)",
+          "#8.32 (kappa=phi^2 not 4)"
+        ],
         "refreshDate": "2026-05-23",
         "refreshSession": "W2 Session A Arc 2 → Arc 3 transition"
       }
@@ -352,27 +1168,122 @@
       "archivedDate": "2026-05-23"
     }
   },
-
   "kpis": {
-    "face1": [{ "id": "F1.1", "name": "Financial Stability Score", "value": 3.5, "target": 7.0, "unit": "scale 1-10" }],
-    "face2": [{ "id": "F2.1", "name": "Conceptual Framework Depth", "value": 7.5, "target": 9.0, "unit": "scale 1-10" }],
-    "face3": [{ "id": "F3.1", "name": "Team Energy Level", "value": 5.0, "target": 8.0, "unit": "scale 1-10" }],
-    "face4": [{ "id": "F4.1", "name": "Governance Documentation", "value": 4.5, "target": 8.0, "unit": "scale 1-10" }],
-    "face5": [{ "id": "F5.1", "name": "External Visibility Score", "value": 2.0, "target": 7.0, "unit": "scale 1-10" }],
-    "face6": [{ "id": "F6.1", "name": "Community Engagement", "value": 3.5, "target": 7.0, "unit": "scale 1-10" }],
-    "face7": [{ "id": "F7.1", "name": "Public Presence Score", "value": 5.0, "target": 7.0, "unit": "scale 1-10" }],
-    "face8": [{ "id": "F8.1", "name": "Operational Systematization", "value": 4.0, "target": 7.0, "unit": "scale 1-10" }],
-    "face9": [{ "id": "F9.1", "name": "Regenerative Practices Score", "value": 5.5, "target": 8.0, "unit": "scale 1-10" }],
-    "face10": [{ "id": "F10.1", "name": "Values Alignment Score", "value": 9.5, "target": 10.0, "unit": "scale 1-10" }],
-    "face11": [{ "id": "F11.1", "name": "Grant Opportunities Pursued", "value": 5.0, "target": 8.0, "unit": "scale 1-10" }],
-    "face12": [{ "id": "F12.1", "name": "Organizational Redundancy", "value": 2.0, "target": 7.0, "unit": "scale 1-10" }]
+    "face1": [
+      {
+        "id": "F1.1",
+        "name": "Financial Stability Score",
+        "value": 3.5,
+        "target": 7.0,
+        "unit": "scale 1-10"
+      }
+    ],
+    "face2": [
+      {
+        "id": "F2.1",
+        "name": "Conceptual Framework Depth",
+        "value": 7.5,
+        "target": 9.0,
+        "unit": "scale 1-10"
+      }
+    ],
+    "face3": [
+      {
+        "id": "F3.1",
+        "name": "Team Energy Level",
+        "value": 5.0,
+        "target": 8.0,
+        "unit": "scale 1-10"
+      }
+    ],
+    "face4": [
+      {
+        "id": "F4.1",
+        "name": "Governance Documentation",
+        "value": 4.5,
+        "target": 8.0,
+        "unit": "scale 1-10"
+      }
+    ],
+    "face5": [
+      {
+        "id": "F5.1",
+        "name": "External Visibility Score",
+        "value": 2.0,
+        "target": 7.0,
+        "unit": "scale 1-10"
+      }
+    ],
+    "face6": [
+      {
+        "id": "F6.1",
+        "name": "Community Engagement",
+        "value": 3.5,
+        "target": 7.0,
+        "unit": "scale 1-10"
+      }
+    ],
+    "face7": [
+      {
+        "id": "F7.1",
+        "name": "Public Presence Score",
+        "value": 5.0,
+        "target": 7.0,
+        "unit": "scale 1-10"
+      }
+    ],
+    "face8": [
+      {
+        "id": "F8.1",
+        "name": "Operational Systematization",
+        "value": 4.0,
+        "target": 7.0,
+        "unit": "scale 1-10"
+      }
+    ],
+    "face9": [
+      {
+        "id": "F9.1",
+        "name": "Regenerative Practices Score",
+        "value": 5.5,
+        "target": 8.0,
+        "unit": "scale 1-10"
+      }
+    ],
+    "face10": [
+      {
+        "id": "F10.1",
+        "name": "Values Alignment Score",
+        "value": 9.5,
+        "target": 10.0,
+        "unit": "scale 1-10"
+      }
+    ],
+    "face11": [
+      {
+        "id": "F11.1",
+        "name": "Grant Opportunities Pursued",
+        "value": 5.0,
+        "target": 8.0,
+        "unit": "scale 1-10"
+      }
+    ],
+    "face12": [
+      {
+        "id": "F12.1",
+        "name": "Organizational Redundancy",
+        "value": 2.0,
+        "target": 7.0,
+        "unit": "scale 1-10"
+      }
+    ]
   },
-
   "metadata": {
     "createdAt": "2026-04-11",
     "version": "1.0.0",
     "source": "Phase 2 Evidence Package — CEN Spiral Dashboard scoring",
     "lastModified": "2026-04-11",
     "notes": "Scores are averages of co-founder self-assessments (Dominique + Esther). Raw individual scores: D_norm=[0.6,0.8,0.7,0.7,0.3,0.3,0.7,0.7,0.6,1.0,0.6,0.3], E_norm=[0.1,0.7,0.3,0.2,0.1,0.4,0.3,0.1,0.5,0.9,0.4,0.1], V_res_post_norm=[0.2,0.5,0.4,0.2,0.2,0.4,0.3,0.2,0.8,0.8,0.2,0.3]. Researcher data (V_res_post) is preserved here for reference and validation. Overall coherence: D=7, E=3, avg=5."
-  }
+  },
+  "lock_8_39_naming_provenance": "Lock #8.39 (Naming-Convention SSOT): appendixEClusterName values for CEN are sourced from Final Thesis/Thesis Work/Assignments/Research/Assignment Research Parts Reports - Chapters/Appendix E/Appendix E - LEADING.md §E.3.1 lines 75-90 (six-plus-six canonical architecture). iircAnchor + architectureLayer values are methodologically-constant from the dodecahedron's structure (Appendix E line 71)."
 }

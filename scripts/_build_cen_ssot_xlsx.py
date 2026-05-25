@@ -425,24 +425,60 @@ def build_sheet_00_cover_provenance(wb: Workbook):
 # Sheet 0a data constants (Section 1 Naming Translation + Section 2 Glossary)
 # ═════════════════════════════════════════════════════════════════════════
 
-# Section 1 — Naming Translation per Lock #8.2: POC canonical ↔ IIRF universal capital
-# ↔ CEN-authentic. Per Lock #2: CEN-authentic primary in Sheet 16; this is the
-# single disclosure point for all three naming systems.
-NAMING_TRANSLATION_ROWS = [
-    # (face_num, POC_canonical, IIRF_universal_capital, CEN_authentic, brief_note)
-    (1,  "Financial",       "Financial Capital",                 "Three-Pillar Sustainability",  "Material/financial flow + sustainability framing"),
-    (2,  "Conceptual",      "Intellectual Capital",              "Strategy & Vision",            "Knowledge/IP/strategic-conceptual capacity"),
-    (3,  "Human",           "Human Capital",                     "Founder Energy & People",      "Founder-bearing + human-development capacity"),
-    (4,  "Structural",      "Structured & Manufactured Capital", "Governance & Structure",       "Governance, processes, organizational architecture"),
-    (5,  "Market",          "Market Capital",                    "Market & Partnerships",        "External market positioning + partner ecosystem"),
-    (6,  "Community",       "Social & Relationship Capital",     "Community & Stakeholders",     "Stakeholder relationships + community-of-practice"),
-    (7,  "Brand",           "Brand Capital",                     "Brand & Reputation",           "Identity, narrative, reputational capital"),
-    (8,  "Operations",      "Operational Capital",               "Operations & Delivery",        "Day-to-day execution + operational discipline"),
-    (9,  "Regenerative",    "Natural & Ecological Capital",      "Regenerative Practice",        "Ecological + regenerative-systems engagement"),
-    (10, "Foundational",    "Values & Foundational Capital",     "Foundational Values",          "Core values + mission orientation"),
-    (11, "Funding",         "Funding Pipeline Capital",          "Funding & Resource Flow",      "Funding pipeline + resource attraction"),
-    (12, "Risk-Resilience", "Risk & Resilience Capital",         "Risk & Resilience",            "Risk surface + adaptive resilience"),
+# Section 1 — Naming Translation per Lock #8.2 + Lock #8.39 (Naming-Convention SSOT).
+#
+# Source-of-truth: Appendix E §E.3.1 in Final Thesis workspace (line 71 declares
+# "six-plus-six canonical architecture: six universal capitals plus six
+# organisation-authentic polarities, twelve in total"). Per Appendix E lines
+# 75-90 cluster table, the F-face mapping is:
+#
+#   6 IIRC Universal Capitals:   F1 (Financial), F2 (Intellectual), F3 (Human),
+#                                F4 (Manufactured → adapted to Structural for CEN),
+#                                F6 (Social-and-Relationship → aliased to Community),
+#                                F9 (Natural Capital → anchored by Ecological Embedding)
+#   6 CEN-authentic polarities:  F5, F7, F8, F10, F11, F12
+#
+# Visual structure: IIRC anchors above (rows 6-11), polarities below (rows 12-17),
+# with explanatory header row + adaptation footnotes at F4, F6, F9 (where IIRC
+# naming doesn't fully accommodate CEN's organisational form).
+#
+# CEN-Authentic Cluster Name column reads from mapping-context.json
+# appendixEClusterName field (Lock #8.39: SSOT sheets inherit from data layer;
+# do NOT invent inline). POC short-form column for F2 corrected from "Conceptual"
+# to "Intellectual" (matches engine breath-axes.js canonical).
+#
+# Tuple shape: (face_num, POC_shortform, IIRC_canonical_or_polarity_marker,
+#               architecture_layer, brief_note, adaptation_footnote_or_None)
+# CEN-Authentic Cluster Name resolved from mapping-context.json at render time.
+
+# IIRC-anchor faces (Appendix E §E.3.1 line 71 first half)
+NAMING_TRANSLATION_IIRC_ROWS = [
+    # face_num, POC_shortform, IIRC_canonical, architecture_layer, brief_note, footnote
+    (1,  "Financial",    "Financial Capital",        "IIRC universal capital", "Material/financial flow + sustainability framing",         None),
+    (2,  "Intellectual", "Intellectual Capital",     "IIRC universal capital", "Knowledge/IP/strategic-conceptual capacity",               None),
+    (3,  "Human",        "Human Capital",            "IIRC universal capital", "Founder-bearing + human-development capacity",             None),
+    (4,  "Structural",   "Manufactured Capital",     "IIRC universal capital", "Governance, processes, organizational architecture",
+        "F4 IIRC canonical = 'Manufactured Capital'. Adapted to 'Structural Capital' for CEN because CEN has no manufacturing — F4 maps to systems, governance, and structural infrastructure in CEN's form. See Appendix E §E.3.1 line 71 + Coherence Portrait §3 line 99."),
+    (6,  "Community",    "Social and Relationship Capital", "IIRC universal capital", "Stakeholder relationships + community-of-practice",
+        "F6 IIRC canonical = 'Social and Relationship Capital'. Aliased to 'Community Capital' (Appendix E §E.3.1 line 71: 'referred to as Community Capital where appropriate') for CEN organisational context."),
+    (9,  "Regenerative", "Natural Capital",          "IIRC universal capital", "Ecological + regenerative-systems engagement",
+        "F9 anchors IIRC Natural Capital via Cluster 6 'Ecological Embedding' (Appendix E §E.3.1 line 84). Quannex 'Regenerative Flow' framing aligns with IIRC's Natural Capital definition + extends with explicit process-orientation."),
 ]
+
+# CEN-authentic polarity faces (Appendix E §E.3.1 line 71 second half)
+NAMING_TRANSLATION_POLARITY_ROWS = [
+    # face_num, POC_shortform, polarity_marker, architecture_layer, brief_note, footnote
+    (5,  "Market",          "n/a — CEN-authentic polarity", "Organisation-authentic polarity", "External market positioning + partner ecosystem",  None),
+    (7,  "Brand",           "n/a — CEN-authentic polarity", "Organisation-authentic polarity", "Identity, narrative, reputational capital",        None),
+    (8,  "Operations",      "n/a — CEN-authentic polarity", "Organisation-authentic polarity", "Day-to-day execution + operational discipline",    None),
+    (10, "Foundational",    "n/a — CEN-authentic polarity", "Organisation-authentic polarity", "Core values + mission orientation",                None),
+    (11, "Funding",         "n/a — CEN-authentic polarity", "Organisation-authentic polarity", "Funding pipeline + resource attraction",           None),
+    (12, "Risk-Resilience", "n/a — CEN-authentic polarity", "Organisation-authentic polarity", "Risk surface + adaptive resilience",               None),
+]
+
+# Combined ordered list (IIRC anchors first, polarities second) for any consumers
+# that need a single iterable.
+NAMING_TRANSLATION_ROWS = NAMING_TRANSLATION_IIRC_ROWS + NAMING_TRANSLATION_POLARITY_ROWS
 
 # Section 2 — Glossary entries (Section 2 of Sheet 0a).
 # Format: (acronym, full_term, brief_definition, category, first_in, challenge, audit_§, code_file_line, doc_path)
@@ -749,33 +785,167 @@ def build_sheet_0a_naming_translation(wb: Workbook):
                        bg=DEEP_TEAL, size=10)
 
     # ─────────────────────────────────────────────────────────
-    # SECTION 1 — Naming Translation (rows 4-17)
+    # SECTION 1 — Naming Translation (Lock #8.2 + Lock #8.39 canonicalization)
     # ─────────────────────────────────────────────────────────
     apply_brand_header(ws, 4, 1, 9,
-                       "Section 1 — Naming Translation: POC ↔ IIRF ↔ CEN-Authentic (per Lock #8.2)",
+                       "Section 1 — Naming Translation: Six-Plus-Six Canonical Architecture (Appendix E §E.3.1)",
                        bg=QUANTUM_PURPLE, size=11)
 
-    # Column headers for Section 1
-    nt_headers = ["Face #", "POC Canonical", "IIRF Universal Capital", "CEN-Authentic (Sheet 16 primary)", "Brief Note"]
+    # Explanatory header row (architecture disclosure)
+    arch_text = (
+        "Six-plus-six canonical architecture per Appendix E §E.3.1 line 71: "
+        "F1+F2+F3+F4+F6+F9 = 6 IIRC universal capitals (with F4 Manufactured→Structural "
+        "adaptation + F6 Social-and-Relationship→Community alias for CEN organisational form); "
+        "F5+F7+F8+F10+F11+F12 = 6 CEN-authentic polarities paired with IIRC anchors via "
+        "breath axes. CEN-Authentic Cluster Names sourced from mapping-context.json "
+        "appendixEClusterName field (Lock #8.39 single-source-of-truth)."
+    )
+    ws.cell(row=5, column=1, value=arch_text).font = Font(
+        name="Calibri", size=9, italic=True, color="404040")
+    ws.cell(row=5, column=1).alignment = Alignment(wrap_text=True, vertical="top")
+    ws.merge_cells(start_row=5, start_column=1, end_row=5, end_column=9)
+    ws.row_dimensions[5].height = 60
+
+    # Column headers for Section 1 (NEW 6-col structure)
+    nt_headers = [
+        "Face #",
+        "POC Short-Form",
+        "IIRC Anchor / Polarity Marker",
+        "Architecture Layer",
+        "CEN-Authentic Cluster Name (Appendix E §E.3.1)",
+        "Brief Note",
+    ]
     for col_idx, h in enumerate(nt_headers, start=1):
-        c = ws.cell(row=5, column=col_idx, value=h)
+        c = ws.cell(row=6, column=col_idx, value=h)
         c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
         c.font = Font(name="Calibri", size=10, bold=True, color="000000")
-        c.alignment = Alignment(horizontal="center", vertical="center")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-    # 12 face rows
-    for offset, (face_num, poc, iirf, cen, note) in enumerate(NAMING_TRANSLATION_ROWS, start=1):
-        row = 5 + offset
+    # Load CEN appendixEClusterName values from mapping-context.json (Lock #8.39 source-of-truth)
+    import json as _json_for_naming
+    cen_mc_path = POC_ROOT / "companies" / "cen" / "mapping-context.json"
+    with cen_mc_path.open(encoding="utf-8") as _f:
+        _cen_mc = _json_for_naming.load(_f)
+    cen_cluster_names = {
+        face["id"]: face.get("appendixEClusterName", "(pending)")
+        for face in _cen_mc.get("faces", [])
+    }
+
+    # Group A — IIRC Universal Capitals (visual sub-header + 6 rows)
+    iirc_sub_row = 7
+    iirc_sub_cell = ws.cell(row=iirc_sub_row, column=1,
+                            value="── 6 IIRC Universal Capitals (Appendix E §E.3.1; F1+F2+F3+F4+F6+F9) ──")
+    iirc_sub_cell.font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+    iirc_sub_cell.alignment = Alignment(horizontal="center")
+    ws.merge_cells(start_row=iirc_sub_row, start_column=1, end_row=iirc_sub_row, end_column=6)
+    ws.cell(row=iirc_sub_row, column=1).fill = PatternFill(
+        start_color="E6F3FF", end_color="E6F3FF", fill_type="solid")
+
+    iirc_anchor_footnotes = []  # collect for footnote section below
+    for offset, (face_num, poc, iirc_or_marker, arch_layer, note, footnote) in enumerate(
+        NAMING_TRANSLATION_IIRC_ROWS, start=1
+    ):
+        row = iirc_sub_row + offset
         ws.cell(row=row, column=1, value=f"F{face_num}").font = Font(name="Calibri", size=11, bold=True)
         ws.cell(row=row, column=2, value=poc)
-        ws.cell(row=row, column=3, value=iirf)
-        ws.cell(row=row, column=4, value=cen).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
-        ws.cell(row=row, column=5, value=note).font = Font(name="Calibri", size=9, italic=True, color="606060")
+        ws.cell(row=row, column=3, value=iirc_or_marker)
+        ws.cell(row=row, column=4, value=arch_layer).font = Font(
+            name="Calibri", size=9, color="0D7377")
+        cen_name = cen_cluster_names.get(face_num, "(pending)")
+        cell_cen = ws.cell(row=row, column=5, value=cen_name)
+        cell_cen.font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+        ws.cell(row=row, column=6, value=note).font = Font(
+            name="Calibri", size=9, italic=True, color="606060")
+        if footnote:
+            iirc_anchor_footnotes.append((face_num, footnote))
+            # Mark cell with footnote indicator
+            ws.cell(row=row, column=3).font = Font(
+                name="Calibri", size=10, color="000000", italic=True)
+            # Add an asterisk marker
+            current_iirc = ws.cell(row=row, column=3).value
+            ws.cell(row=row, column=3, value=f"{current_iirc} *")
+
+    # Visual gap row between groups
+    gap_row = iirc_sub_row + len(NAMING_TRANSLATION_IIRC_ROWS) + 1
+    ws.row_dimensions[gap_row].height = 8
+
+    # Group B — CEN-Authentic Polarities (visual sub-header + 6 rows)
+    pol_sub_row = gap_row + 1
+    pol_sub_cell = ws.cell(row=pol_sub_row, column=1,
+                           value="── 6 CEN-Authentic Polarities (Appendix E §E.3.1; F5+F7+F8+F10+F11+F12) ──")
+    pol_sub_cell.font = Font(name="Calibri", size=10, bold=True, color="8B5CF6")
+    pol_sub_cell.alignment = Alignment(horizontal="center")
+    ws.merge_cells(start_row=pol_sub_row, start_column=1, end_row=pol_sub_row, end_column=6)
+    ws.cell(row=pol_sub_row, column=1).fill = PatternFill(
+        start_color="F3E8FF", end_color="F3E8FF", fill_type="solid")
+
+    for offset, (face_num, poc, polarity_marker, arch_layer, note, _footnote) in enumerate(
+        NAMING_TRANSLATION_POLARITY_ROWS, start=1
+    ):
+        row = pol_sub_row + offset
+        ws.cell(row=row, column=1, value=f"F{face_num}").font = Font(name="Calibri", size=11, bold=True)
+        ws.cell(row=row, column=2, value=poc)
+        ws.cell(row=row, column=3, value=polarity_marker).font = Font(
+            name="Calibri", size=9, italic=True, color="8B5CF6")
+        ws.cell(row=row, column=4, value=arch_layer).font = Font(
+            name="Calibri", size=9, color="8B5CF6")
+        cen_name = cen_cluster_names.get(face_num, "(pending)")
+        cell_cen = ws.cell(row=row, column=5, value=cen_name)
+        cell_cen.font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+        ws.cell(row=row, column=6, value=note).font = Font(
+            name="Calibri", size=9, italic=True, color="606060")
+
+    # IIRC adaptation footnotes (rows below polarities group)
+    footnote_start_row = pol_sub_row + len(NAMING_TRANSLATION_POLARITY_ROWS) + 2
+    if iirc_anchor_footnotes:
+        ws.cell(row=footnote_start_row, column=1,
+                value="IIRC adaptation footnotes (* marks faces where IIRC canonical doesn't fully accommodate CEN form):"
+                ).font = Font(name="Calibri", size=9, bold=True, italic=True, color="0D7377")
+        ws.merge_cells(start_row=footnote_start_row, start_column=1,
+                       end_row=footnote_start_row, end_column=9)
+        for offset, (face_num, footnote_text) in enumerate(iirc_anchor_footnotes, start=1):
+            fn_row = footnote_start_row + offset
+            ws.cell(row=fn_row, column=1, value=f"* F{face_num}:").font = Font(
+                name="Calibri", size=9, bold=True, color="0D7377")
+            ws.cell(row=fn_row, column=2, value=footnote_text).font = Font(
+                name="Calibri", size=9, italic=True, color="404040")
+            ws.cell(row=fn_row, column=2).alignment = Alignment(
+                wrap_text=True, vertical="top")
+            ws.merge_cells(start_row=fn_row, start_column=2, end_row=fn_row, end_column=9)
+            ws.row_dimensions[fn_row].height = 30
+
+    # Cross-reference footnote pointing to Sheet 16 for current-state diagnostic layer
+    xref_row = footnote_start_row + len(iirc_anchor_footnotes) + 2
+    xref_text = (
+        "↗ See Sheet 16 Dashboard_View for CEN Current-State Reading (Phase 2 diagnostic snapshot from "
+        "mapping-context.json customName field). The two CEN naming layers are complementary: "
+        "CEN-Authentic Cluster Name (this Sheet 0a column) = TIMELESS organizational identity from Appendix E; "
+        "CEN Current-State Reading (Sheet 16 column) = Phase 2 diagnostic snapshot. Lock #8.39 single-source-of-truth: "
+        "both layers READ from mapping-context.json (appendixEClusterName + customName fields)."
+    )
+    ws.cell(row=xref_row, column=1, value=xref_text).font = Font(
+        name="Calibri", size=9, italic=True, color="606060")
+    ws.cell(row=xref_row, column=1).alignment = Alignment(wrap_text=True, vertical="top")
+    ws.merge_cells(start_row=xref_row, start_column=1, end_row=xref_row, end_column=9)
+    ws.row_dimensions[xref_row].height = 45
 
     # ─────────────────────────────────────────────────────────
-    # SECTION 2 — Glossary (rows 19+)
+    # SECTION 2 — Glossary (rows 31+; expanded after Lock #8.39 Section 1 restructure)
     # ─────────────────────────────────────────────────────────
-    glossary_start_row = 19
+    # Row layout for Section 1 (Lock #8.39 restructure):
+    #   4  = Section 1 brand header
+    #   5  = Explanatory header (architecture disclosure, 60h)
+    #   6  = Column headers
+    #   7  = IIRC sub-header
+    #   8-13 = 6 IIRC anchor rows (F1, F2, F3, F4, F6, F9)
+    #   14 = gap row (8h)
+    #   15 = Polarity sub-header
+    #   16-21 = 6 polarity rows (F5, F7, F8, F10, F11, F12)
+    #   23 = "IIRC adaptation footnotes" header
+    #   24-26 = 3 footnotes (F4, F6, F9)
+    #   28 = Cross-ref to Sheet 16 (45h)
+    # Section 2 (Glossary) starts at row 31 to give visual breathing room.
+    glossary_start_row = 31
     apply_brand_header(ws, glossary_start_row, 1, 9,
                        "Section 2 — Methodology Glossary (acronyms + operational terminology, alphabetical)",
                        bg=QUANTUM_PURPLE, size=11)
@@ -5417,56 +5587,90 @@ def build_sheet_16_dashboard(wb: Workbook):
                        "🌀 12-Face Energy Map (O1 layer canonical)",
                        bg=QUANTUM_PURPLE, size=12)
 
-    # Face metadata: id, name, customName-cen, anchor (W06v3 + CEN-authentic mirror)
-    FACE_INFO_12 = [
-        (1,  "F1",  "Financial Capital",          "Financial Fragility"),
-        (2,  "F2",  "Intellectual Capital",       "Conceptual Depth"),
-        (3,  "F3",  "Human Capital",              "Human Capital"),
-        (4,  "F4",  "Structural Capital",         "Governance Gap"),
-        (5,  "F5",  "Market Resonance",           "Mission in Silence"),
-        (6,  "F6",  "Community & Partners",       "Community Trust"),
-        (7,  "F7",  "Brand & Reputation",         "Quiet Credibility"),
-        (8,  "F8",  "Core Operations",            "Underdeveloped Engine"),
-        (9,  "F9",  "Regenerative Flow",          "Conscious Core"),
-        (10, "F10", "Foundational Values",        "Sacred Ground"),
-        (11, "F11", "Funding Pipeline",           "Dormant Pipeline"),
-        (12, "F12", "Risk & Resilience",          "Exposed Foundation"),
-    ]
+    # Face metadata loaded from POC/companies/cen/mapping-context.json per Lock #8.39
+    # (Naming-Convention Single-Source-of-Truth). Fields read per face:
+    #   baseName               → Face Base Name (Quannex canonical from breath-axes.js)
+    #   customName             → CEN Current-State Reading (Phase 2 diagnostic)
+    #   iircAnchor             → IIRC capital (F1+F2+F3+F4+F6+F9 only; None for polarities)
+    #   architectureLayer      → "IIRC universal capital" or "Organisation-authentic polarity"
+    # CEN-Authentic Cluster Name (Appendix E §E.3.1) lives in Sheet 0a — see cross-ref
+    # below the face table.
+    import json as _json_for_sheet16
+    cen_mc_path_s16 = POC_ROOT / "companies" / "cen" / "mapping-context.json"
+    with cen_mc_path_s16.open(encoding="utf-8") as _f:
+        _cen_mc_s16 = _json_for_sheet16.load(_f)
+    _face_dict = {f["id"]: f for f in _cen_mc_s16.get("faces", [])}
 
-    # Header
-    face_headers = ["#", "Face", "IIRF Anchor", "CEN-Authentic Name",
-                    "E_final (O1)", "Band", "Notes"]
-    for col_idx, header_text in enumerate(face_headers, start=1):
-        c = ws.cell(row=14, column=col_idx, value=header_text)
+    FACE_INFO_12 = []
+    for face_id in range(1, 13):
+        f = _face_dict.get(face_id, {})
+        base_name = f.get("baseName", f"F{face_id}")
+        custom_name = f.get("customName", "(pending)")
+        iirc_anchor = f.get("iircAnchor")  # None for polarity faces
+        # Strip the adaptation parenthetical for the column display (footnote in Sheet 0a has full text)
+        if iirc_anchor and "(adapted" in iirc_anchor:
+            iirc_anchor_display = iirc_anchor.split("(")[0].strip()
+            iirc_anchor_display = f"{iirc_anchor_display} *"  # asterisk marks adaptation footnote in Sheet 0a
+        elif iirc_anchor and "(aliased" in iirc_anchor:
+            iirc_anchor_display = iirc_anchor.split("(")[0].strip()
+            iirc_anchor_display = f"{iirc_anchor_display} *"
+        elif iirc_anchor:
+            iirc_anchor_display = iirc_anchor
+        else:
+            iirc_anchor_display = "n/a — CEN-authentic polarity"
+        FACE_INFO_12.append((face_id, f"F{face_id}", base_name, custom_name, iirc_anchor_display))
+
+    # Header — explicit column positions matching data layout exactly (fixes pre-existing
+    # column-alignment bug where original enumerate loop misaligned with data merges).
+    # Data row column layout (must match):
+    #   col 1: face_id  · col 2: face_label  · col 3: base_name
+    #   col 4-5 (merged): CEN current-state reading
+    #   col 6: E_final formula  · col 7: Band formula  · col 8: IIRC anchor
+    #   col 9-11 (merged): Notes
+    header_specs = [
+        (1, "#"),
+        (2, "Face"),
+        (3, "Face Base Name (Quannex canonical)"),
+        (4, "CEN Current-State Reading (mapping-context.json Phase 2 diagnostic)"),  # merged 4-5
+        (6, "E_final (O1)"),
+        (7, "Band"),
+        (8, "IIRC Anchor"),
+        (9, "Notes"),  # merged 9-11
+    ]
+    for col, header_text in header_specs:
+        c = ws.cell(row=14, column=col, value=header_text)
         c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
         c.font = Font(name="Calibri", size=10, bold=True, color="000000")
         c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-    # Merge col 4 across cols 4-5 for CEN-Authentic Name; merge col 7 across cols 7-11 for Notes
+    # Col 4-5 merged for CEN Current-State Reading; col 9-11 merged for Notes
     ws.merge_cells(start_row=14, start_column=4, end_row=14, end_column=5)
-    ws.merge_cells(start_row=14, start_column=7, end_row=14, end_column=11)
+    ws.merge_cells(start_row=14, start_column=9, end_row=14, end_column=11)
+    # Fill merged-empty cells with header style for visual continuity
+    for empty_col in [5, 10, 11]:
+        c = ws.cell(row=14, column=empty_col)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
 
     # Per-face row
     F9_F10_FACES = {9, 10}  # architectural-blindness highlight
-    for i, (face_id, face_label, iirf, cen_name) in enumerate(FACE_INFO_12):
+    for i, (face_id, face_label, base_name, cen_name, iirc_anchor_display) in enumerate(FACE_INFO_12):
         row = 15 + i
         ws.cell(row=row, column=1, value=face_id).alignment = Alignment(horizontal="center")
         ws.cell(row=row, column=2, value=face_label).font = Font(
             name="Consolas", size=10, bold=True)
         ws.cell(row=row, column=2).alignment = Alignment(horizontal="center")
-        ws.cell(row=row, column=3, value=iirf).font = Font(
+        ws.cell(row=row, column=3, value=base_name).font = Font(
             name="Calibri", size=10, color="404040")
         ws.cell(row=row, column=4, value=cen_name).font = Font(
             name="Calibri", size=10, italic=True, color="0D7377")
         ws.merge_cells(start_row=row, start_column=4, end_row=row, end_column=5)
 
-        # Col F (=col 5 after the cen_name merge becomes col 6 in source... wait)
-        # Actually after merging col 4-5, the next data col is 6 (E_final), then 7 (Band), then 8+ for Notes
+        # Col 6: E_final (O1)
         apply_formula_cell(ws, row, 6, f"=cen_f{face_id}_o1_e_final")
         ws.cell(row=row, column=6).number_format = "0.0000"
         ws.cell(row=row, column=6).alignment = Alignment(horizontal="center")
         ws.cell(row=row, column=6).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
 
-        # Band classification
+        # Col 7: Band classification
         apply_formula_cell(
             ws, row, 7,
             f'=IF(F{row}<phi_inv_4,"Wall",'
@@ -5477,7 +5681,15 @@ def build_sheet_16_dashboard(wb: Workbook):
         ws.cell(row=row, column=7).alignment = Alignment(horizontal="center")
         ws.cell(row=row, column=7).font = Font(name="Calibri", size=10, italic=True)
 
-        # Notes (Lock #8.36 corrections + architectural-blindness highlight)
+        # Col 8: IIRC Anchor (NEW — populated for F1+F2+F3+F4+F6+F9 only; "n/a — CEN-authentic polarity" for others)
+        iirc_cell = ws.cell(row=row, column=8, value=iirc_anchor_display)
+        if "n/a" in iirc_anchor_display:
+            iirc_cell.font = Font(name="Calibri", size=9, italic=True, color="8B5CF6")
+        else:
+            iirc_cell.font = Font(name="Calibri", size=10, color="0D7377")
+        iirc_cell.alignment = Alignment(horizontal="center", wrap_text=True)
+
+        # Col 9-11: Notes (merged) (Lock #8.36 corrections + architectural-blindness highlight)
         note = ""
         if face_id == 9:
             note = "⚠ F9 architectural blindness (zero O1 BSC KPIs); Lock #8.36 thesis-defense centerpiece"
@@ -5489,15 +5701,30 @@ def build_sheet_16_dashboard(wb: Workbook):
             note = "F11 + F4 reverted edge KPI: BSC.F4 → F11 Fire O2 per Lock #8.36"
         elif face_id == 1:
             note = "F1 highest face energy at canonical κ=φ² baseline (= 0.3324 = Gate)"
-        ws.cell(row=row, column=8, value=note).font = Font(
+        ws.cell(row=row, column=9, value=note).font = Font(
             name="Calibri", size=9, italic=True, color="D946EF" if face_id in F9_F10_FACES else "606060")
-        ws.merge_cells(start_row=row, start_column=8, end_row=row, end_column=11)
+        ws.merge_cells(start_row=row, start_column=9, end_row=row, end_column=11)
 
         # Highlight F9 + F10 (architectural blindness)
         if face_id in F9_F10_FACES:
             for col in range(1, 12):
                 ws.cell(row=row, column=col).fill = PatternFill(
                     start_color="FFE4F0", end_color="FFE4F0", fill_type="solid")
+
+    # Cross-reference footnote (compact, fits in row 27 gap between table and Block D Mode 5 Spotlight)
+    # Points to Sheet 0a for the TIMELESS CEN-Authentic Cluster Name layer (Appendix E §E.3.1).
+    s16_xref_row = 27  # single-row gap between face table (ends row 26) and Block D (row 28)
+    s16_xref_text = (
+        "↗ Two CEN naming layers (Lock #8.39): THIS column = CEN Current-State Reading (Phase 2 diagnostic, mapping-context.json customName); "
+        "Sheet 0a column = CEN-Authentic Cluster Name (timeless, Appendix E §E.3.1). "
+        "IIRC Anchor populated for F1+F2+F3+F4+F6+F9 only; F5+F7+F8+F10+F11+F12 = 6 CEN-authentic polarities. * marks IIRC adaptation footnoted in Sheet 0a."
+    )
+    ws.cell(row=s16_xref_row, column=1, value=s16_xref_text).font = Font(
+        name="Calibri", size=8, italic=True, color="606060")
+    ws.cell(row=s16_xref_row, column=1).alignment = Alignment(wrap_text=True, vertical="top")
+    ws.merge_cells(start_row=s16_xref_row, start_column=1,
+                   end_row=s16_xref_row, end_column=11)
+    ws.row_dimensions[s16_xref_row].height = 30
 
     # ─────────────────────────────────────────────────────────
     # BLOCK D — Mode 5 Spotlight (rows 28-34)
@@ -7023,6 +7250,7 @@ def build_sheet_21_coherence_story(wb: Workbook):
         ("CEN BECOMING:", "→ Calibration Loop closed Phase 2 → Wk6-Wk8: prescribed actions REDUCED systemic tension. → Methodology validated for CEN at canonical κ=φ² baseline. → v1.0 SSOT ships as canonical math + narrative mirror. → v1.1 path identified: add edge-KPI at E1-8 (Mode 5 carrier, ordinal E4) + O1 KPIs at F9 + F10 (close architectural blindness) + expand provenance to Sheet 15b Edge_Provenance (30 rows) + Sheet 15c Vertex_Provenance (20 rows) per original plan §7.A + validate remaining 47 anticipatory Bi-Directional signatures."),
         ("CEN'S COHERENCE STORY:", "An NGO whose values exceed its capacity to externalize them yet — bedrock intact, projection collapsed, founder-load uneven, regenerative ethic strong but unmeasured at O1. The math reveals it; the prescription is paired-raise (F3+F8) + Mission externalization (Axis 5) + founder-load distribution (F8). The methodology + the partnership grow together."),
         ("v1.0 HONEST SCOPE DISCLOSURES:", "(a) Sheet 09 Bi-Directional Influence Signatures: 3 partnership-validated HIGH-confidence + 47 anticipatory placeholders (equal-weight researcher drafts) flagged transparently per Wave 3 partnership-decision; (b) Plan §7.A originally specified 3 provenance sheets (15a Face + 15b Edge + 15c Vertex = 62 rows total); v1.0 ships ONE consolidated Sheet 15 Face_Provenance (12 rows) + this Section D F8 trail as the canonical worked-example template; edge + vertex provenance lives as columns within Sheets 07 + 08; full 30/20-row dedicated templates deferred to v1.1; (c) Plan §7.J Companion Narrative md retired by Lock #8.8 (W0 partnership-decision: Coherence Portrait already serves the narrative; SSOT stays math-pristine). These are honest-as-disclosed boundaries, not hidden corners."),
+        ("v1.0 HARDENING — Lock #8.39 NAMING SSOT:", "Naming-convention canonicalization landed as in-place v1.0 hardening commit (2026-05-25 evening, partnership-confirmed via aggressive AskUserQuestion). 7 divergences closed: (A) Sheet 0a POC col F2 'Conceptual' → 'Intellectual' (engine-canonical); (B+C+D) Sheet 0a NAMING_TRANSLATION restructured into 6+6 visual grouping per Appendix E §E.3.1 line 71: IIRC universal capitals (F1+F2+F3+F4+F6+F9) above + CEN-authentic polarities (F5+F7+F8+F10+F11+F12) below, with adaptation footnotes at F4 (Manufactured→Structural), F6 (Social-and-Relationship→Community alias), F9 (Natural Capital anchor); (E) Sheet 16 'IIRF anchor' column renamed → 'Face Base Name (Quannex canonical)' + new 'IIRC Anchor' column populated only for 6 IIRC-anchor faces; (F) Sheet 16 F3+F6 customName drift auto-fixed by reading from mapping-context.json; (G) two-layer CEN naming made explicit — Sheet 0a 'CEN-Authentic Cluster Name (Appendix E §E.3.1)' = timeless + Sheet 16 'CEN Current-State Reading (mapping-context.json Phase 2 diagnostic)' = current-state; cross-references both sheets. Deeper architectural fix: mapping-context.json extended with appendixEClusterName + iircAnchor + architectureLayer fields per face (ALL 5 companies; CEN populated from Appendix E source-of-truth; others null/pending). Lock #8.39 elevated to Disclosure §6.8 as 8th methodological pillar."),
     ]
     for offset, (label, content) in enumerate(is_isnt_rows, start=1):
         row = sec_e_row + offset
