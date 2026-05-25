@@ -1089,9 +1089,47 @@ def build_sheet_01_assumptions(wb: Workbook):
         add_defined_name(wb, nr_key, f"'01_Assumptions_Constants'!$C${row}")
 
     # ─────────────────────────────────────────────────────────
-    # Footer (row 34+): authority + cross-references
+    # Section E (rows 33-38): Heuristic + Methodological Thresholds
+    # Added 2026-05-25 Sub-Arc 3 W4.1 validator hardening (eliminates Lock
+    # #8.10 orphan-literal violations in Sheets 10 + 13)
     # ─────────────────────────────────────────────────────────
-    apply_brand_header(ws, 33, 1, 6,
+    apply_brand_header(ws, 32, 1, 6, "Section E — Heuristic + Methodological Thresholds (Sheets 10 + 13)",
+                       bg=QUANTUM_PURPLE, size=11)
+
+    section_e = [
+        (33, "aag_critical", "AAG critical-band threshold (Sheet 13)",
+         "=1.5", "AAG > 1.5 → 'Values without operational ground' band per audit trail §12",
+         "audit trail §12 + Disclosure §2-5", "aag_critical"),
+        (34, "aag_aspiring", "AAG aspiring-band threshold (Sheet 13)",
+         "=1.2", "AAG > 1.2 → 'Aspiring beyond capacity (Hidden Oracle)' band per audit trail §12",
+         "audit trail §12 + Disclosure §6 Calibration Loop", "aag_aspiring"),
+        (35, "aag_balanced_lower", "AAG balanced-band lower threshold (Sheet 13)",
+         "=0.8", "AAG ≥ 0.8 → 'Balanced' band per audit trail §12; below = 'Under-claim'",
+         "audit trail §12 + Wk8 canonical", "aag_balanced_lower"),
+        (36, "axis_symmetric", "Breath-axis symmetric threshold (Sheet 10)",
+         "=0.05", "|ΔE| < 0.05 → axis classified 'Symmetric' (≤5% face-energy spread)",
+         "Sheet 10 polarity heuristic; W4.1 hardening", "axis_symmetric"),
+        (37, "axis_mild_asymmetry", "Breath-axis mild-asymmetry threshold (Sheet 10)",
+         "=0.15", "0.05 ≤ |ΔE| < 0.15 → 'Mild asymmetry'; ≥0.15 → 'Strong asymmetry'",
+         "Sheet 10 polarity heuristic; W4.1 hardening", "axis_mild_asymmetry"),
+    ]
+
+    for (row, sym, name, formula, deriv, source, nr_key) in section_e:
+        ws.cell(row=row, column=1, value=sym).font = Font(name="Calibri", size=11, bold=True)
+        ws.cell(row=row, column=2, value=name)
+        apply_formula_cell(ws, row, 3, formula)
+        d = ws.cell(row=row, column=4, value=formula)
+        d.font = Font(name="Consolas", size=10, color="606060")
+        e = ws.cell(row=row, column=5, value=deriv)
+        e.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        f = ws.cell(row=row, column=6, value=source)
+        f.font = Font(name="Consolas", size=9, color="808080")
+        add_defined_name(wb, nr_key, f"'01_Assumptions_Constants'!$C${row}")
+
+    # ─────────────────────────────────────────────────────────
+    # Footer (row 40+): authority + cross-references
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 40, 1, 6,
                        "Authority + Cross-References", bg=DARK_NAVY, size=11)
     notes = [
         "Authority: js/core/TuningConfig.js balancedMode() — POC engine SSOT",
@@ -1105,9 +1143,9 @@ def build_sheet_01_assumptions(wb: Workbook):
         "Downstream sheets reference these via Excel name (e.g., =alpha*0.5 + (1-alpha)*0.3)",
     ]
     for offset, note in enumerate(notes, start=1):
-        c = ws.cell(row=33 + offset, column=1, value=note)
+        c = ws.cell(row=40 + offset, column=1, value=note)
         c.font = Font(name="Calibri", size=10, italic=True, color="404040")
-        ws.merge_cells(start_row=33 + offset, start_column=1, end_row=33 + offset, end_column=6)
+        ws.merge_cells(start_row=40 + offset, start_column=1, end_row=40 + offset, end_column=6)
 
     # Column widths
     ws.column_dimensions["A"].width = 14
@@ -3339,7 +3377,7 @@ def build_sheet_10_breath_axes(wb: Workbook):
 
         # Col G: Symmetry verdict (formula uses |ΔE| threshold)
         apply_formula_cell(ws, row, 7,
-                           f'=IF(F{row}<0.05,"Symmetric",IF(F{row}<0.15,"Mild asymmetry","Strong asymmetry"))')
+                           f'=IF(F{row}<axis_symmetric,"Symmetric",IF(F{row}<axis_mild_asymmetry,"Mild asymmetry","Strong asymmetry"))')
         ws.cell(row=row, column=7).font = Font(name="Calibri", size=9, italic=True)
         ws.cell(row=row, column=7).alignment = Alignment(horizontal="center")
 
@@ -3643,13 +3681,19 @@ def build_sheet_11_octave_detection(wb: Workbook):
     # Nested-IF formula for octave lookup
     lookup_row = section_b_row + 2
     ws.cell(row=lookup_row, column=1, value="Path 1 result:").font = Font(name="Calibri", size=10, bold=True)
+    # Lock #8.10 + Trust-the-Geometry: octave thresholds are φ-derived per
+    # phi-harmonics.js OCTAVE_THRESHOLDS. Use Sheet 01 named ranges +
+    # arithmetic on phi (for ψ_N = 1 − φ⁻ᴺ where no direct named range exists).
+    # Refactored 2026-05-25 Sub-Arc 3 W4.1 validator hardening (eliminates
+    # orphan-literal violation per Lock #8.10 cascading-formula discipline).
+    b_ref = 'B' + str(section_b_row+1)
     nested_if = (
-        '=IF(B' + str(section_b_row+1) + '<0.382,"O1 Survival",'
-        'IF(B' + str(section_b_row+1) + '<0.5,"O2 Structure",'
-        'IF(B' + str(section_b_row+1) + '<0.618,"O3 Relationships",'
-        'IF(B' + str(section_b_row+1) + '<0.764,"O4 Creativity",'
-        'IF(B' + str(section_b_row+1) + '<0.854,"O5 Expression",'
-        'IF(B' + str(section_b_row+1) + '<0.910,"O6 Vision",'
+        '=IF(' + b_ref + '<phi_inv_2,"O1 Survival",'
+        'IF(' + b_ref + '<phi_midpoint,"O2 Structure",'
+        'IF(' + b_ref + '<phi_inv_1,"O3 Relationships",'
+        'IF(' + b_ref + '<(1-phi_inv_3),"O4 Creativity",'
+        'IF(' + b_ref + '<(1-phi_inv_4),"O5 Expression",'
+        'IF(' + b_ref + '<(1-1/phi^5),"O6 Vision",'
         '"O7 Radiance"))))))'
     )
     apply_formula_cell(ws, lookup_row, 2, nested_if)
@@ -3707,7 +3751,7 @@ def build_sheet_11_octave_detection(wb: Workbook):
     apply_formula_cell(ws, calc_row + 1, 2, f"=GEOMEAN({octaves_range})")
     ws.cell(row=calc_row + 1, column=2).number_format = "0.0000"
     ws.cell(row=calc_row + 1, column=2).alignment = Alignment(horizontal="center")
-    ws.cell(row=calc_row + 1, column=3, value="= (Π octave_i)^(1/12)").font = Font(
+    ws.cell(row=calc_row + 1, column=3, value="formula: GEOMEAN = (Π octave_i)^(1/12)").font = Font(
         name="Consolas", size=9, color="606060")
 
     # Std (spread)
@@ -3723,7 +3767,7 @@ def build_sheet_11_octave_detection(wb: Workbook):
     apply_formula_cell(ws, calc_row + 3, 2, f"=B{calc_row+2}*phi_inv_3")
     ws.cell(row=calc_row + 3, column=2).number_format = "0.0000"
     ws.cell(row=calc_row + 3, column=2).alignment = Alignment(horizontal="center")
-    ws.cell(row=calc_row + 3, column=3, value="= std × φ⁻³ ≈ 0.236 (per audit trail Appendix C)").font = Font(
+    ws.cell(row=calc_row + 3, column=3, value="formula: penalty = std × φ⁻³ ≈ 0.236 (per audit trail Appendix C)").font = Font(
         name="Consolas", size=9, color="606060")
 
     # Path 2 result = round(geomean - penalty)
@@ -4195,24 +4239,26 @@ def build_sheet_13_diagnostics(wb: Workbook):
             start_color="E0F4F4", end_color="E0F4F4", fill_type="solid")
 
         # Col E: Band classification per audit trail §12 thresholds
+        # (Lock #8.10 hardening: thresholds via Sheet 01 named ranges, not literals)
         apply_formula_cell(
             ws, row, 5,
             f'=IF(D{row}="","N/A",'
-            f'IF(D{row}>1.5,"Critical",'
-            f'IF(D{row}>1.2,"Aspiring",'
-            f'IF(D{row}>=0.8,"Balanced","Under-claim"))))'
+            f'IF(D{row}>aag_critical,"Critical",'
+            f'IF(D{row}>aag_aspiring,"Aspiring",'
+            f'IF(D{row}>=aag_balanced_lower,"Balanced","Under-claim"))))'
         )
         ws.cell(row=row, column=5).alignment = Alignment(horizontal="center")
         ws.cell(row=row, column=5).font = Font(
             name="Calibri", size=10, italic=True, color="606060")
 
         # Col F: Interpretation text per band
+        # (Lock #8.10 hardening: thresholds via Sheet 01 named ranges, not literals)
         apply_formula_cell(
             ws, row, 6,
             f'=IF(D{row}="","(no face energy at this octave)",'
-            f'IF(D{row}>1.5,"Values without operational ground",'
-            f'IF(D{row}>1.2,"Aspiring beyond capacity (Hidden Oracle pattern)",'
-            f'IF(D{row}>=0.8,"Aspiration met by capacity","Actuality outpacing aspiration (under-claiming, latent capacity)"))))'
+            f'IF(D{row}>aag_critical,"Values without operational ground",'
+            f'IF(D{row}>aag_aspiring,"Aspiring beyond capacity (Hidden Oracle pattern)",'
+            f'IF(D{row}>=aag_balanced_lower,"Aspiration met by capacity","Actuality outpacing aspiration (under-claiming, latent capacity)"))))'
         )
         ws.cell(row=row, column=6).font = Font(
             name="Calibri", size=9, italic=True, color="606060")
@@ -4654,7 +4700,7 @@ def build_sheet_14_spectral(wb: Workbook):
     ws.cell(row=34, column=2).font = Font(name="Calibri", size=11, bold=True, color="0D7377")
     ws.cell(row=34, column=2).fill = PatternFill(
         start_color="E0F4F4", end_color="E0F4F4", fill_type="solid")
-    ws.cell(row=34, column=3, value="= mean(E_F1, E_F9) / mean(E_F3, E_F8)  [reception/projection pole ratio]"
+    ws.cell(row=34, column=3, value="formula: BAB = mean(E_F1, E_F9) / mean(E_F3, E_F8) — reception/projection pole ratio"
             ).font = Font(name="Calibri", size=9, italic=True, color="606060")
 
     # Dissonance Index: weighted by |Δ_f| · E_f / sum|Δ_f|
