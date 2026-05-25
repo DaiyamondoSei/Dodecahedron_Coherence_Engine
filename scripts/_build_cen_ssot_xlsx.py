@@ -3496,10 +3496,14 @@ def build_sheet_09_bidirectional(wb: Workbook):
         is_high = (conf == "HIGH")
         for side_idx, (row, face_id, sig) in enumerate([(row_a, face_a, sig_a), (row_b, face_b, sig_b)]):
             # Col A-C: # + Edge ID + Pair (only on first row)
+            # Edge ID shows BOTH ordinal AND face-pair naming for reviewer clarity
+            # (per Sheet 0a Glossary dual-naming convention; matches Sheet 14 + Lock #8.11 face-pair usage)
             if side_idx == 0:
                 ws.cell(row=row, column=1, value=e_num).alignment = Alignment(horizontal="center")
-                ws.cell(row=row, column=2, value=f"E{e_num}").font = Font(name="Consolas", size=10, bold=True)
-                ws.cell(row=row, column=3, value=f"F{face_a}-F{face_b}").font = Font(
+                ws.cell(row=row, column=2, value=f"E{e_num} (E{face_a}-{face_b})").font = Font(
+                    name="Consolas", size=10, bold=True)
+                ws.cell(row=row, column=2).alignment = Alignment(horizontal="center")
+                ws.cell(row=row, column=3, value=f"F{face_a}↔F{face_b}").font = Font(
                     name="Calibri", size=10, italic=True, color="606060")
                 ws.cell(row=row, column=3).alignment = Alignment(horizontal="center")
             # Col D: Side label
@@ -3769,7 +3773,7 @@ def build_sheet_09_bidirectional(wb: Workbook):
 
     # Column widths
     ws.column_dimensions["A"].width = 4
-    ws.column_dimensions["B"].width = 7
+    ws.column_dimensions["B"].width = 14       # Edge/Vertex ID + face-pair (e.g., "E8 (E2-10)")
     ws.column_dimensions["C"].width = 13
     ws.column_dimensions["D"].width = 6
     for col in ["E", "F", "G", "H", "I", "J"]:
@@ -3780,7 +3784,7 @@ def build_sheet_09_bidirectional(wb: Workbook):
     ws.column_dimensions["N"].width = 38       # §6.7 Status (NEW)
     ws.column_dimensions["O"].width = 50       # Notes / Rationale (NEW; was N)
 
-    ws.freeze_panes = "B21"  # Lock identity col after Block A notes (was B15 pre-block-A expansion)
+    ws.freeze_panes = "C21"  # Lock # + Edge ID for horizontal scroll (was B; widened ID col)
 
     return ws
 
