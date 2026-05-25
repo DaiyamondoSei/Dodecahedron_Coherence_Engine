@@ -116,8 +116,12 @@ AVG_BAND_DISTORTION = PHI ** -4    # φ⁻⁴ ≈ 0.1459 (aggregation distortion
 DEFAULT_OUTPUT = Path(
     r"C:/Users/murau/OneDrive/Stalinis kompiuteris/Final Thesis/"
     r"Thesis Work/Quannex Business Exports/"
-    r"CEN_Spiral_Dashboard_SSOT_v1.0_2026-05-22.xlsx"
+    r"CEN_Spiral_Dashboard_SSOT_v1.0.xlsx"
 )
+# Filename undated 2026-05-25 (W4.7 Option A): v1.0 FINAL is a shipped artifact,
+# not a dated draft. Date belongs in Cover_Provenance sheet + commit log + version
+# history, NOT in the filename. Prior dated build outputs archived to _archive/.
+# Future v1.1 gets its own filename suffix; no v1.0_YYYY-MM-DD churn.
 STAGING_SUFFIX = "_staging.xlsx"   # NOT `.tmp` — openpyxl rejects .tmp on load_workbook
 
 POC_ROOT = Path(r"C:/Users/murau/OneDrive/Stalinis kompiuteris/POC")
