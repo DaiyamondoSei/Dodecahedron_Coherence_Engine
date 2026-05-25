@@ -51,8 +51,12 @@ from openpyxl import load_workbook
 DEFAULT_SSOT_PATH = Path(
     r"C:/Users/murau/OneDrive/Stalinis kompiuteris/Final Thesis/"
     r"Thesis Work/Quannex Business Exports/"
-    r"CEN_Spiral_Dashboard_SSOT_v1.0_2026-05-22.xlsx"
+    r"CEN_Spiral_Dashboard_SSOT_v1.0.xlsx"
 )
+# Filename undated post-W4.7 Option A (2026-05-25); kept in sync with
+# _build_cen_ssot_xlsx.py:DEFAULT_OUTPUT. Both must stay aligned or validator
+# fails on file-not-found. Old dated path archived under Quannex Business
+# Exports/_archive/ per Never Delete Rule.
 
 # Excel error strings that surface as cell values when formulas break
 EXCEL_ERRORS = {"#REF!", "#NAME?", "#DIV/0!", "#VALUE!", "#NULL!", "#NUM!", "#N/A"}

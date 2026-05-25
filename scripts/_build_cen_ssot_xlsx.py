@@ -6293,8 +6293,10 @@ def build_sheet_19_test_coverage(wb: Workbook):
     Maps each major SSOT sheet to the POC test suite that validates its computation.
     Reviewer can audit: 'this sheet's named ranges are verified by THIS test file'.
 
-    Current baseline (Sub-Arc 1 close 2026-05-24): 536/536 unit tests passing.
-    (Browser Smoke Test skipped — no headless browser in CI per Lock #8.34 iframe fix.)
+    Current baseline (W4.7 ship-close 2026-05-25): 613/613 tests passing (full suite
+    incl. Browser Smoke against running HTTP server; 536/536 unit-only without server).
+    Sub-Arc 1 close baseline was 536/536 unit-only (2026-05-24); W1 hygiene-batch added
+    127 PHI Math tests (commit 4091870); Browser Smoke test re-enabled W4.1.
 
     Two sections:
       Section A — 10 test suite breakdown (suite × test file × count × sheets-validated × coverage type)
@@ -6311,7 +6313,7 @@ def build_sheet_19_test_coverage(wb: Workbook):
                        "Sheet 19 — Test Coverage Matrix (POC tests/ ↔ SSOT sheets validation map)",
                        bg=DEEP_TEAL, size=14)
     apply_brand_header(ws, 2, 1, 7,
-                       "Baseline at Sub-Arc 1 close: 536/536 unit tests passing · Sheets 01-20 audit-trailable",
+                       "W4.7 ship-close (2026-05-25): 613/613 tests passing (full suite incl. Browser Smoke; 536 unit-only) · Sheets 01-21 audit-trailable · Sub-Arc 1 baseline was 536/536 + 22 sheets",
                        bg=QUANTUM_PURPLE, size=10)
 
     # ─────────────────────────────────────────────────────────
@@ -6474,8 +6476,8 @@ def build_sheet_19_test_coverage(wb: Workbook):
         "  3. Cross-verify: openpyxl read-back of xlsx values matches engine output within 1e-6 tolerance",
         "  4. 55 Engine State Canonicality gates ensure observable engine state matches canonical expectations",
         "                                       ",
-        "Sub-Arc 1 close baseline (2026-05-24): 536/536 unit tests passing, 22/22 sheets build, 0 syntax errors,",
-        "  0 stale framings post-Lock #8.36 residual audit. Browser Smoke deferred (no headless browser; Lock #8.34).",
+        "W4.7 ship-close (2026-05-25): 613/613 tests passing (full suite incl. Browser Smoke), 23/23 sheets build (incl. Sheet 21 marquee), 0 validator issues,",
+        "  0 stale framings post-Lock #8.36 residual audit. Sub-Arc 1 close baseline was 536/536 unit-only + 22/22 sheets (2026-05-24); W1 hygiene-batch added 127 PHI Math tests + Browser Smoke re-enabled W4.1.",
         "                                       ",
         "Cross-references:",
         "  • tests/run-all.js — orchestrator + per-suite test counts (canonical source)",
@@ -6541,8 +6543,8 @@ CROSS_WORKSPACE_REFS = [
      "Doc", "Append-only live handoff log across all SSOT build sessions",
      "Reproducibility record — every session's deltas + decisions",
      "All sheets"),
-    ("Final Thesis", "Thesis Work/Quannex Business Exports/CEN_Spiral_Dashboard_SSOT_v1.0_2026-05-22.xlsx",
-     "Sheet", "THIS WORKBOOK — primary deliverable location",
+    ("Final Thesis", "Thesis Work/Quannex Business Exports/CEN_Spiral_Dashboard_SSOT_v1.0.xlsx",
+     "Sheet", "THIS WORKBOOK — primary deliverable location (undated canonical post-W4.7 Option A 2026-05-25)",
      "Canonical SSOT for CEN; thesis defense + CEN board reference",
      "Self-reference"),
     ("Final Thesis", "Thesis_Control_Panel.xlsx CEN Deliverables sheet row 16",
@@ -6623,9 +6625,9 @@ CROSS_WORKSPACE_REFS = [
      "Doc", "Layout design specs, signature catalogs, kappa-band analysis, Mode 5 deep interpretation",
      "Per-sheet architectural-design provenance; reviewers can audit how each sheet was designed",
      "Sheets 09, 14, 16 explicitly cross-reference these"),
-    ("POC", "tests/run-all.js (536 unit tests)",
-     "Code", "Full test suite — Integration, AAG, AvG, Spectral, Edge, Vertex, Engine State Canonicality",
-     "Regression baseline — 536/536 passing throughout 2-day arc",
+    ("POC", "tests/run-all.js (613 tests full suite incl. Browser Smoke; 536 unit-only)",
+     "Code", "Full test suite — Integration, AAG, AvG, Spectral, Edge, Vertex, Engine State Canonicality, PHI Math, Browser Smoke",
+     "W4.7 ship-close baseline — 613/613 full suite (536 unit-only baseline maintained throughout 5-day arc; +77 added Sub-Arc 1 hygiene + W4.1)",
      "Sheet 19 Test Coverage Matrix"),
     ("POC", "tests/engine-state-canonicality.test.mjs (55 verification gates)",
      "Code", "Hygiene-principle operationalization — observable-state assertions",
@@ -6813,7 +6815,7 @@ def build_sheet_21_coherence_story(wb: Workbook):
                        "Section A — The Story (integrated reading)",
                        bg=QUANTUM_PURPLE, size=11)
     story_paragraphs = [
-        "CEN — Conscious Enterprise Network — is an NGO whose mathematics tells one coherence story across all 22 sheets of this SSOT.",
+        "CEN — Conscious Enterprise Network — is an NGO whose mathematics tells one coherence story across all 23 sheets of this SSOT (incl. this Sheet 21 Coherence Story marquee).",
         "                                       ",
         "1. The DUALITY at the heart: CEN's Foundational Values (F10 Sacred Ground) is the bedrock — D=10, E=9 per Phase 2 frozen scores; the highest face energy in the dataset; profound alignment between both founders. Yet CEN's Mission externalization (F5 Mission in Silence) is severely depleted — D=3, E=1. The same organization that knows its values exceptionally well does not project that mission outward. This is the FIRST coherence finding.",
         "                                       ",
@@ -7018,8 +7020,9 @@ def build_sheet_21_coherence_story(wb: Workbook):
     is_isnt_rows = [
         ("CEN IS:", "✓ Profound values alignment (F10 D=10 E=9 EXCEPTIONAL bedrock) · ✓ Genuine intellectual depth (F2 D=8 E=7 STRONG agreement) · ✓ Strongest regenerative-ethic finding in dataset (F9 researcher=8) · ✓ Founder-borne commitment (Dominique's operational capacity)"),
         ("CEN ISN'T:", "✗ Financially robust (F1 Financial Fragility D=6 E=1; ~0% revenue coverage) · ✗ Structurally complete operations (F8 founder-load risk; F4 governance gap) · ✗ Externally visible mission (F5 D=3 E=1 SEVERELY DEPLETED) · ✗ Funding-pipeline-systematized (F11 D=6 E=4 below NGO sustainability threshold)"),
-        ("CEN BECOMING:", "→ Calibration Loop closed Phase 2 → Wk6-Wk8: prescribed actions REDUCED systemic tension. → Methodology validated for CEN at canonical κ=φ² baseline. → v1.0 SSOT ships as canonical math + narrative mirror. → v1.1 path identified: add edge-KPI at E1-8 (Mode 5 carrier, ordinal E4) + O1 KPIs at F9 + F10 (close architectural blindness)."),
+        ("CEN BECOMING:", "→ Calibration Loop closed Phase 2 → Wk6-Wk8: prescribed actions REDUCED systemic tension. → Methodology validated for CEN at canonical κ=φ² baseline. → v1.0 SSOT ships as canonical math + narrative mirror. → v1.1 path identified: add edge-KPI at E1-8 (Mode 5 carrier, ordinal E4) + O1 KPIs at F9 + F10 (close architectural blindness) + expand provenance to Sheet 15b Edge_Provenance (30 rows) + Sheet 15c Vertex_Provenance (20 rows) per original plan §7.A + validate remaining 47 anticipatory Bi-Directional signatures."),
         ("CEN'S COHERENCE STORY:", "An NGO whose values exceed its capacity to externalize them yet — bedrock intact, projection collapsed, founder-load uneven, regenerative ethic strong but unmeasured at O1. The math reveals it; the prescription is paired-raise (F3+F8) + Mission externalization (Axis 5) + founder-load distribution (F8). The methodology + the partnership grow together."),
+        ("v1.0 HONEST SCOPE DISCLOSURES:", "(a) Sheet 09 Bi-Directional Influence Signatures: 3 partnership-validated HIGH-confidence + 47 anticipatory placeholders (equal-weight researcher drafts) flagged transparently per Wave 3 partnership-decision; (b) Plan §7.A originally specified 3 provenance sheets (15a Face + 15b Edge + 15c Vertex = 62 rows total); v1.0 ships ONE consolidated Sheet 15 Face_Provenance (12 rows) + this Section D F8 trail as the canonical worked-example template; edge + vertex provenance lives as columns within Sheets 07 + 08; full 30/20-row dedicated templates deferred to v1.1; (c) Plan §7.J Companion Narrative md retired by Lock #8.8 (W0 partnership-decision: Coherence Portrait already serves the narrative; SSOT stays math-pristine). These are honest-as-disclosed boundaries, not hidden corners."),
     ]
     for offset, (label, content) in enumerate(is_isnt_rows, start=1):
         row = sec_e_row + offset
