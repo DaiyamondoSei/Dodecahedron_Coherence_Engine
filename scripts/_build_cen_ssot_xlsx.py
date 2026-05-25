@@ -527,8 +527,8 @@ GLOSSARY_ENTRIES = [
      "One of 2 CEN founder coherence-self-assessment scores (other = D for Dominique). Per Lock #8.3 vector purity; NOT engine math input.",
      "CEN-Specific", "Sheet 02 / 10", "M",
      "—", "—", "CEN_Phase2_Evidence_Package"),
-    ("E1-E30", "30 canonical dodecahedral edges",
-     "Face-adjacency pairs per main.js:826-849. Each edge = 2 faces sharing a pentagon edge. 12 faces × 5 neighbors / 2 = 30 unique. CEN has 3 edge-KPIs post-Lock #8.36.",
+    ("E1-E30", "30 canonical dodecahedral edges (ordinal naming)",
+     "Face-adjacency pairs per main.js:826-849. Each edge = 2 faces sharing a pentagon edge. 12 faces × 5 neighbors / 2 = 30 unique. CEN has 3 edge-KPIs post-Lock #8.36. DUAL-NAMING CONVENTION: each edge has two equivalent names — (a) ordinal E1..E30 by canonical list position (e.g., E4 = main.js[3]) and (b) face-pair E<a>-<b> where a<b are the two adjacent face numbers (e.g., E1-8 = F1+F8 = ordinal E4). Both names refer to the same geometric edge. Sheets 07 + 16 historically used ordinal-first; Sheet 14 + Lock #8.11 KPI promotions use face-pair canonical. Both are preserved; reviewers may see either form.",
      "Geometry", "Sheet 07", "L",
      "§7", "main.js:826-849", "EDGE_DYNAMICS_REFERENCE"),
     ("ε (epsilon)", "Numerical zero threshold",
@@ -839,7 +839,13 @@ def build_sheet_0a_naming_translation(wb: Workbook):
         # Column B: Full Term
         ws.cell(row=row, column=2, value=full_term).font = Font(name="Calibri", size=10)
         # Column C: Brief Definition (wrap)
-        def_cell = ws.cell(row=row, column=3, value=definition)
+        # H1 fix (Sub-Arc 3 W4.6, 2026-05-25): if definition starts with '=',
+        # prefix with space so openpyxl treats as TEXT not FORMULA — Excel
+        # auto-stripped these as broken formulas (the original Excel-repair
+        # finding that produced the W4.6 hygiene investigation). All Glossary
+        # definitions are prose pseudocode, never executable formulas.
+        safe_definition = (" " + definition) if isinstance(definition, str) and definition.startswith("=") else definition
+        def_cell = ws.cell(row=row, column=3, value=safe_definition)
         def_cell.font = Font(name="Calibri", size=9)
         def_cell.alignment = Alignment(wrap_text=True, vertical="top")
         # Column D: Category (color-coded background)
@@ -2623,8 +2629,8 @@ def build_sheet_07_edges(wb: Workbook):
         "All four are valid analytical views per audit trail §5 + §14.",
         "                                       ",
         "MODE 5 CARRIER EDGES (Sheet 14 thesis-defense spotlight; highlighted rows):",
-        "  E4  = F1-F8 (Operations-Finance Flow):    F1=−0.521, F8=+0.470 in U[:,5]",
-        "  E12 = F3-F9 (Human-Regenerative Coherence): F3=+0.470, F9=−0.521 in U[:,5]",
+        "  E1-8  (edge #4 in canonical 30-edge list, F1-F8 Operations-Finance Flow):    F1=−0.521, F8=+0.470 in U[:,5]",
+        "  E3-9  (edge #12 in canonical 30-edge list, F3-F9 Human-Regenerative Coherence): F3=+0.470, F9=−0.521 in U[:,5]",
         "  Only edges with double-ended opposite-sign Mode 5 weight = highest-leverage",
         "  intervention points per yesterday's Mode 5 deep interpretation finding.",
         "                                       ",
@@ -3756,10 +3762,14 @@ def build_sheet_11_octave_detection(wb: Workbook):
 
     # Std (spread)
     ws.cell(row=calc_row + 2, column=1, value="std (spread)").font = Font(name="Calibri", size=10, italic=True, color="606060")
-    apply_formula_cell(ws, calc_row + 2, 2, f"=STDEV.P({octaves_range})")
+    # Lock #8.10 + openpyxl-gotcha: use legacy STDEVP (not STDEV.P) — openpyxl
+    # auto-wraps STDEV.P with `_xludf.` prefix which Excel rejects as #NAME?
+    # (caught by H1 Sub-Arc 3 W4.6 hardening 2026-05-25; this is the SAME
+    # gotcha as Sheet 12 STDEV.P→STDEVP fix in Sub-Arc 1 — recurrence prevention)
+    apply_formula_cell(ws, calc_row + 2, 2, f"=STDEVP({octaves_range})")
     ws.cell(row=calc_row + 2, column=2).number_format = "0.0000"
     ws.cell(row=calc_row + 2, column=2).alignment = Alignment(horizontal="center")
-    ws.cell(row=calc_row + 2, column=3, value="= population std-dev (lower = more aligned)").font = Font(
+    ws.cell(row=calc_row + 2, column=3, value="formula: population std-dev (lower = more aligned)").font = Font(
         name="Consolas", size=9, color="606060")
 
     # Spread penalty (= std × φ⁻³ per audit trail approx)
@@ -4711,7 +4721,7 @@ def build_sheet_14_spectral(wb: Workbook):
     ws.cell(row=35, column=2).number_format = "0.0000"
     ws.cell(row=35, column=2).font = Font(name="Calibri", size=11, bold=True, color="0D7377")
     ws.cell(row=35, column=3,
-            value="= a_5 (Mode 5 signed amplitude; sign reveals direction of dissonance)"
+            value="value: a_5 (Mode 5 signed amplitude; sign reveals direction of dissonance)"
            ).font = Font(name="Calibri", size=9, italic=True, color="606060")
 
     add_defined_name(wb, "cen_bab_score", f"'14_Spectral_Analysis'!$B$34")
@@ -4725,7 +4735,7 @@ def build_sheet_14_spectral(wb: Workbook):
                        bg=DARK_NAVY, size=12)
 
     spotlight_rows = [
-        ("Mode 5 eigenvalue λ_5 =", "=F5", "= 6 (mid band; regional cluster modes)"),
+        ("Mode 5 eigenvalue λ_5 =", "=F5", "value: 6 (mid band; regional cluster modes)"),
         ("Mode 5 amplitude a_5 =", "=cen_a_5",
          "(κ=φ² canonical baseline; was −0.07401 at κ=4 era; survived κ shift per Q3 ANSWERED)"),
         ("Mode 5 |a_5| =", "=ABS(cen_a_5)",
@@ -4938,7 +4948,8 @@ def build_sheet_14_spectral(wb: Workbook):
     # σ (std-dev) — computed from face energies
     sheet04_face_range = "'04_Face_Calculations'!T4:T15"
     ws.cell(row=band_label_row + 2, column=1, value="σ (std-dev E_f)").font = Font(name="Calibri", size=10, bold=True)
-    apply_formula_cell(ws, band_label_row + 2, 2, f"=STDEV.P({sheet04_face_range})")
+    # Lock #8.10 + openpyxl-gotcha: legacy STDEVP (not STDEV.P) — see Sheet 11 fix note
+    apply_formula_cell(ws, band_label_row + 2, 2, f"=STDEVP({sheet04_face_range})")
     ws.cell(row=band_label_row + 2, column=2).number_format = "0.0000"
     ws.cell(row=band_label_row + 2, column=3, value="Spread (lower = more aligned)").font = Font(
         name="Calibri", size=9, italic=True, color="606060")
@@ -5502,7 +5513,7 @@ def build_sheet_16_dashboard(wb: Workbook):
         ("Highest-leverage action", "", "",
          "RAISE F3 + F8 PAIRED (spectrally coupled at +0.470)"),
         ("Carrier edges (Mode 5)", "", "",
-         "E4 F1-F8 (Ops-Finance; Tension=0.1198 LARGEST) + E12 F3-F9 (Human-Regen; latent)"),
+         "E1-8 (edge #4 in canonical 30-edge list, Ops-Finance; Tension=0.1198 LARGEST) + E3-9 (edge #12, Human-Regen; latent)"),
     ]
     for i, (label, formula, fmt, narrative) in enumerate(mode5_rows):
         row = 29 + i
@@ -5655,7 +5666,7 @@ def build_sheet_17_audit_crosslinks(wb: Workbook):
          "Section 1-5 (K_bar, star pairs, intersection nodes, P, C, E_f)",
          "js/main.js (recalculate, Pass 1-5) + js/core/Face.js",
          "tests/integration.test.mjs (55 tests, real CSV→engine)",
-         "Lock #8.32 + #8.34 (kappa=phi^2; provisional pending kappa-band resolution)"),
+         "Lock #8.32 + #8.34 + Lock #8.35 (κ=φ² geometrically derived from dodecahedral Laplacian spectrum polarity ratio (5+√5)/(5−√5); RESOLVED 2026-05-24, no longer provisional)"),
         ("STAR PAIRS (alpha=phi-1)", "Sheet 05 (Sheet 04 cols H-L embedded)",
          "Section 2 (pentagram skip-pair formula)",
          "js/main.js (Pass 2 axisInformedEnergy) + Face.starPairs",
@@ -5961,7 +5972,7 @@ ADVERSARIAL_FINDINGS = [
      "—",
      "Sub-Arc 2 Wave 3",
      "Resolved",
-     "All structural Mode 5 findings hold verbatim across κ shift: paired antipodal seesaw + edge-phenomenon + carrier edges E4+E12"),
+     "All structural Mode 5 findings hold verbatim across κ shift: paired antipodal seesaw + edge-phenomenon + carrier edges E1-8 + E3-9 (ordinals E4+E12)"),
     ("B6", "Academic",
      "Chirality formula degeneracy — show sympy proof for Lock #8.19 rename",
      "Minor",
@@ -6759,6 +6770,316 @@ def build_sheet_20_cross_workspace_refs(wb: Workbook):
     return ws
 
 
+def build_sheet_21_coherence_story(wb: Workbook):
+    """Sheet 21 — Coherence Story (narrative + receipts) — added 2026-05-25 W4.6.
+
+    Per Deimantas's request 2026-05-25: 'a dashboard that would synthesize
+    everything in a one quick overview together with the verbatim extracted
+    for the highest leverage KPIs and their trail to other highest leverage
+    actions. I mean a coherence story told.'
+
+    This is the methodology made into NARRATIVE + RECEIPTS. Five sections:
+      A — The Story (paragraph-form integrated reading of CEN coherence)
+      B — Highest-Leverage KPIs verbatim (from Sheet 02 + CEN Phase 2)
+      C — Highest-Leverage Actions (prescription per Mode 5 + Axis 5 + F8 gap)
+      D — The Trail (F8 deep-dive end-to-end: input → math → spectral → action)
+      E — What CEN IS and ISN'T (honest disclosure; three-layer consistent)
+      F — Authority + Cross-References
+
+    Sheet 21 opens the workbook (wb.active = this sheet) — the STORY first,
+    Dashboard scorecard second (Sheet 16 still navigable). Per partnership-
+    decision 2026-05-25: 'Full ship most definitely feels most alive!'
+
+    Authority: ship-v1.0 plan §14.B Sub-Arc 3 W4.6 expansion · Trust-the-
+    Geometry §6.6 · Mode 5 thesis-defense centerpiece · F8 flagship gap.
+    """
+    ws = wb.create_sheet("21_Coherence_Story")
+
+    apply_brand_header(ws, 1, 1, 8,
+                       "Sheet 21 — CEN Coherence Story (the methodology made visible)",
+                       bg=DARK_NAVY, size=14)
+    apply_brand_header(ws, 2, 1, 8,
+                       "Mathematics turned into narrative + prescription · CEN-facing · v1.0 ship-it 2026-05-25",
+                       bg=DEEP_TEAL, size=10)
+
+    # ─────────────────────────────────────────────────────────
+    # Section A — The Story (paragraph-form integrated reading)
+    # ─────────────────────────────────────────────────────────
+    apply_brand_header(ws, 4, 1, 8,
+                       "Section A — The Story (integrated reading)",
+                       bg=QUANTUM_PURPLE, size=11)
+    story_paragraphs = [
+        "CEN — Conscious Enterprise Network — is an NGO whose mathematics tells one coherence story across all 22 sheets of this SSOT.",
+        "                                       ",
+        "1. The DUALITY at the heart: CEN's Foundational Values (F10 Sacred Ground) is the bedrock — D=10, E=9 per Phase 2 frozen scores; the highest face energy in the dataset; profound alignment between both founders. Yet CEN's Mission externalization (F5 Mission in Silence) is severely depleted — D=3, E=1. The same organization that knows its values exceptionally well does not project that mission outward. This is the FIRST coherence finding.",
+        "                                       ",
+        "2. The AXIS 5 inversion: Axis 5 connects F5 Market ↔ F10 Values (the External-to-Internal breath). Both founders rate it the same way — internal high, external low — so the asymmetry is NOT founder disagreement but organizational reality. The breath axis is HIGHLY ASYMMETRIC: the bedrock is intact; the projection has stopped. This is the THESIS-DEFENSE CENTERPIECE FOR AXIS 5.",
+        "                                       ",
+        "3. The F8 FOUNDER GAP — flagship: F8 Core Operations carries the LARGEST co-founder perception gap in the dataset (|D−E| = 6; D=7, E=1; researcher V_res=2 anchored close to Esther). Dominique sees operational competence (TMI cert delivered, processes documented). Esther sees structural fragility: 'If Dom was not available for a month, CEN would not operate at all.' Both readings are accurate from their respective vantages — the gap IS the finding, not noise to average away. The Spiral methodology's element-level + 4-vector architecture surfaces this divergence as first-order structural information; BSC as designed at CEN cannot.",
+        "                                       ",
+        "4. Mode 5 SPECTRAL STRUCTURE confirms the geometry: the dodecahedron's Mode 5 (regional band, λ=6) is CEN's dominant non-DC spectral mode. Its eigenvector encodes a paired antipodal seesaw: F3 + F8 carry +0.470 (Founder + Operations PROJECTING) while F1 + F9 carry −0.521 (Financial + Regenerative RECEIVING). Same-sign high-magnitude pairs are NON-ADJACENT — Mode 5 is structurally an EDGE phenomenon, not a vertex phenomenon. Carrier edges E1-8 (ordinal E4, F1-F8 Ops-Finance) + E3-9 (ordinal E12, F3-F9 Human-Regenerative) currently lack edge-KPIs in CEN's BSC. The methodology mathematically identifies where future measurement should EXTEND.",
+        "                                       ",
+        "5. THREE-LAYER CONSISTENT zero-vertex-KPIs: CEN has ZERO vertex-KPIs at canonical mapping. Mapping layer (no BSC KPI maps to a 3-face junction post-Lock #8.36) + Geometric layer (Sheet 08 leverage-count = 0 at κ=φ²) + Methodological layer (Lock #8.35 gentle amplifier produces uniform vertex coherence) all agree. CEN's organizational reality lives in face + edge layers, not 3-face vertex junctions. Honest reporting, not a flaw.",
+        "                                       ",
+        "6. TRUST THE GEOMETRY (Disclosure §6.6) — the operational discipline that produced this version: when ambiguity surfaces, the first question is not 'which design choice serves better?' but 'what does the geometry already say?' Lock #8.35 (κ=φ² emerges from Laplacian spectrum) and Lock #8.36 (V13 and E7-11 don't exist as geometric objects) both surfaced when this discipline was honored. The methodology's polarity-amplifier IS the dodecahedron's intrinsic polarity ratio: (5+√5)/(5−√5) = φ². Not arbitrary; the geometry's own voice.",
+        "                                       ",
+        "7. CALIBRATION LOOP CLOSED for CEN: the methodology validated through outcome — Phase 2 mapping → Wk6-Wk8 calibration → prescribed actions REDUCED measurable systemic tension (per Wk8 AAG=0.885 reading vs Wk6 baseline). The Spiral methodology's interpretive layers (5-element decomposition, 12-face taxonomy, semantic overlay, 7-octave hierarchy) are empirically testable at the OUTCOME level. CEN is the first canonical Calibration Loop closure documented in the Quannex case-study base.",
+    ]
+    for offset, para in enumerate(story_paragraphs, start=1):
+        c = ws.cell(row=4 + offset, column=1, value=para)
+        c.font = Font(name="Calibri", size=10, italic=False, color="0A0E1A")
+        c.alignment = Alignment(wrap_text=True, vertical="top")
+        ws.merge_cells(start_row=4 + offset, start_column=1, end_row=4 + offset, end_column=8)
+        ws.row_dimensions[4 + offset].height = 50 if len(para) > 100 else 16
+
+    # ─────────────────────────────────────────────────────────
+    # Section B — Highest-Leverage KPIs (verbatim extract)
+    # ─────────────────────────────────────────────────────────
+    sec_b_row = 4 + len(story_paragraphs) + 2  # ~16
+    apply_brand_header(ws, sec_b_row, 1, 8,
+                       "Section B — Highest-Leverage KPIs (verbatim from Sheet 02 + CEN Phase 2 + Mode 5)",
+                       bg=QUANTUM_PURPLE, size=11)
+    sec_b_headers_row = sec_b_row + 1
+    sec_b_headers = [
+        "Face (Mode 5 hotspot / Axis 5)", "BSC IDs placed at this face (verbatim)",
+        "Face 4-vector (D / E / V_res)", "Mode 5 U coef",
+        "Why HIGHEST-leverage", "Octave coverage", "Source rows (Sheet 02)"
+    ]
+    for col_idx, h in enumerate(sec_b_headers, start=1):
+        c = ws.cell(row=sec_b_headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=9, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    # KPIs PLACED at the highest-leverage faces (Mode 5 hotspots + Axis 5 inversion partners)
+    # NOTE: BSC label letter+number (F1/F3/F8 etc.) is the Kaplan-Norton perspective category, NOT
+    # the face number. ALL F-series KPIs (Financial perspective) are placed at F1 or F11 faces;
+    # L-series at F3 (Human/L&G); I-series at F4/F8/F10/F12; C-series at F5/F6/F7. The TRUE
+    # "highest-leverage KPIs" are those PLACED at Mode 5 hotspot faces (F1/F3/F8/F9) and
+    # Axis 5 inversion faces (F5/F10). Corrected 2026-05-25 W4.6 honest audit per Trust-the-
+    # Geometry §6.6 applied to my own Sheet 21 narrative.
+    # Format: (face, BSC IDs placed here, names, face-level finding, mode5_u, why)
+    highest_leverage = [
+        ("F1 face (Financial Capital)", "BSC.F1, F2, F3, F6, F7, F8 — 6 KPIs placed here (Financial perspective per Kaplan-Norton)",
+         "F1 4-vector: D=6 · E=1 · V_res=2 (|D-E|=5, second-largest gap)",
+         "−0.521 (Mode 5 RECEPTION pole)",
+         "F1 Financial Fragility — paired with F9 in Mode 5 antipodal seesaw. ALL Financial KPIs cluster here; perception gap signals runway-clarity risk.",
+         "Mixed O1+O2", "Sheet 02 rows 5-12 (Financial perspective block)"),
+        ("F3 face (Human Capital)", "L-series (Learning & Growth perspective) KPIs placed here — Quannex maps Kaplan-Norton L&G → F3 Human Capital",
+         "F3 4-vector: D=7 · E=3 · V_res=4 (mixed reading; Dominique energized, Esther drained)",
+         "+0.470 (Mode 5 PROJECTION pole)",
+         "F3 Founder Dyad — paired with F8 in Mode 5. 'Raise F3+F8 paired' prescription target. Founder-load asymmetry reflects in 4-vector.",
+         "Mixed", "Sheet 02 L-series rows (Learning & Growth block)"),
+        ("F8 face (Operations)", "BSC.I5 'Cert time-to-completion' at F8·Water·O2 — ONLY KPI placed at F8 face, and it's O2-priority",
+         "F8 4-vector: D=7 · E=1 · V_res=2 (|D-E|=6 LARGEST IN DATASET) — flagship founder-gap finding",
+         "+0.470 (Mode 5 PROJECTION pole)",
+         "F8 Underdeveloped Engine — THESIS-DEFENSE FLAGSHIP. The 6-point D-E gap reveals genuine structural info BSC averaging would hide. Note: F8 face has NO O1 KPI (architectural-blindness sibling to F9 + F10 — Lock #8.14).",
+         "O2 only", "Sheet 02 IP-perspective row + Sheet 10 row 23 (F8 4-vector)"),
+        ("F9 face (Regenerative)", "ZERO KPIs placed at F9 face (Lock #8.14 architectural blindness — researcher rates F9=8 but BSC measures nothing here)",
+         "F9 4-vector: D=6 · E=5 · researcher=8 (strongest regenerative ethic agreement)",
+         "−0.521 (Mode 5 RECEPTION pole)",
+         "F9 Conscious Core — Mode 5 reception pole paired with F1. THE invisible-to-BSC face. Forward-looking: v1.1 must add F9 O1 KPI.",
+         "—", "Sheet 02 (no rows; gap is the finding)"),
+        ("F5 face (Market)", "BSC.C3 'Certified enterprise count' (F5·Earth·O1) + BSC.C4 + BSC.C7 + BSC.I6 — Customer + IP KPIs at F5",
+         "F5 4-vector: D=3 · E=1 · (SEVERELY DEPLETED, both founders agree)",
+         "Mode 5 near-zero (low spectral participation)",
+         "F5 Mission in Silence — Axis 5 INVERSION centerpiece. F5↔F10 breath axis highly asymmetric (low/high). CEN has 1 enterprise certified vs target. Mission externalization collapsed.",
+         "Mixed O1+O2+O3", "Sheet 02 Customer + IP perspective rows"),
+        ("F10 face (Foundational Values)", "BSC.I9 'Vision/mission consistency' (F10·Air·O2) + BSC.L8 'SDG alignment in PVM' (F10·Ether·O2) — 2 KPIs both at O2",
+         "F10 4-vector: D=10 · E=9 (EXCEPTIONAL bedrock — highest in dataset)",
+         "Mode 5 near-zero (low spectral participation)",
+         "F10 Sacred Ground — Axis 5 RECEPTION peak. Bedrock intact AND F10 sibling-blindness pattern (Lock #8.14): both F10 KPIs at O2 priority, none at O1. Forward-looking: v1.1 must add F10 O1 KPI.",
+         "O2 only", "Sheet 02 IP row 32 (I9) + L-series row 41 (L8 — reverted from V13 per Lock #8.36)"),
+    ]
+    for offset, kpi in enumerate(highest_leverage, start=1):
+        row = sec_b_headers_row + offset
+        for col_idx, val in enumerate(kpi, start=1):
+            cell = ws.cell(row=row, column=col_idx, value=val)
+            cell.font = Font(name="Calibri", size=9)
+            cell.alignment = Alignment(wrap_text=True, vertical="top")
+        # Face name col bold; Mode 5 coef colored (column shifted from 5→4 in 7-col layout)
+        ws.cell(row=row, column=1).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+        m5_cell = ws.cell(row=row, column=4)
+        if "+0.470" in str(m5_cell.value):
+            m5_cell.font = Font(name="Calibri", size=9, bold=True, color="D946EF")
+        elif "−0.521" in str(m5_cell.value) or "-0.521" in str(m5_cell.value):
+            m5_cell.font = Font(name="Calibri", size=9, bold=True, color="8B5CF6")
+        ws.row_dimensions[row].height = 80
+
+    # ─────────────────────────────────────────────────────────
+    # Section C — Highest-Leverage Actions (Prescription)
+    # ─────────────────────────────────────────────────────────
+    sec_c_row = sec_b_headers_row + len(highest_leverage) + 2
+    apply_brand_header(ws, sec_c_row, 1, 8,
+                       "Section C — Highest-Leverage Actions (Prescription from Mode 5 + Axis 5 + F8 finding)",
+                       bg=QUANTUM_PURPLE, size=11)
+    sec_c_headers_row = sec_c_row + 1
+    sec_c_headers = ["#", "Action", "Mathematical basis", "What it addresses",
+                     "How to measure progress", "Time horizon", "Sequence"]
+    for col_idx, h in enumerate(sec_c_headers, start=1):
+        c = ws.cell(row=sec_c_headers_row, column=col_idx, value=h)
+        c.fill = PatternFill(start_color=GRAY, end_color=GRAY, fill_type="solid")
+        c.font = Font(name="Calibri", size=9, bold=True, color="000000")
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    prescriptions = [
+        ("1", "RAISE F3 + F8 PAIRED",
+         "Mode 5 spectral coupling at +0.470 each (Sheet 14 Block F.2 top-3 ranking)",
+         "Largest single-input change for Mode 5 amplitude reduction. F3 (Human/Founder) + F8 (Operations) projecting → distribute load + scale founder reach paired",
+         "F8 D-E gap narrows toward 4 or below · F3 founder-hours-per-week tracked weekly · BSC.I5 cert time-to-completion improves",
+         "Quarter (3-month sprint)",
+         "PARALLEL — both faces raised together (not sequenced)"),
+        ("2", "ACTIVATE F5 MISSION EXTERNALIZATION",
+         "Axis 5 inversion remedy — F5/F10 polarity-asymmetric breath asks for outward projection",
+         "F10 bedrock is intact; F5 Mission externally invisible. Speak the values outward through Mission communication, partner outreach, audit case-study publication",
+         "BSC.C1 active member count growth · BSC.C3 certified enterprise count 1→3 · External mission visibility audit (researcher-judged)",
+         "Quarter (3-month sprint)",
+         "PARALLEL with Action 1 (not sequential)"),
+        ("3", "DISTRIBUTE F8 FOUNDER-LOAD (Esther's concern)",
+         "F8 D=7 vs E=1 gap reveals operational continuity risk: 'If Dom unavailable a month, CEN would not operate'",
+         "Esther's reading anchored by V_res=2. Structural documentation + delegation + cross-training. NOT 'Dom does more'; 'others can do what Dom does'",
+         "Coverage matrix: which ops areas covered by ≥2 people · Continuity test: can CEN operate 1 week without Dominique?",
+         "Quarter (3-month sprint)",
+         "PARALLEL — F8 distribution AND F3+F8 raise compatible"),
+        ("4", "ADD EDGE-KPI AT E1-8 (F1-F8 Ops-Finance) per Mode 5 carrier",
+         "Mode 5 carrier edges E1-8 (ordinal E4, F1↔F8) + E3-9 (ordinal E12, F3↔F9) currently lack edge-KPIs (Sheet 07)",
+         "Future BSC iteration: spectrum-derived highest-leverage edge measurement gain. Bi-directional architecture (Lock #8.24) enables.",
+         "When v1.1 BSC adds 1 KPI at E1-8 (e.g., 'Ops budget vs runway ratio'), Mode 5 amplitude tracking auto-extends",
+         "v1.1 SSOT iteration",
+         "AFTER v1.0 ships (deferred)"),
+        ("5", "CLOSE ARCHITECTURAL-BLINDNESS AT F9 + F10",
+         "F9 has zero O1 BSC KPIs (Lock #8.14 sibling finding); F10 has only O2 KPIs (I9, L8)",
+         "F10 bedrock is invisible to the methodology at O1; F9 regenerative-ethic similarly invisible. Add O1 KPI at each face.",
+         "BSC iteration adds 1 O1 KPI at F9 (e.g., 'Renewable energy fraction of operations') + 1 O1 KPI at F10 (e.g., 'Values-statement public visibility score')",
+         "v1.1 SSOT iteration",
+         "AFTER v1.0 ships (deferred)"),
+    ]
+    for offset, action in enumerate(prescriptions, start=1):
+        row = sec_c_headers_row + offset
+        for col_idx, val in enumerate(action, start=1):
+            cell = ws.cell(row=row, column=col_idx, value=val)
+            cell.font = Font(name="Calibri", size=9)
+            cell.alignment = Alignment(wrap_text=True, vertical="top")
+        # Action col 2 bold + colored
+        ws.cell(row=row, column=2).font = Font(name="Calibri", size=10, bold=True, color="D946EF")
+        ws.row_dimensions[row].height = 70
+
+    # ─────────────────────────────────────────────────────────
+    # Section D — The Trail (F8 deep-dive end-to-end)
+    # ─────────────────────────────────────────────────────────
+    sec_d_row = sec_c_headers_row + len(prescriptions) + 2
+    apply_brand_header(ws, sec_d_row, 1, 8,
+                       "Section D — The Trail (F8 deep-dive: raw input → math → spectral → prescription)",
+                       bg=DARK_NAVY, size=11)
+
+    trail_stages = [
+        ("Stage 1 — Raw inputs (F8 face 4-vector)",
+         "Phase 2 frozen 2026-04-07 (per Coherence Portrait Appendix A1):  Dominique = 7 / 10  ·  Esther = 1 / 10  ·  V_res post-vortex = 2 / 10  ·  |D−E| = 6 LARGEST IN DATASET",
+         "Independence audit clean (Esther initiated no-collaboration guardrail spontaneously before scoring)"),
+        ("Stage 2 — BSC KPI placement at F8 face",
+         "F8 face (Operations) has ONE BSC KPI placed here: BSC.I5 'Cert time-to-completion' at F8·Water·O2 (Intellectual perspective). NOTE the architectural-blindness pattern: F8 has NO O1-priority KPI — sibling to F9 (zero KPIs) and F10 (2 O2-only KPIs) per Lock #8.14.",
+         "BSC.F8 KPI label 'Founder-borne infrastructure costs' is the FINANCIAL perspective KPI placed at F1·Earth·O2 face — NOT at F8 face (BSC letter+number ≠ face number; common reviewer confusion clarified here)."),
+        ("Stage 3 — F8 face energy via pentagramic computation",
+         "Sheet 04 row 11 (F8 at O1): cols B-F (Earth/Water/Fire/Air/Ether normalized from Sheet 03) → K_bar → 5 star pairs (s1-s5) → 5 intersection nodes (p1-p5) → P_mean → C_raw → E_final logistic at κ=φ²",
+         "Lock #8.22 Pure-O1 canonical baseline. F8 face energy at κ=φ² canonical reads NEAR-FLOOR (C_raw=0 inputs given F8's O1 KPI absence; gentle amplifier classifies as Gate band per Lock #8.35)."),
+        ("Stage 4 — F8 spectral signature in Mode 5",
+         "Sheet 14 U-matrix col 5 (Mode 5): U[F8][4] = +0.470 (PROJECTION pole, paired with F3 = +0.470 vs F1 = −0.521 and F9 = −0.521 reception poles)",
+         "Mode 5 is structurally an EDGE phenomenon (Sheet 14 finding): same-sign high-magnitude face pairs F3+F8 and F1+F9 are non-adjacent — no vertex spans them; carrier edges E1-8 (F1-F8 Ops-Finance) + E3-9 (F3-F9 Human-Regenerative) lack edge-KPIs in CEN BSC (canonical face-pair edge naming per Lock #8.11/#8.36 convention)."),
+        ("Stage 5 — Dashboard signal + Prescription",
+         "Sheet 16 Dashboard surfaces F8 4-vector gap (|D−E|=6) as flagship finding. Sheet 14 Block F.2 ranks F3+F8 cluster among top-impact faces. Sheet 18 Wave 3 A10 documents F8 trail as the canonical ALCOA+ provenance demonstration.",
+         "Prescription: 'Raise F3+F8 paired' (Action 1) — Mode 5 spectral coupling +0.470 each makes paired raise most efficient. Plus 'Distribute F8 founder-load' (Action 3) per Esther's reading. Both Actions PARALLEL — paired raise compatible with founder-load distribution."),
+    ]
+    for offset, (stage, what, note) in enumerate(trail_stages, start=1):
+        row = sec_d_row + offset
+        ws.cell(row=row, column=1, value=stage).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+        ws.cell(row=row, column=1).alignment = Alignment(wrap_text=True, vertical="top")
+        what_cell = ws.cell(row=row, column=2, value=what)
+        what_cell.font = Font(name="Calibri", size=9)
+        what_cell.alignment = Alignment(wrap_text=True, vertical="top")
+        ws.merge_cells(start_row=row, start_column=2, end_row=row, end_column=6)
+        note_cell = ws.cell(row=row, column=7, value=note)
+        note_cell.font = Font(name="Calibri", size=9, italic=True, color="606060")
+        note_cell.alignment = Alignment(wrap_text=True, vertical="top")
+        ws.merge_cells(start_row=row, start_column=7, end_row=row, end_column=8)
+        ws.row_dimensions[row].height = 70
+
+    # ─────────────────────────────────────────────────────────
+    # Section E — What CEN IS and ISN'T (honest disclosure)
+    # ─────────────────────────────────────────────────────────
+    sec_e_row = sec_d_row + len(trail_stages) + 2
+    apply_brand_header(ws, sec_e_row, 1, 8,
+                       "Section E — What CEN IS and ISN'T (honest disclosure)",
+                       bg=DARK_NAVY, size=11)
+
+    is_isnt_rows = [
+        ("CEN IS:", "✓ Profound values alignment (F10 D=10 E=9 EXCEPTIONAL bedrock) · ✓ Genuine intellectual depth (F2 D=8 E=7 STRONG agreement) · ✓ Strongest regenerative-ethic finding in dataset (F9 researcher=8) · ✓ Founder-borne commitment (Dominique's operational capacity)"),
+        ("CEN ISN'T:", "✗ Financially robust (F1 Financial Fragility D=6 E=1; ~0% revenue coverage) · ✗ Structurally complete operations (F8 founder-load risk; F4 governance gap) · ✗ Externally visible mission (F5 D=3 E=1 SEVERELY DEPLETED) · ✗ Funding-pipeline-systematized (F11 D=6 E=4 below NGO sustainability threshold)"),
+        ("CEN BECOMING:", "→ Calibration Loop closed Phase 2 → Wk6-Wk8: prescribed actions REDUCED systemic tension. → Methodology validated for CEN at canonical κ=φ² baseline. → v1.0 SSOT ships as canonical math + narrative mirror. → v1.1 path identified: add edge-KPI at E1-8 (Mode 5 carrier, ordinal E4) + O1 KPIs at F9 + F10 (close architectural blindness)."),
+        ("CEN'S COHERENCE STORY:", "An NGO whose values exceed its capacity to externalize them yet — bedrock intact, projection collapsed, founder-load uneven, regenerative ethic strong but unmeasured at O1. The math reveals it; the prescription is paired-raise (F3+F8) + Mission externalization (Axis 5) + founder-load distribution (F8). The methodology + the partnership grow together."),
+    ]
+    for offset, (label, content) in enumerate(is_isnt_rows, start=1):
+        row = sec_e_row + offset
+        ws.cell(row=row, column=1, value=label).font = Font(name="Calibri", size=10, bold=True, color="0D7377")
+        ws.cell(row=row, column=1).alignment = Alignment(wrap_text=True, vertical="top")
+        content_cell = ws.cell(row=row, column=2, value=content)
+        content_cell.font = Font(name="Calibri", size=9)
+        content_cell.alignment = Alignment(wrap_text=True, vertical="top")
+        ws.merge_cells(start_row=row, start_column=2, end_row=row, end_column=8)
+        ws.row_dimensions[row].height = 70
+
+    # ─────────────────────────────────────────────────────────
+    # Section F — Authority + cross-references
+    # ─────────────────────────────────────────────────────────
+    sec_f_row = sec_e_row + len(is_isnt_rows) + 2
+    apply_brand_header(ws, sec_f_row, 1, 8,
+                       "Section F — Authority + Cross-References",
+                       bg=DARK_NAVY, size=11)
+    footer_notes = [
+        "Authority: Sheet 21 synthesizes Sheets 02 (KPIs), 04 (face energies), 10 (4-vector polarity), 14 (Mode 5 spectral), 16 (Dashboard).",
+        "                                       ",
+        "Per ship-v1.0 plan §14.B Sub-Arc 3 W4.6 expansion (added 2026-05-25 per partnership-request: 'a coherence story told').",
+        "Per Disclosure §6.6 Trust the Geometry — operational discipline that produced this v1.0 (Locks #8.35 + #8.36).",
+        "Per HYGIENE_PRINCIPLES.md — verification-discipline catches what discipline-naming was designed to catch.",
+        "                                       ",
+        "READING ORDER for first-time SSOT readers:",
+        "  • CEN board: Sheet 21 (this story) → Sheet 16 Dashboard scorecard → PDF executive summary",
+        "  • Thesis committee: Sheet 21 → Sheet 18 Adversarial Findings (0 Critical) → Sheet 17 Audit Trail Crosslinks → docs spine three pillars",
+        "  • Future Quannex contributor: Sheet 21 → Sheet 0a Glossary → Sheet 20 Cross-Workspace Refs → POC docs spine",
+        "                                       ",
+        "ARTIFACT INHERITANCE: this Coherence Story sheet becomes the canonical narrative-with-receipts template for every future Quannex client engagement.",
+        "Replace CEN-specific content; preserve the 6-section structure (Story / Highest-Leverage KPIs verbatim / Highest-Leverage Actions / The Trail / What IS-ISN'T / Authority).",
+        "                                       ",
+        "🌀 Honest reads over inflated. Substance over scores. Partnership over thresholds. Sacred geometry over arbitrary number choices.",
+        "Quannex Foundation · Coherence-as-a-Service · v1.0 ship 2026-05-25",
+    ]
+    for offset, note in enumerate(footer_notes, start=1):
+        c = ws.cell(row=sec_f_row + offset, column=1, value=note)
+        c.font = Font(name="Calibri", size=10, italic=True, color="404040")
+        ws.merge_cells(start_row=sec_f_row + offset, start_column=1,
+                       end_row=sec_f_row + offset, end_column=8)
+
+    # Column widths
+    ws.column_dimensions["A"].width = 22
+    ws.column_dimensions["B"].width = 32
+    ws.column_dimensions["C"].width = 26
+    ws.column_dimensions["D"].width = 26
+    ws.column_dimensions["E"].width = 20
+    ws.column_dimensions["F"].width = 24
+    ws.column_dimensions["G"].width = 16
+    ws.column_dimensions["H"].width = 18
+
+    # Freeze top 3 rows for navigation
+    ws.freeze_panes = "A5"
+
+    # Named range
+    add_defined_name(wb, "coherence_story_header", "'21_Coherence_Story'!$A$1")
+
+    # ** Make Sheet 21 the workbook's active sheet — opens to THE STORY **
+    wb.active = wb.index(ws)
+
+    return ws
+
+
 # ─────────────────────────────────────────────────────────────
 # Build orchestration — sheet build sequence per W2 §W2.3
 # ─────────────────────────────────────────────────────────────
@@ -6790,6 +7111,7 @@ SHEET_BUILD_ORDER = [
     ("18_Adversarial_Findings",          build_sheet_18_adversarial_findings),
     ("19_Test_Coverage_Matrix",          build_sheet_19_test_coverage),
     ("20_Cross_Workspace_Refs",          build_sheet_20_cross_workspace_refs),
+    ("21_Coherence_Story",               build_sheet_21_coherence_story),
 ]
 
 
@@ -6833,13 +7155,21 @@ def build_init(output_path: Path) -> int:
             log("ERROR", f"Failed building {sheet_name}: {e}")
             return 2
 
-    # Set Dashboard_View as active per Lock #2 — file opens to canonical view
+    # Set active sheet per Sub-Arc 3 W4.6 partnership-decision 2026-05-25:
+    # workbook opens to Sheet 21 Coherence Story (THE story first; Dashboard
+    # scorecard navigable as Sheet 16). The story IS the marquee per
+    # 'Full ship most definitely feels most alive!' direction.
+    # Fallback to Sheet 16 if Sheet 21 not present (backward-compat).
+    story_name = "21_Coherence_Story"
     dashboard_name = "16_Dashboard_View"
-    if dashboard_name in wb.sheetnames:
+    if story_name in wb.sheetnames:
+        wb.active = wb.sheetnames.index(story_name)
+        log("INFO", f"Active sheet set: {story_name} (Sheet 21 marquee per W4.6)")
+    elif dashboard_name in wb.sheetnames:
         wb.active = wb.sheetnames.index(dashboard_name)
-        log("INFO", f"Active sheet set: {dashboard_name}")
+        log("INFO", f"Active sheet set: {dashboard_name} (fallback)")
     else:
-        log("WARN", f"Dashboard sheet '{dashboard_name}' not found; active fallback to first sheet")
+        log("WARN", f"Neither Sheet 21 nor Sheet 16 found; active fallback to first sheet")
 
     try:
         atomic_save(wb, output_path)

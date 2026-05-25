@@ -11,8 +11,10 @@ Per-check authority:
   - Lock #8.7  : SSOT xlsx as canonical numeric/formula authority
   - Lock #8.10 : Named-range discipline; calculation sheets reference named ranges
                  not orphan literals
-  - Lock #8.20 : Canonical CEN O1 regression values (AAG=0.789, AvG=0.0882,
-                 dominantMode=5 = regional band)
+  - Lock #8.20 + #8.35 : Canonical CEN O1 regression values @ κ=φ² canonical baseline
+                          (AAG=0.8851, AvG=0.1813, dominantMode=5 = regional band).
+                          Lock #8.35 (2026-05-24) superseded the earlier κ=4 baseline
+                          values (AAG=0.789, AvG=0.0882) from the Lock #8.20 era.
   - Lock #8.24 : Sheet 09 BiDirectional_Intervention_Map signature face-row
                  weights MUST sum to 1.0 ± 1e-6
 
@@ -60,8 +62,8 @@ TOLERANCE = 1e-6
 
 # CEN canonical regression values (Lock #8.20)
 # Source: js/main.js engine output for CEN client at O1 layer, validated Wk6
-CEN_EXPECTED_AAG_O1 = 0.789           # Aspiration/Actuality face-grouping ratio
-CEN_EXPECTED_AVG_O1 = 0.0882          # Average per-vector mean coherence
+CEN_EXPECTED_AAG_O1 = 0.8851          # Aspiration/Actuality face-grouping ratio @ κ=φ² canonical (Lock #8.35 supersedes 0.789 from Lock #8.20 κ=4 era)
+CEN_EXPECTED_AVG_O1 = 0.1813          # Apparent vs Granular gap @ κ=φ² canonical (Lock #8.35 supersedes 0.0882 from Lock #8.20 κ=4 era)
 CEN_EXPECTED_DOMINANT_MODE = 5         # Regional band (face number, not eigenvalue idx)
 
 # Named ranges expected for the O1 regression check (Lock #8.20)
@@ -478,8 +480,8 @@ class SSOTValidator:
         input KPIs without updating the regression values here.
 
         Expected values (Lock #8.20):
-          cen_aag_o1        = 0.789   (Aspiration/Actuality face-grouping ratio)
-          cen_avg_o1        = 0.0882  (per-vector mean coherence)
+          cen_aag_o1        = 0.8851  (Aspiration/Actuality face-grouping ratio @ κ=φ²)
+          cen_avg_o1        = 0.1813  (Apparent vs Granular gap @ κ=φ²)
           cen_dominant_mode = 5        (regional band)
         """
         for name, expected in CEN_O1_NAMED_RANGES.items():
