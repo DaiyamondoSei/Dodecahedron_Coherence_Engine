@@ -271,6 +271,19 @@ The CEN Phase 2 → Wk6 → Wk7 → Wk8 calibration cycle is the methodology's f
 
 This is the **first empirical validation** of Quannex's interpretive layers via the Calibration Loop. It is not the only validation that will ever exist — future engagements will produce additional loop closures (or fail to, surfacing methodology refinements).
 
+### Snapshot Delivery as the Operational Mode of the Calibration Loop
+
+The Calibration Loop is not a one-time event but an **operational mode** the methodology runs in. Each Quannex deliverable to a client is a **snapshot** — a moment of *researcher-analysis meeting organization-current-state*. The CEN engagement, as of 2026-05-26, has produced:
+- **v1.0 snapshot** (2026-05-25) — first thesis-defense-ready SSOT
+- **v1.1 snapshot** (2026-05-25 evening) — edge + vertex KPI integration + §6.7 Snapshot Delivery framing
+- **v1.2 snapshot** (anticipated: a few weeks) — next iteration
+
+The methodology validates itself across the **succession of snapshots**: each snapshot codifies the researcher's current-best analytical state; subsequent snapshots either confirm via Calibration Loop closure (prescribed actions reduced systemic tension), refine where reality says the model needs adjusting, or supersede where deeper architectural moves emerge.
+
+The asymmetric partnership shape (Quannex authors analytical layer; CEN provides organizational reality; multi-snapshot delivery is the meeting place) is operationalized per Disclosure §6.7. CEN at Phase 2 maturity isn't asked to ratify per-signature interpretive weights — they provide the organizational reality each snapshot's prescriptions are tested against.
+
+This means §6.7's "DRAFT" signatures aren't deficits — they're the methodology's stake in the ground, refined snapshot by snapshot as the partnership operationally matures.
+
 ### Why this is mathematically mature
 
 This pattern — interpretive priors + deterministic mathematical updates + empirically testable outcome posteriors — is **Bayesian in shape**. The interpretive layers are the priors; the mathematics is the update procedure; the Calibration Loop outcomes are the posteriors. The methodology is in the same epistemological company as:
@@ -418,42 +431,79 @@ The methodology's growth lives in the partnership.
 
 ---
 
-## Section 6.7 — Honest Forward-Evolution: PROPOSED Measurement Methodology (added 2026-05-25, Lock #8.37; deferred operationalization)
+## Section 6.7 — Honest Forward-Evolution + Snapshot Delivery Mode (added 2026-05-25, Lock #8.37; refined 2026-05-26 partnership-clarification)
 
 ### The Principle
 
-When the SSOT framework needs to ADD new measurement that requires partnership-validation by a client (e.g., adding O1 KPIs at architecturally-blind faces, adding edge-KPIs at spectrally-derived high-leverage edges), the protocol is:
+When the SSOT framework needs to ADD new measurement that researcher analysis surfaces but real-organization data hasn't yet caught up with (e.g., proposing O1 KPIs at architecturally-blind faces, predicting edge-KPI signatures at spectrally-derived high-leverage edges), the protocol is:
 
-1. **Flag the addition** as `confidence="PROPOSED — pending [partner] partnership-validation [target-date]"` in the data layer
-2. **Ship with dual-display math** — the PROPOSED-shape cascade alongside the partner-validated baseline, so reviewers see both
+1. **Flag the addition** as `confidence="DRAFT"` (researcher snapshot) in the data layer
+2. **Ship with dual-display math** — the DRAFT-shape cascade alongside the validated baseline, so reviewers see both
 3. **Document the addition** in the relevant SSOT disclosure sheet (e.g., Sheet 21 §E v1.X disclosure entry)
-4. **Ratify via partner-final KPI** in the subsequent v1.X.1 release
+4. **Refine across snapshot delivery cadence** as the organization operationally matures + the Calibration Loop closes
 
-This makes forward-evolution HONEST (visible) rather than SILENT (hidden). It extends §6.6 Trust-the-Geometry to forward-looking additions — not just current-state self-audit. The principle: **researcher-drafted starter candidates are presented as a basis for partnership-dialogue, never as canonical fait-accompli; partner authority defines real KPIs**.
+This makes forward-evolution HONEST (visible) rather than SILENT (hidden). It extends §6.6 Trust-the-Geometry to forward-looking additions — not just current-state self-audit. The principle: **researcher-drafted candidates are presented as the methodology's current best snapshot, refined through the succession of subsequent snapshots as real-organization data + Calibration Loop closure inform refinement**.
 
-### Status evolution
+### CRITICAL framing (partnership-clarification 2026-05-26)
 
-**Original status (Lock #8.37, 2026-05-25 morning):** §6.7 named as methodological pillar but **deferred from v1.0 hardening commit**. The first operationalization (proposed F9 O1 + F10 O1 + E1-8 edge KPIs for CEN) was scoped out of v1.0 in favor of focused naming-convention canonicalization. v1.1+ post-defense iterations would operationalize §6.7 when CEN partnership-validation cycles could support the partner-decision quality this principle requires.
+§6.7 was initially mis-framed in v1.1 Phase 1c (2026-05-25 evening) with language like *"pending CEN partnership-validation (target Q3 2026)"*. Partnership-clarification 2026-05-26 surfaced the error:
 
-**Operational-sequencing change (2026-05-25 evening, partnership-override):** Deimantas explicitly chose to override §6.7's deferred-post-defense framing during v1.1 Phase 1c planning:
+> *Deimantas:* "CEN doesn't really have what to validate anything here, at least how I understand it — this is a Quannex deliverable based on their input. But the partnership with them is going to be an ongoing and as they operationally mature, this might definitely change. Right now we are delivering one snapshot, in a few weeks we will deliver another."
 
-> *AskUserQuestion 2026-05-25 evening:* "§6.7's own statement defers 47-signature activation to post-defense. Should we honor §6.7's discipline and DEFER 47-signature activation post-defense, OR override it for thesis defense scope?"
->
-> *Partnership-decision:* "Override — activate 47 signatures pre-defense anyway (Phase 1c FULL as originally chosen)."
+**The methodologically honest framing:** the SSOT is a **Quannex analytical product, snapshot-in-time, based on CEN's organizational inputs**. The partnership is **asymmetric**:
 
-**Refined framing — INTEGRATION pre-defense + RATIFICATION post-defense:** "Activation" honestly means TWO different operational moves at different timescales:
+| Layer | Quannex provides | CEN provides |
+|---|---|---|
+| Methodology + framework | ✓ | — |
+| Interpretive choices (5-element decomposition, 6+6 architecture, signature weights) | ✓ | — |
+| Organizational data inputs (4-vector, BSC KPIs) | — | ✓ |
+| Organizational context (Phase 2 frozen state) | — | ✓ |
+| Calibration Loop response (did prescribed action reduce tension?) | analyzes | embodies |
 
-1. **Integration (pre-defense, v1.1 Phase 1c):** the 47 anticipatory signatures get *integrated into the SSOT* as visible methodological forward-state with §6.7 PROPOSED flagging. They become the methodology's stake-in-the-ground — testable, falsifiable, partnership-discussable. Reviewers (thesis committee, CEN board) see the forward-state explicitly rather than as silent absence.
+CEN at its current Phase 2 organizational maturity provides INPUTS — they don't have the operational infrastructure to ratify per-signature elemental weights. That isn't a deficiency; it's a layer-of-engagement reality. The partnership is real and growing; the validation mechanism just isn't "CEN signs off on the math."
 
-2. **Ratification (post-defense, v1.1.x):** each individual signature requires CEN partnership-cycle validation to move from PROPOSED → HIGH. The Calibration Loop discipline (§6) governs: did prescribed action reduce real systemic tension? CEN partnership cycles answer per signature.
+### Snapshot Delivery Mode (the operational layer for §6.7)
 
-This split honors §6.7's epistemic conservatism (partner-decision authority preserved) while making the architectural forward-state visible to defense reviewers.
+The methodology validates itself through **snapshot delivery cadence**, NOT one-time partner ratification:
+
+1. **Each snapshot** = a moment of *researcher-analysis meeting organization-current-state*. v1.1 = snapshot 2026-05-25. Next snapshot in a few weeks. v1.2, v1.3, etc., as the partnership progresses.
+
+2. **Validation emerges across the succession of snapshots** via the Calibration Loop (Disclosure §6): *"does the prescribed action reduce real systemic tension?"* — answered for CEN Phase 2 → Wk6-Wk8 = YES (first closed loop). Subsequent snapshots produce additional closed loops, or refinements where reality says "no, the methodology's interpretation needs adjusting here."
+
+3. **"DRAFT" signatures aren't waiting for CEN to ratify** — they're the methodology's CURRENT BEST DRAFT, refined snapshot by snapshot as:
+   - CEN operationally matures (organization adds infrastructure the methodology previously had to infer)
+   - The Calibration Loop closes more iterations (prescribed actions produce observable outcomes)
+   - The researcher's interpretive understanding deepens (more cases, more comparisons)
+
+4. **The asymmetry is honored**: Quannex authors the analytical depth; CEN provides organizational reality; multi-snapshot delivery is the meeting place where methodology meets reality without falsely claiming partner-ratification authority that hasn't existed yet.
+
+### v1.1 Phase 1c — what actually happened (2026-05-25)
+
+Phase 1c integrated the 50 Bi-Directional Influence Signatures (5 HIGH researcher pre-validated + 45 DRAFT researcher snapshot) into the SSOT data layer + Sheets 07/08/09. The integration makes the methodology's forward-state visible to defense reviewers + future snapshot recipients.
+
+The "Activation" framing initially used "pending CEN partnership-validation" — that was the framing error. Corrected to "refined across snapshot delivery cadence as CEN matures + Calibration Loop closes."
+
+The integration itself stands; only the language describing what comes after needed correction. v1.1 Phase 1c achieved exactly what the methodology needed: full forward-state visibility + honest disclosure of refinement mechanism.
+
+### Cross-references
+
+- **Lock #8.37** — §6.7 named as methodological pillar (2026-05-25 morning)
+- **Lock #8.40** — Edge + Vertex KPI Single-Source-of-Truth chain (2026-05-25 evening); operationalizes §6.7 + Snapshot Delivery via octave-kpi-spec.json data layer
+- **§6.6 Trust the Geometry** — kin principle for current-state self-audit; §6.7 is the kin principle for forward-evolution
+- **§6 Calibration Loop** — the validation mechanism the snapshot delivery cadence operationalizes
+- **Sheet 21 §E v1.0.1 + v1.1.0 disclosure entries** — operational disclosure points for the architectural evolution
+- **Plan archive** — `~/.claude/plans/_archive/poc_2026-05-25_v1.1-phase1c-edge-vertex-kpi-integration.md`
 
 ### v1.1 Phase 1c activation (2026-05-25)
 
 Operationally landed in commits `a8c17ef` (Phase B.1a data layer) + `16874b4` (Phase B.1b signatures merge from source verbatim) + `a66ced3` (Phase B.2+B.3 Sheet 07+08 KPI columns) + `9abf283` (Phase B.4 Sheet 09 §6.7 activation columns).
 
-All 50 signatures (30 edges + 20 vertices) now carry source-doc verbatim weights from `POC/docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md` parsed via `scripts/_extract_signatures.py`. Sheet 09 §6.7 Status column shows per-signature activation state ("ACTIVATED (HIGH)" / "ACTIVATED (HIGH; KPI deprecated #8.36)" / "PROPOSED — pending CEN partnership-validation"). Equal-weight 0.20 placeholders RETIRED.
+All 50 signatures (30 edges + 20 vertices) now carry source-doc verbatim weights from `POC/docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md` parsed via `scripts/_extract_signatures.py`. Sheet 09 §6.7 Status column shows per-signature activation state — post-2026-05-26 partnership-clarification framing:
+- **"ACTIVATED (researcher pre-validated)"** — 3 HIGH-confidence active edge-KPIs (E2-10/E5-8/E10-12)
+- **"ACTIVATED (HIGH; KPI deprecated #8.36)"** — 2 HIGH-confidence signatures whose KPI placements were reverted (E7-11/V13); signatures preserved
+- **"DRAFT (researcher snapshot; refined across snapshot cadence via Calibration Loop closure)"** — 45 anticipatory entries
+
+Equal-weight 0.20 placeholders RETIRED.
 
 ### Methodological discovery — octave-character invariance (2026-05-25)
 
@@ -483,7 +533,7 @@ This finding is now a **defense-grade methodological insight** worth its own arc
 - **POC/companies/cen/octave-kpi-spec.json** — Layer 2 canonical data file for edge + vertex KPI specifications
 - **Sheet 07 Edges cols K-Q** — operational disclosure of edge canonical name + BSC placement + 3-octave questions
 - **Sheet 08 Vertices cols O-U** — operational disclosure of vertex canonical name + classification + 3-octave questions
-- **Sheet 09 Bi-Directional § Status column** — operational disclosure of §6.7 ACTIVATED vs PROPOSED per signature
+- **Sheet 09 Bi-Directional § Status column** — operational disclosure of §6.7 ACTIVATED vs DRAFT per signature (per 2026-05-26 partnership-clarification framing)
 
 ---
 

@@ -3415,13 +3415,16 @@ def build_sheet_09_bidirectional(wb: Workbook):
         "                                       ",
         "Post-Lock #8.36 KPI distribution: 31 face-KPIs + 3 edge-KPIs + 0 vertex-KPIs = 34 total.",
         "                                       ",
-        "Lock #8.40 §6.7 Honest Forward-Evolution activation (2026-05-25 Phase B.4):",
+        "Lock #8.40 §6.7 Honest Forward-Evolution + Snapshot Delivery Mode (Phase B.4, 2026-05-25):",
         "  Source: docs/cen-ssot/CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md (959 lines)",
         "  Data layer: companies/cen/octave-kpi-spec.json (Phase B.1b parsed verbatim 2026-05-25)",
         "  - 5 HIGH-confidence (Sections 1-2): E2-10, E5-8, E10-12, E7-11 (deprecated KPI per #8.36 but HIGH",
         "    signature preserved), V13 (deprecated KPI per #8.36 but HIGH signature preserved).",
-        "  - 46 PROPOSED-confidence (Sections 3-4): 27 anticipatory edges + 19 anticipatory vertices",
-        "    with researcher-drafted weights pending CEN partnership-validation (target Q3 2026 post-defense).",
+        "  - 46 DRAFT (Sections 3-4): 27 anticipatory edges + 19 anticipatory vertices — researcher snapshot",
+        "    weights, refined across snapshot delivery cadence as CEN operationally matures + Calibration",
+        "    Loop closes (Disclosure §6). NOT 'pending CEN ratification' — CEN at Phase 2 maturity provides",
+        "    inputs not signature-weight validation. Quannex authors the analytical layer; CEN provides",
+        "    organizational reality; multi-snapshot delivery is the meeting place.",
         "  Equal-weight 0.20 placeholders RETIRED — every signature now carries source-doc verbatim weights.",
     ]
     for i, note in enumerate(status_notes, start=1):
@@ -3469,11 +3472,14 @@ def build_sheet_09_bidirectional(wb: Workbook):
             else:
                 kpi_id = "—"
                 kpi_name = "(no KPI; anticipatory)"
-            # §6.7 status per Lock #8.40
+            # §6.7 status per Lock #8.40 — Snapshot Delivery Mode framing
+            # (per partnership-clarification 2026-05-26: this is a Quannex deliverable
+            # based on CEN's inputs; CEN doesn't validate signature weights — validation
+            # emerges through snapshot cadence + Calibration Loop closure as CEN matures)
             if conf == "HIGH":
-                status_67 = "ACTIVATED (partnership-validated; preserved across Lock #8.36)" if not bsc else "ACTIVATED (HIGH + active KPI)"
+                status_67 = "ACTIVATED (researcher pre-validated; preserved across Lock #8.36)" if not bsc else "ACTIVATED (HIGH + active KPI)"
             else:
-                status_67 = "PROPOSED — pending CEN partnership-validation (target Q3 2026)"
+                status_67 = "DRAFT (researcher snapshot; refined across snapshot cadence via Calibration Loop closure)"
             # Rationale (first face's rationale; short)
             rationale_dict = spec_e.get("signatureRationale", {})
             shared = spec_e.get("signatureSharedRationale")
@@ -3604,9 +3610,9 @@ def build_sheet_09_bidirectional(wb: Workbook):
                 kpi_name = "(no KPI; anticipatory)"
             # §6.7 status
             if conf == "HIGH":
-                status_67 = "ACTIVATED (signature HIGH; KPI deprecated #8.36)" if pre_lock_bsc and not bsc else "ACTIVATED (partnership-validated)"
+                status_67 = "ACTIVATED (signature HIGH; KPI deprecated #8.36)" if pre_lock_bsc and not bsc else "ACTIVATED (researcher pre-validated)"
             else:
-                status_67 = "PROPOSED — pending CEN partnership-validation (target Q3 2026)"
+                status_67 = "DRAFT (researcher snapshot; refined across snapshot cadence via Calibration Loop closure)"
             rationale_dict = spec_v.get("signatureRationale", {})
             shared = spec_v.get("signatureSharedRationale")
             if shared:
@@ -3705,10 +3711,10 @@ def build_sheet_09_bidirectional(wb: Workbook):
     ws.cell(row=summary_row + 2, column=2,
             value="5 (Sections 1-2 of source: E2-10, E5-8, E10-12, E7-11 deprecated, V13 deprecated — signatures preserved across Lock #8.36 KPI reversion)").font = Font(
         name="Calibri", size=10, color="0D7377")
-    ws.cell(row=summary_row + 3, column=1, value="PROPOSED confidence:").font = Font(
+    ws.cell(row=summary_row + 3, column=1, value="DRAFT confidence:").font = Font(
         name="Calibri", size=10, bold=True, color="8B5CF6")
     ws.cell(row=summary_row + 3, column=2,
-            value="45 (Sections 3-4 of source: 27 anticipatory edges + 18 anticipatory vertices; §6.7 status PROPOSED pending CEN Q3 2026)").font = Font(
+            value="45 (Sections 3-4 of source: 27 anticipatory edges + 18 anticipatory vertices; §6.7 status DRAFT — refined across snapshot delivery cadence as CEN matures + Calibration Loop closes)").font = Font(
         name="Calibri", size=10, color="8B5CF6")
     ws.cell(row=summary_row + 4, column=1, value="Active edge-KPIs:").font = Font(
         name="Calibri", size=10, bold=True, color="D946EF")
@@ -3746,13 +3752,22 @@ def build_sheet_09_bidirectional(wb: Workbook):
         "    BSC.L8 reverted to F10 Ether O2 face placement (Songbook R38 canonical).",
         "  • Post-correction: 31 face + 3 edge + 0 vertex = 34 KPIs (count preserved; placements pristine).",
         "                                       ",
-        "Lock #8.40 §6.7 Honest Forward-Evolution activation (Phase B.4, 2026-05-25):",
+        "Lock #8.40 §6.7 + Snapshot Delivery Mode (Phase B.4, 2026-05-25):",
         "  Equal-weight 0.20 placeholders RETIRED. All 50 signatures now carry source-doc VERBATIM weights",
         "  parsed from CEN_SSOT_BiDirectional_Signatures_30Edge_20Vertex_2026-05-22.md (959 lines)",
-        "  via Phase B.1b extraction. §6.7 status column shows ACTIVATED (HIGH) vs PROPOSED — pending CEN",
-        "  partnership-validation (target Q3 2026 post-defense per §6.7 Disclosure doc).",
+        "  via Phase B.1b extraction. §6.7 status column shows ACTIVATED (HIGH researcher pre-validated) vs",
+        "  DRAFT (researcher snapshot; refined across snapshot delivery cadence as CEN matures + Calibration",
+        "  Loop closes per Disclosure §6).",
         "                                       ",
-        "  Methodological insight: signature confidence (HIGH/PROPOSED) is INDEPENDENT of KPI placement.",
+        "  Snapshot Delivery framing (per partnership-clarification 2026-05-26):",
+        "  This SSOT is a SNAPSHOT — Quannex's analytical product based on CEN's inputs at one moment in time.",
+        "  v1.1 = snapshot 2026-05-25. Next snapshot in a few weeks. The methodology validates itself across",
+        "  the SUCCESSION OF SNAPSHOTS via Calibration Loop (does prescribed action reduce systemic tension?),",
+        "  NOT via one-time CEN ratification. CEN at Phase 2 maturity provides inputs (4-vector, BSC KPIs,",
+        "  organizational context) — Quannex authors the interpretive layer. Multi-snapshot delivery is the",
+        "  meeting place where methodology meets organizational reality.",
+        "                                       ",
+        "  Methodological insight: signature confidence (HIGH/DRAFT) is INDEPENDENT of KPI placement.",
         "  E7-11 + V13 retain HIGH signature confidence (carefully drafted with full rationale + breath-axis",
         "  cross-validation in source Section 1) even though their BSC.F4/L8 KPI placements were reverted",
         "  by Lock #8.36. Signature = predicted intervention-distribution IF KPI were placed there.",
